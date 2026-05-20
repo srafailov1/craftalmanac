@@ -660,7 +660,6 @@ h2 {
 
   .panel.is-collapsed {
     height: var(--mobile-panel-collapsed);
-    justify-content: center;
   }
 
   .panel::before {
@@ -674,12 +673,12 @@ h2 {
     flex: 0 0 auto;
     gap: 4px;
     min-width: 0;
-    padding: 4px 0 10px;
-    text-align: center;
+    padding: 0;
+    text-align: left;
   }
 
   .brand-block h1 {
-    font-size: 26px;
+    font-size: 28px;
     line-height: 1;
   }
 
@@ -692,8 +691,13 @@ h2 {
     display: none;
   }
 
-  .panel.is-collapsed .brand-block {
-    display: none;
+  .panel-topline {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 12px;
+    min-height: 64px;
   }
 
   .panel-grip {
@@ -703,7 +707,7 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 7px;
-    width: 100%;
+    grid-column: 2;
     min-height: 40px;
     padding: 0;
     border: 0;
@@ -727,6 +731,10 @@ h2 {
     font-size: 11px;
   }
 
+  .panel-topline .brand-block {
+    grid-column: 1;
+  }
+
   .panel-content {
     flex: 1 1 auto;
     min-height: 0;
@@ -745,11 +753,11 @@ h2 {
 
   .control-group {
     min-height: 0;
-    padding-top: 12px;
+    padding-top: 10px;
   }
 
   .section-heading {
-    min-height: 40px;
+    min-height: 38px;
   }
 
   .section-toggle {
@@ -781,6 +789,7 @@ h2 {
 
   .section-body {
     display: none;
+    padding-top: 9px;
   }
 
   .mobile-section.is-open .section-body {

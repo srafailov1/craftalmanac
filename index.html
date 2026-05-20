@@ -6,20 +6,22 @@
     <title>Virginia Forage Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=mobile-4">
+    <link rel="stylesheet" href="./styles.css?v=mobile-5">
   </head>
   <body>
     <main class="app-shell">
       <aside class="panel is-collapsed" aria-label="Forage controls" id="controlPanel">
-        <div class="brand-block">
-          <p class="eyebrow">Charlottesville, Virginia</p>
-          <h1>Forage Map</h1>
-          <p class="lede">Track edible plants and mushrooms by place, date, and confidence.</p>
+        <div class="panel-topline">
+          <div class="brand-block">
+            <p class="eyebrow">Charlottesville, Virginia</p>
+            <h1>Forage Map</h1>
+            <p class="lede">Track edible plants and mushrooms by place, date, and confidence.</p>
+          </div>
+          <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
+            <span class="panel-grip-bar" aria-hidden="true"></span>
+            <span class="panel-grip-label">Filters</span>
+          </button>
         </div>
-        <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
-          <span class="panel-grip-bar" aria-hidden="true"></span>
-          <span class="panel-grip-label">Filters</span>
-        </button>
 
         <div class="panel-content" id="panelContent">
 
@@ -118,6 +120,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=mobile-4"></script>
+    <script src="./app.js?v=mobile-5"></script>
   </body>
 </html>
