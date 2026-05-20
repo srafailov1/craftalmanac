@@ -1,0 +1,30 @@
+{
+  "sourceFiles": {
+    "locations": "/Users/sasson/Downloads/locations.csv.bz2",
+    "types": "/Users/sasson/Downloads/types.csv.bz2"
+  },
+  "bounds": {
+    "south": 37.45,
+    "north": 39.15,
+    "west": -79.65,
+    "east": -77.45
+  },
+  "scannedLocations": 1962493,
+  "skippedHiddenLocations": 14121,
+  "recordCount": 404,
+  "countsBySpeciesId": {
+    "apple": 48,
+    "black-walnut": 45,
+    "blueberry": 9,
+    "bramble": 85,
+    "elderberry": 10,
+    "grape": 5,
+    "hazelnut": 4,
+    "hickory": 11,
+    "huckleberry": 3,
+    "pear": 15,
+    "persimmon": 60,
+    "prunus": 68,
+    "serviceberry": 41
+  }
+}
