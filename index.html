@@ -6,7 +6,7 @@
     <title>Virginia Forage Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=mobile-5">
+    <link rel="stylesheet" href="./styles.css?v=mobile-6">
   </head>
   <body>
     <main class="app-shell">
@@ -19,23 +19,23 @@
           </div>
           <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
             <span class="panel-grip-bar" aria-hidden="true"></span>
-            <span class="panel-grip-label">Filters</span>
+            <span class="panel-grip-label">Menu</span>
           </button>
         </div>
 
         <div class="panel-content" id="panelContent">
 
-          <section class="control-group mobile-section is-open">
+          <section class="control-group mobile-section">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="true">
-                <h2>Season</h2>
+              <button class="section-toggle" type="button" aria-expanded="false">
+                <h2>Seasonality</h2>
               </button>
-              <div class="season-actions">
-                <button class="text-button" id="todayButton" type="button">Ripe today</button>
-                <button class="text-button" id="allSeasonsButton" type="button">All seasons</button>
-              </div>
             </div>
             <div class="section-body">
+              <div class="season-actions">
+                <button class="text-button" id="todayButton" type="button">By date</button>
+                <button class="text-button" id="allSeasonsButton" type="button">All seasons</button>
+              </div>
               <div class="season-readout">
                 <strong id="seasonDateLabel">May 20</strong>
                 <span id="seasonName">Spring</span>
@@ -120,6 +120,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=mobile-5"></script>
+    <script src="./app.js?v=mobile-6"></script>
   </body>
 </html>

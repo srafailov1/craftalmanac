@@ -693,7 +693,7 @@ h2 {
 
   .panel-topline {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) minmax(82px, auto);
     align-items: center;
     flex: 0 0 auto;
     gap: 12px;
@@ -708,6 +708,7 @@ h2 {
     justify-content: center;
     gap: 7px;
     grid-column: 2;
+    justify-self: center;
     min-height: 40px;
     padding: 0;
     border: 0;
@@ -728,7 +729,7 @@ h2 {
   }
 
   .panel-grip-label {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .panel-topline .brand-block {
@@ -738,6 +739,7 @@ h2 {
   .panel-content {
     flex: 1 1 auto;
     min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     padding-bottom: 12px;
@@ -753,18 +755,22 @@ h2 {
 
   .control-group {
     min-height: 0;
-    padding-top: 10px;
+    padding: 9px 0;
+  }
+
+  .control-group + .control-group {
+    margin-top: 0;
   }
 
   .section-heading {
-    min-height: 38px;
+    min-height: 34px;
   }
 
   .section-toggle {
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 38px;
+    min-height: 34px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -789,7 +795,9 @@ h2 {
 
   .section-body {
     display: none;
+    max-width: 100%;
     padding-top: 9px;
+    overflow-x: hidden;
   }
 
   .mobile-section.is-open .section-body {
@@ -798,6 +806,16 @@ h2 {
 
   .season-actions {
     gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .season-histogram,
+  .day-slider,
+  .date-entry,
+  .filter-list,
+  .species-list {
+    max-width: 100%;
+    min-width: 0;
   }
 
   .text-button {
