@@ -240,6 +240,10 @@ const allSeasonsButton = document.querySelector("#allSeasonsButton");
 const publicLayerToggle = document.querySelector("#publicLayerToggle");
 const publicOnlyToggle = document.querySelector("#publicOnlyToggle");
 const orchardLayerToggle = document.querySelector("#orchardLayerToggle");
+const controlPanel = document.querySelector("#controlPanel");
+const panelToggle = document.querySelector("#panelToggle");
+const panelToggleStatus = document.querySelector("#panelToggleStatus");
+const sectionToggles = [...document.querySelectorAll(".section-toggle")];
 
 function getDayOfYear(date) {
   const start = new Date(date.getFullYear(), 0, 0);
@@ -335,6 +339,22 @@ function initControls() {
     input.addEventListener("change", render);
   });
 
+  panelToggle.addEventListener("click", () => {
+    const shouldExpand = controlPanel.classList.contains("is-collapsed");
+    setPanelCollapsed(!shouldExpand);
+  });
+
+  sectionToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const section = toggle.closest(".mobile-section");
+      if (!section) return;
+      const shouldOpen = !section.classList.contains("is-open");
+      section.classList.toggle("is-open", shouldOpen);
+      toggle.setAttribute("aria-expanded", String(shouldOpen));
+      requestAnimationFrame(() => map.resize());
+    });
+  });
+
   categoryInputs.forEach((input) => {
     input.addEventListener("change", () => {
       setSpeciesByCategory(input.value, input.checked);
@@ -409,6 +429,13 @@ function initControls() {
     scheduleDataLoad();
     schedulePublicLandLoad();
   });
+}
+
+function setPanelCollapsed(collapsed) {
+  controlPanel.classList.toggle("is-collapsed", collapsed);
+  panelToggle.setAttribute("aria-expanded", String(!collapsed));
+  panelToggleStatus.textContent = collapsed ? "Open" : "Map";
+  requestAnimationFrame(() => map.resize());
 }
 
 function getSpecies(speciesId) {

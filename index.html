@@ -6,77 +6,99 @@
     <title>Virginia Forage Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=mapboxgl-6">
+    <link rel="stylesheet" href="./styles.css?v=mobile-2">
   </head>
   <body>
     <main class="app-shell">
-      <aside class="panel" aria-label="Forage controls">
+      <aside class="panel is-collapsed" aria-label="Forage controls" id="controlPanel">
         <div class="brand-block">
           <p class="eyebrow">Charlottesville, Virginia</p>
           <h1>Forage Map</h1>
           <p class="lede">Track edible plants and mushrooms by place, date, and confidence.</p>
         </div>
+        <button class="panel-toggle" id="panelToggle" type="button" aria-expanded="false" aria-controls="controlPanel">
+          <span class="panel-toggle-label">Filters</span>
+          <span class="panel-toggle-status" id="panelToggleStatus">Open</span>
+        </button>
 
-        <section class="control-group">
+        <section class="control-group mobile-section is-open">
           <div class="section-heading">
-            <h2>Season</h2>
+            <button class="section-toggle" type="button" aria-expanded="true">
+              <h2>Season</h2>
+            </button>
             <div class="season-actions">
               <button class="text-button" id="todayButton" type="button">Ripe today</button>
               <button class="text-button" id="allSeasonsButton" type="button">All seasons</button>
             </div>
           </div>
-          <div class="season-readout">
-            <strong id="seasonDateLabel">May 20</strong>
-            <span id="seasonName">Spring</span>
+          <div class="section-body">
+            <div class="season-readout">
+              <strong id="seasonDateLabel">May 20</strong>
+              <span id="seasonName">Spring</span>
+            </div>
+            <div class="season-histogram" id="seasonHistogram" aria-label="Seasonal availability histogram"></div>
+            <div class="season-bands" aria-hidden="true">
+              <span>Winter</span>
+              <span>Spring</span>
+              <span>Summer</span>
+              <span>Fall</span>
+            </div>
+            <input class="day-slider" id="daySlider" type="range" min="1" max="365" value="140" aria-label="Choose day of year">
+            <label class="date-entry" for="dateInput">
+              <span>Date</span>
+              <input id="dateInput" type="date">
+            </label>
           </div>
-          <div class="season-histogram" id="seasonHistogram" aria-label="Seasonal availability histogram"></div>
-          <div class="season-bands" aria-hidden="true">
-            <span>Winter</span>
-            <span>Spring</span>
-            <span>Summer</span>
-            <span>Fall</span>
-          </div>
-          <input class="day-slider" id="daySlider" type="range" min="1" max="365" value="140" aria-label="Choose day of year">
-          <label class="date-entry" for="dateInput">
-            <span>Date</span>
-            <input id="dateInput" type="date">
-          </label>
         </section>
 
-        <section class="control-group">
+        <section class="control-group mobile-section">
           <div class="section-heading">
-            <h2>Food Types & Species</h2>
+            <button class="section-toggle" type="button" aria-expanded="false">
+              <h2>Food Types & Species</h2>
+            </button>
             <span class="count" id="speciesCount">0</span>
           </div>
-          <div class="filter-list type-list" id="categoryList">
-            <label><input type="checkbox" name="category" value="fruit" checked> Fruit</label>
-            <label><input type="checkbox" name="category" value="berry" checked> Berries</label>
-            <label><input type="checkbox" name="category" value="nut" checked> Nuts</label>
-            <label><input type="checkbox" name="category" value="mushroom" checked> Mushrooms</label>
+          <div class="section-body">
+            <div class="filter-list type-list" id="categoryList">
+              <label><input type="checkbox" name="category" value="fruit" checked> Fruit</label>
+              <label><input type="checkbox" name="category" value="berry" checked> Berries</label>
+              <label><input type="checkbox" name="category" value="nut" checked> Nuts</label>
+              <label><input type="checkbox" name="category" value="mushroom" checked> Mushrooms</label>
+            </div>
+            <div class="species-actions">
+              <button class="text-button" id="selectAllSpeciesButton" type="button">All</button>
+              <button class="text-button" id="clearSpeciesButton" type="button">None</button>
+            </div>
+            <div class="species-list" id="speciesList" aria-label="Choose species"></div>
           </div>
-          <div class="species-actions">
-            <button class="text-button" id="selectAllSpeciesButton" type="button">All</button>
-            <button class="text-button" id="clearSpeciesButton" type="button">None</button>
-          </div>
-          <div class="species-list" id="speciesList" aria-label="Choose species"></div>
         </section>
 
-        <section class="control-group">
+        <section class="control-group mobile-section">
           <div class="section-heading">
-            <h2>Access & Safety</h2>
+            <button class="section-toggle" type="button" aria-expanded="false">
+              <h2>Access & Safety</h2>
+            </button>
           </div>
-          <div class="filter-list access-list">
-            <label><input type="checkbox" id="publicLayerToggle" checked> Public lands</label>
-            <label><input type="checkbox" id="publicOnlyToggle"> Public access only</label>
-            <label><input type="checkbox" id="orchardLayerToggle" checked> Historic orchards</label>
+          <div class="section-body">
+            <div class="filter-list access-list">
+              <label><input type="checkbox" id="publicLayerToggle" checked> Public lands</label>
+              <label><input type="checkbox" id="publicOnlyToggle"> Public access only</label>
+              <label><input type="checkbox" id="orchardLayerToggle" checked> Historic orchards</label>
+            </div>
+            <p class="fine-print">Public land does not always mean harvest is allowed. Confirm property boundaries, posted rules, and current collection limits before taking anything.</p>
           </div>
-          <p class="fine-print">Public land does not always mean harvest is allowed. Confirm property boundaries, posted rules, and current collection limits before taking anything.</p>
         </section>
 
-        <section class="control-group attribution-block">
-          <h2>Data Notes</h2>
-          <p>Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.</p>
-          <a href="./ATTRIBUTION.md" target="_blank" rel="noreferrer">Attribution and data-use notes</a>
+        <section class="control-group attribution-block mobile-section">
+          <div class="section-heading">
+            <button class="section-toggle" type="button" aria-expanded="false">
+              <h2>Data Notes</h2>
+            </button>
+          </div>
+          <div class="section-body">
+            <p>Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.</p>
+            <a href="./ATTRIBUTION.md" target="_blank" rel="noreferrer">Attribution and data-use notes</a>
+          </div>
         </section>
 
         <p class="fine-print" id="dataStatus">Loading current map data...</p>
@@ -93,6 +115,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=mapboxgl-6"></script>
+    <script src="./app.js?v=mobile-2"></script>
   </body>
 </html>
