@@ -720,20 +720,6 @@ function bindMapInteractions() {
       .addTo(map);
   });
 
-  map.on("click", PUBLIC_LANDS_FILL_LAYER_ID, (event) => {
-    if (!state.publicLayerVisible) return;
-    const feature = event.features?.[0];
-    if (!feature) return;
-    new mapboxgl.Popup({
-      className: "public-land-map-popup",
-      closeButton: true,
-      closeOnClick: true,
-      maxWidth: "300px"
-    })
-      .setLngLat(event.lngLat)
-      .setHTML(getPublicLandPopupHTML(feature.properties))
-      .addTo(map);
-  });
 }
 
 function getMarkerPopupHTML(properties) {
@@ -757,17 +743,6 @@ function getMarkerPopupHTML(properties) {
     ${warning}
     <p class="popup-note">${escapeHTML(properties.note)}</p>
     <p class="popup-note"><strong>Limit note:</strong> ${escapeHTML(properties.parkLimit)}</p>
-  `;
-}
-
-function getPublicLandPopupHTML(properties) {
-  const access = properties.Pub_Access === "RA" ? "Restricted public access" : "Open public access";
-  return `
-    <div class="public-land-popup">
-      <strong>${escapeHTML(properties.Unit_Nm || "Public access land")}</strong>
-      <span>${escapeHTML(access)}</span>
-      <span>${escapeHTML(properties.MngNm_Desc || properties.MngTp_Desc || "Manager unknown")}</span>
-    </div>
   `;
 }
 
