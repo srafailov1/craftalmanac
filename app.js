@@ -8,6 +8,7 @@ const CATEGORIES = ["fruit", "berry", "nut", "mushroom"];
 const MAPBOX_TOKEN = window.FORAGE_CONFIG?.mapboxToken || "";
 const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
+const LIVE_DATA_TIMEOUT = 9000;
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 
 const speciesCatalog = [
@@ -177,6 +178,7 @@ const state = {
   selectedDay: getDayOfYear(new Date()),
   allSeasons: false,
   records: [],
+  inatRecords: [],
   markers: [],
   loadTimer: null,
   publicLoadTimer: null,
@@ -194,9 +196,17 @@ const state = {
 
 const map = L.map("map", {
   zoomControl: false,
+  zoomSnap: 0.25,
+  zoomDelta: 0.5,
+  wheelPxPerZoomLevel: 160,
+  wheelDebounceTime: 24,
+  zoomAnimation: true,
+  markerZoomAnimation: true,
+  fadeAnimation: true,
+  inertia: true,
   preferCanvas: false,
   updateWhenIdle: true,
-  updateWhenZooming: false
+  updateWhenZooming: true
 }).setView([38.0356, -78.5034], 13);
 
 L.control.zoom({ position: "bottomright" }).addTo(map);
@@ -565,14 +575,23 @@ function renderHistogram() {
   }).join("");
 }
 
-function markerIcon(category, source) {
-  return L.divIcon({
-    className: "forage-marker",
-    html: `<span class="marker-dot ${category} ${source === "nps-orchard" ? "nps-orchard" : ""}"></span>`,
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
-    popupAnchor: [0, -8]
-  });
+function markerStyle(category, source) {
+  const colors = {
+    berry: "#d12f7a",
+    fruit: "#1b8a5a",
+    nut: "#c47a15",
+    mushroom: "#6f4acb"
+  };
+  return {
+    renderer: publicLandRenderer,
+    radius: source === "nps-orchard" ? 6 : 5,
+    color: source === "nps-orchard" ? "#fdf1bd" : "#ffffff",
+    weight: source === "nps-orchard" ? 2.5 : 1.8,
+    fillColor: colors[category] || "#1b8a5a",
+    fillOpacity: 0.95,
+    opacity: 1,
+    bubblingMouseEvents: false
+  };
 }
 
 function renderMarkers() {
@@ -580,46 +599,49 @@ function renderMarkers() {
   state.markers = [];
 
   const visibleRecords = getVisibleRecords();
-
   visibleRecords.forEach((record) => {
     const species = getSpecies(record.speciesId);
+    const lat = Number(record.lat);
+    const lng = Number(record.lng);
+    if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return;
+    }
     const sourceText = sourceLabel(record.source);
-    const sourceMarkup = record.sourceUrl
-      ? `<a class="popup-source" href="${escapeHTML(record.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(sourceText)}</a>`
-      : `<span class="popup-source">${escapeHTML(sourceText)}</span>`;
-    const accessNote = getRecordAccessNote(record);
-    const warning = record.harvestStatus
-      ? `<p class="popup-warning">${escapeHTML(record.harvestStatus)}: ${escapeHTML(record.accessNote || "Confirm site rules before harvesting.")}</p>`
-      : "";
-    const popup = `
-      <p class="popup-title">${escapeHTML(species.commonName)}</p>
-      <p class="popup-meta">${escapeHTML(record.observedName || species.commonName)} · ${escapeHTML(record.observedScientificName || species.scientificName)}</p>
-      <dl class="popup-grid">
-        <dt>Place</dt><dd>${escapeHTML(record.name)}</dd>
-        <dt>Source</dt><dd>${sourceMarkup}</dd>
-        <dt>Access</dt><dd>${escapeHTML(accessNote)}</dd>
-        <dt>Season</dt><dd>${escapeHTML(getMonthRangeText(species.months))}</dd>
-        <dt>Status</dt><dd>${escapeHTML(record.confidence)}</dd>
-      </dl>
-      ${warning}
-      <p class="popup-note">${escapeHTML(record.note)}</p>
-      <p class="popup-note"><strong>Limit note:</strong> ${escapeHTML(species.parkLimit)}</p>
-    `;
-    const marker = L.marker([record.lat, record.lng], {
-      icon: markerIcon(species.category, record.source),
-      title: `${species.commonName} - ${sourceText}`,
-      riseOnHover: true,
-      bubblingMouseEvents: false
-    })
-      .bindPopup(popup)
-      .bindTooltip(species.commonName, {
-        direction: "top",
-        offset: [0, -8],
-        opacity: 1
-      });
-    marker.on("click", () => marker.openPopup());
-    marker.addTo(map);
-    state.markers.push(marker);
+    try {
+      const sourceMarkup = record.sourceUrl
+        ? `<a class="popup-source" href="${escapeHTML(record.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(sourceText)}</a>`
+        : `<span class="popup-source">${escapeHTML(sourceText)}</span>`;
+      const accessNote = getRecordAccessNote(record);
+      const warning = record.harvestStatus
+        ? `<p class="popup-warning">${escapeHTML(record.harvestStatus)}: ${escapeHTML(record.accessNote || "Confirm site rules before harvesting.")}</p>`
+        : "";
+      const popup = `
+        <p class="popup-title">${escapeHTML(species.commonName)}</p>
+        <p class="popup-meta">${escapeHTML(record.observedName || species.commonName)} · ${escapeHTML(record.observedScientificName || species.scientificName)}</p>
+        <dl class="popup-grid">
+          <dt>Place</dt><dd>${escapeHTML(record.name)}</dd>
+          <dt>Source</dt><dd>${sourceMarkup}</dd>
+          <dt>Access</dt><dd>${escapeHTML(accessNote)}</dd>
+          <dt>Season</dt><dd>${escapeHTML(getMonthRangeText(species.months))}</dd>
+          <dt>Status</dt><dd>${escapeHTML(record.confidence)}</dd>
+        </dl>
+        ${warning}
+        <p class="popup-note">${escapeHTML(record.note)}</p>
+        <p class="popup-note"><strong>Limit note:</strong> ${escapeHTML(species.parkLimit)}</p>
+      `;
+      const marker = L.circleMarker([lat, lng], markerStyle(species.category, record.source))
+        .bindPopup(popup)
+        .bindTooltip(species.commonName, {
+          direction: "top",
+          offset: [0, -8],
+          opacity: 1
+        });
+      marker.on("click", () => marker.openPopup());
+      marker.addTo(map);
+      state.markers.push(marker);
+    } catch (error) {
+      console.warn("Unable to render map marker", record.id, error);
+    }
   });
 }
 
@@ -631,25 +653,42 @@ function scheduleDataLoad() {
 async function loadMapData() {
   const requestId = state.activeRequest + 1;
   state.activeRequest = requestId;
-  setDataStatus("Loading current map data...");
+  const hadRecords = state.records.length > 0;
+  if (!hadRecords) setDataStatus("Loading current map data...");
 
-  try {
-    const [inatRecords, fallingFruitRecords, npsOrchardRecords] = await Promise.all([
-      loadINaturalist(),
-      loadFallingFruit(),
-      loadNpsOrchards()
-    ]);
+  const [inatResult, fallingFruitResult, npsOrchardResult] = await Promise.allSettled([
+    loadINaturalist(),
+    loadFallingFruit(),
+    loadNpsOrchards()
+  ]);
 
-    if (requestId !== state.activeRequest) return;
-    state.records = [...inatRecords, ...fallingFruitRecords, ...npsOrchardRecords];
-    renderMarkers();
-    setDataStatus(`${state.records.length} current records loaded`);
-  } catch (error) {
-    if (requestId !== state.activeRequest) return;
-    state.records = [];
-    renderMarkers();
-    setDataStatus(`Could not load current data: ${error.message}`);
+  if (requestId !== state.activeRequest) return;
+
+  if (inatResult.status === "fulfilled") {
+    state.inatRecords = inatResult.value;
   }
+
+  const fallingFruitRecords = fallingFruitResult.status === "fulfilled"
+    ? fallingFruitResult.value
+    : state.fallingFruitRecords || [];
+  const npsOrchardRecords = npsOrchardResult.status === "fulfilled"
+    ? npsOrchardResult.value
+    : state.npsOrchardRecords || [];
+  const nextRecords = [...state.inatRecords, ...fallingFruitRecords, ...npsOrchardRecords];
+
+  if (nextRecords.length) {
+    state.records = nextRecords;
+    renderMarkers();
+  }
+
+  const failedSources = [
+    inatResult.status === "rejected" ? "iNaturalist" : "",
+    fallingFruitResult.status === "rejected" ? "Falling Fruit" : "",
+    npsOrchardResult.status === "rejected" ? "NPS orchards" : ""
+  ].filter(Boolean);
+  setDataStatus(failedSources.length
+    ? `${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`
+    : `${state.records.length} current records loaded`);
 }
 
 async function loadINaturalist() {
@@ -677,7 +716,7 @@ async function loadINaturalist() {
     order_by: "observed_on"
   });
 
-  const response = await fetch(`https://api.inaturalist.org/v1/observations?${params.toString()}`);
+  const response = await fetchWithTimeout(`https://api.inaturalist.org/v1/observations?${params.toString()}`);
   if (!response.ok) throw new Error(`iNaturalist returned ${response.status}`);
   const data = await response.json();
   return data.results
@@ -760,7 +799,7 @@ async function loadPublicLands() {
       f: "geojson",
       resultRecordCount: "1000"
     });
-    const response = await fetch(`${PUBLIC_LANDS_URL}?${params.toString()}`);
+    const response = await fetchWithTimeout(`${PUBLIC_LANDS_URL}?${params.toString()}`);
     if (!response.ok) throw new Error(`PAD-US returned ${response.status}`);
     const data = await response.json();
     if (requestId !== state.activePublicRequest) return;
@@ -768,11 +807,31 @@ async function loadPublicLands() {
     state.publicLayerLoadedKey = boundsKey;
     state.publicLandLayer.clearLayers();
     state.publicLandLayer.addData(state.publicLandFeatures);
-    renderMarkers();
+    if (state.publicOnly) renderMarkers();
   } catch (error) {
     if (requestId !== state.activePublicRequest) return;
     state.publicLandFeatures = [];
     state.publicLandLayer.clearLayers();
+    if (state.publicOnly) renderMarkers();
+  }
+}
+
+async function fetchWithTimeout(url, options = {}) {
+  const controller = new AbortController();
+  let timeoutId;
+  const timeout = new Promise((_, reject) => {
+    timeoutId = window.setTimeout(() => {
+      controller.abort();
+      reject(new Error("request timed out"));
+    }, LIVE_DATA_TIMEOUT);
+  });
+  try {
+    return await Promise.race([fetch(url, {
+      ...options,
+      signal: controller.signal
+    }), timeout]);
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 }
 
@@ -867,19 +926,20 @@ function isRecordPubliclyAccessible(record) {
 
 function getContainingPublicLand(record) {
   if (!state.publicLandFeatures.length) return null;
-  return state.publicLandFeatures.find((feature) => pointInFeature([record.lng, record.lat], feature));
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return state.publicLandFeatures.find((feature) => pointInFeature([lng, lat], feature));
 }
 
 function pointInFeature(point, feature) {
   const geometry = feature.geometry;
   if (!geometry) return false;
   if (geometry.type === "Polygon") {
-    return geometry.coordinates.some((polygon) => pointInPolygon(point, polygon));
+    return pointInPolygon(point, geometry.coordinates);
   }
   if (geometry.type === "MultiPolygon") {
-    return geometry.coordinates.some((multiPolygon) => (
-      multiPolygon.some((polygon) => pointInPolygon(point, polygon))
-    ));
+    return geometry.coordinates.some((polygon) => pointInPolygon(point, polygon));
   }
   return false;
 }

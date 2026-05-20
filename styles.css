@@ -508,6 +508,18 @@ h2 {
   top: 0;
 }
 
+.leaflet-zoom-animated {
+  transform-origin: 0 0;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  transition: transform 0.25s cubic-bezier(0, 0, 0.25, 1);
+}
+
+.leaflet-fade-anim .leaflet-tile {
+  will-change: opacity;
+}
+
 .leaflet-container img,
 .leaflet-tile {
   max-width: none !important;
