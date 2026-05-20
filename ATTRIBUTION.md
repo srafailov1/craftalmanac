@@ -1,0 +1,33 @@
+# Attribution and Data-Use Notes
+
+This prototype combines live and cached public-interest data. It is non-commercial, but attribution and use limits still matter.
+
+## iNaturalist
+
+The map queries the supported iNaturalist API at runtime and links each observation back to its iNaturalist observation page. iNaturalist states that user-contributed content remains owned by the contributor and, unless otherwise specified, is licensed under Creative Commons Attribution-NonCommercial (CC BY-NC). Do not reuse photos or other media from iNaturalist without checking the license on the individual observation.
+
+Source: https://www.inaturalist.org/pages/api+reference and https://www.inaturalist.org/pages/terms
+
+## Falling Fruit
+
+The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to central Virginia records matching this app's species groups. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
+
+Source: https://fallingfruit.org/data
+
+## USGS PAD-US Public Access
+
+The public-land overlay is queried live from the USGS PAD-US Public Access feature service. PAD-US is the official U.S. protected-areas inventory, but the Public Access field is a general access category, not a foraging permission layer. USGS notes that the public-access measure includes Open, Restricted, Closed, or Unknown access and that not all areas have been locally reviewed.
+
+Source: https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-web-services
+
+Suggested citation: U.S. Geological Survey Gap Analysis Project, 2024, Protected Areas Database of the United States (PAD-US) 4: U.S. Geological Survey data release, https://doi.org/10.5066/P96WBCHS
+
+## National Park Service Historic Orchards
+
+The historic orchard layer is derived from the NPS Cultural Landscapes historic orchard map. NPS describes the map as informational and not for navigation or resource management. NPS also asks visitors not to take fruit or cuttings from these historic resources without permission, so orchard records in this app are displayed as "permission required."
+
+Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm
+
+## Safety
+
+This app is a planning and discovery aid. It does not verify plant identification, ripeness, toxins, private-property boundaries, or current collection rules. Confirm identification independently, check posted rules and agency regulations, and do not harvest on private land or protected public land without permission.
