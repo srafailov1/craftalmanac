@@ -241,9 +241,12 @@ const publicLayerToggle = document.querySelector("#publicLayerToggle");
 const publicOnlyToggle = document.querySelector("#publicOnlyToggle");
 const orchardLayerToggle = document.querySelector("#orchardLayerToggle");
 const controlPanel = document.querySelector("#controlPanel");
-const panelToggle = document.querySelector("#panelToggle");
-const panelToggleStatus = document.querySelector("#panelToggleStatus");
+const panelGrip = document.querySelector("#panelGrip");
 const sectionToggles = [...document.querySelectorAll(".section-toggle")];
+const MOBILE_PANEL_MIN_HEIGHT = 92;
+const MOBILE_PANEL_DEFAULT_HEIGHT = 420;
+const MOBILE_PANEL_MARGIN = 20;
+let panelDragState = null;
 
 function getDayOfYear(date) {
   const start = new Date(date.getFullYear(), 0, 0);
@@ -339,10 +342,7 @@ function initControls() {
     input.addEventListener("change", render);
   });
 
-  panelToggle.addEventListener("click", () => {
-    const shouldExpand = controlPanel.classList.contains("is-collapsed");
-    setPanelCollapsed(!shouldExpand);
-  });
+  panelGrip.addEventListener("pointerdown", handlePanelGripPointerDown);
 
   sectionToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -433,9 +433,81 @@ function initControls() {
 
 function setPanelCollapsed(collapsed) {
   controlPanel.classList.toggle("is-collapsed", collapsed);
-  panelToggle.setAttribute("aria-expanded", String(!collapsed));
-  panelToggleStatus.textContent = collapsed ? "Menu" : "Map";
+  panelGrip.setAttribute("aria-expanded", String(!collapsed));
+  if (collapsed) {
+    setPanelHeight(MOBILE_PANEL_MIN_HEIGHT);
+  } else {
+    setPanelHeight(Math.max(MOBILE_PANEL_DEFAULT_HEIGHT, MOBILE_PANEL_MIN_HEIGHT));
+  }
   requestAnimationFrame(() => map.resize());
+}
+
+function handlePanelGripPointerDown(event) {
+  if (!isMobilePanel()) return;
+  event.preventDefault();
+  const startHeight = controlPanel.getBoundingClientRect().height;
+  panelDragState = {
+    pointerId: event.pointerId,
+    startY: event.clientY,
+    startHeight,
+    moved: false
+  };
+  controlPanel.classList.add("is-resizing");
+  panelGrip.setPointerCapture(event.pointerId);
+  panelGrip.addEventListener("pointermove", handlePanelGripPointerMove);
+  panelGrip.addEventListener("pointerup", handlePanelGripPointerUp);
+  panelGrip.addEventListener("pointercancel", handlePanelGripPointerUp);
+}
+
+function handlePanelGripPointerMove(event) {
+  if (!panelDragState || event.pointerId !== panelDragState.pointerId) return;
+  const delta = panelDragState.startY - event.clientY;
+  if (Math.abs(delta) > 6) panelDragState.moved = true;
+  const nextHeight = panelDragState.startHeight + delta;
+  setPanelHeight(nextHeight);
+}
+
+function handlePanelGripPointerUp(event) {
+  if (!panelDragState || event.pointerId !== panelDragState.pointerId) return;
+  const wasTap = !panelDragState.moved;
+  panelGrip.releasePointerCapture(event.pointerId);
+  panelGrip.removeEventListener("pointermove", handlePanelGripPointerMove);
+  panelGrip.removeEventListener("pointerup", handlePanelGripPointerUp);
+  panelGrip.removeEventListener("pointercancel", handlePanelGripPointerUp);
+  controlPanel.classList.remove("is-resizing");
+  panelDragState = null;
+
+  if (wasTap) {
+    const isCollapsed = controlPanel.classList.contains("is-collapsed");
+    setPanelCollapsed(!isCollapsed);
+    return;
+  }
+
+  const currentHeight = controlPanel.getBoundingClientRect().height;
+  if (currentHeight <= MOBILE_PANEL_MIN_HEIGHT + 20) {
+    setPanelCollapsed(true);
+  } else {
+    controlPanel.classList.remove("is-collapsed");
+    panelGrip.setAttribute("aria-expanded", "true");
+    setPanelHeight(currentHeight);
+  }
+}
+
+function setPanelHeight(height) {
+  const maxHeight = getPanelMaxHeight();
+  const nextHeight = Math.min(Math.max(height, MOBILE_PANEL_MIN_HEIGHT), maxHeight);
+  controlPanel.style.setProperty("--panel-height", `${nextHeight}px`);
+  controlPanel.classList.toggle("is-collapsed", nextHeight <= MOBILE_PANEL_MIN_HEIGHT + 2);
+  panelGrip.setAttribute("aria-expanded", String(nextHeight > MOBILE_PANEL_MIN_HEIGHT + 2));
+  requestAnimationFrame(() => map.resize());
+}
+
+function getPanelMaxHeight() {
+  return Math.max(MOBILE_PANEL_MIN_HEIGHT, window.innerHeight - MOBILE_PANEL_MARGIN);
+}
+
+function isMobilePanel() {
+  return window.matchMedia("(max-width: 860px)").matches;
 }
 
 function getSpecies(speciesId) {

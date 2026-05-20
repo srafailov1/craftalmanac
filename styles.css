@@ -65,7 +65,7 @@ button {
   z-index: 500;
 }
 
-.panel-toggle {
+.panel-grip {
   display: none;
 }
 
@@ -625,6 +625,7 @@ h2 {
 @media (max-width: 860px) {
   :root {
     --mobile-panel-collapsed: 92px;
+    --panel-height: var(--mobile-panel-collapsed);
   }
 
   .app-shell {
@@ -645,20 +646,21 @@ h2 {
     z-index: 700;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    max-height: min(78dvh, 680px);
+    gap: 0;
+    height: min(var(--panel-height), calc(100dvh - 20px));
+    max-height: calc(100dvh - 20px);
     padding: 14px;
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 14px;
     box-shadow: 0 18px 60px rgba(35, 44, 30, 0.24);
-    transition: max-height 180ms ease, transform 180ms ease;
+    transition: height 160ms ease, transform 180ms ease;
+    touch-action: none;
   }
 
   .panel.is-collapsed {
-    max-height: var(--mobile-panel-collapsed);
-    overflow: hidden;
+    height: var(--mobile-panel-collapsed);
+    justify-content: center;
   }
 
   .panel::before {
@@ -667,21 +669,21 @@ h2 {
 
   .brand-block {
     display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: end;
-    gap: 8px 12px;
+    grid-template-columns: 1fr;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 4px;
     min-width: 0;
-    padding-right: 108px;
+    padding: 4px 0 10px;
+    text-align: center;
   }
 
   .brand-block h1 {
-    grid-column: 1;
-    font-size: 28px;
+    font-size: 26px;
     line-height: 1;
   }
 
   .brand-block .eyebrow {
-    grid-column: 1;
     margin-bottom: 0;
     font-size: 10px;
   }
@@ -690,45 +692,55 @@ h2 {
     display: none;
   }
 
-  .panel-toggle {
+  .panel.is-collapsed .brand-block {
+    display: none;
+  }
+
+  .panel-grip {
     display: flex;
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    align-self: stretch;
+    flex: 0 0 auto;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 94px;
-    min-height: 44px;
-    padding: 0 12px;
-    border: 1px solid var(--leaf-dark);
-    border-radius: 8px;
-    background: var(--leaf-dark);
-    color: #fff;
+    gap: 7px;
+    width: 100%;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--leaf-dark);
     font-weight: 850;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    touch-action: none;
   }
 
-  .panel-toggle-label {
+  .panel-grip-bar {
+    display: block;
+    width: 46px;
+    height: 5px;
+    border-radius: 999px;
+    background: #aebca8;
+  }
+
+  .panel-grip-label {
+    font-size: 11px;
+  }
+
+  .panel-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 12px;
+  }
+
+  .panel.is-collapsed .panel-content {
     display: none;
   }
 
-  .panel-toggle-status {
-    white-space: nowrap;
-  }
-
-  .panel > .panel-toggle {
-    display: none;
-  }
-
-  .brand-block + .panel-toggle {
-    display: flex;
-    position: absolute;
-    top: 20px;
-    right: 14px;
-  }
-
-  .panel.is-collapsed .control-group,
-  .panel.is-collapsed #dataStatus {
-    display: none;
+  .panel.is-resizing {
+    transition: none;
   }
 
   .control-group {
@@ -773,10 +785,6 @@ h2 {
 
   .mobile-section.is-open .section-body {
     display: block;
-  }
-
-  .panel:not(.is-collapsed) {
-    padding-bottom: 18px;
   }
 
   .season-actions {
