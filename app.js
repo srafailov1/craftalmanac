@@ -222,8 +222,8 @@ const map = new mapboxgl.Map({
 });
 
 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-map.scrollZoom.setWheelZoomRate?.(1 / 450);
-map.scrollZoom.setZoomRate?.(1 / 900);
+map.scrollZoom.setWheelZoomRate?.(1 / 320);
+map.scrollZoom.setZoomRate?.(1 / 240);
 window.addEventListener("resize", () => map.resize());
 
 const dataStatus = document.querySelector("#dataStatus");
