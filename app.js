@@ -10,6 +10,18 @@ const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
 const LIVE_DATA_TIMEOUT = 9000;
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
+const MARKERS_SOURCE_ID = "forage-records";
+const MARKERS_LAYER_ID = "forage-record-points";
+const PUBLIC_LANDS_SOURCE_ID = "public-lands";
+const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
+const PUBLIC_LANDS_LINE_LAYER_ID = "public-lands-line";
+const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
+const CATEGORY_COLORS = {
+  berry: "#d12f7a",
+  fruit: "#1b8a5a",
+  nut: "#c47a15",
+  mushroom: "#6f4acb"
+};
 
 const speciesCatalog = [
   {
@@ -179,7 +191,6 @@ const state = {
   allSeasons: false,
   records: [],
   inatRecords: [],
-  markers: [],
   loadTimer: null,
   publicLoadTimer: null,
   activeRequest: 0,
@@ -187,53 +198,33 @@ const state = {
   fallingFruitRecords: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
-  publicLandLayer: null,
+  mapReady: false,
   publicLayerLoadedKey: "",
   publicLayerVisible: true,
   publicOnly: false,
-  showOrchards: true
+  showOrchards: true,
+  activePopup: null,
+  hoverPopup: null
 };
 
-const map = L.map("map", {
-  zoomControl: false,
-  zoomSnap: 0.25,
-  zoomDelta: 0.5,
-  wheelPxPerZoomLevel: 160,
-  wheelDebounceTime: 24,
-  zoomAnimation: true,
-  markerZoomAnimation: true,
-  fadeAnimation: true,
-  inertia: true,
-  preferCanvas: false,
-  updateWhenIdle: true,
-  updateWhenZooming: true
-}).setView([38.0356, -78.5034], 13);
+mapboxgl.accessToken = MAPBOX_TOKEN;
 
-L.control.zoom({ position: "bottomright" }).addTo(map);
-const publicLandRenderer = L.svg({ pane: "overlayPane" });
-publicLandRenderer.addTo(map);
-const tileLayerOptions = {
-  maxZoom: 19,
+const map = new mapboxgl.Map({
+  container: "map",
+  style: MAPBOX_STYLE,
+  center: [-78.5034, 38.0356],
+  zoom: 13,
   minZoom: 3,
-  keepBuffer: 4,
-  crossOrigin: true
-};
+  maxZoom: 19,
+  pitchWithRotate: false,
+  dragRotate: false,
+  attributionControl: true
+});
 
-const mapboxUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/tiles/512/{z}/{x}/{y}@2x?access_token={accessToken}";
-const fallbackUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-L.tileLayer(MAPBOX_TOKEN ? mapboxUrl : fallbackUrl, {
-  ...tileLayerOptions,
-  tileSize: MAPBOX_TOKEN ? 512 : 256,
-  zoomOffset: MAPBOX_TOKEN ? -1 : 0,
-  accessToken: MAPBOX_TOKEN,
-  attribution: MAPBOX_TOKEN
-    ? '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-
-requestAnimationFrame(() => map.invalidateSize());
-window.addEventListener("resize", () => map.invalidateSize());
+map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
+map.scrollZoom.setWheelZoomRate?.(1 / 450);
+map.scrollZoom.setZoomRate?.(1 / 900);
+window.addEventListener("resize", () => map.resize());
 
 const dataStatus = document.querySelector("#dataStatus");
 const speciesCount = document.querySelector("#speciesCount");
@@ -249,35 +240,6 @@ const allSeasonsButton = document.querySelector("#allSeasonsButton");
 const publicLayerToggle = document.querySelector("#publicLayerToggle");
 const publicOnlyToggle = document.querySelector("#publicOnlyToggle");
 const orchardLayerToggle = document.querySelector("#orchardLayerToggle");
-
-state.publicLandLayer = L.geoJSON(null, {
-  renderer: publicLandRenderer,
-  style: (feature) => {
-    const access = feature.properties?.Pub_Access;
-    return {
-      color: access === "RA" ? "#2f786c" : "#4f8f32",
-      weight: 1,
-      opacity: 0.72,
-      fillColor: access === "RA" ? "#3b8c7e" : "#75ad37",
-      fillOpacity: access === "RA" ? 0.16 : 0.18
-    };
-  },
-  onEachFeature: (feature, layer) => {
-    const props = feature.properties || {};
-    const access = props.Pub_Access === "RA" ? "Restricted public access" : "Open public access";
-    layer.bindPopup(`
-      <div class="public-land-popup">
-        <strong>${escapeHTML(props.Unit_Nm || "Public access land")}</strong>
-        <span>${escapeHTML(access)}</span>
-        <span>${escapeHTML(props.MngNm_Desc || props.MngTp_Desc || "Manager unknown")}</span>
-      </div>
-    `);
-  }
-});
-
-if (state.publicLayerVisible) {
-  state.publicLandLayer.addTo(map);
-}
 
 function getDayOfYear(date) {
   const start = new Date(date.getFullYear(), 0, 0);
@@ -394,12 +356,8 @@ function initControls() {
 
   publicLayerToggle.addEventListener("change", () => {
     state.publicLayerVisible = publicLayerToggle.checked;
-    if (state.publicLayerVisible) {
-      state.publicLandLayer.addTo(map);
-      schedulePublicLandLoad();
-    } else {
-      state.publicLandLayer.remove();
-    }
+    updatePublicLandVisibility();
+    if (state.publicLayerVisible) schedulePublicLandLoad();
   });
 
   publicOnlyToggle.addEventListener("change", () => {
@@ -430,11 +388,21 @@ function initControls() {
   });
 
   document.querySelector("#charlottesvilleButton").addEventListener("click", () => {
-    map.setView([38.0356, -78.5034], 13);
+    map.easeTo({
+      center: [-78.5034, 38.0356],
+      zoom: 13,
+      duration: 950,
+      essential: true
+    });
   });
 
   document.querySelector("#shenandoahButton").addEventListener("click", () => {
-    map.setView([38.533, -78.35], 10);
+    map.easeTo({
+      center: [-78.35, 38.533],
+      zoom: 10,
+      duration: 1100,
+      essential: true
+    });
   });
 
   map.on("moveend", () => {
@@ -514,9 +482,11 @@ function render() {
   renderSpeciesState();
   renderHistogram();
   renderMarkers();
-  scheduleDataLoad();
-  if (state.publicLayerVisible || state.publicOnly) schedulePublicLandLoad();
-  requestAnimationFrame(() => map.invalidateSize());
+  if (state.mapReady) {
+    scheduleDataLoad();
+    if (state.publicLayerVisible || state.publicOnly) schedulePublicLandLoad();
+    requestAnimationFrame(() => map.resize());
+  }
 }
 
 function renderSeasonControls() {
@@ -575,72 +545,245 @@ function renderHistogram() {
   }).join("");
 }
 
-function markerStyle(category, source) {
-  const colors = {
-    berry: "#d12f7a",
-    fruit: "#1b8a5a",
-    nut: "#c47a15",
-    mushroom: "#6f4acb"
-  };
-  return {
-    renderer: publicLandRenderer,
-    radius: source === "nps-orchard" ? 6 : 5,
-    color: source === "nps-orchard" ? "#fdf1bd" : "#ffffff",
-    weight: source === "nps-orchard" ? 2.5 : 1.8,
-    fillColor: colors[category] || "#1b8a5a",
-    fillOpacity: 0.95,
-    opacity: 1,
-    bubblingMouseEvents: false
-  };
-}
-
 function renderMarkers() {
-  state.markers.forEach((marker) => marker.remove());
-  state.markers = [];
+  if (!state.mapReady || !map.getSource(MARKERS_SOURCE_ID)) return;
 
-  const visibleRecords = getVisibleRecords();
-  visibleRecords.forEach((record) => {
+  const features = getVisibleRecords().flatMap((record) => {
     const species = getSpecies(record.speciesId);
     const lat = Number(record.lat);
     const lng = Number(record.lng);
     if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) {
-      return;
+      return [];
     }
-    const sourceText = sourceLabel(record.source);
-    try {
-      const sourceMarkup = record.sourceUrl
-        ? `<a class="popup-source" href="${escapeHTML(record.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(sourceText)}</a>`
-        : `<span class="popup-source">${escapeHTML(sourceText)}</span>`;
-      const accessNote = getRecordAccessNote(record);
-      const warning = record.harvestStatus
-        ? `<p class="popup-warning">${escapeHTML(record.harvestStatus)}: ${escapeHTML(record.accessNote || "Confirm site rules before harvesting.")}</p>`
-        : "";
-      const popup = `
-        <p class="popup-title">${escapeHTML(species.commonName)}</p>
-        <p class="popup-meta">${escapeHTML(record.observedName || species.commonName)} · ${escapeHTML(record.observedScientificName || species.scientificName)}</p>
-        <dl class="popup-grid">
-          <dt>Place</dt><dd>${escapeHTML(record.name)}</dd>
-          <dt>Source</dt><dd>${sourceMarkup}</dd>
-          <dt>Access</dt><dd>${escapeHTML(accessNote)}</dd>
-          <dt>Season</dt><dd>${escapeHTML(getMonthRangeText(species.months))}</dd>
-          <dt>Status</dt><dd>${escapeHTML(record.confidence)}</dd>
-        </dl>
-        ${warning}
-        <p class="popup-note">${escapeHTML(record.note)}</p>
-        <p class="popup-note"><strong>Limit note:</strong> ${escapeHTML(species.parkLimit)}</p>
-      `;
-      const marker = L.circleMarker([lat, lng], markerStyle(species.category, record.source))
-        .bindPopup(popup)
-        .bindTooltip(species.commonName, {
-          direction: "top",
-          offset: [0, -8],
-          opacity: 1
-        });
-      marker.on("click", () => marker.openPopup());
-      marker.addTo(map);
-      state.markers.push(marker);
-    } catch (error) {
-      console.warn("Unable to render map marker", record.id, error);
+
+    return [{
+      type: "Feature",
+      id: record.id,
+      geometry: {
+        type: "Point",
+        coordinates: [lng, lat]
+      },
+      properties: {
+        id: record.id,
+        speciesId: record.speciesId,
+        speciesName: species.commonName,
+        scientificName: species.scientificName,
+        observedName: record.observedName || species.commonName,
+        observedScientificName: record.observedScientificName || species.scientificName,
+        category: species.category,
+        categoryColor: CATEGORY_COLORS[species.category] || CATEGORY_COLORS.fruit,
+        source: record.source,
+        sourceLabel: sourceLabel(record.source),
+        sourceUrl: record.sourceUrl || "",
+        name: record.name || species.commonName,
+        accessNote: getRecordAccessNote(record),
+        season: getMonthRangeText(species.months),
+        confidence: record.confidence || "community",
+        note: record.note || "",
+        parkLimit: species.parkLimit,
+        harvestStatus: record.harvestStatus || "",
+        harvestNote: record.accessNote || "Confirm site rules before harvesting.",
+        strokeColor: record.source === "nps-orchard" ? "#fdf1bd" : "#ffffff",
+        strokeWidth: record.source === "nps-orchard" ? 2.5 : 1.5,
+        radius: record.source === "nps-orchard" ? 6.5 : 5
+      }
+    }];
+  });
+
+  map.getSource(MARKERS_SOURCE_ID).setData({
+    type: "FeatureCollection",
+    features
+  });
+}
+
+function initMapLayers() {
+  const firstLineOrSymbolLayerId = getFirstLineOrSymbolLayerId();
+
+  if (!map.getSource(PUBLIC_LANDS_SOURCE_ID)) {
+    map.addSource(PUBLIC_LANDS_SOURCE_ID, {
+      type: "geojson",
+      data: getPublicLandCollection()
+    });
+  }
+
+  if (!map.getLayer(PUBLIC_LANDS_FILL_LAYER_ID)) {
+    map.addLayer({
+      id: PUBLIC_LANDS_FILL_LAYER_ID,
+      type: "fill",
+      source: PUBLIC_LANDS_SOURCE_ID,
+      paint: {
+        "fill-color": [
+          "case",
+          ["==", ["get", "Pub_Access"], "RA"],
+          "#3b8c7e",
+          "#75ad37"
+        ],
+        "fill-opacity": [
+          "case",
+          ["==", ["get", "Pub_Access"], "RA"],
+          0.16,
+          0.18
+        ]
+      }
+    }, firstLineOrSymbolLayerId);
+  }
+
+  if (!map.getLayer(PUBLIC_LANDS_LINE_LAYER_ID)) {
+    map.addLayer({
+      id: PUBLIC_LANDS_LINE_LAYER_ID,
+      type: "line",
+      source: PUBLIC_LANDS_SOURCE_ID,
+      paint: {
+        "line-color": [
+          "case",
+          ["==", ["get", "Pub_Access"], "RA"],
+          "#2f786c",
+          "#4f8f32"
+        ],
+        "line-width": 1,
+        "line-opacity": 0.72
+      }
+    }, firstLineOrSymbolLayerId);
+  }
+
+  if (!map.getSource(MARKERS_SOURCE_ID)) {
+    map.addSource(MARKERS_SOURCE_ID, {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: []
+      }
+    });
+  }
+
+  if (!map.getLayer(MARKERS_LAYER_ID)) {
+    map.addLayer({
+      id: MARKERS_LAYER_ID,
+      type: "circle",
+      source: MARKERS_SOURCE_ID,
+      paint: {
+        "circle-radius": ["get", "radius"],
+        "circle-color": ["get", "categoryColor"],
+        "circle-opacity": 0.95,
+        "circle-stroke-color": ["get", "strokeColor"],
+        "circle-stroke-width": ["get", "strokeWidth"]
+      }
+    });
+  }
+
+  updatePublicLandVisibility();
+  bindMapInteractions();
+}
+
+function getFirstLineOrSymbolLayerId() {
+  return map.getStyle().layers.find((layer) => layer.type === "line" || layer.type === "symbol")?.id;
+}
+
+function bindMapInteractions() {
+  map.on("mouseenter", MARKERS_LAYER_ID, (event) => {
+    map.getCanvas().style.cursor = "pointer";
+    const feature = event.features?.[0];
+    if (!feature) return;
+    state.hoverPopup?.remove();
+    state.hoverPopup = new mapboxgl.Popup({
+      className: "forage-hover-popup",
+      closeButton: false,
+      closeOnClick: false,
+      offset: 12
+    })
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML(`<p class="popup-title">${escapeHTML(feature.properties.speciesName)}</p>`)
+      .addTo(map);
+  });
+
+  map.on("mouseleave", MARKERS_LAYER_ID, () => {
+    map.getCanvas().style.cursor = "";
+    state.hoverPopup?.remove();
+    state.hoverPopup = null;
+  });
+
+  map.on("click", MARKERS_LAYER_ID, (event) => {
+    const feature = event.features?.[0];
+    if (!feature) return;
+    state.hoverPopup?.remove();
+    state.hoverPopup = null;
+    state.activePopup?.remove();
+    state.activePopup = new mapboxgl.Popup({
+      className: "forage-popup",
+      closeButton: true,
+      closeOnClick: true,
+      maxWidth: "340px",
+      offset: 12
+    })
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML(getMarkerPopupHTML(feature.properties))
+      .addTo(map);
+  });
+
+  map.on("click", PUBLIC_LANDS_FILL_LAYER_ID, (event) => {
+    if (!state.publicLayerVisible) return;
+    const feature = event.features?.[0];
+    if (!feature) return;
+    new mapboxgl.Popup({
+      className: "public-land-map-popup",
+      closeButton: true,
+      closeOnClick: true,
+      maxWidth: "300px"
+    })
+      .setLngLat(event.lngLat)
+      .setHTML(getPublicLandPopupHTML(feature.properties))
+      .addTo(map);
+  });
+}
+
+function getMarkerPopupHTML(properties) {
+  const sourceMarkup = properties.sourceUrl
+    ? `<a class="popup-source" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>`
+    : `<span class="popup-source">${escapeHTML(properties.sourceLabel)}</span>`;
+  const warning = properties.harvestStatus
+    ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
+    : "";
+
+  return `
+    <p class="popup-title">${escapeHTML(properties.speciesName)}</p>
+    <p class="popup-meta">${escapeHTML(properties.observedName)} · ${escapeHTML(properties.observedScientificName)}</p>
+    <dl class="popup-grid">
+      <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
+      <dt>Source</dt><dd>${sourceMarkup}</dd>
+      <dt>Access</dt><dd>${escapeHTML(properties.accessNote)}</dd>
+      <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
+      <dt>Status</dt><dd>${escapeHTML(properties.confidence)}</dd>
+    </dl>
+    ${warning}
+    <p class="popup-note">${escapeHTML(properties.note)}</p>
+    <p class="popup-note"><strong>Limit note:</strong> ${escapeHTML(properties.parkLimit)}</p>
+  `;
+}
+
+function getPublicLandPopupHTML(properties) {
+  const access = properties.Pub_Access === "RA" ? "Restricted public access" : "Open public access";
+  return `
+    <div class="public-land-popup">
+      <strong>${escapeHTML(properties.Unit_Nm || "Public access land")}</strong>
+      <span>${escapeHTML(access)}</span>
+      <span>${escapeHTML(properties.MngNm_Desc || properties.MngTp_Desc || "Manager unknown")}</span>
+    </div>
+  `;
+}
+
+function getPublicLandCollection() {
+  return {
+    type: "FeatureCollection",
+    features: state.publicLandFeatures
+  };
+}
+
+function updatePublicLandVisibility() {
+  if (!state.mapReady) return;
+  const visibility = state.publicLayerVisible ? "visible" : "none";
+  [PUBLIC_LANDS_FILL_LAYER_ID, PUBLIC_LANDS_LINE_LAYER_ID].forEach((layerId) => {
+    if (map.getLayer(layerId)) {
+      map.setLayoutProperty(layerId, "visibility", visibility);
     }
   });
 }
@@ -805,14 +948,19 @@ async function loadPublicLands() {
     if (requestId !== state.activePublicRequest) return;
     state.publicLandFeatures = data.features || [];
     state.publicLayerLoadedKey = boundsKey;
-    state.publicLandLayer.clearLayers();
-    state.publicLandLayer.addData(state.publicLandFeatures);
+    updatePublicLandSource();
     if (state.publicOnly) renderMarkers();
   } catch (error) {
     if (requestId !== state.activePublicRequest) return;
     state.publicLandFeatures = [];
-    state.publicLandLayer.clearLayers();
+    updatePublicLandSource();
     if (state.publicOnly) renderMarkers();
+  }
+}
+
+function updatePublicLandSource() {
+  if (state.mapReady && map.getSource(PUBLIC_LANDS_SOURCE_ID)) {
+    map.getSource(PUBLIC_LANDS_SOURCE_ID).setData(getPublicLandCollection());
   }
 }
 
@@ -968,4 +1116,17 @@ function setDataStatus(message) {
 
 initControls();
 render();
-loadMapData();
+map.on("load", () => {
+  state.mapReady = true;
+  initMapLayers();
+  render();
+  loadMapData();
+  if (state.publicLayerVisible || state.publicOnly) schedulePublicLandLoad();
+});
+
+map.on("error", (event) => {
+  const message = event?.error?.message || "";
+  if (message.includes("401") || message.includes("403")) {
+    setDataStatus("Mapbox tiles are blocked for this origin. Add this URL to the token restrictions.");
+  }
+});
