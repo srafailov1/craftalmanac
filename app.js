@@ -434,7 +434,7 @@ function initControls() {
 function setPanelCollapsed(collapsed) {
   controlPanel.classList.toggle("is-collapsed", collapsed);
   panelToggle.setAttribute("aria-expanded", String(!collapsed));
-  panelToggleStatus.textContent = collapsed ? "Open" : "Map";
+  panelToggleStatus.textContent = collapsed ? "Menu" : "Map";
   requestAnimationFrame(() => map.resize());
 }
 
