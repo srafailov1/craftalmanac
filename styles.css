@@ -459,9 +459,8 @@ h2 {
 }
 
 .species-group {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
+  display: grid;
+  gap: 6px;
 }
 
 .species-group summary {
@@ -469,12 +468,22 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  min-height: 38px;
-  padding: 8px 10px;
+  min-height: 34px;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
   color: var(--ink);
   font-size: 13px;
   font-weight: 850;
   cursor: pointer;
+}
+
+.species-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.species-group summary::marker {
+  content: "";
 }
 
 .species-group-title {
@@ -484,14 +493,21 @@ h2 {
   cursor: pointer;
 }
 
-.species-group-title input {
-  accent-color: var(--leaf);
+.species-group[open] summary,
+.species-group summary:hover {
+  border-color: #cdd8c5;
+  background: #f1f5ed;
+}
+
+.species-group-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .species-group-arrow {
   width: 8px;
   height: 8px;
-  margin-right: 2px;
   border-right: 2px solid var(--muted);
   border-bottom: 2px solid var(--muted);
   transform: rotate(45deg);
@@ -505,7 +521,11 @@ h2 {
 .species-group-list {
   display: grid;
   gap: 4px;
-  padding: 0 6px 6px;
+  padding-left: 14px;
+}
+
+.species-list label.is-child-species {
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .species-list label {

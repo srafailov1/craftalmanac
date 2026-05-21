@@ -746,7 +746,7 @@ function getSpeciesListHTML() {
 
 function getSpeciesCheckboxHTML(species) {
   return `
-    <label data-category="${species.category}">
+    <label data-category="${species.category}" class="${species.groupLabel ? "is-child-species" : ""}">
       <span class="species-name">
         <input type="checkbox" name="species" value="${species.id}" checked>
         ${species.commonName}
@@ -758,6 +758,7 @@ function getSpeciesCheckboxHTML(species) {
 
 function getSpeciesGroupHTML(label, speciesItems) {
   const sortedItems = sortCatalogByName(speciesItems);
+  const category = sortedItems[0]?.category || "";
   return `
     <details class="species-group" open>
       <summary>
@@ -765,7 +766,10 @@ function getSpeciesGroupHTML(label, speciesItems) {
           <input type="checkbox" name="species-group" value="${escapeHTML(label)}" checked>
           ${escapeHTML(label)}
         </label>
-        <span class="species-group-arrow" aria-hidden="true"></span>
+        <span class="species-group-actions">
+          <span class="species-group-arrow" aria-hidden="true"></span>
+          <span class="type-pill ${category}">${getCategoryLabel(category)}</span>
+        </span>
       </summary>
       <div class="species-group-list">
         ${sortedItems.map(getSpeciesCheckboxHTML).join("")}
