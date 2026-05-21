@@ -28,6 +28,22 @@ The historic orchard layer is derived from the NPS Cultural Landscapes historic 
 
 Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm
 
+## Access Rules
+
+The access-status badges in popups are rule summaries matched to the public-land polygon containing a record. They are not legal advice and should be treated as a starting point for checking posted rules, current compendiums, special closures, permits, and agency updates.
+
+Primary rule sources currently encoded:
+
+- Shenandoah National Park superintendent's compendium: https://www.nps.gov/shen/learn/management/compendium.htm#CP_JUMP_5595647
+- Blue Ridge Parkway superintendent's compendium: https://www.nps.gov/blri/learn/management/superintendent-s-compendium.htm
+- Prince William Forest Park superintendent's compendium: https://www.nps.gov/prwi/learn/management/superintendents-compendium.htm
+- Manassas National Battlefield Park superintendent's compendium: https://www.nps.gov/mana/learn/management/compendium.htm
+- National Park Service general plant-removal rule, 36 CFR 2.1: https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1
+- George Washington and Jefferson National Forests forest-products permits: https://www.fs.usda.gov/r08/gwj/permits/forest-products-permits
+- Virginia state park regulation on plant removal and edible fruits, berries, fungi, and nuts: https://law.lis.virginia.gov/admincode/title4/agency5/chapter30/section50/
+- Virginia state forest regulation on plant removal and edible fruits, berries, fungi, and nuts: https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/
+- Virginia DWR Wildlife Management Area rules: https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf
+
 ## Safety
 
 This app is a planning and discovery aid. It does not verify plant identification, ripeness, toxins, private-property boundaries, or current collection rules. Confirm identification independently, check posted rules and agency regulations, and do not harvest on private land or protected public land without permission.

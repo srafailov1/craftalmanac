@@ -22,6 +22,25 @@ const CATEGORY_COLORS = {
   nut: "#c47a15",
   mushroom: "#6f4acb"
 };
+const ACCESS_STATUS_COLORS = {
+  allowed: "#2f8f46",
+  "permit-required": "#d89b24",
+  prohibited: "#c74437",
+  unknown: "#8b8f86"
+};
+const ACCESS_RULE_SOURCES = {
+  npsGeneral: "https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1",
+  shenandoah: "https://www.nps.gov/shen/learn/management/compendium.htm#CP_JUMP_5595647",
+  blueRidge: "https://www.nps.gov/blri/learn/management/superintendent-s-compendium.htm",
+  princeWilliam: "https://www.nps.gov/prwi/learn/management/superintendents-compendium.htm",
+  manassas: "https://www.nps.gov/mana/learn/management/compendium.htm",
+  usfs: "https://www.fs.usda.gov/r08/gwj/permits/forest-products-permits",
+  virginiaParks: "https://law.lis.virginia.gov/admincode/title4/agency5/chapter30/section50/",
+  virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
+  virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
+  charlottesville: "https://www.charlottesville.gov/658/Parks-Trails",
+  albemarle: "https://www.albemarle.org/government/parks-recreation"
+};
 
 const speciesCatalog = [
   {
@@ -658,6 +677,7 @@ function renderMarkers() {
     if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) {
       return [];
     }
+    const accessRule = getRecordAccessRule(record, species);
 
     return [{
       type: "Feature",
@@ -679,15 +699,21 @@ function renderMarkers() {
         sourceLabel: sourceLabel(record.source),
         sourceUrl: record.sourceUrl || "",
         name: record.name || species.commonName,
-        accessNote: getRecordAccessNote(record),
+        accessNote: accessRule.note,
+        accessStatus: accessRule.status,
+        accessStatusLabel: accessRule.label,
+        accessArea: accessRule.area,
+        accessLimit: accessRule.limit,
+        accessSourceLabel: accessRule.sourceLabel,
+        accessSourceUrl: accessRule.sourceUrl,
         season: getMonthRangeText(species.months),
         confidence: record.confidence || "community",
         note: record.note || "",
-        parkLimit: species.parkLimit,
         harvestStatus: record.harvestStatus || "",
         harvestNote: record.accessNote || "Confirm site rules before harvesting.",
         strokeColor: record.source === "nps-orchard" ? "#fdf1bd" : "#ffffff",
-        strokeWidth: record.source === "nps-orchard" ? 2.5 : 1.5,
+        accessStrokeColor: ACCESS_STATUS_COLORS[accessRule.status] || ACCESS_STATUS_COLORS.unknown,
+        strokeWidth: record.source === "nps-orchard" ? 3 : 2,
         radius: record.source === "nps-orchard" ? 6.5 : 5
       }
     }];
@@ -768,7 +794,7 @@ function initMapLayers() {
         "circle-radius": ["get", "radius"],
         "circle-color": ["get", "categoryColor"],
         "circle-opacity": 0.95,
-        "circle-stroke-color": ["get", "strokeColor"],
+        "circle-stroke-color": ["get", "accessStrokeColor"],
         "circle-stroke-width": ["get", "strokeWidth"]
       }
     });
@@ -829,6 +855,10 @@ function getMarkerPopupHTML(properties) {
   const sourceMarkup = properties.sourceUrl
     ? `<a class="popup-source" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>`
     : `<span class="popup-source">${escapeHTML(properties.sourceLabel)}</span>`;
+  const accessSourceMarkup = properties.accessSourceUrl
+    ? `<a class="popup-source" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel)}</a>`
+    : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
+  const accessStatusClass = escapeHTML(properties.accessStatus || "unknown");
   const warning = properties.harvestStatus
     ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
     : "";
@@ -839,13 +869,16 @@ function getMarkerPopupHTML(properties) {
     <dl class="popup-grid">
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
       <dt>Source</dt><dd>${sourceMarkup}</dd>
-      <dt>Access</dt><dd>${escapeHTML(properties.accessNote)}</dd>
+      <dt>Access</dt><dd><span class="access-status ${accessStatusClass}">${escapeHTML(properties.accessStatusLabel || "Unknown")}</span></dd>
+      <dt>Land</dt><dd>${escapeHTML(properties.accessArea || "No public land match")}</dd>
+      <dt>Limit</dt><dd>${escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.")}</dd>
+      <dt>Rule source</dt><dd>${accessSourceMarkup}</dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
       <dt>Status</dt><dd>${escapeHTML(properties.confidence)}</dd>
     </dl>
     ${warning}
+    <p class="popup-note">${escapeHTML(properties.accessNote)}</p>
     <p class="popup-note">${escapeHTML(properties.note)}</p>
-    <p class="popup-note"><strong>Limit note:</strong> ${escapeHTML(properties.parkLimit)}</p>
   `;
 }
 
@@ -1137,13 +1170,281 @@ function mapNpsOrchardRecord(record) {
   };
 }
 
-function getRecordAccessNote(record) {
-  const landMatch = getContainingPublicLand(record);
-  if (landMatch) {
-    const access = landMatch.properties?.Pub_Access === "RA" ? "restricted public access" : "open public access";
-    return `${access}: ${landMatch.properties?.Unit_Nm || "PAD-US public land"}`;
+function getRecordAccessRule(record, species) {
+  if (record.source === "nps-orchard") {
+    return {
+      status: "permit-required",
+      label: "Permit required",
+      area: record.access || "National Park Service historic orchard",
+      limit: "Historic orchard or cultural landscape record; do not take fruit or cuttings without park permission.",
+      note: "NPS cultural landscape records can identify fruit trees, but they are not a harvest permission layer.",
+      sourceLabel: "NPS historic orchards",
+      sourceUrl: "https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm"
+    };
   }
-  return record.accessNote || "Access unknown. Confirm ownership and rules before harvesting.";
+
+  const landMatch = getContainingPublicLand(record);
+  const landRule = landMatch ? getPublicLandAccessRule(landMatch.properties || {}, species) : null;
+  if (landRule) return landRule;
+
+  if (record.accessClass === "private") {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area: record.access || "Private or overhanging property",
+      limit: "Do not harvest without explicit property-owner permission.",
+      note: record.accessNote || "Falling Fruit marks this record as private or overhanging.",
+      sourceLabel: "Falling Fruit access note",
+      sourceUrl: record.sourceUrl || "https://fallingfruit.org/"
+    };
+  }
+
+  if (record.publicLand && record.accessClass === "open") {
+    return {
+      status: "unknown",
+      label: "Unknown",
+      area: record.access || "Community-marked public access",
+      limit: "Public access is reported, but harvest rules still need a local source.",
+      note: record.accessNote || "Falling Fruit marks this record as public; confirm rules before harvesting.",
+      sourceLabel: "Falling Fruit access note",
+      sourceUrl: record.sourceUrl || "https://fallingfruit.org/"
+    };
+  }
+
+  return {
+    status: "unknown",
+    label: "Unknown",
+    area: "No public land match",
+    limit: "Unknown; confirm land ownership, posted rules, and species safety before harvesting.",
+    note: record.accessNote || "Access unknown. Confirm ownership and rules before harvesting.",
+    sourceLabel: "No rule source matched",
+    sourceUrl: ""
+  };
+}
+
+function getPublicLandAccessRule(properties, species) {
+  const text = getPublicLandText(properties);
+  const area = getPublicLandName(properties);
+
+  if (text.includes("shenandoah national park")) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: getShenandoahLimit(species),
+      note: "Shenandoah's compendium allows hand-gathering listed fruits, nuts, berries, and morels for personal use within posted daily limits.",
+      sourceLabel: "Shenandoah compendium",
+      sourceUrl: ACCESS_RULE_SOURCES.shenandoah
+    };
+  }
+
+  if (text.includes("blue ridge parkway")) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: getBlueRidgeLimit(species),
+      note: "Blue Ridge Parkway's compendium allows limited personal collection of listed fruits, nuts, berries, and edible fungi.",
+      sourceLabel: "Blue Ridge Parkway compendium",
+      sourceUrl: ACCESS_RULE_SOURCES.blueRidge
+    };
+  }
+
+  if (text.includes("prince william forest park")) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: getPrinceWilliamLimit(species),
+      note: "Prince William Forest Park allows limited personal collection of listed fruits, nuts, berries, and edible fungi.",
+      sourceLabel: "Prince William Forest compendium",
+      sourceUrl: ACCESS_RULE_SOURCES.princeWilliam
+    };
+  }
+
+  if (text.includes("manassas national battlefield")) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: getManassasLimit(species),
+      note: "Manassas National Battlefield Park allows personal collection of listed fruits, nuts, berries, and morels within its compendium limits.",
+      sourceLabel: "Manassas compendium",
+      sourceUrl: ACCESS_RULE_SOURCES.manassas
+    };
+  }
+
+  if (isNationalParkServiceLand(text)) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "NPS plant removal is prohibited unless that park's superintendent has specifically authorized an exception.",
+      note: "This NPS unit does not match one of the Virginia personal-use compendium allowances currently encoded in the app.",
+      sourceLabel: "36 CFR 2.1",
+      sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
+    };
+  }
+
+  if (isUsfsLand(text)) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Small amounts for personal use are allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
+      note: "George Washington and Jefferson National Forests direct commercial and larger forest-product collection through permits.",
+      sourceLabel: "GW-Jefferson forest products permits",
+      sourceUrl: ACCESS_RULE_SOURCES.usfs
+    };
+  }
+
+  if (isVirginiaWma(text)) {
+    return {
+      status: "permit-required",
+      label: "Permit required",
+      area,
+      limit: "Berries, mushrooms, and other fruits may be gathered for personal use, but adult visitors need a hunting, fishing, trapping, boating registration, or WMA access permit.",
+      note: "Virginia DWR WMA rules allow personal-use gathering of berries, mushrooms, and other fruits while requiring access authorization for many visitors.",
+      sourceLabel: "Virginia WMA rules",
+      sourceUrl: ACCESS_RULE_SOURCES.virginiaWma
+    };
+  }
+
+  if (isVirginiaStateForest(text)) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Edible fruits, berries, fungi, and nuts may be collected for personal individual use only.",
+      note: "Virginia state forest regulations prohibit collecting plants generally, with an exception for edible fruits, berries, fungi, and nuts for personal individual use.",
+      sourceLabel: "Virginia state forest regulations",
+      sourceUrl: ACCESS_RULE_SOURCES.virginiaStateForests
+    };
+  }
+
+  if (isVirginiaStateParkOrDcrLand(text)) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Edible fruits, berries, fungi, and nuts may be collected for personal individual use only.",
+      note: "Virginia park regulations prohibit removing plants generally, with an exception for edible fruits, berries, fungi, and nuts for personal individual use.",
+      sourceLabel: "Virginia state park regulations",
+      sourceUrl: ACCESS_RULE_SOURCES.virginiaParks
+    };
+  }
+
+  if (text.includes("charlottesville")) {
+    return {
+      status: "unknown",
+      label: "Unknown",
+      area,
+      limit: "Charlottesville public access is mapped, but a specific city foraging rule has not been confirmed.",
+      note: "Treat municipal park records as access hints only until posted park rules or city code can be checked.",
+      sourceLabel: "Charlottesville Parks & Trails",
+      sourceUrl: ACCESS_RULE_SOURCES.charlottesville
+    };
+  }
+
+  if (text.includes("albemarle")) {
+    return {
+      status: "unknown",
+      label: "Unknown",
+      area,
+      limit: "Albemarle public access is mapped, but a specific county foraging rule has not been confirmed.",
+      note: "Treat county park records as access hints only until posted park rules or county code can be checked.",
+      sourceLabel: "Albemarle Parks & Recreation",
+      sourceUrl: ACCESS_RULE_SOURCES.albemarle
+    };
+  }
+
+  return {
+    status: properties.Pub_Access === "RA" ? "permit-required" : "unknown",
+    label: properties.Pub_Access === "RA" ? "Permit required" : "Unknown",
+    area,
+    limit: properties.Pub_Access === "RA"
+      ? "PAD-US marks this area as restricted public access; check the managing agency before harvesting."
+      : "PAD-US marks this area as open public access, but harvest rules are not yet sourced.",
+    note: "Public access does not always include permission to collect plants or fungi.",
+    sourceLabel: "USGS PAD-US public access",
+    sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/protected-areas"
+  };
+}
+
+function getPublicLandText(properties) {
+  return [
+    properties.Unit_Nm,
+    properties.MngNm_Desc,
+    properties.MngTp_Desc,
+    properties.DesTp_Desc
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function getPublicLandName(properties) {
+  return properties.Unit_Nm || properties.MngNm_Desc || "PAD-US public land";
+}
+
+function isNationalParkServiceLand(text) {
+  return text.includes("national park service")
+    || text.includes("national park")
+    || text.includes("national battlefield")
+    || text.includes("national historical park")
+    || text.includes("national military park")
+    || text.includes("national memorial parkway");
+}
+
+function isUsfsLand(text) {
+  return text.includes("u.s. forest service")
+    || text.includes("us forest service")
+    || text.includes("national forest")
+    || text.includes("george washington")
+    || text.includes("jefferson national forest");
+}
+
+function isVirginiaWma(text) {
+  return text.includes("wildlife management area")
+    || text.includes("department of wildlife resources")
+    || text.includes("virginia department of game")
+    || text.includes("virginia dwr");
+}
+
+function isVirginiaStateForest(text) {
+  return text.includes("state forest")
+    || text.includes("virginia department of forestry");
+}
+
+function isVirginiaStateParkOrDcrLand(text) {
+  return text.includes("state park")
+    || text.includes("virginia department of conservation")
+    || text.includes("department of conservation and recreation")
+    || text.includes("natural area preserve");
+}
+
+function getShenandoahLimit(species) {
+  if (["apple", "pear", "peach"].includes(species.id)) {
+    return `${species.commonName}: 1 bushel per person per day.`;
+  }
+  return `${species.commonName}: 1 gallon per person per day.`;
+}
+
+function getBlueRidgeLimit(species) {
+  if (species.category === "nut" || ["apple", "pear", "peach", "persimmon"].includes(species.id)) {
+    return `${species.commonName}: 1 bushel per person per day.`;
+  }
+  return `${species.commonName}: 1 gallon per person per day.`;
+}
+
+function getPrinceWilliamLimit(species) {
+  if (species.category === "mushroom") return "Edible fungi: 1 quart in aggregate per person per day.";
+  if (species.category === "nut") return `${species.commonName}: 1 quart per species per person per day.`;
+  return `${species.commonName}: 1 pint per species per person per day.`;
+}
+
+function getManassasLimit(species) {
+  if (species.category === "mushroom") return `${species.commonName}: 1 gallon per person per day.`;
+  if (species.category === "nut") return `${species.commonName}: 1 bushel per species per person per day.`;
+  if (species.category === "berry") return `${species.commonName}: 1/2 gallon per species per person per day.`;
+  return `${species.commonName}: 2 bushels per species per person per day.`;
 }
 
 function isRecordPubliclyAccessible(record) {
