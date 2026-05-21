@@ -2004,10 +2004,10 @@ function getRecordAccessRule(record, species) {
 
   if (record.accessClass === "private") {
     return {
-      status: "prohibited",
-      label: "Prohibited",
+      status: "private",
+      label: "Private",
       area: record.access || "Private or overhanging property",
-      limit: "Do not harvest without explicit property-owner permission.",
+      limit: "Secure explicit property-owner permission before collecting.",
       note: record.accessNote || "Falling Fruit marks this record as private or overhanging.",
       sourceLabel: "Falling Fruit access note",
       sourceUrl: record.sourceUrl || "https://fallingfruit.org/"
@@ -2027,12 +2027,12 @@ function getRecordAccessRule(record, species) {
   }
 
   return {
-    status: "unknown",
-    label: "Unknown",
-    area: "No public land match",
-    limit: "Unknown; confirm land ownership, posted rules, and species safety before harvesting.",
-    note: record.accessNote || "Access unknown. Confirm ownership and rules before harvesting.",
-    sourceLabel: "No rule source matched",
+    status: "private-unsourced",
+    label: "Private / unsourced",
+    area: "No sourced public access match",
+    limit: "Secure permission from the landowner or managing institution before collecting.",
+    note: record.accessNote || "This point is not matched to a sourced public access area.",
+    sourceLabel: "Access not sourced",
     sourceUrl: ""
   };
 }
@@ -2059,7 +2059,7 @@ function getPublicLandAccessRule(properties, species) {
       status: "prohibited",
       label: "Prohibited",
       area,
-      limit: "NPS plant removal is prohibited unless that park's superintendent has specifically authorized an exception for collection.",
+      limit: "Collection is not authorized here unless the park has issued a specific exception or permit.",
       note: "The encoded NPS exceptions are food-focused and should not be treated as permission to collect non-food plant materials.",
       sourceLabel: "36 CFR 2.1",
       sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
@@ -2156,7 +2156,7 @@ function getPublicLandAccessRule(properties, species) {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Virginia WMA rules mention personal-use gathering of berries, mushrooms, and other fruits, but this kind of plant-material collection is not specifically encoded here.",
+        limit: "Rules for this plant use are not currently sourced; confirm access requirements and posted site rules before collecting.",
         note: "Confirm DWR access requirements and posted site rules before collecting plant material.",
         sourceLabel: "Virginia WMA rules",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaWma
@@ -2180,7 +2180,7 @@ function getPublicLandAccessRule(properties, species) {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Virginia state forest rules include a personal-use exception for edible fruits, berries, fungi, and nuts; this plant-material collection needs confirmation.",
+        limit: "Rules for this plant use are not currently sourced; confirm posted rules before collecting.",
         note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
         sourceLabel: "Virginia state forest regulations",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaStateForests
@@ -2204,7 +2204,7 @@ function getPublicLandAccessRule(properties, species) {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Virginia park rules include a personal-use exception for edible fruits, berries, fungi, and nuts; this plant-material collection needs confirmation.",
+        limit: "Rules for this plant use are not currently sourced; confirm posted rules before collecting.",
         note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
         sourceLabel: "Virginia state park regulations",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaParks

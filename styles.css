@@ -15,6 +15,7 @@
   --access-allowed: #2f8f46;
   --access-permit: #d89b24;
   --access-prohibited: #c74437;
+  --access-private: #7e6654;
   --access-unknown: #8b8f86;
   --sky: #d8e7ec;
   --shadow: 0 18px 50px rgba(35, 44, 30, 0.16);
@@ -864,6 +865,8 @@ h2 {
 .access-status.allowed { color: var(--access-allowed); }
 .access-status.permit-required { color: var(--access-permit); }
 .access-status.prohibited { color: var(--access-prohibited); }
+.access-status.private,
+.access-status.private-unsourced { color: var(--access-private); }
 .access-status.unknown { color: var(--access-unknown); }
 
 .popup-warning {
