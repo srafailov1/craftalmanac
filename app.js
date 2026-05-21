@@ -693,6 +693,13 @@ function renderFilterControls() {
   document.querySelectorAll("input[name='species']").forEach((input) => {
     input.addEventListener("change", render);
   });
+  document.querySelectorAll("input[name='species-group']").forEach((input) => {
+    input.addEventListener("click", (event) => event.stopPropagation());
+    input.addEventListener("change", () => {
+      setSpeciesByGroup(input.value, input.checked);
+      render();
+    });
+  });
   categoryInputs.forEach((input) => {
     input.addEventListener("change", () => {
       setSpeciesByCategory(input.value, input.checked);
@@ -753,7 +760,13 @@ function getSpeciesGroupHTML(label, speciesItems) {
   const sortedItems = sortCatalogByName(speciesItems);
   return `
     <details class="species-group" open>
-      <summary>${escapeHTML(label)} <span>${sortedItems.length}</span></summary>
+      <summary>
+        <label class="species-group-title">
+          <input type="checkbox" name="species-group" value="${escapeHTML(label)}" checked>
+          ${escapeHTML(label)}
+        </label>
+        <span class="species-group-arrow" aria-hidden="true"></span>
+      </summary>
       <div class="species-group-list">
         ${sortedItems.map(getSpeciesCheckboxHTML).join("")}
       </div>
@@ -980,12 +993,30 @@ function setSpeciesByCategory(category, checked) {
     });
 }
 
+function setSpeciesByGroup(groupLabel, checked) {
+  speciesCatalog
+    .filter((species) => species.groupLabel === groupLabel)
+    .forEach((species) => {
+      const input = getSpeciesInput(species.id);
+      if (input) input.checked = checked;
+    });
+}
+
 function syncCategoryCheckboxes() {
   categoryInputs.forEach((input) => {
     const speciesInCategory = speciesCatalog.filter((species) => species.category === input.value);
     const selectedCount = speciesInCategory.filter((species) => getSpeciesInput(species.id)?.checked).length;
     input.checked = selectedCount === speciesInCategory.length;
     input.indeterminate = selectedCount > 0 && selectedCount < speciesInCategory.length;
+  });
+}
+
+function syncSpeciesGroupCheckboxes() {
+  document.querySelectorAll("input[name='species-group']").forEach((input) => {
+    const speciesInGroup = speciesCatalog.filter((species) => species.groupLabel === input.value);
+    const selectedCount = speciesInGroup.filter((species) => getSpeciesInput(species.id)?.checked).length;
+    input.checked = selectedCount === speciesInGroup.length;
+    input.indeterminate = selectedCount > 0 && selectedCount < speciesInGroup.length;
   });
 }
 
@@ -997,6 +1028,7 @@ function renderSpeciesState() {
     label.classList.toggle("is-selected", input?.checked);
   });
   syncCategoryCheckboxes();
+  syncSpeciesGroupCheckboxes();
 }
 
 function isSpeciesAvailableOnSelectedDate(species) {

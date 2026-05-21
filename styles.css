@@ -468,6 +468,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   min-height: 38px;
   padding: 8px 10px;
   color: var(--ink);
@@ -476,9 +477,29 @@ h2 {
   cursor: pointer;
 }
 
-.species-group summary span {
-  color: var(--muted);
-  font-size: 11px;
+.species-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.species-group-title input {
+  accent-color: var(--leaf);
+}
+
+.species-group-arrow {
+  width: 8px;
+  height: 8px;
+  margin-right: 2px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 0.16s ease;
+}
+
+.species-group:not([open]) .species-group-arrow {
+  transform: rotate(-45deg);
 }
 
 .species-group-list {
