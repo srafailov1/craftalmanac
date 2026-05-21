@@ -6,7 +6,7 @@
     <title>Virginia Forage Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=taxa-1">
+    <link rel="stylesheet" href="./styles.css?v=accordion-1">
   </head>
   <body>
     <main class="app-shell">
@@ -25,9 +25,9 @@
 
         <div class="panel-content" id="panelContent">
 
-          <section class="control-group mobile-section">
+          <section class="control-group mobile-section is-open">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="false">
+              <button class="section-toggle" type="button" aria-expanded="true">
                 <h2>Seasonality</h2>
               </button>
             </div>
@@ -55,9 +55,9 @@
             </div>
           </section>
 
-          <section class="control-group mobile-section">
+          <section class="control-group mobile-section is-open">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="false">
+              <button class="section-toggle" type="button" aria-expanded="true">
                 <h2>Food Types & Species</h2>
               </button>
               <span class="count" id="speciesCount">0</span>
@@ -77,9 +77,9 @@
             </div>
           </section>
 
-          <section class="control-group mobile-section">
+          <section class="control-group mobile-section is-open">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="false">
+              <button class="section-toggle" type="button" aria-expanded="true">
                 <h2>Access & Safety</h2>
               </button>
             </div>
@@ -93,9 +93,9 @@
             </div>
           </section>
 
-          <section class="control-group attribution-block mobile-section">
+          <section class="control-group attribution-block mobile-section is-open">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="false">
+              <button class="section-toggle" type="button" aria-expanded="true">
                 <h2>Data Notes</h2>
               </button>
             </div>
@@ -120,6 +120,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=taxa-1"></script>
+    <script src="./app.js?v=accordion-1"></script>
   </body>
 </html>

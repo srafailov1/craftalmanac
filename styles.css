@@ -70,11 +70,27 @@ button {
 }
 
 .section-toggle {
-  display: contents;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0;
   border: 0;
   background: transparent;
-  color: inherit;
+  color: var(--ink);
   font: inherit;
+}
+
+.section-toggle::before {
+  width: 18px;
+  color: var(--leaf-dark);
+  font-size: 18px;
+  font-weight: 850;
+  content: "+";
+}
+
+.mobile-section.is-open .section-toggle::before {
+  content: "−";
 }
 
 .brand-block h1 {
@@ -102,7 +118,7 @@ button {
 
 .control-group,
 .results-block {
-  padding-top: 18px;
+  padding: 16px 0 18px;
   border-top: 1px solid var(--line);
 }
 
@@ -114,6 +130,11 @@ button {
 }
 
 .section-body {
+  display: none;
+  padding-top: 12px;
+}
+
+.mobile-section.is-open .section-body {
   display: block;
 }
 
@@ -132,6 +153,7 @@ h2 {
 .season-actions {
   display: flex;
   gap: 8px;
+  margin-bottom: 12px;
 }
 
 .map-toolbar button,
@@ -149,7 +171,7 @@ h2 {
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 .season-readout strong {
@@ -766,42 +788,14 @@ h2 {
     min-height: 34px;
   }
 
-  .section-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 34px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--ink);
-  }
-
-  .section-toggle::before {
-    width: 18px;
-    color: var(--leaf-dark);
-    font-size: 18px;
-    font-weight: 850;
-    content: "+";
-  }
-
-  .mobile-section.is-open .section-toggle::before {
-    content: "−";
-  }
-
   .section-toggle h2 {
     margin: 0;
   }
 
   .section-body {
-    display: none;
     max-width: 100%;
     padding-top: 9px;
     overflow-x: hidden;
-  }
-
-  .mobile-section.is-open .section-body {
-    display: block;
   }
 
   .season-actions {
