@@ -500,12 +500,6 @@ h2 {
   font-size: inherit;
 }
 
-.species-group-summary:hover {
-  border-color: #cdd8c5;
-  background: #f1f5ed;
-  color: var(--ink);
-}
-
 .species-group-summary.is-selected {
   border-color: #cdd8c5;
   background: #f1f5ed;
@@ -552,6 +546,10 @@ h2 {
   display: grid;
   gap: 4px;
   padding-left: 14px;
+}
+
+.species-group-list[hidden] {
+  display: none;
 }
 
 .species-list label.is-child-species {
