@@ -53,11 +53,6 @@ button {
   grid-template-columns: minmax(320px, 420px) 1fr;
   height: 100vh;
   overflow: hidden;
-  transition: grid-template-columns 180ms ease;
-}
-
-.app-shell.sidebar-collapsed {
-  grid-template-columns: 72px 1fr;
 }
 
 .panel {
@@ -75,74 +70,6 @@ button {
 }
 
 .panel-grip {
-  display: none;
-}
-
-.panel-topline {
-  position: relative;
-}
-
-.desktop-panel-toggle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--leaf-dark);
-  font-size: 24px;
-  font-weight: 850;
-  line-height: 1;
-  box-shadow: 0 6px 18px rgba(35, 44, 30, 0.12);
-}
-
-.app-shell.sidebar-collapsed .panel {
-  align-items: center;
-  gap: 0;
-  padding: 18px 12px;
-  overflow: hidden;
-}
-
-.app-shell.sidebar-collapsed .panel-topline {
-  position: static;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  gap: 12px;
-  height: 100%;
-  justify-items: center;
-}
-
-.app-shell.sidebar-collapsed .desktop-panel-toggle {
-  position: static;
-}
-
-.app-shell.sidebar-collapsed .desktop-panel-toggle span {
-  transform: rotate(180deg);
-}
-
-.app-shell.sidebar-collapsed .brand-block {
-  align-self: start;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
-.app-shell.sidebar-collapsed .brand-block h1 {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 13px;
-  font-weight: 850;
-  letter-spacing: 0.08em;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
-.app-shell.sidebar-collapsed .brand-block .eyebrow,
-.app-shell.sidebar-collapsed .brand-block .lede,
-.app-shell.sidebar-collapsed .panel-content {
   display: none;
 }
 
@@ -842,10 +769,6 @@ h2 {
     letter-spacing: 0.04em;
     text-transform: uppercase;
     touch-action: none;
-  }
-
-  .desktop-panel-toggle {
-    display: none;
   }
 
   .panel-grip-bar {
