@@ -6,7 +6,7 @@
     <title>Virginia Forage Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=accordion-1">
+    <link rel="stylesheet" href="./styles.css?v=accordion-2">
   </head>
   <body>
     <main class="app-shell">
@@ -55,19 +55,19 @@
             </div>
           </section>
 
-          <section class="control-group mobile-section is-open">
+          <section class="control-group mobile-section">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="true">
+              <button class="section-toggle" type="button" aria-expanded="false">
                 <h2>Food Types & Species</h2>
               </button>
               <span class="count" id="speciesCount">0</span>
             </div>
             <div class="section-body">
               <div class="filter-list type-list" id="categoryList">
-                <label><input type="checkbox" name="category" value="fruit" checked> Fruit</label>
-                <label><input type="checkbox" name="category" value="berry" checked> Berries</label>
-                <label><input type="checkbox" name="category" value="nut" checked> Nuts</label>
-                <label><input type="checkbox" name="category" value="mushroom" checked> Mushrooms</label>
+                <label class="category-option fruit"><input type="checkbox" name="category" value="fruit" checked> Fruit</label>
+                <label class="category-option berry"><input type="checkbox" name="category" value="berry" checked> Berries</label>
+                <label class="category-option nut"><input type="checkbox" name="category" value="nut" checked> Nuts</label>
+                <label class="category-option mushroom"><input type="checkbox" name="category" value="mushroom" checked> Mushrooms</label>
               </div>
               <div class="species-actions">
                 <button class="text-button" id="selectAllSpeciesButton" type="button">All</button>
@@ -77,9 +77,9 @@
             </div>
           </section>
 
-          <section class="control-group mobile-section is-open">
+          <section class="control-group mobile-section">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="true">
+              <button class="section-toggle" type="button" aria-expanded="false">
                 <h2>Access & Safety</h2>
               </button>
             </div>
@@ -93,9 +93,9 @@
             </div>
           </section>
 
-          <section class="control-group attribution-block mobile-section is-open">
+          <section class="control-group attribution-block mobile-section">
             <div class="section-heading">
-              <button class="section-toggle" type="button" aria-expanded="true">
+              <button class="section-toggle" type="button" aria-expanded="false">
                 <h2>Data Notes</h2>
               </button>
             </div>
@@ -120,6 +120,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=accordion-1"></script>
+    <script src="./app.js?v=accordion-2"></script>
   </body>
 </html>

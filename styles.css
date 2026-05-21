@@ -316,10 +316,7 @@ h2 {
 
 .type-list {
   margin-top: 12px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
+  gap: 8px;
 }
 
 .access-list {
@@ -338,6 +335,36 @@ h2 {
   gap: 8px;
   color: var(--muted);
   font-size: 14px;
+}
+
+.type-list label {
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.type-list .category-option.fruit {
+  background: var(--leaf);
+}
+
+.type-list .category-option.berry {
+  background: var(--berry);
+}
+
+.type-list .category-option.nut {
+  background: var(--nut);
+}
+
+.type-list .category-option.mushroom {
+  background: var(--mushroom);
+}
+
+.filter-list.type-list .category-option input {
+  accent-color: #fff;
 }
 
 .filter-list input,
