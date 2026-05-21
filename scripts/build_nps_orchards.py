@@ -72,8 +72,8 @@ def build_subset():
             continue
 
         props = feature.get("properties") or {}
-        species_text = " ".join([
-            props.get("SPECIES") or "",
+        species_field = clean_text(props.get("SPECIES"))
+        species_text = species_field or " ".join([
             props.get("Orchard__1") or "",
             props.get("Short_Name") or "",
         ])

@@ -45,7 +45,9 @@ EXCLUDE = re.compile(
     r"sugar-apple|star apple|mayapple|pineappleweed|pineapple weed|"
     r"prickly pear|pearlbush|sea grape|oregon-grape|peach-palm|"
     r"peachleaf willow|ornamental|flowering|yew plum|plum-pine|mombin|"
-    r"hog plum|gooseberry gourd|barbados gooseberry|star gooseberry",
+    r"hog plum|gooseberry gourd|barbados gooseberry|star gooseberry|"
+    r"Aristotelia|New Zealand wineberry|witch-?hazel|Hamamelis|"
+    r"cherry birch|Betula lenta|Cornelian cherry|Cornus mas",
     re.I,
 )
 

@@ -70,7 +70,7 @@ const speciesCatalog = [
     scientificName: "Sambucus",
     category: "berry",
     months: [7, 8, 9],
-    inatTaxonIds: [52872],
+    inatTaxonIds: [52689],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Only ripe cooked berries are generally used; leaves and stems are unsafe."
   },
@@ -90,7 +90,7 @@ const speciesCatalog = [
     scientificName: "Gaylussacia",
     category: "berry",
     months: [7, 8, 9],
-    inatTaxonIds: [49486],
+    inatTaxonIds: [48345],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Similar habitat to blueberries, often on dry acidic ridges."
   },
@@ -110,7 +110,7 @@ const speciesCatalog = [
     scientificName: "Amelanchier",
     category: "berry",
     months: [5, 6, 7],
-    inatTaxonIds: [49189],
+    inatTaxonIds: [49230],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Early summer fruit on small trees; also called juneberries."
   },
@@ -120,7 +120,7 @@ const speciesCatalog = [
     scientificName: "Diospyros virginiana",
     category: "fruit",
     months: [9, 10, 11, 12],
-    inatTaxonIds: [48501],
+    inatTaxonIds: [83435],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Best after softening; unripe fruit is sharply astringent."
   },
@@ -130,7 +130,7 @@ const speciesCatalog = [
     scientificName: "Juglans nigra",
     category: "nut",
     months: [9, 10, 11],
-    inatTaxonIds: [49158],
+    inatTaxonIds: [54504],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Green husks stain heavily; nuts need processing and curing."
   },
@@ -150,7 +150,7 @@ const speciesCatalog = [
     scientificName: "Corylus americana",
     category: "nut",
     months: [8, 9, 10],
-    inatTaxonIds: [53325],
+    inatTaxonIds: [54770],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Often grows as thickets; nuts ripen inside fringed husks."
   },
@@ -524,6 +524,10 @@ function getCheckedValues(name) {
 
 function getTaxonIds(species) {
   return species.inatTaxonIds || [];
+}
+
+function getExpectedIconicTaxon(species) {
+  return species.category === "mushroom" ? "Fungi" : "Plantae";
 }
 
 function getSelectedCatalogItems() {
@@ -1063,6 +1067,7 @@ function mapINaturalistObservation(observation) {
 
   const species = speciesCatalog.find((item) => {
     const taxon = observation.taxon;
+    if (taxon?.iconic_taxon_name !== getExpectedIconicTaxon(item)) return false;
     const ancestry = taxon?.ancestry ? taxon.ancestry.split("/").map(Number) : [];
     return getTaxonIds(item).some((taxonId) => taxon?.id === taxonId || ancestry.includes(taxonId));
   });

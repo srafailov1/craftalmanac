@@ -20,26 +20,6 @@
     "parkName": "Blue Ridge Parkway"
   },
   {
-    "id": "295-apple",
-    "speciesId": "apple",
-    "name": "Apple Trees at Mountain Farm, Blue Ridge Parkway",
-    "observedName": "chestnut",
-    "observedScientificName": "",
-    "lat": 37.9716550446669,
-    "lng": -78.8987259716311,
-    "source": "nps-orchard",
-    "note": "The Humpback Rocks Mountain Farm exhibit, opened to the public in 1956, is a collection of nineteenth century farm buildings and structures that were relocated to the site from various sites along the parkway to form an exhibit. Development of the Mountain Farm exhibit at Humpback Rocks is part of the formative period of living history development in the national parks, which led to more extensive efforts in the 1...",
-    "confidence": "cultural landscape record",
-    "sourceUrl": "https://www.nps.gov/places/humpback-rocks-mountain-farm.htm",
-    "access": "National Park Service",
-    "accessClass": "restricted",
-    "publicLand": true,
-    "accessNote": "NPS cultural landscape record. Do not take fruit or cuttings without park permission.",
-    "harvestStatus": "Permission required",
-    "parkCode": "BLRI",
-    "parkName": "Blue Ridge Parkway"
-  },
-  {
     "id": "96-apple",
     "speciesId": "apple",
     "name": "Remnant Orchard, Fredericksburg & Spotsylvania National Military Park",

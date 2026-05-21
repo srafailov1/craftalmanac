@@ -6,9 +6,9 @@
     "west": -79.65,
     "east": -77.45
   },
-  "recordCount": 29,
+  "recordCount": 28,
   "countsBySpeciesId": {
-    "apple": 25,
+    "apple": 24,
     "peach": 1,
     "pear": 2,
     "prunus": 1

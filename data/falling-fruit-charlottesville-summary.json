@@ -11,20 +11,20 @@
   },
   "scannedLocations": 1962493,
   "skippedHiddenLocations": 14121,
-  "recordCount": 404,
+  "recordCount": 389,
   "countsBySpeciesId": {
     "apple": 48,
     "black-walnut": 45,
     "blueberry": 9,
-    "bramble": 85,
+    "bramble": 83,
     "elderberry": 10,
     "grape": 5,
-    "hazelnut": 4,
+    "hazelnut": 1,
     "hickory": 11,
     "huckleberry": 3,
     "pear": 15,
     "persimmon": 60,
-    "prunus": 68,
+    "prunus": 58,
     "serviceberry": 41
   }
 }
