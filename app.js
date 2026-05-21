@@ -42,8 +42,30 @@ const ACCESS_RULE_SOURCES = {
   virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
   virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
   charlottesville: "https://www.charlottesville.gov/658/Parks-Trails",
-  albemarle: "https://www.albemarle.org/government/parks-recreation"
+  albemarle: "https://www.albemarle.org/government/parks-recreation",
+  monticelloTrails: "https://www.monticello.org/visit/hiking-trails/trail-hours-faqs"
 };
+const SITE_ACCESS_RULES = [
+  {
+    id: "monticello",
+    name: "Monticello and Saunders-Monticello Trail",
+    bounds: {
+      south: 37.996,
+      north: 38.034,
+      west: -78.482,
+      east: -78.438
+    },
+    rule: {
+      status: "prohibited",
+      label: "Prohibited",
+      area: "Monticello and Saunders-Monticello Trail",
+      limit: "Foraging is prohibited on Monticello grounds and trails.",
+      note: "Monticello trail users are directed to observe posted signage and park rules; this site-specific override reflects the posted no-foraging policy.",
+      sourceLabel: "Monticello trail rules",
+      sourceUrl: ACCESS_RULE_SOURCES.monticelloTrails
+    }
+  }
+];
 
 const speciesCatalog = [
   {
@@ -1286,6 +1308,9 @@ function getRecordAccessRule(record, species) {
     };
   }
 
+  const siteRule = getSiteAccessRule(record);
+  if (siteRule) return siteRule;
+
   const landRule = getBestPublicLandAccessRule(getContainingPublicLands(record), species);
   if (landRule) return landRule;
 
@@ -1322,6 +1347,19 @@ function getRecordAccessRule(record, species) {
     sourceLabel: "No rule source matched",
     sourceUrl: ""
   };
+}
+
+function getSiteAccessRule(record) {
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const site = SITE_ACCESS_RULES.find((rule) => (
+    lat >= rule.bounds.south
+    && lat <= rule.bounds.north
+    && lng >= rule.bounds.west
+    && lng <= rule.bounds.east
+  ));
+  return site?.rule || null;
 }
 
 function getPublicLandAccessRule(properties, species) {
