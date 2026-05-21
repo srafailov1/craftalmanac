@@ -39,6 +39,12 @@ const INK_CATEGORY_COLORS = {
   purple: "#624c9f",
   blue: "#316d8f"
 };
+const MEDICINE_CATEGORY_COLORS = {
+  topical: "#3f8d76",
+  immune: "#6978b8",
+  digestive: "#b7792f",
+  lymphatic: "#9a5f9f"
+};
 let CATEGORY_COLORS = FOOD_CATEGORY_COLORS;
 const ACCESS_RULE_SOURCES = {
   npsGeneral: "https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1",
@@ -452,6 +458,163 @@ const inkSpeciesCatalog = [
   }
 ];
 
+const medicineSpeciesCatalog = [
+  {
+    id: "medicine-jewelweed",
+    commonName: "Jewelweed",
+    scientificName: "Impatiens capensis",
+    category: "topical",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [47888],
+    shenandoahAllowed: false,
+    usedParts: "Fresh aerial parts, especially leaves and stems.",
+    notes: "Traditionally used externally; harvest small amounts from abundant patches and avoid uprooting wetland plants."
+  },
+  {
+    id: "medicine-broadleaf-plantain",
+    commonName: "Broadleaf plantain",
+    scientificName: "Plantago major",
+    category: "topical",
+    months: [4, 5, 6, 7, 8, 9, 10],
+    inatTaxonIds: [58961],
+    shenandoahAllowed: false,
+    usedParts: "Leaves.",
+    notes: "A common lawn and trail-edge plant; avoid contaminated soils, roadsides, and sprayed areas."
+  },
+  {
+    id: "medicine-yarrow",
+    commonName: "Yarrow",
+    scientificName: "Achillea millefolium",
+    category: "topical",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [52821],
+    shenandoahAllowed: false,
+    usedParts: "Flowering tops and leaves.",
+    notes: "Confirm the aromatic, finely divided leaves; avoid confusing with toxic lookalikes in the carrot family."
+  },
+  {
+    id: "medicine-chickweed",
+    commonName: "Chickweed",
+    scientificName: "Stellaria media",
+    category: "topical",
+    months: [2, 3, 4, 5, 10, 11, 12],
+    inatTaxonIds: [53298],
+    shenandoahAllowed: false,
+    usedParts: "Tender aerial parts.",
+    notes: "Cool-season groundcover; harvest lightly from clean, abundant patches."
+  },
+  {
+    id: "medicine-witch-hazel",
+    commonName: "Witch hazel",
+    scientificName: "Hamamelis virginiana",
+    category: "topical",
+    months: [9, 10, 11, 12],
+    inatTaxonIds: [51970],
+    shenandoahAllowed: false,
+    usedParts: "Leaves, twigs, and bark.",
+    notes: "Woody-part harvest can harm shrubs; favor observation unless pruning material is already available with permission."
+  },
+  {
+    id: "medicine-elderberry",
+    commonName: "Elderberry",
+    scientificName: "Sambucus",
+    category: "immune",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [52689],
+    shenandoahAllowed: false,
+    usedParts: "Flowers and fully ripe cooked berries.",
+    notes: "Leaves, stems, and unripe fruit are unsafe; confirm species and preparation guidance before use."
+  },
+  {
+    id: "medicine-echinacea",
+    commonName: "Echinacea",
+    scientificName: "Echinacea purpurea",
+    category: "immune",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [48627],
+    shenandoahAllowed: false,
+    usedParts: "Roots, leaves, and flowering tops.",
+    notes: "Often cultivated or planted; avoid taking roots from wild or uncertain-access populations."
+  },
+  {
+    id: "medicine-mullein",
+    commonName: "Mullein",
+    scientificName: "Verbascum thapsus",
+    category: "immune",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [59029],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and flowers.",
+    notes: "Second-year flower stalks are conspicuous; collect leaves and flowers sparingly where permitted."
+  },
+  {
+    id: "medicine-bergamot",
+    commonName: "Wild bergamot / bee balm",
+    scientificName: "Monarda fistulosa",
+    category: "immune",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [85320],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and flowering tops.",
+    notes: "Aromatic mint-family plant; leave enough flowers for pollinators and seed set."
+  },
+  {
+    id: "medicine-goldenrod",
+    commonName: "Goldenrod",
+    scientificName: "Solidago",
+    category: "immune",
+    months: [8, 9, 10],
+    inatTaxonIds: [48678],
+    shenandoahAllowed: false,
+    usedParts: "Flowering tops and leaves.",
+    notes: "Abundant late-season flowers; harvest selectively and avoid rare or uncertain Solidago species."
+  },
+  {
+    id: "medicine-dandelion",
+    commonName: "Dandelion",
+    scientificName: "Taraxacum officinale",
+    category: "digestive",
+    months: [3, 4, 5, 6, 7, 8, 9, 10, 11],
+    inatTaxonIds: [47602],
+    shenandoahAllowed: false,
+    usedParts: "Leaves, flowers, and roots.",
+    notes: "Common in disturbed ground; avoid treated lawns and compacted roadsides."
+  },
+  {
+    id: "medicine-garlic-mustard",
+    commonName: "Garlic mustard",
+    scientificName: "Alliaria petiolata",
+    category: "digestive",
+    months: [3, 4, 5, 6],
+    inatTaxonIds: [56061],
+    shenandoahAllowed: false,
+    usedParts: "Leaves, roots, flowers, and seeds.",
+    notes: "Invasive biennial; bag and remove pulled plants where local rules allow, because seeds can spread."
+  },
+  {
+    id: "medicine-violet",
+    commonName: "Violet",
+    scientificName: "Viola sororia",
+    category: "lymphatic",
+    months: [3, 4, 5, 6],
+    inatTaxonIds: [82816],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and flowers.",
+    notes: "Harvest only from abundant clean patches; avoid yellow violets and uncertain IDs."
+  },
+  {
+    id: "medicine-cleavers",
+    commonName: "Cleavers",
+    scientificName: "Galium aparine",
+    category: "lymphatic",
+    months: [3, 4, 5, 6],
+    inatTaxonIds: [53059],
+    shenandoahAllowed: false,
+    usedParts: "Tender aerial parts before seed.",
+    notes: "Clinging spring annual; collect before the plant becomes tough and seedy, where permitted."
+  }
+];
+
 const MAP_MODE_CONFIG = {
   food: {
     id: "food",
@@ -474,7 +637,7 @@ const MAP_MODE_CONFIG = {
   ink: {
     id: "ink",
     speciesHeading: "Ink Colors & Materials",
-    lede: "Map plants, trees, and fruits that can produce natural inks across Virginia by place, season, and collection permissions. This first ink catalog focuses on common color sources that can fit the same fieldwork structure as the food map.",
+    lede: "Discover plants, trees, and fruits that can produce natural inks across Virginia by season and habitat. The list favors abundant native species that can be harvested lightly, as well as invasive plants whose careful removal can support surrounding ecosystems.",
     categories: [
       { id: "black", label: "Black / gray" },
       { id: "blue", label: "Blue / green" },
@@ -489,6 +652,25 @@ const MAP_MODE_CONFIG = {
     dataNotes: "Live observations from iNaturalist, relevant community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.",
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: true,
+    loadNpsOrchards: false
+  },
+  medicine: {
+    id: "medicine",
+    speciesHeading: "Therapeutic Uses & Species",
+    lede: "Explore therapeutic plants across Virginia by season and habitat.",
+    safetyNote: "This map is provided for educational purposes. Do not ingest or apply wild plants without guidance from a qualified practitioner or trained herbalist.",
+    categories: [
+      { id: "digestive", label: "Digestive" },
+      { id: "immune", label: "Immune" },
+      { id: "lymphatic", label: "Lymphatic" },
+      { id: "topical", label: "Topical" }
+    ],
+    categoryColors: MEDICINE_CATEGORY_COLORS,
+    catalog: medicineSpeciesCatalog,
+    sourceNames: ["iNaturalist"],
+    dataNotes: "Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced. Plant-use notes are educational and are not instructions for treatment.",
+    rulesLabel: "Collection rules and limits",
+    loadFallingFruit: false,
     loadNpsOrchards: false
   }
 };
@@ -564,6 +746,7 @@ const seasonDateLabel = document.querySelector("#seasonDateLabel");
 const seasonName = document.querySelector("#seasonName");
 const seasonHistogram = document.querySelector("#seasonHistogram");
 const mapLede = document.querySelector("#mapLede");
+const mapSafetyNote = document.querySelector("#mapSafetyNote");
 const speciesSectionTitle = document.querySelector("#speciesSectionTitle");
 const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
@@ -669,6 +852,8 @@ function syncActiveCatalog() {
 function renderModeChrome() {
   const config = getActiveMapConfig();
   mapLede.textContent = config.lede;
+  mapSafetyNote.textContent = config.safetyNote || "";
+  mapSafetyNote.hidden = !config.safetyNote;
   speciesSectionTitle.textContent = config.speciesHeading;
   document.querySelector(".attribution-block .section-body p").textContent = config.dataNotes;
   orchardLayerToggle.closest("label").hidden = !config.loadNpsOrchards;
@@ -1179,12 +1364,13 @@ function renderMarkers() {
         observedName: record.observedName || species.commonName,
         observedScientificName: record.observedScientificName || species.scientificName,
         category: species.category,
-        categoryColor: CATEGORY_COLORS[species.category] || CATEGORY_COLORS.fruit,
+        categoryColor: CATEGORY_COLORS[species.category] || Object.values(CATEGORY_COLORS)[0],
         source: record.source,
         sourceLabel: sourceLabel(record.source),
         sourceUrl: record.sourceUrl || "",
         idDate: record.idDate || "",
         name: record.name || species.commonName,
+        usedParts: species.usedParts || "",
         accessNote: accessRule.note,
         accessStatus: accessRule.status,
         accessStatusLabel: accessRule.label,
@@ -1455,6 +1641,9 @@ function getMarkerPopupHTML(properties) {
   const rulesText = [
     properties.accessLimit || "Unknown; confirm local rules before harvesting."
   ].filter(Boolean).map(escapeHTML).join(" · ");
+  const usedParts = properties.usedParts
+    ? `<dt>Used parts</dt><dd>${escapeHTML(properties.usedParts)}</dd>`
+    : "";
   const warning = properties.harvestStatus
     ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
     : "";
@@ -1465,6 +1654,7 @@ function getMarkerPopupHTML(properties) {
     <dl class="popup-grid">
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
       <dt>ID source</dt><dd>${sourceMarkup}</dd>
+      ${usedParts}
       <dt>${escapeHTML(properties.rulesLabel || "Harvesting rules and limits")}</dt><dd>${ruleStatus} ${rulesText} · ${accessSourceMarkup}</dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
     </dl>
@@ -1864,13 +2054,13 @@ function getPublicLandAccessRule(properties, species) {
   const text = getPublicLandText(properties);
   const area = getPublicLandName(properties);
 
-  if (state.activeMap === "ink" && isNationalParkServiceLand(text)) {
+  if (state.activeMap !== "food" && isNationalParkServiceLand(text)) {
     return {
       status: "prohibited",
       label: "Prohibited",
       area,
       limit: "NPS plant removal is prohibited unless that park's superintendent has specifically authorized an exception for collection.",
-      note: "The encoded NPS exceptions are food-focused and should not be treated as permission to collect ink materials.",
+      note: "The encoded NPS exceptions are food-focused and should not be treated as permission to collect non-food plant materials.",
       sourceLabel: "36 CFR 2.1",
       sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
     };
@@ -1961,13 +2151,13 @@ function getPublicLandAccessRule(properties, species) {
   }
 
   if (isVirginiaWma(text)) {
-    if (state.activeMap === "ink") {
+    if (state.activeMap !== "food") {
       return {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Virginia WMA rules mention personal-use gathering of berries, mushrooms, and other fruits, but ink-material collection is not specifically encoded here.",
-        note: "Confirm DWR access requirements and posted site rules before collecting plant material for ink.",
+        limit: "Virginia WMA rules mention personal-use gathering of berries, mushrooms, and other fruits, but this kind of plant-material collection is not specifically encoded here.",
+        note: "Confirm DWR access requirements and posted site rules before collecting plant material.",
         sourceLabel: "Virginia WMA rules",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaWma
       };
@@ -1985,13 +2175,13 @@ function getPublicLandAccessRule(properties, species) {
   }
 
   if (isVirginiaStateForest(text)) {
-    if (state.activeMap === "ink") {
+    if (state.activeMap !== "food") {
       return {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Virginia state forest rules include a personal-use exception for edible fruits, berries, fungi, and nuts; ink-material collection needs confirmation.",
-        note: "Do not assume the edible-collection exception applies to ink materials, especially bark, wood, leaves, or galls.",
+        limit: "Virginia state forest rules include a personal-use exception for edible fruits, berries, fungi, and nuts; this plant-material collection needs confirmation.",
+        note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
         sourceLabel: "Virginia state forest regulations",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaStateForests
       };
@@ -2009,13 +2199,13 @@ function getPublicLandAccessRule(properties, species) {
   }
 
   if (isVirginiaStateParkOrDcrLand(text)) {
-    if (state.activeMap === "ink") {
+    if (state.activeMap !== "food") {
       return {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Virginia park rules include a personal-use exception for edible fruits, berries, fungi, and nuts; ink-material collection needs confirmation.",
-        note: "Do not assume the edible-collection exception applies to ink materials, especially bark, wood, leaves, or galls.",
+        limit: "Virginia park rules include a personal-use exception for edible fruits, berries, fungi, and nuts; this plant-material collection needs confirmation.",
+        note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
         sourceLabel: "Virginia state park regulations",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaParks
       };

@@ -161,6 +161,12 @@ button {
   line-height: 1.45;
 }
 
+.safety-lede {
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+
 .control-group,
 .results-block {
   padding: 16px 0 18px;
@@ -291,6 +297,10 @@ h2 {
 .histogram-segment.red { background: #bf4150; }
 .histogram-segment.purple { background: #624c9f; }
 .histogram-segment.blue { background: #316d8f; }
+.histogram-segment.topical { background: #3f8d76; }
+.histogram-segment.immune { background: #6978b8; }
+.histogram-segment.digestive { background: #b7792f; }
+.histogram-segment.lymphatic { background: #9a5f9f; }
 
 .season-bands {
   display: grid;
@@ -435,6 +445,22 @@ h2 {
 
 .type-list .category-option.blue {
   background: #316d8f;
+}
+
+.type-list .category-option.topical {
+  background: #3f8d76;
+}
+
+.type-list .category-option.immune {
+  background: #6978b8;
+}
+
+.type-list .category-option.digestive {
+  background: #b7792f;
+}
+
+.type-list .category-option.lymphatic {
+  background: #9a5f9f;
 }
 
 .filter-list.type-list .category-option input {
@@ -626,6 +652,10 @@ h2 {
 .type-pill.red { background: #bf4150; }
 .type-pill.purple { background: #624c9f; }
 .type-pill.blue { background: #316d8f; }
+.type-pill.topical { background: #3f8d76; }
+.type-pill.immune { background: #6978b8; }
+.type-pill.digestive { background: #b7792f; }
+.type-pill.lymphatic { background: #9a5f9f; }
 
 .fine-print {
   margin: 10px 0 0;
