@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Virginia Forage Map</title>
+    <title>Virginia Edible Forage Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=virginia-outline-1">
+    <link rel="stylesheet" href="./styles.css?v=edible-virginia-1">
   </head>
   <body>
     <main class="app-shell">
       <aside class="panel is-collapsed" aria-label="Forage controls" id="controlPanel">
         <div class="panel-topline">
           <div class="brand-block">
-            <p class="eyebrow">Charlottesville, Virginia</p>
-            <h1>Forage Map</h1>
-            <p class="lede">Track edible plants and mushrooms by place, date, and confidence.</p>
+            <p class="eyebrow">Virginia</p>
+            <h1>Edible Forage Map</h1>
+            <p class="lede">Track edible plants and mushrooms across Virginia by place, date, and confidence.</p>
           </div>
           <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
             <span class="panel-grip-bar" aria-hidden="true"></span>
@@ -111,15 +111,11 @@
 
       <section class="map-area" aria-label="Forage map">
         <div id="map"></div>
-        <div class="map-toolbar" aria-label="Map tools">
-          <button id="charlottesvilleButton" type="button">Charlottesville</button>
-          <button id="shenandoahButton" type="button">Shenandoah</button>
-        </div>
       </section>
     </main>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=virginia-outline-1"></script>
+    <script src="./app.js?v=edible-virginia-1"></script>
   </body>
 </html>

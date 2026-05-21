@@ -438,24 +438,6 @@ function initControls() {
     render();
   });
 
-  document.querySelector("#charlottesvilleButton").addEventListener("click", () => {
-    map.easeTo({
-      center: [-78.5034, 38.0356],
-      zoom: 13,
-      duration: 950,
-      essential: true
-    });
-  });
-
-  document.querySelector("#shenandoahButton").addEventListener("click", () => {
-    map.easeTo({
-      center: [-78.35, 38.533],
-      zoom: 10,
-      duration: 1100,
-      essential: true
-    });
-  });
-
   map.on("moveend", () => {
     scheduleDataLoad();
     schedulePublicLandLoad();
@@ -976,9 +958,9 @@ function getMarkerPopupHTML(properties) {
   const accessSourceMarkup = properties.accessSourceUrl
     ? `<a class="popup-source" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel)}</a>`
     : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
+  const accessStatusClass = escapeHTML(properties.accessStatus || "unknown");
+  const ruleStatus = `<span class="access-status ${accessStatusClass}">${escapeHTML(properties.accessStatusLabel || "Unknown")}</span>`;
   const rulesText = [
-    properties.accessStatusLabel || "Unknown",
-    properties.accessArea || "No public land match",
     properties.accessLimit || "Unknown; confirm local rules before harvesting."
   ].filter(Boolean).map(escapeHTML).join(" · ");
   const warning = properties.harvestStatus
@@ -991,7 +973,7 @@ function getMarkerPopupHTML(properties) {
     <dl class="popup-grid">
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
       <dt>ID source</dt><dd>${sourceMarkup}</dd>
-      <dt>Harvesting rules and limits</dt><dd>${rulesText} · ${accessSourceMarkup}</dd>
+      <dt>Harvesting rules and limits</dt><dd>${ruleStatus} ${rulesText} · ${accessSourceMarkup}</dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
     </dl>
     ${warning}
@@ -1495,8 +1477,14 @@ function getBestPublicLandAccessRule(features, species) {
   if (!features.length) return null;
   const candidates = features.map((feature) => ({
     rule: getPublicLandAccessRule(feature.properties || {}, species),
+    text: getPublicLandText(feature.properties || {}),
     acres: Number(feature.properties?.GIS_Acres) || 0
   }));
+  const shenandoahNationalPark = candidates.find((candidate) => (
+    candidate.text.includes("shenandoah national park")
+  ));
+  if (shenandoahNationalPark) return shenandoahNationalPark.rule;
+
   const specificProhibition = candidates
     .filter((candidate) => candidate.rule.status === "prohibited" && candidate.rule.sourceLabel !== "36 CFR 2.1")
     .sort((a, b) => a.acres - b.acres)[0];
