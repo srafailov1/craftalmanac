@@ -765,9 +765,9 @@ function getSpeciesGroupHTML(label, speciesItems) {
         <label class="species-group-title">
           <input type="checkbox" name="species-group" value="${escapeHTML(label)}" checked>
           ${escapeHTML(label)}
+          <span class="species-group-arrow" aria-hidden="true"></span>
         </label>
         <span class="species-group-actions">
-          <span class="species-group-arrow" aria-hidden="true"></span>
           <span class="type-pill ${category}">${getCategoryLabel(category)}</span>
         </span>
       </summary>

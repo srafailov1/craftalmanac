@@ -467,14 +467,13 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  min-height: 34px;
+  gap: 12px;
   padding: 7px 8px;
   border: 1px solid transparent;
   border-radius: 6px;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 850;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -490,13 +489,23 @@ h2 {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
   cursor: pointer;
 }
 
-.species-group[open] summary,
+.species-list .species-group-title {
+  justify-content: flex-start;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
 .species-group summary:hover {
   border-color: #cdd8c5;
   background: #f1f5ed;
+  color: var(--ink);
 }
 
 .species-group-actions {
@@ -506,8 +515,9 @@ h2 {
 }
 
 .species-group-arrow {
-  width: 8px;
-  height: 8px;
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
   border-right: 2px solid var(--muted);
   border-bottom: 2px solid var(--muted);
   transform: rotate(45deg);
