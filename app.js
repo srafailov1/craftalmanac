@@ -9,6 +9,7 @@ const MAPBOX_TOKEN = window.FORAGE_CONFIG?.mapboxToken || "";
 const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
 const LIVE_DATA_TIMEOUT = 9000;
+const INATURALIST_VIRGINIA_PLACE_ID = "7";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
@@ -16,17 +17,15 @@ const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
 const PUBLIC_LANDS_LINE_LAYER_ID = "public-lands-line";
 const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
+const VIRGINIA_MAX_BOUNDS = [
+  [-84.1, 36.25],
+  [-74.8, 39.75]
+];
 const CATEGORY_COLORS = {
   berry: "#d12f7a",
   fruit: "#1b8a5a",
   nut: "#c47a15",
   mushroom: "#6f4acb"
-};
-const ACCESS_STATUS_COLORS = {
-  allowed: "#2f8f46",
-  "permit-required": "#d89b24",
-  prohibited: "#c74437",
-  unknown: "#8b8f86"
 };
 const ACCESS_RULE_SOURCES = {
   npsGeneral: "https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1",
@@ -233,8 +232,9 @@ const map = new mapboxgl.Map({
   style: MAPBOX_STYLE,
   center: [-78.5034, 38.0356],
   zoom: 13,
-  minZoom: 3,
+  minZoom: 6,
   maxZoom: 19,
+  maxBounds: VIRGINIA_MAX_BOUNDS,
   pitchWithRotate: false,
   dragRotate: false,
   attributionControl: true
@@ -315,6 +315,13 @@ function sourceLabel(source) {
     fallingfruit: "Falling Fruit",
     "nps-orchard": "National Park Service"
   }[source] || source;
+}
+
+function formatFallingFruitDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return getDateInputValue(date);
 }
 
 function escapeHTML(value) {
@@ -698,6 +705,7 @@ function renderMarkers() {
         source: record.source,
         sourceLabel: sourceLabel(record.source),
         sourceUrl: record.sourceUrl || "",
+        idDate: record.idDate || "",
         name: record.name || species.commonName,
         accessNote: accessRule.note,
         accessStatus: accessRule.status,
@@ -708,12 +716,9 @@ function renderMarkers() {
         accessSourceUrl: accessRule.sourceUrl,
         season: getMonthRangeText(species.months),
         confidence: record.confidence || "community",
-        note: record.note || "",
         harvestStatus: record.harvestStatus || "",
         harvestNote: record.accessNote || "Confirm site rules before harvesting.",
-        strokeColor: record.source === "nps-orchard" ? "#fdf1bd" : "#ffffff",
-        accessStrokeColor: ACCESS_STATUS_COLORS[accessRule.status] || ACCESS_STATUS_COLORS.unknown,
-        strokeWidth: record.source === "nps-orchard" ? 3 : 2,
+        strokeWidth: 0,
         radius: record.source === "nps-orchard" ? 6.5 : 5
       }
     }];
@@ -794,7 +799,7 @@ function initMapLayers() {
         "circle-radius": ["get", "radius"],
         "circle-color": ["get", "categoryColor"],
         "circle-opacity": 0.95,
-        "circle-stroke-color": ["get", "accessStrokeColor"],
+        "circle-stroke-color": "rgba(255, 255, 255, 0)",
         "circle-stroke-width": ["get", "strokeWidth"]
       }
     });
@@ -853,8 +858,8 @@ function bindMapInteractions() {
 
 function getMarkerPopupHTML(properties) {
   const sourceMarkup = properties.sourceUrl
-    ? `<a class="popup-source" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>`
-    : `<span class="popup-source">${escapeHTML(properties.sourceLabel)}</span>`;
+    ? `<a class="popup-source" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>${properties.idDate ? ` · ${escapeHTML(properties.idDate)}` : ""}`
+    : `<span class="popup-source">${escapeHTML(properties.sourceLabel)}${properties.idDate ? ` · ${escapeHTML(properties.idDate)}` : ""}</span>`;
   const accessSourceMarkup = properties.accessSourceUrl
     ? `<a class="popup-source" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel)}</a>`
     : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
@@ -868,17 +873,19 @@ function getMarkerPopupHTML(properties) {
     <p class="popup-meta">${escapeHTML(properties.observedName)} · ${escapeHTML(properties.observedScientificName)}</p>
     <dl class="popup-grid">
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
-      <dt>Source</dt><dd>${sourceMarkup}</dd>
-      <dt>Access</dt><dd><span class="access-status ${accessStatusClass}">${escapeHTML(properties.accessStatusLabel || "Unknown")}</span></dd>
-      <dt>Land</dt><dd>${escapeHTML(properties.accessArea || "No public land match")}</dd>
-      <dt>Limit</dt><dd>${escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.")}</dd>
-      <dt>Rule source</dt><dd>${accessSourceMarkup}</dd>
+      <dt>ID source</dt><dd>${sourceMarkup}</dd>
+      <dt class="popup-full">Harvesting rules and limits</dt>
+      <dd class="popup-full">
+        <div class="popup-rule">
+          <span class="access-status ${accessStatusClass}">${escapeHTML(properties.accessStatusLabel || "Unknown")}</span>
+          <span>${escapeHTML(properties.accessArea || "No public land match")}</span>
+          <span>${escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.")}</span>
+          <span>${accessSourceMarkup}</span>
+        </div>
+      </dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
-      <dt>Status</dt><dd>${escapeHTML(properties.confidence)}</dd>
     </dl>
     ${warning}
-    <p class="popup-note">${escapeHTML(properties.accessNote)}</p>
-    <p class="popup-note">${escapeHTML(properties.note)}</p>
   `;
 }
 
@@ -965,6 +972,7 @@ async function loadINaturalist() {
     geo: "true",
     photos: "true",
     quality_grade: "research",
+    place_id: INATURALIST_VIRGINIA_PLACE_ID,
     per_page: "120",
     order: "desc",
     order_by: "observed_on"
@@ -984,7 +992,7 @@ async function loadFallingFruit() {
   }
 
   try {
-    const response = await fetch("./data/falling-fruit-charlottesville.json");
+    const response = await fetch("./data/falling-fruit-virginia.json");
     if (!response.ok) return [];
     const data = await response.json();
     state.fallingFruitRecords = data
@@ -1118,6 +1126,7 @@ function mapINaturalistObservation(observation) {
     source: "inaturalist",
     note: `Observed ${observation.observed_on || "date unknown"}; iNaturalist ID ${observation.id}.`,
     confidence: observation.quality_grade || "community",
+    idDate: observation.observed_on || "",
     sourceUrl: observation.uri || `https://www.inaturalist.org/observations/${observation.id}`,
     accessClass: "unknown",
     publicLand: false,
@@ -1140,6 +1149,7 @@ function mapFallingFruitRecord(record) {
     note: record.note || "Imported Falling Fruit record.",
     confidence: record.confidence || "community",
     sourceUrl: record.sourceUrl || "https://fallingfruit.org/",
+    idDate: formatFallingFruitDate(record.idDate),
     access: record.access || "",
     accessClass: record.accessClass || "unknown",
     publicLand: Boolean(record.publicLand),
@@ -1162,6 +1172,7 @@ function mapNpsOrchardRecord(record) {
     note: record.note || "Historic orchard or fruit tree documented by the National Park Service.",
     confidence: record.confidence || "cultural landscape record",
     sourceUrl: record.sourceUrl || "https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm",
+    idDate: record.idDate || "",
     access: record.access || "National Park Service",
     accessClass: record.accessClass || "restricted",
     publicLand: true,

@@ -9,16 +9,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TYPES_PATH = Path("/Users/sasson/Downloads/types.csv.bz2")
 LOCATIONS_PATH = Path("/Users/sasson/Downloads/locations.csv.bz2")
-OUTPUT_PATH = ROOT / "data" / "falling-fruit-charlottesville.json"
-SUMMARY_PATH = ROOT / "data" / "falling-fruit-charlottesville-summary.json"
+OUTPUT_PATH = ROOT / "data" / "falling-fruit-virginia.json"
+SUMMARY_PATH = ROOT / "data" / "falling-fruit-virginia-summary.json"
+BOUNDARY_PATH = ROOT / "data" / "virginia-boundary.json"
 
-# Covers Charlottesville, nearby Albemarle, and the Shenandoah-facing area
-# without carrying the full Virginia archive into the browser.
+# Virginia statewide browser subset. The polygon is checked after this broad
+# bounding-box screen so neighboring-state records near the border are excluded.
 BOUNDS = {
-    "south": 37.45,
-    "north": 39.15,
-    "west": -79.65,
-    "east": -77.45,
+    "south": 36.45,
+    "north": 39.55,
+    "west": -83.75,
+    "east": -75.15,
 }
 
 RULES = [
@@ -101,6 +102,38 @@ def in_bounds(lat, lng):
     )
 
 
+def read_virginia_boundary():
+    data = json.loads(BOUNDARY_PATH.read_text(encoding="utf-8"))
+    return data
+
+
+def point_in_virginia(lat, lng, boundary):
+    point = (lng, lat)
+    if boundary["type"] == "Polygon":
+        return point_in_polygon(point, boundary["coordinates"])
+    if boundary["type"] == "MultiPolygon":
+        return any(point_in_polygon(point, polygon) for polygon in boundary["coordinates"])
+    return False
+
+
+def point_in_polygon(point, polygon):
+    if not polygon or not point_in_ring(point, polygon[0]):
+        return False
+    return not any(point_in_ring(point, hole) for hole in polygon[1:])
+
+
+def point_in_ring(point, ring):
+    x, y = point
+    inside = False
+    j = len(ring) - 1
+    for i, (xi, yi) in enumerate(ring):
+        xj, yj = ring[j]
+        if ((yi > y) != (yj > y)) and x < ((xj - xi) * (y - yi)) / (yj - yi) + xi:
+            inside = not inside
+        j = i
+    return inside
+
+
 def clean_note(row, type_name):
     pieces = []
     if row.get("description"):
@@ -156,6 +189,7 @@ def classify_access(access):
 
 def build_subset():
     type_to_species, type_info = read_types()
+    virginia_boundary = read_virginia_boundary()
     records = []
     seen = set()
     skipped_hidden = 0
@@ -173,6 +207,8 @@ def build_subset():
             except (TypeError, ValueError):
                 continue
             if not in_bounds(lat, lng):
+                continue
+            if not point_in_virginia(lat, lng, virginia_boundary):
                 continue
 
             type_ids = [
@@ -203,6 +239,7 @@ def build_subset():
                     "note": clean_note(row, info["name"]),
                     "confidence": "community",
                     "sourceUrl": f"https://fallingfruit.org/locations/{row['id']}",
+                    "idDate": row.get("updated_at") or row.get("created_at") or "",
                     **access,
                 })
 
