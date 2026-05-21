@@ -34,7 +34,7 @@ Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-nat
 
 ## Access Rules
 
-The access-status badges in popups are rule summaries matched to the public-land polygon containing a record. They are not legal advice and should be treated as a starting point for checking posted rules, current compendiums, special closures, permits, and agency updates.
+The harvesting rules and limits shown in popups are rule summaries matched to the public-land polygon containing a record. They are not legal advice and should be treated as a starting point for checking posted rules, current compendiums, special closures, permits, and agency updates.
 
 Primary rule sources currently encoded:
 

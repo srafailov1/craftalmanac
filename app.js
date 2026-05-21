@@ -16,6 +16,10 @@ const MARKERS_LAYER_ID = "forage-record-points";
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
 const PUBLIC_LANDS_LINE_LAYER_ID = "public-lands-line";
+const VIRGINIA_BOUNDARY_SOURCE_ID = "virginia-boundary";
+const VIRGINIA_MASK_SOURCE_ID = "virginia-mask";
+const VIRGINIA_MASK_LAYER_ID = "virginia-mask-fill";
+const VIRGINIA_OUTLINE_LAYER_ID = "virginia-outline";
 const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
 const VIRGINIA_MAX_BOUNDS = [
   [-84.1, 36.25],
@@ -209,6 +213,7 @@ const state = {
   allSeasons: false,
   records: [],
   inatRecords: [],
+  inatRecordCache: new Map(),
   loadTimer: null,
   publicLoadTimer: null,
   activeRequest: 0,
@@ -730,8 +735,26 @@ function renderMarkers() {
   });
 }
 
+function getCachedINaturalistRecordsInBounds() {
+  if (!state.mapReady) return [...state.inatRecordCache.values()];
+  const bounds = map.getBounds();
+  return [...state.inatRecordCache.values()].filter((record) => recordInBounds(record, bounds));
+}
+
+function recordInBounds(record, bounds) {
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return false;
+  return lat >= bounds.getSouth()
+    && lat <= bounds.getNorth()
+    && lng >= bounds.getWest()
+    && lng <= bounds.getEast();
+}
+
 function initMapLayers() {
   const firstLineOrSymbolLayerId = getFirstLineOrSymbolLayerId();
+
+  initVirginiaBoundaryLayers(firstLineOrSymbolLayerId);
 
   if (!map.getSource(PUBLIC_LANDS_SOURCE_ID)) {
     map.addSource(PUBLIC_LANDS_SOURCE_ID, {
@@ -796,7 +819,14 @@ function initMapLayers() {
       type: "circle",
       source: MARKERS_SOURCE_ID,
       paint: {
-        "circle-radius": ["get", "radius"],
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          6, 4.8,
+          10, 5.4,
+          14, ["get", "radius"]
+        ],
         "circle-color": ["get", "categoryColor"],
         "circle-opacity": 0.95,
         "circle-stroke-color": "rgba(255, 255, 255, 0)",
@@ -807,6 +837,89 @@ function initMapLayers() {
 
   updatePublicLandVisibility();
   bindMapInteractions();
+}
+
+async function initVirginiaBoundaryLayers(firstLineOrSymbolLayerId) {
+  try {
+    const response = await fetch("./data/virginia-boundary.json");
+    if (!response.ok) return;
+    const geometry = await response.json();
+    const feature = {
+      type: "Feature",
+      properties: {},
+      geometry
+    };
+    const mask = getOutsideVirginiaMask(geometry);
+
+    if (!map.getSource(VIRGINIA_BOUNDARY_SOURCE_ID)) {
+      map.addSource(VIRGINIA_BOUNDARY_SOURCE_ID, {
+        type: "geojson",
+        data: feature
+      });
+    }
+
+    if (!map.getSource(VIRGINIA_MASK_SOURCE_ID)) {
+      map.addSource(VIRGINIA_MASK_SOURCE_ID, {
+        type: "geojson",
+        data: mask
+      });
+    }
+
+    if (!map.getLayer(VIRGINIA_MASK_LAYER_ID)) {
+      map.addLayer({
+        id: VIRGINIA_MASK_LAYER_ID,
+        type: "fill",
+        source: VIRGINIA_MASK_SOURCE_ID,
+        paint: {
+          "fill-color": "#f2efe5",
+          "fill-opacity": 0.58
+        }
+      }, firstLineOrSymbolLayerId);
+    }
+
+    if (!map.getLayer(VIRGINIA_OUTLINE_LAYER_ID)) {
+      map.addLayer({
+        id: VIRGINIA_OUTLINE_LAYER_ID,
+        type: "line",
+        source: VIRGINIA_BOUNDARY_SOURCE_ID,
+        paint: {
+          "line-color": "#1f3d2b",
+          "line-opacity": 0.86,
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            6, 1.6,
+            10, 2.2,
+            14, 3
+          ]
+        }
+      }, firstLineOrSymbolLayerId);
+    }
+  } catch {
+    // The boundary is visual guidance; the app can still run without it.
+  }
+}
+
+function getOutsideVirginiaMask(geometry) {
+  const worldRing = [
+    [-180, -85],
+    [180, -85],
+    [180, 85],
+    [-180, 85],
+    [-180, -85]
+  ];
+  const holes = geometry.type === "Polygon"
+    ? geometry.coordinates.map((ring) => [...ring].reverse())
+    : geometry.coordinates.flatMap((polygon) => polygon.map((ring) => [...ring].reverse()));
+  return {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Polygon",
+      coordinates: [worldRing, ...holes]
+    }
+  };
 }
 
 function getFirstLineOrSymbolLayerId() {
@@ -863,7 +976,11 @@ function getMarkerPopupHTML(properties) {
   const accessSourceMarkup = properties.accessSourceUrl
     ? `<a class="popup-source" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel)}</a>`
     : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
-  const accessStatusClass = escapeHTML(properties.accessStatus || "unknown");
+  const rulesText = [
+    properties.accessStatusLabel || "Unknown",
+    properties.accessArea || "No public land match",
+    properties.accessLimit || "Unknown; confirm local rules before harvesting."
+  ].filter(Boolean).map(escapeHTML).join(" · ");
   const warning = properties.harvestStatus
     ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
     : "";
@@ -874,15 +991,7 @@ function getMarkerPopupHTML(properties) {
     <dl class="popup-grid">
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
       <dt>ID source</dt><dd>${sourceMarkup}</dd>
-      <dt class="popup-full">Harvesting rules and limits</dt>
-      <dd class="popup-full">
-        <div class="popup-rule">
-          <span class="access-status ${accessStatusClass}">${escapeHTML(properties.accessStatusLabel || "Unknown")}</span>
-          <span>${escapeHTML(properties.accessArea || "No public land match")}</span>
-          <span>${escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.")}</span>
-          <span>${accessSourceMarkup}</span>
-        </div>
-      </dd>
+      <dt>Harvesting rules and limits</dt><dd>${rulesText} · ${accessSourceMarkup}</dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
     </dl>
     ${warning}
@@ -926,8 +1035,9 @@ async function loadMapData() {
   if (requestId !== state.activeRequest) return;
 
   if (inatResult.status === "fulfilled") {
-    state.inatRecords = inatResult.value;
+    inatResult.value.forEach((record) => state.inatRecordCache.set(record.id, record));
   }
+  state.inatRecords = getCachedINaturalistRecordsInBounds();
 
   const fallingFruitRecords = fallingFruitResult.status === "fulfilled"
     ? fallingFruitResult.value
@@ -1194,8 +1304,7 @@ function getRecordAccessRule(record, species) {
     };
   }
 
-  const landMatch = getContainingPublicLand(record);
-  const landRule = landMatch ? getPublicLandAccessRule(landMatch.properties || {}, species) : null;
+  const landRule = getBestPublicLandAccessRule(getContainingPublicLands(record), species);
   if (landRule) return landRule;
 
   if (record.accessClass === "private") {
@@ -1382,6 +1491,25 @@ function getPublicLandAccessRule(properties, species) {
   };
 }
 
+function getBestPublicLandAccessRule(features, species) {
+  if (!features.length) return null;
+  const candidates = features.map((feature) => ({
+    rule: getPublicLandAccessRule(feature.properties || {}, species),
+    acres: Number(feature.properties?.GIS_Acres) || 0
+  }));
+  const specificProhibition = candidates
+    .filter((candidate) => candidate.rule.status === "prohibited" && candidate.rule.sourceLabel !== "36 CFR 2.1")
+    .sort((a, b) => a.acres - b.acres)[0];
+  if (specificProhibition) return specificProhibition.rule;
+
+  const largerLandRules = candidates
+    .filter((candidate) => !(candidate.rule.status === "prohibited" && candidate.rule.sourceLabel === "36 CFR 2.1"))
+    .sort((a, b) => b.acres - a.acres);
+  if (largerLandRules.length) return largerLandRules[0].rule;
+
+  return candidates.sort((a, b) => b.acres - a.acres)[0].rule;
+}
+
 function getPublicLandText(properties) {
   return [
     properties.Unit_Nm,
@@ -1464,11 +1592,15 @@ function isRecordPubliclyAccessible(record) {
 }
 
 function getContainingPublicLand(record) {
-  if (!state.publicLandFeatures.length) return null;
+  return getContainingPublicLands(record)[0] || null;
+}
+
+function getContainingPublicLands(record) {
+  if (!state.publicLandFeatures.length) return [];
   const lat = Number(record.lat);
   const lng = Number(record.lng);
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
-  return state.publicLandFeatures.find((feature) => pointInFeature([lng, lat], feature));
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return [];
+  return state.publicLandFeatures.filter((feature) => pointInFeature([lng, lat], feature));
 }
 
 function pointInFeature(point, feature) {

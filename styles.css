@@ -12,10 +12,6 @@
   --nut: #c47a15;
   --public-open: #5fa540;
   --public-restricted: #3b8c7e;
-  --access-allowed: #2f8f46;
-  --access-permit: #d89b24;
-  --access-prohibited: #c74437;
-  --access-unknown: #8b8f86;
   --sky: #d8e7ec;
   --shadow: 0 18px 50px rgba(35, 44, 30, 0.16);
 }
@@ -607,7 +603,7 @@ h2 {
 
 .popup-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 92px minmax(0, 1fr);
   gap: 5px 10px;
   margin: 10px 0;
   color: #5d6659;
@@ -623,41 +619,9 @@ h2 {
   margin: 0;
 }
 
-.popup-grid .popup-full {
-  grid-column: 1 / -1;
-}
-
-.popup-grid dt.popup-full {
-  margin-top: 4px;
-}
-
 .popup-source {
   color: var(--leaf-dark);
   font-weight: 850;
-}
-
-.access-status {
-  display: inline-flex;
-  align-items: center;
-  min-height: 22px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 850;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.access-status.allowed { background: var(--access-allowed); }
-.access-status.permit-required { background: var(--access-permit); }
-.access-status.prohibited { background: var(--access-prohibited); }
-.access-status.unknown { background: var(--access-unknown); }
-
-.popup-rule {
-  display: grid;
-  gap: 5px;
-  line-height: 1.35;
 }
 
 .popup-warning {
