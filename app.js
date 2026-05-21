@@ -42,30 +42,9 @@ const ACCESS_RULE_SOURCES = {
   virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
   virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
   charlottesville: "https://www.charlottesville.gov/658/Parks-Trails",
-  albemarle: "https://www.albemarle.org/government/parks-recreation",
-  monticelloTrails: "https://www.monticello.org/visit/hiking-trails/trail-hours-faqs"
+  albemarle: "https://www.albemarle.org/government/parks-recreation"
 };
-const SITE_ACCESS_RULES = [
-  {
-    id: "monticello",
-    name: "Monticello and Saunders-Monticello Trail",
-    bounds: {
-      south: 37.996,
-      north: 38.034,
-      west: -78.482,
-      east: -78.438
-    },
-    rule: {
-      status: "prohibited",
-      label: "Prohibited",
-      area: "Monticello and Saunders-Monticello Trail",
-      limit: "Foraging is prohibited on Monticello grounds and trails.",
-      note: "Monticello trail users are directed to observe posted signage and park rules; this site-specific override reflects the posted no-foraging policy.",
-      sourceLabel: "Monticello trail rules",
-      sourceUrl: ACCESS_RULE_SOURCES.monticelloTrails
-    }
-  }
-];
+const SITE_ACCESS_RULES = [];
 
 const speciesCatalog = [
   {
@@ -159,6 +138,16 @@ const speciesCatalog = [
     notes: "Early summer fruit on small trees; also called juneberries."
   },
   {
+    id: "wild-strawberry",
+    commonName: "Wild strawberries",
+    scientificName: "Fragaria virginiana and Fragaria vesca",
+    category: "berry",
+    months: [4, 5, 6],
+    inatTaxonIds: [77155, 50298],
+    parkLimit: "1 gallon per person per day in Shenandoah National Park",
+    notes: "Low spring fruit; confirm true wild strawberries rather than ornamental lookalikes."
+  },
+  {
     id: "persimmon",
     commonName: "American persimmons",
     scientificName: "Diospyros virginiana",
@@ -167,6 +156,39 @@ const speciesCatalog = [
     inatTaxonIds: [83435],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Best after softening; unripe fruit is sharply astringent."
+  },
+  {
+    id: "pawpaw",
+    commonName: "Pawpaws",
+    scientificName: "Asimina triloba",
+    category: "fruit",
+    months: [8, 9, 10],
+    inatTaxonIds: [50897],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Soft custardlike fruit from understory trees, often near streams and rich slopes."
+  },
+  {
+    id: "mulberry",
+    commonName: "Mulberries",
+    scientificName: "Morus",
+    category: "berry",
+    months: [5, 6, 7],
+    inatTaxonIds: [56091],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Dark ripe fruits stain easily; map records may include red, white, and hybrid mulberries."
+  },
+  {
+    id: "sumac",
+    commonName: "Sumac berries",
+    scientificName: "Rhus",
+    category: "berry",
+    months: [8, 9, 10, 11],
+    inatTaxonIds: [54765],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Use only true Rhus sumacs with fuzzy red fruit clusters; avoid poison sumac and uncertain IDs."
   },
   {
     id: "black-walnut",
@@ -229,6 +251,9 @@ const speciesCatalog = [
     notes: "Included in the park list, though less common as a wild forage."
   }
 ];
+const speciesCatalogByName = [...speciesCatalog].sort((a, b) => (
+  a.commonName.localeCompare(b.commonName, undefined, { sensitivity: "base" })
+));
 
 const state = {
   selectedDay: getDayOfYear(new Date()),
@@ -367,7 +392,7 @@ function initControls() {
   dateInput.min = `${ACTIVE_YEAR}-01-01`;
   dateInput.max = `${ACTIVE_YEAR}-12-31`;
 
-  speciesList.innerHTML = speciesCatalog.map((species) => `
+  speciesList.innerHTML = speciesCatalogByName.map((species) => `
     <label data-category="${species.category}">
       <span class="species-name">
         <input type="checkbox" name="species" value="${species.id}" checked>
@@ -1367,6 +1392,18 @@ function getPublicLandAccessRule(properties, species) {
   const area = getPublicLandName(properties);
 
   if (text.includes("shenandoah national park")) {
+    if (species.shenandoahAllowed === false) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: `${species.commonName} are not listed in the encoded Shenandoah compendium allowance; do not harvest without written park authorization.`,
+        note: "Shenandoah allows hand-gathering only for the foods specifically authorized in its superintendent's compendium.",
+        sourceLabel: "Shenandoah compendium",
+        sourceUrl: ACCESS_RULE_SOURCES.shenandoah
+      };
+    }
+
     return {
       status: "allowed",
       label: "Allowed",

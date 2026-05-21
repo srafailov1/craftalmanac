@@ -6,7 +6,7 @@
     <title>Craft Almanac · Virginia Food Map</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=craft-title-1">
+    <link rel="stylesheet" href="./styles.css?v=new-foods-1">
   </head>
   <body>
     <main class="app-shell">
@@ -16,10 +16,10 @@
             <h1>Craft Almanac</h1>
             <p class="site-slogan">Seasonal maps for making with place.</p>
             <nav class="map-tabs" aria-label="Craft Almanac map types">
-              <span class="active">Food</span>
-              <span>Medicine</span>
               <span>Ink</span>
               <span>Objects</span>
+              <span class="active">Food</span>
+              <span>Medicine</span>
             </nav>
             <p class="lede">Track edible plants and mushrooms across Virginia by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.</p>
           </div>
@@ -70,10 +70,10 @@
             </div>
             <div class="section-body">
               <div class="filter-list type-list" id="categoryList">
-                <label class="category-option fruit"><input type="checkbox" name="category" value="fruit" checked> Fruit</label>
                 <label class="category-option berry"><input type="checkbox" name="category" value="berry" checked> Berries</label>
-                <label class="category-option nut"><input type="checkbox" name="category" value="nut" checked> Nuts</label>
+                <label class="category-option fruit"><input type="checkbox" name="category" value="fruit" checked> Fruit</label>
                 <label class="category-option mushroom"><input type="checkbox" name="category" value="mushroom" checked> Mushrooms</label>
+                <label class="category-option nut"><input type="checkbox" name="category" value="nut" checked> Nuts</label>
               </div>
               <div class="species-actions">
                 <button class="text-button" id="selectAllSpeciesButton" type="button">All</button>
@@ -122,6 +122,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=craft-title-1"></script>
+    <script src="./app.js?v=new-foods-1"></script>
   </body>
 </html>
