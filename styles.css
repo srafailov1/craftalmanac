@@ -500,6 +500,21 @@ h2 {
   font-size: inherit;
 }
 
+.species-list .species-group-title,
+.species-list .species-group-title:hover,
+.species-list .species-group-title:active,
+.species-list .species-group-title:focus-within {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.species-list .species-group-title,
+.species-list .species-group-title * {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
 .species-group-summary.is-selected {
   border-color: #cdd8c5;
   background: #f1f5ed;
@@ -564,10 +579,24 @@ h2 {
   border-radius: 6px;
 }
 
+.species-group:hover .species-group-summary:not(.is-selected),
+.species-list label:not(.is-selected):hover {
+  border-color: #cdd8c5;
+}
+
 .species-list label.is-selected {
   border-color: #cdd8c5;
   background: #f1f5ed;
   color: var(--ink);
+}
+
+.species-list .species-group-title.is-selected,
+.species-list .species-group-title.is-selected:hover,
+.species-list .species-group-title.is-selected:active,
+.species-list .species-group-title.is-selected:focus-within {
+  border: 0;
+  background: transparent;
+  color: inherit;
 }
 
 .species-name {

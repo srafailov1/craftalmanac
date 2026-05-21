@@ -1056,9 +1056,12 @@ function syncSpeciesGroupCheckboxes() {
 function renderSpeciesState() {
   const selectedSpecies = getCheckedValues("species");
   speciesCount.textContent = selectedSpecies.length;
-  document.querySelectorAll(".species-list label").forEach((label) => {
+  document.querySelectorAll(".species-list label:not(.species-group-title)").forEach((label) => {
     const input = label.querySelector("input[name='species']");
     label.classList.toggle("is-selected", input?.checked);
+  });
+  document.querySelectorAll(".species-list .species-group-title").forEach((label) => {
+    label.classList.remove("is-selected");
   });
   syncCategoryCheckboxes();
   syncSpeciesGroupCheckboxes();
