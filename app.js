@@ -700,6 +700,18 @@ function renderFilterControls() {
       render();
     });
   });
+  document.querySelectorAll(".species-group-arrow-button").forEach((toggle) => {
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleSpeciesGroup(toggle);
+    });
+    toggle.addEventListener("keydown", (event) => {
+      if (!["Enter", " "].includes(event.key)) return;
+      event.preventDefault();
+      toggleSpeciesGroup(toggle);
+    });
+  });
   categoryInputs.forEach((input) => {
     input.addEventListener("change", () => {
       setSpeciesByCategory(input.value, input.checked);
@@ -760,22 +772,38 @@ function getSpeciesGroupHTML(label, speciesItems) {
   const sortedItems = sortCatalogByName(speciesItems);
   const category = sortedItems[0]?.category || "";
   return `
-    <details class="species-group" open>
-      <summary>
-        <label class="species-group-title">
-          <input type="checkbox" name="species-group" value="${escapeHTML(label)}" checked>
-          ${escapeHTML(label)}
-          <span class="species-group-arrow" aria-hidden="true"></span>
-        </label>
+    <div class="species-group is-open">
+      <div class="species-group-summary">
+        <span class="species-group-title-wrap">
+          <label class="species-group-title">
+            <input type="checkbox" name="species-group" value="${escapeHTML(label)}" checked>
+            ${escapeHTML(label)}
+          </label>
+          <span class="species-group-arrow-button" role="button" tabindex="0" aria-label="Collapse ${escapeHTML(label)}">
+            <span class="species-group-arrow" aria-hidden="true"></span>
+          </span>
+        </span>
         <span class="species-group-actions">
           <span class="type-pill ${category}">${getCategoryLabel(category)}</span>
         </span>
-      </summary>
+      </div>
       <div class="species-group-list">
         ${sortedItems.map(getSpeciesCheckboxHTML).join("")}
       </div>
-    </details>
+    </div>
   `;
+}
+
+function toggleSpeciesGroup(toggle) {
+  const group = toggle.closest(".species-group");
+  if (!group) return;
+  const isOpen = group.classList.toggle("is-open");
+  group.querySelector(".species-group-list").hidden = !isOpen;
+  toggle.setAttribute("aria-label", `${isOpen ? "Collapse" : "Expand"} ${getSpeciesGroupLabel(group)}`);
+}
+
+function getSpeciesGroupLabel(group) {
+  return group.querySelector("input[name='species-group']")?.value || "group";
 }
 
 function setMapMode(mode) {
@@ -1021,6 +1049,7 @@ function syncSpeciesGroupCheckboxes() {
     const selectedCount = speciesInGroup.filter((species) => getSpeciesInput(species.id)?.checked).length;
     input.checked = selectedCount === speciesInGroup.length;
     input.indeterminate = selectedCount > 0 && selectedCount < speciesInGroup.length;
+    input.closest(".species-group")?.querySelector(".species-group-summary")?.classList.toggle("is-selected", input.checked);
   });
 }
 

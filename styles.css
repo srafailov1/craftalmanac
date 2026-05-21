@@ -463,7 +463,7 @@ h2 {
   gap: 6px;
 }
 
-.species-group summary {
+.species-group-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -474,22 +474,20 @@ h2 {
   color: var(--muted);
   font-size: 14px;
   font-weight: 400;
-  cursor: pointer;
+  cursor: default;
 }
 
-.species-group summary::-webkit-details-marker {
-  display: none;
-}
-
-.species-group summary::marker {
-  content: "";
+.species-group-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
 .species-group-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 0;
   cursor: pointer;
 }
 
@@ -502,7 +500,13 @@ h2 {
   font-size: inherit;
 }
 
-.species-group summary:hover {
+.species-group-summary:hover {
+  border-color: #cdd8c5;
+  background: #f1f5ed;
+  color: var(--ink);
+}
+
+.species-group-summary.is-selected {
   border-color: #cdd8c5;
   background: #f1f5ed;
   color: var(--ink);
@@ -512,6 +516,22 @@ h2 {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.species-group-arrow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.species-group-arrow-button:hover,
+.species-group-arrow-button:focus-visible {
+  background: rgba(32, 36, 31, 0.08);
+  outline: none;
 }
 
 .species-group-arrow {
@@ -524,7 +544,7 @@ h2 {
   transition: transform 0.16s ease;
 }
 
-.species-group:not([open]) .species-group-arrow {
+.species-group:not(.is-open) .species-group-arrow {
   transform: rotate(-45deg);
 }
 
