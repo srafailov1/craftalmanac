@@ -29,21 +29,25 @@ RULES = [
     ("ink-osage-orange", r"\b(osage orange|osage-orange|hedge apple)\b|\bMaclura pomifera\b"),
     ("ink-pokeweed", r"\b(pokeweed|pokeberry|inkberry)\b|\bPhytolacca americana\b"),
     ("ink-autumn-olive", r"\bautumn olive\b|\bElaeagnus umbellata\b"),
-    ("ink-wineberry", r"\bwineberr(y|ies)\b|Rubus phoenicolasius"),
     ("ink-privet", r"\bprivet\b|\bLigustrum\b"),
     ("morel", r"\b(Morchella|morel)\b"),
     ("blueberry", r"\bblueberr(y|ies)\b|Vaccinium corymbosum|Vaccinium pallidum"),
-    ("bramble", r"\b(blackberry|raspberry|wineberry|dewberry|boysenberry|loganberry)\b|Rubus (allegheniensis|occidentalis|phoenicolasius|idaeus|armeniacus|laciniatus|fruticosus)"),
+    ("wineberry", r"\bwineberr(y|ies)\b|Rubus phoenicolasius"),
+    ("blackberry", r"\b(blackberry|dewberry|boysenberry|loganberry)\b|Rubus (allegheniensis|argutus|armeniacus|laciniatus|fruticosus)"),
+    ("raspberry", r"\b(black raspberry|red raspberry|raspberry)\b|Rubus (occidentalis|idaeus)"),
     ("grape", r"\bgrape\b|\bVitis\b"),
     ("elderberry", r"\belderberr(y|ies)\b|\belderflower\b|\bSambucus\b"),
     ("ribes", r"\b(currant|gooseberry|redcurrant|blackcurrant|whitecurrant|jostaberry)\b|\bRibes\b"),
     ("huckleberry", r"\bhuckleberr(y|ies)\b|\bGaylussacia\b"),
-    ("prunus", r"\b(cherr(y|ies)|plum|prune)\b|\bPrunus\b"),
+    ("cornelian-cherry", r"\bCornelian cherr(y|ies)\b|\bCornus mas\b"),
+    ("sour-cherry", r"\bsour cherr(y|ies)\b|Prunus cerasus"),
+    ("sweet-cherry", r"\b(sweet cherr(y|ies)|wild cherr(y|ies))\b|Prunus avium"),
+    ("black-cherry", r"\bblack cherr(y|ies)\b|Prunus serotina"),
+    ("plum", r"\b(plum|prune)\b|Prunus (americana|mexicana)"),
     ("serviceberry", r"\b(serviceberry|juneberry)\b|\bAmelanchier\b"),
     ("wild-strawberry", r"\bstrawberr(y|ies)\b|\bFragaria\b"),
     ("persimmon", r"\bpersimmon\b|\bDiospyros\b"),
     ("pawpaw", r"\bpawpaw\b|\bpaw paw\b|\bAsimina triloba\b"),
-    ("mulberry", r"\bmulberr(y|ies)\b|\bMorus\b"),
     ("sumac", r"\bsumac\b|\bRhus\b"),
     ("black-walnut", r"\bblack walnut\b|Juglans nigra"),
     ("hickory", r"\bhickory\b|\bCarya\b"),
@@ -60,7 +64,7 @@ EXCLUDE = re.compile(
     r"peachleaf willow|ornamental|flowering|yew plum|plum-pine|mombin|"
     r"hog plum|gooseberry gourd|barbados gooseberry|star gooseberry|"
     r"Aristotelia|New Zealand wineberry|witch-?hazel|Hamamelis|"
-    r"cherry birch|Betula lenta|Cornelian cherry|Cornus mas|"
+    r"cherry birch|Betula lenta|"
     r"mock strawberry|strawberry tree|Arbutus|poison sumac|"
     r"Toxicodendron vernix|African sumac|Rhus lancea",
     re.I,

@@ -458,6 +458,35 @@ h2 {
   gap: 8px;
 }
 
+.species-group {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.species-group summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
+  padding: 8px 10px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.species-group summary span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.species-group-list {
+  display: grid;
+  gap: 4px;
+  padding: 0 6px 6px;
+}
+
 .species-list label {
   justify-content: space-between;
   gap: 12px;

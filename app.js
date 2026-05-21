@@ -77,14 +77,37 @@ const foodSpeciesCatalog = [
     notes: "Often found in acidic soils, open woods, and sunny edges."
   },
   {
-    id: "bramble",
-    commonName: "Blackberries and raspberries",
-    scientificName: "Rubus",
+    id: "blackberry",
+    commonName: "Blackberries",
+    scientificName: "Rubus allegheniensis and related blackberries",
     category: "berry",
-    months: [6, 7, 8, 9],
-    inatTaxonIds: [82110, 125489, 84227],
+    groupLabel: "Blackberries and raspberries",
+    months: [6, 7, 8],
+    inatTaxonIds: [82110, 1276041],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
     notes: "Cane fruits are common around edges and sunny disturbed ground."
+  },
+  {
+    id: "raspberry",
+    commonName: "Raspberries",
+    scientificName: "Rubus occidentalis and Rubus idaeus",
+    category: "berry",
+    groupLabel: "Blackberries and raspberries",
+    months: [6, 7, 8],
+    inatTaxonIds: [125489, 54436],
+    parkLimit: "1 gallon per person per day in Shenandoah National Park",
+    notes: "Black and red raspberries ripen around early to mid summer; confirm cane and fruit traits."
+  },
+  {
+    id: "wineberry",
+    commonName: "Wineberries",
+    scientificName: "Rubus phoenicolasius",
+    category: "berry",
+    groupLabel: "Blackberries and raspberries",
+    months: [6, 7, 8],
+    inatTaxonIds: [84227],
+    parkLimit: "1 gallon per person per day in Shenandoah National Park",
+    notes: "An invasive bramble with sticky red hairs; fruit is often easy to distinguish when ripe."
   },
   {
     id: "grape",
@@ -127,14 +150,60 @@ const foodSpeciesCatalog = [
     notes: "Similar habitat to blueberries, often on dry acidic ridges."
   },
   {
-    id: "prunus",
-    commonName: "Cherries and plums",
-    scientificName: "Prunus",
+    id: "black-cherry",
+    commonName: "Black cherries",
+    scientificName: "Prunus serotina",
     category: "fruit",
-    months: [6, 7, 8, 9],
-    inatTaxonIds: [54834, 48629],
+    groupLabel: "Cherries and plums",
+    months: [7, 8, 9],
+    inatTaxonIds: [54834],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
-    notes: "Fruit flesh can be used, but pits, leaves, and wilted foliage are hazardous."
+    notes: "Fruit flesh can be used when ripe, but pits, leaves, and wilted foliage are hazardous."
+  },
+  {
+    id: "sweet-cherry",
+    commonName: "Sweet cherries",
+    scientificName: "Prunus avium",
+    category: "fruit",
+    groupLabel: "Cherries and plums",
+    months: [6, 7],
+    inatTaxonIds: [61964],
+    parkLimit: "1 gallon per person per day in Shenandoah National Park",
+    notes: "Often associated with plantings and old homestead sites; check property access closely."
+  },
+  {
+    id: "sour-cherry",
+    commonName: "Sour cherries",
+    scientificName: "Prunus cerasus",
+    category: "fruit",
+    groupLabel: "Cherries and plums",
+    months: [6, 7],
+    inatTaxonIds: [68763],
+    parkLimit: "1 gallon per person per day in Shenandoah National Park",
+    notes: "Tart cultivated or escaped cherries; check access before harvesting around neighborhoods."
+  },
+  {
+    id: "plum",
+    commonName: "Plums",
+    scientificName: "Prunus americana and Prunus mexicana",
+    category: "fruit",
+    groupLabel: "Cherries and plums",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [48629, 128755],
+    parkLimit: "1 gallon per person per day in Shenandoah National Park",
+    notes: "Wild and escaped plums vary in size and flavor; avoid leaves, pits, and wilted foliage."
+  },
+  {
+    id: "cornelian-cherry",
+    commonName: "Cornelian cherries",
+    scientificName: "Cornus mas",
+    category: "fruit",
+    groupLabel: "Cherries and plums",
+    months: [7, 8, 9],
+    inatTaxonIds: [55858],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "A dogwood fruit often found in plantings; not a true cherry, but commonly foraged where access allows."
   },
   {
     id: "serviceberry",
@@ -158,7 +227,7 @@ const foodSpeciesCatalog = [
   },
   {
     id: "persimmon",
-    commonName: "American persimmons",
+    commonName: "Persimmons",
     scientificName: "Diospyros virginiana",
     category: "fruit",
     months: [9, 10, 11, 12],
@@ -176,17 +245,6 @@ const foodSpeciesCatalog = [
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
     notes: "Soft custardlike fruit from understory trees, often near streams and rich slopes."
-  },
-  {
-    id: "mulberry",
-    commonName: "Mulberries",
-    scientificName: "Morus",
-    category: "berry",
-    months: [5, 6, 7],
-    inatTaxonIds: [56091],
-    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
-    shenandoahAllowed: false,
-    notes: "Dark ripe fruits stain easily; map records may include red, white, and hybrid mulberries."
   },
   {
     id: "sumac",
@@ -221,7 +279,7 @@ const foodSpeciesCatalog = [
   },
   {
     id: "hazelnut",
-    commonName: "American hazelnut",
+    commonName: "Hazelnuts",
     scientificName: "Corylus americana",
     category: "nut",
     months: [8, 9, 10],
@@ -358,7 +416,7 @@ const inkSpeciesCatalog = [
     scientificName: "Rubus phoenicolasius",
     category: "red",
     months: [6, 7, 8],
-    inatTaxonIds: [125489],
+    inatTaxonIds: [84227],
     shenandoahAllowed: false,
     notes: "Fruit gives pink-red stains and inks; plants are bristly and often invasive."
   },
@@ -443,7 +501,8 @@ const INK_FALLING_FRUIT_SPECIES_ALIASES = {
   elderberry: "ink-elderberry",
   grape: "ink-wild-grape",
   hickory: "ink-hickory",
-  sumac: "ink-sumac"
+  sumac: "ink-sumac",
+  wineberry: "ink-wineberry"
 };
 
 const state = {
@@ -486,6 +545,13 @@ const map = new mapboxgl.Map({
 });
 
 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
+map.addControl(new mapboxgl.GeolocateControl({
+  positionOptions: {
+    enableHighAccuracy: true
+  },
+  trackUserLocation: true,
+  showUserHeading: true
+}), "bottom-right");
 map.scrollZoom.setWheelZoomRate?.(1 / 280);
 map.scrollZoom.setZoomRate?.(1 / 60);
 window.addEventListener("resize", () => map.resize());
@@ -621,15 +687,7 @@ function renderFilterControls() {
     </label>
   `).join("");
 
-  speciesList.innerHTML = speciesCatalogByName.map((species) => `
-    <label data-category="${species.category}">
-      <span class="species-name">
-        <input type="checkbox" name="species" value="${species.id}" checked>
-        ${species.commonName}
-      </span>
-      <span class="type-pill ${species.category}">${getCategoryLabel(species.category)}</span>
-    </label>
-  `).join("");
+  speciesList.innerHTML = getSpeciesListHTML();
 
   categoryInputs = [...document.querySelectorAll("input[name='category']")];
   document.querySelectorAll("input[name='species']").forEach((input) => {
@@ -646,6 +704,61 @@ function renderFilterControls() {
 
 function getCategoryLabel(categoryId) {
   return getActiveMapConfig().categories.find((category) => category.id === categoryId)?.label || categoryId;
+}
+
+function getSpeciesListHTML() {
+  const grouped = new Map();
+  const singleItems = [];
+  speciesCatalogByName.forEach((species) => {
+    if (!species.groupLabel) {
+      singleItems.push(species);
+      return;
+    }
+    if (!grouped.has(species.groupLabel)) grouped.set(species.groupLabel, []);
+    grouped.get(species.groupLabel).push(species);
+  });
+
+  const rows = [
+    ...singleItems.map((species) => ({
+      type: "single",
+      label: species.commonName,
+      html: getSpeciesCheckboxHTML(species)
+    })),
+    ...[...grouped.entries()].map(([label, speciesItems]) => ({
+      type: "group",
+      label,
+      html: getSpeciesGroupHTML(label, speciesItems)
+    }))
+  ];
+
+  return rows
+    .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
+    .map((row) => row.html)
+    .join("");
+}
+
+function getSpeciesCheckboxHTML(species) {
+  return `
+    <label data-category="${species.category}">
+      <span class="species-name">
+        <input type="checkbox" name="species" value="${species.id}" checked>
+        ${species.commonName}
+      </span>
+      <span class="type-pill ${species.category}">${getCategoryLabel(species.category)}</span>
+    </label>
+  `;
+}
+
+function getSpeciesGroupHTML(label, speciesItems) {
+  const sortedItems = sortCatalogByName(speciesItems);
+  return `
+    <details class="species-group" open>
+      <summary>${escapeHTML(label)} <span>${sortedItems.length}</span></summary>
+      <div class="species-group-list">
+        ${sortedItems.map(getSpeciesCheckboxHTML).join("")}
+      </div>
+    </details>
+  `;
 }
 
 function setMapMode(mode) {
@@ -1509,13 +1622,7 @@ function mapINaturalistObservation(observation) {
   const coordinates = observation.geojson?.coordinates;
   if (!coordinates || coordinates.length < 2) return null;
 
-  const species = speciesCatalog.find((item) => {
-    const taxon = observation.taxon;
-    if (taxon?.iconic_taxon_name !== getExpectedIconicTaxon(item)) return false;
-    const ancestry = taxon?.ancestry ? taxon.ancestry.split("/").map(Number) : [];
-    return getTaxonIds(item).some((taxonId) => taxon?.id === taxonId || ancestry.includes(taxonId));
-  });
-
+  const species = getSpeciesForObservation(observation);
   if (!species) return null;
 
   return {
@@ -1537,8 +1644,32 @@ function mapINaturalistObservation(observation) {
   };
 }
 
+function getSpeciesForObservation(observation) {
+  const taxon = observation.taxon;
+  if (!taxon?.id) return null;
+  const ancestry = taxon.ancestry ? taxon.ancestry.split("/").map(Number) : [];
+  const matchingSpecies = speciesCatalog.filter((item) => {
+    if (taxon.iconic_taxon_name !== getExpectedIconicTaxon(item)) return false;
+    return getTaxonIds(item).some((taxonId) => taxon.id === taxonId || ancestry.includes(taxonId));
+  });
+  if (!matchingSpecies.length) return null;
+
+  return matchingSpecies
+    .map((item) => ({
+      item,
+      exact: getTaxonIds(item).includes(taxon.id),
+      score: getTaxonIds(item).reduce((best, taxonId) => {
+        if (taxon.id === taxonId) return Math.max(best, 1000);
+        const depth = ancestry.indexOf(taxonId);
+        return depth >= 0 ? Math.max(best, depth) : best;
+      }, -1)
+    }))
+    .sort((a, b) => Number(b.exact) - Number(a.exact) || b.score - a.score)
+    [0].item;
+}
+
 function mapFallingFruitRecord(record) {
-  const speciesId = getFallingFruitSpeciesId(record.speciesId);
+  const speciesId = getImportedSpeciesId(record.speciesId);
   const species = speciesCatalog.find((item) => item.id === speciesId);
   if (!species || !record.lat || !record.lng) return null;
   return {
@@ -1561,15 +1692,17 @@ function mapFallingFruitRecord(record) {
   };
 }
 
-function getFallingFruitSpeciesId(speciesId) {
+function getImportedSpeciesId(speciesId) {
   if (state.activeMap === "ink") {
     return INK_FALLING_FRUIT_SPECIES_ALIASES[speciesId] || speciesId;
   }
+  if (state.activeMap === "food" && speciesId === "prunus") return "sweet-cherry";
   return speciesId;
 }
 
 function mapNpsOrchardRecord(record) {
-  const species = speciesCatalog.find((item) => item.id === record.speciesId);
+  const speciesId = getImportedSpeciesId(record.speciesId);
+  const species = speciesCatalog.find((item) => item.id === speciesId);
   if (!species || !record.lat || !record.lng) return null;
   return {
     id: `nps-orchard-${record.id}`,
