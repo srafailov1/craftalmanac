@@ -4,7 +4,7 @@ const FULL_MONTHS = [
   "July", "August", "September", "October", "November", "December"
 ];
 const ACTIVE_YEAR = new Date().getFullYear();
-const CATEGORIES = ["fruit", "berry", "nut", "mushroom"];
+let CATEGORIES = ["fruit", "berry", "nut", "mushroom"];
 const MAPBOX_TOKEN = window.FORAGE_CONFIG?.mapboxToken || "";
 const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
@@ -25,12 +25,21 @@ const VIRGINIA_MAX_BOUNDS = [
   [-84.1, 36.25],
   [-74.8, 39.75]
 ];
-const CATEGORY_COLORS = {
+const FOOD_CATEGORY_COLORS = {
   berry: "#d12f7a",
   fruit: "#1b8a5a",
   nut: "#c47a15",
   mushroom: "#6f4acb"
 };
+const INK_CATEGORY_COLORS = {
+  black: "#252321",
+  brown: "#8a5a2b",
+  yellow: "#d8a829",
+  red: "#bf4150",
+  purple: "#624c9f",
+  blue: "#316d8f"
+};
+let CATEGORY_COLORS = FOOD_CATEGORY_COLORS;
 const ACCESS_RULE_SOURCES = {
   npsGeneral: "https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1",
   shenandoah: "https://www.nps.gov/shen/learn/management/compendium.htm#CP_JUMP_5595647",
@@ -46,7 +55,7 @@ const ACCESS_RULE_SOURCES = {
 };
 const SITE_ACCESS_RULES = [];
 
-const speciesCatalog = [
+const foodSpeciesCatalog = [
   {
     id: "morel",
     commonName: "Morel mushrooms",
@@ -251,11 +260,184 @@ const speciesCatalog = [
     notes: "Included in the park list, though less common as a wild forage."
   }
 ];
-const speciesCatalogByName = [...speciesCatalog].sort((a, b) => (
-  a.commonName.localeCompare(b.commonName, undefined, { sensitivity: "base" })
-));
+
+const inkSpeciesCatalog = [
+  {
+    id: "ink-black-walnut",
+    commonName: "Black walnut",
+    scientificName: "Juglans nigra",
+    category: "black",
+    months: [9, 10, 11],
+    inatTaxonIds: [54504],
+    shenandoahAllowed: false,
+    notes: "Green hulls make dark brown to black ink; wear gloves and avoid damaging trees."
+  },
+  {
+    id: "ink-oak",
+    commonName: "Oak galls and acorn caps",
+    scientificName: "Quercus",
+    category: "black",
+    months: [9, 10, 11, 12],
+    inatTaxonIds: [47851],
+    shenandoahAllowed: false,
+    notes: "Tannin-rich galls and caps can make gray, brown, and iron-black inks."
+  },
+  {
+    id: "ink-hickory",
+    commonName: "Hickory hulls",
+    scientificName: "Carya",
+    category: "brown",
+    months: [9, 10, 11],
+    inatTaxonIds: [54788],
+    shenandoahAllowed: false,
+    notes: "Outer hulls produce warm brown ink and dye; gather fallen hulls where allowed."
+  },
+  {
+    id: "ink-sumac",
+    commonName: "Sumac",
+    scientificName: "Rhus",
+    category: "brown",
+    months: [8, 9, 10, 11],
+    inatTaxonIds: [54765],
+    shenandoahAllowed: false,
+    notes: "True Rhus sumacs are tannin-rich and useful for brown or modifier inks."
+  },
+  {
+    id: "ink-honeysuckle",
+    commonName: "Honeysuckle",
+    scientificName: "Lonicera",
+    category: "yellow",
+    months: [5, 6, 7],
+    inatTaxonIds: [51874],
+    shenandoahAllowed: false,
+    notes: "Flowers and leaves can shift toward pale yellow or greenish ink."
+  },
+  {
+    id: "ink-goldenrod",
+    commonName: "Goldenrod",
+    scientificName: "Solidago",
+    category: "yellow",
+    months: [8, 9, 10],
+    inatTaxonIds: [48678],
+    shenandoahAllowed: false,
+    notes: "Flowering tops produce yellow ink and dye when collected in bloom."
+  },
+  {
+    id: "ink-osage-orange",
+    commonName: "Osage orange",
+    scientificName: "Maclura pomifera",
+    category: "yellow",
+    months: [9, 10, 11],
+    inatTaxonIds: [58205],
+    shenandoahAllowed: false,
+    notes: "Wood and fruit can produce strong yellow tones; avoid cutting living wood without permission."
+  },
+  {
+    id: "ink-pokeweed",
+    commonName: "Pokeweed",
+    scientificName: "Phytolacca americana",
+    category: "red",
+    months: [8, 9, 10],
+    inatTaxonIds: [48599],
+    shenandoahAllowed: false,
+    notes: "Berries make vivid magenta ink but the plant is toxic; handle carefully and label clearly."
+  },
+  {
+    id: "ink-autumn-olive",
+    commonName: "Autumn olive",
+    scientificName: "Elaeagnus umbellata",
+    category: "red",
+    months: [9, 10, 11],
+    inatTaxonIds: [64697],
+    shenandoahAllowed: false,
+    notes: "Ripe fruit can make pink-red ink; this invasive shrub is common on edges."
+  },
+  {
+    id: "ink-wineberry",
+    commonName: "Wineberry",
+    scientificName: "Rubus phoenicolasius",
+    category: "red",
+    months: [6, 7, 8],
+    inatTaxonIds: [125489],
+    shenandoahAllowed: false,
+    notes: "Fruit gives pink-red stains and inks; plants are bristly and often invasive."
+  },
+  {
+    id: "ink-elderberry",
+    commonName: "Elderberry",
+    scientificName: "Sambucus",
+    category: "purple",
+    months: [7, 8, 9],
+    inatTaxonIds: [52689],
+    shenandoahAllowed: false,
+    notes: "Ripe berries can make purple ink; leaves, stems, and unripe parts are unsafe."
+  },
+  {
+    id: "ink-privet",
+    commonName: "Privet",
+    scientificName: "Ligustrum",
+    category: "blue",
+    months: [9, 10, 11, 12],
+    inatTaxonIds: [69819],
+    shenandoahAllowed: false,
+    notes: "Berries can shift blue, purple, or green; many privets are invasive and fruits are not edible."
+  },
+  {
+    id: "ink-wild-grape",
+    commonName: "Wild grapes and Boston ivy",
+    scientificName: "Vitis and Parthenocissus tricuspidata",
+    category: "purple",
+    months: [8, 9, 10],
+    inatTaxonIds: [60773, 166162],
+    shenandoahAllowed: false,
+    notes: "Dark fruits can make blue-purple inks; this group includes inedible Boston ivy for pigment mapping."
+  }
+];
+
+const MAP_MODE_CONFIG = {
+  food: {
+    id: "food",
+    speciesHeading: "Food Types & Species",
+    lede: "Track edible plants and mushrooms across Virginia by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.",
+    categories: [
+      { id: "berry", label: "Berries" },
+      { id: "fruit", label: "Fruit" },
+      { id: "mushroom", label: "Mushrooms" },
+      { id: "nut", label: "Nuts" }
+    ],
+    categoryColors: FOOD_CATEGORY_COLORS,
+    catalog: foodSpeciesCatalog,
+    sourceNames: ["iNaturalist", "Falling Fruit", "NPS orchards"],
+    dataNotes: "Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.",
+    rulesLabel: "Harvesting rules and limits",
+    loadFoodSources: true
+  },
+  ink: {
+    id: "ink",
+    speciesHeading: "Ink Colors & Materials",
+    lede: "Map plants, trees, and fruits that can produce natural inks across Virginia by place, season, and collection permissions. This first ink catalog focuses on common color sources that can fit the same fieldwork structure as the food map.",
+    categories: [
+      { id: "black", label: "Black / gray" },
+      { id: "blue", label: "Blue / green" },
+      { id: "brown", label: "Brown" },
+      { id: "purple", label: "Purple" },
+      { id: "red", label: "Red / pink" },
+      { id: "yellow", label: "Yellow / gold" }
+    ],
+    categoryColors: INK_CATEGORY_COLORS,
+    catalog: inkSpeciesCatalog,
+    sourceNames: ["iNaturalist"],
+    dataNotes: "Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.",
+    rulesLabel: "Collection rules and limits",
+    loadFoodSources: false
+  }
+};
+
+let speciesCatalog = foodSpeciesCatalog;
+let speciesCatalogByName = sortCatalogByName(speciesCatalog);
 
 const state = {
+  activeMap: "food",
   selectedDay: getDayOfYear(new Date()),
   allSeasons: false,
   records: [],
@@ -304,8 +486,12 @@ const dateInput = document.querySelector("#dateInput");
 const seasonDateLabel = document.querySelector("#seasonDateLabel");
 const seasonName = document.querySelector("#seasonName");
 const seasonHistogram = document.querySelector("#seasonHistogram");
+const mapLede = document.querySelector("#mapLede");
+const speciesSectionTitle = document.querySelector("#speciesSectionTitle");
+const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
-const categoryInputs = [...document.querySelectorAll("input[name='category']")];
+const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
+let categoryInputs = [];
 const todayButton = document.querySelector("#todayButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
 const publicLayerToggle = document.querySelector("#publicLayerToggle");
@@ -385,12 +571,44 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
-function initControls() {
-  daySlider.max = String(getDaysInYear(ACTIVE_YEAR));
-  daySlider.value = String(state.selectedDay);
-  dateInput.value = getDateInputValue(getSelectedDate());
-  dateInput.min = `${ACTIVE_YEAR}-01-01`;
-  dateInput.max = `${ACTIVE_YEAR}-12-31`;
+function sortCatalogByName(catalog) {
+  return [...catalog].sort((a, b) => (
+    a.commonName.localeCompare(b.commonName, undefined, { sensitivity: "base" })
+  ));
+}
+
+function getActiveMapConfig() {
+  return MAP_MODE_CONFIG[state.activeMap] || MAP_MODE_CONFIG.food;
+}
+
+function syncActiveCatalog() {
+  const config = getActiveMapConfig();
+  speciesCatalog = config.catalog;
+  speciesCatalogByName = sortCatalogByName(speciesCatalog);
+  CATEGORIES = config.categories.map((category) => category.id);
+  CATEGORY_COLORS = config.categoryColors;
+}
+
+function renderModeChrome() {
+  const config = getActiveMapConfig();
+  mapLede.textContent = config.lede;
+  speciesSectionTitle.textContent = config.speciesHeading;
+  document.querySelector(".attribution-block .section-body p").textContent = config.dataNotes;
+  orchardLayerToggle.closest("label").hidden = !config.loadFoodSources;
+  mapModeButtons.forEach((button) => {
+    const isActive = button.dataset.mapMode === state.activeMap;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function renderFilterControls() {
+  const config = getActiveMapConfig();
+  categoryList.innerHTML = config.categories.map((category) => `
+    <label class="category-option ${category.id}">
+      <input type="checkbox" name="category" value="${category.id}" checked> ${category.label}
+    </label>
+  `).join("");
 
   speciesList.innerHTML = speciesCatalogByName.map((species) => `
     <label data-category="${species.category}">
@@ -398,9 +616,51 @@ function initControls() {
         <input type="checkbox" name="species" value="${species.id}" checked>
         ${species.commonName}
       </span>
-      <span class="type-pill ${species.category}">${species.category}</span>
+      <span class="type-pill ${species.category}">${getCategoryLabel(species.category)}</span>
     </label>
   `).join("");
+
+  categoryInputs = [...document.querySelectorAll("input[name='category']")];
+  document.querySelectorAll("input[name='species']").forEach((input) => {
+    input.addEventListener("change", render);
+  });
+  categoryInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      setSpeciesByCategory(input.value, input.checked);
+      syncCategoryCheckboxes();
+      render();
+    });
+  });
+}
+
+function getCategoryLabel(categoryId) {
+  return getActiveMapConfig().categories.find((category) => category.id === categoryId)?.label || categoryId;
+}
+
+function setMapMode(mode) {
+  if (!MAP_MODE_CONFIG[mode] || mode === state.activeMap) return;
+  state.activeMap = mode;
+  state.records = [];
+  state.inatRecords = [];
+  state.inatRecordCache.clear();
+  state.activeRequest += 1;
+  state.activePopup?.remove();
+  state.hoverPopup?.remove();
+  syncActiveCatalog();
+  renderModeChrome();
+  renderFilterControls();
+  render();
+}
+
+function initControls() {
+  syncActiveCatalog();
+  renderModeChrome();
+  daySlider.max = String(getDaysInYear(ACTIVE_YEAR));
+  daySlider.value = String(state.selectedDay);
+  dateInput.value = getDateInputValue(getSelectedDate());
+  dateInput.min = `${ACTIVE_YEAR}-01-01`;
+  dateInput.max = `${ACTIVE_YEAR}-12-31`;
+  renderFilterControls();
 
   daySlider.addEventListener("input", () => {
     state.selectedDay = Number(daySlider.value);
@@ -416,8 +676,8 @@ function initControls() {
     render();
   });
 
-  document.querySelectorAll("input[name='species']").forEach((input) => {
-    input.addEventListener("change", render);
+  mapModeButtons.forEach((button) => {
+    button.addEventListener("click", () => setMapMode(button.dataset.mapMode));
   });
 
   panelGrip.addEventListener("pointerdown", handlePanelGripPointerDown);
@@ -430,14 +690,6 @@ function initControls() {
       section.classList.toggle("is-open", shouldOpen);
       toggle.setAttribute("aria-expanded", String(shouldOpen));
       requestAnimationFrame(() => map.resize());
-    });
-  });
-
-  categoryInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      setSpeciesByCategory(input.value, input.checked);
-      syncCategoryCheckboxes();
-      render();
     });
   });
 
@@ -748,6 +1000,7 @@ function renderMarkers() {
         accessLimit: accessRule.limit,
         accessSourceLabel: accessRule.sourceLabel,
         accessSourceUrl: accessRule.sourceUrl,
+        rulesLabel: getActiveMapConfig().rulesLabel,
         season: getMonthRangeText(species.months),
         confidence: record.confidence || "community",
         harvestStatus: record.harvestStatus || "",
@@ -1020,7 +1273,7 @@ function getMarkerPopupHTML(properties) {
     <dl class="popup-grid">
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
       <dt>ID source</dt><dd>${sourceMarkup}</dd>
-      <dt>Harvesting rules and limits</dt><dd>${ruleStatus} ${rulesText} · ${accessSourceMarkup}</dd>
+      <dt>${escapeHTML(properties.rulesLabel || "Harvesting rules and limits")}</dt><dd>${ruleStatus} ${rulesText} · ${accessSourceMarkup}</dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
     </dl>
     ${warning}
@@ -1052,13 +1305,14 @@ function scheduleDataLoad() {
 async function loadMapData() {
   const requestId = state.activeRequest + 1;
   state.activeRequest = requestId;
+  const config = getActiveMapConfig();
   const hadRecords = state.records.length > 0;
   if (!hadRecords) setDataStatus("Loading current map data...");
 
   const [inatResult, fallingFruitResult, npsOrchardResult] = await Promise.allSettled([
     loadINaturalist(),
-    loadFallingFruit(),
-    loadNpsOrchards()
+    config.loadFoodSources ? loadFallingFruit() : Promise.resolve([]),
+    config.loadFoodSources ? loadNpsOrchards() : Promise.resolve([])
   ]);
 
   if (requestId !== state.activeRequest) return;
@@ -1083,12 +1337,12 @@ async function loadMapData() {
 
   const failedSources = [
     inatResult.status === "rejected" ? "iNaturalist" : "",
-    fallingFruitResult.status === "rejected" ? "Falling Fruit" : "",
-    npsOrchardResult.status === "rejected" ? "NPS orchards" : ""
+    config.loadFoodSources && fallingFruitResult.status === "rejected" ? "Falling Fruit" : "",
+    config.loadFoodSources && npsOrchardResult.status === "rejected" ? "NPS orchards" : ""
   ].filter(Boolean);
   setDataStatus(failedSources.length
     ? `${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`
-    : `${state.records.length} current records loaded`);
+    : `${state.records.length} current records loaded from ${config.sourceNames.join(", ")}`);
 }
 
 async function loadINaturalist() {
@@ -1391,6 +1645,18 @@ function getPublicLandAccessRule(properties, species) {
   const text = getPublicLandText(properties);
   const area = getPublicLandName(properties);
 
+  if (state.activeMap === "ink" && isNationalParkServiceLand(text)) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "NPS plant removal is prohibited unless that park's superintendent has specifically authorized an exception for collection.",
+      note: "The encoded NPS exceptions are food-focused and should not be treated as permission to collect ink materials.",
+      sourceLabel: "36 CFR 2.1",
+      sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
+    };
+  }
+
   if (text.includes("shenandoah national park")) {
     if (species.shenandoahAllowed === false) {
       return {
@@ -1476,6 +1742,18 @@ function getPublicLandAccessRule(properties, species) {
   }
 
   if (isVirginiaWma(text)) {
+    if (state.activeMap === "ink") {
+      return {
+        status: "unknown",
+        label: "Unknown",
+        area,
+        limit: "Virginia WMA rules mention personal-use gathering of berries, mushrooms, and other fruits, but ink-material collection is not specifically encoded here.",
+        note: "Confirm DWR access requirements and posted site rules before collecting plant material for ink.",
+        sourceLabel: "Virginia WMA rules",
+        sourceUrl: ACCESS_RULE_SOURCES.virginiaWma
+      };
+    }
+
     return {
       status: "permit-required",
       label: "Permit required",
@@ -1488,6 +1766,18 @@ function getPublicLandAccessRule(properties, species) {
   }
 
   if (isVirginiaStateForest(text)) {
+    if (state.activeMap === "ink") {
+      return {
+        status: "unknown",
+        label: "Unknown",
+        area,
+        limit: "Virginia state forest rules include a personal-use exception for edible fruits, berries, fungi, and nuts; ink-material collection needs confirmation.",
+        note: "Do not assume the edible-collection exception applies to ink materials, especially bark, wood, leaves, or galls.",
+        sourceLabel: "Virginia state forest regulations",
+        sourceUrl: ACCESS_RULE_SOURCES.virginiaStateForests
+      };
+    }
+
     return {
       status: "allowed",
       label: "Allowed",
@@ -1500,6 +1790,18 @@ function getPublicLandAccessRule(properties, species) {
   }
 
   if (isVirginiaStateParkOrDcrLand(text)) {
+    if (state.activeMap === "ink") {
+      return {
+        status: "unknown",
+        label: "Unknown",
+        area,
+        limit: "Virginia park rules include a personal-use exception for edible fruits, berries, fungi, and nuts; ink-material collection needs confirmation.",
+        note: "Do not assume the edible-collection exception applies to ink materials, especially bark, wood, leaves, or galls.",
+        sourceLabel: "Virginia state park regulations",
+        sourceUrl: ACCESS_RULE_SOURCES.virginiaParks
+      };
+    }
+
     return {
       status: "allowed",
       label: "Allowed",

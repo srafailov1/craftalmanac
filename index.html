@@ -3,25 +3,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Craft Almanac · Virginia Food Map</title>
+    <title>Craft Almanac · Virginia Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=new-foods-1">
+    <link rel="stylesheet" href="./styles.css?v=ink-map-1">
   </head>
   <body>
     <main class="app-shell">
-      <aside class="panel is-collapsed" aria-label="Forage controls" id="controlPanel">
+      <aside class="panel is-collapsed" aria-label="Map controls" id="controlPanel">
         <div class="panel-topline">
           <div class="brand-block">
             <h1>Craft Almanac</h1>
             <p class="site-slogan">Seasonal maps for making with place.</p>
             <nav class="map-tabs" aria-label="Craft Almanac map types">
-              <span>Ink</span>
-              <span>Objects</span>
-              <span class="active">Food</span>
-              <span>Medicine</span>
+              <button type="button" data-map-mode="ink" aria-pressed="false">Ink</button>
+              <button type="button" data-map-mode="objects" disabled>Objects</button>
+              <button class="active" type="button" data-map-mode="food" aria-pressed="true">Food</button>
+              <button type="button" data-map-mode="medicine" disabled>Medicine</button>
             </nav>
-            <p class="lede">Track edible plants and mushrooms across Virginia by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.</p>
+            <p class="lede" id="mapLede">Track edible plants and mushrooms across Virginia by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.</p>
           </div>
           <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
             <span class="panel-grip-bar" aria-hidden="true"></span>
@@ -64,7 +64,7 @@
           <section class="control-group mobile-section">
             <div class="section-heading">
               <button class="section-toggle" type="button" aria-expanded="false">
-                <h2>Food Types & Species</h2>
+                <h2 id="speciesSectionTitle">Food Types & Species</h2>
               </button>
               <span class="count" id="speciesCount">0</span>
             </div>
@@ -115,13 +115,13 @@
         </div>
       </aside>
 
-      <section class="map-area" aria-label="Forage map">
+      <section class="map-area" aria-label="Craft Almanac map">
         <div id="map"></div>
       </section>
     </main>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=new-foods-1"></script>
+    <script src="./app.js?v=ink-map-1"></script>
   </body>
 </html>

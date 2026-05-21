@@ -120,7 +120,7 @@ button {
   margin-top: 16px;
 }
 
-.map-tabs span {
+.map-tabs button {
   min-height: 32px;
   padding: 7px 10px;
   border: 1px solid var(--line);
@@ -132,6 +132,12 @@ button {
   letter-spacing: 0.04em;
   text-align: center;
   text-transform: uppercase;
+  cursor: pointer;
+}
+
+.map-tabs button:disabled {
+  cursor: default;
+  opacity: 0.52;
 }
 
 .map-tabs .active {
@@ -279,6 +285,12 @@ h2 {
 .histogram-segment.fruit { background: var(--leaf); }
 .histogram-segment.nut { background: var(--nut); }
 .histogram-segment.mushroom { background: var(--mushroom); }
+.histogram-segment.black { background: #252321; }
+.histogram-segment.brown { background: #8a5a2b; }
+.histogram-segment.yellow { background: #d8a829; }
+.histogram-segment.red { background: #bf4150; }
+.histogram-segment.purple { background: #624c9f; }
+.histogram-segment.blue { background: #316d8f; }
 
 .season-bands {
   display: grid;
@@ -401,6 +413,30 @@ h2 {
   background: var(--mushroom);
 }
 
+.type-list .category-option.black {
+  background: #252321;
+}
+
+.type-list .category-option.brown {
+  background: #8a5a2b;
+}
+
+.type-list .category-option.yellow {
+  background: #d8a829;
+}
+
+.type-list .category-option.red {
+  background: #bf4150;
+}
+
+.type-list .category-option.purple {
+  background: #624c9f;
+}
+
+.type-list .category-option.blue {
+  background: #316d8f;
+}
+
 .filter-list.type-list .category-option input {
   accent-color: #fff;
 }
@@ -457,6 +493,12 @@ h2 {
 .type-pill.fruit { background: var(--leaf); }
 .type-pill.nut { background: var(--nut); }
 .type-pill.mushroom { background: var(--mushroom); }
+.type-pill.black { background: #252321; }
+.type-pill.brown { background: #8a5a2b; }
+.type-pill.yellow { background: #d8a829; }
+.type-pill.red { background: #bf4150; }
+.type-pill.purple { background: #624c9f; }
+.type-pill.blue { background: #316d8f; }
 
 .fine-print {
   margin: 10px 0 0;
