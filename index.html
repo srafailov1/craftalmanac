@@ -87,16 +87,16 @@
           <section class="control-group mobile-section">
             <div class="section-heading">
               <button class="section-toggle" type="button" aria-expanded="false">
-                <h2>Access</h2>
+                <h2>Access &amp; Permissions</h2>
               </button>
             </div>
             <div class="section-body">
-              <div class="filter-list access-list">
-                <label><input type="checkbox" id="publicLayerToggle" checked> Public lands</label>
-                <label><input type="checkbox" id="publicOnlyToggle"> Public access only</label>
-                <label><input type="checkbox" id="orchardLayerToggle" checked> Historic orchards</label>
+              <div class="species-actions">
+                <button class="text-button" id="selectAllAccessButton" type="button">All</button>
+                <button class="text-button" id="clearAccessButton" type="button">None</button>
               </div>
-              <p class="fine-print">Public land does not always mean harvest is allowed. Confirm property boundaries, posted rules, and current collection limits before taking anything.</p>
+              <div class="filter-list access-list permission-list" id="accessStatusList" aria-label="Choose permission statuses"></div>
+              <p class="fine-print">Private, unsourced, and public-access points still require checking property boundaries, posted rules, and current collection limits before taking anything.</p>
             </div>
           </section>
 

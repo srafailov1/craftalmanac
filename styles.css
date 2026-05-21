@@ -389,6 +389,36 @@ h2 {
   background: #fff;
 }
 
+.permission-list {
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.permission-option {
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--access-unknown);
+  font-weight: 850;
+}
+
+.permission-option.allowed { color: var(--access-allowed); }
+.permission-option.permit-required { color: var(--access-permit); }
+.permission-option.private,
+.permission-option.private-unsourced { color: var(--access-private); }
+.permission-option.prohibited { color: var(--access-prohibited); }
+.permission-option.unknown { color: var(--access-unknown); }
+
+.permission-option:has(input:not(:checked)) {
+  border-color: var(--line);
+  color: var(--muted);
+  opacity: 0.62;
+}
+
 .filter-list label,
 .species-list label {
   display: flex;

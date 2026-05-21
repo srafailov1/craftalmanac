@@ -60,6 +60,14 @@ const ACCESS_RULE_SOURCES = {
   albemarle: "https://www.albemarle.org/government/parks-recreation"
 };
 const SITE_ACCESS_RULES = [];
+const ACCESS_STATUS_OPTIONS = [
+  { id: "allowed", label: "Allowed", defaultChecked: true },
+  { id: "permit-required", label: "Permit required", defaultChecked: true },
+  { id: "private", label: "Private", defaultChecked: true },
+  { id: "private-unsourced", label: "Private / unsourced", defaultChecked: true },
+  { id: "unknown", label: "Unknown", defaultChecked: true },
+  { id: "prohibited", label: "Prohibited", defaultChecked: false }
+];
 
 const foodSpeciesCatalog = [
   {
@@ -705,8 +713,6 @@ const state = {
   mapReady: false,
   publicLayerLoadedKey: "",
   publicLayerVisible: true,
-  publicOnly: false,
-  showOrchards: true,
   activePopup: null,
   hoverPopup: null
 };
@@ -750,13 +756,12 @@ const mapSafetyNote = document.querySelector("#mapSafetyNote");
 const speciesSectionTitle = document.querySelector("#speciesSectionTitle");
 const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
+const accessStatusList = document.querySelector("#accessStatusList");
 const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
 let categoryInputs = [];
+let accessStatusInputs = [];
 const todayButton = document.querySelector("#todayButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
-const publicLayerToggle = document.querySelector("#publicLayerToggle");
-const publicOnlyToggle = document.querySelector("#publicOnlyToggle");
-const orchardLayerToggle = document.querySelector("#orchardLayerToggle");
 const controlPanel = document.querySelector("#controlPanel");
 const panelGrip = document.querySelector("#panelGrip");
 const sectionToggles = [...document.querySelectorAll(".section-toggle")];
@@ -856,7 +861,6 @@ function renderModeChrome() {
   mapSafetyNote.hidden = !config.safetyNote;
   speciesSectionTitle.textContent = config.speciesHeading;
   document.querySelector(".attribution-block .section-body p").textContent = config.dataNotes;
-  orchardLayerToggle.closest("label").hidden = !config.loadNpsOrchards;
   mapModeButtons.forEach((button) => {
     const isActive = button.dataset.mapMode === state.activeMap;
     button.classList.toggle("active", isActive);
@@ -903,6 +907,33 @@ function renderFilterControls() {
       syncCategoryCheckboxes();
       render();
     });
+  });
+}
+
+function initAccessControls() {
+  accessStatusList.innerHTML = ACCESS_STATUS_OPTIONS.map((status) => `
+    <label class="permission-option ${status.id}">
+      <input type="checkbox" name="access-status" value="${status.id}" ${status.defaultChecked ? "checked" : ""}>
+      ${status.label}
+    </label>
+  `).join("");
+  accessStatusInputs = [...document.querySelectorAll("input[name='access-status']")];
+  accessStatusInputs.forEach((input) => {
+    input.addEventListener("change", render);
+  });
+
+  document.querySelector("#selectAllAccessButton").addEventListener("click", () => {
+    accessStatusInputs.forEach((input) => {
+      input.checked = true;
+    });
+    render();
+  });
+
+  document.querySelector("#clearAccessButton").addEventListener("click", () => {
+    accessStatusInputs.forEach((input) => {
+      input.checked = false;
+    });
+    render();
   });
 }
 
@@ -1015,6 +1046,7 @@ function initControls() {
   dateInput.min = `${ACTIVE_YEAR}-01-01`;
   dateInput.max = `${ACTIVE_YEAR}-12-31`;
   renderFilterControls();
+  initAccessControls();
 
   daySlider.addEventListener("input", () => {
     state.selectedDay = Number(daySlider.value);
@@ -1055,23 +1087,6 @@ function initControls() {
 
   allSeasonsButton.addEventListener("click", () => {
     state.allSeasons = !state.allSeasons;
-    render();
-  });
-
-  publicLayerToggle.addEventListener("change", () => {
-    state.publicLayerVisible = publicLayerToggle.checked;
-    updatePublicLandVisibility();
-    if (state.publicLayerVisible) schedulePublicLandLoad();
-  });
-
-  publicOnlyToggle.addEventListener("change", () => {
-    state.publicOnly = publicOnlyToggle.checked;
-    if (state.publicOnly) schedulePublicLandLoad();
-    render();
-  });
-
-  orchardLayerToggle.addEventListener("change", () => {
-    state.showOrchards = orchardLayerToggle.checked;
     render();
   });
 
@@ -1188,6 +1203,13 @@ function getCheckedValues(name) {
   return [...document.querySelectorAll(`input[name='${name}']:checked`)].map((input) => input.value);
 }
 
+function getSelectedAccessStatuses() {
+  const selectedStatuses = getCheckedValues("access-status");
+  return selectedStatuses.length
+    ? selectedStatuses
+    : [];
+}
+
 function getTaxonIds(species) {
   return species.inatTaxonIds || [];
 }
@@ -1258,12 +1280,13 @@ function isSpeciesAvailableOnSelectedDate(species) {
 
 function getVisibleRecords() {
   const selectedSpecies = getCheckedValues("species");
+  const selectedAccessStatuses = getSelectedAccessStatuses();
 
   return state.records.filter((record) => {
     const species = getSpecies(record.speciesId);
     if (!species) return false;
-    if (!state.showOrchards && record.source === "nps-orchard") return false;
-    if (state.publicOnly && !isRecordPubliclyAccessible(record)) return false;
+    const accessRule = getRecordAccessRule(record, species);
+    if (!selectedAccessStatuses.includes(accessRule.status)) return false;
     return isSpeciesAvailableOnSelectedDate(species)
       && selectedSpecies.includes(record.speciesId);
   });
@@ -1276,7 +1299,7 @@ function render() {
   renderMarkers();
   if (state.mapReady) {
     scheduleDataLoad();
-    if (state.publicLayerVisible || state.publicOnly) schedulePublicLandLoad();
+    schedulePublicLandLoad();
     requestAnimationFrame(() => map.resize());
   }
 }
@@ -1802,8 +1825,6 @@ function schedulePublicLandLoad() {
 }
 
 async function loadPublicLands() {
-  if (!state.publicLayerVisible && !state.publicOnly) return;
-
   const bounds = map.getBounds();
   const boundsKey = [
     bounds.getSouth().toFixed(2),
@@ -1842,12 +1863,12 @@ async function loadPublicLands() {
     state.publicLandFeatures = data.features || [];
     state.publicLayerLoadedKey = boundsKey;
     updatePublicLandSource();
-    if (state.publicOnly) renderMarkers();
+    renderMarkers();
   } catch (error) {
     if (requestId !== state.activePublicRequest) return;
     state.publicLandFeatures = [];
     updatePublicLandSource();
-    if (state.publicOnly) renderMarkers();
+    renderMarkers();
   }
 }
 
@@ -2418,7 +2439,7 @@ map.on("load", () => {
   initMapLayers();
   render();
   loadMapData();
-  if (state.publicLayerVisible || state.publicOnly) schedulePublicLandLoad();
+  schedulePublicLandLoad();
 });
 
 map.on("error", (event) => {
