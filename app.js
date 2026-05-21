@@ -287,7 +287,9 @@ const publicLayerToggle = document.querySelector("#publicLayerToggle");
 const publicOnlyToggle = document.querySelector("#publicOnlyToggle");
 const orchardLayerToggle = document.querySelector("#orchardLayerToggle");
 const controlPanel = document.querySelector("#controlPanel");
+const appShell = document.querySelector(".app-shell");
 const panelGrip = document.querySelector("#panelGrip");
+const desktopPanelToggle = document.querySelector("#desktopPanelToggle");
 const sectionToggles = [...document.querySelectorAll(".section-toggle")];
 const MOBILE_PANEL_MIN_HEIGHT = 92;
 const MOBILE_PANEL_DEFAULT_HEIGHT = 420;
@@ -396,6 +398,7 @@ function initControls() {
   });
 
   panelGrip.addEventListener("pointerdown", handlePanelGripPointerDown);
+  desktopPanelToggle.addEventListener("click", toggleDesktopSidebar);
 
   sectionToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -464,6 +467,15 @@ function initControls() {
     scheduleDataLoad();
     schedulePublicLandLoad();
   });
+}
+
+function toggleDesktopSidebar() {
+  if (isMobilePanel()) return;
+  const shouldCollapse = !appShell.classList.contains("sidebar-collapsed");
+  appShell.classList.toggle("sidebar-collapsed", shouldCollapse);
+  desktopPanelToggle.setAttribute("aria-expanded", String(!shouldCollapse));
+  desktopPanelToggle.setAttribute("aria-label", shouldCollapse ? "Expand sidebar" : "Collapse sidebar");
+  requestAnimationFrame(() => map.resize());
 }
 
 function setPanelCollapsed(collapsed) {
