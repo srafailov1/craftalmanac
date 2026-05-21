@@ -410,7 +410,8 @@ const MAP_MODE_CONFIG = {
     sourceNames: ["iNaturalist", "Falling Fruit", "NPS orchards"],
     dataNotes: "Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.",
     rulesLabel: "Harvesting rules and limits",
-    loadFoodSources: true
+    loadFallingFruit: true,
+    loadNpsOrchards: true
   },
   ink: {
     id: "ink",
@@ -426,15 +427,24 @@ const MAP_MODE_CONFIG = {
     ],
     categoryColors: INK_CATEGORY_COLORS,
     catalog: inkSpeciesCatalog,
-    sourceNames: ["iNaturalist"],
-    dataNotes: "Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.",
+    sourceNames: ["iNaturalist", "Falling Fruit"],
+    dataNotes: "Live observations from iNaturalist, relevant community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.",
     rulesLabel: "Collection rules and limits",
-    loadFoodSources: false
+    loadFallingFruit: true,
+    loadNpsOrchards: false
   }
 };
 
 let speciesCatalog = foodSpeciesCatalog;
 let speciesCatalogByName = sortCatalogByName(speciesCatalog);
+
+const INK_FALLING_FRUIT_SPECIES_ALIASES = {
+  "black-walnut": "ink-black-walnut",
+  elderberry: "ink-elderberry",
+  grape: "ink-wild-grape",
+  hickory: "ink-hickory",
+  sumac: "ink-sumac"
+};
 
 const state = {
   activeMap: "food",
@@ -447,6 +457,7 @@ const state = {
   publicLoadTimer: null,
   activeRequest: 0,
   activePublicRequest: 0,
+  fallingFruitData: null,
   fallingFruitRecords: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
@@ -594,7 +605,7 @@ function renderModeChrome() {
   mapLede.textContent = config.lede;
   speciesSectionTitle.textContent = config.speciesHeading;
   document.querySelector(".attribution-block .section-body p").textContent = config.dataNotes;
-  orchardLayerToggle.closest("label").hidden = !config.loadFoodSources;
+  orchardLayerToggle.closest("label").hidden = !config.loadNpsOrchards;
   mapModeButtons.forEach((button) => {
     const isActive = button.dataset.mapMode === state.activeMap;
     button.classList.toggle("active", isActive);
@@ -1311,8 +1322,8 @@ async function loadMapData() {
 
   const [inatResult, fallingFruitResult, npsOrchardResult] = await Promise.allSettled([
     loadINaturalist(),
-    config.loadFoodSources ? loadFallingFruit() : Promise.resolve([]),
-    config.loadFoodSources ? loadNpsOrchards() : Promise.resolve([])
+    config.loadFallingFruit ? loadFallingFruit() : Promise.resolve([]),
+    config.loadNpsOrchards ? loadNpsOrchards() : Promise.resolve([])
   ]);
 
   if (requestId !== state.activeRequest) return;
@@ -1337,8 +1348,8 @@ async function loadMapData() {
 
   const failedSources = [
     inatResult.status === "rejected" ? "iNaturalist" : "",
-    config.loadFoodSources && fallingFruitResult.status === "rejected" ? "Falling Fruit" : "",
-    config.loadFoodSources && npsOrchardResult.status === "rejected" ? "NPS orchards" : ""
+    config.loadFallingFruit && fallingFruitResult.status === "rejected" ? "Falling Fruit" : "",
+    config.loadNpsOrchards && npsOrchardResult.status === "rejected" ? "NPS orchards" : ""
   ].filter(Boolean);
   setDataStatus(failedSources.length
     ? `${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`
@@ -1380,15 +1391,14 @@ async function loadINaturalist() {
 }
 
 async function loadFallingFruit() {
-  if (state.fallingFruitRecords) {
-    return state.fallingFruitRecords;
-  }
-
   try {
-    const response = await fetch("./data/falling-fruit-virginia.json");
-    if (!response.ok) return [];
-    const data = await response.json();
-    state.fallingFruitRecords = data
+    if (!state.fallingFruitData) {
+      const response = await fetch("./data/falling-fruit-virginia.json");
+      if (!response.ok) return [];
+      state.fallingFruitData = await response.json();
+    }
+
+    state.fallingFruitRecords = state.fallingFruitData
       .map(mapFallingFruitRecord)
       .filter(Boolean);
     return state.fallingFruitRecords;
@@ -1528,7 +1538,8 @@ function mapINaturalistObservation(observation) {
 }
 
 function mapFallingFruitRecord(record) {
-  const species = speciesCatalog.find((item) => item.id === record.speciesId);
+  const speciesId = getFallingFruitSpeciesId(record.speciesId);
+  const species = speciesCatalog.find((item) => item.id === speciesId);
   if (!species || !record.lat || !record.lng) return null;
   return {
     id: `fallingfruit-${record.id}`,
@@ -1548,6 +1559,13 @@ function mapFallingFruitRecord(record) {
     publicLand: Boolean(record.publicLand),
     accessNote: record.accessNote || "Access unknown in Falling Fruit."
   };
+}
+
+function getFallingFruitSpeciesId(speciesId) {
+  if (state.activeMap === "ink") {
+    return INK_FALLING_FRUIT_SPECIES_ALIASES[speciesId] || speciesId;
+  }
+  return speciesId;
 }
 
 function mapNpsOrchardRecord(record) {

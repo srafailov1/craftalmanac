@@ -23,6 +23,14 @@ BOUNDS = {
 }
 
 RULES = [
+    ("ink-oak", r"\b(oak|acorn|acorns)\b|\bQuercus\b"),
+    ("ink-honeysuckle", r"\bhoneysuckle\b|\bLonicera\b"),
+    ("ink-goldenrod", r"\bgoldenrod\b|\bSolidago\b"),
+    ("ink-osage-orange", r"\b(osage orange|osage-orange|hedge apple)\b|\bMaclura pomifera\b"),
+    ("ink-pokeweed", r"\b(pokeweed|pokeberry|inkberry)\b|\bPhytolacca americana\b"),
+    ("ink-autumn-olive", r"\bautumn olive\b|\bElaeagnus umbellata\b"),
+    ("ink-wineberry", r"\bwineberr(y|ies)\b|Rubus phoenicolasius"),
+    ("ink-privet", r"\bprivet\b|\bLigustrum\b"),
     ("morel", r"\b(Morchella|morel)\b"),
     ("blueberry", r"\bblueberr(y|ies)\b|Vaccinium corymbosum|Vaccinium pallidum"),
     ("bramble", r"\b(blackberry|raspberry|wineberry|dewberry|boysenberry|loganberry)\b|Rubus (allegheniensis|occidentalis|phoenicolasius|idaeus|armeniacus|laciniatus|fruticosus)"),
