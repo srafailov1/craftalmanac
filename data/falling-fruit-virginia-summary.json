@@ -11,7 +11,7 @@
   },
   "scannedLocations": 1962493,
   "skippedHiddenLocations": 14121,
-  "recordCount": 884,
+  "recordCount": 1302,
   "countsBySpeciesId": {
     "apple": 80,
     "black-walnut": 83,
@@ -21,10 +21,14 @@
     "grape": 26,
     "hazelnut": 3,
     "hickory": 43,
+    "mulberry": 306,
+    "pawpaw": 107,
     "pear": 18,
     "persimmon": 128,
     "prunus": 101,
     "ribes": 1,
-    "serviceberry": 84
+    "serviceberry": 84,
+    "sumac": 4,
+    "wild-strawberry": 1
   }
 }

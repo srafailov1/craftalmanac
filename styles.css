@@ -107,8 +107,9 @@ button {
 
 .site-slogan {
   margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
+  color: #4f5b50;
+  font-size: 15px;
+  font-weight: 750;
   line-height: 1.35;
 }
 
