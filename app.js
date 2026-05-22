@@ -1100,7 +1100,7 @@ function renderMapLegend() {
 
   mapLegend.innerHTML = `
     <div class="legend-section">
-      <strong>Permissions</strong>
+      <strong>Harvesting Permissions</strong>
       <div class="legend-grid">${permissionRows}</div>
     </div>
     <div class="legend-section">

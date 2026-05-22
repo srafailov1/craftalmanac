@@ -927,14 +927,14 @@ h2 {
 }
 
 .welcome-kicker {
-  margin: 0 0 10px;
+  margin: -8px 0 18px;
   color: var(--leaf-dark);
   font-size: 14px;
   font-weight: 800;
 }
 
 .welcome-modal h2 {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   color: var(--ink);
   font-family: Georgia, "Times New Roman", serif;
   font-size: 32px;
@@ -959,11 +959,18 @@ h2 {
   width: 100%;
   min-height: 44px;
   margin-top: 22px;
-  border: 1px solid var(--leaf-dark);
+  border: 1px solid transparent;
   border-radius: 8px;
   background: var(--leaf-dark);
   color: #fffdf7;
   font-weight: 850;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.welcome-primary:hover {
+  border-color: #0e5234;
+  background: #0f5c3a;
+  transform: translateY(-1px);
 }
 
 .welcome-primary:focus-visible {
