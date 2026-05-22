@@ -84,7 +84,7 @@ const LEGEND_PERMISSION_OPTIONS = [
 ];
 const MARKER_ICON_SIZE = 26;
 const MARKER_ICON_PIXEL_RATIO = 3;
-const BEFORE_COLLECTING_STORAGE_KEY = "craftAlmanacBeforeCollectingSeen";
+const WELCOME_MODAL_STORAGE_KEY = "craftAlmanacWelcomeSeen";
 const HARVEST_ETHIC_LABELS = {
   "fallen material preferred": "Fallen material preferred",
   "light harvest": "Light harvest",
@@ -862,7 +862,8 @@ const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
 const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
-const beforeCollectingSection = document.querySelector("#beforeCollectingSection");
+const welcomeModal = document.querySelector("#welcomeModal");
+const welcomeModalButton = document.querySelector("#welcomeModalButton");
 const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
 let categoryInputs = [];
 let accessStatusInputs = [];
@@ -1049,15 +1050,28 @@ function initAccessControls() {
   });
 }
 
-function initBeforeCollectingSection() {
-  if (!beforeCollectingSection) return;
-  const toggle = beforeCollectingSection.querySelector(".section-toggle");
-  const hasSeenCard = window.localStorage?.getItem(BEFORE_COLLECTING_STORAGE_KEY) === "true";
-  beforeCollectingSection.classList.toggle("is-open", !hasSeenCard);
-  toggle?.setAttribute("aria-expanded", String(!hasSeenCard));
-  if (!hasSeenCard) {
-    window.localStorage?.setItem(BEFORE_COLLECTING_STORAGE_KEY, "true");
-  }
+function initWelcomeModal() {
+  if (!welcomeModal || !welcomeModalButton) return;
+  const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
+  if (hasSeenModal) return;
+
+  const focusAfterClose = panelGrip || document.querySelector(".mapboxgl-ctrl-zoom-in") || document.body;
+  welcomeModal.hidden = false;
+  document.body.classList.add("modal-open");
+  window.setTimeout(() => welcomeModalButton.focus(), 0);
+
+  welcomeModalButton.addEventListener("click", () => {
+    window.localStorage?.setItem(WELCOME_MODAL_STORAGE_KEY, "true");
+    welcomeModal.hidden = true;
+    document.body.classList.remove("modal-open");
+    focusAfterClose?.focus?.();
+  }, { once: true });
+
+  welcomeModal.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab") return;
+    event.preventDefault();
+    welcomeModalButton.focus();
+  });
 }
 
 function getCategoryLabel(categoryId) {
@@ -1234,7 +1248,7 @@ function initControls() {
   });
 
   panelGrip.addEventListener("pointerdown", handlePanelGripPointerDown);
-  initBeforeCollectingSection();
+  initWelcomeModal();
 
   sectionToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -1614,7 +1628,8 @@ function ensureMarkerIcon(iconName, fillColor, accessStatus) {
 
   drawMarkerOutline(context, center, outlineRadius, style.color, style.dashed, 1.8);
 
-  map.addImage(iconName, canvas, { pixelRatio: MARKER_ICON_PIXEL_RATIO });
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  map.addImage(iconName, imageData, { pixelRatio: MARKER_ICON_PIXEL_RATIO });
 }
 
 function drawMarkerOutline(context, center, radius, color, dashed, lineWidth) {
