@@ -951,24 +951,23 @@ h2 {
   width: 100%;
   min-height: 44px;
   margin-top: 22px;
-  border: 1px solid transparent;
+  border: 1px solid #cdd8c5;
   border-radius: 8px;
-  background: var(--leaf-dark);
-  color: #fffdf7;
+  background: #f1f5ed;
+  color: var(--ink);
   font-weight: 850;
-  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 
 .welcome-primary:hover {
-  border-color: #cdd8c5;
-  background: #f1f5ed;
-  box-shadow: 0 0 0 3px rgba(205, 216, 197, 0.38);
-  color: var(--ink);
+  border-color: var(--leaf-dark);
+  background: var(--leaf-dark);
+  color: #fffdf7;
 }
 
 .welcome-primary:focus-visible {
-  outline: 3px solid rgba(27, 138, 90, 0.32);
-  outline-offset: 3px;
+  outline: 0;
+  border-color: var(--leaf-dark);
 }
 
 body.modal-open .app-shell {
