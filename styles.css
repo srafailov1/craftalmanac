@@ -926,24 +926,6 @@ h2 {
   animation: modal-in 180ms ease;
 }
 
-.welcome-kicker {
-  margin: -8px 0 18px;
-  color: var(--leaf-dark);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.welcome-modal h2 {
-  margin: 0 0 12px;
-  color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.08;
-  text-transform: none;
-}
-
 .welcome-copy {
   display: grid;
   gap: 10px;
@@ -955,6 +937,16 @@ h2 {
   margin: 0;
 }
 
+.welcome-opening {
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.42;
+}
+
+.welcome-opening strong {
+  font-weight: 900;
+}
+
 .welcome-primary {
   width: 100%;
   min-height: 44px;
@@ -964,13 +956,14 @@ h2 {
   background: var(--leaf-dark);
   color: #fffdf7;
   font-weight: 850;
-  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
 }
 
 .welcome-primary:hover {
-  border-color: #0e5234;
-  background: #0f5c3a;
-  transform: translateY(-1px);
+  border-color: #cdd8c5;
+  background: #f1f5ed;
+  box-shadow: 0 0 0 3px rgba(205, 216, 197, 0.38);
+  color: var(--ink);
 }
 
 .welcome-primary:focus-visible {
