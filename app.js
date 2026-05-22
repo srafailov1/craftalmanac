@@ -86,6 +86,7 @@ const MARKER_ICON_SIZE = 26;
 const MARKER_ICON_PIXEL_RATIO = 3;
 const WELCOME_MODAL_STORAGE_KEY = "craftAlmanacWelcomeSeen";
 const FAVORITE_SPECIES_STORAGE_KEY = "craftAlmanacFavoriteSpecies";
+const SAVED_LOCATIONS_STORAGE_KEY = "craftAlmanacSavedLocations";
 const HARVEST_ETHIC_LABELS = {
   "fallen material preferred": "Fallen material preferred",
   "light harvest": "Light harvest",
@@ -819,7 +820,9 @@ const state = {
   publicLayerVisible: true,
   activePopup: null,
   hoverPopup: null,
-  favoriteSpecies: new Set(readFavoriteSpecies())
+  favoriteSpecies: new Set(readFavoriteSpecies()),
+  savedLocations: new Set(readSavedLocations()),
+  savedLocationsOnly: false
 };
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -959,6 +962,23 @@ function saveFavoriteSpecies() {
 
 function isFavoriteSpecies(speciesId) {
   return state.favoriteSpecies.has(speciesId);
+}
+
+function readSavedLocations() {
+  try {
+    const storedLocations = JSON.parse(window.localStorage?.getItem(SAVED_LOCATIONS_STORAGE_KEY) || "[]");
+    return Array.isArray(storedLocations) ? storedLocations.filter((id) => typeof id === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveSavedLocations() {
+  window.localStorage?.setItem(SAVED_LOCATIONS_STORAGE_KEY, JSON.stringify([...state.savedLocations]));
+}
+
+function isSavedLocation(recordId) {
+  return state.savedLocations.has(recordId);
 }
 
 function sortCatalogByName(catalog) {
@@ -1252,11 +1272,12 @@ function getSpeciesGroupLabel(group) {
 
 function setMapMode(mode) {
   if (!MAP_MODE_CONFIG[mode] || mode === state.activeMap) return;
-  state.activeMap = mode;
-  state.records = [];
-  state.inatRecords = [];
-  state.inatRecordCache.clear();
-  state.activeRequest += 1;
+    state.activeMap = mode;
+    state.records = [];
+    state.inatRecords = [];
+    state.inatRecordCache.clear();
+    state.savedLocationsOnly = false;
+    state.activeRequest += 1;
   state.activePopup?.remove();
   state.hoverPopup?.remove();
   syncActiveCatalog();
@@ -1320,6 +1341,7 @@ function initControls() {
   });
 
   document.querySelector("#selectAllSpeciesButton").addEventListener("click", () => {
+    state.savedLocationsOnly = false;
     document.querySelectorAll("input[name='species']").forEach((input) => {
       input.checked = true;
     });
@@ -1328,6 +1350,7 @@ function initControls() {
   });
 
   document.querySelector("#selectFavoriteSpeciesButton").addEventListener("click", () => {
+    state.savedLocationsOnly = false;
     document.querySelectorAll("input[name='species']").forEach((input) => {
       input.checked = state.favoriteSpecies.has(input.value);
     });
@@ -1335,7 +1358,19 @@ function initControls() {
     render();
   });
 
+  document.querySelector("#selectSavedLocationsButton").addEventListener("click", () => {
+    state.savedLocationsOnly = !state.savedLocationsOnly;
+    if (state.savedLocationsOnly) {
+      document.querySelectorAll("input[name='species']").forEach((input) => {
+        input.checked = true;
+      });
+      syncCategoryCheckboxes();
+    }
+    render();
+  });
+
   document.querySelector("#clearSpeciesButton").addEventListener("click", () => {
+    state.savedLocationsOnly = false;
     document.querySelectorAll("input[name='species']").forEach((input) => {
       input.checked = false;
     });
@@ -1500,6 +1535,7 @@ function syncSpeciesGroupCheckboxes() {
 function renderSpeciesState() {
   const selectedSpecies = getCheckedValues("species");
   speciesCount.textContent = selectedSpecies.length;
+  document.querySelector("#selectSavedLocationsButton")?.classList.toggle("active", state.savedLocationsOnly);
   document.querySelectorAll(".species-list label:not(.species-group-title)").forEach((label) => {
     const input = label.querySelector("input[name='species']");
     label.classList.toggle("is-selected", input?.checked);
@@ -1536,6 +1572,7 @@ function getVisibleRecords() {
   return state.records.filter((record) => {
     const species = getSpecies(record.speciesId);
     if (!species) return false;
+    if (state.savedLocationsOnly && !state.savedLocations.has(record.id)) return false;
     const accessRule = getRecordAccessRule(record, species);
     if (!selectedAccessStatuses.includes(accessRule.status)) return false;
     return isSpeciesAvailableOnSelectedDate(species)
@@ -1635,6 +1672,7 @@ function renderMarkers() {
       },
       properties: {
         id: record.id,
+        savedLocation: isSavedLocation(record.id),
         speciesId: record.speciesId,
         speciesName: species.commonName,
         scientificName: species.scientificName,
@@ -1958,8 +1996,37 @@ function bindMapInteractions() {
       .setLngLat(feature.geometry.coordinates)
       .setHTML(getMarkerPopupHTML(feature.properties))
       .addTo(map);
+    bindPopupActions(state.activePopup);
   });
 
+}
+
+function bindPopupActions(popup) {
+  const element = popup.getElement();
+  const saveButton = element?.querySelector("[data-save-location]");
+  if (!saveButton) return;
+  saveButton.addEventListener("click", () => {
+    toggleSavedLocation(saveButton.dataset.saveLocation);
+    updateSaveLocationButton(saveButton);
+    render();
+  });
+}
+
+function toggleSavedLocation(recordId) {
+  if (!recordId) return;
+  if (state.savedLocations.has(recordId)) {
+    state.savedLocations.delete(recordId);
+  } else {
+    state.savedLocations.add(recordId);
+  }
+  saveSavedLocations();
+}
+
+function updateSaveLocationButton(button) {
+  const saved = state.savedLocations.has(button.dataset.saveLocation);
+  button.classList.toggle("is-saved", saved);
+  button.setAttribute("aria-pressed", String(saved));
+  button.textContent = saved ? "Saved location" : "Save location";
 }
 
 function getMarkerPopupHTML(properties) {
@@ -1989,6 +2056,7 @@ function getMarkerPopupHTML(properties) {
   const warning = properties.harvestStatus
     ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
     : "";
+  const saved = isSavedLocation(properties.id);
 
   return `
     <p class="popup-title">${escapeHTML(properties.speciesName)}</p>
@@ -2003,6 +2071,12 @@ function getMarkerPopupHTML(properties) {
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
     </dl>
     ${warning}
+    <button
+      class="save-location-button ${saved ? "is-saved" : ""}"
+      type="button"
+      data-save-location="${escapeHTML(properties.id)}"
+      aria-pressed="${String(saved)}"
+    >${saved ? "Saved location" : "Save location"}</button>
   `;
 }
 

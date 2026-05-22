@@ -505,6 +505,7 @@ h2 {
 
 .species-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin: 12px 0 10px;
 }
@@ -685,16 +686,12 @@ h2 {
 
 .favorite-button:hover,
 .favorite-button:focus-visible {
-  border-color: #cdd8c5;
-  background: #f1f5ed;
-  color: var(--leaf-dark);
+  color: #c08a16;
   outline: none;
 }
 
 .favorite-button.is-favorite {
-  border-color: #cdd8c5;
-  background: #f1f5ed;
-  color: var(--leaf-dark);
+  color: #c08a16;
 }
 
 .type-pill {
@@ -1150,6 +1147,26 @@ body.modal-open .app-shell {
   color: #64480b;
   font-size: 12px;
   font-weight: 780;
+}
+
+.save-location-button {
+  width: 100%;
+  min-height: 34px;
+  margin-top: 12px;
+  border: 1px solid #cdd8c5;
+  border-radius: 6px;
+  background: #f1f5ed;
+  color: var(--ink);
+  font-weight: 850;
+}
+
+.save-location-button:hover,
+.save-location-button:focus-visible,
+.save-location-button.is-saved {
+  border-color: var(--leaf-dark);
+  background: var(--leaf-dark);
+  color: #fffdf7;
+  outline: none;
 }
 
 .marker-dot {
