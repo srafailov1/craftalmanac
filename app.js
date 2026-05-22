@@ -68,6 +68,110 @@ const ACCESS_STATUS_OPTIONS = [
   { id: "unknown", label: "Unknown", defaultChecked: true },
   { id: "prohibited", label: "Prohibited", defaultChecked: false }
 ];
+const ACCESS_MARKER_STYLES = {
+  allowed: { label: "Allowed", color: "#111111", dashed: false },
+  "permit-required": { label: "Permit required", color: "#111111", dashed: true },
+  private: { label: "Private", color: "#ffffff", dashed: false, shadow: true },
+  "private-unsourced": { label: "Private / unsourced", color: "#ffffff", dashed: true, shadow: true },
+  unknown: { label: "Unknown", color: "#ffffff", dashed: true, shadow: true },
+  prohibited: { label: "Prohibited", color: "#d51f1f", dashed: false }
+};
+const LEGEND_PERMISSION_OPTIONS = [
+  { id: "allowed", label: "Allowed" },
+  { id: "permit-required", label: "Permit required" },
+  { id: "private", label: "Private" },
+  { id: "unknown", label: "Unverified" }
+];
+const MARKER_ICON_SIZE = 26;
+const MARKER_ICON_PIXEL_RATIO = 3;
+const BEFORE_COLLECTING_STORAGE_KEY = "craftAlmanacBeforeCollectingSeen";
+const HARVEST_ETHIC_LABELS = {
+  "fallen material preferred": "Fallen material preferred",
+  "light harvest": "Light harvest",
+  "invasive removal": "Invasive removal",
+  "cultivated preferred": "Cultivated preferred",
+  "observe only": "Observe only"
+};
+const SAFETY_TAGS_BY_SPECIES = {
+  elderberry: ["toxic parts", "lookalikes"],
+  "black-cherry": ["toxic parts"],
+  "sweet-cherry": ["toxic parts", "cultivated preferred"],
+  "sour-cherry": ["toxic parts", "cultivated preferred"],
+  plum: ["toxic parts"],
+  "cornelian-cherry": ["cultivated preferred"],
+  sumac: ["lookalikes"],
+  morel: ["lookalikes"],
+  "wild-strawberry": ["lookalikes"],
+  "ink-pokeweed": ["toxic parts", "do not ingest"],
+  "ink-elderberry": ["toxic parts", "do not ingest"],
+  "ink-privet": ["toxic parts", "do not ingest"],
+  "ink-wild-grape": ["toxic parts", "do not ingest"],
+  "medicine-jewelweed": ["external use only", "do not ingest"],
+  "medicine-yarrow": ["lookalikes", "avoid pregnancy", "drug interactions"],
+  "medicine-chickweed": ["lookalikes"],
+  "medicine-witch-hazel": ["external use only"],
+  "medicine-elderberry": ["toxic parts", "drug interactions"],
+  "medicine-echinacea": ["drug interactions", "root harvest discouraged"],
+  "medicine-mullein": ["external use only"],
+  "medicine-bergamot": ["avoid pregnancy", "drug interactions"],
+  "medicine-dandelion": ["drug interactions", "root harvest discouraged"],
+  "medicine-violet": ["lookalikes"],
+  "medicine-cleavers": ["drug interactions"]
+};
+const HARVEST_ETHIC_BY_SPECIES = {
+  morel: "light harvest",
+  blueberry: "light harvest",
+  blackberry: "light harvest",
+  raspberry: "light harvest",
+  wineberry: "invasive removal",
+  grape: "light harvest",
+  elderberry: "light harvest",
+  ribes: "light harvest",
+  huckleberry: "light harvest",
+  "black-cherry": "light harvest",
+  "sweet-cherry": "cultivated preferred",
+  "sour-cherry": "cultivated preferred",
+  plum: "light harvest",
+  "cornelian-cherry": "cultivated preferred",
+  serviceberry: "light harvest",
+  "wild-strawberry": "light harvest",
+  persimmon: "light harvest",
+  pawpaw: "light harvest",
+  sumac: "light harvest",
+  "black-walnut": "fallen material preferred",
+  hickory: "fallen material preferred",
+  hazelnut: "light harvest",
+  apple: "cultivated preferred",
+  pear: "cultivated preferred",
+  peach: "cultivated preferred",
+  "ink-black-walnut": "fallen material preferred",
+  "ink-oak": "fallen material preferred",
+  "ink-hickory": "fallen material preferred",
+  "ink-sumac": "light harvest",
+  "ink-honeysuckle": "invasive removal",
+  "ink-goldenrod": "light harvest",
+  "ink-osage-orange": "fallen material preferred",
+  "ink-pokeweed": "light harvest",
+  "ink-autumn-olive": "invasive removal",
+  "ink-wineberry": "invasive removal",
+  "ink-elderberry": "light harvest",
+  "ink-privet": "invasive removal",
+  "ink-wild-grape": "light harvest",
+  "medicine-jewelweed": "light harvest",
+  "medicine-broadleaf-plantain": "light harvest",
+  "medicine-yarrow": "light harvest",
+  "medicine-chickweed": "light harvest",
+  "medicine-witch-hazel": "observe only",
+  "medicine-elderberry": "light harvest",
+  "medicine-echinacea": "cultivated preferred",
+  "medicine-mullein": "light harvest",
+  "medicine-bergamot": "light harvest",
+  "medicine-goldenrod": "light harvest",
+  "medicine-dandelion": "light harvest",
+  "medicine-garlic-mustard": "invasive removal",
+  "medicine-violet": "light harvest",
+  "medicine-cleavers": "light harvest"
+};
 
 const foodSpeciesCatalog = [
   {
@@ -757,6 +861,8 @@ const speciesSectionTitle = document.querySelector("#speciesSectionTitle");
 const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
 const accessStatusList = document.querySelector("#accessStatusList");
+const mapLegend = document.querySelector("#mapLegend");
+const beforeCollectingSection = document.querySelector("#beforeCollectingSection");
 const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
 let categoryInputs = [];
 let accessStatusInputs = [];
@@ -866,6 +972,7 @@ function renderModeChrome() {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+  renderMapLegend();
 }
 
 function renderFilterControls() {
@@ -919,13 +1026,17 @@ function initAccessControls() {
   `).join("");
   accessStatusInputs = [...document.querySelectorAll("input[name='access-status']")];
   accessStatusInputs.forEach((input) => {
-    input.addEventListener("change", render);
+    input.addEventListener("change", () => {
+      renderMapLegend();
+      render();
+    });
   });
 
   document.querySelector("#selectAllAccessButton").addEventListener("click", () => {
     accessStatusInputs.forEach((input) => {
       input.checked = true;
     });
+    renderMapLegend();
     render();
   });
 
@@ -933,12 +1044,68 @@ function initAccessControls() {
     accessStatusInputs.forEach((input) => {
       input.checked = false;
     });
+    renderMapLegend();
     render();
   });
 }
 
+function initBeforeCollectingSection() {
+  if (!beforeCollectingSection) return;
+  const toggle = beforeCollectingSection.querySelector(".section-toggle");
+  const hasSeenCard = window.localStorage?.getItem(BEFORE_COLLECTING_STORAGE_KEY) === "true";
+  beforeCollectingSection.classList.toggle("is-open", !hasSeenCard);
+  toggle?.setAttribute("aria-expanded", String(!hasSeenCard));
+  if (!hasSeenCard) {
+    window.localStorage?.setItem(BEFORE_COLLECTING_STORAGE_KEY, "true");
+  }
+}
+
 function getCategoryLabel(categoryId) {
   return getActiveMapConfig().categories.find((category) => category.id === categoryId)?.label || categoryId;
+}
+
+function renderMapLegend() {
+  if (!mapLegend) return;
+  const config = getActiveMapConfig();
+  const showProhibited = getCheckedValues("access-status").includes("prohibited");
+  const permissionOptions = showProhibited
+    ? [...LEGEND_PERMISSION_OPTIONS, { id: "prohibited", label: "Prohibited" }]
+    : LEGEND_PERMISSION_OPTIONS;
+  const permissionRows = permissionOptions.map((status) => `
+    <span class="legend-row">
+      <span class="legend-dot outline-${status.id}" aria-hidden="true"></span>
+      <span>${status.label}</span>
+    </span>
+  `).join("");
+  const categoryRows = config.categories.map((category) => `
+    <span class="legend-row">
+      <span class="legend-swatch" style="background: ${escapeHTML(config.categoryColors[category.id] || "#777")}" aria-hidden="true"></span>
+      <span>${escapeHTML(category.label)}</span>
+    </span>
+  `).join("");
+
+  mapLegend.innerHTML = `
+    <div class="legend-section">
+      <strong>Permissions</strong>
+      <div class="legend-grid">${permissionRows}</div>
+    </div>
+    <div class="legend-section">
+      <strong>${escapeHTML(config.speciesHeading.replace(" & Species", ""))}</strong>
+      <div class="legend-grid">${categoryRows}</div>
+    </div>
+  `;
+}
+
+function getSpeciesSafetyTags(species) {
+  return species.safetyTags || SAFETY_TAGS_BY_SPECIES[species.id] || [];
+}
+
+function getSpeciesHarvestEthic(species) {
+  return species.harvestEthic || HARVEST_ETHIC_BY_SPECIES[species.id] || "light harvest";
+}
+
+function getSpeciesHarvestEthicLabel(species) {
+  return HARVEST_ETHIC_LABELS[getSpeciesHarvestEthic(species)] || getSpeciesHarvestEthic(species);
 }
 
 function getSpeciesListHTML() {
@@ -1067,6 +1234,7 @@ function initControls() {
   });
 
   panelGrip.addEventListener("pointerdown", handlePanelGripPointerDown);
+  initBeforeCollectingSection();
 
   sectionToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -1371,6 +1539,9 @@ function renderMarkers() {
       return [];
     }
     const accessRule = getRecordAccessRule(record, species);
+    const categoryColor = CATEGORY_COLORS[species.category] || Object.values(CATEGORY_COLORS)[0];
+    const markerIcon = getMarkerIconName(species.category, accessRule.status);
+    ensureMarkerIcon(markerIcon, categoryColor, accessRule.status);
 
     return [{
       type: "Feature",
@@ -1387,13 +1558,16 @@ function renderMarkers() {
         observedName: record.observedName || species.commonName,
         observedScientificName: record.observedScientificName || species.scientificName,
         category: species.category,
-        categoryColor: CATEGORY_COLORS[species.category] || Object.values(CATEGORY_COLORS)[0],
+        categoryColor,
+        markerIcon,
         source: record.source,
         sourceLabel: sourceLabel(record.source),
         sourceUrl: record.sourceUrl || "",
         idDate: record.idDate || "",
         name: record.name || species.commonName,
         usedParts: species.usedParts || "",
+        safetyTags: getSpeciesSafetyTags(species).join("|"),
+        harvestEthic: getSpeciesHarvestEthicLabel(species),
         accessNote: accessRule.note,
         accessStatus: accessRule.status,
         accessStatusLabel: accessRule.label,
@@ -1405,9 +1579,7 @@ function renderMarkers() {
         season: getMonthRangeText(species.months),
         confidence: record.confidence || "community",
         harvestStatus: record.harvestStatus || "",
-        harvestNote: record.accessNote || "Confirm site rules before harvesting.",
-        strokeWidth: 0,
-        radius: record.source === "nps-orchard" ? 6.5 : 5
+        harvestNote: record.accessNote || "Confirm site rules before harvesting."
       }
     }];
   });
@@ -1416,6 +1588,61 @@ function renderMarkers() {
     type: "FeatureCollection",
     features
   });
+}
+
+function getMarkerIconName(category, accessStatus) {
+  return `marker-${category}-${accessStatus}`;
+}
+
+function ensureMarkerIcon(iconName, fillColor, accessStatus) {
+  if (!state.mapReady || map.hasImage(iconName)) return;
+  const style = ACCESS_MARKER_STYLES[accessStatus] || ACCESS_MARKER_STYLES.unknown;
+  const canvas = document.createElement("canvas");
+  canvas.width = MARKER_ICON_SIZE * MARKER_ICON_PIXEL_RATIO;
+  canvas.height = MARKER_ICON_SIZE * MARKER_ICON_PIXEL_RATIO;
+  const context = canvas.getContext("2d");
+  context.scale(MARKER_ICON_PIXEL_RATIO, MARKER_ICON_PIXEL_RATIO);
+  const center = MARKER_ICON_SIZE / 2;
+  const fillRadius = 6.5;
+  const outlineRadius = 5.3;
+
+  context.clearRect(0, 0, MARKER_ICON_SIZE, MARKER_ICON_SIZE);
+  context.beginPath();
+  context.arc(center, center, fillRadius, 0, Math.PI * 2);
+  context.fillStyle = fillColor;
+  context.fill();
+
+  drawMarkerOutline(context, center, outlineRadius, style.color, style.dashed, 1.8);
+
+  map.addImage(iconName, canvas, { pixelRatio: MARKER_ICON_PIXEL_RATIO });
+}
+
+function drawMarkerOutline(context, center, radius, color, dashed, lineWidth) {
+  context.save();
+  if (dashed) {
+    const dotCount = 14;
+    const dotRadius = lineWidth * 0.42;
+    context.fillStyle = color;
+    for (let index = 0; index < dotCount; index += 1) {
+      const angle = (Math.PI * 2 * index) / dotCount;
+      context.beginPath();
+      context.arc(
+        center + Math.cos(angle) * radius,
+        center + Math.sin(angle) * radius,
+        dotRadius,
+        0,
+        Math.PI * 2
+      );
+      context.fill();
+    }
+  } else {
+    context.strokeStyle = color;
+    context.lineWidth = lineWidth;
+    context.beginPath();
+    context.arc(center, center, radius, 0, Math.PI * 2);
+    context.stroke();
+  }
+  context.restore();
 }
 
 function getCachedINaturalistRecordsInBounds() {
@@ -1499,21 +1726,20 @@ function initMapLayers() {
   if (!map.getLayer(MARKERS_LAYER_ID)) {
     map.addLayer({
       id: MARKERS_LAYER_ID,
-      type: "circle",
+      type: "symbol",
       source: MARKERS_SOURCE_ID,
-      paint: {
-        "circle-radius": [
+      layout: {
+        "icon-image": ["get", "markerIcon"],
+        "icon-size": [
           "interpolate",
           ["linear"],
           ["zoom"],
-          6, 4.8,
-          10, 5.4,
-          14, ["get", "radius"]
+          6, 0.74,
+          10, 0.86,
+          14, 1.06
         ],
-        "circle-color": ["get", "categoryColor"],
-        "circle-opacity": 0.95,
-        "circle-stroke-color": "rgba(255, 255, 255, 0)",
-        "circle-stroke-width": ["get", "strokeWidth"]
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true
       }
     });
   }
@@ -1667,6 +1893,15 @@ function getMarkerPopupHTML(properties) {
   const usedParts = properties.usedParts
     ? `<dt>Used parts</dt><dd>${escapeHTML(properties.usedParts)}</dd>`
     : "";
+  const safetyTags = String(properties.safetyTags || "")
+    .split("|")
+    .filter(Boolean);
+  const safetyMarkup = safetyTags.length
+    ? `<dt>Safety tags</dt><dd><span class="tag-list">${safetyTags.map((tag) => `<span class="safety-tag">${escapeHTML(tag)}</span>`).join("")}</span></dd>`
+    : "";
+  const harvestEthic = properties.harvestEthic
+    ? `<dt>Harvest ethic</dt><dd><span class="ethic-tag">${escapeHTML(properties.harvestEthic)}</span></dd>`
+    : "";
   const warning = properties.harvestStatus
     ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
     : "";
@@ -1678,6 +1913,8 @@ function getMarkerPopupHTML(properties) {
       <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
       <dt>ID source</dt><dd>${sourceMarkup}</dd>
       ${usedParts}
+      ${safetyMarkup}
+      ${harvestEthic}
       <dt>${escapeHTML(properties.rulesLabel || "Harvesting rules and limits")}</dt><dd>${ruleStatus} ${rulesText} · ${accessSourceMarkup}</dd>
       <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
     </dl>
