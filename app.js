@@ -85,6 +85,7 @@ const LEGEND_PERMISSION_OPTIONS = [
 const MARKER_ICON_SIZE = 26;
 const MARKER_ICON_PIXEL_RATIO = 3;
 const WELCOME_MODAL_STORAGE_KEY = "craftAlmanacWelcomeSeen";
+const FAVORITE_SPECIES_STORAGE_KEY = "craftAlmanacFavoriteSpecies";
 const HARVEST_ETHIC_LABELS = {
   "fallen material preferred": "Fallen material preferred",
   "light harvest": "Light harvest",
@@ -817,7 +818,8 @@ const state = {
   publicLayerLoadedKey: "",
   publicLayerVisible: true,
   activePopup: null,
-  hoverPopup: null
+  hoverPopup: null,
+  favoriteSpecies: new Set(readFavoriteSpecies())
 };
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -942,6 +944,23 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
+function readFavoriteSpecies() {
+  try {
+    const storedFavorites = JSON.parse(window.localStorage?.getItem(FAVORITE_SPECIES_STORAGE_KEY) || "[]");
+    return Array.isArray(storedFavorites) ? storedFavorites.filter((id) => typeof id === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveFavoriteSpecies() {
+  window.localStorage?.setItem(FAVORITE_SPECIES_STORAGE_KEY, JSON.stringify([...state.favoriteSpecies]));
+}
+
+function isFavoriteSpecies(speciesId) {
+  return state.favoriteSpecies.has(speciesId);
+}
+
 function sortCatalogByName(catalog) {
   return [...catalog].sort((a, b) => (
     a.commonName.localeCompare(b.commonName, undefined, { sensitivity: "base" })
@@ -1013,6 +1032,13 @@ function renderFilterControls() {
       setSpeciesByCategory(input.value, input.checked);
       syncCategoryCheckboxes();
       render();
+    });
+  });
+  document.querySelectorAll("[data-favorite-species]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFavoriteSpecies(button.dataset.favoriteSpecies);
     });
   });
 }
@@ -1153,15 +1179,37 @@ function getSpeciesListHTML() {
 }
 
 function getSpeciesCheckboxHTML(species) {
+  const favorite = isFavoriteSpecies(species.id);
   return `
     <label data-category="${species.category}" class="${species.groupLabel ? "is-child-species" : ""}">
       <span class="species-name">
         <input type="checkbox" name="species" value="${species.id}" checked>
         ${species.commonName}
       </span>
-      <span class="type-pill ${species.category}">${getCategoryLabel(species.category)}</span>
+      <span class="species-meta">
+        <button
+          class="favorite-button ${favorite ? "is-favorite" : ""}"
+          type="button"
+          data-favorite-species="${species.id}"
+          aria-pressed="${String(favorite)}"
+          aria-label="${favorite ? "Remove" : "Add"} ${escapeHTML(species.commonName)} ${favorite ? "from" : "to"} favorites"
+          title="${favorite ? "Remove from favorites" : "Add to favorites"}"
+        >&#9733;</button>
+        <span class="type-pill ${species.category}">${getCategoryLabel(species.category)}</span>
+      </span>
     </label>
   `;
+}
+
+function toggleFavoriteSpecies(speciesId) {
+  if (!speciesId) return;
+  if (state.favoriteSpecies.has(speciesId)) {
+    state.favoriteSpecies.delete(speciesId);
+  } else {
+    state.favoriteSpecies.add(speciesId);
+  }
+  saveFavoriteSpecies();
+  renderFavoriteSpeciesState();
 }
 
 function getSpeciesGroupHTML(label, speciesItems) {
@@ -1274,6 +1322,14 @@ function initControls() {
   document.querySelector("#selectAllSpeciesButton").addEventListener("click", () => {
     document.querySelectorAll("input[name='species']").forEach((input) => {
       input.checked = true;
+    });
+    syncCategoryCheckboxes();
+    render();
+  });
+
+  document.querySelector("#selectFavoriteSpeciesButton").addEventListener("click", () => {
+    document.querySelectorAll("input[name='species']").forEach((input) => {
+      input.checked = state.favoriteSpecies.has(input.value);
     });
     syncCategoryCheckboxes();
     render();
@@ -1453,6 +1509,20 @@ function renderSpeciesState() {
   });
   syncCategoryCheckboxes();
   syncSpeciesGroupCheckboxes();
+  renderFavoriteSpeciesState();
+}
+
+function renderFavoriteSpeciesState() {
+  document.querySelectorAll("[data-favorite-species]").forEach((button) => {
+    const species = getSpecies(button.dataset.favoriteSpecies);
+    const favorite = state.favoriteSpecies.has(button.dataset.favoriteSpecies);
+    button.classList.toggle("is-favorite", favorite);
+    button.setAttribute("aria-pressed", String(favorite));
+    if (species) {
+      button.setAttribute("aria-label", `${favorite ? "Remove" : "Add"} ${species.commonName} ${favorite ? "from" : "to"} favorites`);
+    }
+    button.setAttribute("title", favorite ? "Remove from favorites" : "Add to favorites");
+  });
 }
 
 function isSpeciesAvailableOnSelectedDate(species) {
