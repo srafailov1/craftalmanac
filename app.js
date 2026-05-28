@@ -145,6 +145,7 @@ const HARVEST_ETHIC_BY_SPECIES = {
   apple: "light harvest",
   pear: "light harvest",
   peach: "light harvest",
+  fig: "light harvest",
   "ink-black-walnut": "fallen material preferred",
   "ink-oak": "fallen material preferred",
   "ink-hickory": "fallen material preferred",
@@ -435,6 +436,17 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [78755],
     parkLimit: "1 bushel per person per day in Shenandoah National Park",
     notes: "Included in the park list, though less common as a wild forage."
+  },
+  {
+    id: "fig",
+    commonName: "Figs",
+    scientificName: "Ficus carica",
+    category: "fruit",
+    months: [8, 9, 10],
+    inatTaxonIds: [60218],
+    parkLimit: "Not listed for Shenandoah National Park",
+    shenandoahAllowed: false,
+    notes: "Usually a cultivated or escaped planting; confirm property access before harvesting."
   }
 ];
 

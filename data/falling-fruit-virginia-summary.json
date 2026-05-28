@@ -11,7 +11,7 @@
   },
   "scannedLocations": 1962493,
   "skippedHiddenLocations": 14121,
-  "recordCount": 1063,
+  "recordCount": 1179,
   "countsBySpeciesId": {
     "apple": 80,
     "black-cherry": 12,
@@ -20,6 +20,7 @@
     "blueberry": 30,
     "cornelian-cherry": 9,
     "elderberry": 20,
+    "fig": 116,
     "grape": 26,
     "hazelnut": 3,
     "hickory": 43,

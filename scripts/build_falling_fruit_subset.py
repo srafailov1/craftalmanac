@@ -55,6 +55,7 @@ RULES = [
     ("apple", r"\bapple\b|\bMalus\b"),
     ("pear", r"\bpear\b|\bPyrus\b"),
     ("peach", r"\bpeach\b|Prunus persica"),
+    ("fig", r"\bfig(s)?\b|\bFicus carica\b"),
 ]
 
 EXCLUDE = re.compile(
@@ -66,7 +67,8 @@ EXCLUDE = re.compile(
     r"Aristotelia|New Zealand wineberry|witch-?hazel|Hamamelis|"
     r"cherry birch|Betula lenta|"
     r"mock strawberry|strawberry tree|Arbutus|poison sumac|"
-    r"Toxicodendron vernix|African sumac|Rhus lancea",
+    r"Toxicodendron vernix|African sumac|Rhus lancea|"
+    r"indian fig|cactus fig|opuntia|ficus-indica",
     re.I,
 )
 
