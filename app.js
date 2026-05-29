@@ -13,6 +13,11 @@ const INATURALIST_VIRGINIA_PLACE_ID = "7";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
+const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
+const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
+const MARKER_CLUSTER_MAX_ZOOM = 10;
+const MARKER_CLUSTER_RADIUS = 46;
+const PUBLIC_LANDS_MIN_RENDER_ZOOM = 8;
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
 const PUBLIC_LANDS_LINE_LAYER_ID = "public-lands-line";
@@ -847,6 +852,9 @@ const map = new mapboxgl.Map({
   minZoom: 6,
   maxZoom: 19,
   maxBounds: VIRGINIA_MAX_BOUNDS,
+  renderWorldCopies: false,
+  fadeDuration: 0,
+  refreshExpiredTiles: false,
   pitchWithRotate: false,
   dragRotate: false,
   attributionControl: true
@@ -1812,6 +1820,7 @@ function initMapLayers() {
       id: PUBLIC_LANDS_FILL_LAYER_ID,
       type: "fill",
       source: PUBLIC_LANDS_SOURCE_ID,
+      minzoom: PUBLIC_LANDS_MIN_RENDER_ZOOM,
       paint: {
         "fill-color": [
           "case",
@@ -1834,6 +1843,7 @@ function initMapLayers() {
       id: PUBLIC_LANDS_LINE_LAYER_ID,
       type: "line",
       source: PUBLIC_LANDS_SOURCE_ID,
+      minzoom: PUBLIC_LANDS_MIN_RENDER_ZOOM,
       paint: {
         "line-color": [
           "case",
@@ -1850,9 +1860,71 @@ function initMapLayers() {
   if (!map.getSource(MARKERS_SOURCE_ID)) {
     map.addSource(MARKERS_SOURCE_ID, {
       type: "geojson",
+      cluster: true,
+      clusterMaxZoom: MARKER_CLUSTER_MAX_ZOOM,
+      clusterRadius: MARKER_CLUSTER_RADIUS,
       data: {
         type: "FeatureCollection",
         features: []
+      }
+    });
+  }
+
+  if (!map.getLayer(MARKER_CLUSTERS_LAYER_ID)) {
+    map.addLayer({
+      id: MARKER_CLUSTERS_LAYER_ID,
+      type: "circle",
+      source: MARKERS_SOURCE_ID,
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": [
+          "step",
+          ["get", "point_count"],
+          "#eef4e9",
+          25,
+          "#dbe8d0",
+          100,
+          "#c7d8b8"
+        ],
+        "circle-radius": [
+          "step",
+          ["get", "point_count"],
+          15,
+          25,
+          19,
+          100,
+          24
+        ],
+        "circle-stroke-color": "#1f3d2b",
+        "circle-stroke-opacity": 0.75,
+        "circle-stroke-width": 1.4
+      }
+    });
+  }
+
+  if (!map.getLayer(MARKER_CLUSTER_COUNT_LAYER_ID)) {
+    map.addLayer({
+      id: MARKER_CLUSTER_COUNT_LAYER_ID,
+      type: "symbol",
+      source: MARKERS_SOURCE_ID,
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": ["get", "point_count_abbreviated"],
+        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": [
+          "step",
+          ["get", "point_count"],
+          11,
+          25,
+          12,
+          100,
+          13
+        ],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true
+      },
+      paint: {
+        "text-color": "#1f3d2b"
       }
     });
   }
@@ -1862,6 +1934,8 @@ function initMapLayers() {
       id: MARKERS_LAYER_ID,
       type: "symbol",
       source: MARKERS_SOURCE_ID,
+      filter: ["!", ["has", "point_count"]],
+      minzoom: MARKER_CLUSTER_MAX_ZOOM,
       layout: {
         "icon-image": ["get", "markerIcon"],
         "icon-size": [
@@ -1970,6 +2044,36 @@ function getFirstLineOrSymbolLayerId() {
 }
 
 function bindMapInteractions() {
+  map.on("mouseenter", MARKER_CLUSTERS_LAYER_ID, () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+
+  map.on("mouseleave", MARKER_CLUSTERS_LAYER_ID, () => {
+    map.getCanvas().style.cursor = "";
+  });
+
+  map.on("click", MARKER_CLUSTERS_LAYER_ID, (event) => {
+    const feature = event.features?.[0];
+    const clusterId = feature?.properties?.cluster_id;
+    if (clusterId === undefined) return;
+    const source = map.getSource(MARKERS_SOURCE_ID);
+    let handled = false;
+    const zoomToCluster = (zoom) => {
+      if (handled || !Number.isFinite(zoom)) return;
+      handled = true;
+      map.easeTo({
+        center: feature.geometry.coordinates,
+        zoom: Math.min(zoom + 0.25, map.getMaxZoom()),
+        duration: 420
+      });
+    };
+    const expansionZoom = source.getClusterExpansionZoom(clusterId, (error, zoom) => {
+      if (error) return;
+      zoomToCluster(zoom);
+    });
+    expansionZoom?.then?.(zoomToCluster).catch?.(() => {});
+  });
+
   map.on("mouseenter", MARKERS_LAYER_ID, (event) => {
     map.getCanvas().style.cursor = "pointer";
     const feature = event.features?.[0];
@@ -2228,6 +2332,13 @@ async function loadNpsOrchards() {
 
 function schedulePublicLandLoad() {
   window.clearTimeout(state.publicLoadTimer);
+  if (map.getZoom() < PUBLIC_LANDS_MIN_RENDER_ZOOM) {
+    state.activePublicRequest += 1;
+    state.publicLandFeatures = [];
+    state.publicLayerLoadedKey = "";
+    updatePublicLandSource();
+    return;
+  }
   state.publicLoadTimer = window.setTimeout(loadPublicLands, PUBLIC_LANDS_REFRESH_DELAY);
 }
 
