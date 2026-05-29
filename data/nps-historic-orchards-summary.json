@@ -1,16 +1,16 @@
 {
   "sourceUrl": "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/contrib_orchard_pt/FeatureServer/4/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
   "bounds": {
-    "south": 37.45,
-    "north": 39.15,
-    "west": -79.65,
-    "east": -77.45
+    "south": 36.45,
+    "north": 42.65,
+    "west": -83.75,
+    "east": -74.45
   },
-  "recordCount": 28,
+  "recordCount": 57,
   "countsBySpeciesId": {
-    "apple": 24,
-    "peach": 1,
-    "pear": 2,
-    "prunus": 1
+    "apple": 37,
+    "peach": 6,
+    "pear": 7,
+    "prunus": 7
   }
 }

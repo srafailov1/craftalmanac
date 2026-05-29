@@ -9,7 +9,7 @@ const MAPBOX_TOKEN = window.FORAGE_CONFIG?.mapboxToken || "";
 const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
 const LIVE_DATA_TIMEOUT = 9000;
-const INATURALIST_VIRGINIA_PLACE_ID = "7";
+const INATURALIST_REGION_PLACE_IDS = "7,33,39,4,42";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
@@ -21,15 +21,17 @@ const PUBLIC_LANDS_MIN_RENDER_ZOOM = 8;
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
 const PUBLIC_LANDS_LINE_LAYER_ID = "public-lands-line";
-const VIRGINIA_BOUNDARY_SOURCE_ID = "virginia-boundary";
-const VIRGINIA_MASK_SOURCE_ID = "virginia-mask";
-const VIRGINIA_MASK_LAYER_ID = "virginia-mask-fill";
-const VIRGINIA_OUTLINE_LAYER_ID = "virginia-outline";
+const REGION_BOUNDARY_SOURCE_ID = "region-boundary";
+const REGION_MASK_SOURCE_ID = "region-mask";
+const REGION_MASK_LAYER_ID = "region-mask-fill";
+const REGION_OUTLINE_LAYER_ID = "region-outline";
 const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
-const VIRGINIA_MAX_BOUNDS = [
+const REGION_MAX_BOUNDS = [
   [-84.1, 36.25],
-  [-74.8, 39.75]
+  [-74.45, 42.65]
 ];
+const REGION_NAME = "the Mid-Atlantic";
+const REGION_STATES = "Virginia, West Virginia, Maryland, Delaware, and Pennsylvania";
 const FOOD_CATEGORY_COLORS = {
   berry: "#d12f7a",
   fruit: "#1b8a5a",
@@ -749,7 +751,7 @@ const MAP_MODE_CONFIG = {
   food: {
     id: "food",
     speciesHeading: "Food Types & Species",
-    lede: "Track edible plants and mushrooms across Virginia by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.",
+    lede: `Track edible plants and mushrooms across ${REGION_STATES} by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.`,
     categories: [
       { id: "berry", label: "Berries" },
       { id: "fruit", label: "Fruit" },
@@ -759,7 +761,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: FOOD_CATEGORY_COLORS,
     catalog: foodSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit", "NPS orchards"],
-    dataNotes: "Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.",
+    dataNotes: `Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service across ${REGION_NAME}.`,
     rulesLabel: "Harvesting rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: true
@@ -767,7 +769,7 @@ const MAP_MODE_CONFIG = {
   ink: {
     id: "ink",
     speciesHeading: "Ink Colors & Materials",
-    lede: "Discover plants, trees, and fruits that can produce natural inks across Virginia by season and habitat. The list favors abundant native species that can be harvested lightly, as well as invasive plants whose careful removal can support surrounding ecosystems.",
+    lede: `Discover plants, trees, and fruits that can produce natural inks across ${REGION_STATES} by season and habitat. The list favors abundant native species that can be harvested lightly, as well as invasive plants whose careful removal can support surrounding ecosystems.`,
     categories: [
       { id: "black", label: "Black / gray" },
       { id: "blue", label: "Blue / green" },
@@ -779,7 +781,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: INK_CATEGORY_COLORS,
     catalog: inkSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit"],
-    dataNotes: "Live observations from iNaturalist, relevant community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.",
+    dataNotes: `Live observations from iNaturalist, relevant community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Ink materials still require permission to collect.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: false
@@ -787,7 +789,7 @@ const MAP_MODE_CONFIG = {
   medicine: {
     id: "medicine",
     speciesHeading: "Therapeutic Uses & Species",
-    lede: "Explore therapeutic plants across Virginia by season and habitat.",
+    lede: `Explore therapeutic plants across ${REGION_STATES} by season and habitat.`,
     safetyNote: "This map is provided for educational purposes. Do not ingest or apply wild plants without guidance from a qualified practitioner or trained herbalist.",
     categories: [
       { id: "digestive", label: "Digestive" },
@@ -798,7 +800,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: MEDICINE_CATEGORY_COLORS,
     catalog: medicineSpeciesCatalog,
     sourceNames: ["iNaturalist"],
-    dataNotes: "Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced. Plant-use notes are educational and are not instructions for treatment.",
+    dataNotes: `Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Plant-use notes are educational and are not instructions for treatment.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: false,
     loadNpsOrchards: false
@@ -830,6 +832,7 @@ const state = {
   activePublicRequest: 0,
   fallingFruitData: null,
   fallingFruitRecords: null,
+  npsOrchardData: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
   mapReady: false,
@@ -847,11 +850,11 @@ mapboxgl.accessToken = MAPBOX_TOKEN;
 const map = new mapboxgl.Map({
   container: "map",
   style: MAPBOX_STYLE,
-  center: [-78.5034, 38.0356],
-  zoom: 13,
-  minZoom: 6,
+  center: [-77.7, 39.3],
+  zoom: 7,
+  minZoom: 5,
   maxZoom: 19,
-  maxBounds: VIRGINIA_MAX_BOUNDS,
+  maxBounds: REGION_MAX_BOUNDS,
   renderWorldCopies: false,
   fadeDuration: 0,
   refreshExpiredTiles: false,
@@ -1806,7 +1809,7 @@ function recordInBounds(record, bounds) {
 function initMapLayers() {
   const firstLineOrSymbolLayerId = getFirstLineOrSymbolLayerId();
 
-  initVirginiaBoundaryLayers(firstLineOrSymbolLayerId);
+  initRegionBoundaryLayers(firstLineOrSymbolLayerId);
 
   if (!map.getSource(PUBLIC_LANDS_SOURCE_ID)) {
     map.addSource(PUBLIC_LANDS_SOURCE_ID, {
@@ -1956,9 +1959,9 @@ function initMapLayers() {
   bindMapInteractions();
 }
 
-async function initVirginiaBoundaryLayers(firstLineOrSymbolLayerId) {
+async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
   try {
-    const response = await fetch("./data/virginia-boundary.json");
+    const response = await fetch("./data/mid-atlantic-boundary.json");
     if (!response.ok) return;
     const geometry = await response.json();
     const feature = {
@@ -1966,27 +1969,27 @@ async function initVirginiaBoundaryLayers(firstLineOrSymbolLayerId) {
       properties: {},
       geometry
     };
-    const mask = getOutsideVirginiaMask(geometry);
+    const mask = getOutsideRegionMask(geometry);
 
-    if (!map.getSource(VIRGINIA_BOUNDARY_SOURCE_ID)) {
-      map.addSource(VIRGINIA_BOUNDARY_SOURCE_ID, {
+    if (!map.getSource(REGION_BOUNDARY_SOURCE_ID)) {
+      map.addSource(REGION_BOUNDARY_SOURCE_ID, {
         type: "geojson",
         data: feature
       });
     }
 
-    if (!map.getSource(VIRGINIA_MASK_SOURCE_ID)) {
-      map.addSource(VIRGINIA_MASK_SOURCE_ID, {
+    if (!map.getSource(REGION_MASK_SOURCE_ID)) {
+      map.addSource(REGION_MASK_SOURCE_ID, {
         type: "geojson",
         data: mask
       });
     }
 
-    if (!map.getLayer(VIRGINIA_MASK_LAYER_ID)) {
+    if (!map.getLayer(REGION_MASK_LAYER_ID)) {
       map.addLayer({
-        id: VIRGINIA_MASK_LAYER_ID,
+        id: REGION_MASK_LAYER_ID,
         type: "fill",
-        source: VIRGINIA_MASK_SOURCE_ID,
+        source: REGION_MASK_SOURCE_ID,
         paint: {
           "fill-color": "#f2efe5",
           "fill-opacity": 0.58
@@ -1994,11 +1997,11 @@ async function initVirginiaBoundaryLayers(firstLineOrSymbolLayerId) {
       }, firstLineOrSymbolLayerId);
     }
 
-    if (!map.getLayer(VIRGINIA_OUTLINE_LAYER_ID)) {
+    if (!map.getLayer(REGION_OUTLINE_LAYER_ID)) {
       map.addLayer({
-        id: VIRGINIA_OUTLINE_LAYER_ID,
+        id: REGION_OUTLINE_LAYER_ID,
         type: "line",
-        source: VIRGINIA_BOUNDARY_SOURCE_ID,
+        source: REGION_BOUNDARY_SOURCE_ID,
         paint: {
           "line-color": "#1f3d2b",
           "line-opacity": 0.86,
@@ -2018,7 +2021,7 @@ async function initVirginiaBoundaryLayers(firstLineOrSymbolLayerId) {
   }
 }
 
-function getOutsideVirginiaMask(geometry) {
+function getOutsideRegionMask(geometry) {
   const worldRing = [
     [-180, -85],
     [180, -85],
@@ -2281,7 +2284,7 @@ async function loadINaturalist() {
     geo: "true",
     photos: "true",
     quality_grade: "research",
-    place_id: INATURALIST_VIRGINIA_PLACE_ID,
+    place_id: INATURALIST_REGION_PLACE_IDS,
     per_page: "120",
     order: "desc",
     order_by: "observed_on"
@@ -2298,12 +2301,13 @@ async function loadINaturalist() {
 async function loadFallingFruit() {
   try {
     if (!state.fallingFruitData) {
-      const response = await fetch("./data/falling-fruit-virginia.json");
+      const response = await fetch("./data/falling-fruit-mid-atlantic.json");
       if (!response.ok) return [];
       state.fallingFruitData = await response.json();
     }
 
     state.fallingFruitRecords = state.fallingFruitData
+      .filter((record) => !state.mapReady || recordInBounds(record, map.getBounds()))
       .map(mapFallingFruitRecord)
       .filter(Boolean);
     return state.fallingFruitRecords;
@@ -2313,15 +2317,14 @@ async function loadFallingFruit() {
 }
 
 async function loadNpsOrchards() {
-  if (state.npsOrchardRecords) {
-    return state.npsOrchardRecords;
-  }
-
   try {
-    const response = await fetch("./data/nps-historic-orchards.json");
-    if (!response.ok) return [];
-    const data = await response.json();
-    state.npsOrchardRecords = data
+    if (!state.npsOrchardData) {
+      const response = await fetch("./data/nps-historic-orchards.json");
+      if (!response.ok) return [];
+      state.npsOrchardData = await response.json();
+    }
+    state.npsOrchardRecords = state.npsOrchardData
+      .filter((record) => !state.mapReady || recordInBounds(record, map.getBounds()))
       .map(mapNpsOrchardRecord)
       .filter(Boolean);
     return state.npsOrchardRecords;
@@ -2671,7 +2674,7 @@ function getPublicLandAccessRule(properties, species) {
       label: "Prohibited",
       area,
       limit: "NPS plant removal is prohibited unless that park's superintendent has specifically authorized an exception.",
-      note: "This NPS unit does not match one of the Virginia personal-use compendium allowances currently encoded in the app.",
+      note: "This NPS unit does not match one of the personal-use compendium allowances currently encoded in the app.",
       sourceLabel: "36 CFR 2.1",
       sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
     };

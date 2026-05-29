@@ -9,17 +9,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TYPES_PATH = Path("/Users/sasson/Downloads/types.csv.bz2")
 LOCATIONS_PATH = Path("/Users/sasson/Downloads/locations.csv.bz2")
-OUTPUT_PATH = ROOT / "data" / "falling-fruit-virginia.json"
-SUMMARY_PATH = ROOT / "data" / "falling-fruit-virginia-summary.json"
-BOUNDARY_PATH = ROOT / "data" / "virginia-boundary.json"
+OUTPUT_PATH = ROOT / "data" / "falling-fruit-mid-atlantic.json"
+SUMMARY_PATH = ROOT / "data" / "falling-fruit-mid-atlantic-summary.json"
+BOUNDARY_PATH = ROOT / "data" / "mid-atlantic-boundary.json"
 
-# Virginia statewide browser subset. The polygon is checked after this broad
+# Mid-Atlantic browser subset. The polygon is checked after this broad
 # bounding-box screen so neighboring-state records near the border are excluded.
 BOUNDS = {
     "south": 36.45,
-    "north": 39.55,
+    "north": 42.65,
     "west": -83.75,
-    "east": -75.15,
+    "east": -74.45,
 }
 
 RULES = [
@@ -122,12 +122,12 @@ def in_bounds(lat, lng):
     )
 
 
-def read_virginia_boundary():
+def read_region_boundary():
     data = json.loads(BOUNDARY_PATH.read_text(encoding="utf-8"))
     return data
 
 
-def point_in_virginia(lat, lng, boundary):
+def point_in_region(lat, lng, boundary):
     point = (lng, lat)
     if boundary["type"] == "Polygon":
         return point_in_polygon(point, boundary["coordinates"])
@@ -209,7 +209,7 @@ def classify_access(access):
 
 def build_subset():
     type_to_species, type_info = read_types()
-    virginia_boundary = read_virginia_boundary()
+    region_boundary = read_region_boundary()
     records = []
     seen = set()
     skipped_hidden = 0
@@ -228,7 +228,7 @@ def build_subset():
                 continue
             if not in_bounds(lat, lng):
                 continue
-            if not point_in_virginia(lat, lng, virginia_boundary):
+            if not point_in_region(lat, lng, region_boundary):
                 continue
 
             type_ids = [

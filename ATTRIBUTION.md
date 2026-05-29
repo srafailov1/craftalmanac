@@ -10,13 +10,13 @@ Source: https://www.inaturalist.org/pages/api+reference and https://www.inatural
 
 ## Falling Fruit
 
-The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to Virginia records matching this app's species groups. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
+The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to records in Virginia, West Virginia, Maryland, Delaware, and Pennsylvania matching this app's species groups. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
 
 Source: https://fallingfruit.org/data
 
-The Virginia boundary used to filter the Falling Fruit subset is derived from iNaturalist's Virginia place geometry, place ID 7.
+The regional boundary used to filter the Falling Fruit subset is derived from iNaturalist place geometries for Virginia, West Virginia, Maryland, Delaware, and Pennsylvania.
 
-Source: https://www.inaturalist.org/places/virginia-us
+Sources: https://www.inaturalist.org/places/virginia-us, https://www.inaturalist.org/places/west-virginia, https://www.inaturalist.org/places/maryland-us, https://www.inaturalist.org/places/delaware, and https://www.inaturalist.org/places/pennsylvania
 
 ## USGS PAD-US Public Access
 

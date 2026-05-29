@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Craft Almanac · Virginia Material Maps</title>
+    <title>Craft Almanac · Mid-Atlantic Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=clusters-1">
+    <link rel="stylesheet" href="./styles.css?v=mid-atlantic-1">
   </head>
   <body>
     <main class="app-shell">
@@ -21,7 +21,7 @@
               <button class="active" type="button" data-map-mode="food" aria-pressed="true">Food</button>
               <button type="button" data-map-mode="medicine" aria-pressed="false">Herbalism</button>
             </nav>
-            <p class="lede" id="mapLede">Track edible plants and mushrooms across Virginia by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.</p>
+            <p class="lede" id="mapLede">Track edible plants and mushrooms across Virginia, West Virginia, Maryland, Delaware, and Pennsylvania by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.</p>
             <p class="lede safety-lede" id="mapSafetyNote" hidden></p>
           </div>
           <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
@@ -126,7 +126,7 @@
     <div class="welcome-modal-backdrop" id="welcomeModal" hidden>
       <section class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-describedby="welcomeModalBody">
         <div class="welcome-copy" id="welcomeModalBody">
-          <p class="welcome-opening" id="welcomeModalTitle"><strong>Craft Almanac</strong> maps plants, fungi, and other local materials across Virginia by season, habitat, and access.</p>
+          <p class="welcome-opening" id="welcomeModalTitle"><strong>Craft Almanac</strong> maps plants, fungi, and other local materials across the Mid-Atlantic by season, habitat, and access.</p>
           <p>Before collecting, confirm identification, property boundaries, posted rules, and current harvesting limits. Map points show observations, not permission to collect.</p>
           <p>Some plants and fungi are toxic, have dangerous lookalikes, or require special preparation. Medicinal plant information is educational only and is not medical advice.</p>
           <p>Please collect only where allowed, take lightly, and leave enough for continued growth and wildlife.</p>
@@ -137,6 +137,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=clusters-1"></script>
+    <script src="./app.js?v=mid-atlantic-1"></script>
   </body>
 </html>

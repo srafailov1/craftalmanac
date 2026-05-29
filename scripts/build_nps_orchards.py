@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_PATH = ROOT / "data" / "nps-historic-orchards.json"
 SUMMARY_PATH = ROOT / "data" / "nps-historic-orchards-summary.json"
+BOUNDARY_PATH = ROOT / "data" / "mid-atlantic-boundary.json"
 LOCAL_CACHE = Path("/private/tmp/nps_orchards.geojson")
 SOURCE_URL = (
     "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/"
@@ -16,10 +17,10 @@ SOURCE_URL = (
 )
 
 BOUNDS = {
-    "south": 37.45,
-    "north": 39.15,
-    "west": -79.65,
-    "east": -77.45,
+    "south": 36.45,
+    "north": 42.65,
+    "west": -83.75,
+    "east": -74.45,
 }
 
 RULES = [
@@ -44,6 +45,39 @@ def in_bounds(lat, lng):
     )
 
 
+def read_region_boundary():
+    return json.loads(BOUNDARY_PATH.read_text(encoding="utf-8"))
+
+
+def point_in_region(lat, lng, boundary):
+    point = (lng, lat)
+    if boundary["type"] == "Polygon":
+        return point_in_polygon(point, boundary["coordinates"])
+    if boundary["type"] == "MultiPolygon":
+        return any(point_in_polygon(point, polygon) for polygon in boundary["coordinates"])
+    return False
+
+
+def point_in_polygon(point, polygon):
+    if not polygon or not point_in_ring(point, polygon[0]):
+        return False
+    return not any(point_in_ring(point, hole) for hole in polygon[1:])
+
+
+def point_in_ring(point, ring):
+    x, y = point
+    inside = False
+    previous_x, previous_y = ring[-1]
+    for current_x, current_y in ring:
+        crosses = (current_y > y) != (previous_y > y)
+        if crosses:
+            intersect_x = (previous_x - current_x) * (y - current_y) / (previous_y - current_y) + current_x
+            if x < intersect_x:
+                inside = not inside
+        previous_x, previous_y = current_x, current_y
+    return inside
+
+
 def matched_species(text):
     matches = []
     for species_id, pattern in RULES:
@@ -59,6 +93,7 @@ def clean_text(value, fallback=""):
 
 def build_subset():
     data = load_source()
+    region_boundary = read_region_boundary()
     records = []
     seen = set()
 
@@ -69,6 +104,8 @@ def build_subset():
             continue
         lng, lat = coordinates[:2]
         if not in_bounds(lat, lng):
+            continue
+        if not point_in_region(lat, lng, region_boundary):
             continue
 
         props = feature.get("properties") or {}
