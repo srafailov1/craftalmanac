@@ -1969,7 +1969,7 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
       properties: {},
       geometry
     };
-    const mask = getOutsideRegionMask(geometry);
+    const mask = getOutsideRegionBoundsMask();
 
     if (!map.getSource(REGION_BOUNDARY_SOURCE_ID)) {
       map.addSource(REGION_BOUNDARY_SOURCE_ID, {
@@ -2021,24 +2021,40 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
   }
 }
 
-function getOutsideRegionMask(geometry) {
-  const worldRing = [
-    [-180, -85],
-    [180, -85],
-    [180, 85],
-    [-180, 85],
-    [-180, -85]
-  ];
-  const holes = geometry.type === "Polygon"
-    ? geometry.coordinates.map((ring) => [...ring].reverse())
-    : geometry.coordinates.flatMap((polygon) => polygon.map((ring) => [...ring].reverse()));
+function getOutsideRegionBoundsMask() {
+  const [[west, south], [east, north]] = REGION_MAX_BOUNDS;
+  const world = {
+    west: -180,
+    south: -85,
+    east: 180,
+    north: 85
+  };
+  const makeRect = (left, bottom, right, top) => [[
+    [left, bottom],
+    [right, bottom],
+    [right, top],
+    [left, top],
+    [left, bottom]
+  ]];
+
+  // A precise world polygon with five adjacent state-shaped holes can render
+  // inconsistently at different zooms. Masking outside the regional extent is
+  // simpler and keeps every in-scope state at full opacity.
   return {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "Polygon",
-      coordinates: [worldRing, ...holes]
-    }
+    type: "FeatureCollection",
+    features: [
+      makeRect(world.west, world.south, west, world.north),
+      makeRect(east, world.south, world.east, world.north),
+      makeRect(west, world.south, east, south),
+      makeRect(west, north, east, world.north)
+    ].map((coordinates) => ({
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Polygon",
+        coordinates
+      }
+    }))
   };
 }
 
