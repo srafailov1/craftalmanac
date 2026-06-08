@@ -17,6 +17,12 @@ const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
 const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
 const MARKER_CLUSTER_MAX_ZOOM = 10;
 const MARKER_CLUSTER_RADIUS = 46;
+const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
+const FALLING_FRUIT_STATE_AGGREGATE_LAYER_ID = "falling-fruit-state-aggregate-circles";
+const FALLING_FRUIT_STATE_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-state-aggregate-counts";
+const FALLING_FRUIT_STATE_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-state-aggregate-labels";
+const FALLING_FRUIT_CHUNK_AGGREGATE_LAYER_ID = "falling-fruit-chunk-aggregate-circles";
+const FALLING_FRUIT_CHUNK_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-chunk-aggregate-counts";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
 const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
 const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
@@ -1764,6 +1770,7 @@ function render() {
   renderSpeciesState();
   renderHistogram();
   renderMarkers();
+  updateFallingFruitAggregates();
   if (state.mapReady) {
     scheduleDataLoad();
     schedulePublicLandLoad();
@@ -1890,6 +1897,104 @@ function renderMarkers() {
   });
 }
 
+function updateFallingFruitAggregates() {
+  if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+  getFallingFruitManifest()
+    .then((manifest) => {
+      if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+      map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID).setData(getFallingFruitAggregateCollection(manifest));
+    })
+    .catch(() => {
+      map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)?.setData({
+        type: "FeatureCollection",
+        features: []
+      });
+    });
+}
+
+function getFallingFruitAggregateCollection(manifest) {
+  if (!getActiveMapConfig().loadFallingFruit || state.savedLocationsOnly) {
+    return {
+      type: "FeatureCollection",
+      features: []
+    };
+  }
+  const selectedSpeciesIds = new Set(getSelectedCatalogItems()
+    .filter(isSpeciesAvailableOnSelectedDate)
+    .map((species) => species.id));
+  if (!selectedSpeciesIds.size) {
+    return {
+      type: "FeatureCollection",
+      features: []
+    };
+  }
+
+  const stateFeatures = (manifest.states || []).flatMap((item) => {
+    const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
+    if (!count) return [];
+    return [getAggregateFeature({
+      id: `state-${item.id}`,
+      level: "state",
+      label: item.name,
+      center: item.center || getBboxCenter(item.bbox),
+      count
+    })];
+  });
+
+  const chunkFeatures = (manifest.chunks || []).flatMap((item) => {
+    const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
+    if (!count) return [];
+    return [getAggregateFeature({
+      id: `chunk-${item.id}`,
+      level: "chunk",
+      label: "",
+      center: getBboxCenter(item.bbox),
+      count
+    })];
+  });
+
+  return {
+    type: "FeatureCollection",
+    features: [...stateFeatures, ...chunkFeatures]
+  };
+}
+
+function getAggregateRecordCount(countsBySpeciesId, selectedSpeciesIds) {
+  return Object.entries(countsBySpeciesId || {}).reduce((total, [sourceSpeciesId, count]) => {
+    const importedSpeciesId = getImportedSpeciesId(sourceSpeciesId);
+    return selectedSpeciesIds.has(importedSpeciesId) ? total + Number(count || 0) : total;
+  }, 0);
+}
+
+function getAggregateFeature({ id, level, label, center, count }) {
+  return {
+    type: "Feature",
+    id,
+    geometry: {
+      type: "Point",
+      coordinates: center
+    },
+    properties: {
+      id,
+      level,
+      label,
+      count,
+      countLabel: formatAggregateCount(count)
+    }
+  };
+}
+
+function getBboxCenter(bbox) {
+  const [west, south, east, north] = bbox;
+  return [(west + east) / 2, (south + north) / 2];
+}
+
+function formatAggregateCount(count) {
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1).replace(/\.0$/, "")}m`;
+  if (count >= 1000) return `${Math.round(count / 100) / 10}k`.replace(".0k", "k");
+  return String(count);
+}
+
 function getMarkerIconName(category, accessStatus) {
   return `marker-${category}-${accessStatus}`;
 }
@@ -2014,6 +2119,149 @@ function initMapLayers() {
         "line-opacity": 0.72
       }
     }, firstLineOrSymbolLayerId);
+  }
+
+  if (!map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) {
+    map.addSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID, {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: []
+      }
+    });
+  }
+
+  if (!map.getLayer(FALLING_FRUIT_STATE_AGGREGATE_LAYER_ID)) {
+    map.addLayer({
+      id: FALLING_FRUIT_STATE_AGGREGATE_LAYER_ID,
+      type: "circle",
+      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      maxzoom: 5.5,
+      filter: ["==", ["get", "level"], "state"],
+      paint: {
+        "circle-color": "#f7f2df",
+        "circle-opacity": 0.88,
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["get", "count"],
+          1, 10,
+          25, 15,
+          250, 23,
+          2500, 34,
+          25000, 46
+        ],
+        "circle-stroke-color": "#243a2a",
+        "circle-stroke-opacity": 0.82,
+        "circle-stroke-width": 1.4
+      }
+    });
+  }
+
+  if (!map.getLayer(FALLING_FRUIT_STATE_AGGREGATE_COUNT_LAYER_ID)) {
+    map.addLayer({
+      id: FALLING_FRUIT_STATE_AGGREGATE_COUNT_LAYER_ID,
+      type: "symbol",
+      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      maxzoom: 5.5,
+      filter: ["==", ["get", "level"], "state"],
+      layout: {
+        "text-field": ["get", "countLabel"],
+        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["get", "count"],
+          1, 11,
+          250, 13,
+          25000, 15
+        ],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true
+      },
+      paint: {
+        "text-color": "#243a2a"
+      }
+    });
+  }
+
+  if (!map.getLayer(FALLING_FRUIT_STATE_AGGREGATE_LABEL_LAYER_ID)) {
+    map.addLayer({
+      id: FALLING_FRUIT_STATE_AGGREGATE_LABEL_LAYER_ID,
+      type: "symbol",
+      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      maxzoom: 5.5,
+      filter: ["==", ["get", "level"], "state"],
+      layout: {
+        "text-field": ["get", "label"],
+        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-offset": [0, 2.2],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false
+      },
+      paint: {
+        "text-color": "#243a2a",
+        "text-halo-color": "#f7f2df",
+        "text-halo-width": 1.4
+      }
+    });
+  }
+
+  if (!map.getLayer(FALLING_FRUIT_CHUNK_AGGREGATE_LAYER_ID)) {
+    map.addLayer({
+      id: FALLING_FRUIT_CHUNK_AGGREGATE_LAYER_ID,
+      type: "circle",
+      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      minzoom: 5.5,
+      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
+      filter: ["==", ["get", "level"], "chunk"],
+      paint: {
+        "circle-color": "#f7f2df",
+        "circle-opacity": 0.82,
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["get", "count"],
+          1, 6,
+          10, 10,
+          100, 16,
+          1000, 25,
+          5000, 34
+        ],
+        "circle-stroke-color": "#243a2a",
+        "circle-stroke-opacity": 0.74,
+        "circle-stroke-width": 1.2
+      }
+    });
+  }
+
+  if (!map.getLayer(FALLING_FRUIT_CHUNK_AGGREGATE_COUNT_LAYER_ID)) {
+    map.addLayer({
+      id: FALLING_FRUIT_CHUNK_AGGREGATE_COUNT_LAYER_ID,
+      type: "symbol",
+      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      minzoom: 5.5,
+      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
+      filter: ["==", ["get", "level"], "chunk"],
+      layout: {
+        "text-field": ["get", "countLabel"],
+        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["get", "count"],
+          1, 9,
+          100, 11,
+          5000, 13
+        ],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true
+      },
+      paint: {
+        "text-color": "#243a2a"
+      }
+    });
   }
 
   if (!map.getSource(MARKERS_SOURCE_ID)) {

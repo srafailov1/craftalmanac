@@ -264,7 +264,10 @@ def classify_access(access):
 def build_subset():
     type_to_species, type_info = read_types()
     state_boundaries = read_state_boundaries()
+    state_lookup = {state["id"]: state for state in state_boundaries}
     records_by_chunk = {}
+    counts_by_chunk = {}
+    counts_by_state = {state["id"]: Counter() for state in state_boundaries}
     seen = set()
     skipped_hidden = 0
     scanned = 0
@@ -321,8 +324,11 @@ def build_subset():
                     **access,
                 }
                 records_by_chunk.setdefault(chunk_id, []).append([record.get(field, "") for field in RECORD_FIELDS])
+                counts_by_chunk.setdefault(chunk_id, Counter())[species_id] += 1
+                counts_by_state[state_id][species_id] += 1
 
     manifest_chunks = []
+    manifest_states = []
     total_records = 0
     counts = Counter()
 
@@ -343,7 +349,22 @@ def build_subset():
             "id": chunk_id,
             "bbox": get_chunk_bbox(chunk_id),
             "recordCount": len(records),
+            "countsBySpeciesId": dict(sorted(counts_by_chunk[chunk_id].items())),
             "path": f"./data/falling-fruit/us/chunks/{chunk_id}.json",
+        })
+
+    for state_id, state_counts in counts_by_state.items():
+        record_count = sum(state_counts.values())
+        if not record_count:
+            continue
+        state = state_lookup[state_id]
+        manifest_states.append({
+            "id": state_id,
+            "name": state["name"],
+            "bbox": state["bbox"],
+            "center": get_bbox_center(state["bbox"]),
+            "recordCount": record_count,
+            "countsBySpeciesId": dict(sorted(state_counts.items())),
         })
 
     summary = {
@@ -366,6 +387,7 @@ def build_subset():
         "chunkType": "degree-grid",
         "chunkSizeDegrees": CHUNK_SIZE_DEGREES,
         "recordFields": RECORD_FIELDS,
+        "states": sorted(manifest_states, key=lambda item: item["id"]),
         "chunks": sorted(manifest_chunks, key=lambda item: item["id"]),
         "recordCount": total_records,
     }
@@ -385,7 +407,12 @@ def get_chunk_bbox(chunk_id):
     lng_part, lat_part = chunk_id.split("_")
     west = parse_axis(lng_part)
     south = parse_axis(lat_part)
-    return [west, south, west + CHUNK_SIZE_DEGREES, south + CHUNK_SIZE_DEGREES]
+    return [west, south, round(west + CHUNK_SIZE_DEGREES, 5), round(south + CHUNK_SIZE_DEGREES, 5)]
+
+
+def get_bbox_center(bbox):
+    west, south, east, north = bbox
+    return [round((west + east) / 2, 5), round((south + north) / 2, 5)]
 
 
 def format_axis(value, negative_prefix, positive_prefix):
