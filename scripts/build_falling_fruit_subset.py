@@ -124,16 +124,36 @@ def in_bounds(lat, lng):
 
 def read_region_boundary():
     data = json.loads(BOUNDARY_PATH.read_text(encoding="utf-8"))
-    return data
+    polygons = data["coordinates"] if data["type"] == "MultiPolygon" else [data["coordinates"]]
+    return [
+        {
+            "rings": polygon,
+            "bbox": get_ring_bbox(polygon[0]),
+        }
+        for polygon in polygons
+        if polygon
+    ]
 
 
 def point_in_region(lat, lng, boundary):
     point = (lng, lat)
-    if boundary["type"] == "Polygon":
-        return point_in_polygon(point, boundary["coordinates"])
-    if boundary["type"] == "MultiPolygon":
-        return any(point_in_polygon(point, polygon) for polygon in boundary["coordinates"])
-    return False
+    return any(
+        point_in_bbox(point, polygon["bbox"])
+        and point_in_polygon(point, polygon["rings"])
+        for polygon in boundary
+    )
+
+
+def get_ring_bbox(ring):
+    lngs = [point[0] for point in ring]
+    lats = [point[1] for point in ring]
+    return (min(lngs), min(lats), max(lngs), max(lats))
+
+
+def point_in_bbox(point, bbox):
+    lng, lat = point
+    west, south, east, north = bbox
+    return west <= lng <= east and south <= lat <= north
 
 
 def point_in_polygon(point, polygon):

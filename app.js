@@ -9,7 +9,7 @@ const MAPBOX_TOKEN = window.FORAGE_CONFIG?.mapboxToken || "";
 const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
 const LIVE_DATA_TIMEOUT = 9000;
-const INATURALIST_REGION_PLACE_IDS = "7,33,39,4,42";
+const INATURALIST_REGION_PLACE_IDS = "1";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
@@ -27,11 +27,11 @@ const REGION_MASK_LAYER_ID = "region-mask-fill";
 const REGION_OUTLINE_LAYER_ID = "region-outline";
 const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
 const REGION_MAX_BOUNDS = [
-  [-84.1, 36.25],
-  [-74.45, 42.65]
+  [-125.2, 24.0],
+  [-66.8, 49.6]
 ];
-const REGION_NAME = "the Mid-Atlantic";
-const REGION_STATES = "Virginia, West Virginia, Maryland, Delaware, and Pennsylvania";
+const REGION_NAME = "the contiguous United States";
+const REGION_STATES = "the contiguous United States";
 const FOOD_CATEGORY_COLORS = {
   berry: "#d12f7a",
   fruit: "#1b8a5a",
@@ -761,7 +761,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: FOOD_CATEGORY_COLORS,
     catalog: foodSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit", "NPS orchards"],
-    dataNotes: `Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service across ${REGION_NAME}.`,
+    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, bundled regional community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.`,
     rulesLabel: "Harvesting rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: true
@@ -781,7 +781,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: INK_CATEGORY_COLORS,
     catalog: inkSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit"],
-    dataNotes: `Live observations from iNaturalist, relevant community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Ink materials still require permission to collect.`,
+    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, relevant bundled regional community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: false
@@ -850,9 +850,9 @@ mapboxgl.accessToken = MAPBOX_TOKEN;
 const map = new mapboxgl.Map({
   container: "map",
   style: MAPBOX_STYLE,
-  center: [-77.7, 39.3],
-  zoom: 7,
-  minZoom: 5,
+  center: [-98.6, 39.8],
+  zoom: 3.7,
+  minZoom: 3,
   maxZoom: 19,
   maxBounds: REGION_MAX_BOUNDS,
   renderWorldCopies: false,
@@ -889,6 +889,9 @@ const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
 const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
+const locationSearchForm = document.querySelector("#locationSearchForm");
+const locationSearchInput = document.querySelector("#locationSearchInput");
+const locationSearchStatus = document.querySelector("#locationSearchStatus");
 const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
 const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
@@ -1309,6 +1312,74 @@ function setMapMode(mode) {
   render();
 }
 
+function initLocationSearch() {
+  if (!locationSearchForm || !locationSearchInput) return;
+  locationSearchForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const query = locationSearchInput.value.trim();
+    if (!query) return;
+    await searchLocation(query);
+  });
+}
+
+async function searchLocation(query) {
+  if (!MAPBOX_TOKEN) {
+    setLocationSearchStatus("Location search needs a Mapbox token.");
+    return;
+  }
+
+  setLocationSearchStatus("Searching...");
+  const [[west, south], [east, north]] = REGION_MAX_BOUNDS;
+  const params = new URLSearchParams({
+    access_token: MAPBOX_TOKEN,
+    country: "us",
+    bbox: [west, south, east, north].join(","),
+    limit: "1",
+    autocomplete: "true",
+    types: "country,region,postcode,district,place,locality,neighborhood,address,poi"
+  });
+
+  try {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?${params.toString()}`;
+    const response = await fetchWithTimeout(url);
+    if (!response.ok) throw new Error(`Mapbox geocoder returned ${response.status}`);
+    const data = await response.json();
+    const feature = data.features?.[0];
+    if (!feature?.center) {
+      setLocationSearchStatus("No matching place found.");
+      return;
+    }
+
+    setLocationSearchStatus("");
+    if (Array.isArray(feature.bbox) && feature.bbox.length === 4) {
+      map.fitBounds([
+        [feature.bbox[0], feature.bbox[1]],
+        [feature.bbox[2], feature.bbox[3]]
+      ], {
+        padding: 72,
+        maxZoom: 12,
+        duration: 900
+      });
+      return;
+    }
+
+    map.flyTo({
+      center: feature.center,
+      zoom: Math.max(map.getZoom(), 11),
+      duration: 900,
+      essential: true
+    });
+  } catch {
+    setLocationSearchStatus("Search unavailable. Try again in a moment.");
+  }
+}
+
+function setLocationSearchStatus(message) {
+  if (!locationSearchStatus) return;
+  locationSearchStatus.textContent = message;
+  locationSearchStatus.hidden = !message;
+}
+
 function initControls() {
   syncActiveCatalog();
   renderModeChrome();
@@ -1319,6 +1390,7 @@ function initControls() {
   dateInput.max = `${ACTIVE_YEAR}-12-31`;
   renderFilterControls();
   initAccessControls();
+  initLocationSearch();
 
   daySlider.addEventListener("input", () => {
     state.selectedDay = Number(daySlider.value);
@@ -1961,7 +2033,7 @@ function initMapLayers() {
 
 async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
   try {
-    const response = await fetch("./data/mid-atlantic-boundary.json");
+    const response = await fetch("./data/contiguous-us-boundary.json");
     if (!response.ok) return;
     const geometry = await response.json();
     const feature = {
@@ -1969,7 +2041,7 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
       properties: {},
       geometry
     };
-    const mask = getOutsideRegionBoundsMask();
+    const mask = getOutsideRegionMask(geometry);
 
     if (!map.getSource(REGION_BOUNDARY_SOURCE_ID)) {
       map.addSource(REGION_BOUNDARY_SOURCE_ID, {
@@ -2021,40 +2093,25 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
   }
 }
 
-function getOutsideRegionBoundsMask() {
-  const [[west, south], [east, north]] = REGION_MAX_BOUNDS;
-  const world = {
-    west: -180,
-    south: -85,
-    east: 180,
-    north: 85
-  };
-  const makeRect = (left, bottom, right, top) => [[
-    [left, bottom],
-    [right, bottom],
-    [right, top],
-    [left, top],
-    [left, bottom]
-  ]];
+function getOutsideRegionMask(geometry) {
+  const worldRing = [
+    [-180, -85],
+    [180, -85],
+    [180, 85],
+    [-180, 85],
+    [-180, -85]
+  ];
+  const holes = geometry.type === "Polygon"
+    ? geometry.coordinates.map((ring) => [...ring].reverse())
+    : geometry.coordinates.flatMap((polygon) => polygon.map((ring) => [...ring].reverse()));
 
-  // A precise world polygon with five adjacent state-shaped holes can render
-  // inconsistently at different zooms. Masking outside the regional extent is
-  // simpler and keeps every in-scope state at full opacity.
   return {
-    type: "FeatureCollection",
-    features: [
-      makeRect(world.west, world.south, west, world.north),
-      makeRect(east, world.south, world.east, world.north),
-      makeRect(west, world.south, east, south),
-      makeRect(west, north, east, world.north)
-    ].map((coordinates) => ({
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "Polygon",
-        coordinates
-      }
-    }))
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Polygon",
+      coordinates: [worldRing, ...holes]
+    }
   };
 }
 

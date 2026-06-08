@@ -1,6 +1,6 @@
-# Craft Almanac Mid-Atlantic Material Maps
+# Craft Almanac Material Maps
 
-A local-first prototype for mapping edible plants, mushrooms, and craft materials across Virginia, West Virginia, Maryland, Delaware, and Pennsylvania.
+A local-first prototype for mapping edible plants, mushrooms, and craft materials across the contiguous United States.
 
 ## Run locally
 
@@ -12,12 +12,14 @@ Open `http://127.0.0.1:4173/`.
 
 ## Current prototype
 
-- Interactive Mapbox Outdoors basemap with movement constrained to the five-state Mid-Atlantic region.
+- Interactive Mapbox Outdoors basemap with movement constrained to the contiguous United States.
+- Contiguous U.S. boundary outline and exterior opacity mask derived from U.S. Census cartographic boundary data.
+- Location search for cities, addresses, ZIP codes, and other U.S. places.
 - Day-of-year filtering, a "Ripe today" shortcut, and a stacked seasonal availability chart.
 - Category filters for fruit, berries, nuts, and mushrooms.
 - Human-readable food groups in the sidebar, with more specific observed taxa shown in map popups.
-- Automatic iNaturalist observation loading for the current map bounds, selected state place scopes, and selected species groups.
-- Trimmed Mid-Atlantic Falling Fruit import at `data/falling-fruit-mid-atlantic.json`.
+- Automatic iNaturalist observation loading for the current map bounds, the U.S. place scope, and selected species groups.
+- Trimmed regional Falling Fruit import at `data/falling-fruit-mid-atlantic.json`.
 - Public access polygons from USGS PAD-US, queried live for the current map bounds.
 - Historic orchard records from the National Park Service cultural landscapes map, marked as permission-required.
 
@@ -35,13 +37,13 @@ window.FORAGE_CONFIG = {
 
 The starter species list is based on Shenandoah National Park's 2026 Superintendent's Compendium section on fruits, nuts, berries, and edible fungi that may be gathered by hand for personal use. The prototype intentionally excludes the broad "other edible fungi" bucket until mushrooms can be handled with a species-level edible whitelist. Park rules are not a general foraging license elsewhere; land ownership, local ordinances, and species-level safety still need to be checked.
 
-Falling Fruit is not represented with starter records anymore. The browser app loads a trimmed Mid-Atlantic JSON export from `data/falling-fruit-mid-atlantic.json`. Regenerate it from the downloaded Falling Fruit CSV archives with:
+Falling Fruit is not represented with starter records anymore. The browser app currently loads a trimmed regional JSON export from `data/falling-fruit-mid-atlantic.json`. A national Falling Fruit layer should be chunked by viewport or state before production use, because a single contiguous-U.S. JSON bundle is likely too heavy for first load. The local build script can be adapted from the downloaded Falling Fruit CSV archives with:
 
 ```sh
 python3 scripts/build_falling_fruit_subset.py
 ```
 
-The subset currently filters the full Falling Fruit archive to the app's material groups and the regional boundary stored in `data/mid-atlantic-boundary.json`.
+The current app bundle filters the full Falling Fruit archive to the app's material groups and the regional boundary stored in `data/mid-atlantic-boundary.json`. The contiguous U.S. boundary used for the map mask is stored in `data/contiguous-us-boundary.json`.
 
 iNaturalist data is useful for occurrence hints, not harvest permission. Some observations have obscured or generalized coordinates, and many taxa need edible-species filtering before they should be shown as forage recommendations.
 
@@ -59,8 +61,8 @@ See `ATTRIBUTION.md` for source links, license notes, and safety caveats.
 
 ## Good next steps
 
-- Add a city, county, or state selector if the regional Falling Fruit subset feels too broad.
+- Split Falling Fruit into viewport, state, or tile-sized chunks for national coverage.
 - Add a "verified by me" layer for personal notes and harvest history.
 - Build a safer species whitelist for edible fungi before adding more mushroom taxa.
 - Add plant-part metadata: fruit, nut, berry, mushroom, leaf, shoot, flower, root.
-- Consider more regional sources: state wildlife/park/forest data for VA, WV, MD, DE, and PA; USFS recreation/open data; municipal open-data tree inventories; and USDA/USFS Forest Inventory and Analysis occurrence data.
+- Consider more regional sources: state wildlife/park/forest data; USFS recreation/open data; municipal open-data tree inventories; and USDA/USFS Forest Inventory and Analysis occurrence data.

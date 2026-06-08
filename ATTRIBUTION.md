@@ -10,13 +10,19 @@ Source: https://www.inaturalist.org/pages/api+reference and https://www.inatural
 
 ## Falling Fruit
 
-The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to records in Virginia, West Virginia, Maryland, Delaware, and Pennsylvania matching this app's species groups. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
+The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to matching species groups. The currently bundled client-side subset is regional while the live map has expanded to the contiguous United States; a national Falling Fruit layer should be loaded in chunks or by viewport before being added to production. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
 
 Source: https://fallingfruit.org/data
 
-The regional boundary used to filter the Falling Fruit subset is derived from iNaturalist place geometries for Virginia, West Virginia, Maryland, Delaware, and Pennsylvania.
+The regional boundary used to filter the current Falling Fruit subset is derived from iNaturalist place geometries for Virginia, West Virginia, Maryland, Delaware, and Pennsylvania.
 
 Sources: https://www.inaturalist.org/places/virginia-us, https://www.inaturalist.org/places/west-virginia, https://www.inaturalist.org/places/maryland-us, https://www.inaturalist.org/places/delaware, and https://www.inaturalist.org/places/pennsylvania
+
+## U.S. Boundary
+
+The contiguous United States outline used for the map boundary and exterior opacity mask is derived from the U.S. Census Bureau 2023 cartographic boundary file for the national outline at 1:20,000,000 scale, filtered to the lower 48 states.
+
+Source: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
 
 ## USGS PAD-US Public Access
 
