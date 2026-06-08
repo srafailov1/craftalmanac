@@ -54,6 +54,11 @@ button {
   grid-template-columns: minmax(320px, 420px) 1fr;
   height: 100vh;
   overflow: hidden;
+  transition: grid-template-columns 180ms ease;
+}
+
+.app-shell.panel-collapsed {
+  grid-template-columns: 68px 1fr;
 }
 
 .panel {
@@ -70,8 +75,66 @@ button {
   z-index: 500;
 }
 
+.panel-topline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 14px;
+}
+
 .panel-grip {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--leaf-dark);
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panel-grip:hover,
+.panel-grip:focus-visible {
+  border-color: var(--leaf-dark);
+  outline: none;
+}
+
+.panel-grip-bar {
+  display: block;
+  width: 24px;
+  height: 3px;
+  border-radius: 999px;
+  background: #aebca8;
+}
+
+.panel-grip-label {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.panel.is-desktop-collapsed {
+  gap: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 12px;
+}
+
+.panel.is-desktop-collapsed .brand-block,
+.panel.is-desktop-collapsed .panel-content {
   display: none;
+}
+
+.panel.is-desktop-collapsed .panel-topline {
+  display: flex;
+  justify-content: center;
 }
 
 .section-toggle {

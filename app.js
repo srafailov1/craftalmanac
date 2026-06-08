@@ -18,11 +18,9 @@ const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
 const MARKER_CLUSTER_MAX_ZOOM = 10;
 const MARKER_CLUSTER_RADIUS = 46;
 const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
-const FALLING_FRUIT_STATE_AGGREGATE_LAYER_ID = "falling-fruit-state-aggregate-circles";
-const FALLING_FRUIT_STATE_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-state-aggregate-counts";
-const FALLING_FRUIT_STATE_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-state-aggregate-labels";
-const FALLING_FRUIT_CHUNK_AGGREGATE_LAYER_ID = "falling-fruit-chunk-aggregate-circles";
-const FALLING_FRUIT_CHUNK_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-chunk-aggregate-counts";
+const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
+const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
+const FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-aggregate-labels";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
 const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
 const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
@@ -36,8 +34,8 @@ const REGION_MASK_LAYER_ID = "region-mask-fill";
 const REGION_OUTLINE_LAYER_ID = "region-outline";
 const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
 const REGION_MAX_BOUNDS = [
-  [-125.2, 24.0],
-  [-66.8, 49.6]
+  [-127.0, 22.5],
+  [-65.0, 50.8]
 ];
 const REGION_NAME = "the contiguous United States";
 const REGION_STATES = "the contiguous United States";
@@ -863,8 +861,8 @@ const map = new mapboxgl.Map({
   container: "map",
   style: MAPBOX_STYLE,
   center: [-98.6, 39.8],
-  zoom: 3.7,
-  minZoom: 3,
+  zoom: 3.25,
+  minZoom: 2.4,
   maxZoom: 19,
   maxBounds: REGION_MAX_BOUNDS,
   renderWorldCopies: false,
@@ -885,7 +883,10 @@ map.addControl(new mapboxgl.GeolocateControl({
 }), "bottom-right");
 map.scrollZoom.setWheelZoomRate?.(1 / 280);
 map.scrollZoom.setZoomRate?.(1 / 60);
-window.addEventListener("resize", () => map.resize());
+window.addEventListener("resize", () => {
+  syncPanelGripLabel();
+  map.resize();
+});
 
 const dataStatus = document.querySelector("#dataStatus");
 const speciesCount = document.querySelector("#speciesCount");
@@ -912,6 +913,7 @@ let categoryInputs = [];
 let accessStatusInputs = [];
 const todayButton = document.querySelector("#todayButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
+const appShell = document.querySelector(".app-shell");
 const controlPanel = document.querySelector("#controlPanel");
 const panelGrip = document.querySelector("#panelGrip");
 const sectionToggles = [...document.querySelectorAll(".section-toggle")];
@@ -1481,6 +1483,7 @@ function initControls() {
   renderFilterControls();
   initAccessControls();
   initLocationSearch();
+  syncPanelGripLabel();
 
   daySlider.addEventListener("input", () => {
     state.selectedDay = Number(daySlider.value);
@@ -1564,6 +1567,7 @@ function initControls() {
   });
 
   map.on("moveend", () => {
+    updateFallingFruitAggregates();
     scheduleDataLoad();
     schedulePublicLandLoad();
   });
@@ -1581,7 +1585,11 @@ function setPanelCollapsed(collapsed) {
 }
 
 function handlePanelGripPointerDown(event) {
-  if (!isMobilePanel()) return;
+  if (!isMobilePanel()) {
+    event.preventDefault();
+    setDesktopPanelCollapsed(!controlPanel.classList.contains("is-desktop-collapsed"));
+    return;
+  }
   event.preventDefault();
   const startHeight = controlPanel.getBoundingClientRect().height;
   panelDragState = {
@@ -1595,6 +1603,24 @@ function handlePanelGripPointerDown(event) {
   panelGrip.addEventListener("pointermove", handlePanelGripPointerMove);
   panelGrip.addEventListener("pointerup", handlePanelGripPointerUp);
   panelGrip.addEventListener("pointercancel", handlePanelGripPointerUp);
+}
+
+function setDesktopPanelCollapsed(collapsed) {
+  controlPanel.classList.toggle("is-desktop-collapsed", collapsed);
+  appShell?.classList.toggle("panel-collapsed", collapsed);
+  panelGrip.setAttribute("aria-expanded", String(!collapsed));
+  syncPanelGripLabel();
+  requestAnimationFrame(() => map.resize());
+}
+
+function syncPanelGripLabel() {
+  const label = panelGrip?.querySelector(".panel-grip-label");
+  if (!label) return;
+  if (isMobilePanel()) {
+    label.textContent = "Menu";
+    return;
+  }
+  label.textContent = controlPanel.classList.contains("is-desktop-collapsed") ? "Menu" : "Map";
 }
 
 function handlePanelGripPointerMove(event) {
@@ -1929,7 +1955,19 @@ function getFallingFruitAggregateCollection(manifest) {
     };
   }
 
-  const stateFeatures = (manifest.states || []).flatMap((item) => {
+  const zoom = state.mapReady ? map.getZoom() : 0;
+  const features = zoom < 4.2
+    ? getStateAggregateFeatures(manifest, selectedSpeciesIds)
+    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateGridSize(zoom));
+
+  return {
+    type: "FeatureCollection",
+    features
+  };
+}
+
+function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
+  const features = (manifest.states || []).flatMap((item) => {
     const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
     if (!count) return [];
     return [getAggregateFeature({
@@ -1940,23 +1978,101 @@ function getFallingFruitAggregateCollection(manifest) {
       count
     })];
   });
+  return relaxAggregateFeatures(features);
+}
 
-  const chunkFeatures = (manifest.chunks || []).flatMap((item) => {
+function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize) {
+  const groups = new Map();
+  (manifest.chunks || []).forEach((item) => {
     const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
-    if (!count) return [];
-    return [getAggregateFeature({
-      id: `chunk-${item.id}`,
-      level: "chunk",
+    if (!count) return;
+    const center = getBboxCenter(item.bbox);
+    const west = Math.floor(center[0] / gridSize) * gridSize;
+    const south = Math.floor(center[1] / gridSize) * gridSize;
+    const key = `${west.toFixed(2)}_${south.toFixed(2)}`;
+    const group = groups.get(key) || {
+      id: key,
+      level: "grid",
       label: "",
-      center: getBboxCenter(item.bbox),
-      count
-    })];
+      count: 0,
+      weightedLng: 0,
+      weightedLat: 0
+    };
+    group.count += count;
+    group.weightedLng += center[0] * count;
+    group.weightedLat += center[1] * count;
+    groups.set(key, group);
   });
 
-  return {
-    type: "FeatureCollection",
-    features: [...stateFeatures, ...chunkFeatures]
-  };
+  return [...groups.values()].map((group) => getAggregateFeature({
+    id: `grid-${group.id}`,
+    level: "grid",
+    label: "",
+    center: [
+      group.weightedLng / group.count,
+      group.weightedLat / group.count
+    ],
+    count: group.count
+  }));
+}
+
+function getAggregateGridSize(zoom) {
+  if (zoom < 5.2) return 4;
+  if (zoom < 6.3) return 2;
+  if (zoom < 7.2) return 0.5;
+  return 0.15;
+}
+
+function relaxAggregateFeatures(features) {
+  if (!state.mapReady || features.length < 2 || map.getZoom() >= 4.2) return features;
+  const nodes = features.map((feature) => {
+    const point = map.project(feature.geometry.coordinates);
+    return {
+      feature,
+      x: point.x,
+      y: point.y,
+      radius: getAggregateScreenRadius(feature.properties.count)
+    };
+  });
+
+  for (let pass = 0; pass < 6; pass += 1) {
+    for (let i = 0; i < nodes.length; i += 1) {
+      for (let j = i + 1; j < nodes.length; j += 1) {
+        const a = nodes[i];
+        const b = nodes[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const distance = Math.max(1, Math.hypot(dx, dy));
+        const minDistance = a.radius + b.radius + 4;
+        if (distance >= minDistance) continue;
+        const push = (minDistance - distance) / 2;
+        const nx = dx / distance;
+        const ny = dy / distance;
+        a.x -= nx * push;
+        a.y -= ny * push;
+        b.x += nx * push;
+        b.y += ny * push;
+      }
+    }
+  }
+
+  return nodes.map((node) => {
+    const lngLat = map.unproject([node.x, node.y]);
+    return {
+      ...node.feature,
+      geometry: {
+        type: "Point",
+        coordinates: [lngLat.lng, lngLat.lat]
+      }
+    };
+  });
+}
+
+function getAggregateScreenRadius(count) {
+  if (count >= 25000) return 24;
+  if (count >= 2500) return 20;
+  if (count >= 250) return 16;
+  return 12;
 }
 
 function getAggregateRecordCount(countsBySpeciesId, selectedSpeciesIds) {
@@ -2131,40 +2247,38 @@ function initMapLayers() {
     });
   }
 
-  if (!map.getLayer(FALLING_FRUIT_STATE_AGGREGATE_LAYER_ID)) {
+  if (!map.getLayer(FALLING_FRUIT_AGGREGATE_LAYER_ID)) {
     map.addLayer({
-      id: FALLING_FRUIT_STATE_AGGREGATE_LAYER_ID,
+      id: FALLING_FRUIT_AGGREGATE_LAYER_ID,
       type: "circle",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      maxzoom: 5.5,
-      filter: ["==", ["get", "level"], "state"],
+      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       paint: {
         "circle-color": "#f7f2df",
-        "circle-opacity": 0.88,
+        "circle-opacity": 0.86,
         "circle-radius": [
           "interpolate",
           ["linear"],
           ["get", "count"],
-          1, 10,
-          25, 15,
-          250, 23,
-          2500, 34,
-          25000, 46
+          1, 7,
+          25, 11,
+          250, 16,
+          2500, 22,
+          25000, 28
         ],
         "circle-stroke-color": "#243a2a",
-        "circle-stroke-opacity": 0.82,
-        "circle-stroke-width": 1.4
+        "circle-stroke-opacity": 0.78,
+        "circle-stroke-width": 1.25
       }
     });
   }
 
-  if (!map.getLayer(FALLING_FRUIT_STATE_AGGREGATE_COUNT_LAYER_ID)) {
+  if (!map.getLayer(FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID)) {
     map.addLayer({
-      id: FALLING_FRUIT_STATE_AGGREGATE_COUNT_LAYER_ID,
+      id: FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID,
       type: "symbol",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      maxzoom: 5.5,
-      filter: ["==", ["get", "level"], "state"],
+      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       layout: {
         "text-field": ["get", "countLabel"],
         "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
@@ -2174,7 +2288,7 @@ function initMapLayers() {
           ["get", "count"],
           1, 11,
           250, 13,
-          25000, 15
+          25000, 14
         ],
         "text-allow-overlap": true,
         "text-ignore-placement": true
@@ -2185,12 +2299,12 @@ function initMapLayers() {
     });
   }
 
-  if (!map.getLayer(FALLING_FRUIT_STATE_AGGREGATE_LABEL_LAYER_ID)) {
+  if (!map.getLayer(FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID)) {
     map.addLayer({
-      id: FALLING_FRUIT_STATE_AGGREGATE_LABEL_LAYER_ID,
+      id: FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID,
       type: "symbol",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      maxzoom: 5.5,
+      maxzoom: 4.2,
       filter: ["==", ["get", "level"], "state"],
       layout: {
         "text-field": ["get", "label"],
@@ -2204,62 +2318,6 @@ function initMapLayers() {
         "text-color": "#243a2a",
         "text-halo-color": "#f7f2df",
         "text-halo-width": 1.4
-      }
-    });
-  }
-
-  if (!map.getLayer(FALLING_FRUIT_CHUNK_AGGREGATE_LAYER_ID)) {
-    map.addLayer({
-      id: FALLING_FRUIT_CHUNK_AGGREGATE_LAYER_ID,
-      type: "circle",
-      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      minzoom: 5.5,
-      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
-      filter: ["==", ["get", "level"], "chunk"],
-      paint: {
-        "circle-color": "#f7f2df",
-        "circle-opacity": 0.82,
-        "circle-radius": [
-          "interpolate",
-          ["linear"],
-          ["get", "count"],
-          1, 6,
-          10, 10,
-          100, 16,
-          1000, 25,
-          5000, 34
-        ],
-        "circle-stroke-color": "#243a2a",
-        "circle-stroke-opacity": 0.74,
-        "circle-stroke-width": 1.2
-      }
-    });
-  }
-
-  if (!map.getLayer(FALLING_FRUIT_CHUNK_AGGREGATE_COUNT_LAYER_ID)) {
-    map.addLayer({
-      id: FALLING_FRUIT_CHUNK_AGGREGATE_COUNT_LAYER_ID,
-      type: "symbol",
-      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      minzoom: 5.5,
-      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
-      filter: ["==", ["get", "level"], "chunk"],
-      layout: {
-        "text-field": ["get", "countLabel"],
-        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-        "text-size": [
-          "interpolate",
-          ["linear"],
-          ["get", "count"],
-          1, 9,
-          100, 11,
-          5000, 13
-        ],
-        "text-allow-overlap": true,
-        "text-ignore-placement": true
-      },
-      paint: {
-        "text-color": "#243a2a"
       }
     });
   }
