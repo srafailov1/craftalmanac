@@ -17,6 +17,9 @@ const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
 const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
 const MARKER_CLUSTER_MAX_ZOOM = 10;
 const MARKER_CLUSTER_RADIUS = 46;
+const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
+const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
+const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
 const PUBLIC_LANDS_MIN_RENDER_ZOOM = 8;
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
@@ -761,7 +764,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: FOOD_CATEGORY_COLORS,
     catalog: foodSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit", "NPS orchards"],
-    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, bundled regional community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.`,
+    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.`,
     rulesLabel: "Harvesting rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: true
@@ -781,7 +784,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: INK_CATEGORY_COLORS,
     catalog: inkSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit"],
-    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, relevant bundled regional community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.`,
+    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, relevant chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: false
@@ -830,7 +833,8 @@ const state = {
   publicLoadTimer: null,
   activeRequest: 0,
   activePublicRequest: 0,
-  fallingFruitData: null,
+  fallingFruitManifest: null,
+  fallingFruitChunkCache: new Map(),
   fallingFruitRecords: null,
   npsOrchardData: null,
   npsOrchardRecords: null,
@@ -840,6 +844,8 @@ const state = {
   publicLayerVisible: true,
   activePopup: null,
   hoverPopup: null,
+  locationSuggestionTimer: null,
+  locationSuggestions: [],
   favoriteSpecies: new Set(readFavoriteSpecies()),
   savedLocations: new Set(readSavedLocations()),
   savedLocationsOnly: false
@@ -891,6 +897,7 @@ const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
 const locationSearchForm = document.querySelector("#locationSearchForm");
 const locationSearchInput = document.querySelector("#locationSearchInput");
+const locationSearchSuggestions = document.querySelector("#locationSearchSuggestions");
 const locationSearchStatus = document.querySelector("#locationSearchStatus");
 const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
@@ -1320,21 +1327,50 @@ function initLocationSearch() {
     if (!query) return;
     await searchLocation(query);
   });
+  locationSearchInput.addEventListener("input", () => {
+    window.clearTimeout(state.locationSuggestionTimer);
+    state.locationSuggestionTimer = window.setTimeout(() => {
+      updateLocationSuggestions(locationSearchInput.value.trim());
+    }, 220);
+  });
+  locationSearchInput.addEventListener("blur", () => {
+    window.setTimeout(() => hideLocationSuggestions(), 160);
+  });
+  locationSearchInput.addEventListener("focus", () => {
+    renderLocationSuggestions();
+  });
 }
 
 async function searchLocation(query) {
-  if (!MAPBOX_TOKEN) {
-    setLocationSearchStatus("Location search needs a Mapbox token.");
+  const matchingSuggestion = state.locationSuggestions.find((feature) => (
+    feature.place_name?.toLowerCase() === query.toLowerCase()
+    || feature.text?.toLowerCase() === query.toLowerCase()
+  ));
+  if (matchingSuggestion) {
+    chooseLocationSuggestion(matchingSuggestion);
     return;
   }
 
-  setLocationSearchStatus("Searching...");
+  const suggestions = await fetchLocationSuggestions(query, 1);
+  if (suggestions[0]) {
+    chooseLocationSuggestion(suggestions[0]);
+    return;
+  }
+  setLocationSearchStatus("No matching place found.");
+}
+
+async function fetchLocationSuggestions(query, limit = 5) {
+  if (!MAPBOX_TOKEN) {
+    setLocationSearchStatus("Location search needs a Mapbox token.");
+    return [];
+  }
+
   const [[west, south], [east, north]] = REGION_MAX_BOUNDS;
   const params = new URLSearchParams({
     access_token: MAPBOX_TOKEN,
     country: "us",
     bbox: [west, south, east, north].join(","),
-    limit: "1",
+    limit: String(limit),
     autocomplete: "true",
     types: "country,region,postcode,district,place,locality,neighborhood,address,poi"
   });
@@ -1344,34 +1380,82 @@ async function searchLocation(query) {
     const response = await fetchWithTimeout(url);
     if (!response.ok) throw new Error(`Mapbox geocoder returned ${response.status}`);
     const data = await response.json();
-    const feature = data.features?.[0];
-    if (!feature?.center) {
-      setLocationSearchStatus("No matching place found.");
-      return;
-    }
-
-    setLocationSearchStatus("");
-    if (Array.isArray(feature.bbox) && feature.bbox.length === 4) {
-      map.fitBounds([
-        [feature.bbox[0], feature.bbox[1]],
-        [feature.bbox[2], feature.bbox[3]]
-      ], {
-        padding: 72,
-        maxZoom: 12,
-        duration: 900
-      });
-      return;
-    }
-
-    map.flyTo({
-      center: feature.center,
-      zoom: Math.max(map.getZoom(), 11),
-      duration: 900,
-      essential: true
-    });
+    return (data.features || []).filter((feature) => feature.center);
   } catch {
     setLocationSearchStatus("Search unavailable. Try again in a moment.");
+    return [];
   }
+}
+
+async function updateLocationSuggestions(query) {
+  if (query.length < 2) {
+    state.locationSuggestions = [];
+    hideLocationSuggestions();
+    setLocationSearchStatus("");
+    return;
+  }
+  const suggestions = await fetchLocationSuggestions(query, 5);
+  if (locationSearchInput.value.trim() !== query) return;
+  state.locationSuggestions = suggestions;
+  setLocationSearchStatus(suggestions.length ? "" : "No matching places found.");
+  renderLocationSuggestions();
+}
+
+function renderLocationSuggestions() {
+  if (!locationSearchSuggestions) return;
+  if (!state.locationSuggestions.length || document.activeElement !== locationSearchInput) {
+    hideLocationSuggestions();
+    return;
+  }
+  locationSearchSuggestions.innerHTML = state.locationSuggestions.map((feature, index) => `
+    <button class="location-suggestion" type="button" role="option" data-suggestion-index="${index}">
+      <span>${escapeHTML(feature.text || "Location")}</span>
+      <small>${escapeHTML(getLocationSuggestionContext(feature))}</small>
+    </button>
+  `).join("");
+  locationSearchSuggestions.hidden = false;
+  locationSearchSuggestions.querySelectorAll("[data-suggestion-index]").forEach((button) => {
+    button.addEventListener("mousedown", (event) => {
+      event.preventDefault();
+      chooseLocationSuggestion(state.locationSuggestions[Number(button.dataset.suggestionIndex)]);
+    });
+  });
+}
+
+function getLocationSuggestionContext(feature) {
+  return feature.place_name
+    ? feature.place_name.replace(feature.text, "").replace(/^,\s*/, "")
+    : "";
+}
+
+function chooseLocationSuggestion(feature) {
+  if (!feature?.center) return;
+  locationSearchInput.value = feature.place_name || feature.text || "";
+  hideLocationSuggestions();
+  setLocationSearchStatus("");
+  if (Array.isArray(feature.bbox) && feature.bbox.length === 4) {
+    map.fitBounds([
+      [feature.bbox[0], feature.bbox[1]],
+      [feature.bbox[2], feature.bbox[3]]
+    ], {
+      padding: 72,
+      maxZoom: 12,
+      duration: 900
+    });
+    return;
+  }
+  map.flyTo({
+    center: feature.center,
+    zoom: Math.max(map.getZoom(), 11),
+    duration: 900,
+    essential: true
+  });
+}
+
+function hideLocationSuggestions() {
+  if (!locationSearchSuggestions) return;
+  locationSearchSuggestions.hidden = true;
+  locationSearchSuggestions.innerHTML = "";
 }
 
 function setLocationSearchStatus(message) {
@@ -2322,10 +2406,8 @@ async function loadMapData() {
     : state.npsOrchardRecords || [];
   const nextRecords = [...state.inatRecords, ...fallingFruitRecords, ...npsOrchardRecords];
 
-  if (nextRecords.length) {
-    state.records = nextRecords;
-    renderMarkers();
-  }
+  state.records = nextRecords;
+  renderMarkers();
 
   const failedSources = [
     inatResult.status === "rejected" ? "iNaturalist" : "",
@@ -2373,20 +2455,68 @@ async function loadINaturalist() {
 
 async function loadFallingFruit() {
   try {
-    if (!state.fallingFruitData) {
-      const response = await fetch("./data/falling-fruit-mid-atlantic.json");
-      if (!response.ok) return [];
-      state.fallingFruitData = await response.json();
+    if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+      state.fallingFruitRecords = [];
+      return [];
     }
 
-    state.fallingFruitRecords = state.fallingFruitData
-      .filter((record) => !state.mapReady || recordInBounds(record, map.getBounds()))
+    const manifest = await getFallingFruitManifest();
+    const bounds = map.getBounds();
+    const chunks = getVisibleFallingFruitChunks(manifest, bounds);
+    if (!chunks.length || chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
+      state.fallingFruitRecords = [];
+      return [];
+    }
+
+    await Promise.all(chunks.map(loadFallingFruitChunk));
+    state.fallingFruitRecords = chunks
+      .flatMap((chunk) => state.fallingFruitChunkCache.get(chunk.id) || [])
+      .filter((record) => recordInBounds(record, bounds))
       .map(mapFallingFruitRecord)
       .filter(Boolean);
     return state.fallingFruitRecords;
   } catch {
     return [];
   }
+}
+
+async function getFallingFruitManifest() {
+  if (state.fallingFruitManifest) return state.fallingFruitManifest;
+  const response = await fetch(FALLING_FRUIT_MANIFEST_URL);
+  if (!response.ok) throw new Error(`Falling Fruit manifest returned ${response.status}`);
+  state.fallingFruitManifest = await response.json();
+  return state.fallingFruitManifest;
+}
+
+function getVisibleFallingFruitChunks(manifest, bounds) {
+  return (manifest.chunks || [])
+    .filter((chunk) => bboxIntersectsBounds(chunk.bbox, bounds));
+}
+
+async function loadFallingFruitChunk(chunk) {
+  if (state.fallingFruitChunkCache.has(chunk.id)) return;
+  const response = await fetch(chunk.path);
+  if (!response.ok) throw new Error(`Falling Fruit chunk ${chunk.id} returned ${response.status}`);
+  const rows = await response.json();
+  const fields = state.fallingFruitManifest?.recordFields || [];
+  state.fallingFruitChunkCache.set(chunk.id, rows.map((row) => expandFallingFruitRecord(row, fields)));
+}
+
+function expandFallingFruitRecord(row, fields) {
+  if (!Array.isArray(row)) return row;
+  return fields.reduce((record, field, index) => {
+    record[field] = row[index];
+    return record;
+  }, {});
+}
+
+function bboxIntersectsBounds(bbox, bounds) {
+  if (!bbox || bbox.length !== 4) return false;
+  const [west, south, east, north] = bbox;
+  return east >= bounds.getWest()
+    && west <= bounds.getEast()
+    && north >= bounds.getSouth()
+    && south <= bounds.getNorth();
 }
 
 async function loadNpsOrchards() {

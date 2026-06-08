@@ -10,13 +10,11 @@ Source: https://www.inaturalist.org/pages/api+reference and https://www.inatural
 
 ## Falling Fruit
 
-The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to matching species groups. The currently bundled client-side subset is regional while the live map has expanded to the contiguous United States; a national Falling Fruit layer should be loaded in chunks or by viewport before being added to production. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
+The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to matching species groups in the contiguous United States. The browser loads this data through a manifest and small viewport chunks rather than one national JSON file. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
 
 Source: https://fallingfruit.org/data
 
-The regional boundary used to filter the current Falling Fruit subset is derived from iNaturalist place geometries for Virginia, West Virginia, Maryland, Delaware, and Pennsylvania.
-
-Sources: https://www.inaturalist.org/places/virginia-us, https://www.inaturalist.org/places/west-virginia, https://www.inaturalist.org/places/maryland-us, https://www.inaturalist.org/places/delaware, and https://www.inaturalist.org/places/pennsylvania
+The state and national boundaries used to filter and chunk the Falling Fruit subset are derived from U.S. Census Bureau 2023 cartographic boundary files.
 
 ## U.S. Boundary
 

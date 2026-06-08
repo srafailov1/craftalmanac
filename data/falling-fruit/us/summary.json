@@ -1,0 +1,53 @@
+{
+  "sourceFiles": {
+    "locations": "/Users/sasson/Downloads/locations.csv.bz2",
+    "types": "/Users/sasson/Downloads/types.csv.bz2"
+  },
+  "bounds": {
+    "south": 24.0,
+    "north": 49.6,
+    "west": -125.2,
+    "east": -66.8
+  },
+  "scannedLocations": 1962493,
+  "skippedHiddenLocations": 14121,
+  "matchedLocations": 229004,
+  "recordCount": 231798,
+  "chunkSizeDegrees": 0.05,
+  "chunkCount": 6063,
+  "countsBySpeciesId": {
+    "apple": 45923,
+    "black-cherry": 2454,
+    "black-walnut": 5164,
+    "blackberry": 2663,
+    "blueberry": 523,
+    "cornelian-cherry": 692,
+    "elderberry": 865,
+    "fig": 3300,
+    "grape": 1416,
+    "hazelnut": 1524,
+    "hickory": 6139,
+    "huckleberry": 121,
+    "ink-autumn-olive": 222,
+    "ink-goldenrod": 62,
+    "ink-honeysuckle": 183,
+    "ink-oak": 75494,
+    "ink-osage-orange": 145,
+    "ink-pokeweed": 232,
+    "ink-privet": 92,
+    "morel": 21,
+    "pawpaw": 956,
+    "peach": 1910,
+    "pear": 22669,
+    "persimmon": 2087,
+    "plum": 39593,
+    "raspberry": 1217,
+    "ribes": 296,
+    "serviceberry": 9166,
+    "sour-cherry": 3550,
+    "sumac": 1264,
+    "sweet-cherry": 1248,
+    "wild-strawberry": 405,
+    "wineberry": 202
+  }
+}

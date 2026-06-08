@@ -9,17 +9,38 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TYPES_PATH = Path("/Users/sasson/Downloads/types.csv.bz2")
 LOCATIONS_PATH = Path("/Users/sasson/Downloads/locations.csv.bz2")
-OUTPUT_PATH = ROOT / "data" / "falling-fruit-mid-atlantic.json"
-SUMMARY_PATH = ROOT / "data" / "falling-fruit-mid-atlantic-summary.json"
-BOUNDARY_PATH = ROOT / "data" / "mid-atlantic-boundary.json"
+OUTPUT_DIR = ROOT / "data" / "falling-fruit" / "us"
+CHUNKS_DIR = OUTPUT_DIR / "chunks"
+MANIFEST_PATH = OUTPUT_DIR / "manifest.json"
+SUMMARY_PATH = OUTPUT_DIR / "summary.json"
+STATE_BOUNDARY_PATH = ROOT / "data" / "contiguous-us-states.json"
+CHUNK_SIZE_DEGREES = 0.05
+CHUNK_AXIS_SCALE = 100
+RECORD_FIELDS = [
+    "id",
+    "speciesId",
+    "name",
+    "observedName",
+    "observedScientificName",
+    "lat",
+    "lng",
+    "note",
+    "confidence",
+    "sourceUrl",
+    "idDate",
+    "access",
+    "accessClass",
+    "publicLand",
+    "accessNote",
+]
 
-# Mid-Atlantic browser subset. The polygon is checked after this broad
-# bounding-box screen so neighboring-state records near the border are excluded.
+# Contiguous U.S. browser subset. The state polygons are checked after this
+# broad bounding-box screen so Alaska, Hawaii, and territories are excluded.
 BOUNDS = {
-    "south": 36.45,
-    "north": 42.65,
-    "west": -83.75,
-    "east": -74.45,
+    "south": 24.0,
+    "north": 49.6,
+    "west": -125.2,
+    "east": -66.8,
 }
 
 RULES = [
@@ -122,26 +143,39 @@ def in_bounds(lat, lng):
     )
 
 
-def read_region_boundary():
-    data = json.loads(BOUNDARY_PATH.read_text(encoding="utf-8"))
-    polygons = data["coordinates"] if data["type"] == "MultiPolygon" else [data["coordinates"]]
-    return [
-        {
-            "rings": polygon,
-            "bbox": get_ring_bbox(polygon[0]),
-        }
-        for polygon in polygons
-        if polygon
-    ]
+def read_state_boundaries():
+    data = json.loads(STATE_BOUNDARY_PATH.read_text(encoding="utf-8"))
+    states = []
+    for state in data["states"]:
+        polygons = state["geometry"]["coordinates"]
+        states.append({
+            "id": state["id"],
+            "name": state["name"],
+            "bbox": state["bbox"],
+            "polygons": [
+                {
+                    "rings": polygon,
+                    "bbox": get_ring_bbox(polygon[0]),
+                }
+                for polygon in polygons
+                if polygon
+            ],
+        })
+    return states
 
 
-def point_in_region(lat, lng, boundary):
+def get_point_state_id(lat, lng, states):
     point = (lng, lat)
-    return any(
-        point_in_bbox(point, polygon["bbox"])
-        and point_in_polygon(point, polygon["rings"])
-        for polygon in boundary
-    )
+    for state in states:
+        if not point_in_bbox(point, state["bbox"]):
+            continue
+        if any(
+            point_in_bbox(point, polygon["bbox"])
+            and point_in_polygon(point, polygon["rings"])
+            for polygon in state["polygons"]
+        ):
+            return state["id"]
+    return None
 
 
 def get_ring_bbox(ring):
@@ -186,7 +220,7 @@ def clean_note(row, type_name):
         pieces.append(f"Falling Fruit season: {start}-{stop}.")
     if not pieces:
         pieces.append(f"Falling Fruit record for {type_name}.")
-    return " ".join(pieces)[:500]
+    return " ".join(pieces)[:260]
 
 
 def classify_access(access):
@@ -229,11 +263,12 @@ def classify_access(access):
 
 def build_subset():
     type_to_species, type_info = read_types()
-    region_boundary = read_region_boundary()
-    records = []
+    state_boundaries = read_state_boundaries()
+    records_by_chunk = {}
     seen = set()
     skipped_hidden = 0
     scanned = 0
+    matched_locations = 0
 
     with bz2.open(LOCATIONS_PATH, "rt", encoding="utf-8", newline="") as handle:
         for row in csv.DictReader(handle):
@@ -248,8 +283,6 @@ def build_subset():
                 continue
             if not in_bounds(lat, lng):
                 continue
-            if not point_in_region(lat, lng, region_boundary):
-                continue
 
             type_ids = [
                 int(value)
@@ -258,17 +291,22 @@ def build_subset():
             ]
             if not type_ids:
                 continue
+            state_id = get_point_state_id(lat, lng, state_boundaries)
+            if not state_id:
+                continue
+            matched_locations += 1
+            chunk_id = get_chunk_id(lat, lng)
 
             for type_id in type_ids:
                 species_id = type_to_species[type_id]
-                key = (row["id"], species_id, type_id)
+                key = (chunk_id, row["id"], species_id, type_id)
                 if key in seen:
                     continue
                 seen.add(key)
                 info = type_info[type_id]
                 record_name = row.get("address") or info["name"] or "Falling Fruit record"
                 access = classify_access(row.get("access"))
-                records.append({
+                record = {
                     "id": f"{row['id']}-{type_id}",
                     "speciesId": species_id,
                     "name": record_name,
@@ -281,10 +319,33 @@ def build_subset():
                     "sourceUrl": f"https://fallingfruit.org/locations/{row['id']}",
                     "idDate": row.get("updated_at") or row.get("created_at") or "",
                     **access,
-                })
+                }
+                records_by_chunk.setdefault(chunk_id, []).append([record.get(field, "") for field in RECORD_FIELDS])
 
-    records.sort(key=lambda item: (item["speciesId"], item["lat"], item["lng"], item["id"]))
-    counts = Counter(record["speciesId"] for record in records)
+    manifest_chunks = []
+    total_records = 0
+    counts = Counter()
+
+    CHUNKS_DIR.mkdir(parents=True, exist_ok=True)
+    for stale_path in CHUNKS_DIR.glob("*.json"):
+        stale_path.unlink()
+
+    for chunk_id, records in records_by_chunk.items():
+        species_index = RECORD_FIELDS.index("speciesId")
+        lat_index = RECORD_FIELDS.index("lat")
+        lng_index = RECORD_FIELDS.index("lng")
+        id_index = RECORD_FIELDS.index("id")
+        records.sort(key=lambda item: (item[species_index], item[lat_index], item[lng_index], item[id_index]))
+        (CHUNKS_DIR / f"{chunk_id}.json").write_text(json.dumps(records, separators=(",", ":")), encoding="utf-8")
+        total_records += len(records)
+        counts.update(record[species_index] for record in records)
+        manifest_chunks.append({
+            "id": chunk_id,
+            "bbox": get_chunk_bbox(chunk_id),
+            "recordCount": len(records),
+            "path": f"./data/falling-fruit/us/chunks/{chunk_id}.json",
+        })
+
     summary = {
         "sourceFiles": {
             "locations": str(LOCATIONS_PATH),
@@ -293,14 +354,49 @@ def build_subset():
         "bounds": BOUNDS,
         "scannedLocations": scanned,
         "skippedHiddenLocations": skipped_hidden,
-        "recordCount": len(records),
+        "matchedLocations": matched_locations,
+        "recordCount": total_records,
+        "chunkSizeDegrees": CHUNK_SIZE_DEGREES,
+        "chunkCount": len(manifest_chunks),
         "countsBySpeciesId": dict(sorted(counts.items())),
     }
+    manifest = {
+        "source": "Falling Fruit",
+        "scope": "contiguous-us",
+        "chunkType": "degree-grid",
+        "chunkSizeDegrees": CHUNK_SIZE_DEGREES,
+        "recordFields": RECORD_FIELDS,
+        "chunks": sorted(manifest_chunks, key=lambda item: item["id"]),
+        "recordCount": total_records,
+    }
 
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(records, indent=2), encoding="utf-8")
+    MANIFEST_PATH.write_text(json.dumps(manifest, separators=(",", ":")), encoding="utf-8")
     SUMMARY_PATH.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
+
+
+def get_chunk_id(lat, lng):
+    west = int(lng // CHUNK_SIZE_DEGREES) * CHUNK_SIZE_DEGREES
+    south = int(lat // CHUNK_SIZE_DEGREES) * CHUNK_SIZE_DEGREES
+    return f"{format_axis(west, 'w', 'e')}_{format_axis(south, 's', 'n')}"
+
+
+def get_chunk_bbox(chunk_id):
+    lng_part, lat_part = chunk_id.split("_")
+    west = parse_axis(lng_part)
+    south = parse_axis(lat_part)
+    return [west, south, west + CHUNK_SIZE_DEGREES, south + CHUNK_SIZE_DEGREES]
+
+
+def format_axis(value, negative_prefix, positive_prefix):
+    prefix = negative_prefix if value < 0 else positive_prefix
+    scaled = int(round(abs(value) * CHUNK_AXIS_SCALE))
+    return f"{prefix}{scaled:05d}"
+
+
+def parse_axis(value):
+    sign = -1 if value[0] in {"w", "s"} else 1
+    return sign * int(value[1:]) / CHUNK_AXIS_SCALE
 
 
 if __name__ == "__main__":
