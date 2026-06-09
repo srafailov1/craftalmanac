@@ -12,7 +12,7 @@ const LIVE_DATA_TIMEOUT = 9000;
 const INATURALIST_DEFAULT_PER_PAGE = 120;
 const INATURALIST_TILE_PER_PAGE = 50;
 const INATURALIST_AGGREGATE_DELAY = 260;
-const INATURALIST_AGGREGATE_MAX_TILES = 72;
+const INATURALIST_AGGREGATE_MAX_TILES = 240;
 const INATURALIST_AGGREGATE_SPECIES_ID = "__inat-aggregate";
 const INATURALIST_REGION_PLACE_IDS = "1";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
@@ -2897,21 +2897,31 @@ async function loadINaturalistAggregates() {
   if (!missingTiles.length) return;
 
   try {
-    const fetchedItems = await mapWithConcurrency(missingTiles, 6, async (tile) => {
+    const fetchedItems = [];
+    await mapWithConcurrency(missingTiles, 6, async (tile) => {
       const item = await fetchINaturalistAggregateTile(taxonIds, tile);
       state.inatAggregateCache.set(getINaturalistAggregateCacheKey(taxonIds, tile), item);
+      fetchedItems.push(item);
+      if (requestId === state.activeINaturalistAggregateRequest && fetchedItems.length % 12 === 0) {
+        state.inatAggregateItems = getNonzeroAggregateItems([...cachedItems, ...fetchedItems]);
+        updateFallingFruitAggregates();
+      }
       return item;
     });
     if (requestId !== state.activeINaturalistAggregateRequest) return;
-    state.inatAggregateItems = [...cachedItems, ...fetchedItems].filter((item) => (
-      getAggregateRecordCount(item.countsBySpeciesId, new Set()) > 0
-    ));
+    state.inatAggregateItems = getNonzeroAggregateItems([...cachedItems, ...fetchedItems]);
     updateFallingFruitAggregates();
   } catch {
     if (requestId !== state.activeINaturalistAggregateRequest) return;
     state.inatAggregateItems = cachedItems;
     updateFallingFruitAggregates();
   }
+}
+
+function getNonzeroAggregateItems(items) {
+  return items.filter((item) => (
+    getAggregateRecordCount(item.countsBySpeciesId, new Set()) > 0
+  ));
 }
 
 async function loadMapData() {
@@ -3068,12 +3078,7 @@ function getINaturalistAggregateItem(tile, count) {
 }
 
 function getINaturalistAggregateTiles(bounds, zoom) {
-  const baseBounds = {
-    west: Math.max(REGION_MAX_BOUNDS[0][0], bounds.getWest()),
-    south: Math.max(REGION_MAX_BOUNDS[0][1], bounds.getSouth()),
-    east: Math.min(REGION_MAX_BOUNDS[1][0], bounds.getEast()),
-    north: Math.min(REGION_MAX_BOUNDS[1][1], bounds.getNorth())
-  };
+  const baseBounds = getINaturalistAggregateBounds(bounds, zoom);
   const baseSize = getINaturalistAggregateTileSize(zoom);
   const size = getAdjustedAggregateTileSize(baseBounds, baseSize);
   const westStart = Math.floor(baseBounds.west / size) * size;
@@ -3097,10 +3102,28 @@ function getINaturalistAggregateTiles(bounds, zoom) {
   return tiles;
 }
 
+function getINaturalistAggregateBounds(bounds, zoom) {
+  if (!shouldUseViewportAggregateBounds(zoom, bounds)) {
+    return {
+      west: REGION_MAX_BOUNDS[0][0],
+      south: REGION_MAX_BOUNDS[0][1],
+      east: REGION_MAX_BOUNDS[1][0],
+      north: REGION_MAX_BOUNDS[1][1]
+    };
+  }
+  const paddedBounds = getPaddedAggregateBounds(bounds, zoom);
+  return {
+    west: paddedBounds.getWest(),
+    south: paddedBounds.getSouth(),
+    east: paddedBounds.getEast(),
+    north: paddedBounds.getNorth()
+  };
+}
+
 function getINaturalistAggregateTileSize(zoom) {
-  if (zoom < 3.4) return 5.5;
-  if (zoom < 4.6) return 3.2;
-  if (zoom < 5.8) return 1.8;
+  if (zoom < 3.4) return 3.4;
+  if (zoom < 4.6) return 2.4;
+  if (zoom < 5.8) return 1.45;
   if (zoom < 6.8) return 1;
   return 0.55;
 }
