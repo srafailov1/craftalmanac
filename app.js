@@ -1568,7 +1568,7 @@ function initControls() {
   });
 
   map.on("move", () => {
-    if (map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    if (shouldRebalanceAggregatesOnMove()) {
       scheduleFallingFruitAggregateUpdate();
     }
   });
@@ -1617,7 +1617,23 @@ function setDesktopPanelCollapsed(collapsed) {
   appShell?.classList.toggle("panel-collapsed", collapsed);
   panelGrip.setAttribute("aria-expanded", String(!collapsed));
   syncPanelGripLabel();
-  requestAnimationFrame(() => map.resize());
+  resizeMapAfterLayoutChange();
+}
+
+function resizeMapAfterLayoutChange() {
+  if (!state.mapReady) return;
+  const view = {
+    center: map.getCenter(),
+    zoom: map.getZoom(),
+    bearing: map.getBearing(),
+    pitch: map.getPitch()
+  };
+  const resize = () => {
+    map.resize();
+    map.jumpTo(view);
+  };
+  requestAnimationFrame(resize);
+  window.setTimeout(resize, 220);
 }
 
 function syncPanelGripLabel() {
@@ -1970,10 +1986,11 @@ function getFallingFruitAggregateCollection(manifest) {
 
   const zoom = state.mapReady ? map.getZoom() : 0;
   const bounds = state.mapReady ? map.getBounds() : null;
-  const aggregateBounds = bounds ? getPaddedAggregateBounds(bounds, zoom) : null;
-  const features = shouldUseStateAggregates(zoom, bounds)
-    ? getStateAggregateFeatures(manifest, selectedSpeciesIds)
-    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateScreenGridSize(zoom), aggregateBounds);
+  const useViewportAggregation = shouldUseViewportAggregateBounds(zoom, bounds);
+  const aggregateBounds = useViewportAggregation && bounds ? getPaddedAggregateBounds(bounds, zoom) : null;
+  const features = useViewportAggregation
+    ? getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateScreenGridSize(zoom), aggregateBounds, "screen")
+    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateGeoGridSize(zoom), null, "geo");
 
   return {
     type: "FeatureCollection",
@@ -1996,20 +2013,24 @@ function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
   return mergeOverlappingAggregateFeatures(features);
 }
 
-function shouldUseStateAggregates(zoom, bounds) {
-  if (!bounds) return true;
-  return zoom < 3.75 && getBoundsLngSpan(bounds) > 42;
+function shouldRebalanceAggregatesOnMove() {
+  if (!state.mapReady || map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) return false;
+  return shouldUseViewportAggregateBounds(map.getZoom(), map.getBounds());
 }
 
-function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds) {
+function shouldUseViewportAggregateBounds(zoom, bounds) {
+  if (!bounds) return false;
+  return zoom >= 5.6 || getBoundsLngSpan(bounds) <= 18;
+}
+
+function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds, mode) {
   const groups = new Map();
   (manifest.chunks || []).forEach((item) => {
     if (bounds && !bboxIntersectsBounds(item.bbox, bounds)) return;
     const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
     if (!count) return;
     const center = getAggregateItemCenter(item, selectedSpeciesIds);
-    const point = state.mapReady ? map.project(center) : { x: center[0], y: center[1] };
-    const key = `${Math.floor(point.x / gridSize)}_${Math.floor(point.y / gridSize)}`;
+    const key = getAggregateGridKey(center, gridSize, mode);
     const group = groups.get(key) || {
       id: key,
       level: "grid",
@@ -2035,6 +2056,23 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds
     count: group.count
   }));
   return mergeOverlappingAggregateFeatures(features);
+}
+
+function getAggregateGridKey(center, gridSize, mode) {
+  if (mode === "screen") {
+    const point = state.mapReady ? map.project(center) : { x: center[0], y: center[1] };
+    return `${Math.floor(point.x / gridSize)}_${Math.floor(point.y / gridSize)}`;
+  }
+  const west = Math.floor(center[0] / gridSize) * gridSize;
+  const south = Math.floor(center[1] / gridSize) * gridSize;
+  return `${west.toFixed(2)}_${south.toFixed(2)}`;
+}
+
+function getAggregateGeoGridSize(zoom) {
+  if (zoom < 3.2) return 1.2;
+  if (zoom < 4.2) return 0.85;
+  if (zoom < 5.2) return 0.55;
+  return 0.35;
 }
 
 function getAggregateScreenGridSize(zoom) {
