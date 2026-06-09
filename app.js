@@ -835,6 +835,7 @@ const state = {
   inatRecordCache: new Map(),
   loadTimer: null,
   publicLoadTimer: null,
+  aggregateTimer: null,
   activeRequest: 0,
   activePublicRequest: 0,
   fallingFruitManifest: null,
@@ -1566,6 +1567,12 @@ function initControls() {
     render();
   });
 
+  map.on("move", () => {
+    if (map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+      scheduleFallingFruitAggregateUpdate();
+    }
+  });
+
   map.on("moveend", () => {
     updateFallingFruitAggregates();
     scheduleDataLoad();
@@ -1925,6 +1932,7 @@ function renderMarkers() {
 
 function updateFallingFruitAggregates() {
   if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+  window.clearTimeout(state.aggregateTimer);
   getFallingFruitManifest()
     .then((manifest) => {
       if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
@@ -1936,6 +1944,11 @@ function updateFallingFruitAggregates() {
         features: []
       });
     });
+}
+
+function scheduleFallingFruitAggregateUpdate() {
+  window.clearTimeout(state.aggregateTimer);
+  state.aggregateTimer = window.setTimeout(updateFallingFruitAggregates, 90);
 }
 
 function getFallingFruitAggregateCollection(manifest) {
@@ -1956,9 +1969,11 @@ function getFallingFruitAggregateCollection(manifest) {
   }
 
   const zoom = state.mapReady ? map.getZoom() : 0;
-  const features = zoom < 4.2
+  const bounds = state.mapReady ? map.getBounds() : null;
+  const aggregateBounds = bounds ? getPaddedAggregateBounds(bounds, zoom) : null;
+  const features = shouldUseStateAggregates(zoom, bounds)
     ? getStateAggregateFeatures(manifest, selectedSpeciesIds)
-    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateGridSize(zoom));
+    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateGridSize(zoom), aggregateBounds);
 
   return {
     type: "FeatureCollection",
@@ -1981,9 +1996,15 @@ function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
   return mergeOverlappingAggregateFeatures(features);
 }
 
-function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize) {
+function shouldUseStateAggregates(zoom, bounds) {
+  if (!bounds) return true;
+  return zoom < 3.75 && getBoundsLngSpan(bounds) > 42;
+}
+
+function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds) {
   const groups = new Map();
   (manifest.chunks || []).forEach((item) => {
+    if (bounds && !bboxIntersectsBounds(item.bbox, bounds)) return;
     const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
     if (!count) return;
     const center = getBboxCenter(item.bbox);
@@ -2018,10 +2039,27 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize) {
 }
 
 function getAggregateGridSize(zoom) {
+  if (zoom < 4.2) return 6;
   if (zoom < 5.2) return 4;
   if (zoom < 6.3) return 2;
   if (zoom < 7.2) return 0.5;
   return 0.15;
+}
+
+function getPaddedAggregateBounds(bounds, zoom) {
+  const padRatio = zoom < 5.5 ? 0.18 : 0.1;
+  const lngPad = getBoundsLngSpan(bounds) * padRatio;
+  const latPad = (bounds.getNorth() - bounds.getSouth()) * padRatio;
+  return {
+    getWest: () => Math.max(REGION_MAX_BOUNDS[0][0], bounds.getWest() - lngPad),
+    getSouth: () => Math.max(REGION_MAX_BOUNDS[0][1], bounds.getSouth() - latPad),
+    getEast: () => Math.min(REGION_MAX_BOUNDS[1][0], bounds.getEast() + lngPad),
+    getNorth: () => Math.min(REGION_MAX_BOUNDS[1][1], bounds.getNorth() + latPad)
+  };
+}
+
+function getBoundsLngSpan(bounds) {
+  return bounds.getEast() - bounds.getWest();
 }
 
 function mergeOverlappingAggregateFeatures(features) {
