@@ -9,6 +9,8 @@ const MAPBOX_TOKEN = window.FORAGE_CONFIG?.mapboxToken || "";
 const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
 const LIVE_DATA_TIMEOUT = 9000;
+const INATURALIST_DEFAULT_PER_PAGE = 120;
+const INATURALIST_TILE_PER_PAGE = 50;
 const INATURALIST_REGION_PLACE_IDS = "1";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const MARKERS_SOURCE_ID = "forage-records";
@@ -1633,7 +1635,6 @@ function resizeMapAfterLayoutChange() {
     map.jumpTo(view);
   };
   requestAnimationFrame(resize);
-  window.setTimeout(resize, 220);
 }
 
 function syncPanelGripLabel() {
@@ -1968,7 +1969,7 @@ function scheduleFallingFruitAggregateUpdate() {
 }
 
 function getFallingFruitAggregateCollection(manifest) {
-  if (!getActiveMapConfig().loadFallingFruit || state.savedLocationsOnly) {
+  if (state.savedLocationsOnly) {
     return {
       type: "FeatureCollection",
       features: []
@@ -1988,9 +1989,10 @@ function getFallingFruitAggregateCollection(manifest) {
   const bounds = state.mapReady ? map.getBounds() : null;
   const useViewportAggregation = shouldUseViewportAggregateBounds(zoom, bounds);
   const aggregateBounds = useViewportAggregation && bounds ? getPaddedAggregateBounds(bounds, zoom) : null;
-  const features = useViewportAggregation
-    ? getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateScreenGridSize(zoom), aggregateBounds, "screen")
-    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateGeoGridSize(zoom), null, "geo");
+  const aggregateItems = getAggregateItems(manifest, selectedSpeciesIds, aggregateBounds);
+  const mode = useViewportAggregation ? "screen" : "geo";
+  const gridSize = useViewportAggregation ? getAggregateScreenGridSize(zoom) : getAggregateGeoGridSize(zoom);
+  const features = getGridAggregateFeatures(aggregateItems, selectedSpeciesIds, gridSize, aggregateBounds, mode);
 
   return {
     type: "FeatureCollection",
@@ -2023,9 +2025,35 @@ function shouldUseViewportAggregateBounds(zoom, bounds) {
   return zoom >= 5.6 || getBoundsLngSpan(bounds) <= 18;
 }
 
-function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds, mode) {
+function getAggregateItems(manifest, selectedSpeciesIds, bounds) {
+  const items = getActiveMapConfig().loadFallingFruit
+    ? [...(manifest.chunks || [])]
+    : [];
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    items.push(...getLiveAggregateItems(selectedSpeciesIds, bounds));
+  }
+  return items;
+}
+
+function getLiveAggregateItems(selectedSpeciesIds, bounds) {
+  return [...state.inatRecordCache.values()].flatMap((record) => {
+    if (!selectedSpeciesIds.has(record.speciesId)) return [];
+    if (bounds && !recordInBounds(record, bounds)) return [];
+    const lng = Number(record.lng);
+    const lat = Number(record.lat);
+    if (!Number.isFinite(lng) || !Number.isFinite(lat)) return [];
+    return [{
+      id: `inat-${record.id}`,
+      bbox: [lng, lat, lng, lat],
+      countsBySpeciesId: { [record.speciesId]: 1 },
+      centroidsBySpeciesId: { [record.speciesId]: [lng, lat, 1] }
+    }];
+  });
+}
+
+function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, mode) {
   const groups = new Map();
-  (manifest.chunks || []).forEach((item) => {
+  items.forEach((item) => {
     if (bounds && !bboxIntersectsBounds(item.bbox, bounds)) return;
     const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
     if (!count) return;
@@ -2055,7 +2083,7 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds
     ],
     count: group.count
   }));
-  return mergeOverlappingAggregateFeatures(features);
+  return mergeOverlappingAggregateFeatures(features, mode === "geo" ? 18 : 6);
 }
 
 function getAggregateGridKey(center, gridSize, mode) {
@@ -2069,10 +2097,10 @@ function getAggregateGridKey(center, gridSize, mode) {
 }
 
 function getAggregateGeoGridSize(zoom) {
-  if (zoom < 3.2) return 1.2;
-  if (zoom < 4.2) return 0.85;
-  if (zoom < 5.2) return 0.55;
-  return 0.35;
+  if (zoom < 3.2) return 2.4;
+  if (zoom < 4.2) return 1.5;
+  if (zoom < 5.2) return 0.9;
+  return 0.5;
 }
 
 function getAggregateScreenGridSize(zoom) {
@@ -2099,7 +2127,7 @@ function getBoundsLngSpan(bounds) {
   return bounds.getEast() - bounds.getWest();
 }
 
-function mergeOverlappingAggregateFeatures(features) {
+function mergeOverlappingAggregateFeatures(features, padding = 6) {
   if (!state.mapReady || features.length < 2) return features;
   let nodes = features.map((feature) => {
     const point = map.project(feature.geometry.coordinates);
@@ -2125,7 +2153,7 @@ function mergeOverlappingAggregateFeatures(features) {
         const a = nodes[i];
         const b = nodes[j];
         const distance = Math.hypot(b.x - a.x, b.y - a.y);
-        if (distance > a.radius + b.radius + 6) continue;
+        if (distance > a.radius + b.radius + padding) continue;
         nodes.splice(j, 1);
         nodes[i] = mergeAggregateNodes(a, b);
         merged = true;
@@ -2840,6 +2868,9 @@ async function loadMapData() {
 
   state.records = nextRecords;
   renderMarkers();
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    updateFallingFruitAggregates();
+  }
 
   const failedSources = [
     inatResult.status === "rejected" ? "iNaturalist" : "",
@@ -2862,27 +2893,65 @@ async function loadINaturalist() {
   if (!taxonIds) return [];
 
   const bounds = map.getBounds();
+  const tiles = getINaturalistRequestBounds(bounds, map.getZoom());
+  const results = await Promise.all(tiles.map((tile) => fetchINaturalistBounds(taxonIds, tile)));
+  return dedupeRecords(results.flatMap((data) => data.results || []))
+    .map(mapINaturalistObservation)
+    .filter(Boolean);
+}
+
+async function fetchINaturalistBounds(taxonIds, bounds) {
   const params = new URLSearchParams({
     taxon_id: taxonIds,
-    swlat: bounds.getSouth().toFixed(5),
-    swlng: bounds.getWest().toFixed(5),
-    nelat: bounds.getNorth().toFixed(5),
-    nelng: bounds.getEast().toFixed(5),
+    swlat: bounds.south.toFixed(5),
+    swlng: bounds.west.toFixed(5),
+    nelat: bounds.north.toFixed(5),
+    nelng: bounds.east.toFixed(5),
     geo: "true",
     photos: "true",
     quality_grade: "research",
     place_id: INATURALIST_REGION_PLACE_IDS,
-    per_page: "120",
+    per_page: String(bounds.perPage),
     order: "desc",
     order_by: "observed_on"
   });
 
   const response = await fetchWithTimeout(`https://api.inaturalist.org/v1/observations?${params.toString()}`);
   if (!response.ok) throw new Error(`iNaturalist returned ${response.status}`);
-  const data = await response.json();
-  return data.results
-    .map(mapINaturalistObservation)
-    .filter(Boolean);
+  return response.json();
+}
+
+function getINaturalistRequestBounds(bounds, zoom) {
+  const baseBounds = {
+    west: bounds.getWest(),
+    south: bounds.getSouth(),
+    east: bounds.getEast(),
+    north: bounds.getNorth(),
+    perPage: INATURALIST_DEFAULT_PER_PAGE
+  };
+  if (zoom < 5.4 || zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM) return [baseBounds];
+
+  const columns = getBoundsLngSpan(bounds) > 9 ? 3 : 2;
+  const rows = (bounds.getNorth() - bounds.getSouth()) > 5 ? 2 : 1;
+  const lngStep = (baseBounds.east - baseBounds.west) / columns;
+  const latStep = (baseBounds.north - baseBounds.south) / rows;
+  const tiles = [];
+  for (let row = 0; row < rows; row += 1) {
+    for (let column = 0; column < columns; column += 1) {
+      tiles.push({
+        west: baseBounds.west + column * lngStep,
+        south: baseBounds.south + row * latStep,
+        east: column === columns - 1 ? baseBounds.east : baseBounds.west + (column + 1) * lngStep,
+        north: row === rows - 1 ? baseBounds.north : baseBounds.south + (row + 1) * latStep,
+        perPage: INATURALIST_TILE_PER_PAGE
+      });
+    }
+  }
+  return tiles;
+}
+
+function dedupeRecords(records) {
+  return [...new Map(records.map((record) => [record.id, record])).values()];
 }
 
 async function loadFallingFruit() {
