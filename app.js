@@ -1978,7 +1978,7 @@ function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
       count
     })];
   });
-  return relaxAggregateFeatures(features);
+  return mergeOverlappingAggregateFeatures(features);
 }
 
 function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize) {
@@ -2004,7 +2004,7 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize) {
     groups.set(key, group);
   });
 
-  return [...groups.values()].map((group) => getAggregateFeature({
+  const features = [...groups.values()].map((group) => getAggregateFeature({
     id: `grid-${group.id}`,
     level: "grid",
     label: "",
@@ -2014,6 +2014,7 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize) {
     ],
     count: group.count
   }));
+  return mergeOverlappingAggregateFeatures(features);
 }
 
 function getAggregateGridSize(zoom) {
@@ -2023,56 +2024,87 @@ function getAggregateGridSize(zoom) {
   return 0.15;
 }
 
-function relaxAggregateFeatures(features) {
-  if (!state.mapReady || features.length < 2 || map.getZoom() >= 4.2) return features;
-  const nodes = features.map((feature) => {
+function mergeOverlappingAggregateFeatures(features) {
+  if (!state.mapReady || features.length < 2) return features;
+  let nodes = features.map((feature) => {
     const point = map.project(feature.geometry.coordinates);
     return {
-      feature,
+      ids: [feature.properties.id],
+      levels: new Set([feature.properties.level]),
+      labels: feature.properties.label ? [feature.properties.label] : [],
+      count: Number(feature.properties.count || 0),
+      weightedLng: feature.geometry.coordinates[0] * Number(feature.properties.count || 0),
+      weightedLat: feature.geometry.coordinates[1] * Number(feature.properties.count || 0),
       x: point.x,
       y: point.y,
       radius: getAggregateScreenRadius(feature.properties.count)
     };
   });
 
-  for (let pass = 0; pass < 6; pass += 1) {
+  let merged = true;
+  while (merged) {
+    merged = false;
+    outer:
     for (let i = 0; i < nodes.length; i += 1) {
       for (let j = i + 1; j < nodes.length; j += 1) {
         const a = nodes[i];
         const b = nodes[j];
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
-        const distance = Math.max(1, Math.hypot(dx, dy));
-        const minDistance = a.radius + b.radius + 4;
-        if (distance >= minDistance) continue;
-        const push = (minDistance - distance) / 2;
-        const nx = dx / distance;
-        const ny = dy / distance;
-        a.x -= nx * push;
-        a.y -= ny * push;
-        b.x += nx * push;
-        b.y += ny * push;
+        const distance = Math.hypot(b.x - a.x, b.y - a.y);
+        if (distance > a.radius + b.radius + 6) continue;
+        nodes.splice(j, 1);
+        nodes[i] = mergeAggregateNodes(a, b);
+        merged = true;
+        break outer;
       }
     }
   }
 
-  return nodes.map((node) => {
-    const lngLat = map.unproject([node.x, node.y]);
-    return {
-      ...node.feature,
-      geometry: {
-        type: "Point",
-        coordinates: [lngLat.lng, lngLat.lat]
-      }
-    };
-  });
+  return nodes.map((node) => getAggregateFeature({
+    id: `merged-${node.ids.sort().join("-")}`,
+    level: node.levels.size === 1 ? [...node.levels][0] : "region",
+    label: node.labels.length === 1 ? node.labels[0] : "",
+    center: [
+      node.weightedLng / node.count,
+      node.weightedLat / node.count
+    ],
+    count: node.count
+  }));
+}
+
+function mergeAggregateNodes(a, b) {
+  const count = a.count + b.count;
+  const lng = (a.weightedLng + b.weightedLng) / count;
+  const lat = (a.weightedLat + b.weightedLat) / count;
+  const point = map.project([lng, lat]);
+  return {
+    ids: [...a.ids, ...b.ids],
+    levels: new Set([...a.levels, ...b.levels]),
+    labels: [...a.labels, ...b.labels],
+    count,
+    weightedLng: a.weightedLng + b.weightedLng,
+    weightedLat: a.weightedLat + b.weightedLat,
+    x: point.x,
+    y: point.y,
+    radius: getAggregateScreenRadius(count)
+  };
 }
 
 function getAggregateScreenRadius(count) {
-  if (count >= 25000) return 24;
-  if (count >= 2500) return 20;
-  if (count >= 250) return 16;
-  return 12;
+  const stops = [
+    [1, 7],
+    [25, 11],
+    [250, 16],
+    [2500, 22],
+    [25000, 28]
+  ];
+  for (let index = 1; index < stops.length; index += 1) {
+    const [stopCount, stopRadius] = stops[index];
+    const [prevCount, prevRadius] = stops[index - 1];
+    if (count > stopCount) continue;
+    const progress = (count - prevCount) / (stopCount - prevCount);
+    return prevRadius + progress * (stopRadius - prevRadius);
+  }
+  return stops[stops.length - 1][1];
 }
 
 function getAggregateRecordCount(countsBySpeciesId, selectedSpeciesIds) {
@@ -2340,6 +2372,7 @@ function initMapLayers() {
       id: MARKER_CLUSTERS_LAYER_ID,
       type: "circle",
       source: MARKERS_SOURCE_ID,
+      minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       filter: ["has", "point_count"],
       paint: {
         "circle-color": [
@@ -2372,6 +2405,7 @@ function initMapLayers() {
       id: MARKER_CLUSTER_COUNT_LAYER_ID,
       type: "symbol",
       source: MARKERS_SOURCE_ID,
+      minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       filter: ["has", "point_count"],
       layout: {
         "text-field": ["get", "point_count_abbreviated"],
