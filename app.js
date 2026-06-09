@@ -1973,7 +1973,7 @@ function getFallingFruitAggregateCollection(manifest) {
   const aggregateBounds = bounds ? getPaddedAggregateBounds(bounds, zoom) : null;
   const features = shouldUseStateAggregates(zoom, bounds)
     ? getStateAggregateFeatures(manifest, selectedSpeciesIds)
-    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateGridSize(zoom), aggregateBounds);
+    : getGridAggregateFeatures(manifest, selectedSpeciesIds, getAggregateScreenGridSize(zoom), aggregateBounds);
 
   return {
     type: "FeatureCollection",
@@ -1989,7 +1989,7 @@ function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
       id: `state-${item.id}`,
       level: "state",
       label: item.name,
-      center: item.center || getBboxCenter(item.bbox),
+      center: getAggregateItemCenter(item, selectedSpeciesIds),
       count
     })];
   });
@@ -2007,10 +2007,9 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds
     if (bounds && !bboxIntersectsBounds(item.bbox, bounds)) return;
     const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
     if (!count) return;
-    const center = getBboxCenter(item.bbox);
-    const west = Math.floor(center[0] / gridSize) * gridSize;
-    const south = Math.floor(center[1] / gridSize) * gridSize;
-    const key = `${west.toFixed(2)}_${south.toFixed(2)}`;
+    const center = getAggregateItemCenter(item, selectedSpeciesIds);
+    const point = state.mapReady ? map.project(center) : { x: center[0], y: center[1] };
+    const key = `${Math.floor(point.x / gridSize)}_${Math.floor(point.y / gridSize)}`;
     const group = groups.get(key) || {
       id: key,
       level: "grid",
@@ -2038,12 +2037,12 @@ function getGridAggregateFeatures(manifest, selectedSpeciesIds, gridSize, bounds
   return mergeOverlappingAggregateFeatures(features);
 }
 
-function getAggregateGridSize(zoom) {
-  if (zoom < 4.2) return 6;
-  if (zoom < 5.2) return 4;
-  if (zoom < 6.3) return 2;
-  if (zoom < 7.2) return 0.5;
-  return 0.15;
+function getAggregateScreenGridSize(zoom) {
+  if (zoom < 4.2) return 150;
+  if (zoom < 5.2) return 130;
+  if (zoom < 6.3) return 110;
+  if (zoom < 7.2) return 86;
+  return 64;
 }
 
 function getPaddedAggregateBounds(bounds, zoom) {
@@ -2150,6 +2149,23 @@ function getAggregateRecordCount(countsBySpeciesId, selectedSpeciesIds) {
     const importedSpeciesId = getImportedSpeciesId(sourceSpeciesId);
     return selectedSpeciesIds.has(importedSpeciesId) ? total + Number(count || 0) : total;
   }, 0);
+}
+
+function getAggregateItemCenter(item, selectedSpeciesIds) {
+  let count = 0;
+  let weightedLng = 0;
+  let weightedLat = 0;
+  Object.entries(item.centroidsBySpeciesId || {}).forEach(([sourceSpeciesId, centroid]) => {
+    const importedSpeciesId = getImportedSpeciesId(sourceSpeciesId);
+    if (!selectedSpeciesIds.has(importedSpeciesId) || !Array.isArray(centroid)) return;
+    const centroidCount = Number(centroid[2] || item.countsBySpeciesId?.[sourceSpeciesId] || 0);
+    if (!centroidCount) return;
+    weightedLng += Number(centroid[0]) * centroidCount;
+    weightedLat += Number(centroid[1]) * centroidCount;
+    count += centroidCount;
+  });
+  if (count) return [weightedLng / count, weightedLat / count];
+  return item.center || getBboxCenter(item.bbox);
 }
 
 function getAggregateFeature({ id, level, label, center, count }) {

@@ -268,6 +268,8 @@ def build_subset():
     records_by_chunk = {}
     counts_by_chunk = {}
     counts_by_state = {state["id"]: Counter() for state in state_boundaries}
+    centroid_sums_by_chunk = {}
+    centroid_sums_by_state = {}
     seen = set()
     skipped_hidden = 0
     scanned = 0
@@ -326,6 +328,14 @@ def build_subset():
                 records_by_chunk.setdefault(chunk_id, []).append([record.get(field, "") for field in RECORD_FIELDS])
                 counts_by_chunk.setdefault(chunk_id, Counter())[species_id] += 1
                 counts_by_state[state_id][species_id] += 1
+                centroid_sums_by_chunk.setdefault(chunk_id, {}).setdefault(species_id, [0.0, 0.0, 0])
+                centroid_sums_by_chunk[chunk_id][species_id][0] += lng
+                centroid_sums_by_chunk[chunk_id][species_id][1] += lat
+                centroid_sums_by_chunk[chunk_id][species_id][2] += 1
+                centroid_sums_by_state.setdefault(state_id, {}).setdefault(species_id, [0.0, 0.0, 0])
+                centroid_sums_by_state[state_id][species_id][0] += lng
+                centroid_sums_by_state[state_id][species_id][1] += lat
+                centroid_sums_by_state[state_id][species_id][2] += 1
 
     manifest_chunks = []
     manifest_states = []
@@ -350,6 +360,7 @@ def build_subset():
             "bbox": get_chunk_bbox(chunk_id),
             "recordCount": len(records),
             "countsBySpeciesId": dict(sorted(counts_by_chunk[chunk_id].items())),
+            "centroidsBySpeciesId": get_centroids_by_species_id(centroid_sums_by_chunk.get(chunk_id, {})),
             "path": f"./data/falling-fruit/us/chunks/{chunk_id}.json",
         })
 
@@ -365,6 +376,7 @@ def build_subset():
             "center": get_bbox_center(state["bbox"]),
             "recordCount": record_count,
             "countsBySpeciesId": dict(sorted(state_counts.items())),
+            "centroidsBySpeciesId": get_centroids_by_species_id(centroid_sums_by_state.get(state_id, {})),
         })
 
     summary = {
@@ -413,6 +425,19 @@ def get_chunk_bbox(chunk_id):
 def get_bbox_center(bbox):
     west, south, east, north = bbox
     return [round((west + east) / 2, 5), round((south + north) / 2, 5)]
+
+
+def get_centroids_by_species_id(centroid_sums):
+    centroids = {}
+    for species_id, (lng_sum, lat_sum, count) in sorted(centroid_sums.items()):
+        if not count:
+            continue
+        centroids[species_id] = [
+            round(lng_sum / count, 5),
+            round(lat_sum / count, 5),
+            count,
+        ]
+    return centroids
 
 
 def format_axis(value, negative_prefix, positive_prefix):
