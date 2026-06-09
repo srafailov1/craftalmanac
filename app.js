@@ -840,6 +840,7 @@ const state = {
   inatRecordCache: new Map(),
   inatAggregateCache: new Map(),
   inatAggregateItems: [],
+  inatAggregateTaxonKey: "",
   loadTimer: null,
   inatAggregateTimer: null,
   publicLoadTimer: null,
@@ -2031,7 +2032,7 @@ function shouldRebalanceAggregatesOnMove() {
 
 function shouldUseViewportAggregateBounds(zoom, bounds) {
   if (!bounds) return false;
-  return zoom >= 5.6 || getBoundsLngSpan(bounds) <= 18;
+  return zoom >= 6.4 || getBoundsLngSpan(bounds) <= 12;
 }
 
 function getAggregateItems(manifest, selectedSpeciesIds, bounds) {
@@ -2869,6 +2870,7 @@ function scheduleINaturalistAggregateLoad() {
 async function loadINaturalistAggregates() {
   if (!state.mapReady || map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM || state.savedLocationsOnly) {
     state.inatAggregateItems = [];
+    state.inatAggregateTaxonKey = "";
     updateFallingFruitAggregates();
     return;
   }
@@ -2878,18 +2880,23 @@ async function loadINaturalistAggregates() {
   const taxonIds = getINaturalistTaxonIdString(selectedSpecies);
   if (!taxonIds) {
     state.inatAggregateItems = [];
+    state.inatAggregateTaxonKey = "";
     updateFallingFruitAggregates();
     return;
   }
 
   const requestId = state.activeINaturalistAggregateRequest + 1;
   state.activeINaturalistAggregateRequest = requestId;
+  const taxonChanged = state.inatAggregateTaxonKey !== taxonIds;
+  state.inatAggregateTaxonKey = taxonIds;
   const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
   const cachedItems = tiles
     .map((tile) => state.inatAggregateCache.get(getINaturalistAggregateCacheKey(taxonIds, tile)))
     .filter(Boolean);
-  state.inatAggregateItems = cachedItems;
-  updateFallingFruitAggregates();
+  if (cachedItems.length || taxonChanged || !state.inatAggregateItems.length) {
+    state.inatAggregateItems = getNonzeroAggregateItems(cachedItems);
+    updateFallingFruitAggregates();
+  }
 
   const missingTiles = tiles.filter((tile) => (
     !state.inatAggregateCache.has(getINaturalistAggregateCacheKey(taxonIds, tile))
@@ -2903,19 +2910,26 @@ async function loadINaturalistAggregates() {
       state.inatAggregateCache.set(getINaturalistAggregateCacheKey(taxonIds, tile), item);
       fetchedItems.push(item);
       if (requestId === state.activeINaturalistAggregateRequest && fetchedItems.length % 12 === 0) {
-        state.inatAggregateItems = getNonzeroAggregateItems([...cachedItems, ...fetchedItems]);
-        updateFallingFruitAggregates();
+        updateINaturalistAggregateItems(cachedItems, fetchedItems);
       }
       return item;
     });
     if (requestId !== state.activeINaturalistAggregateRequest) return;
-    state.inatAggregateItems = getNonzeroAggregateItems([...cachedItems, ...fetchedItems]);
-    updateFallingFruitAggregates();
+    updateINaturalistAggregateItems(cachedItems, fetchedItems);
   } catch {
     if (requestId !== state.activeINaturalistAggregateRequest) return;
-    state.inatAggregateItems = cachedItems;
-    updateFallingFruitAggregates();
+    if (cachedItems.length) {
+      state.inatAggregateItems = getNonzeroAggregateItems(cachedItems);
+      updateFallingFruitAggregates();
+    }
   }
+}
+
+function updateINaturalistAggregateItems(cachedItems, fetchedItems) {
+  const nextItems = getNonzeroAggregateItems([...cachedItems, ...fetchedItems]);
+  if (!nextItems.length) return;
+  state.inatAggregateItems = nextItems;
+  updateFallingFruitAggregates();
 }
 
 function getNonzeroAggregateItems(items) {
