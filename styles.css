@@ -210,15 +210,6 @@ button {
   color: #fff;
 }
 
-.eyebrow {
-  margin: 0 0 8px;
-  color: var(--leaf-dark);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .lede {
   margin: 12px 0 0;
   color: var(--muted);
@@ -231,8 +222,7 @@ button {
   font-size: 13px;
 }
 
-.control-group,
-.results-block {
+.control-group {
   padding: 16px 0 18px;
   border-top: 1px solid var(--line);
 }
@@ -363,8 +353,7 @@ h2 {
   margin-bottom: 12px;
 }
 
-.text-button,
-.primary-button {
+.text-button {
   min-height: 38px;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -507,21 +496,6 @@ h2 {
   border-color: var(--leaf-dark);
   background: var(--leaf-dark);
   color: #fff;
-}
-
-.primary-button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 0 14px;
-  background: var(--leaf);
-  color: #fff;
-  border-color: var(--leaf);
-  font-weight: 800;
-}
-
-.primary-button:disabled {
-  cursor: progress;
-  opacity: 0.68;
 }
 
 .filter-list {
@@ -895,21 +869,6 @@ h2 {
   font-weight: 850;
 }
 
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: #aab0a4;
-}
-
-.status-dot.is-live {
-  background: #2f9e59;
-}
-
-.status-dot.is-error {
-  background: #ba3a3a;
-}
-
 .count {
   min-width: 30px;
   padding: 3px 8px;
@@ -919,52 +878,6 @@ h2 {
   font-size: 12px;
   font-weight: 850;
   text-align: center;
-}
-
-.result-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.result-card {
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-}
-
-.result-title {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 6px;
-  font-weight: 850;
-}
-
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.tag {
-  padding: 3px 7px;
-  border-radius: 999px;
-  background: #edf1e8;
-  color: #46513f;
-  font-size: 11px;
-  font-weight: 760;
-  text-transform: capitalize;
-}
-
-.result-card p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.4;
 }
 
 .map-area {
@@ -1323,38 +1236,6 @@ body.modal-open .app-shell {
   background: var(--leaf-dark);
   color: #fffdf7;
   outline: none;
-}
-
-.marker-dot {
-  display: grid;
-  place-items: center;
-  width: 12px;
-  height: 12px;
-  margin: 3px;
-  border: 2px solid #fff;
-  border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-}
-
-.marker-dot.berry { background: var(--berry); }
-.marker-dot.fruit { background: var(--leaf); }
-.marker-dot.nut { background: var(--nut); }
-.marker-dot.mushroom { background: var(--mushroom); }
-.marker-dot.nps-orchard {
-  border-color: #fdf1bd;
-  box-shadow: 0 0 0 3px rgba(113, 79, 15, 0.2), 0 2px 8px rgba(0, 0, 0, 0.26);
-}
-
-.public-land-popup strong {
-  display: block;
-  margin-bottom: 4px;
-}
-
-.public-land-popup span {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.35;
 }
 
 @media (max-width: 860px) {

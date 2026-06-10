@@ -16,6 +16,8 @@ const INATURALIST_AGGREGATE_MAX_TILES = 240;
 const INATURALIST_AGGREGATE_SPECIES_ID = "__inat-aggregate";
 const INATURALIST_REGION_PLACE_IDS = "1";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
+const PUBLIC_LANDS_PAGE_SIZE = 1000;
+const PUBLIC_LANDS_MAX_PAGES = 4;
 const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
 const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
@@ -854,6 +856,7 @@ const state = {
   npsOrchardData: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
+  accessRuleCache: new Map(),
   mapReady: false,
   publicLayerLoadedKey: "",
   publicLayerVisible: true,
@@ -934,8 +937,10 @@ const MOBILE_PANEL_MARGIN = 20;
 let panelDragState = null;
 
 function getDayOfYear(date) {
-  const start = new Date(date.getFullYear(), 0, 0);
-  return Math.floor((date - start) / 86400000);
+  // UTC math avoids daylight-saving off-by-one errors in local-time subtraction.
+  const dayMs = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  const startMs = Date.UTC(date.getFullYear(), 0, 0);
+  return Math.floor((dayMs - startMs) / 86400000);
 }
 
 function getDateForDay(day) {
@@ -1328,6 +1333,7 @@ function setMapMode(mode) {
     state.records = [];
     state.inatRecords = [];
     state.inatRecordCache.clear();
+    state.accessRuleCache.clear();
     state.savedLocationsOnly = false;
     state.activeRequest += 1;
   state.activePopup?.remove();
@@ -2578,7 +2584,7 @@ function initMapLayers() {
       type: "symbol",
       source: MARKERS_SOURCE_ID,
       filter: ["!", ["has", "point_count"]],
-      minzoom: MARKER_CLUSTER_MAX_ZOOM,
+      minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       layout: {
         "icon-image": ["get", "markerIcon"],
         "icon-size": [
@@ -2906,6 +2912,7 @@ async function loadINaturalistAggregates() {
   try {
     const fetchedItems = [];
     await mapWithConcurrency(missingTiles, 6, async (tile) => {
+      if (requestId !== state.activeINaturalistAggregateRequest) return null;
       const item = await fetchINaturalistAggregateTile(taxonIds, tile);
       state.inatAggregateCache.set(getINaturalistAggregateCacheKey(taxonIds, tile), item);
       fetchedItems.push(item);
@@ -3263,6 +3270,7 @@ function schedulePublicLandLoad() {
     state.activePublicRequest += 1;
     state.publicLandFeatures = [];
     state.publicLayerLoadedKey = "";
+    state.accessRuleCache.clear();
     updatePublicLandSource();
     return;
   }
@@ -3283,35 +3291,43 @@ async function loadPublicLands() {
   state.activePublicRequest = requestId;
 
   try {
-    const params = new URLSearchParams({
-      where: "Pub_Access IN ('OA','RA')",
-      geometry: [
-        bounds.getWest().toFixed(5),
-        bounds.getSouth().toFixed(5),
-        bounds.getEast().toFixed(5),
-        bounds.getNorth().toFixed(5)
-      ].join(","),
-      geometryType: "esriGeometryEnvelope",
-      inSR: "4326",
-      spatialRel: "esriSpatialRelIntersects",
-      outFields: "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres",
-      returnGeometry: "true",
-      outSR: "4326",
-      geometryPrecision: "5",
-      f: "geojson",
-      resultRecordCount: "1000"
-    });
-    const response = await fetchWithTimeout(`${PUBLIC_LANDS_URL}?${params.toString()}`);
-    if (!response.ok) throw new Error(`PAD-US returned ${response.status}`);
-    const data = await response.json();
-    if (requestId !== state.activePublicRequest) return;
-    state.publicLandFeatures = data.features || [];
+    const features = [];
+    for (let page = 0; page < PUBLIC_LANDS_MAX_PAGES; page += 1) {
+      const params = new URLSearchParams({
+        where: "Pub_Access IN ('OA','RA')",
+        geometry: [
+          bounds.getWest().toFixed(5),
+          bounds.getSouth().toFixed(5),
+          bounds.getEast().toFixed(5),
+          bounds.getNorth().toFixed(5)
+        ].join(","),
+        geometryType: "esriGeometryEnvelope",
+        inSR: "4326",
+        spatialRel: "esriSpatialRelIntersects",
+        outFields: "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres",
+        returnGeometry: "true",
+        outSR: "4326",
+        geometryPrecision: "5",
+        f: "geojson",
+        resultRecordCount: String(PUBLIC_LANDS_PAGE_SIZE),
+        resultOffset: String(page * PUBLIC_LANDS_PAGE_SIZE)
+      });
+      const response = await fetchWithTimeout(`${PUBLIC_LANDS_URL}?${params.toString()}`);
+      if (!response.ok) throw new Error(`PAD-US returned ${response.status}`);
+      const data = await response.json();
+      if (requestId !== state.activePublicRequest) return;
+      features.push(...(data.features || []));
+      if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) break;
+    }
+    state.publicLandFeatures = features;
     state.publicLayerLoadedKey = boundsKey;
+    state.accessRuleCache.clear();
     updatePublicLandSource();
     renderMarkers();
   } catch (error) {
     if (requestId !== state.activePublicRequest) return;
     state.publicLandFeatures = [];
+    state.accessRuleCache.clear();
     updatePublicLandSource();
     renderMarkers();
   }
@@ -3450,6 +3466,15 @@ function mapNpsOrchardRecord(record) {
 }
 
 function getRecordAccessRule(record, species) {
+  // Cached per record; cleared whenever public-land features or the map mode change.
+  const cached = state.accessRuleCache.get(record.id);
+  if (cached) return cached;
+  const rule = computeRecordAccessRule(record, species);
+  state.accessRuleCache.set(record.id, rule);
+  return rule;
+}
+
+function computeRecordAccessRule(record, species) {
   if (record.source === "nps-orchard") {
     return {
       status: "permit-required",
@@ -3764,20 +3789,25 @@ function getPublicLandName(properties) {
 }
 
 function isNationalParkServiceLand(text) {
+  // Conservative by design: unmatched NPS-style units default to the
+  // 36 CFR 2.1 prohibition rather than a more permissive agency rule.
   return text.includes("national park service")
     || text.includes("national park")
     || text.includes("national battlefield")
     || text.includes("national historical park")
+    || text.includes("national historic site")
     || text.includes("national military park")
-    || text.includes("national memorial parkway");
+    || text.includes("national monument")
+    || text.includes("national seashore")
+    || text.includes("national lakeshore")
+    || text.includes("national preserve")
+    || text.includes("memorial parkway");
 }
 
 function isUsfsLand(text) {
-  return text.includes("u.s. forest service")
-    || text.includes("us forest service")
+  return text.includes("forest service")
     || text.includes("national forest")
-    || text.includes("george washington")
-    || text.includes("jefferson national forest");
+    || text.includes("national grassland");
 }
 
 function isVirginiaWma(text) {

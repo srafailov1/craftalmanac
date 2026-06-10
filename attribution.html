@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Attribution and Data-Use Notes · Craft Almanac</title>
+    <style>
+      body {
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+        max-width: 720px;
+        font-family: Georgia, "Times New Roman", serif;
+        color: #23301f;
+        background: #faf8f0;
+        line-height: 1.6;
+      }
+      h1, h2 { font-family: inherit; line-height: 1.25; }
+      h1 { font-size: 1.6rem; margin-bottom: 0.4em; }
+      h2 { font-size: 1.15rem; margin-top: 1.8em; }
+      a { color: #1f5c3d; word-break: break-word; }
+      ul { padding-left: 1.2em; }
+      .back-link { font-size: 0.9rem; display: inline-block; margin-bottom: 18px; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; Back to the map</a>
+    <main id="content"><p>Loading attribution notes&hellip;</p></main>
+    <script>
+      // Renders ATTRIBUTION.md so the canonical notes live in one file.
+      function escapeHTML(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function linkify(text) {
+        return text.replace(/(https?:\/\/[^\s<]+[^\s<.,)])/g, '<a href="$1" target="_blank" rel="noreferrer">$1</a>');
+      }
+
+      function renderMarkdown(markdown) {
+        const blocks = markdown.split(/\n{2,}/);
+        return blocks.map((block) => {
+          const trimmed = block.trim();
+          if (!trimmed) return "";
+          if (trimmed.startsWith("## ")) return `<h2>${linkify(escapeHTML(trimmed.slice(3)))}</h2>`;
+          if (trimmed.startsWith("# ")) return `<h1>${linkify(escapeHTML(trimmed.slice(2)))}</h1>`;
+          if (trimmed.split("\n").every((line) => line.trim().startsWith("- "))) {
+            const items = trimmed.split("\n")
+              .map((line) => `<li>${linkify(escapeHTML(line.trim().slice(2)))}</li>`)
+              .join("");
+            return `<ul>${items}</ul>`;
+          }
+          return `<p>${linkify(escapeHTML(trimmed)).replaceAll("\n", "<br>")}</p>`;
+        }).join("\n");
+      }
+
+      fetch("./ATTRIBUTION.md")
+        .then((response) => {
+          if (!response.ok) throw new Error(`ATTRIBUTION.md returned ${response.status}`);
+          return response.text();
+        })
+        .then((markdown) => {
+          document.querySelector("#content").innerHTML = renderMarkdown(markdown);
+        })
+        .catch(() => {
+          document.querySelector("#content").innerHTML =
+            '<p>Could not load the notes. <a href="./ATTRIBUTION.md">Open the raw file instead</a>.</p>';
+        });
+    </script>
+  </body>
+</html>

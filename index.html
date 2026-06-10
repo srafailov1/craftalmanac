@@ -6,7 +6,7 @@
     <title>Craft Almanac · United States Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=overview-aggregates-5">
+    <link rel="stylesheet" href="./styles.css?v=diagnostic-fixes-1">
   </head>
   <body>
     <main class="app-shell">
@@ -34,7 +34,7 @@
           <section class="control-group location-search-group" aria-label="Search map location">
             <form class="location-search-form" id="locationSearchForm">
               <label class="location-search-label" for="locationSearchInput">Search location</label>
-              <input id="locationSearchInput" type="search" autocomplete="street-address" placeholder="City, address, or ZIP code">
+              <input id="locationSearchInput" type="search" autocomplete="off" placeholder="City, address, or ZIP code">
             </form>
             <div class="location-suggestions" id="locationSearchSuggestions" role="listbox" aria-label="Suggested locations" hidden></div>
             <p class="location-search-status" id="locationSearchStatus" aria-live="polite"></p>
@@ -118,7 +118,7 @@
             </div>
             <div class="section-body">
               <p>Live observations from iNaturalist, community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.</p>
-              <a href="./ATTRIBUTION.md" target="_blank" rel="noreferrer">Attribution and data-use notes</a>
+              <a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes</a>
             </div>
           </section>
 
@@ -146,6 +146,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=overview-aggregates-5"></script>
+    <script src="./app.js?v=diagnostic-fixes-1"></script>
   </body>
 </html>
