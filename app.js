@@ -103,7 +103,18 @@ const ACCESS_RULE_SOURCES = {
   californiaParks: "https://www.parks.ca.gov/?page_id=21301",
   nycParks: "https://www.nycgovparks.org/rules/section-1-04/",
   monticello: "https://www.monticello.org/visit/tips-for-visiting/guest-policies",
-  uvaGardens: "https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds"
+  uvaGardens: "https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds",
+  coloradoParks: "https://www.law.cornell.edu/regulations/colorado/2-CCR-405-1-100",
+  oregonParks: "https://secure.sos.state.or.us/oard/view.action?ruleNumber=736-010-0055",
+  marylandParks: "https://regs.maryland.gov/us/md/exec/comar/08.07.06.13",
+  marylandForests: "https://regs.maryland.gov/us/md/exec/comar/08.07.01.13",
+  northCarolinaParks: "http://reports.oah.state.nc.us/ncac/title%2007%20-%20natural%20and%20cultural%20resources/chapter%2013%20-%20parks%20and%20recreation%20area%20rules/chapter%2013%20rules.pdf",
+  michiganDnr: "https://www.michigan.gov/dnr/things-to-do/foraging",
+  minnesotaParks: "https://www.revisor.mn.gov/rules/6100.0900/",
+  carverEdiblePark: "https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/",
+  festivalBeachFoodForest: "https://festivalbeach.org/frequently-asked-questions/",
+  brownsMillFoodForest: "https://aglanta.atlantaga.gov/urban-food-forest-at-browns-mill-1",
+  botanicalGardens: "https://www.usna.usda.gov/visit/rules-and-guidelines/"
 };
 
 // Park-specific 36 CFR 2.1(c) gathering designations, matched against PAD-US
@@ -117,15 +128,15 @@ const NPS_GATHERING_RULES = [
     sourceUrl: "https://www.nps.gov/grsm/learn/management/compendium.htm",
     mushroomsAllowed: true,
     limit: "Listed fruits, berries, and nuts: 1 pound per person per day per species (apples, pears, and peaches excepted); edible soil-growing mushrooms: 1 pound combined, 100+ feet from roads and facilities.",
-    note: "Great Smoky Mountains designates listed species for hand-gathering 200+ feet from nature trails; ramps may not be collected. Confirm the species appears in the current compendium list."
+    note: "Great Smoky Mountains designates listed species for hand-gathering 200+ feet from nature trails; ramps may not be collected. Confirm the species appears in the compendium list. Verified against the current compendium, June 2026."
   },
   {
     match: "new river gorge",
     sourceLabel: "New River Gorge compendium",
     sourceUrl: "https://www.nps.gov/neri/learn/management/superintendents-compendium.htm",
     mushroomsAllowed: true,
-    limit: "Listed berries and fruits: about 1 gallon per person per day (3 gallons for apples, peaches, pears, plums, persimmons, and black walnuts); edible mushrooms: about 1.5 gallons.",
-    note: "New River Gorge designates a long list of fruits, nuts, and mushrooms for personal-use gathering. Confirm current compendium limits."
+    limit: "Listed berries and fruits (including mayapples and sumac berries): 1 gallon per person per day; apples, black walnuts, peaches, pears, persimmons, and plums: 3 gallons; edible mushrooms (morel, oyster, chanterelle, puffball, black trumpet, dryad's saddle, sulphur shelf): 1.5 gallons.",
+    note: "New River Gorge designates listed fruits, nuts, and mushrooms for personal-use gathering. Ramps were removed from the designation (depleted populations) and ginseng is illegal to harvest on NPS land. Verified against the current compendium, June 2026."
   },
   {
     match: "acadia",
@@ -139,10 +150,11 @@ const NPS_GATHERING_RULES = [
   {
     match: "cuyahoga valley",
     sourceLabel: "Cuyahoga Valley compendium",
-    sourceUrl: "https://www.nps.gov/cuva/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/cuva/learn/management/superintendents-compendium.htm",
     mushroomsAllowed: false,
-    limit: "Reasonable quantities of edible fruit, berries, or nuts for personal use, excluding state or federally listed rare, threatened, or endangered plants.",
-    note: "Cuyahoga Valley permits hand-collection of edible fruit, berries, and nuts; mushrooms are not designated."
+    mushroomNote: "Cuyahoga Valley's compendium explicitly prohibits collecting fungi (mushrooms) and bulbs in any quantity; the adjacent Summit and Cleveland Metroparks also prohibit foraging.",
+    limit: "Reasonable quantities of edible fruit, berries, or nuts for personal use, excluding state or federally listed rare, threatened, or endangered plants. Fungi (mushrooms) and bulbs may not be collected in any quantity.",
+    note: "Cuyahoga Valley permits hand-collection of edible fruit, berries, and nuts; mushroom and bulb collection is explicitly prohibited. Verified against the current compendium, June 2026."
   },
   {
     match: "olympic national park",
@@ -157,88 +169,89 @@ const NPS_GATHERING_RULES = [
     sourceLabel: "Mount Rainier compendium",
     sourceUrl: "https://www.nps.gov/mora/learn/management/lawsandpolicies.htm",
     mushroomsAllowed: true,
-    limit: "Berries: about 1 gallon per person per day; edible mushrooms may be gathered by hand for personal consumption.",
-    note: "Mount Rainier designates berries and edible mushrooms for hand-gathering. Confirm current compendium limits."
+    limit: "Listed berries (blueberries, highbush cranberries, gooseberries, salmonberries, blackberries, thimbleberries, serviceberries, strawberries) and edible mushrooms: no more than 1 gallon per person per day, gathered by hand.",
+    note: "Mount Rainier designates listed berries and edible fungi for hand-gathering; stay on trail in the Paradise, Sunrise, Tipsoo Lake, and Ohanapecosh hot springs areas. Verified against the 2025 compendium, June 2026."
   },
   {
     match: "rocky mountain national park",
     sourceLabel: "Rocky Mountain compendium",
-    sourceUrl: "https://www.nps.gov/romo/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/romo/learn/management/rmnp_compendium.htm",
     mushroomsAllowed: false,
-    mushroomNote: "Mushroom gathering and consumption are explicitly prohibited in Rocky Mountain National Park.",
-    limit: "Listed fruits and berries: about 1 quart per person per day for personal consumption.",
-    note: "Rocky Mountain designates several fruits and berries for hand-gathering; mushroom collection is explicitly prohibited."
+    mushroomNote: "Rocky Mountain's compendium explicitly states edible mushrooms are not permitted to be gathered or consumed.",
+    limit: "Listed fruits and berries (blueberries and huckleberries, chokecherries, red elderberries, raspberries, rose hips, strawberries): 1 quart per person per day for personal consumption.",
+    note: "Rocky Mountain designates listed fruits and berries for hand-gathering; mushroom collection is explicitly prohibited. Verified against the 2025 compendium, June 2026."
   },
   {
     match: "yellowstone",
     sourceLabel: "Yellowstone compendium",
-    sourceUrl: "https://www.nps.gov/yell/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/yell/learn/management/compendium.htm",
     mushroomsAllowed: true,
-    limit: "Edible berries and mushrooms: about 1 quart per species per person per day, for consumption within the park.",
-    note: "Yellowstone allows limited berry and mushroom gathering consumed inside the park. Confirm current compendium limits."
+    limit: "Edible berries and mushrooms: 1 quart per species per person per day; possession and consumption are restricted to park areas.",
+    note: "Yellowstone allows limited berry and mushroom gathering consumed inside the park. Verified against the current compendium, June 2026."
   },
   {
     match: "yosemite",
     sourceLabel: "Yosemite compendium",
-    sourceUrl: "https://www.nps.gov/yose/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/yose/learn/management/upload/yose-compendium.pdf",
     mushroomsAllowed: true,
-    limit: "Listed berries and edible fungi: about 1 pint per person per day for immediate consumption (no limit for invasive Himalayan blackberries; apples and pears may be taken).",
-    note: "Yosemite allows small-quantity berry and fungus gathering for immediate consumption. Confirm current compendium limits."
+    limit: "Listed berries (blackberries, raspberries, elderberries, strawberries, thimbleberries, huckleberries): 1 pint per person per day each, for immediate consumption; invasive Himalayan blackberries: unlimited; edible fungi: 1 pint per day, cut (not pulled); apples and pears may be gathered and transported for non-commercial use.",
+    note: "Yosemite allows small-quantity berry and fungus gathering for immediate consumption. Verified against the September 2025 compendium, June 2026."
   },
   {
     match: "glacier national park",
     sourceLabel: "Glacier compendium",
-    sourceUrl: "https://www.nps.gov/glac/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/glac/learn/management/compendium.htm",
     mushroomsAllowed: false,
-    limit: "Edible fruits, berries, and nuts: about 1 quart per person per day, gathered by hand only.",
-    note: "Glacier designates edible fruits, nuts, and berries for hand-gathering; harvesting tools are prohibited."
+    mushroomNote: "Glacier's compendium explicitly prohibits picking, gathering, or harvesting mushrooms; removing fruiting bodies removes the spores that continue the fungus's reproductive cycle.",
+    limit: "Edible fruits, nuts, and berries: 1 quart per person per day, gathered by hand; bush rakes and other harvesting devices are prohibited. Mushroom gathering is prohibited.",
+    note: "Glacier designates edible fruits, nuts, and berries for hand-gathering; harvesting tools and mushroom collection are explicitly prohibited. Verified against the current compendium, June 2026."
   },
   {
     match: "crater lake",
     sourceLabel: "Crater Lake compendium",
-    sourceUrl: "https://www.nps.gov/crla/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/crla/learn/management/superintendent-s-compendium.htm",
     mushroomsAllowed: false,
-    limit: "Blueberries, huckleberries, serviceberries, and thimbleberries: about 1 quart per person per day, consumed within the park.",
-    note: "Crater Lake designates four berry groups for in-park consumption; other gathering is not designated."
+    limit: "Blueberries, huckleberries, Pacific serviceberries, and western thimbleberries: 1 quart per person per day possession limit each; all park areas are open to collection of these berries.",
+    note: "Crater Lake designates four berry groups for hand-gathering; other gathering (including mushrooms) is not designated. Verified against the current compendium, June 2026."
   },
   {
     match: "grand teton",
     sourceLabel: "Grand Teton compendium",
-    sourceUrl: "https://www.nps.gov/grte/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/grte/learn/management/compendium.htm",
     mushroomsAllowed: true,
-    limit: "Edible fruits, berries, nuts, and mushrooms: about 1 quart per species per person per day, consumed within the park.",
-    note: "Grand Teton (and the adjacent Rockefeller Parkway) allows gathering of specified vegetation for immediate personal consumption."
+    limit: "Edible fruits, berries, nuts, and mushrooms: 1 quart per species per person per day; possession and consumption are restricted to park areas.",
+    note: "Grand Teton (and the adjacent Rockefeller Parkway) allows gathering of specified vegetation for immediate personal consumption. Verified against the current compendium, June 2026."
   },
   {
     match: "redwood",
     sourceLabel: "Redwood compendium",
-    sourceUrl: "https://www.nps.gov/redw/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/redw/learn/management/superintendent-s-compendium.htm",
     mushroomsAllowed: false,
-    limit: "Edible berries: about 1 gallon per person per day; hazelnuts: 1 gallon; tanoak acorns: 10 gallons; apples: 5 per day.",
-    note: "Redwood designates berries and nuts for hand-gathering. Confirm current compendium limits."
+    limit: "All berry species: 1 gallon per person per day; apples: 5 per day; tanoak acorns: 10 gallons; hazelnuts: 1 gallon; unoccupied seashells: 1 gallon (below the storm-wave limit only).",
+    note: "Redwood designates berries, listed nuts, apples, and seashells for hand-gathering; mushrooms are not designated. Verified against the current compendium, June 2026."
   },
   {
     match: "capitol reef",
     sourceLabel: "Capitol Reef orchards",
-    sourceUrl: "https://www.nps.gov/care/planyourvisit/fruita-orchards.htm",
+    sourceUrl: "https://www.nps.gov/care/learn/historyculture/orchards.htm",
     mushroomsAllowed: false,
-    limit: "Fruita historic orchards: fruit may be eaten free in the orchards in season; picked fruit to take is sold per posted rates.",
-    note: "Capitol Reef's historic orchards operate a managed u-pick program rather than wild gathering."
+    limit: "Fruita historic orchards: harvest only ripe fruit from orchards posted with \"U-Pick Fruit\" signs; fruit taken from the orchards must be paid for at the self-pay station.",
+    note: "Capitol Reef's historic orchards operate a managed u-pick program rather than wild gathering; never climb the historic trees. Verified against the park's current orchard regulations, June 2026."
   },
   {
     match: "death valley",
     sourceLabel: "Death Valley compendium",
-    sourceUrl: "https://www.nps.gov/deva/learn/management/lawsandpolicies.htm",
+    sourceUrl: "https://www.nps.gov/deva/learn/management/rules-and-regulations.htm",
     mushroomsAllowed: false,
-    limit: "Designated foods include mesquite beans, pine nuts, grapes, and non-native fruits (apples, figs, palms, pomegranates, black walnuts) in personal-use amounts.",
-    note: "Death Valley designates several native and non-native foods for hand-gathering. Confirm current compendium limits."
+    limit: "Pine nuts, mesquite beans, grapes, and fruit from non-native trees (palms, apples, figs, black walnuts, pomegranates): less than 1 quart per person per day and no more than 5 total quarts per calendar year.",
+    note: "Death Valley designates several native and non-native foods for hand-gathering in small personal-use amounts. Verified against the current compendium, June 2026."
   }
 ];
 
 const SITE_ACCESS_RULES = [
   {
     name: "Beacon Food Forest",
-    bounds: { south: 47.5748, west: -122.314, north: 47.5778, east: -122.311 },
+    bounds: { south: 47.5648, west: -122.3137, north: 47.5683, east: -122.3105 },
     rules: {
       food: {
         status: "allowed",
@@ -266,6 +279,87 @@ const SITE_ACCESS_RULES = [
         note: "Beacon Food Forest describes more than 100 edible, medicinal, and crafting plants open for community harvest.",
         sourceLabel: "Beacon Food Forest open harvest policy",
         sourceUrl: ACCESS_RULE_SOURCES.beaconFoodForest
+      }
+    }
+  },
+  {
+    name: "Dr. George Washington Carver Edible Park",
+    bounds: { south: 35.5933, west: -82.5478, north: 35.5947, east: -82.5462 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Dr. George Washington Carver Edible Park (Asheville)",
+        limit: "Visitors are encouraged to enjoy freshly picked produce from the park's 40+ fruit and nut species, and discouraged from taking more than their fair share.",
+        note: "The nation's first public food forest (1997), a City of Asheville park maintained with Bountiful Cities. Leave the community-garden plots to their gardeners.",
+        sourceLabel: "City of Asheville Parks & Recreation",
+        sourceUrl: ACCESS_RULE_SOURCES.carverEdiblePark
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Dr. George Washington Carver Edible Park (Asheville)",
+        limit: "The city's open invitation covers picking produce to eat; collection of craft or medicinal material is not addressed.",
+        note: "Ask Bountiful Cities or Asheville Parks & Recreation before collecting non-food material.",
+        sourceLabel: "City of Asheville Parks & Recreation",
+        sourceUrl: ACCESS_RULE_SOURCES.carverEdiblePark
+      }
+    }
+  },
+  {
+    name: "Festival Beach Food Forest",
+    bounds: { south: 30.2529, west: -97.7361, north: 30.2542, east: -97.7346 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Festival Beach Food Forest (Austin)",
+        limit: "Open foraging of fruits, vegetables, and herbs, free for the taking: gather only what's abundant and healthy, take only what you need, and leave some to reseed.",
+        note: "A fence-less public food forest on Austin parkland beside the Festival Beach Community Garden — don't pick from the garden's individual plots. Double-check identification; not every plant here is edible.",
+        sourceLabel: "Festival Beach Food Forest",
+        sourceUrl: ACCESS_RULE_SOURCES.festivalBeachFoodForest
+      },
+      medicine: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Festival Beach Food Forest (Austin)",
+        limit: "The food forest grows medicinal herbs as part of its public plantings, with signage on which plants are medicinal: harvest gently and take only what you need.",
+        note: "Confirm identification against the site's signage, and leave enough for the plant to recover and others to share.",
+        sourceLabel: "Festival Beach Food Forest",
+        sourceUrl: ACCESS_RULE_SOURCES.festivalBeachFoodForest
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Festival Beach Food Forest (Austin)",
+        limit: "The open-foraging invitation covers food and medicinal herbs; collection of craft material is not addressed — \"take food, not the forest.\"",
+        note: "Ask the food forest stewards before collecting non-food material.",
+        sourceLabel: "Festival Beach Food Forest",
+        sourceUrl: ACCESS_RULE_SOURCES.festivalBeachFoodForest
+      }
+    }
+  },
+  {
+    name: "Urban Food Forest at Browns Mill",
+    bounds: { south: 33.6921, west: -84.376, north: 33.6939, east: -84.374 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Urban Food Forest at Browns Mill (Atlanta)",
+        limit: "The City of Atlanta's public food forest grows nuts, fruits, vegetables, herbs, and mushrooms for public consumption; harvest modestly and follow posted guidance and any volunteer-led harvest practices.",
+        note: "The nation's largest public food forest, community-managed with excess harvests shared with local food pantries. The city's detailed harvest-guidelines page is currently offline — follow on-site signage.",
+        sourceLabel: "AgLanta (City of Atlanta)",
+        sourceUrl: ACCESS_RULE_SOURCES.brownsMillFoodForest
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Urban Food Forest at Browns Mill (Atlanta)",
+        limit: "The city's public-consumption invitation covers food; collection of craft or medicinal material is not addressed.",
+        note: "Ask the AgLanta team or on-site stewards before collecting non-food material.",
+        sourceLabel: "AgLanta (City of Atlanta)",
+        sourceUrl: ACCESS_RULE_SOURCES.brownsMillFoodForest
       }
     }
   },
@@ -4013,6 +4107,18 @@ function getPublicLandAccessRule(properties, species) {
   const text = getPublicLandText(properties);
   const area = getPublicLandName(properties);
 
+  if (text.includes("botanic") || text.includes("arboretum")) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Botanical gardens and arboreta protect their living collections: do not collect plants or plant parts, including flowers, leaves, seeds, fruits, or cuttings.",
+      note: "Curated plant collections are research and conservation assets; collection is uniformly prohibited (e.g., the U.S. National Arboretum's rules) unless the institution explicitly authorizes it.",
+      sourceLabel: "U.S. National Arboretum rules (representative)",
+      sourceUrl: ACCESS_RULE_SOURCES.botanicalGardens
+    };
+  }
+
   if (state.activeMap !== "food" && isNationalParkServiceLand(text)) {
     return {
       status: "prohibited",
@@ -4375,6 +4481,115 @@ function getStateSystemRule(properties, text, area) {
       note: "California's park regulations (14 CCR 4306) protect all vegetation; a few units post berry or mushroom exceptions at headquarters.",
       sourceLabel: "California state park regulations",
       sourceUrl: ACCESS_RULE_SOURCES.californiaParks
+    };
+  }
+
+  if (landIsInState(properties, "CO") && (text.includes("state park") || text.includes("colorado parks and wildlife"))) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Removing, destroying, mutilating, modifying, or defacing any plant or vegetation is prohibited on Colorado Parks and Wildlife lands (firewood from designated areas and noxious weeds excepted).",
+      note: "Colorado's park regulations (2 CCR 405-1 #100) contain no edible-plant exception; foraging is prohibited in Colorado state parks unless posted otherwise.",
+      sourceLabel: "Colorado parks regulations (2 CCR 405-1)",
+      sourceUrl: ACCESS_RULE_SOURCES.coloradoParks
+    };
+  }
+
+  if (landIsInState(properties, "OR") && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area") || text.includes("state scenic"))) {
+    if (!foodMode) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: "Picking, cutting, trimming, uprooting, or removing living vegetation — including roots, tubers, flowers, and stems — requires written park permission outside the edible-gathering exception.",
+        note: "Oregon's rule (OAR 736-010-0055) allows gathering edibles and small non-living souvenirs, but collection of living plant material for craft or medicine is not authorized. Federally recognized Oregon tribal members retain customary-practice rights.",
+        sourceLabel: "OAR 736-010-0055",
+        sourceUrl: ACCESS_RULE_SOURCES.oregonParks
+      };
+    }
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Berries, fruits, mushrooms, and similar edibles: up to 5 gallons per person per day for personal consumption, unless otherwise posted. Uprooting plants or collecting roots, tubers, flowers, and stems is prohibited.",
+      note: "Oregon state parks allow personal-use gathering of edibles under OAR 736-010-0055(5); check postings, and leave the plant itself unharmed.",
+      sourceLabel: "OAR 736-010-0055",
+      sourceUrl: ACCESS_RULE_SOURCES.oregonParks
+    };
+  }
+
+  if (landIsInState(properties, "MD")) {
+    if (text.includes("state park")) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: "Removing, disturbing, damaging, or destroying any plant, rock, mineral, or animal in a Maryland state park is prohibited; the Maryland Park Service may issue permits.",
+        note: "Maryland's park rule (COMAR 08.07.06.13) protects all plants with no edible exception; berry picking has been cited under this rule.",
+        sourceLabel: "COMAR 08.07.06.13",
+        sourceUrl: ACCESS_RULE_SOURCES.marylandParks
+      };
+    }
+    if (text.includes("state forest")) {
+      return {
+        status: "permit-required",
+        label: "Permit required",
+        area,
+        limit: "Plants may not be removed from Maryland state forests without authorization; forest products may be taken after obtaining a permit from the Maryland Forest Service.",
+        note: "COMAR 08.07.01.13 protects all plants in state forests; timber, firewood, and other forest products require a Service permit.",
+        sourceLabel: "COMAR 08.07.01.13",
+        sourceUrl: ACCESS_RULE_SOURCES.marylandForests
+      };
+    }
+  }
+
+  if (landIsInState(properties, "NC") && (text.includes("state park") || text.includes("state recreation area") || text.includes("state natural area"))) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Removing, possessing, or disturbing any plant, fungus, or mineral in North Carolina state park areas is prohibited; collection is limited to research-permit holders from scientific institutions.",
+      note: "North Carolina's park rule (07 NCAC 13B .0201) has no personal-use foraging exception; research permits for personal or commercial purposes are expressly prohibited.",
+      sourceLabel: "07 NCAC 13B .0201",
+      sourceUrl: ACCESS_RULE_SOURCES.northCarolinaParks
+    };
+  }
+
+  if (landIsInState(properties, "MI")
+    && (text.includes("state park") || text.includes("state recreation") || text.includes("state forest") || text.includes("state game") || text.includes("wildlife area"))) {
+    if (!foodMode) return null;
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Mushrooms, nuts, berries, and tree fruits may be harvested from Michigan state-managed lands for personal use (state land rules cap personal take at about 25 pounds); not for resale.",
+      note: "Michigan DNR allows wild-food foraging on state land, but not plants that are destroyed or damaged by harvest — no fiddleheads, ramps, ginseng, whole plants, or tree tapping.",
+      sourceLabel: "Michigan DNR foraging guidance",
+      sourceUrl: ACCESS_RULE_SOURCES.michiganDnr
+    };
+  }
+
+  if (landIsInState(properties, "MN") && (text.includes("state park") || text.includes("forest recreation area"))) {
+    if (!foodMode) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: "Collecting or possessing naturally occurring plants in a fresh state is prohibited in Minnesota state parks; only edible fruit and mushrooms are excepted, for personal use.",
+        note: "Minnesota Rules 6100.0900 protects park vegetation; the edible exception does not extend to craft or medicinal plant material.",
+        sourceLabel: "Minnesota Rules 6100.0900",
+        sourceUrl: ACCESS_RULE_SOURCES.minnesotaParks
+      };
+    }
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Edible fruit and mushrooms may be harvested for personal, noncommercial use in Minnesota state parks and forest recreation areas; nuts and other plant parts are not included in the exception.",
+      note: "Minnesota Rules 6100.0900 excepts edible fruit and mushrooms from the park plant-protection rule; commercial harvest requires the commissioner's written permission.",
+      sourceLabel: "Minnesota Rules 6100.0900",
+      sourceUrl: ACCESS_RULE_SOURCES.minnesotaParks
     };
   }
 

@@ -55,7 +55,18 @@ Primary rule sources currently encoded:
 - Great Smoky Mountains superintendent's compendium (verified against primary source June 2026): https://www.nps.gov/grsm/learn/management/compendium.htm
 - Acadia superintendent's compendium (verified against primary source June 2026): https://www.nps.gov/acad/learn/management/sc.htm
 - Olympic superintendent's compendium (verified against primary source June 2026): https://www.nps.gov/olym/learn/management/superintendent-s-compendium.htm
-- Additional park compendium gathering designations (New River Gorge, Cuyahoga Valley, Mount Rainier, Rocky Mountain, Yellowstone, Yosemite, Glacier, Crater Lake, Grand Teton, Redwood, Capitol Reef, Death Valley), encoded from each park's compendium page with limits summarized using "about" hedging; reverify against the current year's compendium. See docs/permissions-research-2026-06.md for per-park verification status.
+- New River Gorge superintendent's compendium (verified June 2026): https://www.nps.gov/neri/learn/management/superintendents-compendium.htm
+- Cuyahoga Valley superintendent's compendium (verified June 2026, approved April 2026): https://www.nps.gov/cuva/learn/management/superintendents-compendium.htm
+- Mount Rainier 2025 superintendent's compendium (verified June 2026): https://www.nps.gov/mora/learn/management/lawsandpolicies.htm
+- Rocky Mountain 2025 superintendent's compendium (verified June 2026): https://www.nps.gov/romo/learn/management/rmnp_compendium.htm
+- Yellowstone superintendent's compendium (verified June 2026): https://www.nps.gov/yell/learn/management/compendium.htm
+- Yosemite superintendent's compendium, September 2025 (verified June 2026): https://www.nps.gov/yose/learn/management/upload/yose-compendium.pdf
+- Glacier superintendent's compendium (verified June 2026): https://www.nps.gov/glac/learn/management/compendium.htm
+- Crater Lake superintendent's compendium (verified June 2026): https://www.nps.gov/crla/learn/management/superintendent-s-compendium.htm
+- Grand Teton superintendent's compendium (verified June 2026): https://www.nps.gov/grte/learn/management/compendium.htm
+- Redwood National and State Parks superintendent's compendium (verified June 2026): https://www.nps.gov/redw/learn/management/superintendent-s-compendium.htm
+- Capitol Reef Fruita orchard regulations (verified June 2026): https://www.nps.gov/care/learn/historyculture/orchards.htm
+- Death Valley superintendent's compendium via the park rules page (verified June 2026): https://www.nps.gov/deva/learn/management/rules-and-regulations.htm
 - BLM personal-use collection of renewable plant materials: https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits
 - National wildlife refuge default plant protection, 50 CFR Part 27: https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27
 - Army Corps project-land vegetation protection, 36 CFR Part 327: https://www.ecfr.gov/current/title-36/chapter-III/part-327
@@ -66,7 +77,19 @@ Primary rule sources currently encoded:
 - New York City parks vegetation rule, 56 RCNY 1-04: https://www.nycgovparks.org/rules/section-1-04/
 - Monticello guest policies (no collection on Foundation property): https://www.monticello.org/visit/tips-for-visiting/guest-policies
 - UVA pavilion gardens edible-landscape guidance: https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds
-- Beacon Food Forest open harvest policy (site bounds drawn from the street grid at 15th Ave S & S Dakota St, Seattle; refine against parcel data if needed): https://www.beaconfoodforest.org/openharvest
+- Beacon Food Forest open harvest policy (site bounds centered on 47.567, -122.313 at 15th Ave S & S Dakota St, Seattle; refine against parcel data if needed): https://www.beaconfoodforest.org/openharvest
+- Dr. George Washington Carver Edible Park visitor guidance, City of Asheville Parks & Recreation: https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/
+- Festival Beach Food Forest FAQ and harvest guidance (see also EPA brownfields success story, EPA 560-F-20-172): https://festivalbeach.org/frequently-asked-questions/
+- Urban Food Forest at Browns Mill, AgLanta (City of Atlanta); detailed harvest-guidelines page offline as of June 2026: https://aglanta.atlantaga.gov/urban-food-forest-at-browns-mill-1
+- U.S. National Arboretum rules and guidelines (representative source for the generic botanical-garden/arboretum prohibition): https://www.usna.usda.gov/visit/rules-and-guidelines/
+- Colorado Parks and Wildlife land regulations, 2 CCR 405-1 #100: https://www.law.cornell.edu/regulations/colorado/2-CCR-405-1-100
+- Oregon state park resources rule, OAR 736-010-0055: https://secure.sos.state.or.us/oard/view.action?ruleNumber=736-010-0055
+- Maryland state park plant protection, COMAR 08.07.06.13 (CC BY-NC-SA via Open Law Library): https://regs.maryland.gov/us/md/exec/comar/08.07.06.13
+- Maryland state forest plant protection and forest-product permits, COMAR 08.07.01.13: https://regs.maryland.gov/us/md/exec/comar/08.07.01.13
+- North Carolina parks natural-resource protection, 07 NCAC 13B .0201: http://reports.oah.state.nc.us/ncac/title%2007%20-%20natural%20and%20cultural%20resources/chapter%2013%20-%20parks%20and%20recreation%20area%20rules/chapter%2013%20rules.pdf
+- Michigan DNR foraging guidance for state-managed lands: https://www.michigan.gov/dnr/things-to-do/foraging
+- Minnesota state park plant rules, Minnesota Rules 6100.0900 (rule text quoted verbatim in the Sept 2025 MN Sustainable Foraging Task Force memo): https://www.revisor.mn.gov/rules/6100.0900/
+- Minnesota Sustainable Foraging Task Force 50-state foraging-law list (roadmap reference for future state passes): https://www.lcc.mn.gov/foraging/meetings/20250909/Foraging-Laws-List
 
 ## Safety
 
