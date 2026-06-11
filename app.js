@@ -4217,7 +4217,7 @@ function computeRecordAccessRule(record, species) {
   const siteRule = getSiteAccessRule(record);
   if (siteRule) return siteRule;
 
-  const landRule = getBestPublicLandAccessRule(getContainingPublicLands(record), species, getRecordStateCode(record));
+  const landRule = getBestPublicLandAccessRule(getContainingPublicLands(record), species, getRecordStateCode(record), record);
   if (landRule) return landRule;
 
   if (record.accessClass === "private") {
@@ -4297,7 +4297,7 @@ function getRecordStateCode(record) {
   return match ? match.id.toUpperCase() : "";
 }
 
-function getPublicLandAccessRule(properties, species, stateCode) {
+function getPublicLandAccessRule(properties, species, stateCode, record) {
   const text = getPublicLandText(properties);
   const area = getPublicLandName(properties);
 
@@ -4310,6 +4310,18 @@ function getPublicLandAccessRule(properties, species, stateCode) {
       note: "Curated plant collections are research and conservation assets; collection is uniformly prohibited (e.g., the U.S. National Arboretum's rules) unless the institution explicitly authorizes it.",
       sourceLabel: "U.S. National Arboretum rules (representative)",
       sourceUrl: ACCESS_RULE_SOURCES.botanicalGardens
+    };
+  }
+
+  if (isNycLocalPark(text, stateCode, record)) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Removing plants, flowers, or other vegetation from New York City parks is prohibited without the Commissioner's permission.",
+      note: "PAD-US identifies this as local city parkland inside New York City; applying the NYC Parks vegetation rule.",
+      sourceLabel: "NYC Parks rules 1-04",
+      sourceUrl: ACCESS_RULE_SOURCES.nycParks
     };
   }
 
@@ -4790,10 +4802,10 @@ function getStateSystemRule(stateCode, text, area) {
   return null;
 }
 
-function getBestPublicLandAccessRule(features, species, stateCode) {
+function getBestPublicLandAccessRule(features, species, stateCode, record) {
   if (!features.length) return null;
   const candidates = features.map((feature) => ({
-    rule: getPublicLandAccessRule(feature.properties || {}, species, stateCode),
+    rule: getPublicLandAccessRule(feature.properties || {}, species, stateCode, record),
     text: getPublicLandText(feature.properties || {}),
     acres: Number(feature.properties?.GIS_Acres) || 0
   }));
@@ -4842,6 +4854,27 @@ function isNationalParkServiceLand(text) {
     || text.includes("national lakeshore")
     || text.includes("national preserve")
     || text.includes("memorial parkway");
+}
+
+function isNycLocalPark(text, stateCode, record) {
+  if (stateCode !== "NY" || !isRecordInNycArea(record)) return false;
+  const localPark = text.includes("local park")
+    || text.includes("local recreation area")
+    || text.includes("local other or unknown");
+  return text.includes("city land")
+    && text.includes("local government")
+    && localPark;
+}
+
+function isRecordInNycArea(record) {
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  return Number.isFinite(lat)
+    && Number.isFinite(lng)
+    && lat >= 40.47
+    && lat <= 40.92
+    && lng >= -74.26
+    && lng <= -73.7;
 }
 
 function isUsfsLand(text) {

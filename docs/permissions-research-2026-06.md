@@ -160,3 +160,11 @@ getPublicLandAccessRule.
 - State_Nm-based state matching only applies to freshly fetched PAD-US
   features; nothing breaks for older cached features, they just fall through
   to the generic fallback.
+
+## Filtered aggregate maintenance
+
+- When permission rules in `app.js` change, rerun
+  `node scripts/build_access_status.mjs` so `data/falling-fruit/us/manifest.json`
+  refreshes its baked `accessCounts` and `accessCentroids` from the current
+  rule logic. The PAD-US containment cache does not need to be rebuilt unless
+  PAD-US boundaries or public-access units are being refreshed.
