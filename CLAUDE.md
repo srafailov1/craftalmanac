@@ -33,11 +33,14 @@ the start of debugging sessions; update or clear entries as they're resolved.
 
 ## Collaborators
 
-Two scheduled Claude agents run nightly at 4am (debug tune-up owning
-`KNOWN_ISSUES.md`; permissions research owning the rule tables and research
-docs). Codex works the filtered-aggregates pipeline per
-`docs/TODO-filtered-aggregates.md`. Stay out of each other's areas; the TODO
-file's Boundaries section is the contract.
+Three agent tiers — see `docs/work-split.md` for the full split and queues.
+Claude: architecture, design, rule semantics, reviews, and the two 4am
+scheduled loops (debug tune-up owning `KNOWN_ISSUES.md`; permissions research
+owning rule tables and research docs). Codex: mid-level engineering from
+work orders (`docs/TODO-*.md`). Qwen (local, via opencode): junior tasks per
+`AGENTS.md` and the queue in `docs/work-split.md`. Stay out of each other's
+areas; Boundaries sections are the contract. Design work lives on the
+`design/relaunch` branch, never `main`.
 
 ## Workflow
 
