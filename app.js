@@ -1195,6 +1195,7 @@ const state = {
   npsOrchardData: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
+  stateBoundaries: null,
   accessRuleCache: new Map(),
   pointDataReady: false,
   loadedPointBounds: null,
@@ -3854,7 +3855,7 @@ async function loadPublicLands() {
         geometryType: "esriGeometryEnvelope",
         inSR: "4326",
         spatialRel: "esriSpatialRelIntersects",
-        outFields: "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres,State_Nm",
+        outFields: "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres",
         returnGeometry: "true",
         outSR: "4326",
         geometryPrecision: "5",
@@ -3865,6 +3866,7 @@ async function loadPublicLands() {
       const response = await fetchWithTimeout(`${PUBLIC_LANDS_URL}?${params.toString()}`);
       if (!response.ok) throw new Error(`PAD-US returned ${response.status}`);
       const data = await response.json();
+      if (data.error) throw new Error(`PAD-US query error: ${data.error.message || data.error.code || "unknown"}`);
       if (requestId !== state.activePublicRequest) return;
       features.push(...(data.features || []));
       if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) break;
@@ -4042,7 +4044,7 @@ function computeRecordAccessRule(record, species) {
   const siteRule = getSiteAccessRule(record);
   if (siteRule) return siteRule;
 
-  const landRule = getBestPublicLandAccessRule(getContainingPublicLands(record), species);
+  const landRule = getBestPublicLandAccessRule(getContainingPublicLands(record), species, getRecordStateCode(record));
   if (landRule) return landRule;
 
   if (record.accessClass === "private") {
@@ -4094,16 +4096,35 @@ function getSiteAccessRule(record) {
   return site.rules[state.activeMap] || site.rules.default || null;
 }
 
-function landIsInState(properties, stateCode) {
-  // PAD-US State_Nm can list multiple codes; match whole tokens only so
-  // "VA" never matches "WA" and vice versa.
-  return String(properties.State_Nm || "")
-    .toUpperCase()
-    .split(/[^A-Z]+/)
-    .includes(stateCode);
+async function loadStateBoundaries() {
+  // PAD-US's public-access layer does not carry usable state attribution
+  // (ST_Name is "Not Applicable" on designation features), so state-specific
+  // rules locate each record inside Census state polygons instead.
+  try {
+    const response = await fetch("./data/contiguous-us-states.json");
+    if (!response.ok) return;
+    state.stateBoundaries = (await response.json()).states || [];
+    state.accessRuleCache.clear();
+    renderMarkers();
+  } catch {
+    // State-specific rules degrade to generic fallbacks without boundaries.
+  }
 }
 
-function getPublicLandAccessRule(properties, species) {
+function getRecordStateCode(record) {
+  if (!state.stateBoundaries) return "";
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return "";
+  const match = state.stateBoundaries.find((entry) => (
+    lng >= entry.bbox[0] && lng <= entry.bbox[2]
+    && lat >= entry.bbox[1] && lat <= entry.bbox[3]
+    && pointInFeature([lng, lat], entry)
+  ));
+  return match ? match.id.toUpperCase() : "";
+}
+
+function getPublicLandAccessRule(properties, species, stateCode) {
   const text = getPublicLandText(properties);
   const area = getPublicLandName(properties);
 
@@ -4254,10 +4275,10 @@ function getPublicLandAccessRule(properties, species) {
     };
   }
 
-  const stateRule = getStateSystemRule(properties, text, area);
+  const stateRule = getStateSystemRule(stateCode, text, area);
   if (stateRule) return stateRule;
 
-  if (landIsInState(properties, "VA") && isVirginiaWma(text)) {
+  if (stateCode === "VA" && isVirginiaWma(text)) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
@@ -4281,7 +4302,7 @@ function getPublicLandAccessRule(properties, species) {
     };
   }
 
-  if (landIsInState(properties, "VA") && isVirginiaStateForest(text)) {
+  if (stateCode === "VA" && isVirginiaStateForest(text)) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
@@ -4305,7 +4326,7 @@ function getPublicLandAccessRule(properties, species) {
     };
   }
 
-  if (landIsInState(properties, "VA") && isVirginiaStateParkOrDcrLand(text)) {
+  if (stateCode === "VA" && isVirginiaStateParkOrDcrLand(text)) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
@@ -4391,7 +4412,7 @@ function getNpsCompendiumRule(text, area, species) {
   };
 }
 
-function getStateSystemRule(properties, text, area) {
+function getStateSystemRule(stateCode, text, area) {
   const foodMode = state.activeMap === "food";
 
   if (text.includes("new york city") || text.includes("city of new york")) {
@@ -4406,7 +4427,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "NY")) {
+  if (stateCode === "NY") {
     if (text.includes("state forest") || text.includes("forest preserve") || text.includes("environmental conservation")) {
       if (!foodMode) return null;
       return {
@@ -4432,7 +4453,7 @@ function getStateSystemRule(properties, text, area) {
     }
   }
 
-  if (landIsInState(properties, "PA")
+  if (stateCode === "PA"
     && (text.includes("state forest") || text.includes("state park") || text.includes("conservation and natural resources"))) {
     if (!foodMode) return null;
     return {
@@ -4446,7 +4467,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "WA")) {
+  if (stateCode === "WA") {
     if (text.includes("natural area preserve")) {
       return {
         status: "prohibited",
@@ -4472,7 +4493,7 @@ function getStateSystemRule(properties, text, area) {
     }
   }
 
-  if (landIsInState(properties, "CA") && text.includes("state park")) {
+  if (stateCode === "CA" && text.includes("state park")) {
     return {
       status: "prohibited",
       label: "Prohibited",
@@ -4484,7 +4505,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "CO") && (text.includes("state park") || text.includes("colorado parks and wildlife"))) {
+  if (stateCode === "CO" && (text.includes("state park") || text.includes("colorado parks and wildlife"))) {
     return {
       status: "prohibited",
       label: "Prohibited",
@@ -4496,7 +4517,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "OR") && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area") || text.includes("state scenic"))) {
+  if (stateCode === "OR" && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area") || text.includes("state scenic"))) {
     if (!foodMode) {
       return {
         status: "prohibited",
@@ -4519,7 +4540,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "MD")) {
+  if (stateCode === "MD") {
     if (text.includes("state park")) {
       return {
         status: "prohibited",
@@ -4544,7 +4565,7 @@ function getStateSystemRule(properties, text, area) {
     }
   }
 
-  if (landIsInState(properties, "NC") && (text.includes("state park") || text.includes("state recreation area") || text.includes("state natural area"))) {
+  if (stateCode === "NC" && (text.includes("state park") || text.includes("state recreation area") || text.includes("state natural area"))) {
     return {
       status: "prohibited",
       label: "Prohibited",
@@ -4556,7 +4577,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "MI")
+  if (stateCode === "MI"
     && (text.includes("state park") || text.includes("state recreation") || text.includes("state forest") || text.includes("state game") || text.includes("wildlife area"))) {
     if (!foodMode) return null;
     return {
@@ -4570,7 +4591,7 @@ function getStateSystemRule(properties, text, area) {
     };
   }
 
-  if (landIsInState(properties, "MN") && (text.includes("state park") || text.includes("forest recreation area"))) {
+  if (stateCode === "MN" && (text.includes("state park") || text.includes("forest recreation area"))) {
     if (!foodMode) {
       return {
         status: "prohibited",
@@ -4596,10 +4617,10 @@ function getStateSystemRule(properties, text, area) {
   return null;
 }
 
-function getBestPublicLandAccessRule(features, species) {
+function getBestPublicLandAccessRule(features, species, stateCode) {
   if (!features.length) return null;
   const candidates = features.map((feature) => ({
-    rule: getPublicLandAccessRule(feature.properties || {}, species),
+    rule: getPublicLandAccessRule(feature.properties || {}, species, stateCode),
     text: getPublicLandText(feature.properties || {}),
     acres: Number(feature.properties?.GIS_Acres) || 0
   }));
@@ -4788,6 +4809,7 @@ map.on("load", () => {
   state.mapReady = true;
   setINaturalistAggregateReady(false);
   initMapLayers();
+  loadStateBoundaries();
   render();
   loadMapData();
   schedulePublicLandLoad();
