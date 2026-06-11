@@ -85,6 +85,7 @@ const ACCESS_RULE_SOURCES = {
   virginiaParks: "https://law.lis.virginia.gov/admincode/title4/agency5/chapter30/section50/",
   virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
   virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
+  beaconFoodForest: "https://www.beaconfoodforest.org/openharvest",
   charlottesville: "https://www.charlottesville.gov/658/Parks-Trails",
   albemarle: "https://www.albemarle.org/government/parks-recreation",
   newYorkDec: "https://dec.ny.gov/nature/forests-trees/state-forests/rules-for-use",
@@ -122,8 +123,9 @@ const NPS_GATHERING_RULES = [
     sourceLabel: "Acadia compendium",
     sourceUrl: "https://www.nps.gov/acad/learn/management/sc.htm",
     mushroomsAllowed: false,
-    limit: "Edible fruits and berries: about 1/2 dry gallon per person per day; unshelled nuts: 1/2 gallon; apples: up to 10 dry gallons.",
-    note: "Acadia designates edible fruits, berries, and nuts for hand-gathering; mushrooms are not designated. Confirm current compendium limits."
+    mushroomNote: "Acadia's compendium explicitly prohibits collecting mushrooms (and conifer cones, lichens, and fiddlehead ferns): too little is known about harvest effects on fungi and their role in the ecosystem.",
+    limit: "Edible fruits and berries (excluding apples): 1 dry half-gallon per person per day; apples: up to 10 dry gallons; unshelled nuts: 1/2 gallon; unoccupied seashells: 1 pint. Gathering must not damage the plant.",
+    note: "Acadia designates edible fruits, berries, nuts, and unoccupied seashells for hand-gathering; mushroom collection is explicitly prohibited. Verified against the current compendium, June 2026."
   },
   {
     match: "cuyahoga valley",
@@ -138,8 +140,8 @@ const NPS_GATHERING_RULES = [
     sourceLabel: "Olympic compendium",
     sourceUrl: "https://www.nps.gov/olym/learn/management/superintendent-s-compendium.htm",
     mushroomsAllowed: true,
-    limit: "Edible fruits, berries, nuts, and mushrooms: about 1 quart per person per day, 200+ feet from nature trails; higher limits for cranberries, native blackberries, and non-native fruit trees.",
-    note: "Olympic designates edible fruits, berries, nuts, and mushroom fruiting bodies for hand-gathering. Confirm current compendium limits."
+    limit: "Edible fruits, berries, nuts, and mushroom fruiting bodies: 1 quart per person per day, except within 200 feet of nature trails, special trails, and natural study areas. Cranberries and native blackberries: 3 1/2 gallons once per two-week period. Exotic species (apples, pears, non-native blackberries) are exempt from limits. Unoccupied seashells: a handful per visit.",
+    note: "Olympic designates edible fruits, berries, nuts, mushrooms, and unoccupied seashells for hand-gathering for personal consumption. Verified against the current compendium, June 2026."
   },
   {
     match: "mount rainier",
@@ -225,6 +227,39 @@ const NPS_GATHERING_RULES = [
 ];
 
 const SITE_ACCESS_RULES = [
+  {
+    name: "Beacon Food Forest",
+    bounds: { south: 47.5748, west: -122.314, north: 47.5778, east: -122.311 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Beacon Food Forest (Seattle)",
+        limit: "Open harvest year-round for anyone: take what you need of what's ripe and abundant, and leave some for others. Do not pick from the P-patch plots (stone-walled rectangles/hexagons, rented by individual gardeners) or the food bank plot.",
+        note: "A 7-acre public food forest on Seattle Public Utilities land beside Jefferson Park, founded on an open-harvest, fair-share-for-all policy.",
+        sourceLabel: "Beacon Food Forest open harvest policy",
+        sourceUrl: ACCESS_RULE_SOURCES.beaconFoodForest
+      },
+      medicine: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Beacon Food Forest (Seattle)",
+        limit: "The open-harvest invitation covers the site's medicinal plantings: harvest gently, take only what's abundant, and leave some for others. Do not pick from P-patch plots or the food bank plot.",
+        note: "Please leave the sust̓əlǰixʷali Traditional Indian Medicine garden, tended by the Seattle Indian Health Board, to its caretakers unless invited.",
+        sourceLabel: "Beacon Food Forest open harvest policy",
+        sourceUrl: ACCESS_RULE_SOURCES.beaconFoodForest
+      },
+      default: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Beacon Food Forest (Seattle)",
+        limit: "The open-harvest invitation extends to the site's crafting plants: harvest gently, take only what's abundant, and leave some for others. Do not pick from P-patch plots or the food bank plot.",
+        note: "Beacon Food Forest describes more than 100 edible, medicinal, and crafting plants open for community harvest.",
+        sourceLabel: "Beacon Food Forest open harvest policy",
+        sourceUrl: ACCESS_RULE_SOURCES.beaconFoodForest
+      }
+    }
+  },
   {
     name: "Monticello (Thomas Jefferson Foundation)",
     bounds: { south: 37.9985, west: -78.464, north: 38.0165, east: -78.438 },

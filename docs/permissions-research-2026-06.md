@@ -20,9 +20,9 @@ in the app; **candidate** = found but not yet encoded.
 |---|---|---|---|
 | Great Smoky Mountains | 16-item species list, 1 lb/person/day/species (apples, pears, peaches excepted); 200 ft from nature trails; no ramps | Yes — 1 lb combined, soil/down-log only, 100 ft from facilities | **verified** (primary, June 2026) |
 | New River Gorge | ~1 gal/day list incl. mayapples & sumac; 3 gal for tree fruits/walnuts | Yes — ~1.5 gal | sourced |
-| Acadia | ~1/2 dry gal fruits/berries; 1/2 gal nuts; 10 gal apples | No | sourced |
+| Acadia | 1 dry half-gal/day fruits/berries (apples excepted); apples 10 dry gal; unshelled nuts 1/2 gal; seashells 1 pint | **Explicitly prohibited** (also cones, lichens, fiddleheads) | **verified** (primary, June 2026) |
 | Cuyahoga Valley | reasonable quantities fruits/berries/nuts, excluding listed rare species | No | sourced |
-| Olympic | ~1 qt/day fruits/berries/nuts/mushrooms; cranberries & native blackberries 3.5 gal per 2 weeks; non-native fruit unlimited; seashells (handful/visit) | Yes | sourced |
+| Olympic | 1 qt/day fruits/berries/nuts/mushrooms, 200+ ft from nature/special trails & natural study areas; cranberries & native blackberries 3.5 gal once per 2 weeks; exotics (apples, pears, non-native blackberries) exempt; seashells handful/visit | Yes | **verified** (primary, June 2026) |
 | Mount Rainier | ~1 gal berries/day | Yes | sourced |
 | Rocky Mountain | ~1 qt fruits/berries incl. chokecherries, rose hips | **Explicitly prohibited** | sourced |
 | Yellowstone | ~1 qt/species/day berries + mushrooms, in-park consumption | Yes | sourced |
@@ -56,6 +56,16 @@ Future state passes worth doing (dense data): CO, OR, MD, NC, MI, MN, IL/Chicago
 ## Fine-grained sites
 
 **Encoded (bounds in `SITE_ACCESS_RULES`):**
+- **Beacon Food Forest, Seattle WA** — allowed, all three modes (June 2026,
+  primary source beaconfoodforest.org/openharvest). Open harvest year-round
+  for anyone; site invites harvest of "more than 100 edible, medicinal, and
+  crafting plants" — the explicit crafting language is why the default
+  (ink/craft) mode is allowed too. Exceptions kept in the limit text: P-patch
+  plots and the food bank plot. Medicine-mode note asks users to leave the
+  sust̓əlǰixʷali Traditional Indian Medicine garden (Seattle Indian Health
+  Board) to its caretakers. Bounds 47.5748..47.5778 N, -122.314..-122.311 W,
+  drawn from the street grid (7-acre slope between 15th Ave S and Jefferson
+  Park, south of S Dakota St) — refine against the SPU parcel if needed.
 - **Monticello** — prohibited, all modes. Private Thomas Jefferson Foundation
   museum property incl. Saunders-Monticello Trail. Note: the guest-policies
   page protects the property generally but does not contain an explicit
@@ -68,8 +78,6 @@ Future state passes worth doing (dense data): CO, OR, MD, NC, MI, MN, IL/Chicago
   -78.506..-78.5018 W.
 
 **Candidates — verified to exist, bounds not yet confirmed (next iteration):**
-- Beacon Food Forest, Seattle WA (~47.576, -122.312) — public food forest,
-  open community harvest. beaconfoodforest.org
 - Urban Food Forest at Browns Mill, Atlanta GA (~33.70, -84.36) — nation's
   largest public food forest; harvest is community-prioritized and partly
   volunteer-managed; check aglanta.atlantaga.gov guidance before encoding as
@@ -82,6 +90,18 @@ Future state passes worth doing (dense data): CO, OR, MD, NC, MI, MN, IL/Chicago
   Minnesota Landscape Arboretum) — uniformly prohibit collection; a generic
   "botanical garden / arboretum -> prohibited" PAD-US text rule is a good
   future addition.
+
+## Run log
+
+- **2026-06-11:** Verified Acadia and Olympic against current compendium pages
+  (sourced → verified; Acadia limits unchanged but mushroom prohibition is now
+  explicit with the park's rationale; Olympic limits unchanged, trail-buffer
+  and seashell details added). Encoded Beacon Food Forest into
+  SITE_ACCESS_RULES (all modes allowed; first candidate promoted). Next in
+  queue: remaining "sourced" compendiums (Mount Rainier, Yosemite, Yellowstone,
+  Glacier, Crater Lake, Grand Teton, Redwood, New River Gorge, Cuyahoga,
+  Rocky Mountain, Capitol Reef, Death Valley), Browns Mill / Carver Edible
+  Park bounds, and the CO/OR/MD/NC/MI/MN state passes.
 
 ## Known limitations of this pass
 
