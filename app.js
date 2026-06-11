@@ -10,6 +10,7 @@ const DATA_REFRESH_DELAY = 550;
 const PUBLIC_LANDS_REFRESH_DELAY = 650;
 const LIVE_DATA_TIMEOUT = 9000;
 const INATURALIST_DEFAULT_PER_PAGE = 120;
+const INATURALIST_MAX_PER_PAGE = 200;
 const INATURALIST_TILE_PER_PAGE = 50;
 const INATURALIST_AGGREGATE_DELAY = 260;
 const INATURALIST_GRID_MIN_ZOOM = 2;
@@ -3107,7 +3108,11 @@ function getINaturalistRequestBounds(bounds, zoom) {
     south: bounds.getSouth(),
     east: bounds.getEast(),
     north: bounds.getNorth(),
-    perPage: INATURALIST_DEFAULT_PER_PAGE
+    // At point zooms, fetch the API maximum so dense viewports stay as full
+    // as the aggregate circles implied they would be.
+    perPage: zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM
+      ? INATURALIST_MAX_PER_PAGE
+      : INATURALIST_DEFAULT_PER_PAGE
   };
   if (zoom < 5.4 || zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM) return [baseBounds];
 
@@ -3267,10 +3272,18 @@ async function loadFallingFruit() {
 
     const manifest = await getFallingFruitManifest();
     const bounds = map.getBounds();
-    const chunks = getVisibleFallingFruitChunks(manifest, bounds);
-    if (!chunks.length || chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
+    let chunks = getVisibleFallingFruitChunks(manifest, bounds);
+    if (!chunks.length) {
       state.fallingFruitRecords = [];
       return [];
+    }
+    if (chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
+      // Never drop everything: load the chunks nearest the viewport center
+      // up to the cap, so dense regions degrade gracefully at the edges.
+      const center = bounds.getCenter();
+      chunks = [...chunks]
+        .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center))
+        .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
     }
 
     await Promise.all(chunks.map(loadFallingFruitChunk));
@@ -3296,6 +3309,12 @@ async function getFallingFruitManifest() {
 function getVisibleFallingFruitChunks(manifest, bounds) {
   return (manifest.chunks || [])
     .filter((chunk) => bboxIntersectsBounds(chunk.bbox, bounds));
+}
+
+function getChunkCenterDistance(chunk, center) {
+  const lng = (chunk.bbox[0] + chunk.bbox[2]) / 2 - center.lng;
+  const lat = (chunk.bbox[1] + chunk.bbox[3]) / 2 - center.lat;
+  return lng * lng + lat * lat;
 }
 
 async function loadFallingFruitChunk(chunk) {

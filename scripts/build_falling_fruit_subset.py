@@ -14,7 +14,9 @@ CHUNKS_DIR = OUTPUT_DIR / "chunks"
 MANIFEST_PATH = OUTPUT_DIR / "manifest.json"
 SUMMARY_PATH = OUTPUT_DIR / "summary.json"
 STATE_BOUNDARY_PATH = ROOT / "data" / "contiguous-us-states.json"
-CHUNK_SIZE_DEGREES = 0.05
+# 0.15 keeps worst-case metro viewports at zoom 8 under the app's chunk-request
+# cap; the original 0.05 grid intersected 300+ files and dropped all records.
+CHUNK_SIZE_DEGREES = 0.15
 CHUNK_AXIS_SCALE = 100
 RECORD_FIELDS = [
     "id",
