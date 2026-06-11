@@ -6,7 +6,7 @@
     <title>Craft Almanac · United States Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=filtered-access-2">
+    <link rel="stylesheet" href="./styles.css?v=filtered-access-3">
   </head>
   <body>
     <main class="app-shell">
@@ -106,7 +106,7 @@
                 <button class="text-button" id="clearAccessButton" type="button">None</button>
               </div>
               <div class="filter-list access-list permission-list" id="accessStatusList" aria-label="Choose permission statuses"></div>
-              <p class="fine-print access-filter-note" id="accessFilterNote" hidden>Permission filters apply to Falling Fruit overview circles and individual points. Live iNaturalist overview counts are hidden while permission filters are active because they cannot be permission-classified.</p>
+              <p class="fine-print access-filter-note" id="accessFilterNote" hidden>Permission filters apply exactly to Falling Fruit overview circles and individual points. Live iNaturalist overview counts are filtered approximately by area rules; point-level labels remain exact.</p>
               <p class="fine-print">Private, unsourced, and public-access points still require checking property boundaries, posted rules, and current collection limits before taking anything.</p>
             </div>
           </section>
@@ -147,6 +147,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=filtered-access-2"></script>
+    <script src="./app.js?v=filtered-access-3"></script>
   </body>
 </html>

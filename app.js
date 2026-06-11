@@ -38,6 +38,8 @@ const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
 const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
 const FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-aggregate-labels";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
+const STATUS_RASTER_URL = "./data/falling-fruit/us/status-raster.json";
+const STATUS_RASTER_CELL_SIZE_DEGREES = 0.05;
 const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
 const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
 // Live-data caches grow as the user pans; trim the oldest entries past these
@@ -1189,6 +1191,8 @@ const state = {
   activeINaturalistAggregateRequest: 0,
   activePublicRequest: 0,
   fallingFruitManifest: null,
+  statusRaster: null,
+  statusRasterPromise: null,
   fallingFruitChunkCache: new Map(),
   fallingFruitChunkLoads: new Map(),
   fallingFruitRecords: null,
@@ -2441,7 +2445,7 @@ function getAggregateItems(manifest, selectedSpeciesIds, bounds, accessFilterAct
   const items = getActiveMapConfig().loadFallingFruit
     ? [...(manifest.chunks || [])]
     : [];
-  if (!accessFilterActive && state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     items.push(...getINaturalistAggregateItems(bounds));
   }
   return items;
@@ -2630,7 +2634,9 @@ function getAggregateScreenRadius(count) {
 
 function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive) {
   if (item.countsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID]) {
-    return accessFilterActive ? 0 : Number(item.countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
+    const count = Number(item.countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
+    if (!accessFilterActive) return count;
+    return accessStatusSelectionHas(selectedAccessStatuses, getINaturalistAggregateAccessStatus(item)) ? count : 0;
   }
   const modeAccessCounts = item.accessCounts?.[state.activeMap];
   if (accessFilterActive && modeAccessCounts) {
@@ -2684,6 +2690,54 @@ function getFilteredAccessStatusCount(speciesCounts, selectedSpeciesIds) {
   return Object.entries(speciesCounts || {}).reduce((total, [speciesId, count]) => (
     selectedSpeciesIds.has(speciesId) ? total + Number(count || 0) : total
   ), 0);
+}
+
+function accessStatusSelectionHas(selectedAccessStatuses, status) {
+  return typeof selectedAccessStatuses?.has === "function"
+    ? selectedAccessStatuses.has(status)
+    : selectedAccessStatuses.includes(status);
+}
+
+function getINaturalistAggregateAccessStatus(item) {
+  const centroid = item.centroidsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID];
+  if (!Array.isArray(centroid)) return "unknown";
+  const key = getStatusRasterCellKey(Number(centroid[0]), Number(centroid[1]));
+  return state.statusRaster?.[key]?.[state.activeMap] || "unknown";
+}
+
+function getStatusRasterCellKey(lng, lat) {
+  if (!Number.isFinite(lng) || !Number.isFinite(lat)) return "";
+  const west = Math.floor(lng / STATUS_RASTER_CELL_SIZE_DEGREES) * STATUS_RASTER_CELL_SIZE_DEGREES;
+  const south = Math.floor(lat / STATUS_RASTER_CELL_SIZE_DEGREES) * STATUS_RASTER_CELL_SIZE_DEGREES;
+  return `${formatRasterCoord(west, "w", "e")}_${formatRasterCoord(south, "s", "n")}`;
+}
+
+function formatRasterCoord(value, negativePrefix, positivePrefix) {
+  const rounded = Number(value.toFixed(5));
+  const prefix = rounded < 0 ? negativePrefix : positivePrefix;
+  const absolute = Math.round(Math.abs(rounded) * 100);
+  return `${prefix}${String(absolute).padStart(5, "0")}`;
+}
+
+async function loadStatusRaster() {
+  if (state.statusRaster) return state.statusRaster;
+  if (!state.statusRasterPromise) {
+    state.statusRasterPromise = fetch(STATUS_RASTER_URL)
+      .then((response) => {
+        if (!response.ok) throw new Error(`status raster returned ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        state.statusRaster = data || {};
+        return state.statusRaster;
+      })
+      .catch((error) => {
+        console.warn("Status raster unavailable; live overview permissions fall back to unknown.", error);
+        state.statusRaster = {};
+        return state.statusRaster;
+      });
+  }
+  return state.statusRasterPromise;
 }
 
 function getAggregateFeature({ id, level, label, center, count }) {
@@ -3402,13 +3456,6 @@ async function loadINaturalistAggregates() {
     updateFallingFruitAggregates();
     return;
   }
-  if (isAccessFilterActive() && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
-    state.inatAggregateItems = [];
-    state.inatAggregateTaxonKey = "";
-    setINaturalistAggregateReady(true);
-    updateFallingFruitAggregates();
-    return;
-  }
   if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
     // Keep the last aggregate cells: they bridge the handoff while point
     // data loads after crossing the point-zoom threshold.
@@ -3434,6 +3481,11 @@ async function loadINaturalistAggregates() {
   if (taxonChanged) {
     state.inatAggregateItems = [];
     setINaturalistAggregateReady(false);
+  }
+  if (isAccessFilterActive()) {
+    setINaturalistAggregateReady(false);
+    await loadStatusRaster();
+    if (requestId !== state.activeINaturalistAggregateRequest) return;
   }
   const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
   const missingTiles = tiles.filter((tile) => (
