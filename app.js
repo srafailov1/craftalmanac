@@ -40,6 +40,11 @@ const FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-aggregate-labels";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
 const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
 const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
+// Live-data caches grow as the user pans; trim the oldest entries past these
+// caps so long sessions don't accumulate unbounded memory.
+const INATURALIST_RECORD_CACHE_MAX = 12000;
+const INATURALIST_AGGREGATE_CACHE_MAX = 800;
+const FALLING_FRUIT_CHUNK_CACHE_MAX = 400;
 const PUBLIC_LANDS_MIN_RENDER_ZOOM = 8;
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
@@ -1055,6 +1060,7 @@ const MAP_MODE_CONFIG = {
 
 let speciesCatalog = foodSpeciesCatalog;
 let speciesCatalogByName = sortCatalogByName(speciesCatalog);
+let speciesCatalogById = new Map(speciesCatalog.map((species) => [species.id, species]));
 
 const INK_FALLING_FRUIT_SPECIES_ALIASES = {
   "black-walnut": "ink-black-walnut",
@@ -1090,6 +1096,7 @@ const state = {
   activePublicRequest: 0,
   fallingFruitManifest: null,
   fallingFruitChunkCache: new Map(),
+  fallingFruitChunkLoads: new Map(),
   fallingFruitRecords: null,
   npsOrchardData: null,
   npsOrchardRecords: null,
@@ -1232,7 +1239,9 @@ function sourceLabel(source) {
 
 function formatFallingFruitDate(value) {
   if (!value) return "";
-  const date = new Date(value);
+  // Date-only strings parse as UTC midnight; force local time so the date
+  // doesn't shift back a day in timezones west of UTC.
+  const date = new Date(/^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00` : value);
   if (Number.isNaN(date.getTime())) return "";
   return getDateInputValue(date);
 }
@@ -1294,6 +1303,7 @@ function syncActiveCatalog() {
   const config = getActiveMapConfig();
   speciesCatalog = config.catalog;
   speciesCatalogByName = sortCatalogByName(speciesCatalog);
+  speciesCatalogById = new Map(speciesCatalog.map((species) => [species.id, species]));
   CATEGORIES = config.categories.map((category) => category.id);
   CATEGORY_COLORS = config.categoryColors;
 }
@@ -1979,7 +1989,7 @@ function isMobilePanel() {
 }
 
 function getSpecies(speciesId) {
-  return speciesCatalog.find((species) => species.id === speciesId);
+  return speciesCatalogById.get(speciesId);
 }
 
 function getSpeciesInput(speciesId) {
@@ -1991,10 +2001,7 @@ function getCheckedValues(name) {
 }
 
 function getSelectedAccessStatuses() {
-  const selectedStatuses = getCheckedValues("access-status");
-  return selectedStatuses.length
-    ? selectedStatuses
-    : [];
+  return getCheckedValues("access-status");
 }
 
 function getTaxonIds(species) {
@@ -2006,8 +2013,8 @@ function getExpectedIconicTaxon(species) {
 }
 
 function getSelectedCatalogItems() {
-  const selectedIds = getCheckedValues("species");
-  return speciesCatalog.filter((species) => selectedIds.includes(species.id));
+  const selectedIds = new Set(getCheckedValues("species"));
+  return speciesCatalog.filter((species) => selectedIds.has(species.id));
 }
 
 function setSpeciesByCategory(category, checked) {
@@ -2081,17 +2088,17 @@ function isSpeciesAvailableOnSelectedDate(species) {
 }
 
 function getVisibleRecords() {
-  const selectedSpecies = getCheckedValues("species");
-  const selectedAccessStatuses = getSelectedAccessStatuses();
+  const selectedSpecies = new Set(getCheckedValues("species"));
+  const selectedAccessStatuses = new Set(getSelectedAccessStatuses());
 
   return state.records.filter((record) => {
+    if (!selectedSpecies.has(record.speciesId)) return false;
     const species = getSpecies(record.speciesId);
     if (!species) return false;
     if (state.savedLocationsOnly && !state.savedLocations.has(record.id)) return false;
+    if (!isSpeciesAvailableOnSelectedDate(species)) return false;
     const accessRule = getRecordAccessRule(record, species);
-    if (!selectedAccessStatuses.includes(accessRule.status)) return false;
-    return isSpeciesAvailableOnSelectedDate(species)
-      && selectedSpecies.includes(record.speciesId);
+    return selectedAccessStatuses.has(accessRule.status);
   });
 }
 
@@ -2299,21 +2306,6 @@ function getFallingFruitAggregateCollection(manifest) {
     type: "FeatureCollection",
     features
   };
-}
-
-function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
-  const features = (manifest.states || []).flatMap((item) => {
-    const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
-    if (!count) return [];
-    return [getAggregateFeature({
-      id: `state-${item.id}`,
-      level: "state",
-      label: item.name,
-      center: getAggregateItemCenter(item, selectedSpeciesIds),
-      count
-    })];
-  });
-  return mergeOverlappingAggregateFeatures(features);
 }
 
 function shouldRebalanceAggregatesOnMove() {
@@ -3303,7 +3295,7 @@ async function loadINaturalistAggregates() {
       await mapWithConcurrency(missingTiles, 6, async (tile) => {
         if (requestId !== state.activeINaturalistAggregateRequest) return null;
         const items = await fetchINaturalistAggregateTileWithRetry(taxonIds, tile);
-        state.inatAggregateCache.set(getINaturalistAggregateCacheKey(taxonIds, tile), items);
+        touchCacheEntry(state.inatAggregateCache, getINaturalistAggregateCacheKey(taxonIds, tile), items);
         return items;
       });
     } catch {
@@ -3313,9 +3305,14 @@ async function loadINaturalistAggregates() {
   }
 
   // Swap the full tile set in at once so counts never paint partially.
-  state.inatAggregateItems = getNonzeroAggregateItems(tiles.flatMap((tile) => (
-    state.inatAggregateCache.get(getINaturalistAggregateCacheKey(taxonIds, tile)) || []
-  )));
+  state.inatAggregateItems = getNonzeroAggregateItems(tiles.flatMap((tile) => {
+    const cacheKey = getINaturalistAggregateCacheKey(taxonIds, tile);
+    const items = state.inatAggregateCache.get(cacheKey);
+    // Failed tiles stay uncached so the next pass retries them.
+    if (items) touchCacheEntry(state.inatAggregateCache, cacheKey, items);
+    return items || [];
+  }));
+  trimCache(state.inatAggregateCache, INATURALIST_AGGREGATE_CACHE_MAX);
   setINaturalistAggregateReady(true);
   updateFallingFruitAggregates();
 }
@@ -3358,7 +3355,8 @@ async function loadMapData() {
   if (requestId !== state.activeRequest) return;
 
   if (inatResult.status === "fulfilled") {
-    inatResult.value.forEach((record) => state.inatRecordCache.set(record.id, record));
+    inatResult.value.forEach((record) => touchCacheEntry(state.inatRecordCache, record.id, record));
+    trimCache(state.inatRecordCache, INATURALIST_RECORD_CACHE_MAX);
   }
   state.inatRecords = getCachedINaturalistRecordsInBounds();
 
@@ -3473,6 +3471,19 @@ function getINaturalistRequestBounds(bounds, zoom) {
 
 function dedupeRecords(records) {
   return [...new Map(records.map((record) => [record.id, record])).values()];
+}
+
+function touchCacheEntry(cache, key, value) {
+  // Delete-then-set keeps insertion order as recency order, so trimming from
+  // the front evicts the least recently touched entries first.
+  cache.delete(key);
+  cache.set(key, value);
+}
+
+function trimCache(cache, maxEntries) {
+  while (cache.size > maxEntries) {
+    cache.delete(cache.keys().next().value);
+  }
 }
 
 function getINaturalistTaxonIdString(speciesItems) {
@@ -3600,38 +3611,36 @@ async function mapWithConcurrency(items, concurrency, mapper) {
 }
 
 async function loadFallingFruit() {
-  try {
-    if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
-      state.fallingFruitRecords = [];
-      return [];
-    }
-
-    const manifest = await getFallingFruitManifest();
-    const bounds = map.getBounds();
-    let chunks = getVisibleFallingFruitChunks(manifest, bounds);
-    if (!chunks.length) {
-      state.fallingFruitRecords = [];
-      return [];
-    }
-    if (chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
-      // Never drop everything: load the chunks nearest the viewport center
-      // up to the cap, so dense regions degrade gracefully at the edges.
-      const center = bounds.getCenter();
-      chunks = [...chunks]
-        .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center))
-        .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
-    }
-
-    await Promise.all(chunks.map(loadFallingFruitChunk));
-    state.fallingFruitRecords = chunks
-      .flatMap((chunk) => state.fallingFruitChunkCache.get(chunk.id) || [])
-      .filter((record) => recordInBounds(record, bounds))
-      .map(mapFallingFruitRecord)
-      .filter(Boolean);
-    return state.fallingFruitRecords;
-  } catch {
+  // Errors propagate so loadMapData can keep the previous records and report
+  // the source as unavailable instead of silently dropping every point.
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    state.fallingFruitRecords = [];
     return [];
   }
+
+  const manifest = await getFallingFruitManifest();
+  const bounds = map.getBounds();
+  let chunks = getVisibleFallingFruitChunks(manifest, bounds);
+  if (!chunks.length) {
+    state.fallingFruitRecords = [];
+    return [];
+  }
+  if (chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
+    // Never drop everything: load the chunks nearest the viewport center
+    // up to the cap, so dense regions degrade gracefully at the edges.
+    const center = bounds.getCenter();
+    chunks = [...chunks]
+      .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center))
+      .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
+  }
+
+  await Promise.all(chunks.map(loadFallingFruitChunk));
+  state.fallingFruitRecords = chunks
+    .flatMap((chunk) => state.fallingFruitChunkCache.get(chunk.id) || [])
+    .filter((record) => recordInBounds(record, bounds))
+    .map(mapFallingFruitRecord)
+    .filter(Boolean);
+  return state.fallingFruitRecords;
 }
 
 async function getFallingFruitManifest() {
@@ -3654,12 +3663,29 @@ function getChunkCenterDistance(chunk, center) {
 }
 
 async function loadFallingFruitChunk(chunk) {
-  if (state.fallingFruitChunkCache.has(chunk.id)) return;
-  const response = await fetch(chunk.path);
-  if (!response.ok) throw new Error(`Falling Fruit chunk ${chunk.id} returned ${response.status}`);
-  const rows = await response.json();
-  const fields = state.fallingFruitManifest?.recordFields || [];
-  state.fallingFruitChunkCache.set(chunk.id, rows.map((row) => expandFallingFruitRecord(row, fields)));
+  if (state.fallingFruitChunkCache.has(chunk.id)) {
+    // Refresh recency so chunks for the current viewport are evicted last.
+    touchCacheEntry(state.fallingFruitChunkCache, chunk.id, state.fallingFruitChunkCache.get(chunk.id));
+    return;
+  }
+  // Overlapping loads share one in-flight fetch per chunk instead of
+  // re-downloading the same file.
+  const inFlight = state.fallingFruitChunkLoads.get(chunk.id);
+  if (inFlight) return inFlight;
+  const request = (async () => {
+    const response = await fetch(chunk.path);
+    if (!response.ok) throw new Error(`Falling Fruit chunk ${chunk.id} returned ${response.status}`);
+    const rows = await response.json();
+    const fields = state.fallingFruitManifest?.recordFields || [];
+    state.fallingFruitChunkCache.set(chunk.id, rows.map((row) => expandFallingFruitRecord(row, fields)));
+    trimCache(state.fallingFruitChunkCache, FALLING_FRUIT_CHUNK_CACHE_MAX);
+  })();
+  state.fallingFruitChunkLoads.set(chunk.id, request);
+  try {
+    await request;
+  } finally {
+    state.fallingFruitChunkLoads.delete(chunk.id);
+  }
 }
 
 function expandFallingFruitRecord(row, fields) {
@@ -3680,20 +3706,18 @@ function bboxIntersectsBounds(bbox, bounds) {
 }
 
 async function loadNpsOrchards() {
-  try {
-    if (!state.npsOrchardData) {
-      const response = await fetch("./data/nps-historic-orchards.json");
-      if (!response.ok) return [];
-      state.npsOrchardData = await response.json();
-    }
-    state.npsOrchardRecords = state.npsOrchardData
-      .filter((record) => !state.mapReady || recordInBounds(record, map.getBounds()))
-      .map(mapNpsOrchardRecord)
-      .filter(Boolean);
-    return state.npsOrchardRecords;
-  } catch {
-    return [];
+  // Errors propagate so loadMapData can keep the previous records and report
+  // the source as unavailable.
+  if (!state.npsOrchardData) {
+    const response = await fetch("./data/nps-historic-orchards.json");
+    if (!response.ok) throw new Error(`NPS orchards returned ${response.status}`);
+    state.npsOrchardData = await response.json();
   }
+  state.npsOrchardRecords = state.npsOrchardData
+    .filter((record) => !state.mapReady || recordInBounds(record, map.getBounds()))
+    .map(mapNpsOrchardRecord)
+    .filter(Boolean);
+  return state.npsOrchardRecords;
 }
 
 function schedulePublicLandLoad() {
@@ -3761,10 +3785,9 @@ async function loadPublicLands() {
     renderMarkers();
   } catch (error) {
     if (requestId !== state.activePublicRequest) return;
-    state.publicLandFeatures = [];
-    state.accessRuleCache.clear();
-    updatePublicLandSource();
-    renderMarkers();
+    // Keep the last loaded polygons on a transient failure: blanking them
+    // would silently downgrade every marker's access label to unsourced.
+    // The loaded key stays unset, so the next moveend retries this viewport.
   }
 }
 
@@ -3845,7 +3868,7 @@ function getSpeciesForObservation(observation) {
 
 function mapFallingFruitRecord(record) {
   const speciesId = getImportedSpeciesId(record.speciesId);
-  const species = speciesCatalog.find((item) => item.id === speciesId);
+  const species = speciesCatalogById.get(speciesId);
   if (!species || !record.lat || !record.lng) return null;
   return {
     id: `fallingfruit-${record.id}`,
@@ -3877,7 +3900,7 @@ function getImportedSpeciesId(speciesId) {
 
 function mapNpsOrchardRecord(record) {
   const speciesId = getImportedSpeciesId(record.speciesId);
-  const species = speciesCatalog.find((item) => item.id === speciesId);
+  const species = speciesCatalogById.get(speciesId);
   if (!species || !record.lat || !record.lng) return null;
   return {
     id: `nps-orchard-${record.id}`,
@@ -4478,15 +4501,6 @@ function getManassasLimit(species) {
   if (species.category === "nut") return `${species.commonName}: 1 bushel per species per person per day.`;
   if (species.category === "berry") return `${species.commonName}: 1/2 gallon per species per person per day.`;
   return `${species.commonName}: 2 bushels per species per person per day.`;
-}
-
-function isRecordPubliclyAccessible(record) {
-  if (record.publicLand && record.accessClass !== "private") return true;
-  return Boolean(getContainingPublicLand(record));
-}
-
-function getContainingPublicLand(record) {
-  return getContainingPublicLands(record)[0] || null;
 }
 
 function getContainingPublicLands(record) {
