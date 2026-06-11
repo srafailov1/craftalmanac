@@ -24,4 +24,8 @@ done
 echo "Running data validation..."
 node scripts/validate_data.mjs || { echo "FAIL: Data validation failed"; exit 1; }
 
+# Run permission rule tests
+echo "Running permission rule tests..."
+node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }
+
 echo "All checks PASSED"

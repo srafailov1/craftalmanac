@@ -33,24 +33,49 @@ Codex queue:
 ## Tier 3 — Qwen via opencode (junior, local, free)
 
 Operating manual: `AGENTS.md` at repo root (hard rules live there).
-Scope: single-file scripts, docs upkeep, mechanical validation — never core
-app logic, never safety/permissions semantics, never data regeneration.
+Scope: documentation refreshes, scripts README, file inventories, simple shell
+runners over commands that already work, smoke tests, and tightly scoped
+mechanical edits whose pass/fail is obvious from the task text alone. Never
+core app logic, never safety/permissions semantics, never data regeneration.
+
+**Do NOT assign Qwen tasks that involve (route these to Codex or Claude):**
+- extracting functions or constants out of `app.js` into a VM/Node harness
+  (the regex-extraction pattern in `scripts/build_access_status.mjs` is
+  senior-tier work);
+- permission-rule semantics — what status a piece of land or species should
+  return, or any reasoning about NPS/state/PAD-US rule predicates;
+- safety language, disclaimers, or species safety/harvest-ethic tags;
+- interpreting a data schema beyond the explicit field examples a task spells
+  out (e.g. manifest `chunks` vs `states`, `accessCounts` nesting);
+- tests or checks that can print PASS without actually asserting the intended
+  behavior. If a junior task needs a test that truly exercises rule logic, it
+  is not a junior task.
+
+Why: across the 2026-06 queue Qwen misread the manifest schema (used
+`manifest.states` instead of `manifest.chunks`), printed PASS after inner
+failures, and wrote rule tests that passed without asserting real behavior
+(null records, synthetic land text that matched no app.js predicate, a
+mushroom test whose species lacked `category: "mushroom"`). It reliably
+handles docs and simple runners; it does not reliably handle app.js semantics.
 
 Qwen queue (work top-down from the first item not marked DONE or BLOCKED, one per fresh session):
 1. **Data validation script — DONE.** `scripts/validate_data.mjs` exists and
-   passes on current data. Do not redo this item unless a senior agent asks.
+   passes on current data. (Originally drafted by Qwen; repaired and committed
+   by Codex — schema-interpretation bugs put it over the junior line.) Do not
+   redo this item unless a senior agent asks.
 2. **Pre-commit check runner — DONE.** `scripts/check.sh` exists, is
    executable, and passes on current data. Do not redo this item unless a
    senior agent asks.
-3. **Rule-test consolidation — ACTIVE.** Create `scripts/test_rules.mjs`:
-   extract rule functions from `app.js` by regex (reuse the extraction pattern
-   shown inside `scripts/build_access_status.mjs`) and assert: state-code
-   lookups for 5 known cities; NY/PA/WA/CA/NYC/CO/OR/MD/NC/MI/MN status
-   outcomes for one synthetic land-text each (copy expected statuses from
-   `docs/permissions-research-2026-06.md` tables); Great Smoky mushroom
-   allowed; Rocky Mountain mushroom prohibited; Acadia mushroom prohibited.
-   Acceptance: `node scripts/test_rules.mjs` passes; `bash scripts/check.sh`
-   passes after wiring `scripts/test_rules.mjs` into `scripts/check.sh`.
+3. **Rule-test consolidation — DONE (Claude/Codex-tier, reassigned off Qwen).**
+   `scripts/test_rules.mjs` extracts the rule functions from `app.js` and
+   asserts state-code lookups for 5 cities, the NY/PA/WA/CA/NYC/CO/OR/MD/NC/MI/MN
+   status matrix, and Great Smoky / Rocky Mountain / Acadia mushroom outcomes;
+   it is wired into `scripts/check.sh`. Expected statuses are read from the
+   encoded `app.js` logic (the cited `docs/permissions-research-2026-06.md` does
+   not exist; `docs/permission-inferences-2026-06.md` is the closest doc). This
+   item required app.js extraction and rule semantics, so it was never a safe
+   Qwen assignment — it is logged here as senior-tier work, completed. Do not
+   re-queue it for Qwen.
 4. **README refresh.** Update `README.md` to current reality: the three
    modes (food / ink / medicine), 0.15-degree chunks, UTFGrid overview
    counts, the permissions system and filtered aggregates, the docs/ map,

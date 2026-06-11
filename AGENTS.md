@@ -11,6 +11,30 @@ You handle small, well-specified, low-risk tasks. Your task queue lives in
 the queue first, exactly as specified. Do not invent tasks. Do not expand
 scope. Senior agents (Claude, Codex) handle architecture and core logic.
 
+Tasks that fit you: documentation refreshes, a scripts README, file
+inventories, simple shell runners over commands that already work, smoke
+tests, and tightly scoped mechanical edits whose pass/fail is obvious from the
+task text alone.
+
+## Out of scope — STOP and escalate if a task asks for these
+
+Even if a queue item names one of these, do not attempt it. Write a note in
+`docs/qwen-questions.md` and end the session. These belong to Codex or Claude:
+
+1. Extracting functions or constants out of `app.js` into a Node/VM harness
+   (the regex-extraction pattern in `scripts/build_access_status.mjs`).
+2. Permission-rule semantics: deciding what access status a piece of land or a
+   species should produce, or reasoning about NPS / state / PAD-US predicates.
+3. Safety language, disclaimers, or species safety/harvest-ethic tags.
+4. Interpreting a data schema beyond the explicit field examples a task gives
+   you (e.g. the Falling Fruit manifest uses `chunks`, not `states`; respect
+   the `accessCounts` nesting exactly as shown).
+5. Any test or check that could print PASS without actually asserting the
+   intended behavior. A real rule test is senior-tier work, not yours.
+
+If you are unsure whether a task crosses one of these lines, treat it as out
+of scope and escalate. Do not guess.
+
 ## Session discipline
 
 Start each queue task in a fresh OpenCode session. Do not continue a prior
