@@ -31,6 +31,14 @@ Live: iNaturalist API (observations), USGS PAD-US ArcGIS service (public-access 
 `KNOWN_ISSUES.md` is the debug queue for the daily tune-up pass. Check it at
 the start of debugging sessions; update or clear entries as they're resolved.
 
+## Collaborators
+
+Two scheduled Claude agents run nightly at 4am (debug tune-up owning
+`KNOWN_ISSUES.md`; permissions research owning the rule tables and research
+docs). Codex works the filtered-aggregates pipeline per
+`docs/TODO-filtered-aggregates.md`. Stay out of each other's areas; the TODO
+file's Boundaries section is the contract.
+
 ## Workflow
 
 - Repo: `github.com/srafailov1/craftalmanac`, branch `main`. Cloudflare (Workers static assets, `wrangler.jsonc`) auto-deploys on push.
