@@ -1609,6 +1609,11 @@ function initControls() {
     if (!belowPointZoom && state.wasBelowPointZoom && !isViewportCoveredByLoadedPoints()) {
       state.pointDataReady = false;
     }
+    if (belowPointZoom && !state.wasBelowPointZoom) {
+      // Crossing down: hold the aggregate repaint until grid counts for this
+      // viewport are confirmed, instead of painting a sparse interim state.
+      setINaturalistAggregateReady(false);
+    }
     state.wasBelowPointZoom = belowPointZoom;
     updateLayerHandoff();
   });
@@ -2092,10 +2097,7 @@ function getAggregateItems(manifest, selectedSpeciesIds, bounds) {
     ? [...(manifest.chunks || [])]
     : [];
   if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
-    const inatAggregateItems = getINaturalistAggregateItems(bounds);
-    items.push(...inatAggregateItems.length
-      ? inatAggregateItems
-      : getLiveAggregateItems(selectedSpeciesIds, bounds));
+    items.push(...getINaturalistAggregateItems(bounds));
   }
   return items;
 }
@@ -2104,22 +2106,6 @@ function getINaturalistAggregateItems(bounds) {
   return state.inatAggregateItems.filter((item) => (
     !bounds || bboxIntersectsBounds(item.bbox, bounds)
   ));
-}
-
-function getLiveAggregateItems(selectedSpeciesIds, bounds) {
-  return [...state.inatRecordCache.values()].flatMap((record) => {
-    if (!selectedSpeciesIds.has(record.speciesId)) return [];
-    if (bounds && !recordInBounds(record, bounds)) return [];
-    const lng = Number(record.lng);
-    const lat = Number(record.lat);
-    if (!Number.isFinite(lng) || !Number.isFinite(lat)) return [];
-    return [{
-      id: `inat-${record.id}`,
-      bbox: [lng, lat, lng, lat],
-      countsBySpeciesId: { [record.speciesId]: 1 },
-      centroidsBySpeciesId: { [record.speciesId]: [lng, lat, 1] }
-    }];
-  });
 }
 
 function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, mode) {
@@ -3040,6 +3026,9 @@ async function loadINaturalistAggregates() {
   ));
 
   if (missingTiles.length) {
+    // Gate repaints while tiles are in flight so partially covered viewports
+    // never paint; the previous complete state stays up until the swap.
+    setINaturalistAggregateReady(false);
     try {
       await mapWithConcurrency(missingTiles, 6, async (tile) => {
         if (requestId !== state.activeINaturalistAggregateRequest) return null;
