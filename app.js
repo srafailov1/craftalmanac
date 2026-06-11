@@ -865,6 +865,10 @@ const state = {
   npsOrchardRecords: null,
   publicLandFeatures: [],
   accessRuleCache: new Map(),
+  pointDataReady: false,
+  loadedPointBounds: null,
+  wasBelowPointZoom: true,
+  lastShowPoints: false,
   mapReady: false,
   publicLayerLoadedKey: "",
   publicLayerVisible: true,
@@ -1343,12 +1347,15 @@ function setMapMode(mode) {
     state.inatRecordCache.clear();
     state.accessRuleCache.clear();
     state.savedLocationsOnly = false;
+    state.pointDataReady = false;
+    state.loadedPointBounds = null;
     state.activeRequest += 1;
   state.activePopup?.remove();
   state.hoverPopup?.remove();
   syncActiveCatalog();
   renderModeChrome();
   renderFilterControls();
+  updateLayerHandoff();
   render();
 }
 
@@ -1595,6 +1602,15 @@ function initControls() {
     if (shouldRebalanceAggregatesOnMove()) {
       scheduleFallingFruitAggregateUpdate();
     }
+  });
+
+  map.on("zoom", () => {
+    const belowPointZoom = map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM;
+    if (!belowPointZoom && state.wasBelowPointZoom && !isViewportCoveredByLoadedPoints()) {
+      state.pointDataReady = false;
+    }
+    state.wasBelowPointZoom = belowPointZoom;
+    updateLayerHandoff();
   });
 
   map.on("moveend", () => {
@@ -1974,6 +1990,7 @@ function renderMarkers() {
 
 function updateFallingFruitAggregates() {
   if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+  if (shouldShowPointLayers()) return;
   if (shouldDeferAggregatePaint()) return;
   window.clearTimeout(state.aggregateTimer);
   getFallingFruitManifest()
@@ -2479,7 +2496,6 @@ function initMapLayers() {
       id: FALLING_FRUIT_AGGREGATE_LAYER_ID,
       type: "circle",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       paint: {
         "circle-color": "#f7f2df",
         "circle-opacity": 0.86,
@@ -2505,7 +2521,6 @@ function initMapLayers() {
       id: FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID,
       type: "symbol",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       layout: {
         "text-field": ["get", "countLabel"],
         "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
@@ -2631,6 +2646,7 @@ function initMapLayers() {
       filter: ["!", ["has", "point_count"]],
       minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
       layout: {
+        "visibility": "none",
         "icon-image": ["get", "markerIcon"],
         "icon-size": [
           "interpolate",
@@ -2648,6 +2664,7 @@ function initMapLayers() {
 
   updatePublicLandVisibility();
   bindMapInteractions();
+  updateLayerHandoff();
 
   map.on("sourcedata", (event) => {
     if (event.sourceId !== MARKERS_SOURCE_ID || !event.isSourceLoaded) return;
@@ -2655,14 +2672,51 @@ function initMapLayers() {
   });
 }
 
+function shouldShowPointLayers() {
+  return state.mapReady
+    && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM
+    && state.pointDataReady;
+}
+
+function updateLayerHandoff() {
+  // Aggregate circles stay on screen until the point data for this viewport
+  // has actually loaded, then the two swap in a single pass — no empty gap
+  // while clusters fetch at the zoom-8 crossing.
+  if (!state.mapReady) return;
+  const showPoints = shouldShowPointLayers();
+  setLayerVisibility(FALLING_FRUIT_AGGREGATE_LAYER_ID, !showPoints);
+  setLayerVisibility(FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID, !showPoints);
+  setLayerVisibility(MARKER_CLUSTERS_LAYER_ID, showPoints);
+  setLayerVisibility(MARKER_CLUSTER_COUNT_LAYER_ID, showPoints);
+  if (showPoints !== state.lastShowPoints) {
+    state.lastShowPoints = showPoints;
+    updateMarkerPointVisibility();
+  }
+}
+
+function setLayerVisibility(layerId, visible) {
+  if (!map.getLayer(layerId)) return;
+  const visibility = visible ? "visible" : "none";
+  if (map.getLayoutProperty(layerId, "visibility") !== visibility) {
+    map.setLayoutProperty(layerId, "visibility", visibility);
+  }
+}
+
+function isViewportCoveredByLoadedPoints() {
+  const loaded = state.loadedPointBounds;
+  if (!loaded) return false;
+  const bounds = map.getBounds();
+  return bounds.getWest() >= loaded.west
+    && bounds.getEast() <= loaded.east
+    && bounds.getSouth() >= loaded.south
+    && bounds.getNorth() <= loaded.north;
+}
+
 function updateMarkerPointVisibility() {
   // Individual points stay hidden while any cluster is in the viewport, so a
   // given view reveals all of its points at once. Denser areas need more zoom.
   if (!state.mapReady || !map.getLayer(MARKERS_LAYER_ID)) return;
-  const visibility = viewportHasMarkerClusters() ? "none" : "visible";
-  if (map.getLayoutProperty(MARKERS_LAYER_ID, "visibility") !== visibility) {
-    map.setLayoutProperty(MARKERS_LAYER_ID, "visibility", visibility);
-  }
+  setLayerVisibility(MARKERS_LAYER_ID, shouldShowPointLayers() && !viewportHasMarkerClusters());
 }
 
 function viewportHasMarkerClusters() {
@@ -2947,11 +3001,17 @@ function scheduleINaturalistAggregateLoad() {
 }
 
 async function loadINaturalistAggregates() {
-  if (!state.mapReady || map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM || state.savedLocationsOnly) {
+  if (!state.mapReady || state.savedLocationsOnly) {
     state.inatAggregateItems = [];
     state.inatAggregateTaxonKey = "";
     setINaturalistAggregateReady(true);
     updateFallingFruitAggregates();
+    return;
+  }
+  if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    // Keep the last aggregate cells: they bridge the handoff while point
+    // data loads after crossing the point-zoom threshold.
+    setINaturalistAggregateReady(true);
     return;
   }
 
@@ -3025,6 +3085,7 @@ async function loadMapData() {
   const requestId = state.activeRequest + 1;
   state.activeRequest = requestId;
   const config = getActiveMapConfig();
+  const loadBounds = state.mapReady ? map.getBounds() : null;
   const hadRecords = state.records.length > 0;
   if (!hadRecords) setDataStatus("Loading current map data...");
 
@@ -3051,6 +3112,16 @@ async function loadMapData() {
 
   state.records = nextRecords;
   renderMarkers();
+  if (state.mapReady && loadBounds && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    state.pointDataReady = true;
+    state.loadedPointBounds = {
+      west: loadBounds.getWest(),
+      south: loadBounds.getSouth(),
+      east: loadBounds.getEast(),
+      north: loadBounds.getNorth()
+    };
+    updateLayerHandoff();
+  }
   if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     updateFallingFruitAggregates();
   }
