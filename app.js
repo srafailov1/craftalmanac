@@ -15,6 +15,7 @@ const INATURALIST_AGGREGATE_DELAY = 260;
 const INATURALIST_GRID_MIN_ZOOM = 2;
 const INATURALIST_GRID_MAX_ZOOM = 7;
 const INATURALIST_GRID_MAX_TILES = 24;
+const INATURALIST_GRID_CELL_BUCKETS = 32;
 const AGGREGATE_FIRST_PAINT_GRACE_MS = 2500;
 const INATURALIST_AGGREGATE_SPECIES_ID = "__inat-aggregate";
 const INATURALIST_REGION_PLACE_IDS = "1";
@@ -25,7 +26,7 @@ const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
 const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
 const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
-const MARKER_CLUSTER_MAX_ZOOM = 10;
+const MARKER_CLUSTER_MAX_ZOOM = 14;
 const MARKER_CLUSTER_RADIUS = 46;
 const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
 const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
@@ -1597,6 +1598,7 @@ function initControls() {
 
   map.on("moveend", () => {
     updateFallingFruitAggregates();
+    updateMarkerPointVisibility();
     scheduleINaturalistAggregateLoad();
     scheduleDataLoad();
     schedulePublicLandLoad();
@@ -2057,6 +2059,8 @@ function getStateAggregateFeatures(manifest, selectedSpeciesIds) {
 
 function shouldRebalanceAggregatesOnMove() {
   if (!state.mapReady || map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) return false;
+  // Rebalancing mid-gesture competes with the renderer; zoomend/moveend covers it.
+  if (map.isZooming()) return false;
   return shouldUseViewportAggregateBounds(map.getZoom(), map.getBounds());
 }
 
@@ -2137,12 +2141,19 @@ function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, m
 
 function getAggregateGridKey(center, gridSize, mode) {
   if (mode === "screen") {
-    const point = state.mapReady ? map.project(center) : { x: center[0], y: center[1] };
-    return `${Math.floor(point.x / gridSize)}_${Math.floor(point.y / gridSize)}`;
+    // Pure mercator math; map.project is too slow for thousands of cells per pass.
+    const scale = getWorldPixelScale();
+    const x = lngToTileX(center[0], scale);
+    const y = latToTileY(center[1], scale);
+    return `${Math.floor(x / gridSize)}_${Math.floor(y / gridSize)}`;
   }
   const west = Math.floor(center[0] / gridSize) * gridSize;
   const south = Math.floor(center[1] / gridSize) * gridSize;
   return `${west.toFixed(2)}_${south.toFixed(2)}`;
+}
+
+function getWorldPixelScale() {
+  return 512 * (2 ** (state.mapReady ? map.getZoom() : 0));
 }
 
 function getAggregateGeoGridSize(zoom) {
@@ -2178,8 +2189,12 @@ function getBoundsLngSpan(bounds) {
 
 function mergeOverlappingAggregateFeatures(features, padding = 6) {
   if (!state.mapReady || features.length < 2) return features;
+  const scale = getWorldPixelScale();
   let nodes = features.map((feature) => {
-    const point = map.project(feature.geometry.coordinates);
+    const point = {
+      x: lngToTileX(feature.geometry.coordinates[0], scale),
+      y: latToTileY(feature.geometry.coordinates[1], scale)
+    };
     return {
       ids: [feature.properties.id],
       levels: new Set([feature.properties.level]),
@@ -2204,7 +2219,7 @@ function mergeOverlappingAggregateFeatures(features, padding = 6) {
         const distance = Math.hypot(b.x - a.x, b.y - a.y);
         if (distance > a.radius + b.radius + padding) continue;
         nodes.splice(j, 1);
-        nodes[i] = mergeAggregateNodes(a, b);
+        nodes[i] = mergeAggregateNodes(a, b, scale);
         merged = true;
         break outer;
       }
@@ -2223,11 +2238,14 @@ function mergeOverlappingAggregateFeatures(features, padding = 6) {
   }));
 }
 
-function mergeAggregateNodes(a, b) {
+function mergeAggregateNodes(a, b, scale) {
   const count = a.count + b.count;
   const lng = (a.weightedLng + b.weightedLng) / count;
   const lat = (a.weightedLat + b.weightedLat) / count;
-  const point = map.project([lng, lat]);
+  const point = {
+    x: lngToTileX(lng, scale),
+    y: latToTileY(lat, scale)
+  };
   return {
     ids: [...a.ids, ...b.ids],
     levels: new Set([...a.levels, ...b.levels]),
@@ -2627,6 +2645,34 @@ function initMapLayers() {
 
   updatePublicLandVisibility();
   bindMapInteractions();
+
+  map.on("sourcedata", (event) => {
+    if (event.sourceId !== MARKERS_SOURCE_ID || !event.isSourceLoaded) return;
+    updateMarkerPointVisibility();
+  });
+}
+
+function updateMarkerPointVisibility() {
+  // Individual points stay hidden while any cluster is in the viewport, so a
+  // given view reveals all of its points at once. Denser areas need more zoom.
+  if (!state.mapReady || !map.getLayer(MARKERS_LAYER_ID)) return;
+  const visibility = viewportHasMarkerClusters() ? "none" : "visible";
+  if (map.getLayoutProperty(MARKERS_LAYER_ID, "visibility") !== visibility) {
+    map.setLayoutProperty(MARKERS_LAYER_ID, "visibility", visibility);
+  }
+}
+
+function viewportHasMarkerClusters() {
+  if (map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) return false;
+  const bounds = map.getBounds();
+  return map.querySourceFeatures(MARKERS_SOURCE_ID, { filter: ["has", "point_count"] })
+    .some((feature) => {
+      const [lng, lat] = feature.geometry?.coordinates || [];
+      return lng >= bounds.getWest()
+        && lng <= bounds.getEast()
+        && lat >= bounds.getSouth()
+        && lat <= bounds.getNorth();
+    });
 }
 
 async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
@@ -3109,17 +3155,32 @@ async function fetchINaturalistAggregateTile(taxonIds, tile) {
 }
 
 function getINaturalistGridItems(tile, gridData) {
-  return Object.values(gridData?.data || {}).flatMap((cell) => {
+  // Merge the 64x64 response cells into 32x32 buckets per tile. Display buckets
+  // are never finer than tile/8, so this is visually lossless but caps the item
+  // count the per-frame aggregation code has to walk.
+  const bucketScale = (2 ** tile.z) * INATURALIST_GRID_CELL_BUCKETS;
+  const buckets = new Map();
+  Object.values(gridData?.data || {}).forEach((cell) => {
     const count = Number(cell?.cellCount || 0);
     const lng = Number(cell?.longitude);
     const lat = Number(cell?.latitude);
-    if (!count || !Number.isFinite(lng) || !Number.isFinite(lat)) return [];
-    return [{
-      id: `inat-grid-${tile.id}-${cell.id}`,
+    if (!count || !Number.isFinite(lng) || !Number.isFinite(lat)) return;
+    const key = `${Math.floor(lngToTileX(lng, bucketScale))}_${Math.floor(latToTileY(lat, bucketScale))}`;
+    const bucket = buckets.get(key) || { count: 0, weightedLng: 0, weightedLat: 0 };
+    bucket.count += count;
+    bucket.weightedLng += lng * count;
+    bucket.weightedLat += lat * count;
+    buckets.set(key, bucket);
+  });
+  return [...buckets.entries()].map(([key, bucket]) => {
+    const lng = bucket.weightedLng / bucket.count;
+    const lat = bucket.weightedLat / bucket.count;
+    return {
+      id: `inat-grid-${tile.id}-${key}`,
       bbox: [lng, lat, lng, lat],
-      countsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: count },
-      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, count] }
-    }];
+      countsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: bucket.count },
+      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, bucket.count] }
+    };
   });
 }
 
