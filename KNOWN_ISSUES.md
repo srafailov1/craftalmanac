@@ -4,19 +4,62 @@ Issues queued for the daily tune-up pass. Investigate, fix, and remove entries
 once verified on the live site. Keep this file current: future debugging
 sessions rely on it for context.
 
-## 1. Sparse-counts flash during zoom transitions around zoom 8 (FIX APPLIED — verify on live site)
+## 1. Sparse-counts flash during zoom transitions around zoom 8 (STILL REPRODUCING — new diagnosis 2026-06-11, plan below)
 
-**Fix applied 2026-06-11 (not yet verified live):** implemented the symmetric
-downward bridge from the leading hypothesis below. On a downward crossing the
-cluster layers now stay visible (cluster layer minzoom lowered 8 -> 6.4) while
-the aggregate layers stay hidden until a fresh aggregate paint — computed with
-grid counts ready (`inatAggregateReady`) — has rendered (`map.once("idle")`
-after `setData`, so the old source buffer never shows). A 2.5 s safety timer
-(`AGGREGATE_BRIDGE_MAX_MS`) bounds the bridge; mode switches cancel it. See
-`beginAggregateBridge` / `cancelAggregateBridge` / `settleAggregateBridgeAfterPaint`
-and the bridge-aware `updateLayerHandoff`. Run the verification standard below
-(wheel, double-click, and pinch zoom over Charlottesville and NYC, cold cache)
-before clearing this entry.
+**Owner-confirmed 2026-06-11 (after the downward-bridge fix shipped):** the
+flash still reproduces. Screenshot at ~zoom 7.5 over Charlottesville shows a
+handful of small clusters near the viewport center and nothing elsewhere,
+correcting after a beat.
+
+**New diagnosis (code-level, matches the screenshot exactly):** the downward
+bridge holds the CLUSTER layers visible — but cluster data only covers
+`loadedPointBounds`, the smaller viewport that was loaded at zoom >= 8. Zooming
+out to 7.5 roughly triples the visible area, so the bridge necessarily shows
+correct clusters near the center and *empty space everywhere else*. That IS
+the sparse state the owner sees; it is not a stale-buffer problem. The
+structural issue: a zoom-out reveals territory for which NEITHER dataset is
+loaded yet, so no choice of which stale layer to hold can fill it. The fix
+must make aggregate data for the wider view available (near-)instantly.
+
+**Plan for tonight's pass (in order):**
+1. **Quantize the iNat grid zoom** so tile sets stop churning on every integer
+   zoom: in `getINaturalistAggregateTiles`, snap `gridZoom` to even values
+   (2/4/6) instead of `Math.floor(zoom)`. Cell resolution stays ample (64x64
+   per tile); cache hit rate across a continuous zoom rises dramatically, so
+   most downward crossings find their tiles already cached and the aggregate
+   paint is immediate.
+2. **Prefetch the zoom-out tile set while the user sits in the point band**:
+   after a successful `loadMapData` at zoom >= 8, background-fetch the grid
+   tiles for the padded viewport at the quantized gz the user would land on
+   below 8 (and at startup, always warm the whole-region gz=2/4 set — it is
+   only ~4-12 requests). Use the existing cache + `fetchINaturalistAggregateTileWithRetry`;
+   throttle to concurrency 2 so it never competes with foreground loads.
+3. **Keep the downward bridge but bound it by data availability, not time**:
+   on a downward crossing, if all grid tiles for the target view are cached
+   (common case after 1+2), skip the bridge entirely and paint aggregates
+   synchronously. Only bridge when tiles are genuinely missing.
+4. **Instrument before/after**: add a temporary `window.__handoffLog` that
+   records (t, zoom, event, aggregateBridgeActive, pointDataReady,
+   inatAggregateReady, missingTileCount, aggregateSourceFeatures) on every
+   zoom/moveend/load-completion. Run a scripted jumpTo sequence 9 -> 7.5 -> 6
+   -> 9 over Charlottesville, dump the log, and confirm: no state where
+   visible layer's data covers less than the viewport for >1 frame. Remove
+   the instrumentation before committing, or keep it behind a
+   `window.FORAGE_DEBUG` flag.
+5. If a residual flash remains after 1-3, the remaining suspect is the FF
+   manifest aggregate recompute being deferred by `shouldDeferAggregatePaint`
+   while iNat tiles fetch — consider painting FF-manifest-only aggregates
+   immediately on downward crossings (they are complete nationwide from page
+   load) and merging iNat counts in one later swap; weigh that single count
+   step against the current empty-edges state (owner prefers complete-at-once,
+   but FF-only edges may read better than empty edges — note tradeoff in the
+   commit and flag for owner review).
+
+**Verification note for the loop:** rendering-dependent checks
+(`queryRenderedFeatures`) silently return 0 when the Chrome window is
+occluded — the map's rAF loop pauses. Use the instrumentation log +
+source-data assertions instead, and call out in the run summary that final
+visual sign-off needs the owner (or a visible window).
 
 **Symptom:** Zooming through the aggregate/cluster handoff band (viewport
 roughly 100–200 miles wide, zoom ~7–9), the map briefly shows far fewer
