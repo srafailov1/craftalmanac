@@ -52,6 +52,18 @@ Primary rule sources currently encoded:
 - Virginia state forest regulation on plant removal and edible fruits, berries, fungi, and nuts: https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/
 - Virginia DWR Wildlife Management Area rules: https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf
 - Monticello trail rules and visitor guidance: https://www.monticello.org/visit/hiking-trails/trail-hours-faqs
+- Great Smoky Mountains superintendent's compendium (verified against primary source June 2026): https://www.nps.gov/grsm/learn/management/compendium.htm
+- Additional park compendium gathering designations (New River Gorge, Acadia, Cuyahoga Valley, Olympic, Mount Rainier, Rocky Mountain, Yellowstone, Yosemite, Glacier, Crater Lake, Grand Teton, Redwood, Capitol Reef, Death Valley), encoded from each park's compendium page with limits summarized using "about" hedging; reverify against the current year's compendium. See docs/permissions-research-2026-06.md for per-park verification status.
+- BLM personal-use collection of renewable plant materials: https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits
+- National wildlife refuge default plant protection, 50 CFR Part 27: https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27
+- Army Corps project-land vegetation protection, 36 CFR Part 327: https://www.ecfr.gov/current/title-36/chapter-III/part-327
+- New York DEC state forest and Forest Preserve use rules: https://dec.ny.gov/nature/forests-trees/state-forests/rules-for-use
+- Pennsylvania DCNR state forest rules and regulations: https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-forests/rules-and-regulations
+- Washington state parks edible harvest rule, WAC 352-28-030: https://app.leg.wa.gov/wac/default.aspx?cite=352-28-030
+- California state park plant protection (14 CCR 4306): https://www.parks.ca.gov/?page_id=21301
+- New York City parks vegetation rule, 56 RCNY 1-04: https://www.nycgovparks.org/rules/section-1-04/
+- Monticello guest policies (no collection on Foundation property): https://www.monticello.org/visit/tips-for-visiting/guest-policies
+- UVA pavilion gardens edible-landscape guidance: https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds
 
 ## Safety
 

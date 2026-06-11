@@ -79,13 +79,201 @@ const ACCESS_RULE_SOURCES = {
   princeWilliam: "https://www.nps.gov/prwi/learn/management/superintendents-compendium.htm",
   manassas: "https://www.nps.gov/mana/learn/management/compendium.htm",
   usfs: "https://www.fs.usda.gov/r08/gwj/permits/forest-products-permits",
+  blm: "https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits",
+  usfws: "https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27",
+  usace: "https://www.ecfr.gov/current/title-36/chapter-III/part-327",
   virginiaParks: "https://law.lis.virginia.gov/admincode/title4/agency5/chapter30/section50/",
   virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
   virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
   charlottesville: "https://www.charlottesville.gov/658/Parks-Trails",
-  albemarle: "https://www.albemarle.org/government/parks-recreation"
+  albemarle: "https://www.albemarle.org/government/parks-recreation",
+  newYorkDec: "https://dec.ny.gov/nature/forests-trees/state-forests/rules-for-use",
+  pennsylvaniaDcnr: "https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-forests/rules-and-regulations",
+  washingtonParks: "https://app.leg.wa.gov/wac/default.aspx?cite=352-28-030",
+  californiaParks: "https://www.parks.ca.gov/?page_id=21301",
+  nycParks: "https://www.nycgovparks.org/rules/section-1-04/",
+  monticello: "https://www.monticello.org/visit/tips-for-visiting/guest-policies",
+  uvaGardens: "https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds"
 };
-const SITE_ACCESS_RULES = [];
+
+// Park-specific 36 CFR 2.1(c) gathering designations, matched against PAD-US
+// unit text before the generic NPS prohibition. Food mode only — the earlier
+// non-food NPS branch keeps craft/medicine collection marked prohibited.
+// Limits reflect recent superintendent's compendiums; always confirm current.
+const NPS_GATHERING_RULES = [
+  {
+    match: "great smoky",
+    sourceLabel: "Great Smoky Mountains compendium",
+    sourceUrl: "https://www.nps.gov/grsm/learn/management/compendium.htm",
+    mushroomsAllowed: true,
+    limit: "Listed fruits, berries, and nuts: 1 pound per person per day per species (apples, pears, and peaches excepted); edible soil-growing mushrooms: 1 pound combined, 100+ feet from roads and facilities.",
+    note: "Great Smoky Mountains designates listed species for hand-gathering 200+ feet from nature trails; ramps may not be collected. Confirm the species appears in the current compendium list."
+  },
+  {
+    match: "new river gorge",
+    sourceLabel: "New River Gorge compendium",
+    sourceUrl: "https://www.nps.gov/neri/learn/management/superintendents-compendium.htm",
+    mushroomsAllowed: true,
+    limit: "Listed berries and fruits: about 1 gallon per person per day (3 gallons for apples, peaches, pears, plums, persimmons, and black walnuts); edible mushrooms: about 1.5 gallons.",
+    note: "New River Gorge designates a long list of fruits, nuts, and mushrooms for personal-use gathering. Confirm current compendium limits."
+  },
+  {
+    match: "acadia",
+    sourceLabel: "Acadia compendium",
+    sourceUrl: "https://www.nps.gov/acad/learn/management/sc.htm",
+    mushroomsAllowed: false,
+    limit: "Edible fruits and berries: about 1/2 dry gallon per person per day; unshelled nuts: 1/2 gallon; apples: up to 10 dry gallons.",
+    note: "Acadia designates edible fruits, berries, and nuts for hand-gathering; mushrooms are not designated. Confirm current compendium limits."
+  },
+  {
+    match: "cuyahoga valley",
+    sourceLabel: "Cuyahoga Valley compendium",
+    sourceUrl: "https://www.nps.gov/cuva/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: false,
+    limit: "Reasonable quantities of edible fruit, berries, or nuts for personal use, excluding state or federally listed rare, threatened, or endangered plants.",
+    note: "Cuyahoga Valley permits hand-collection of edible fruit, berries, and nuts; mushrooms are not designated."
+  },
+  {
+    match: "olympic national park",
+    sourceLabel: "Olympic compendium",
+    sourceUrl: "https://www.nps.gov/olym/learn/management/superintendent-s-compendium.htm",
+    mushroomsAllowed: true,
+    limit: "Edible fruits, berries, nuts, and mushrooms: about 1 quart per person per day, 200+ feet from nature trails; higher limits for cranberries, native blackberries, and non-native fruit trees.",
+    note: "Olympic designates edible fruits, berries, nuts, and mushroom fruiting bodies for hand-gathering. Confirm current compendium limits."
+  },
+  {
+    match: "mount rainier",
+    sourceLabel: "Mount Rainier compendium",
+    sourceUrl: "https://www.nps.gov/mora/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: true,
+    limit: "Berries: about 1 gallon per person per day; edible mushrooms may be gathered by hand for personal consumption.",
+    note: "Mount Rainier designates berries and edible mushrooms for hand-gathering. Confirm current compendium limits."
+  },
+  {
+    match: "rocky mountain national park",
+    sourceLabel: "Rocky Mountain compendium",
+    sourceUrl: "https://www.nps.gov/romo/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: false,
+    mushroomNote: "Mushroom gathering and consumption are explicitly prohibited in Rocky Mountain National Park.",
+    limit: "Listed fruits and berries: about 1 quart per person per day for personal consumption.",
+    note: "Rocky Mountain designates several fruits and berries for hand-gathering; mushroom collection is explicitly prohibited."
+  },
+  {
+    match: "yellowstone",
+    sourceLabel: "Yellowstone compendium",
+    sourceUrl: "https://www.nps.gov/yell/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: true,
+    limit: "Edible berries and mushrooms: about 1 quart per species per person per day, for consumption within the park.",
+    note: "Yellowstone allows limited berry and mushroom gathering consumed inside the park. Confirm current compendium limits."
+  },
+  {
+    match: "yosemite",
+    sourceLabel: "Yosemite compendium",
+    sourceUrl: "https://www.nps.gov/yose/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: true,
+    limit: "Listed berries and edible fungi: about 1 pint per person per day for immediate consumption (no limit for invasive Himalayan blackberries; apples and pears may be taken).",
+    note: "Yosemite allows small-quantity berry and fungus gathering for immediate consumption. Confirm current compendium limits."
+  },
+  {
+    match: "glacier national park",
+    sourceLabel: "Glacier compendium",
+    sourceUrl: "https://www.nps.gov/glac/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: false,
+    limit: "Edible fruits, berries, and nuts: about 1 quart per person per day, gathered by hand only.",
+    note: "Glacier designates edible fruits, nuts, and berries for hand-gathering; harvesting tools are prohibited."
+  },
+  {
+    match: "crater lake",
+    sourceLabel: "Crater Lake compendium",
+    sourceUrl: "https://www.nps.gov/crla/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: false,
+    limit: "Blueberries, huckleberries, serviceberries, and thimbleberries: about 1 quart per person per day, consumed within the park.",
+    note: "Crater Lake designates four berry groups for in-park consumption; other gathering is not designated."
+  },
+  {
+    match: "grand teton",
+    sourceLabel: "Grand Teton compendium",
+    sourceUrl: "https://www.nps.gov/grte/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: true,
+    limit: "Edible fruits, berries, nuts, and mushrooms: about 1 quart per species per person per day, consumed within the park.",
+    note: "Grand Teton (and the adjacent Rockefeller Parkway) allows gathering of specified vegetation for immediate personal consumption."
+  },
+  {
+    match: "redwood",
+    sourceLabel: "Redwood compendium",
+    sourceUrl: "https://www.nps.gov/redw/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: false,
+    limit: "Edible berries: about 1 gallon per person per day; hazelnuts: 1 gallon; tanoak acorns: 10 gallons; apples: 5 per day.",
+    note: "Redwood designates berries and nuts for hand-gathering. Confirm current compendium limits."
+  },
+  {
+    match: "capitol reef",
+    sourceLabel: "Capitol Reef orchards",
+    sourceUrl: "https://www.nps.gov/care/planyourvisit/fruita-orchards.htm",
+    mushroomsAllowed: false,
+    limit: "Fruita historic orchards: fruit may be eaten free in the orchards in season; picked fruit to take is sold per posted rates.",
+    note: "Capitol Reef's historic orchards operate a managed u-pick program rather than wild gathering."
+  },
+  {
+    match: "death valley",
+    sourceLabel: "Death Valley compendium",
+    sourceUrl: "https://www.nps.gov/deva/learn/management/lawsandpolicies.htm",
+    mushroomsAllowed: false,
+    limit: "Designated foods include mesquite beans, pine nuts, grapes, and non-native fruits (apples, figs, palms, pomegranates, black walnuts) in personal-use amounts.",
+    note: "Death Valley designates several native and non-native foods for hand-gathering. Confirm current compendium limits."
+  }
+];
+
+const SITE_ACCESS_RULES = [
+  {
+    name: "Monticello (Thomas Jefferson Foundation)",
+    bounds: { south: 37.9985, west: -78.464, north: 38.0165, east: -78.438 },
+    rules: {
+      default: {
+        status: "prohibited",
+        label: "Prohibited",
+        area: "Monticello (Thomas Jefferson Foundation)",
+        limit: "No harvesting or collection of any plant material on Monticello property, including the Saunders-Monticello Trail.",
+        note: "Monticello is a private historic museum property; its gardens and grounds are protected landscapes.",
+        sourceLabel: "Monticello guest policies",
+        sourceUrl: ACCESS_RULE_SOURCES.monticello
+      }
+    }
+  },
+  {
+    name: "UVA Pavilion Gardens",
+    bounds: { south: 38.033, west: -78.506, north: 38.0378, east: -78.5018 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "University of Virginia pavilion gardens",
+        limit: "Ripe fruits, nuts, and herbs in the pavilion gardens are open for respectful picking and consumption when the gardens are not in use for events.",
+        note: "UVA's garden teams invite tasting of ripe produce; do not pick unripe fruit or clip branches.",
+        sourceLabel: "UVA Sustainability",
+        sourceUrl: ACCESS_RULE_SOURCES.uvaGardens
+      },
+      medicine: {
+        status: "allowed",
+        label: "Allowed",
+        area: "University of Virginia pavilion gardens",
+        limit: "Ripe herbs may be picked for personal consumption; do not clip branches or take more than a meal's worth.",
+        note: "UVA's invitation covers edible consumption of ripe garden produce; treat medicinal gathering as the same light, respectful tasting.",
+        sourceLabel: "UVA Sustainability",
+        sourceUrl: ACCESS_RULE_SOURCES.uvaGardens
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "University of Virginia pavilion gardens",
+        limit: "UVA's open-picking invitation covers ripe edible produce; collection of craft material is not addressed.",
+        note: "Ask UVA's gardens staff before collecting non-food material.",
+        sourceLabel: "UVA Sustainability",
+        sourceUrl: ACCESS_RULE_SOURCES.uvaGardens
+      }
+    }
+  }
+];
 const ACCESS_STATUS_OPTIONS = [
   { id: "allowed", label: "Allowed", defaultChecked: true },
   { id: "permit-required", label: "Permit required", defaultChecked: true },
@@ -3466,7 +3654,7 @@ async function loadPublicLands() {
         geometryType: "esriGeometryEnvelope",
         inSR: "4326",
         spatialRel: "esriSpatialRelIntersects",
-        outFields: "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres",
+        outFields: "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres,State_Nm",
         returnGeometry: "true",
         outSR: "4326",
         geometryPrecision: "5",
@@ -3703,7 +3891,17 @@ function getSiteAccessRule(record) {
     && lng >= rule.bounds.west
     && lng <= rule.bounds.east
   ));
-  return site?.rule || null;
+  if (!site) return null;
+  return site.rules[state.activeMap] || site.rules.default || null;
+}
+
+function landIsInState(properties, stateCode) {
+  // PAD-US State_Nm can list multiple codes; match whole tokens only so
+  // "VA" never matches "WA" and vice versa.
+  return String(properties.State_Nm || "")
+    .toUpperCase()
+    .split(/[^A-Z]+/)
+    .includes(stateCode);
 }
 
 function getPublicLandAccessRule(properties, species) {
@@ -3782,6 +3980,9 @@ function getPublicLandAccessRule(properties, species) {
     };
   }
 
+  const compendiumRule = getNpsCompendiumRule(text, area, species);
+  if (compendiumRule) return compendiumRule;
+
   if (isNationalParkServiceLand(text)) {
     return {
       status: "prohibited",
@@ -3799,14 +4000,53 @@ function getPublicLandAccessRule(properties, species) {
       status: "allowed",
       label: "Allowed",
       area,
-      limit: "Small amounts for personal use are allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
-      note: "George Washington and Jefferson National Forests direct commercial and larger forest-product collection through permits.",
-      sourceLabel: "GW-Jefferson forest products permits",
+      limit: "Small amounts for personal use are generally allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
+      note: "Most national forests allow incidental personal-use gathering, but rules vary by forest — check the local ranger district for permit requirements and closures.",
+      sourceLabel: "USFS forest products permits",
       sourceUrl: ACCESS_RULE_SOURCES.usfs
     };
   }
 
-  if (isVirginiaWma(text)) {
+  if (isBlmLand(text)) {
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Small amounts of berries, nuts, mushrooms, plants, seeds, flowers, and cones may be collected for personal use in most areas without a permit.",
+      note: "BLM allows reasonable personal-use collection of renewable plant materials; local restrictions can apply, so check the managing field office.",
+      sourceLabel: "BLM forest product permits",
+      sourceUrl: ACCESS_RULE_SOURCES.blm
+    };
+  }
+
+  if (isWildlifeRefugeLand(text)) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Plant gathering on national wildlife refuges is prohibited by default; some refuges authorize berry or mushroom picking with posted limits.",
+      note: "50 CFR Part 27 prohibits plant disturbance unless the refuge specifically authorizes it — check the refuge's own rules page before collecting anything.",
+      sourceLabel: "50 CFR Part 27",
+      sourceUrl: ACCESS_RULE_SOURCES.usfws
+    };
+  }
+
+  if (isArmyCorpsLand(text)) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Removal or injury of vegetation on Corps project lands is prohibited without written permission of the District Commander.",
+      note: "36 CFR Part 327 protects vegetation on Army Corps water-project lands; only dead firewood gathering in designated areas is generally allowed.",
+      sourceLabel: "36 CFR Part 327",
+      sourceUrl: ACCESS_RULE_SOURCES.usace
+    };
+  }
+
+  const stateRule = getStateSystemRule(properties, text, area);
+  if (stateRule) return stateRule;
+
+  if (landIsInState(properties, "VA") && isVirginiaWma(text)) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
@@ -3830,7 +4070,7 @@ function getPublicLandAccessRule(properties, species) {
     };
   }
 
-  if (isVirginiaStateForest(text)) {
+  if (landIsInState(properties, "VA") && isVirginiaStateForest(text)) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
@@ -3854,7 +4094,7 @@ function getPublicLandAccessRule(properties, species) {
     };
   }
 
-  if (isVirginiaStateParkOrDcrLand(text)) {
+  if (landIsInState(properties, "VA") && isVirginiaStateParkOrDcrLand(text)) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
@@ -3915,6 +4155,127 @@ function getPublicLandAccessRule(properties, species) {
   };
 }
 
+function getNpsCompendiumRule(text, area, species) {
+  const entry = NPS_GATHERING_RULES.find((rule) => text.includes(rule.match));
+  if (!entry) return null;
+  if (species.category === "mushroom" && !entry.mushroomsAllowed) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: entry.mushroomNote || "Mushrooms are not designated for gathering in this park's compendium.",
+      note: entry.note,
+      sourceLabel: entry.sourceLabel,
+      sourceUrl: entry.sourceUrl
+    };
+  }
+  return {
+    status: "allowed",
+    label: "Allowed",
+    area,
+    limit: entry.limit,
+    note: entry.note,
+    sourceLabel: entry.sourceLabel,
+    sourceUrl: entry.sourceUrl
+  };
+}
+
+function getStateSystemRule(properties, text, area) {
+  const foodMode = state.activeMap === "food";
+
+  if (text.includes("new york city") || text.includes("city of new york")) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Removing plants, flowers, or other vegetation from New York City parks is prohibited without the Commissioner's permission.",
+      note: "NYC Parks rule 1-04 protects all park vegetation; foraging is not permitted in city parks.",
+      sourceLabel: "NYC Parks rules 1-04",
+      sourceUrl: ACCESS_RULE_SOURCES.nycParks
+    };
+  }
+
+  if (landIsInState(properties, "NY")) {
+    if (text.includes("state forest") || text.includes("forest preserve") || text.includes("environmental conservation")) {
+      if (!foodMode) return null;
+      return {
+        status: "allowed",
+        label: "Allowed",
+        area,
+        limit: "Plants and fungi may be gathered for personal consumption on DEC state forests and Forest Preserve lands; commercial collection requires a permit.",
+        note: "New York DEC land rules make a personal-consumption exception to the plant-protection rule. Harvest lightly and avoid protected species.",
+        sourceLabel: "NYSDEC state forest rules",
+        sourceUrl: ACCESS_RULE_SOURCES.newYorkDec
+      };
+    }
+    if (text.includes("state park")) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: "Foraging is prohibited in New York state parks.",
+        note: "The personal-consumption exception applies to DEC lands, not the OPRHP state park system.",
+        sourceLabel: "NYSDEC state land rules",
+        sourceUrl: ACCESS_RULE_SOURCES.newYorkDec
+      };
+    }
+  }
+
+  if (landIsInState(properties, "PA")
+    && (text.includes("state forest") || text.includes("state park") || text.includes("conservation and natural resources"))) {
+    if (!foodMode) return null;
+    return {
+      status: "allowed",
+      label: "Allowed",
+      area,
+      limit: "Edible fruits, nuts, berries, and fungi may be gathered in reasonable amounts for personal or family consumption; protected species (including ginseng) excluded.",
+      note: "Pennsylvania DCNR allows personal-use gathering of edible wild plants in state parks and forests; commercial collection is prohibited.",
+      sourceLabel: "PA DCNR rules",
+      sourceUrl: ACCESS_RULE_SOURCES.pennsylvaniaDcnr
+    };
+  }
+
+  if (landIsInState(properties, "WA")) {
+    if (text.includes("natural area preserve")) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: "No harvest of edible plants or fruiting bodies is allowed within Washington natural area preserves.",
+        note: "WAC 352-28-030 excludes natural area preserves from the state-park harvest allowance.",
+        sourceLabel: "WAC 352-28-030",
+        sourceUrl: ACCESS_RULE_SOURCES.washingtonParks
+      };
+    }
+    if (text.includes("state park")) {
+      if (!foodMode) return null;
+      return {
+        status: "allowed",
+        label: "Allowed",
+        area,
+        limit: "Edible plants, mushrooms, berries, and nuts: up to 2 gallons per person per day unless otherwise posted.",
+        note: "Washington state parks allow recreational harvest of edibles under WAC 352-28-030; posted park rules can restrict it.",
+        sourceLabel: "WAC 352-28-030",
+        sourceUrl: ACCESS_RULE_SOURCES.washingtonParks
+      };
+    }
+  }
+
+  if (landIsInState(properties, "CA") && text.includes("state park")) {
+    return {
+      status: "prohibited",
+      label: "Prohibited",
+      area,
+      limit: "Picking or removing any plant material in California state parks is prohibited unless gathering is specifically authorized and posted for that unit.",
+      note: "California's park regulations (14 CCR 4306) protect all vegetation; a few units post berry or mushroom exceptions at headquarters.",
+      sourceLabel: "California state park regulations",
+      sourceUrl: ACCESS_RULE_SOURCES.californiaParks
+    };
+  }
+
+  return null;
+}
+
 function getBestPublicLandAccessRule(features, species) {
   if (!features.length) return null;
   const candidates = features.map((feature) => ({
@@ -3973,6 +4334,22 @@ function isUsfsLand(text) {
   return text.includes("forest service")
     || text.includes("national forest")
     || text.includes("national grassland");
+}
+
+function isBlmLand(text) {
+  return text.includes("bureau of land management")
+    || text.includes("blm");
+}
+
+function isWildlifeRefugeLand(text) {
+  return text.includes("national wildlife refuge")
+    || text.includes("fish and wildlife service")
+    || text.includes("waterfowl production area");
+}
+
+function isArmyCorpsLand(text) {
+  return text.includes("army corps")
+    || text.includes("corps of engineers");
 }
 
 function isVirginiaWma(text) {
