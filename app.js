@@ -434,35 +434,6 @@ const LEGEND_PERMISSION_OPTIONS = [
   { id: "private", label: "Private" },
   { id: "unknown", label: "Unverified" }
 ];
-const PERMISSION_BEACON_SOURCE_ID = "permission-beacons";
-const PERMISSION_BEACON_LAYER_ID = "permission-beacon-rings";
-const PERMISSION_BEACON_LABEL_LAYER_ID = "permission-beacon-labels";
-
-// Overview beacons marking land with verified harvesting rules, so the wide
-// view shows where permission information is mapped. Park beacons reflect
-// food-mode compendium designations; other modes show them as prohibited.
-const PERMISSION_BEACON_PARKS = [
-  { name: "Shenandoah NP", center: [-78.46, 38.49], status: "allowed" },
-  { name: "Blue Ridge Parkway", center: [-79.94, 37.0], status: "allowed" },
-  { name: "Prince William Forest Park", center: [-77.35, 38.59], status: "allowed" },
-  { name: "Manassas Battlefield", center: [-77.52, 38.81], status: "allowed" },
-  { name: "Great Smoky Mountains NP", center: [-83.51, 35.61], status: "allowed" },
-  { name: "New River Gorge NP", center: [-81.05, 37.93], status: "allowed" },
-  { name: "Acadia NP", center: [-68.27, 44.34], status: "allowed" },
-  { name: "Cuyahoga Valley NP", center: [-81.57, 41.24], status: "allowed" },
-  { name: "Olympic NP", center: [-123.6, 47.8], status: "allowed" },
-  { name: "Mount Rainier NP", center: [-121.73, 46.86], status: "allowed" },
-  { name: "Rocky Mountain NP", center: [-105.69, 40.35], status: "allowed" },
-  { name: "Yellowstone NP", center: [-110.59, 44.6], status: "allowed" },
-  { name: "Yosemite NP", center: [-119.54, 37.85], status: "allowed" },
-  { name: "Glacier NP", center: [-113.78, 48.7], status: "allowed" },
-  { name: "Crater Lake NP", center: [-122.12, 42.94], status: "allowed" },
-  { name: "Grand Teton NP", center: [-110.7, 43.79], status: "allowed" },
-  { name: "Redwood N&SP", center: [-124.0, 41.4], status: "allowed" },
-  { name: "Capitol Reef NP (paid u-pick)", center: [-111.18, 38.2], status: "permit-required" },
-  { name: "Death Valley NP", center: [-117.08, 36.51], status: "allowed" }
-];
-
 const MARKER_ICON_SIZE = 26;
 const MARKER_ICON_PIXEL_RATIO = 3;
 const WELCOME_MODAL_STORAGE_KEY = "craftAlmanacWelcomeSeen";
@@ -1528,6 +1499,19 @@ function initAccessControls() {
   });
 }
 
+function getDefaultAccessStatuses() {
+  return ACCESS_STATUS_OPTIONS.filter((option) => option.defaultChecked).map((option) => option.id);
+}
+
+function getSelectedAccessStatuses() {
+  return new Set(getCheckedValues("access-status"));
+}
+
+function isAccessFilterActive(selectedStatuses = getSelectedAccessStatuses()) {
+  const defaults = getDefaultAccessStatuses();
+  return selectedStatuses.size !== defaults.length || defaults.some((id) => !selectedStatuses.has(id));
+}
+
 function initWelcomeModal() {
   if (!welcomeModal || !welcomeModalButton) return;
   const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
@@ -1568,12 +1552,7 @@ function renderMapLegend() {
       <span class="legend-dot outline-${status.id}" aria-hidden="true"></span>
       <span>${status.label}</span>
     </span>
-  `).join("") + `
-    <span class="legend-row">
-      <span class="legend-dot legend-beacon" aria-hidden="true"></span>
-      <span>Verified rule area (wide view)</span>
-    </span>
-  `;
+  `).join("");
   const categoryRows = config.categories.map((category) => `
     <span class="legend-row">
       <span class="legend-swatch" style="background: ${escapeHTML(config.categoryColors[category.id] || "#777")}" aria-hidden="true"></span>
@@ -1726,7 +1705,6 @@ function setMapMode(mode) {
   renderModeChrome();
   renderFilterControls();
   updateLayerHandoff();
-  updatePermissionBeacons();
   render();
 }
 
@@ -2250,10 +2228,7 @@ function render() {
 function renderAccessFilterNote() {
   const note = document.querySelector("#accessFilterNote");
   if (!note) return;
-  const selected = new Set(getCheckedValues("access-status"));
-  const defaults = ACCESS_STATUS_OPTIONS.filter((option) => option.defaultChecked).map((option) => option.id);
-  const changed = selected.size !== defaults.length || defaults.some((id) => !selected.has(id));
-  note.hidden = !changed;
+  note.hidden = !isAccessFilterActive();
 }
 
 function renderSeasonControls() {
@@ -2435,12 +2410,14 @@ function getFallingFruitAggregateCollection(manifest) {
 
   const zoom = state.mapReady ? map.getZoom() : 0;
   const bounds = state.mapReady ? map.getBounds() : null;
+  const selectedAccessStatuses = getSelectedAccessStatuses();
+  const accessFilterActive = isAccessFilterActive(selectedAccessStatuses);
   const useViewportAggregation = shouldUseViewportAggregateBounds(zoom, bounds);
   const aggregateBounds = useViewportAggregation && bounds ? getPaddedAggregateBounds(bounds, zoom) : null;
-  const aggregateItems = getAggregateItems(manifest, selectedSpeciesIds, aggregateBounds);
+  const aggregateItems = getAggregateItems(manifest, selectedSpeciesIds, aggregateBounds, accessFilterActive);
   const mode = useViewportAggregation ? "screen" : "geo";
   const gridSize = useViewportAggregation ? getAggregateScreenGridSize(zoom) : getAggregateGeoGridSize(zoom);
-  const features = getGridAggregateFeatures(aggregateItems, selectedSpeciesIds, gridSize, aggregateBounds, mode);
+  const features = getGridAggregateFeatures(aggregateItems, selectedSpeciesIds, gridSize, aggregateBounds, mode, selectedAccessStatuses, accessFilterActive);
 
   return {
     type: "FeatureCollection",
@@ -2460,11 +2437,11 @@ function shouldUseViewportAggregateBounds(zoom, bounds) {
   return zoom >= 6.4 || getBoundsLngSpan(bounds) <= 12;
 }
 
-function getAggregateItems(manifest, selectedSpeciesIds, bounds) {
+function getAggregateItems(manifest, selectedSpeciesIds, bounds, accessFilterActive = false) {
   const items = getActiveMapConfig().loadFallingFruit
     ? [...(manifest.chunks || [])]
     : [];
-  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+  if (!accessFilterActive && state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     items.push(...getINaturalistAggregateItems(bounds));
   }
   return items;
@@ -2476,13 +2453,13 @@ function getINaturalistAggregateItems(bounds) {
   ));
 }
 
-function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, mode) {
+function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, mode, selectedAccessStatuses, accessFilterActive) {
   const groups = new Map();
   items.forEach((item) => {
     if (bounds && !bboxIntersectsBounds(item.bbox, bounds)) return;
-    const count = getAggregateRecordCount(item.countsBySpeciesId, selectedSpeciesIds);
+    const count = getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive);
     if (!count) return;
-    const center = getAggregateItemCenter(item, selectedSpeciesIds);
+    const center = getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive);
     const key = getAggregateGridKey(center, gridSize, mode);
     const group = groups.get(key) || {
       id: key,
@@ -2651,19 +2628,42 @@ function getAggregateScreenRadius(count) {
   return stops[stops.length - 1][1];
 }
 
-function getAggregateRecordCount(countsBySpeciesId, selectedSpeciesIds) {
-  if (countsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID]) {
-    return Number(countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
+function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive) {
+  if (item.countsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID]) {
+    return accessFilterActive ? 0 : Number(item.countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
   }
-  return Object.entries(countsBySpeciesId || {}).reduce((total, [sourceSpeciesId, count]) => {
+  const modeAccessCounts = item.accessCounts?.[state.activeMap];
+  if (accessFilterActive && modeAccessCounts) {
+    return [...selectedAccessStatuses].reduce((total, status) => (
+      total + getFilteredAccessStatusCount(modeAccessCounts[status], selectedSpeciesIds)
+    ), 0);
+  }
+  return Object.entries(item.countsBySpeciesId || {}).reduce((total, [sourceSpeciesId, count]) => {
     const importedSpeciesId = getImportedSpeciesId(sourceSpeciesId);
     return selectedSpeciesIds.has(importedSpeciesId) ? total + Number(count || 0) : total;
   }, 0);
 }
 
-function getAggregateItemCenter(item, selectedSpeciesIds) {
+function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive) {
   const aggregateCentroid = item.centroidsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID];
   if (Array.isArray(aggregateCentroid)) return [aggregateCentroid[0], aggregateCentroid[1]];
+  const modeAccessCentroids = item.accessCentroids?.[state.activeMap];
+  const modeAccessCounts = item.accessCounts?.[state.activeMap];
+  if (accessFilterActive && modeAccessCentroids) {
+    let accessCount = 0;
+    let accessWeightedLng = 0;
+    let accessWeightedLat = 0;
+    selectedAccessStatuses.forEach((status) => {
+      const centroid = modeAccessCentroids[status];
+      if (!Array.isArray(centroid)) return;
+      const centroidCount = getFilteredAccessStatusCount(modeAccessCounts?.[status], selectedSpeciesIds);
+      if (!centroidCount) return;
+      accessWeightedLng += Number(centroid[0]) * centroidCount;
+      accessWeightedLat += Number(centroid[1]) * centroidCount;
+      accessCount += centroidCount;
+    });
+    if (accessCount) return [accessWeightedLng / accessCount, accessWeightedLat / accessCount];
+  }
   let count = 0;
   let weightedLng = 0;
   let weightedLat = 0;
@@ -2678,6 +2678,12 @@ function getAggregateItemCenter(item, selectedSpeciesIds) {
   });
   if (count) return [weightedLng / count, weightedLat / count];
   return item.center || getBboxCenter(item.bbox);
+}
+
+function getFilteredAccessStatusCount(speciesCounts, selectedSpeciesIds) {
+  return Object.entries(speciesCounts || {}).reduce((total, [speciesId, count]) => (
+    selectedSpeciesIds.has(speciesId) ? total + Number(count || 0) : total
+  ), 0);
 }
 
 function getAggregateFeature({ id, level, label, center, count }) {
@@ -3016,56 +3022,6 @@ function initMapLayers() {
     });
   }
 
-  if (!map.getSource(PERMISSION_BEACON_SOURCE_ID)) {
-    map.addSource(PERMISSION_BEACON_SOURCE_ID, {
-      type: "geojson",
-      data: getPermissionBeaconCollection()
-    });
-  }
-
-  if (!map.getLayer(PERMISSION_BEACON_LAYER_ID)) {
-    map.addLayer({
-      id: PERMISSION_BEACON_LAYER_ID,
-      type: "circle",
-      source: PERMISSION_BEACON_SOURCE_ID,
-      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
-      paint: {
-        "circle-color": "#fffdf7",
-        "circle-opacity": 0.95,
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 4.5, 7, 7],
-        "circle-stroke-width": 2.25,
-        "circle-stroke-color": [
-          "match", ["get", "status"],
-          "allowed", "#2f8f46",
-          "prohibited", "#c74437",
-          "#d89b24"
-        ]
-      }
-    });
-  }
-
-  if (!map.getLayer(PERMISSION_BEACON_LABEL_LAYER_ID)) {
-    map.addLayer({
-      id: PERMISSION_BEACON_LABEL_LAYER_ID,
-      type: "symbol",
-      source: PERMISSION_BEACON_SOURCE_ID,
-      minzoom: 5.2,
-      maxzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
-      layout: {
-        "text-field": ["get", "name"],
-        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-        "text-size": 10,
-        "text-offset": [0, 1.4],
-        "text-allow-overlap": false
-      },
-      paint: {
-        "text-color": "#243a2a",
-        "text-halo-color": "#f7f2df",
-        "text-halo-width": 1.3
-      }
-    });
-  }
-
   updatePublicLandVisibility();
   bindMapInteractions();
   updateLayerHandoff();
@@ -3289,41 +3245,6 @@ function bindMapInteractions() {
     expansionZoom?.then?.(zoomToCluster).catch?.(() => {});
   });
 
-  map.on("mouseenter", PERMISSION_BEACON_LAYER_ID, (event) => {
-    map.getCanvas().style.cursor = "pointer";
-    const feature = event.features?.[0];
-    if (!feature) return;
-    state.hoverPopup?.remove();
-    state.hoverPopup = new mapboxgl.Popup({
-      className: "forage-hover-popup",
-      closeButton: false,
-      closeOnClick: false,
-      offset: 12
-    })
-      .setLngLat(feature.geometry.coordinates)
-      .setHTML(`<p class="popup-title">${escapeHTML(feature.properties.name)}</p><p class="popup-meta">${escapeHTML(feature.properties.statusLabel)} · click to zoom</p>`)
-      .addTo(map);
-  });
-
-  map.on("mouseleave", PERMISSION_BEACON_LAYER_ID, () => {
-    map.getCanvas().style.cursor = "";
-    state.hoverPopup?.remove();
-    state.hoverPopup = null;
-  });
-
-  map.on("click", PERMISSION_BEACON_LAYER_ID, (event) => {
-    const feature = event.features?.[0];
-    if (!feature) return;
-    state.hoverPopup?.remove();
-    state.hoverPopup = null;
-    map.flyTo({
-      center: feature.geometry.coordinates,
-      zoom: 9.3,
-      duration: 1100,
-      essential: true
-    });
-  });
-
   map.on("mouseenter", MARKERS_LAYER_ID, (event) => {
     map.getCanvas().style.cursor = "pointer";
     const feature = event.features?.[0];
@@ -3446,49 +3367,6 @@ function getMarkerPopupHTML(properties) {
   `;
 }
 
-function getPermissionBeaconCollection() {
-  const foodMode = state.activeMap === "food";
-  const parkFeatures = PERMISSION_BEACON_PARKS.map((park) => ({
-    type: "Feature",
-    geometry: { type: "Point", coordinates: park.center },
-    properties: {
-      name: park.name,
-      status: foodMode ? park.status : "prohibited",
-      statusLabel: foodMode
-        ? (ACCESS_MARKER_STYLES[park.status]?.label || park.status)
-        : "Prohibited (food-only designation)"
-    }
-  }));
-  const siteFeatures = SITE_ACCESS_RULES.map((site) => {
-    const rule = site.rules[state.activeMap] || site.rules.default;
-    if (!rule) return null;
-    return {
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [
-          (site.bounds.west + site.bounds.east) / 2,
-          (site.bounds.south + site.bounds.north) / 2
-        ]
-      },
-      properties: {
-        name: site.name,
-        status: rule.status,
-        statusLabel: rule.label
-      }
-    };
-  }).filter(Boolean);
-  return {
-    type: "FeatureCollection",
-    features: [...parkFeatures, ...siteFeatures]
-  };
-}
-
-function updatePermissionBeacons() {
-  if (!state.mapReady || !map.getSource(PERMISSION_BEACON_SOURCE_ID)) return;
-  map.getSource(PERMISSION_BEACON_SOURCE_ID).setData(getPermissionBeaconCollection());
-}
-
 function getPublicLandCollection() {
   return {
     type: "FeatureCollection",
@@ -3518,6 +3396,13 @@ function scheduleINaturalistAggregateLoad() {
 
 async function loadINaturalistAggregates() {
   if (!state.mapReady || state.savedLocationsOnly) {
+    state.inatAggregateItems = [];
+    state.inatAggregateTaxonKey = "";
+    setINaturalistAggregateReady(true);
+    updateFallingFruitAggregates();
+    return;
+  }
+  if (isAccessFilterActive() && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     state.inatAggregateItems = [];
     state.inatAggregateTaxonKey = "";
     setINaturalistAggregateReady(true);
@@ -3601,7 +3486,7 @@ async function fetchINaturalistAggregateTileWithRetry(taxonIds, tile) {
 
 function getNonzeroAggregateItems(items) {
   return items.filter((item) => (
-    getAggregateRecordCount(item.countsBySpeciesId, new Set()) > 0
+    getAggregateRecordCount(item, new Set(), new Set(), false) > 0
   ));
 }
 
