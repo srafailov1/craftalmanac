@@ -166,5 +166,7 @@ getPublicLandAccessRule.
 - When permission rules in `app.js` change, rerun
   `node scripts/build_access_status.mjs` so `data/falling-fruit/us/manifest.json`
   refreshes its baked `accessCounts` and `accessCentroids` from the current
-  rule logic. The PAD-US containment cache does not need to be rebuilt unless
-  PAD-US boundaries or public-access units are being refreshed.
+  rule logic. Then rerun `node scripts/build_status_raster.mjs` so live
+  iNaturalist overview filtering uses the same current area-rule statuses.
+  The PAD-US containment caches do not need to be rebuilt unless PAD-US
+  boundaries or public-access units are being refreshed.
