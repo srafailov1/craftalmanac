@@ -3086,6 +3086,7 @@ async function loadMapData() {
   state.activeRequest = requestId;
   const config = getActiveMapConfig();
   const loadBounds = state.mapReady ? map.getBounds() : null;
+  const loadZoom = state.mapReady ? map.getZoom() : 0;
   const hadRecords = state.records.length > 0;
   if (!hadRecords) setDataStatus("Loading current map data...");
 
@@ -3112,7 +3113,12 @@ async function loadMapData() {
 
   state.records = nextRecords;
   renderMarkers();
-  if (state.mapReady && loadBounds && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
+  // Only a load that STARTED in the point band carries Falling Fruit data; a
+  // load kicked off below zoom 8 that finishes after the user crosses up must
+  // not end the bridge, or sparse iNaturalist-only clusters flash in.
+  if (state.mapReady && loadBounds
+    && loadZoom >= FALLING_FRUIT_MIN_LOAD_ZOOM
+    && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
     state.pointDataReady = true;
     state.loadedPointBounds = {
       west: loadBounds.getWest(),
@@ -3486,6 +3492,9 @@ async function loadPublicLands() {
       features.push(...(data.features || []));
       if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) break;
     }
+    features.forEach((feature) => {
+      feature.__bbox = getFeatureBbox(feature);
+    });
     state.publicLandFeatures = features;
     state.publicLayerLoadedKey = boundsKey;
     state.accessRuleCache.clear();
@@ -4037,7 +4046,29 @@ function getContainingPublicLands(record) {
   const lat = Number(record.lat);
   const lng = Number(record.lng);
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return [];
-  return state.publicLandFeatures.filter((feature) => pointInFeature([lng, lat], feature));
+  return state.publicLandFeatures.filter((feature) => {
+    // Cheap bbox rejection first; full point-in-polygon only for candidates.
+    const box = feature.__bbox;
+    if (box && (lng < box[0] || lng > box[2] || lat < box[1] || lat > box[3])) return false;
+    return pointInFeature([lng, lat], feature);
+  });
+}
+
+function getFeatureBbox(feature) {
+  let west = Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let north = -Infinity;
+  const scanPolygon = (rings) => rings.forEach((ring) => ring.forEach(([lng, lat]) => {
+    if (lng < west) west = lng;
+    if (lng > east) east = lng;
+    if (lat < south) south = lat;
+    if (lat > north) north = lat;
+  }));
+  const geometry = feature.geometry;
+  if (geometry?.type === "Polygon") scanPolygon(geometry.coordinates);
+  else if (geometry?.type === "MultiPolygon") geometry.coordinates.forEach(scanPolygon);
+  return [west, south, east, north];
 }
 
 function pointInFeature(point, feature) {
