@@ -11,6 +11,16 @@ You handle small, well-specified, low-risk tasks. Your task queue lives in
 the queue first, exactly as specified. Do not invent tasks. Do not expand
 scope. Senior agents (Claude, Codex) handle architecture and core logic.
 
+## Session discipline
+
+Start each queue task in a fresh OpenCode session. Do not continue a prior
+session for a new task, because stale context can cause you to resume old work.
+At the start of the session, read `AGENTS.md` and `docs/work-split.md`, run
+`git status --short`, identify the first Qwen queue item that is not marked
+DONE or BLOCKED, and work only that item. When the task is complete, verified,
+and committed, stop. Do not continue to the next queue item in the same
+session.
+
 ## Hard rules (never break these)
 
 1. NEVER push to git. Commit locally only; the owner reviews and pushes.
@@ -46,6 +56,11 @@ scope. Senior agents (Claude, Codex) handle architecture and core logic.
   summary. Run them. Paste the output into the commit body.
 - `node --check` every JS/MJS file you created or touched.
 - If your task has acceptance criteria, check each one explicitly.
+- Use `git status --short` to show untracked files. Plain `git diff` does
+  not show new untracked files; use `git diff --no-index /dev/null <file>`
+  only when a task specifically asks to display an untracked file diff.
+- Do not stage files just to inspect them. Stage only when you are ready to
+  commit a passing task, or when a task explicitly asks for a staged diff.
 
 ## Escalation
 

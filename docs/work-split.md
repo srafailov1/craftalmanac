@@ -18,19 +18,14 @@ research docs) are Claude-tier work.
 
 Owns: well-specified multi-file engineering with judgment inside guardrails.
 Specs come from Claude as work orders (`docs/TODO-*.md`) with phases,
-acceptance gates, and Boundaries sections. Current assignment:
-`docs/TODO-filtered-aggregates.md` — Phases 1–4 delivered and reviewed
-(2026-06-12, approved); **Phase 5 (iNaturalist overview statuses) is the
-active Codex task** — see the TODO file.
+acceptance gates, and Boundaries sections. Recent assignment
+`docs/TODO-filtered-aggregates.md` Phases 1–5 is delivered.
 
 Codex queue:
-1. TODO-filtered-aggregates Phase 5 (iNat status raster) — active. Note:
-   Phase 5 already covers medicine mode end to end — step 2 bakes
-   `{food, ink, medicine}` statuses into the cell raster and step 3 filters
-   the iNat-only medicine overview through it. (Removed a former "extend the
-   bake to the medicine catalog" item: medicine mode loads no Falling Fruit,
-   so there is nothing to bake into the FF chunks — the raster is the
-   mechanism.)
+1. TODO-filtered-aggregates Phase 5 (iNat status raster) — DONE. Phase 5
+   covers medicine mode end to end — step 2 bakes `{food, ink, medicine}`
+   statuses into the cell raster and step 3 filters the iNat-only medicine
+   overview through it.
 2. Mapbox Studio style implementation — BLOCKED until the `design/relaunch`
    Round 2 direction is chosen; Claude provides the style spec from Round 2.
    Do not start before the spec lands.
@@ -41,30 +36,21 @@ Operating manual: `AGENTS.md` at repo root (hard rules live there).
 Scope: single-file scripts, docs upkeep, mechanical validation — never core
 app logic, never safety/permissions semantics, never data regeneration.
 
-Qwen queue (work top-down, one per session):
-1. **Data validation script.** Create `scripts/validate_data.mjs` (Node,
-   no dependencies). Checks, printing PASS/FAIL per check and exiting
-   nonzero on any failure: (a) every manifest chunk's `path` file exists
-   and parses; (b) per-chunk row count equals `recordCount`; (c) summing
-   `countsBySpeciesId` across chunks equals manifest `recordCount` total;
-   (d) every chunk id has an `access-cache/` file and its array length
-   equals the chunk's row count; (e) for each mode in `accessCounts`,
-   per-species sums across statuses never exceed `countsBySpeciesId`;
-   (f) `data/contiguous-us-states.json` has 49 states, each with bbox and
-   MultiPolygon/Polygon geometry. Acceptance: running
-   `node scripts/validate_data.mjs` on current data prints all PASS.
-2. **Pre-commit check runner.** Create `scripts/check.sh` (bash, +x):
-   runs `node --check app.js`, `node --check` on every `scripts/*.mjs`,
-   then `node scripts/validate_data.mjs`. Clear summary, nonzero exit on
-   failure. Acceptance: `bash scripts/check.sh` passes on current repo.
-3. **Rule-test consolidation.** Create `scripts/test_rules.mjs`: extract
-   rule functions from `app.js` by regex (the pattern is shown inside
-   `scripts/build_access_status.mjs`) and assert: state-code lookups for
-   5 known cities; NY/PA/WA/CA/NYC/CO/OR/MD/NC/MI/MN status outcomes for
-   one synthetic land-text each (copy expected statuses from
+Qwen queue (work top-down from the first item not marked DONE or BLOCKED, one per fresh session):
+1. **Data validation script — DONE.** `scripts/validate_data.mjs` exists and
+   passes on current data. Do not redo this item unless a senior agent asks.
+2. **Pre-commit check runner — DONE.** `scripts/check.sh` exists, is
+   executable, and passes on current data. Do not redo this item unless a
+   senior agent asks.
+3. **Rule-test consolidation — ACTIVE.** Create `scripts/test_rules.mjs`:
+   extract rule functions from `app.js` by regex (reuse the extraction pattern
+   shown inside `scripts/build_access_status.mjs`) and assert: state-code
+   lookups for 5 known cities; NY/PA/WA/CA/NYC/CO/OR/MD/NC/MI/MN status
+   outcomes for one synthetic land-text each (copy expected statuses from
    `docs/permissions-research-2026-06.md` tables); Great Smoky mushroom
    allowed; Rocky Mountain mushroom prohibited; Acadia mushroom prohibited.
-   Acceptance: all assertions pass; wire it into `scripts/check.sh`.
+   Acceptance: `node scripts/test_rules.mjs` passes; `bash scripts/check.sh`
+   passes after wiring `scripts/test_rules.mjs` into `scripts/check.sh`.
 4. **README refresh.** Update `README.md` to current reality: the three
    modes (food / ink / medicine), 0.15-degree chunks, UTFGrid overview
    counts, the permissions system and filtered aggregates, the docs/ map,
