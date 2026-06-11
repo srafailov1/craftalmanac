@@ -28,7 +28,10 @@ CHUNK_AXIS_SCALE = 100
 CELL_SIZE_SCALED = round(TARGET_CHUNK_SIZE_DEGREES * CHUNK_AXIS_SCALE)
 
 
-def axis_label(prefix, scaled_value):
+def axis_label(scaled_value, negative_prefix, positive_prefix):
+    # Pick the hemisphere prefix from the sign (matches
+    # build_falling_fruit_subset.format_axis) instead of assuming w/n.
+    prefix = negative_prefix if scaled_value < 0 else positive_prefix
     return f"{prefix}{abs(scaled_value):05d}"
 
 
@@ -44,7 +47,7 @@ def merged_chunk_entry(cell, source_chunks):
     cell_west, cell_south = cell
     west = cell_west / CHUNK_AXIS_SCALE
     south = cell_south / CHUNK_AXIS_SCALE
-    chunk_id = f"{axis_label('w', cell_west)}_{axis_label('n', cell_south)}"
+    chunk_id = f"{axis_label(cell_west, 'w', 'e')}_{axis_label(cell_south, 's', 'n')}"
 
     counts = defaultdict(int)
     weighted = defaultdict(lambda: [0.0, 0.0, 0])
