@@ -26,6 +26,11 @@ Static site, no build step, no framework, no package manager. Vanilla JS + Mapbo
 
 Live: iNaturalist API (observations), USGS PAD-US ArcGIS service (public-access polygons). Cached/derived: Falling Fruit chunks, NPS orchards, Census boundaries. Access-rule summaries are hand-encoded from NPS compendiums and 36 CFR 2.1 — see `ATTRIBUTION.md` for all sources and caveats.
 
+## Known issues
+
+`KNOWN_ISSUES.md` is the debug queue for the daily tune-up pass. Check it at
+the start of debugging sessions; update or clear entries as they're resolved.
+
 ## Workflow
 
 - Repo: `github.com/srafailov1/craftalmanac`, branch `main`. Cloudflare (Workers static assets, `wrangler.jsonc`) auto-deploys on push.
