@@ -24,12 +24,16 @@ acceptance gates, and Boundaries sections. Current assignment:
 active Codex task** — see the TODO file.
 
 Codex queue:
-1. TODO-filtered-aggregates Phase 5 (iNat status raster) — active.
-2. After Phase 5: medicine-mode aggregate statuses (extend the bake to the
-   medicine catalog so an active filter in Herbalism mode isn't empty —
-   same pattern as food/ink; spec note in the TODO).
-3. Mapbox Studio style implementation when the design direction is chosen
-   (Claude provides the style spec from Round 2).
+1. TODO-filtered-aggregates Phase 5 (iNat status raster) — active. Note:
+   Phase 5 already covers medicine mode end to end — step 2 bakes
+   `{food, ink, medicine}` statuses into the cell raster and step 3 filters
+   the iNat-only medicine overview through it. (Removed a former "extend the
+   bake to the medicine catalog" item: medicine mode loads no Falling Fruit,
+   so there is nothing to bake into the FF chunks — the raster is the
+   mechanism.)
+2. Mapbox Studio style implementation — BLOCKED until the `design/relaunch`
+   Round 2 direction is chosen; Claude provides the style spec from Round 2.
+   Do not start before the spec lands.
 
 ## Tier 3 — Qwen via opencode (junior, local, free)
 
@@ -61,11 +65,17 @@ Qwen queue (work top-down, one per session):
    `docs/permissions-research-2026-06.md` tables); Great Smoky mushroom
    allowed; Rocky Mountain mushroom prohibited; Acadia mushroom prohibited.
    Acceptance: all assertions pass; wire it into `scripts/check.sh`.
-4. **README refresh.** Update `README.md` to current reality: three modes,
-   0.15-degree chunks, UTFGrid overview counts, permissions system and
-   filtered aggregates, the docs/ map, the agent roster. Do not change
-   ATTRIBUTION.md or safety language. Acceptance: no stale claims remain
-   (grep for "0.05", "Mid-Atlantic", "starter records").
+4. **README refresh.** Update `README.md` to current reality: the three
+   modes (food / ink / medicine), 0.15-degree chunks, UTFGrid overview
+   counts, the permissions system and filtered aggregates, the docs/ map,
+   and the agent roster. The current README still frames the catalog as a
+   Shenandoah-only "starter species list" (line ~38) and a single food mode
+   (line ~19) — both are stale. Do not change ATTRIBUTION.md or safety
+   language. Acceptance: (a) `grep -niE "starter species|0\.05|Mid-Atlantic"
+   README.md` returns nothing; (b) the README names all three modes and the
+   permission filter; (c) the line about Falling Fruit no longer being
+   "starter records" stays accurate (it is a correct negation — do not flag
+   it). Leave the existing edible-fungi whitelist caveat intact.
 5. **Scripts README.** Create `scripts/README.md`: one paragraph per
    script — what it does, when to run it, inputs/outputs. Acceptance:
    covers every file in `scripts/`.
