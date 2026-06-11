@@ -960,6 +960,19 @@ h2 {
   border: 1.5px solid #111;
 }
 
+.legend-dot.legend-beacon {
+  background: #fffdf7;
+  border: 2px solid var(--access-allowed);
+}
+
+.access-filter-note {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f4f1e6;
+  color: #46513f;
+}
+
 .legend-dot.outline-permit-required {
   background: #fff;
   border: 1.5px dotted #111;
