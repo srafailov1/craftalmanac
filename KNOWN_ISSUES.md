@@ -4,7 +4,19 @@ Issues queued for the daily tune-up pass. Investigate, fix, and remove entries
 once verified on the live site. Keep this file current: future debugging
 sessions rely on it for context.
 
-## 1. Sparse-counts flash during zoom transitions around zoom 8 (OPEN)
+## 1. Sparse-counts flash during zoom transitions around zoom 8 (FIX APPLIED — verify on live site)
+
+**Fix applied 2026-06-11 (not yet verified live):** implemented the symmetric
+downward bridge from the leading hypothesis below. On a downward crossing the
+cluster layers now stay visible (cluster layer minzoom lowered 8 -> 6.4) while
+the aggregate layers stay hidden until a fresh aggregate paint — computed with
+grid counts ready (`inatAggregateReady`) — has rendered (`map.once("idle")`
+after `setData`, so the old source buffer never shows). A 2.5 s safety timer
+(`AGGREGATE_BRIDGE_MAX_MS`) bounds the bridge; mode switches cancel it. See
+`beginAggregateBridge` / `cancelAggregateBridge` / `settleAggregateBridgeAfterPaint`
+and the bridge-aware `updateLayerHandoff`. Run the verification standard below
+(wheel, double-click, and pinch zoom over Charlottesville and NYC, cold cache)
+before clearing this entry.
 
 **Symptom:** Zooming through the aggregate/cluster handoff band (viewport
 roughly 100–200 miles wide, zoom ~7–9), the map briefly shows far fewer

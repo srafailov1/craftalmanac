@@ -18,6 +18,10 @@ const INATURALIST_GRID_MAX_ZOOM = 7;
 const INATURALIST_GRID_MAX_TILES = 24;
 const INATURALIST_GRID_CELL_BUCKETS = 32;
 const AGGREGATE_FIRST_PAINT_GRACE_MS = 2500;
+const AGGREGATE_BRIDGE_MAX_MS = 2500;
+// Cluster layers stay renderable a bit below the point band so they can
+// bridge the downward handoff while a fresh aggregate paint is prepared.
+const MARKER_CLUSTER_BRIDGE_MIN_ZOOM = 6.4;
 const INATURALIST_AGGREGATE_SPECIES_ID = "__inat-aggregate";
 const INATURALIST_REGION_PLACE_IDS = "1";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
@@ -1074,6 +1078,9 @@ const state = {
   inatAggregateReady: false,
   aggregateGateStart: null,
   aggregateGateTimer: null,
+  aggregateBridgeActive: false,
+  aggregateBridgeId: 0,
+  aggregateBridgeTimer: null,
   loadTimer: null,
   inatAggregateTimer: null,
   publicLoadTimer: null,
@@ -1573,6 +1580,7 @@ function setMapMode(mode) {
     state.pointDataReady = false;
     state.loadedPointBounds = null;
     state.activeRequest += 1;
+  cancelAggregateBridge();
   state.activePopup?.remove();
   state.hoverPopup?.remove();
   syncActiveCatalog();
@@ -1835,7 +1843,11 @@ function initControls() {
     if (belowPointZoom && !state.wasBelowPointZoom) {
       // Crossing down: hold the aggregate repaint until grid counts for this
       // viewport are confirmed, instead of painting a sparse interim state.
+      // Clusters stay up (their records are already loaded) until the fresh
+      // aggregate paint lands — symmetric with the upward handoff bridge.
       setINaturalistAggregateReady(false);
+      beginAggregateBridge();
+      scheduleINaturalistAggregateLoad();
     }
     state.wasBelowPointZoom = belowPointZoom;
     updateLayerHandoff();
@@ -2226,6 +2238,7 @@ function updateFallingFruitAggregates() {
       if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
       if (shouldDeferAggregatePaint()) return;
       map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID).setData(getFallingFruitAggregateCollection(manifest));
+      settleAggregateBridgeAfterPaint();
     })
     .catch(() => {
       map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)?.setData({
@@ -2791,7 +2804,7 @@ function initMapLayers() {
       id: MARKER_CLUSTERS_LAYER_ID,
       type: "circle",
       source: MARKERS_SOURCE_ID,
-      minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
+      minzoom: MARKER_CLUSTER_BRIDGE_MIN_ZOOM,
       filter: ["has", "point_count"],
       paint: {
         "circle-color": [
@@ -2824,7 +2837,7 @@ function initMapLayers() {
       id: MARKER_CLUSTER_COUNT_LAYER_ID,
       type: "symbol",
       source: MARKERS_SOURCE_ID,
-      minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
+      minzoom: MARKER_CLUSTER_BRIDGE_MIN_ZOOM,
       filter: ["has", "point_count"],
       layout: {
         "text-field": ["get", "point_count_abbreviated"],
@@ -2890,17 +2903,51 @@ function shouldShowPointLayers() {
 function updateLayerHandoff() {
   // Aggregate circles stay on screen until the point data for this viewport
   // has actually loaded, then the two swap in a single pass — no empty gap
-  // while clusters fetch at the zoom-8 crossing.
+  // while clusters fetch at the zoom-8 crossing. The downward crossing is
+  // symmetric: clusters stay up until a fresh aggregate paint has rendered.
   if (!state.mapReady) return;
   const showPoints = shouldShowPointLayers();
-  setLayerVisibility(FALLING_FRUIT_AGGREGATE_LAYER_ID, !showPoints);
-  setLayerVisibility(FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID, !showPoints);
-  setLayerVisibility(MARKER_CLUSTERS_LAYER_ID, showPoints);
-  setLayerVisibility(MARKER_CLUSTER_COUNT_LAYER_ID, showPoints);
+  if (showPoints && state.aggregateBridgeActive) cancelAggregateBridge();
+  const bridging = state.aggregateBridgeActive;
+  setLayerVisibility(FALLING_FRUIT_AGGREGATE_LAYER_ID, !showPoints && !bridging);
+  setLayerVisibility(FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID, !showPoints && !bridging);
+  setLayerVisibility(MARKER_CLUSTERS_LAYER_ID, showPoints || bridging);
+  setLayerVisibility(MARKER_CLUSTER_COUNT_LAYER_ID, showPoints || bridging);
   if (showPoints !== state.lastShowPoints) {
     state.lastShowPoints = showPoints;
     updateMarkerPointVisibility();
   }
+}
+
+function beginAggregateBridge() {
+  // Only bridge when the clusters actually have point data to show.
+  if (!state.pointDataReady || !state.loadedPointBounds) return;
+  state.aggregateBridgeActive = true;
+  state.aggregateBridgeId += 1;
+  window.clearTimeout(state.aggregateBridgeTimer);
+  // Safety valve: never hold the bridge past the paint grace window.
+  state.aggregateBridgeTimer = window.setTimeout(() => {
+    cancelAggregateBridge();
+    updateLayerHandoff();
+  }, AGGREGATE_BRIDGE_MAX_MS);
+}
+
+function cancelAggregateBridge() {
+  window.clearTimeout(state.aggregateBridgeTimer);
+  state.aggregateBridgeTimer = null;
+  state.aggregateBridgeActive = false;
+}
+
+function settleAggregateBridgeAfterPaint() {
+  // A fresh aggregate paint just went into the source; flip the bridge once
+  // the new tiles have rendered so the old buffer never shows.
+  if (!state.aggregateBridgeActive || !state.inatAggregateReady) return;
+  const bridgeId = state.aggregateBridgeId;
+  map.once("idle", () => {
+    if (!state.aggregateBridgeActive || state.aggregateBridgeId !== bridgeId) return;
+    cancelAggregateBridge();
+    updateLayerHandoff();
+  });
 }
 
 function setLayerVisibility(layerId, visible) {
