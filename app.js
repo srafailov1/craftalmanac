@@ -26,8 +26,8 @@ const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
 const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
 const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
-const MARKER_CLUSTER_MAX_ZOOM = 14;
-const MARKER_CLUSTER_RADIUS = 46;
+const MARKER_CLUSTER_MAX_ZOOM = 12;
+const MARKER_CLUSTER_RADIUS = 40;
 const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
 const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
 const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
@@ -2136,7 +2136,7 @@ function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, m
     ],
     count: group.count
   }));
-  return mergeOverlappingAggregateFeatures(features, mode === "geo" ? 18 : 6);
+  return mergeOverlappingAggregateFeatures(features, mode === "geo" ? 8 : 6);
 }
 
 function getAggregateGridKey(center, gridSize, mode) {
@@ -2157,10 +2157,12 @@ function getWorldPixelScale() {
 }
 
 function getAggregateGeoGridSize(zoom) {
-  if (zoom < 3.2) return 2.4;
-  if (zoom < 4.2) return 1.5;
-  if (zoom < 5.2) return 0.9;
-  return 0.5;
+  // Target a constant ~110 screen pixels per bucket at every zoom (capped at
+  // 2.4 degrees so the wide national overview keeps its familiar grain).
+  // Fixed degree sizes produced ~32px buckets around zoom 5-6, exploding the
+  // group count and making that zoom band sluggish.
+  const degreesPerPixel = 360 / (512 * (2 ** zoom));
+  return Math.min(2.4, 110 * degreesPerPixel);
 }
 
 function getAggregateScreenGridSize(zoom) {
