@@ -12,7 +12,10 @@ const LIVE_DATA_TIMEOUT = 9000;
 const INATURALIST_DEFAULT_PER_PAGE = 120;
 const INATURALIST_TILE_PER_PAGE = 50;
 const INATURALIST_AGGREGATE_DELAY = 260;
-const INATURALIST_AGGREGATE_MAX_TILES = 240;
+const INATURALIST_GRID_MIN_ZOOM = 2;
+const INATURALIST_GRID_MAX_ZOOM = 7;
+const INATURALIST_GRID_MAX_TILES = 24;
+const AGGREGATE_FIRST_PAINT_GRACE_MS = 2500;
 const INATURALIST_AGGREGATE_SPECIES_ID = "__inat-aggregate";
 const INATURALIST_REGION_PLACE_IDS = "1";
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
@@ -843,6 +846,9 @@ const state = {
   inatAggregateCache: new Map(),
   inatAggregateItems: [],
   inatAggregateTaxonKey: "",
+  inatAggregateReady: false,
+  aggregateGateStart: null,
+  aggregateGateTimer: null,
   loadTimer: null,
   inatAggregateTimer: null,
   publicLoadTimer: null,
@@ -1965,10 +1971,12 @@ function renderMarkers() {
 
 function updateFallingFruitAggregates() {
   if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+  if (shouldDeferAggregatePaint()) return;
   window.clearTimeout(state.aggregateTimer);
   getFallingFruitManifest()
     .then((manifest) => {
       if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+      if (shouldDeferAggregatePaint()) return;
       map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID).setData(getFallingFruitAggregateCollection(manifest));
     })
     .catch(() => {
@@ -1982,6 +1990,22 @@ function updateFallingFruitAggregates() {
 function scheduleFallingFruitAggregateUpdate() {
   window.clearTimeout(state.aggregateTimer);
   state.aggregateTimer = window.setTimeout(updateFallingFruitAggregates, 90);
+}
+
+function shouldDeferAggregatePaint() {
+  // Hold the overview paint briefly while iNaturalist grid counts are in flight,
+  // so the page settles in one pass instead of repainting as counts stream in.
+  if (state.inatAggregateReady || state.savedLocationsOnly) return false;
+  if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) return false;
+  if (state.aggregateGateStart === null) return false;
+  const elapsed = performance.now() - state.aggregateGateStart;
+  if (elapsed >= AGGREGATE_FIRST_PAINT_GRACE_MS) return false;
+  window.clearTimeout(state.aggregateGateTimer);
+  state.aggregateGateTimer = window.setTimeout(
+    updateFallingFruitAggregates,
+    AGGREGATE_FIRST_PAINT_GRACE_MS - elapsed + 50
+  );
+  return true;
 }
 
 function getFallingFruitAggregateCollection(manifest) {
@@ -2877,6 +2901,7 @@ async function loadINaturalistAggregates() {
   if (!state.mapReady || map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM || state.savedLocationsOnly) {
     state.inatAggregateItems = [];
     state.inatAggregateTaxonKey = "";
+    setINaturalistAggregateReady(true);
     updateFallingFruitAggregates();
     return;
   }
@@ -2887,6 +2912,7 @@ async function loadINaturalistAggregates() {
   if (!taxonIds) {
     state.inatAggregateItems = [];
     state.inatAggregateTaxonKey = "";
+    setINaturalistAggregateReady(true);
     updateFallingFruitAggregates();
     return;
   }
@@ -2895,48 +2921,49 @@ async function loadINaturalistAggregates() {
   state.activeINaturalistAggregateRequest = requestId;
   const taxonChanged = state.inatAggregateTaxonKey !== taxonIds;
   state.inatAggregateTaxonKey = taxonIds;
-  const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
-  const cachedItems = tiles
-    .map((tile) => state.inatAggregateCache.get(getINaturalistAggregateCacheKey(taxonIds, tile)))
-    .filter(Boolean);
-  if (cachedItems.length || taxonChanged || !state.inatAggregateItems.length) {
-    state.inatAggregateItems = getNonzeroAggregateItems(cachedItems);
-    updateFallingFruitAggregates();
+  if (taxonChanged) {
+    state.inatAggregateItems = [];
+    setINaturalistAggregateReady(false);
   }
-
+  const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
   const missingTiles = tiles.filter((tile) => (
     !state.inatAggregateCache.has(getINaturalistAggregateCacheKey(taxonIds, tile))
   ));
-  if (!missingTiles.length) return;
 
-  try {
-    const fetchedItems = [];
-    await mapWithConcurrency(missingTiles, 6, async (tile) => {
-      if (requestId !== state.activeINaturalistAggregateRequest) return null;
-      const item = await fetchINaturalistAggregateTile(taxonIds, tile);
-      state.inatAggregateCache.set(getINaturalistAggregateCacheKey(taxonIds, tile), item);
-      fetchedItems.push(item);
-      if (requestId === state.activeINaturalistAggregateRequest && fetchedItems.length % 12 === 0) {
-        updateINaturalistAggregateItems(cachedItems, fetchedItems);
-      }
-      return item;
-    });
-    if (requestId !== state.activeINaturalistAggregateRequest) return;
-    updateINaturalistAggregateItems(cachedItems, fetchedItems);
-  } catch {
-    if (requestId !== state.activeINaturalistAggregateRequest) return;
-    if (cachedItems.length) {
-      state.inatAggregateItems = getNonzeroAggregateItems(cachedItems);
-      updateFallingFruitAggregates();
+  if (missingTiles.length) {
+    try {
+      await mapWithConcurrency(missingTiles, 6, async (tile) => {
+        if (requestId !== state.activeINaturalistAggregateRequest) return null;
+        const items = await fetchINaturalistAggregateTileWithRetry(taxonIds, tile);
+        state.inatAggregateCache.set(getINaturalistAggregateCacheKey(taxonIds, tile), items);
+        return items;
+      });
+    } catch {
+      // Tiles that failed twice stay uncached and are retried on the next pass.
     }
+    if (requestId !== state.activeINaturalistAggregateRequest) return;
   }
+
+  // Swap the full tile set in at once so counts never paint partially.
+  state.inatAggregateItems = getNonzeroAggregateItems(tiles.flatMap((tile) => (
+    state.inatAggregateCache.get(getINaturalistAggregateCacheKey(taxonIds, tile)) || []
+  )));
+  setINaturalistAggregateReady(true);
+  updateFallingFruitAggregates();
 }
 
-function updateINaturalistAggregateItems(cachedItems, fetchedItems) {
-  const nextItems = getNonzeroAggregateItems([...cachedItems, ...fetchedItems]);
-  if (!nextItems.length) return;
-  state.inatAggregateItems = nextItems;
-  updateFallingFruitAggregates();
+function setINaturalistAggregateReady(ready) {
+  state.inatAggregateReady = ready;
+  state.aggregateGateStart = ready ? null : performance.now();
+}
+
+async function fetchINaturalistAggregateTileWithRetry(taxonIds, tile) {
+  try {
+    return await fetchINaturalistAggregateTile(taxonIds, tile);
+  } catch {
+    await new Promise((resolve) => window.setTimeout(resolve, 800));
+    return fetchINaturalistAggregateTile(taxonIds, tile);
+  }
 }
 
 function getNonzeroAggregateItems(items) {
@@ -3066,61 +3093,70 @@ function getINaturalistTaxonIdString(speciesItems) {
 }
 
 async function fetchINaturalistAggregateTile(taxonIds, tile) {
+  // One UTFGrid request returns 64x64 aggregated cell counts for the whole tile,
+  // replacing dozens of per-rectangle count queries and staying inside API limits.
   const params = new URLSearchParams({
     taxon_id: taxonIds,
-    swlat: tile.south.toFixed(5),
-    swlng: tile.west.toFixed(5),
-    nelat: tile.north.toFixed(5),
-    nelng: tile.east.toFixed(5),
     geo: "true",
     quality_grade: "research",
-    place_id: INATURALIST_REGION_PLACE_IDS,
-    per_page: "0"
+    place_id: INATURALIST_REGION_PLACE_IDS
   });
 
-  const response = await fetchWithTimeout(`https://api.inaturalist.org/v1/observations?${params.toString()}`);
-  if (!response.ok) throw new Error(`iNaturalist aggregate returned ${response.status}`);
+  const response = await fetchWithTimeout(`https://api.inaturalist.org/v1/grid/${tile.z}/${tile.x}/${tile.y}.grid.json?${params.toString()}`);
+  if (!response.ok) throw new Error(`iNaturalist grid returned ${response.status}`);
   const data = await response.json();
-  const count = Number(data.total_results || 0);
-  return getINaturalistAggregateItem(tile, count);
+  return getINaturalistGridItems(tile, data);
 }
 
-function getINaturalistAggregateItem(tile, count) {
-  const center = [
-    (tile.west + tile.east) / 2,
-    (tile.south + tile.north) / 2
-  ];
-  return {
-    id: `inat-count-${tile.id}`,
-    bbox: [tile.west, tile.south, tile.east, tile.north],
-    countsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: count },
-    centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [center[0], center[1], count] }
-  };
+function getINaturalistGridItems(tile, gridData) {
+  return Object.values(gridData?.data || {}).flatMap((cell) => {
+    const count = Number(cell?.cellCount || 0);
+    const lng = Number(cell?.longitude);
+    const lat = Number(cell?.latitude);
+    if (!count || !Number.isFinite(lng) || !Number.isFinite(lat)) return [];
+    return [{
+      id: `inat-grid-${tile.id}-${cell.id}`,
+      bbox: [lng, lat, lng, lat],
+      countsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: count },
+      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, count] }
+    }];
+  });
 }
 
 function getINaturalistAggregateTiles(bounds, zoom) {
-  const baseBounds = getINaturalistAggregateBounds(bounds, zoom);
-  const baseSize = getINaturalistAggregateTileSize(zoom);
-  const size = getAdjustedAggregateTileSize(baseBounds, baseSize);
-  const westStart = Math.floor(baseBounds.west / size) * size;
-  const southStart = Math.floor(baseBounds.south / size) * size;
-  const tiles = [];
+  const area = getINaturalistAggregateBounds(bounds, zoom);
+  let gridZoom = Math.min(INATURALIST_GRID_MAX_ZOOM, Math.max(INATURALIST_GRID_MIN_ZOOM, Math.floor(zoom)));
+  let tiles = getGridTilesForArea(area, gridZoom);
+  while (tiles.length > INATURALIST_GRID_MAX_TILES && gridZoom > INATURALIST_GRID_MIN_ZOOM) {
+    gridZoom -= 1;
+    tiles = getGridTilesForArea(area, gridZoom);
+  }
+  return tiles;
+}
 
-  for (let west = westStart; west < baseBounds.east; west += size) {
-    for (let south = southStart; south < baseBounds.north; south += size) {
-      const tile = {
-        west: roundCoordinate(Math.max(west, baseBounds.west)),
-        south: roundCoordinate(Math.max(south, baseBounds.south)),
-        east: roundCoordinate(Math.min(west + size, baseBounds.east)),
-        north: roundCoordinate(Math.min(south + size, baseBounds.north))
-      };
-      if (tile.east <= tile.west || tile.north <= tile.south) continue;
-      tile.id = `${size.toFixed(2)}_${tile.west}_${tile.south}_${tile.east}_${tile.north}`;
-      tiles.push(tile);
+function getGridTilesForArea(area, zoomLevel) {
+  const scale = 2 ** zoomLevel;
+  const minX = Math.max(0, Math.floor(lngToTileX(area.west, scale)));
+  const maxX = Math.min(scale - 1, Math.floor(lngToTileX(area.east, scale)));
+  const minY = Math.max(0, Math.floor(latToTileY(area.north, scale)));
+  const maxY = Math.min(scale - 1, Math.floor(latToTileY(area.south, scale)));
+  const tiles = [];
+  for (let x = minX; x <= maxX; x += 1) {
+    for (let y = minY; y <= maxY; y += 1) {
+      tiles.push({ z: zoomLevel, x, y, id: `${zoomLevel}/${x}/${y}` });
     }
   }
-
   return tiles;
+}
+
+function lngToTileX(lng, scale) {
+  return ((lng + 180) / 360) * scale;
+}
+
+function latToTileY(lat, scale) {
+  const clamped = Math.max(-85.0511, Math.min(85.0511, lat));
+  const rad = (clamped * Math.PI) / 180;
+  return ((1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2) * scale;
 }
 
 function getINaturalistAggregateBounds(bounds, zoom) {
@@ -3141,30 +3177,8 @@ function getINaturalistAggregateBounds(bounds, zoom) {
   };
 }
 
-function getINaturalistAggregateTileSize(zoom) {
-  if (zoom < 3.4) return 3.4;
-  if (zoom < 4.6) return 2.4;
-  if (zoom < 5.8) return 1.45;
-  if (zoom < 6.8) return 1;
-  return 0.55;
-}
-
-function getAdjustedAggregateTileSize(bounds, baseSize) {
-  const lngSpan = Math.max(0.01, bounds.east - bounds.west);
-  const latSpan = Math.max(0.01, bounds.north - bounds.south);
-  let size = baseSize;
-  while (Math.ceil(lngSpan / size) * Math.ceil(latSpan / size) > INATURALIST_AGGREGATE_MAX_TILES) {
-    size *= 1.25;
-  }
-  return size;
-}
-
 function getINaturalistAggregateCacheKey(taxonIds, tile) {
   return `${taxonIds}|${tile.id}`;
-}
-
-function roundCoordinate(value) {
-  return Math.round(value * 100000) / 100000;
 }
 
 async function mapWithConcurrency(items, concurrency, mapper) {
@@ -3911,6 +3925,7 @@ initControls();
 render();
 map.on("load", () => {
   state.mapReady = true;
+  setINaturalistAggregateReady(false);
   initMapLayers();
   render();
   loadMapData();
