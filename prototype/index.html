@@ -5,21 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Craft Almanac — Living Map prototype</title>
 <!--
-  Round 5 living-map prototype (design/relaunch only — never main).
-  Single file, no build step. Run from repo root:
-    python3 -m http.server 4173 --bind 127.0.0.1
-  then open http://127.0.0.1:4173/prototype/
+  Round 5 living-map prototype, revision 2 (design/relaunch only — never main).
+  Single file, no build step. Serve from repo root; open /prototype/.
 
-  DEMO RECORDS ONLY — points are invented for design review, not real
-  occurrences. Live data used: Open-Meteo (rain/wind/clouds), NOAA CO-OPS
-  (tide, station 8454000), client-side sun/moon math, Mapbox Standard
-  lightPreset. All degrade gracefully to baked samples.
+  DEMO RECORDS ONLY — points are invented for design review (clustered around
+  Providence, RI on purpose). Live data: Open-Meteo, NOAA CO-OPS, client-side
+  sun/moon, Mapbox Standard lightPreset. All degrade gracefully.
+
+  Rev 2 per owner review of the live page:
+  - map constrained to the contiguous US (site convention)
+  - points: core = material type pigment, ring = access status (both visible)
+  - popups anchored to the point; permission / use / safety lead, histogram demoted
+  - season slider expands on hover into a stacked by-type histogram
+  - conditions rail panels carry deck-style graphics (sun arc, moon disc, compass, tide dial)
+  - wind & cloud layer is geo-anchored: pans and scales with the map
 -->
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
 <script src="../config.js"></script>
 <style>
-  /* ---------- registers: Pigment Index day · Night Survey night ---------- */
   :root, body[data-register="day"] {
     --ground:#F1F5EC; --panel:#FFFFFF; --panel-a:rgba(255,255,255,0.93);
     --ink:#1F2421; --sub:#5A615B; --hair:#D5DAD2; --accent:#6B7F2E;
@@ -61,12 +65,7 @@
   .serif { font-family:Georgia, "Times New Roman", serif; }
 
   #map { position:absolute; inset:0; }
-  #map-fallback {
-    position:absolute; inset:0; display:none;
-    background:
-      radial-gradient(120% 90% at 70% 20%, transparent 0%, rgba(0,0,0,0.05) 100%),
-      var(--ground);
-  }
+  #map-fallback { position:absolute; inset:0; display:none; background:var(--ground); }
   #fx { position:absolute; inset:0; pointer-events:none; z-index:3; }
 
   .floating {
@@ -82,7 +81,7 @@
   #masthead .links { display:flex; gap:10px; border-left:1px solid var(--hair); padding-left:12px; }
   #masthead .links button {
     background:none; border:none; color:var(--sub); font-size:11px; cursor:pointer;
-    padding:2px 2px; letter-spacing:0.06em; text-transform:uppercase;
+    padding:2px; letter-spacing:0.06em; text-transform:uppercase;
     font-family:ui-monospace, Menlo, monospace;
   }
   #masthead .links button:hover { color:var(--ink); }
@@ -96,21 +95,27 @@
   /* ---------- conditions rail ---------- */
   #rail { top:14px; right:14px; display:flex; align-items:stretch; padding:6px 4px; }
   .rail-seg {
-    display:flex; flex-direction:column; justify-content:center; gap:2px;
+    display:flex; align-items:center; gap:9px;
     padding:4px 12px; border:none; background:none; cursor:pointer; text-align:left;
-    border-left:1px solid var(--hair); color:var(--ink); min-width:86px;
+    border-left:1px solid var(--hair); color:var(--ink);
   }
   .rail-seg:first-child { border-left:none; }
-  .rail-seg .k { font-size:8.5px; letter-spacing:0.1em; color:var(--sub);
+  .rail-seg .ic { width:20px; height:20px; flex:none; }
+  .rail-seg .ic svg { width:100%; height:100%; display:block; }
+  .rail-seg .k { display:block; font-size:8px; letter-spacing:0.1em; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
-  .rail-seg .v { font-size:11.5px; }
+  .rail-seg .v { display:block; font-size:11px; margin-top:1px; }
   .rail-seg.active .k { color:var(--accent); }
-  #rail-panel { top:74px; right:14px; width:300px; padding:14px; display:none; font-size:11.5px; }
+  #rail-panel { top:74px; right:14px; width:312px; display:none; font-size:11.5px; overflow:hidden; }
   #rail-panel.open { display:block; }
-  #rail-panel h3 { margin:0 0 6px; font-size:10px; letter-spacing:0.1em; color:var(--accent);
+  #rail-panel .spine { position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--accent); }
+  #rail-panel .pad { padding:14px 14px 12px 19px; }
+  #rail-panel h3 { margin:0 0 8px; font-size:10px; letter-spacing:0.1em; color:var(--accent);
     font-family:ui-monospace, Menlo, monospace; font-weight:600; }
-  #rail-panel .note { color:var(--sub); line-height:1.45; }
-  #rail-panel .age { margin-top:8px; font-size:8.5px; color:var(--sub);
+  #rail-panel .fig { margin:4px 0 10px; }
+  #rail-panel .fig svg { display:block; width:100%; }
+  #rail-panel .note { color:var(--sub); line-height:1.5; }
+  #rail-panel .age { margin-top:9px; font-size:8px; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; letter-spacing:0.06em; }
   .bars { display:flex; align-items:flex-end; gap:3px; height:54px; margin:8px 0 2px; }
   .bars .b { flex:1; background:var(--accent); opacity:0.85; border-radius:2px 2px 0 0; min-height:2px; }
@@ -120,22 +125,34 @@
     font-family:ui-monospace, Menlo, monospace; }
   .bars-labels span { flex:1; text-align:center; }
 
-  /* ---------- legend / status filter ---------- */
+  /* ---------- legend / status filter (ring = access) ---------- */
   #legend { bottom:64px; left:14px; padding:10px 12px; }
   #legend .k { font-size:8.5px; letter-spacing:0.1em; color:var(--sub); margin-bottom:7px;
     font-family:ui-monospace, Menlo, monospace; }
   .leg-row { display:flex; flex-direction:column; gap:5px; }
   .leg-chip {
     display:flex; align-items:center; gap:7px; border:none; background:none; cursor:pointer;
-    color:var(--ink); font-size:10.5px; padding:1px 2px; opacity:1; transition:opacity .2s;
+    color:var(--ink); font-size:10.5px; padding:1px 2px; transition:opacity .2s;
   }
-  .leg-chip .dot { width:10px; height:10px; border-radius:50%; flex:none; }
+  .leg-chip .ring { width:11px; height:11px; border-radius:50%; flex:none;
+    border:2.5px solid currentColor; background:transparent; }
   .leg-chip.off { opacity:0.32; }
-  .leg-chip.off .dot { background:transparent !important; box-shadow:inset 0 0 0 1.5px var(--sub); }
+  #legend .k2 { font-size:7.5px; letter-spacing:0.08em; color:var(--sub); margin-top:8px;
+    font-family:ui-monospace, Menlo, monospace; }
 
-  /* ---------- season slider ---------- */
-  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(520px, 72vw);
+  /* ---------- season slider: expands on hover into stacked histogram ---------- */
+  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(560px, 76vw);
     padding:10px 16px 8px; }
+  #season-hist { height:0; opacity:0; overflow:hidden; transition:height .25s ease, opacity .25s ease; }
+  #season:hover #season-hist, #season.expanded #season-hist { height:96px; opacity:1; }
+  #season-hist .stack { display:flex; align-items:flex-end; gap:4px; height:64px; margin-top:8px; }
+  #season-hist .mcol { flex:1; display:flex; flex-direction:column-reverse; gap:1px; }
+  #season-hist .seg { width:100%; border-radius:1.5px; min-height:0; }
+  #season-hist .mcol.hot { outline:1.5px solid var(--ink); outline-offset:1px; border-radius:2px; }
+  #season-hist .cats { display:flex; gap:14px; margin-top:7px; font-size:7.5px; color:var(--sub);
+    font-family:ui-monospace, Menlo, monospace; letter-spacing:0.06em; }
+  #season-hist .cats i { display:inline-block; width:8px; height:8px; border-radius:2px;
+    margin-right:4px; vertical-align:-1px; }
   #season .track { position:relative; height:22px; cursor:pointer; }
   #season .months { display:flex; justify-content:space-between; font-size:8px;
     color:var(--sub); font-family:ui-monospace, Menlo, monospace; letter-spacing:0.05em;
@@ -148,38 +165,45 @@
   #season .meta button { background:none; border:none; color:var(--accent); cursor:pointer;
     font:inherit; letter-spacing:0.08em; padding:0; display:none; }
   #season.scrubbed .meta button { display:inline; }
-  #hist-tip {
-    position:absolute; bottom:64px; left:0; width:148px; padding:8px 10px 6px; display:none;
-    pointer-events:none; z-index:6;
-  }
-  #hist-tip .bars { height:40px; margin:4px 0 2px; }
-  #hist-tip .t { font-size:8.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace;
-    letter-spacing:0.05em; }
 
-  /* ---------- quiet pigment peek card ---------- */
-  #peek { top:50%; right:14px; transform:translateY(-50%); width:248px; display:none; overflow:hidden; }
-  #peek.open { display:block; }
-  #peek .spine { position:absolute; left:0; top:0; bottom:0; width:5px; }
-  #peek .inner { padding:16px 16px 12px 20px; }
-  #peek h2 { margin:0; font-size:18px; font-weight:500; }
-  #peek .sci { font-size:8.5px; letter-spacing:0.08em; color:var(--sub); margin:3px 0 10px;
+  /* ---------- anchored point card (mapbox popup shell) ---------- */
+  .ca-popup .mapboxgl-popup-content { background:none; padding:0; box-shadow:none; border-radius:0; }
+  .ca-popup .mapboxgl-popup-tip { display:none; }
+  .ca-popup { z-index:6; }
+  .pt-card { position:relative; width:252px; background:var(--panel-a); border:1px solid var(--hair);
+    border-radius:10px; box-shadow:var(--glow); overflow:hidden;
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .pt-card .spine { position:absolute; left:0; top:0; bottom:0; width:5px; }
+  .pt-card .pad { padding:13px 14px 10px 19px; }
+  .pt-card h2 { margin:0; font-size:16.5px; font-weight:500; font-family:Georgia, serif; }
+  .pt-card .sci { font-size:8px; letter-spacing:0.08em; color:var(--sub); margin:2px 0 9px;
     font-family:ui-monospace, Menlo, monospace; }
-  #peek .bars { height:44px; }
-  #peek .status { display:inline-flex; align-items:center; gap:6px; margin:10px 0 4px;
-    font-size:10.5px; }
-  #peek .status .dot { width:9px; height:9px; border-radius:50%; }
-  #peek .ethic { font-size:10px; color:var(--sub); line-height:1.45; margin:4px 0 8px; }
-  #peek .oinp { font-size:8px; letter-spacing:0.08em; color:var(--warn);
+  .pt-card .row { display:flex; gap:8px; align-items:baseline; padding:5px 0;
+    border-top:1px solid var(--hair); }
+  .pt-card .row .lab { flex:none; width:52px; font-size:7.5px; letter-spacing:0.1em;
+    color:var(--sub); font-family:ui-monospace, Menlo, monospace; }
+  .pt-card .row .val { font-size:11px; line-height:1.4; }
+  .pt-card .row.access .val { font-weight:600; display:flex; align-items:center; gap:7px; }
+  .pt-card .row.access .ring { width:11px; height:11px; border-radius:50%; flex:none;
+    border:3px solid currentColor; }
+  .pt-card .row.safety .val { color:var(--ink); }
+  .pt-card .row.safety .lab { color:var(--warn); }
+  .pt-card .season-line { display:flex; align-items:center; gap:8px; margin-top:7px; }
+  .pt-card .season-line svg { display:block; }
+  .pt-card .season-line .t { font-size:7.5px; letter-spacing:0.06em; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
-  #peek .close { position:absolute; top:8px; right:10px; background:none; border:none;
-    color:var(--sub); cursor:pointer; font-size:13px; }
-  #peek .flush { margin-top:6px; font-size:8.5px; color:var(--accent); letter-spacing:0.06em;
+  .pt-card .ethic { font-size:9.5px; color:var(--sub); line-height:1.45; margin-top:7px; }
+  .pt-card .oinp { margin-top:7px; font-size:7.5px; letter-spacing:0.08em; color:var(--warn);
+    font-family:ui-monospace, Menlo, monospace; }
+  .pt-card .flush { margin-top:5px; font-size:8px; color:var(--accent); letter-spacing:0.06em;
     font-family:ui-monospace, Menlo, monospace; display:none; }
-  #peek .flush.on { display:block; }
+  .pt-card .flush.on { display:block; }
+  .pt-card .close { position:absolute; top:6px; right:9px; background:none; border:none;
+    color:var(--sub); cursor:pointer; font-size:13px; padding:2px; }
 
-  /* ---------- sheets (about / plants / recipes) ---------- */
-  #sheet-wrap { position:absolute; inset:0; z-index:20; display:none;
-    background:rgba(10,14,11,0.45); }
+  /* ---------- sheets ---------- */
+  #sheet-wrap { position:absolute; inset:0; z-index:20; display:none; background:rgba(10,14,11,0.45); }
   #sheet-wrap.open { display:flex; align-items:center; justify-content:center; }
   #sheet { width:min(680px, 90vw); max-height:80vh; overflow:auto; padding:28px 30px; }
   #sheet h2 { margin:0 0 4px; font-weight:500; font-size:22px; }
@@ -198,23 +222,18 @@
   #sheet .closer { position:sticky; top:0; float:right; background:none; border:none;
     color:var(--sub); font-size:15px; cursor:pointer; }
 
-  /* ---------- prototype banner / toast ---------- */
   #proto-note { bottom:14px; right:14px; padding:7px 11px; font-size:8px; letter-spacing:0.07em;
     color:var(--sub); font-family:ui-monospace, Menlo, monospace; max-width:230px; line-height:1.5; }
   #proto-note b { color:var(--warn); font-weight:600; }
 
-  /* pulsing flush markers */
   .pulse { width:14px; height:14px; border-radius:50%; position:relative; pointer-events:none; }
   .pulse::after { content:""; position:absolute; inset:0; border-radius:50%;
     border:1.5px solid var(--accent); animation:pulse 2.4s ease-out infinite; }
   @keyframes pulse { 0% { transform:scale(0.5); opacity:0.9; } 100% { transform:scale(2.6); opacity:0; } }
-  @media (prefers-reduced-motion: reduce) {
-    .pulse::after { animation:none; opacity:0.6; }
-  }
+  @media (prefers-reduced-motion: reduce) { .pulse::after { animation:none; opacity:0.6; } }
 
   @media (max-width:720px) {
-    #rail { display:none; } /* phone: sky chip TBD in full build */
-    #peek { width:210px; }
+    #rail { display:none; }
   }
 </style>
 </head>
@@ -235,14 +254,19 @@
 </div>
 
 <div id="rail" class="floating"></div>
-<div id="rail-panel" class="floating"></div>
+<div id="rail-panel" class="floating"><div class="spine"></div><div class="pad" id="rail-pad"></div></div>
 
 <div id="legend" class="floating">
-  <div class="k">ACCESS AT A GLANCE</div>
+  <div class="k">ACCESS AT A GLANCE — THE RING</div>
   <div class="leg-row" id="leg-row"></div>
+  <div class="k2">FILL = MATERIAL TYPE · RING = ACCESS</div>
 </div>
 
 <div id="season" class="floating">
+  <div id="season-hist">
+    <div class="stack" id="season-stack"></div>
+    <div class="cats" id="season-cats"></div>
+  </div>
   <div class="track" id="season-track">
     <div class="line"></div>
     <div class="cursor" id="season-cursor"></div>
@@ -252,28 +276,10 @@
     <span id="season-label">THIS WEEK</span>
     <button id="season-reset">BACK TO NOW</button>
   </div>
-  <div id="hist-tip" class="floating">
-    <div class="t" id="hist-tip-t"></div>
-    <div class="bars" id="hist-tip-bars"></div>
-  </div>
-</div>
-
-<div id="peek" class="floating">
-  <div class="spine"></div>
-  <button class="close" aria-label="Close">×</button>
-  <div class="inner">
-    <h2 class="serif" id="peek-name"></h2>
-    <div class="sci" id="peek-sci"></div>
-    <div class="bars" id="peek-bars"></div>
-    <div class="status"><span class="dot" id="peek-dot"></span><span id="peek-status"></span></div>
-    <div class="flush" id="peek-flush">RAIN-FED FLUSH LIKELY THIS WEEK</div>
-    <div class="ethic" id="peek-ethic"></div>
-    <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE</div>
-  </div>
 </div>
 
 <div id="proto-note" class="floating">
-  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON &amp; TIDE
+  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS (PROVIDENCE, RI), NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON &amp; TIDE
 </div>
 
 <div id="sheet-wrap"><div id="sheet" class="floating"></div></div>
@@ -281,11 +287,11 @@
 <script>
 "use strict";
 /* =================================================================== state */
-const CENTER = [-71.412, 41.82];           // Providence, RI — demo viewport
-const TIDE_STATION = "8454000";            // NOAA CO-OPS Providence
+const CENTER = [-71.412, 41.82];           // Providence, RI — demo viewport (intentional)
+const CONUS = [[-127.0, 22.5], [-65.0, 50.8]];  // site convention: contiguous US only
+const TIDE_STATION = "8454000";
 const S = {
-  week: isoWeek(new Date()),               // selected week (scrub)
-  nowWeek: isoWeek(new Date()),
+  week: isoWeek(new Date()), nowWeek: isoWeek(new Date()),
   statuses: new Set(["allowed","permit","prohibited","private","unknown"]),
   register: "day", override: localStorage.getItem("ca-register") || "auto",
   weather: null, tide: null, selected: null, mapOK: false,
@@ -293,7 +299,7 @@ const S = {
 };
 
 /* ============================================================ demo catalog */
-function bellMonths(w0, w1) { // 12-month histogram from ripe-week range
+function bellMonths(w0, w1) {
   const m0 = (w0 - 1) / 4.345, m1 = (w1 - 1) / 4.345, mid = (m0 + m1) / 2;
   const spread = Math.max((m1 - m0) / 2, 0.8);
   return Array.from({length:12}, (_, i) => {
@@ -301,33 +307,53 @@ function bellMonths(w0, w1) { // 12-month histogram from ripe-week range
     return Math.max(0.04, Math.exp(-(d * d) / (2 * spread * spread)));
   });
 }
+const CATS = {
+  food:  { label:"FOOD",      color:"#A63D2F" },   // madder
+  fungi: { label:"FUNGI",     color:"#D9A521" },   // weld
+  inkdye:{ label:"INK & DYE", color:"#2F4DA0" },   // indigo
+};
 const SPECIES = {
-  elderberry:  { name:"Elderberry", sci:"SAMBUCUS CANADENSIS", uses:"food · ink · dye", pigment:"#8E2D56", ripe:[24,33], fungal:false, ethic:"Abundant. Take ripe umbels only; leave stems standing for the birds.", no:12 },
-  walnut:      { name:"Black walnut", sci:"JUGLANS NIGRA", uses:"ink · dye", pigment:"#5C4632", ripe:[40,46], fungal:false, ethic:"Fallen hulls only — the tree never misses them. Gloves on; the stain is the lesson.", no:47 },
-  oakgall:     { name:"Oak gall", sci:"QUERCUS / CYNIPIDAE", uses:"ink", pigment:"#3A3F3D", ripe:[36,48], fungal:false, ethic:"Gather fallen galls with an exit hole — the wasp has already left.", no:31 },
-  mulberry:    { name:"Mulberry", sci:"MORUS ALBA / RUBRA", uses:"food · dye", pigment:"#6E2D8E", ripe:[22,28], fungal:false, ethic:"Street-tree abundance. Shake onto a sheet; share the sidewalk crop.", no:8 },
-  serviceberry:{ name:"Serviceberry", sci:"AMELANCHIER SPP.", uses:"food", pigment:"#A63D2F", ripe:[22,27], fungal:false, ethic:"Planted everywhere, picked nowhere. Birds first; there is plenty.", no:5 },
-  chanterelle: { name:"Chanterelle", sci:"CANTHARELLUS SPP.", uses:"food", pigment:"#D9A521", ripe:[27,38], fungal:true, ethic:"Cut, don't rake. ID with three field marks minimum — see the safety whitelist.", no:63 },
-  grape:       { name:"Wild grape", sci:"VITIS SPP.", uses:"food · dye", pigment:"#2F4DA0", ripe:[36,41], fungal:false, ethic:"Leave the high clusters for wildlife; the low ones beat any hedge.", no:22 },
-  sumac:       { name:"Staghorn sumac", sci:"RHUS TYPHINA", uses:"food · dye", pigment:"#B4552D", ripe:[30,38], fungal:false, ethic:"Clip a few drupes per stand before heavy rain washes the acid off.", no:17 },
+  elderberry:  { name:"Elderberry", sci:"SAMBUCUS CANADENSIS", uses:"food · ink · dye", cat:"food", pigment:"#8E2D56", ripe:[24,33], fungal:false,
+    safety:"Cook before eating — raw berries, leaves and stems purge.",
+    ethic:"Abundant. Take ripe umbels only; leave stems standing for the birds.", no:12 },
+  walnut:      { name:"Black walnut", sci:"JUGLANS NIGRA", uses:"ink · dye", cat:"inkdye", pigment:"#5C4632", ripe:[40,46], fungal:false,
+    safety:"Hull stain is permanent — gloves on. Juglone irritates some skin.",
+    ethic:"Fallen hulls only — the tree never misses them.", no:47 },
+  oakgall:     { name:"Oak gall", sci:"QUERCUS / CYNIPIDAE", uses:"ink", cat:"inkdye", pigment:"#3A3F3D", ripe:[36,48], fungal:false,
+    safety:"Inert to handle. Finished iron-gall ink corrodes steel nibs and cheap paper.",
+    ethic:"Gather fallen galls with an exit hole — the wasp has already left.", no:31 },
+  mulberry:    { name:"Mulberry", sci:"MORUS ALBA / RUBRA", uses:"food · dye", cat:"food", pigment:"#6E2D8E", ripe:[22,28], fungal:false,
+    safety:"Fruit is safe ripe; unripe fruit and white sap can irritate.",
+    ethic:"Street-tree abundance. Shake onto a sheet; share the sidewalk crop.", no:8 },
+  serviceberry:{ name:"Serviceberry", sci:"AMELANCHIER SPP.", uses:"food", cat:"food", pigment:"#A63D2F", ripe:[22,27], fungal:false,
+    safety:"Safe; seeds carry a faint almond bitterness — spit or swallow, don't crush in bulk.",
+    ethic:"Planted everywhere, picked nowhere. Birds first; there is plenty.", no:5 },
+  chanterelle: { name:"Chanterelle", sci:"CANTHARELLUS SPP.", uses:"food", cat:"fungi", pigment:"#D9A521", ripe:[27,38], fungal:true,
+    safety:"Deadly lookalikes exist. Verify all three field marks; whitelist species only — when unsure, leave it.",
+    ethic:"Cut, don't rake; leave the small ones and the mycelium.", no:63 },
+  grape:       { name:"Wild grape", sci:"VITIS SPP.", uses:"food · dye", cat:"food", pigment:"#2F4DA0", ripe:[36,41], fungal:false,
+    safety:"Moonseed is a toxic lookalike — check for multi-seeded fruit and forked tendrils before tasting.",
+    ethic:"Leave the high clusters for wildlife.", no:22 },
+  sumac:       { name:"Staghorn sumac", sci:"RHUS TYPHINA", uses:"food · dye", cat:"food", pigment:"#B4552D", ripe:[30,38], fungal:false,
+    safety:"Red upright drupes only — white-berried poison sumac is a different, hazardous plant.",
+    ethic:"Clip a few drupes per stand before heavy rain washes the acid off.", no:17 },
 };
 Object.values(SPECIES).forEach(s => s.months = bellMonths(...s.ripe));
 const STATUS_LABEL = { allowed:"Allowed", permit:"Permit required", prohibited:"Prohibited",
   private:"Private land", unknown:"Unknown — verify" };
-const STATUS_RULE = { allowed:"Allowed here — 1 gal/person/day", permit:"Permit required — link to issuer",
+const STATUS_RULE = { allowed:"Allowed here — 1 gal/person/day", permit:"Permit required — via issuer",
   prohibited:"Gathering prohibited here", private:"Private parcel — ask first", unknown:"No rule found yet — verify" };
+const STATUS_DAY = { allowed:"#2F8F46", permit:"#D89B24", prohibited:"#C74437", private:"#7E6654", unknown:"#8B8F86" };
+const STATUS_NIGHT = { allowed:"#5BE08A", permit:"#FFC94D", prohibited:"#FF6B5E", private:"#C99B7A", unknown:"#93A39A" };
 
 const rnd = mulberry32(20260611);
 const POINTS = [];
 { const keys = Object.keys(SPECIES);
   const stats = ["allowed","allowed","allowed","permit","permit","prohibited","private","unknown"];
   for (let i = 0; i < 26; i++) {
-    POINTS.push({
-      id:i, sp:keys[i % keys.length],
-      lng:CENTER[0] + (rnd() - 0.5) * 0.085,
-      lat:CENTER[1] + (rnd() - 0.5) * 0.055,
-      status:stats[Math.floor(rnd() * stats.length)],
-    });
+    POINTS.push({ id:i, sp:keys[i % keys.length],
+      lng:CENTER[0] + (rnd() - 0.5) * 0.085, lat:CENTER[1] + (rnd() - 0.5) * 0.055,
+      status:stats[Math.floor(rnd() * stats.length)] });
   }
 }
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -338,8 +364,8 @@ function isoWeek(d){const x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.get
 function dayNum(d){ return d / 864e5 - 0.5 + 2440588 - 2451545; }
 function sunAltitude(date, lat, lng) {
   const d = dayNum(+date);
-  const g = RAD * (357.5291 + 0.98560028 * d);                 // mean anomaly
-  const q = RAD * (280.459 + 0.98564736 * d);                  // mean longitude
+  const g = RAD * (357.5291 + 0.98560028 * d);
+  const q = RAD * (280.459 + 0.98564736 * d);
   const L = q + RAD * 1.915 * Math.sin(g) + RAD * 0.02 * Math.sin(2 * g);
   const e = RAD * 23.439;
   const dec = Math.asin(Math.sin(e) * Math.sin(L));
@@ -348,7 +374,7 @@ function sunAltitude(date, lat, lng) {
   const H = gmst + RAD * lng - ra;
   return Math.asin(Math.sin(RAD*lat)*Math.sin(dec) + Math.cos(RAD*lat)*Math.cos(dec)*Math.cos(H)) / RAD;
 }
-function sunTimes(date, lat, lng) { // scan-based: simple + robust for a prototype
+function sunTimes(date, lat, lng) {
   const day = new Date(date); day.setHours(0,0,0,0);
   let rise=null,set=null,goldenEve=null,duskCivil=null,dawnCivil=null,prev=null;
   for (let m = 0; m <= 1440; m += 4) {
@@ -364,21 +390,20 @@ function sunTimes(date, lat, lng) { // scan-based: simple + robust for a prototy
   }
   return { rise, set, goldenEve, duskCivil, dawnCivil };
 }
-function moonPhase(date) { // synodic approximation
+function moonPhase(date) {
   const synodic = 29.53058867;
   const days = (+date / 864e5 - +new Date(Date.UTC(2000,0,6,18,14)) / 864e5);
-  const phase = ((days % synodic) + synodic) % synodic / synodic;     // 0 new → 0.5 full
+  const phase = ((days % synodic) + synodic) % synodic / synodic;
   const illum = 0.5 * (1 - Math.cos(2 * Math.PI * phase));
   return { phase, illum, waxing: phase < 0.5 };
 }
 
-/* =========================================================== registers */
+/* ============================================================== registers */
 function computeRegister(date = new Date()) {
   const alt = sunAltitude(date, CENTER[1], CENTER[0]);
   if (alt >= 8) return "day";
   if (alt <= -6) return "night";
-  const inMorning = date.getHours() < 12;
-  return inMorning ? "dawn" : "dusk";
+  return date.getHours() < 12 ? "dawn" : "dusk";
 }
 function applyRegister() {
   const reg = S.override === "auto" ? computeRegister() : S.override;
@@ -386,7 +411,7 @@ function applyRegister() {
     S.register = reg;
     document.body.dataset.register = reg;
     if (S.mapOK) try { map.setConfigProperty("basemap", "lightPreset", reg); } catch(e) {}
-    paintPoints(); renderPeek();
+    paintPoints(); renderPointCard();
   }
   document.getElementById("register-chip").textContent =
     (S.override === "auto" ? "AUTO · " : "PINNED · ") + reg.toUpperCase();
@@ -399,9 +424,8 @@ document.getElementById("register-chip").addEventListener("click", () => {
 });
 setInterval(applyRegister, 60e3);
 
-/* ================================================================== map */
-let map = null, flushMarkers = [];
-const DAY_COLORS = sp => SPECIES[sp].pigment;
+/* ==================================================================== map */
+let map = null, flushMarkers = [], popup = null;
 const NIGHT_COLORS = { elderberry:"#F2A7C3", walnut:"#FF9447", oakgall:"#D7E8DC",
   mulberry:"#C9A7F2", serviceberry:"#FF8A75", chanterelle:"#FFD166", grape:"#9BD4E4", sumac:"#FFB489" };
 
@@ -409,25 +433,30 @@ function geojson() {
   return { type:"FeatureCollection", features: POINTS.map(p => ({
     type:"Feature", id:p.id,
     geometry:{ type:"Point", coordinates:[p.lng, p.lat] },
-    properties:{ sp:p.sp, status:p.status,
-      dayColor:DAY_COLORS(p.sp), nightColor:NIGHT_COLORS[p.sp],
-      r0:SPECIES[p.sp].ripe[0], r1:SPECIES[p.sp].ripe[1], fungal:SPECIES[p.sp].fungal ? 1 : 0 },
+    properties:{ sp:p.sp, status:p.status, dayColor:SPECIES[p.sp].pigment,
+      nightColor:NIGHT_COLORS[p.sp], r0:SPECIES[p.sp].ripe[0], r1:SPECIES[p.sp].ripe[1] },
   })) };
 }
-function pointFilter() {
-  return ["in", ["get","status"], ["literal", [...S.statuses]]];
-}
-function seasonOpacity() {  // in-season vivid, out-of-season ghosted
+const statusExpr = night => {
+  const T = night ? STATUS_NIGHT : STATUS_DAY;
+  return ["match", ["get","status"], "allowed", T.allowed, "permit", T.permit,
+          "prohibited", T.prohibited, "private", T.private, T.unknown];
+};
+function pointFilter() { return ["in", ["get","status"], ["literal", [...S.statuses]]]; }
+function seasonOpacity() {
   return ["case", ["all", ["<=", ["get","r0"], S.week], [">=", ["get","r1"], S.week]], 0.95, 0.22];
 }
 function paintPoints() {
   if (!S.mapOK) { paintFallback(); return; }
   const night = S.register === "night" || S.register === "dusk";
   const colorExpr = ["get", night ? "nightColor" : "dayColor"];
+  /* core fill = material type pigment · ring = access status */
   map.setPaintProperty("occ-core", "circle-color", colorExpr);
   map.setPaintProperty("occ-core", "circle-opacity", seasonOpacity());
+  map.setPaintProperty("occ-core", "circle-stroke-color", statusExpr(night));
+  map.setPaintProperty("occ-core", "circle-stroke-opacity", seasonOpacity());
   map.setPaintProperty("occ-halo", "circle-color", colorExpr);
-  map.setPaintProperty("occ-halo", "circle-opacity", night ? 0.5 : 0.0);
+  map.setPaintProperty("occ-halo", "circle-opacity", night ? 0.45 : 0.0);
   map.setFilter("occ-core", pointFilter());
   map.setFilter("occ-halo", pointFilter());
   refreshFlush();
@@ -438,37 +467,40 @@ function initMap() {
   mapboxgl.accessToken = token;
   try {
     map = new mapboxgl.Map({ container:"map", style:"mapbox://styles/mapbox/standard",
-      center:CENTER, zoom:12.6, attributionControl:true });
+      center:CENTER, zoom:12.6, minZoom:3.2,
+      maxBounds:CONUS, renderWorldCopies:false, attributionControl:true });
   } catch (e) { return mapFallback(); }
-  map.on("error", ev => { if (!S.mapOK) mapFallback(); });
+  map.on("error", () => { if (!S.mapOK) mapFallback(); });
   map.on("style.load", () => {
     S.mapOK = true;
     try { map.setConfigProperty("basemap", "lightPreset", S.register); } catch(e) {}
     map.addSource("occ", { type:"geojson", data:geojson() });
     map.addLayer({ id:"occ-halo", type:"circle", source:"occ", slot:"top",
-      paint:{ "circle-radius":13, "circle-blur":1.1, "circle-color":"#FFD166", "circle-opacity":0 } });
+      paint:{ "circle-radius":14, "circle-blur":1.1, "circle-color":"#FFD166", "circle-opacity":0 } });
     map.addLayer({ id:"occ-core", type:"circle", source:"occ", slot:"top",
       paint:{ "circle-radius":5.5, "circle-color":"#6B7F2E", "circle-opacity":0.95,
-              "circle-stroke-width":1, "circle-stroke-color":"rgba(255,255,255,0.55)" } });
+              "circle-stroke-width":2.4, "circle-stroke-color":"#2F8F46" } });
     paintPoints();
-    map.on("click", "occ-core", e => openPeek(e.features[0].id));
+    fxInit();
+    map.on("click", "occ-core", e => openPointCard(e.features[0].id));
     map.on("mouseenter", "occ-core", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "occ-core", () => map.getCanvas().style.cursor = "");
+    map.on("moveend", fxRespawnOffscreen);
   });
 }
-/* fallback: gradient ground + DOM dots (design still reviewable w/o token) */
+/* fallback (no token/library): schematic dots so the UI still reviews */
 const FB = { dots:[] };
 function mapFallback() {
   document.getElementById("map").style.display = "none";
   const fb = document.getElementById("map-fallback");
   fb.style.display = "block";
-  fb.innerHTML = "<div class='mono' style='position:absolute;top:46%;width:100%;text-align:center;font-size:9px;letter-spacing:0.1em;color:var(--sub)'>MAP UNAVAILABLE — UI PROTOTYPE MODE (DEMO DOTS BELOW ARE SCHEMATIC)</div>";
+  fb.innerHTML = "<div class='mono' style='position:absolute;top:46%;width:100%;text-align:center;font-size:9px;letter-spacing:0.1em;color:var(--sub)'>MAP UNAVAILABLE — UI PROTOTYPE MODE (SCHEMATIC DOTS)</div>";
   POINTS.forEach(p => {
     const el = document.createElement("button");
-    el.style.cssText = "position:absolute;width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.5);cursor:pointer;";
+    el.style.cssText = "position:absolute;width:13px;height:13px;border-radius:50%;cursor:pointer;border:3px solid #888;";
     el.style.left = (50 + (p.lng - CENTER[0]) / 0.05 * 38) + "%";
     el.style.top  = (50 - (p.lat - CENTER[1]) / 0.035 * 38) + "%";
-    el.addEventListener("click", () => openPeek(p.id));
+    el.addEventListener("click", () => openPointCard(p.id, el));
     fb.appendChild(el); FB.dots.push([p, el]);
   });
   paintFallback();
@@ -478,14 +510,13 @@ function paintFallback() {
   FB.dots.forEach(([p, el]) => {
     const sp = SPECIES[p.sp];
     el.style.background = night ? NIGHT_COLORS[p.sp] : sp.pigment;
+    el.style.borderColor = (night ? STATUS_NIGHT : STATUS_DAY)[p.status];
     el.style.boxShadow = night ? "0 0 10px " + NIGHT_COLORS[p.sp] : "none";
     const inSeason = sp.ripe[0] <= S.week && sp.ripe[1] >= S.week;
     el.style.opacity = S.statuses.has(p.status) ? (inSeason ? 0.95 : 0.25) : 0;
     el.style.pointerEvents = S.statuses.has(p.status) ? "auto" : "none";
   });
 }
-
-/* ------- flush pulse markers on fungal points after real rain ------- */
 function refreshFlush() {
   flushMarkers.forEach(m => m.remove()); flushMarkers = [];
   if (!S.mapOK || !S.weather || S.weather.past72 < 18) return;
@@ -495,7 +526,7 @@ function refreshFlush() {
   });
 }
 
-/* ============================================================== weather */
+/* =============================================================== weather */
 async function loadWeather() {
   const KEY = "ca-wx", TTL = 30 * 60e3;
   const cached = JSON.parse(localStorage.getItem(KEY) || "null");
@@ -509,24 +540,22 @@ async function loadWeather() {
     const H = j.hourly, nowI = H.time.findIndex(t => new Date(t) > new Date()) - 1;
     const past72 = sum(H.precipitation.slice(Math.max(0, nowI - 72), nowI));
     const daily = [];
-    for (let d = 0; d < 10; d++) daily.push(sum(H.precipitation.slice(d * 24, d * 24 + 24)));
-    S.weather = {
-      past72: round1(past72), daily: daily.map(round1),
+    for (let d = 0; d < 10; d++) daily.push(round1(sum(H.precipitation.slice(d * 24, d * 24 + 24))));
+    S.weather = { past72: round1(past72), daily,
       wind: H.wind_speed_10m[nowI] || 0, windDir: H.wind_direction_10m[nowI] || 0,
-      clouds: H.cloud_cover[nowI] || 0, fetched: Date.now(),
-    };
+      clouds: H.cloud_cover[nowI] || 0, fetched: Date.now() };
     localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), v: S.weather }));
     afterWeather("live");
-  } catch (e) { // baked sample so the design always reviews
+  } catch (e) {
     S.weather = { past72:31, daily:[2,14,15,0,0,4,11,0,0,2], wind:9, windDir:240, clouds:55, fetched:0, sample:true };
     afterWeather("sample");
   }
 }
-function afterWeather(src) { S.weather.src = src; renderRail(); refreshFlush(); renderPeek(); }
+function afterWeather(src) { S.weather.src = src; renderRail(); refreshFlush(); renderPointCard(); }
 const sum = a => a.reduce((x,y) => x + (y||0), 0);
 const round1 = x => Math.round(x * 10) / 10;
 
-/* ================================================================= tide */
+/* ================================================================== tide */
 async function loadTide() {
   const KEY = "ca-tide", TTL = 60 * 60e3;
   const cached = JSON.parse(localStorage.getItem(KEY) || "null");
@@ -547,28 +576,110 @@ async function loadTide() {
   renderRail();
 }
 
+/* ============================================ svg figures for the rail */
+function svgSunArc(st, w = 270, h = 64) {
+  const now = +new Date();
+  let t = 0.5;
+  if (st.rise && st.set && +st.set > +st.rise)
+    t = Math.max(0, Math.min(1, (now - +st.rise) / (+st.set - +st.rise)));
+  const cx = w/2, cy = h - 12, rx = w/2 - 26, ry = h - 26;
+  const ang = Math.PI * (1 - t);
+  const sx = cx + rx * Math.cos(ang), sy = cy - ry * Math.sin(ang);
+  // golden segment: last 12% of the arc before set
+  const g0 = Math.PI * 0.12;
+  const gx = cx + rx * Math.cos(g0), gy = cy - ry * Math.sin(g0);
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <path d="M ${cx-rx} ${cy} A ${rx} ${ry} 0 0 1 ${cx+rx} ${cy}" fill="none"
+      stroke="var(--hair)" stroke-width="1.5"/>
+    <path d="M ${gx} ${gy} A ${rx} ${ry} 0 0 1 ${cx+rx} ${cy}" fill="none"
+      stroke="var(--warn)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="6" y1="${cy}" x2="${w-6}" y2="${cy}" stroke="var(--sub)" stroke-width="0.8"/>
+    <circle cx="${sx}" cy="${sy}" r="5" fill="var(--accent)"/>
+    <circle cx="${sx}" cy="${sy}" r="9" fill="var(--accent)" opacity="0.25"/>
+    <text x="6" y="${cy+11}" font-family="monospace" font-size="7" fill="var(--sub)">RISE</text>
+    <text x="${w-6}" y="${cy+11}" font-family="monospace" font-size="7" fill="var(--sub)" text-anchor="end">SET</text>
+  </svg>`;
+}
+function svgMoon(mp, r = 22) {
+  const d = r * 2 + 8, c = d / 2;
+  // phase shading via an offset ellipse mask approximation
+  const k = Math.cos(2 * Math.PI * mp.phase);          // 1 new → -1 full
+  const rx = Math.abs(k) * r;
+  const lit = "var(--ink)", dark = "var(--panel)";
+  const half = mp.waxing ? 1 : -1;
+  return `<svg viewBox="0 0 ${d} ${d}" width="${d}" height="${d}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r}" fill="${dark}" stroke="var(--sub)" stroke-width="1"/>
+    <path d="M ${c} ${c-r} A ${r} ${r} 0 0 ${half>0?1:0} ${c} ${c+r}
+             A ${rx} ${r} 0 0 ${ (half>0) === (k<0) ? 1 : 0 } ${c} ${c-r} Z" fill="${lit}" opacity="0.85"/>
+  </svg>`;
+}
+function svgCompass(dir, speed, r = 26) {
+  const d = r * 2 + 10, c = d / 2;
+  const a = (dir + 180) * RAD;   // arrow points where wind goes
+  const x2 = c + Math.sin(a) * (r - 6), y2 = c - Math.cos(a) * (r - 6);
+  const x1 = c - Math.sin(a) * (r - 14), y1 = c + Math.cos(a) * (r - 14);
+  const ticks = ["N","E","S","W"].map((t,i) => {
+    const ta = i * Math.PI / 2;
+    return `<text x="${c + Math.sin(ta)*(r-1)}" y="${c - Math.cos(ta)*(r-1) + 2.5}"
+      font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="middle">${t}</text>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${d} ${d}" width="${d}" height="${d}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r-8}" fill="none" stroke="var(--hair)" stroke-width="1.2"/>
+    ${ticks}
+    <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="${x2}" cy="${y2}" r="3" fill="var(--accent)"/>
+    <text x="${c}" y="${c+3}" font-family="monospace" font-size="8" fill="var(--ink)" text-anchor="middle">${Math.round(speed)}</text>
+  </svg>`;
+}
+function svgTideDial(next, r = 26) {
+  const d = r * 2 + 10, c = d / 2;
+  const n = next && next[0];
+  const rising = n && n.type === "H";
+  const mins = n ? Math.max(0, (+new Date(n.t) - Date.now()) / 6e4) : 0;
+  const frac = Math.min(1, 1 - mins / (6.2 * 60));   // fraction of half-cycle elapsed
+  const end = -Math.PI/2 + frac * 2 * Math.PI;
+  const large = frac > 0.5 ? 1 : 0;
+  const ex = c + (r - 8) * Math.cos(end), ey = c + (r - 8) * Math.sin(end);
+  return `<svg viewBox="0 0 ${d} ${d}" width="${d}" height="${d}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r-8}" fill="none" stroke="var(--hair)" stroke-width="2"/>
+    <path d="M ${c} ${c-(r-8)} A ${r-8} ${r-8} 0 ${large} 1 ${ex} ${ey}" fill="none"
+      stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/>
+    <text x="${c}" y="${c+1}" font-family="monospace" font-size="7" fill="var(--ink)" text-anchor="middle">${rising?"RISING":"FALLING"}</text>
+    <text x="${c}" y="${c+10}" font-family="monospace" font-size="6" fill="var(--sub)" text-anchor="middle">${n?fmtT(n.t):""}</text>
+  </svg>`;
+}
+function sparkline(months, color, w = 84, h = 20) {
+  const mx = Math.max(...months);
+  const bars = months.map((v, i) =>
+    `<rect x="${i * (w/12) + 1}" y="${h - v/mx*h}" width="${w/12 - 2}" height="${Math.max(1.5, v/mx*h)}" rx="1" fill="${color}"/>`).join("");
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${bars}</svg>`;
+}
+
 /* ========================================================= conditions rail */
 const railEl = document.getElementById("rail");
 const panelEl = document.getElementById("rail-panel");
+const padEl = document.getElementById("rail-pad");
 let openSeg = null;
-function seg(id, k, v) {
-  return `<button class="rail-seg ${openSeg===id?"active":""}" data-seg="${id}">
-    <span class="k">${k}</span><span class="v">${v}</span></button>`;
-}
 function fmtT(d) { return d ? new Date(d).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "—"; }
+function miniSun(st) { return svgSunArc(st, 26, 18).replace('viewBox="0 0 26 18"', 'viewBox="0 0 26 18" preserveAspectRatio="xMidYMid meet"'); }
+function seg(id, k, v, icon) {
+  return `<button class="rail-seg ${openSeg===id?"active":""}" data-seg="${id}">
+    <span class="ic">${icon}</span><span><span class="k">${k}</span><span class="v">${v}</span></span></button>`;
+}
 function renderRail() {
   const st = sunTimes(new Date(), CENTER[1], CENTER[0]);
   const mp = moonPhase(new Date());
   const w = S.weather;
-  let html = seg("sun", "SUN", "set " + fmtT(st.set));
-  html += seg("moon", "MOON", Math.round(mp.illum * 100) + "% " + (mp.waxing ? "waxing" : "waning"));
+  let html = seg("sun", "SUN", "set " + fmtT(st.set), svgSunArc(st, 26, 20));
+  html += seg("moon", "MOON", Math.round(mp.illum * 100) + "%", svgMoon(mp, 8));
   if (w) {
-    html += seg("rain", "RAIN 72H", w.past72 + " mm" + (w.past72 >= 18 ? " ·⚡" : ""));
-    html += seg("wind", "WIND", Math.round(w.wind) + " km/h");
+    html += seg("rain", "RAIN 72H", w.past72 + " mm" + (w.past72 >= 18 ? " · FLUSH" : ""),
+      sparkline(w.daily.map(x => x + 0.2), "var(--accent)", 20, 18));
+    html += seg("wind", "WIND", Math.round(w.wind) + " km/h", svgCompass(w.windDir, w.wind, 9));
   }
   if (S.tide && S.tide.next) {
     const n = S.tide.next[0];
-    html += seg("tide", "TIDE", (n.type === "L" ? "low " : "high ") + fmtT(n.t));
+    html += seg("tide", "TIDE", (n.type === "L" ? "low " : "high ") + fmtT(n.t), svgTideDial(S.tide.next, 9));
   }
   railEl.innerHTML = html;
   railEl.querySelectorAll(".rail-seg").forEach(b =>
@@ -584,48 +695,51 @@ function renderPanel() {
   let html = "";
   if (openSeg === "sun") {
     html = `<h3>THE DAY'S EDGES</h3>
-      <div class="note">Rise ${fmtT(st.dawnCivil)} (civil) · ${fmtT(st.rise)} (sun)<br>
+      <div class="fig">${svgSunArc(st)}</div>
+      <div class="note">First light ${fmtT(st.dawnCivil)} · Rise ${fmtT(st.rise)}<br>
       Golden hour from ${fmtT(st.goldenEve)} · Set ${fmtT(st.set)} · Dark ${fmtT(st.duskCivil)}<br><br>
       Many parks close gathering at dusk — the register and the rules keep the same clock.</div>
       <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
   } else if (openSeg === "moon") {
-    html = `<h3>MOON</h3><div class="note">${Math.round(mp.illum*100)}% illuminated, ${mp.waxing?"waxing":"waning"}.
-      Bright-moon nights favor low-tide walks and evening-primrose watching; headlamps off when you can.</div>
+    html = `<h3>MOON</h3>
+      <div class="fig" style="display:flex;justify-content:center">${svgMoon(mp)}</div>
+      <div class="note" style="text-align:center">${Math.round(mp.illum*100)}% illuminated, ${mp.waxing?"waxing":"waning"}.</div>
+      <div class="note">Bright-moon nights favor low-tide walks and evening-primrose watching; headlamps off when you can.</div>
       <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
   } else if (openSeg === "rain" && w) {
     const labels = ["-3d","-2d","-1d","today","+1","+2","+3","+4","+5","+6"];
-    const mx = Math.max(...w.daily, 1);
+    const mxv = Math.max(...w.daily, 1);
     const bars = w.daily.map((v,i) =>
-      `<div class="b ${i<3?"past":""} ${i===3?"today":""}" style="height:${Math.max(4, v/mx*100)}%" title="${v} mm"></div>`).join("");
+      `<div class="b ${i<3?"past":""} ${i===3?"today":""}" style="height:${Math.max(4, v/mxv*100)}%" title="${v} mm"></div>`).join("");
     const flush = w.past72 >= 18;
-    const windows = pickWindows(w.daily);
-    html = `<h3>RAIN — MEMORY & FORECAST</h3>
+    html = `<h3>RAIN — MEMORY &amp; FORECAST</h3>
       <div class="bars">${bars}</div><div class="bars-labels">${labels.map(l=>`<span>${l}</span>`).join("")}</div>
       <div class="note" style="margin-top:8px">
       Past 72 h: <b>${w.past72} mm</b>${flush ? " — <b>fungal flush likely</b>; chanterelle points are pulsing." : " — below flush threshold (18 mm)."}<br>
-      ${windows}</div>${srcLine}`;
+      ${pickWindows(w.daily)}</div>${srcLine}`;
   } else if (openSeg === "wind" && w) {
-    html = `<h3>WIND & CLOUD</h3>
+    html = `<h3>WIND &amp; CLOUD</h3>
+      <div class="fig" style="display:flex;justify-content:center">${svgCompass(w.windDir, w.wind)}</div>
       <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>
-      Calm dry days are drying days — fiber and dye plants cure fastest.<br>
-      Gusty days: stay clear of old canopy.</div>
+      Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
       <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer">
         <input type="checkbox" id="fx-toggle" ${S.fxOn?"checked":""}> animate wind &amp; cloud layer
       </label>${srcLine}`;
   } else if (openSeg === "tide" && S.tide) {
     const rows = S.tide.next.map(n =>
       `${n.type === "L" ? "LOW" : "HIGH"} ${fmtT(n.t)} (${n.v} ft)`).join("<br>");
-    html = `<h3>TIDE — PROVIDENCE STATION</h3><div class="note">${rows}<br><br>
+    html = `<h3>TIDE — PROVIDENCE STATION</h3>
+      <div class="fig" style="display:flex;justify-content:center">${svgTideDial(S.tide.next)}</div>
+      <div class="note">${rows}<br><br>
       The falling tide opens the intertidal window. <b>Biotoxin closures always override</b> —
-      closure layers are hand-encoded like park rules, never inferred.</div>
+      closures are hand-encoded like park rules, never inferred.</div>
       <div class="age">SOURCE: NOAA CO-OPS · STATION ${TIDE_STATION}</div>`;
   }
-  panelEl.innerHTML = html;
+  padEl.innerHTML = html;
   const t = document.getElementById("fx-toggle");
   if (t) t.addEventListener("change", e => { S.fxOn = e.target.checked; });
 }
 function pickWindows(daily) {
-  // forecast helper: next rain day, then first dry day after = fungi window; 2+ dry days = berry/fiber window
   let rainDay = -1;
   for (let i = 4; i < 10; i++) if (daily[i] >= 5) { rainDay = i; break; }
   let dryStart = -1, dryEnd = -1;
@@ -642,49 +756,74 @@ function pickWindows(daily) {
 }
 function dirName(d){return ["N","NE","E","SE","S","SW","W","NW"][Math.round(d/45)%8]}
 
-/* =========================================== wind + cloud canvas (animated) */
+/* ================================ wind + cloud canvas — geo-anchored ===== */
 const fx = document.getElementById("fx"), ctx = fx.getContext("2d");
 let parts = [], clouds = [];
 function fxResize(){ fx.width = innerWidth; fx.height = innerHeight; }
 addEventListener("resize", fxResize); fxResize();
+function viewBounds() {
+  if (S.mapOK) { const b = map.getBounds();
+    return { w:b.getWest(), e:b.getEast(), s:b.getSouth(), n:b.getNorth() }; }
+  return { w:CENTER[0]-0.06, e:CENTER[0]+0.06, s:CENTER[1]-0.04, n:CENTER[1]+0.04 };
+}
 function fxInit() {
-  parts = Array.from({length:110}, () => ({ x:Math.random()*fx.width, y:Math.random()*fx.height,
-    a:Math.random()*Math.PI*2, life:Math.random()*90 }));
-  clouds = Array.from({length:5}, () => ({ x:Math.random()*fx.width, y:Math.random()*fx.height*0.8,
-    w:180+Math.random()*260, h:50+Math.random()*60, v:0.06+Math.random()*0.1 }));
+  const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
+  parts = Array.from({length:110}, () => ({
+    lng:b.w + Math.random()*dw, lat:b.s + Math.random()*dh, life:60+Math.random()*80 }));
+  clouds = Array.from({length:5}, () => ({
+    lng:b.w + Math.random()*dw, lat:b.s + Math.random()*dh,
+    rdeg:dw * (0.07 + Math.random()*0.08), v:0.5+Math.random()*0.7 }));
 }
 fxInit();
+function fxRespawnOffscreen() {
+  const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
+  const inB = o => o.lng > b.w - dw*0.1 && o.lng < b.e + dw*0.1 && o.lat > b.s - dh*0.1 && o.lat < b.n + dh*0.1;
+  parts.forEach(p => { if (!inB(p)) { p.lng = b.w + Math.random()*dw; p.lat = b.s + Math.random()*dh; } });
+  clouds.forEach(cl => { if (!inB(cl)) { cl.lng = b.w + Math.random()*dw; cl.lat = b.s + Math.random()*dh;
+    cl.rdeg = dw * (0.07 + Math.random()*0.08); } });
+}
+function project(lng, lat) {
+  if (S.mapOK) { const p = map.project([lng, lat]); return [p.x, p.y]; }
+  const b = viewBounds();
+  return [ (lng - b.w) / (b.e - b.w) * fx.width, (1 - (lat - b.s) / (b.n - b.s)) * fx.height ];
+}
 function fxFrame() {
   requestAnimationFrame(fxFrame);
   if (document.hidden) return;
   ctx.clearRect(0, 0, fx.width, fx.height);
   if (!S.fxOn || !S.weather) return;
   const w = S.weather, night = S.register === "night" || S.register === "dusk";
-  const speed = Math.min(2.4, 0.25 + w.wind * 0.07);
-  const dir = (w.windDir + 180) * RAD;            // direction wind blows TOWARD
-  const vx = Math.sin(dir) * speed, vy = -Math.cos(dir) * speed;
-  // clouds
-  const cAlpha = Math.min(0.16, w.clouds / 100 * 0.18) * (night ? 0.8 : 1);
-  ctx.fillStyle = night ? "rgba(190,210,200,"+cAlpha+")" : "rgba(90,100,110,"+cAlpha+")";
+  const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
+  /* wind vector in degrees/frame — scaled to viewport so motion reads at any zoom */
+  const spd = Math.min(2.2, 0.25 + w.wind * 0.06) * dw * 0.0011;
+  const dir = (w.windDir + 180) * RAD;
+  const vlng = Math.sin(dir) * spd, vlat = -Math.cos(dir) * spd * (dh / dw) * (fx.width / fx.height);
+  /* clouds — anchored, drift slowly with the wind */
+  const cAlpha = Math.min(0.15, w.clouds / 100 * 0.17) * (night ? 0.8 : 1);
+  ctx.fillStyle = night ? "rgba(190,210,200," + cAlpha + ")" : "rgba(90,100,110," + cAlpha + ")";
   clouds.forEach(cl => {
-    cl.x += vx * cl.v * 6; cl.y += vy * cl.v * 2;
-    if (cl.x > fx.width + cl.w) cl.x = -cl.w; if (cl.x < -cl.w) cl.x = fx.width + cl.w;
-    if (cl.y > fx.height + cl.h) cl.y = -cl.h; if (cl.y < -cl.h) cl.y = fx.height + cl.h;
-    ctx.beginPath(); ctx.ellipse(cl.x, cl.y, cl.w, cl.h, 0, 0, 7); ctx.fill();
+    cl.lng += vlng * cl.v * 0.5; cl.lat += vlat * cl.v * 0.5;
+    if (cl.lng > b.e + cl.rdeg*2) cl.lng = b.w - cl.rdeg; if (cl.lng < b.w - cl.rdeg*2) cl.lng = b.e + cl.rdeg;
+    if (cl.lat > b.n + cl.rdeg*2) cl.lat = b.s - cl.rdeg; if (cl.lat < b.s - cl.rdeg*2) cl.lat = b.n + cl.rdeg;
+    const [cx, cy] = project(cl.lng, cl.lat);
+    const [ex] = project(cl.lng + cl.rdeg, cl.lat);
+    const rx = Math.max(8, ex - cx);
+    ctx.beginPath(); ctx.ellipse(cx, cy, rx, rx * 0.42, 0, 0, 7); ctx.fill();
   });
-  // wind streaks
+  /* wind streaks — anchored; length = projected tail, so it scales with zoom */
   ctx.lineWidth = 1;
   parts.forEach(p => {
-    p.x += vx * 2.2; p.y += vy * 2.2; p.life -= 1;
-    if (p.life <= 0 || p.x < -20 || p.x > fx.width+20 || p.y < -20 || p.y > fx.height+20) {
-      p.x = Math.random()*fx.width; p.y = Math.random()*fx.height; p.life = 60+Math.random()*80;
+    p.lng += vlng; p.lat += vlat; p.life -= 1;
+    if (p.life <= 0 || p.lng < b.w - dw*0.1 || p.lng > b.e + dw*0.1 || p.lat < b.s - dh*0.1 || p.lat > b.n + dh*0.1) {
+      p.lng = b.w + Math.random()*dw; p.lat = b.s + Math.random()*dh; p.life = 60 + Math.random()*80;
     }
+    const [x, y] = project(p.lng, p.lat);
+    const [tx, ty] = project(p.lng - vlng * 9, p.lat - vlat * 9);
     const a = Math.min(1, p.life / 40) * (night ? 0.5 : 0.22);
-    ctx.strokeStyle = night ? "rgba(215,232,220,"+a+")" : "rgba(90,97,91,"+a+")";
-    ctx.beginPath(); ctx.moveTo(p.x, p.y);
-    ctx.lineTo(p.x - vx*9, p.y - vy*9); ctx.stroke();
-    if (night) { ctx.fillStyle = "rgba(255,250,230,"+(a*0.9)+")";
-      ctx.beginPath(); ctx.arc(p.x, p.y, 0.9, 0, 7); ctx.fill(); }
+    ctx.strokeStyle = night ? "rgba(215,232,220," + a + ")" : "rgba(90,97,91," + a + ")";
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx, ty); ctx.stroke();
+    if (night) { ctx.fillStyle = "rgba(255,250,230," + a * 0.9 + ")";
+      ctx.beginPath(); ctx.arc(x, y, 0.9, 0, 7); ctx.fill(); }
   });
 }
 requestAnimationFrame(fxFrame);
@@ -692,8 +831,8 @@ requestAnimationFrame(fxFrame);
 /* ====================================================== legend / filters */
 const LEG = document.getElementById("leg-row");
 LEG.innerHTML = Object.keys(STATUS_LABEL).map(k =>
-  `<button class="leg-chip" data-st="${k}">
-     <span class="dot" style="background:var(--st-${k})"></span>${STATUS_LABEL[k]}</button>`).join("");
+  `<button class="leg-chip" data-st="${k}" style="color:var(--st-${k})">
+     <span class="ring"></span><span style="color:var(--ink)">${STATUS_LABEL[k]}</span></button>`).join("");
 LEG.querySelectorAll(".leg-chip").forEach(b => b.addEventListener("click", () => {
   const k = b.dataset.st;
   if (S.statuses.has(k)) { S.statuses.delete(k); b.classList.add("off"); }
@@ -701,10 +840,9 @@ LEG.querySelectorAll(".leg-chip").forEach(b => b.addEventListener("click", () =>
   paintPoints();
 }));
 
-/* ===================================================== season slider */
+/* ================================================= season slider + stack */
 const track = document.getElementById("season-track");
 const cursor = document.getElementById("season-cursor");
-const tip = document.getElementById("hist-tip");
 function weekToX(w){ return (w - 1) / 51; }
 function setCursor(){ cursor.style.left = (weekToX(S.week) * 100) + "%";
   document.getElementById("season-label").textContent =
@@ -717,55 +855,101 @@ function trackWeek(e){
   return Math.max(1, Math.min(52, Math.round(((e.clientX - r.left) / r.width) * 51) + 1));
 }
 let dragging = false;
-track.addEventListener("pointerdown", e => { dragging = true; S.week = trackWeek(e); setCursor(); paintPoints(); });
-addEventListener("pointermove", e => { if (dragging) { S.week = trackWeek(e); setCursor(); paintPoints(); } });
+track.addEventListener("pointerdown", e => { dragging = true; S.week = trackWeek(e); setCursor(); paintPoints(); buildStack(); });
+addEventListener("pointermove", e => { if (dragging) { S.week = trackWeek(e); setCursor(); paintPoints(); buildStack(); } });
 addEventListener("pointerup", () => dragging = false);
 document.getElementById("season-reset").addEventListener("click", () => {
-  S.week = S.nowWeek; setCursor(); paintPoints();
+  S.week = S.nowWeek; setCursor(); paintPoints(); buildStack();
 });
-/* histogram tooltip — on hover only, per owner */
-track.addEventListener("pointermove", e => {
-  const w = trackWeek(e), m = Math.min(11, Math.floor((w - 1) / 4.345));
-  const agg = Array.from({length:12}, (_, i) =>
-    Object.values(SPECIES).reduce((s, sp) => s + sp.months[i], 0));
-  const mx = Math.max(...agg);
-  document.getElementById("hist-tip-bars").innerHTML = agg.map((v,i) =>
-    `<div class="b" style="height:${v/mx*100}%; opacity:${i===m?1:0.45}"></div>`).join("");
-  document.getElementById("hist-tip-t").textContent =
-    "WHAT'S IN SEASON · " + ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][m];
-  const r = track.getBoundingClientRect();
-  tip.style.left = Math.max(0, Math.min(e.clientX - r.left - 74, r.width - 148)) + "px";
-  tip.style.display = "block";
-});
-track.addEventListener("pointerleave", () => tip.style.display = "none");
-
-/* ================================================== quiet pigment peek */
-function openPeek(id) {
-  S.selected = POINTS[id]; renderPeek();
-  document.getElementById("peek").classList.add("open");
+/* stacked by-type histogram — revealed by the card's hover expansion */
+function buildStack(hoverMonth) {
+  const hot = hoverMonth != null ? hoverMonth : Math.min(11, Math.floor((S.week - 1) / 4.345));
+  const byCat = {};
+  Object.keys(CATS).forEach(k => byCat[k] = Array(12).fill(0));
+  Object.values(SPECIES).forEach(sp => sp.months.forEach((v, i) => byCat[sp.cat][i] += v));
+  const totals = Array.from({length:12}, (_, i) =>
+    Object.keys(CATS).reduce((s, k) => s + byCat[k][i], 0));
+  const mx = Math.max(...totals);
+  document.getElementById("season-stack").innerHTML = Array.from({length:12}, (_, i) => {
+    const segs = Object.keys(CATS).map(k =>
+      `<div class="seg" style="height:${byCat[k][i] / mx * 60}px; background:${CATS[k].color}"></div>`).join("");
+    return `<div class="mcol ${i === hot ? "hot" : ""}">${segs}</div>`;
+  }).join("");
+  document.getElementById("season-cats").innerHTML = Object.keys(CATS).map(k =>
+    `<span><i style="background:${CATS[k].color}"></i>${CATS[k].label}</span>`).join("");
 }
-document.querySelector("#peek .close").addEventListener("click", () =>
-  document.getElementById("peek").classList.remove("open"));
-function renderPeek() {
-  const p = S.selected; if (!p) return;
+buildStack();
+track.addEventListener("pointermove", e => {
+  const w = trackWeek(e);
+  buildStack(Math.min(11, Math.floor((w - 1) / 4.345)));
+});
+track.addEventListener("pointerleave", () => buildStack());
+
+/* ============================== anchored point card (permission/use/safety) */
+function cardHTML(p) {
   const sp = SPECIES[p.sp];
   const night = S.register === "night" || S.register === "dusk";
-  document.querySelector("#peek .spine").style.background = sp.pigment;
-  document.getElementById("peek-name").textContent = sp.name;
-  document.getElementById("peek-sci").textContent =
-    "NO. " + String(sp.no).padStart(3,"0") + " · " + sp.sci + " · " + sp.uses.toUpperCase() +
-    " · RIPE WK " + sp.ripe[0] + "–" + sp.ripe[1];
-  const mx = Math.max(...sp.months);
-  document.getElementById("peek-bars").innerHTML = sp.months.map(v =>
-    `<div class="b" style="height:${v/mx*100}%; background:${night ? NIGHT_COLORS[p.sp] : sp.pigment}"></div>`).join("");
-  document.getElementById("peek-dot").style.background = `var(--st-${p.status})`;
-  document.getElementById("peek-status").textContent = STATUS_RULE[p.status];
-  document.getElementById("peek-ethic").textContent = sp.ethic;
-  document.getElementById("peek-flush").classList.toggle("on",
-    sp.fungal && S.weather && S.weather.past72 >= 18);
+  const stCol = (night ? STATUS_NIGHT : STATUS_DAY)[p.status];
+  const flush = sp.fungal && S.weather && S.weather.past72 >= 18;
+  return `<div class="pt-card">
+    <div class="spine" style="background:${sp.pigment}"></div>
+    <button class="close" aria-label="Close">×</button>
+    <div class="pad">
+      <h2>${sp.name}</h2>
+      <div class="sci">NO. ${String(sp.no).padStart(3,"0")} · ${sp.sci}</div>
+      <div class="row access"><span class="lab">ACCESS</span>
+        <span class="val" style="color:${stCol}"><span class="ring"></span>${STATUS_RULE[p.status]}</span></div>
+      <div class="row"><span class="lab">USE</span><span class="val">${sp.uses}</span></div>
+      <div class="row safety"><span class="lab">SAFETY</span><span class="val">${sp.safety}</span></div>
+      <div class="season-line">${sparkline(sp.months, night ? NIGHT_COLORS[p.sp] : sp.pigment)}
+        <span class="t">RIPE WK ${sp.ripe[0]}–${sp.ripe[1]}</span></div>
+      <div class="flush ${flush ? "on" : ""}">RAIN-FED FLUSH LIKELY THIS WEEK</div>
+      <div class="ethic">${sp.ethic}</div>
+      <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE</div>
+    </div></div>`;
+}
+function openPointCard(id, fbEl) {
+  S.selected = POINTS[id];
+  if (S.mapOK) {
+    if (popup) popup.remove();
+    const node = document.createElement("div");
+    node.innerHTML = cardHTML(S.selected);
+    popup = new mapboxgl.Popup({ closeButton:false, className:"ca-popup", maxWidth:"none",
+      offset:14, anchor:undefined })
+      .setLngLat([S.selected.lng, S.selected.lat]).setDOMContent(node.firstElementChild).addTo(map);
+    node.remove();
+    bindCardClose();
+  } else if (fbEl) {
+    closeFbCard();
+    const div = document.createElement("div");
+    div.id = "fb-card"; div.innerHTML = cardHTML(S.selected);
+    div.style.cssText = "position:absolute; z-index:7; left:" +
+      Math.min(parseFloat(fbEl.style.left), 70) + "%; top:" +
+      Math.min(parseFloat(fbEl.style.top), 55) + "%;";
+    document.getElementById("map-fallback").appendChild(div);
+    bindCardClose();
+  }
+}
+function bindCardClose() {
+  document.querySelectorAll(".pt-card .close").forEach(b =>
+    b.addEventListener("click", closePointCard));
+}
+function closeFbCard() { const d = document.getElementById("fb-card"); if (d) d.remove(); }
+function closePointCard() { if (popup) { popup.remove(); popup = null; } closeFbCard(); S.selected = null; }
+function renderPointCard() {  // re-skin on register change
+  if (!S.selected) return;
+  if (popup) {
+    const node = document.createElement("div");
+    node.innerHTML = cardHTML(S.selected);
+    popup.setDOMContent(node.firstElementChild);
+    node.remove(); bindCardClose();
+  } else if (document.getElementById("fb-card")) {
+    document.getElementById("fb-card").innerHTML = cardHTML(S.selected);
+    bindCardClose();
+  }
 }
 
-/* ============================================== sheets: about/plants/recipes */
+/* ========================================= sheets: about/plants/recipes */
 const SHEETS = {
   about: () => `<button class="closer">×</button><div class="k">CRAFT ALMANAC · PROTOTYPE</div>
     <h2 class="serif">A map that keeps the almanac's hours</h2>
@@ -804,14 +988,13 @@ function bindSheet() {
   sheetEl.querySelectorAll("[data-sp]").forEach(card => card.addEventListener("click", () => {
     const k = card.dataset.sp, pt = POINTS.find(p => p.sp === k);
     wrapEl.classList.remove("open");
-    if (pt) { if (S.mapOK) map.flyTo({ center:[pt.lng, pt.lat], zoom:14 }); openPeek(pt.id); }
+    if (pt) { if (S.mapOK) map.flyTo({ center:[pt.lng, pt.lat], zoom:14 }); openPointCard(pt.id); }
   }));
 }
 wrapEl.addEventListener("click", e => { if (e.target === wrapEl) wrapEl.classList.remove("open"); });
-addEventListener("keydown", e => { if (e.key === "Escape") { wrapEl.classList.remove("open");
-  document.getElementById("peek").classList.remove("open"); } });
+addEventListener("keydown", e => { if (e.key === "Escape") { wrapEl.classList.remove("open"); closePointCard(); } });
 
-/* ================================================================ boot */
+/* ================================================================== boot */
 applyRegister();
 initMap();
 renderRail();
