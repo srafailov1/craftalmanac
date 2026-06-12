@@ -213,13 +213,29 @@ async function readCellCacheFiles() {
   const files = (await readdir(CELL_CACHE_DIR))
     .filter((file) => file.endsWith(".json") && !file.startsWith("_"))
     .sort();
-  const cells = [];
+  const cellsByKey = new Map();
   for (const file of files) {
     const chunkCells = JSON.parse(await readFile(path.join(CELL_CACHE_DIR, file), "utf8"));
-    if (chunkCells.length !== 9) throw new Error(`${file}: expected 9 cells, got ${chunkCells.length}`);
-    chunkCells.forEach((cell) => cells.push({ ...cell, chunkFile: file }));
+    const isRegionFile = file.startsWith("region-");
+    if (!Array.isArray(chunkCells)) throw new Error(`${file}: expected a cell array`);
+    if (!isRegionFile && chunkCells.length !== 9) throw new Error(`${file}: expected 9 cells, got ${chunkCells.length}`);
+    chunkCells.forEach((cell) => {
+      const previous = cellsByKey.get(cell.key);
+      if (!previous) {
+        cellsByKey.set(cell.key, { ...cell, units: [...(cell.units || [])], chunkFile: file });
+        return;
+      }
+      const seenUnits = new Set((previous.units || []).map((unit) => JSON.stringify(unit)));
+      (cell.units || []).forEach((unit) => {
+        const signature = JSON.stringify(unit);
+        if (seenUnits.has(signature)) return;
+        seenUnits.add(signature);
+        previous.units.push(unit);
+      });
+      previous.chunkFile = `${previous.chunkFile},${file}`;
+    });
   }
-  return cells;
+  return [...cellsByKey.values()];
 }
 
 function validateRaster(context, cells, raster, statusIds) {

@@ -28,4 +28,8 @@ node scripts/validate_data.mjs || { echo "FAIL: Data validation failed"; exit 1;
 echo "Running permission rule tests..."
 node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }
 
+# Run overview coverage tests
+echo "Running overview coverage tests..."
+node scripts/test_overview_coverage.mjs || { echo "FAIL: Overview coverage tests failed"; exit 1; }
+
 echo "All checks PASSED"

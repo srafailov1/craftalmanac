@@ -42,6 +42,19 @@ Codex queue:
    implement→gate loop. Diagnostic context: 2026-06-11 health check confirmed
    `index.html` cache tokens are consistent (`filtered-access-3`) and the tree
    is clean, so this is greenfield, not a regression fix.
+4. **Extend overview status-raster coverage to encoded-rule areas — spec ready:
+   `docs/TODO-overview-rule-coverage.md`.** Root cause (confirmed in code): the
+   low-zoom iNaturalist overview colors cells from the baked status raster,
+   which is generated only for the Falling Fruit chunk footprint. Encoded rule
+   areas with no Falling Fruit data (e.g. Sequoia / Kings Canyon NP, the Indiana
+   Dunes park polygon) therefore have no raster cell and show `"unknown"` when
+   zoomed out, even though the high-zoom point layer labels them correctly. The
+   work order extends `fetch_padus_cell_containment.mjs` + `build_status_raster.mjs`
+   to cover the `NPS_GATHERING_RULES` parks and bounded `SITE_ACCESS_RULES`
+   sites, with a node gate asserting Sequoia/Kings Canyon/Indiana Dunes resolve
+   `food=allowed` in the rebuilt raster. Boundaries: rule **semantics** stay in
+   `app.js` (Claude-owned); this only changes which cells are baked. Data
+   regeneration, so explicitly off Qwen.
 
 ## Tier 3 — Qwen via opencode (junior, local, free)
 

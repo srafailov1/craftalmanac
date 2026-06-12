@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { access, mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -8,6 +9,8 @@ const ROOT = path.resolve(path.dirname(__filename), "..");
 const MANIFEST_PATH = path.join(ROOT, "data", "falling-fruit", "us", "manifest.json");
 const CACHE_DIR = path.join(ROOT, "data", "falling-fruit", "us", "cell-containment");
 const FAILURES_PATH = path.join(CACHE_DIR, "_failures.json");
+const REGION_FAILURES_PATH = path.join(CACHE_DIR, "_region_failures.json");
+const APP_PATH = path.join(ROOT, "app.js");
 
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const PUBLIC_LANDS_PAGE_SIZE = 1000;
@@ -17,6 +20,30 @@ const RETRY_BACKOFF_MS = 2000;
 const CELL_SIZE_DEGREES = 0.05;
 
 const OUT_FIELDS = "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres";
+const REGION_BBOX_PADDING_DEGREES = 0.05;
+
+// Region cache files are named region-*.json and store the same per-cell
+// record shape as FF chunk files, but they may contain any number of cells.
+const NPS_REGION_BOUNDS_BY_MATCH = {
+  "acadia": { south: 44.20, west: -68.45, north: 44.45, east: -68.10 },
+  "capitol reef": { south: 37.55, west: -111.35, north: 38.40, east: -110.65 },
+  "crater lake": { south: 42.78, west: -122.25, north: 43.05, east: -121.95 },
+  "cuyahoga valley": { south: 41.15, west: -81.70, north: 41.40, east: -81.45 },
+  "death valley": { south: 35.65, west: -117.00, north: 37.40, east: -116.10 },
+  "glacier national park": { south: 48.20, west: -114.50, north: 49.05, east: -113.35 },
+  "grand teton": { south: 43.45, west: -110.95, north: 44.10, east: -110.45 },
+  "great smoky": { south: 35.40, west: -84.05, north: 35.85, east: -83.10 },
+  "indiana dunes": { south: 41.55, west: -87.25, north: 41.80, east: -86.80 },
+  "kings canyon": { south: 36.65, west: -119.10, north: 37.05, east: -118.20 },
+  "mount rainier": { south: 46.65, west: -122.05, north: 47.05, east: -121.45 },
+  "new river gorge": { south: 37.75, west: -81.25, north: 38.20, east: -80.80 },
+  "olympic national park": { south: 47.45, west: -124.80, north: 48.25, east: -123.25 },
+  "redwood": { south: 40.25, west: -124.20, north: 42.10, east: -123.70 },
+  "rocky mountain national park": { south: 40.15, west: -105.90, north: 40.55, east: -105.45 },
+  "sequoia national park": { south: 36.25, west: -118.95, north: 36.85, east: -118.30 },
+  "yellowstone": { south: 44.10, west: -111.20, north: 45.15, east: -109.80 },
+  "yosemite": { south: 37.45, west: -120.00, north: 38.20, east: -119.15 }
+};
 
 const args = new Map();
 for (const arg of process.argv.slice(2)) {
@@ -26,6 +53,8 @@ for (const arg of process.argv.slice(2)) {
 
 const limit = args.has("limit") ? Number(args.get("limit")) : Infinity;
 const force = args.get("force") === "true";
+const regionsOnly = args.get("regions-only") === "true";
+const chunksOnly = args.get("chunks-only") === "true";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -214,6 +243,190 @@ function findContainingProperties(point, features) {
     .map((feature) => feature.properties || {});
 }
 
+function findMatchingDelimiter(source, startIndex, openChar, closeChar) {
+  let depth = 0;
+  let quote = "";
+  let escaped = false;
+  let templateExpressionDepth = 0;
+  for (let index = startIndex; index < source.length; index += 1) {
+    const char = source[index];
+    const next = source[index + 1];
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (char === "\\") {
+        escaped = true;
+        continue;
+      }
+      if (quote === "`" && char === "$" && next === "{") {
+        templateExpressionDepth += 1;
+        index += 1;
+        continue;
+      }
+      if (templateExpressionDepth) {
+        if (char === "{") templateExpressionDepth += 1;
+        else if (char === "}") templateExpressionDepth -= 1;
+        continue;
+      }
+      if (char === quote) quote = "";
+      continue;
+    }
+    if (char === "\"" || char === "'" || char === "`") {
+      quote = char;
+      continue;
+    }
+    if (char === "/" && next === "/") {
+      index = source.indexOf("\n", index);
+      if (index < 0) return -1;
+      continue;
+    }
+    if (char === "/" && next === "*") {
+      index = source.indexOf("*/", index + 2);
+      if (index < 0) return -1;
+      index += 1;
+      continue;
+    }
+    if (char === openChar) depth += 1;
+    if (char === closeChar) {
+      depth -= 1;
+      if (depth === 0) return index;
+    }
+  }
+  return -1;
+}
+
+function extractConstExpression(source, name) {
+  const start = source.indexOf(`const ${name} =`);
+  if (start < 0) throw new Error(`Could not find const ${name}`);
+  const equals = source.indexOf("=", start);
+  let expressionStart = equals + 1;
+  while (/\s/.test(source[expressionStart])) expressionStart += 1;
+  const openChar = source[expressionStart];
+  const closeChar = openChar === "[" ? "]" : openChar === "{" ? "}" : "";
+  if (!closeChar) throw new Error(`Const ${name} does not start with an object or array literal`);
+  const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
+  if (end < 0) throw new Error(`Could not parse const ${name}`);
+  return source.slice(expressionStart, end + 1);
+}
+
+async function readRuleLists() {
+  const appSource = await readFile(APP_PATH, "utf8");
+  const context = { console };
+  vm.createContext(context);
+  ["ACCESS_RULE_SOURCES", "NPS_GATHERING_RULES", "SITE_ACCESS_RULES"].forEach((name) => {
+    const expression = extractConstExpression(appSource, name);
+    vm.runInContext(`var ${name} = ${expression};`, context, { filename: APP_PATH });
+  });
+  return {
+    npsRules: context.NPS_GATHERING_RULES,
+    siteRules: context.SITE_ACCESS_RULES
+  };
+}
+
+async function loadExistingCellKeys(excludeFile = "") {
+  const files = (await readdir(CACHE_DIR))
+    .filter((file) => file.endsWith(".json") && !file.startsWith("_") && file !== excludeFile);
+  const keys = new Set();
+  for (const file of files) {
+    const cells = JSON.parse(await readFile(path.join(CACHE_DIR, file), "utf8"));
+    cells.forEach((cell) => {
+      if (cell?.key) keys.add(cell.key);
+    });
+  }
+  return keys;
+}
+
+function slugify(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function padBounds(bounds) {
+  return {
+    south: roundCoord(bounds.south - REGION_BBOX_PADDING_DEGREES),
+    west: roundCoord(bounds.west - REGION_BBOX_PADDING_DEGREES),
+    north: roundCoord(bounds.north + REGION_BBOX_PADDING_DEGREES),
+    east: roundCoord(bounds.east + REGION_BBOX_PADDING_DEGREES)
+  };
+}
+
+function boundsToBbox(bounds) {
+  return [bounds.west, bounds.south, bounds.east, bounds.north];
+}
+
+function getRegionCells(bounds, existingKeys) {
+  const cells = [];
+  const westStart = Math.floor(bounds.west / CELL_SIZE_DEGREES) * CELL_SIZE_DEGREES;
+  const southStart = Math.floor(bounds.south / CELL_SIZE_DEGREES) * CELL_SIZE_DEGREES;
+  const eastEnd = Math.ceil(bounds.east / CELL_SIZE_DEGREES) * CELL_SIZE_DEGREES;
+  const northEnd = Math.ceil(bounds.north / CELL_SIZE_DEGREES) * CELL_SIZE_DEGREES;
+  for (let south = southStart; south < northEnd; south += CELL_SIZE_DEGREES) {
+    for (let west = westStart; west < eastEnd; west += CELL_SIZE_DEGREES) {
+      const cellWest = roundCoord(west);
+      const cellSouth = roundCoord(south);
+      const key = makeCellKey(cellWest, cellSouth);
+      if (existingKeys.has(key)) continue;
+      cells.push({
+        key,
+        center: [
+          roundCoord(cellWest + (CELL_SIZE_DEGREES / 2)),
+          roundCoord(cellSouth + (CELL_SIZE_DEGREES / 2))
+        ],
+        units: []
+      });
+    }
+  }
+  return cells;
+}
+
+async function getRuleRegions() {
+  const { npsRules, siteRules } = await readRuleLists();
+  const regions = [];
+  npsRules.forEach((rule) => {
+    const bounds = NPS_REGION_BOUNDS_BY_MATCH[rule.match];
+    if (!bounds) throw new Error(`Missing NPS region bounds for ${rule.match}`);
+    regions.push({
+      id: `nps-${slugify(rule.match)}`,
+      label: rule.match,
+      bbox: boundsToBbox(padBounds(bounds))
+    });
+  });
+  siteRules.filter((rule) => rule.bounds).forEach((rule) => {
+    regions.push({
+      id: `site-${slugify(rule.name)}`,
+      label: rule.name,
+      bbox: boundsToBbox(padBounds(rule.bounds))
+    });
+  });
+  return regions;
+}
+
+async function processRegion(region) {
+  const cacheFile = `region-${region.id}.json`;
+  const cachePath = path.join(CACHE_DIR, cacheFile);
+  if (!force && await fileExists(cachePath)) return { skipped: true };
+
+  const existingKeys = await loadExistingCellKeys(cacheFile);
+  const bounds = {
+    west: region.bbox[0],
+    south: region.bbox[1],
+    east: region.bbox[2],
+    north: region.bbox[3]
+  };
+  const cells = getRegionCells(bounds, existingKeys);
+  const features = await withRetry(() => fetchPadusFeatures(region.bbox));
+  const populatedCells = cells.map((cell) => ({
+    ...cell,
+    units: findContainingProperties(cell.center, features)
+  }));
+
+  const tempPath = `${cachePath}.tmp-${process.pid}`;
+  await writeFile(tempPath, `${JSON.stringify(populatedCells)}\n`);
+  await rename(tempPath, cachePath);
+  return { skipped: false, cells: populatedCells.length, features: features.length };
+}
+
 async function processChunk(chunk) {
   const cachePath = path.join(CACHE_DIR, `${chunk.id}.json`);
   if (!force && await fileExists(cachePath)) return { skipped: true };
@@ -257,28 +470,60 @@ async function main() {
   let skipped = 0;
   let processedCells = 0;
 
-  await runWithConcurrency(chunks, MAX_CONCURRENT_CHUNKS, async (chunk) => {
-    try {
-      const result = await processChunk(chunk);
-      completed += 1;
-      if (result.skipped) skipped += 1;
-      else processedCells += result.cells || 0;
-      if (completed % 25 === 0 || completed === chunks.length) {
-        console.log(`PAD-US cell containment: ${completed}/${chunks.length} chunks (${skipped} skipped, ${processedCells} cells processed)`);
+  if (!regionsOnly) {
+    await runWithConcurrency(chunks, MAX_CONCURRENT_CHUNKS, async (chunk) => {
+      try {
+        const result = await processChunk(chunk);
+        completed += 1;
+        if (result.skipped) skipped += 1;
+        else processedCells += result.cells || 0;
+        if (completed % 25 === 0 || completed === chunks.length) {
+          console.log(`PAD-US cell containment: ${completed}/${chunks.length} chunks (${skipped} skipped, ${processedCells} cells processed)`);
+        }
+      } catch (error) {
+        completed += 1;
+        failures.push({
+          id: chunk.id,
+          bbox: chunk.bbox,
+          message: error.message
+        });
+        console.error(`Failed ${chunk.id}: ${error.message}`);
       }
-    } catch (error) {
-      completed += 1;
-      failures.push({
-        id: chunk.id,
-        bbox: chunk.bbox,
-        message: error.message
-      });
-      console.error(`Failed ${chunk.id}: ${error.message}`);
-    }
-  });
+    });
 
-  await writeFile(FAILURES_PATH, `${JSON.stringify(failures, null, 2)}\n`);
-  console.log(`PAD-US cell containment complete: ${chunks.length - skipped - failures.length} written, ${skipped} skipped, ${failures.length} failed.`);
+    await writeFile(FAILURES_PATH, `${JSON.stringify(failures, null, 2)}\n`);
+    console.log(`PAD-US cell containment complete: ${chunks.length - skipped - failures.length} written, ${skipped} skipped, ${failures.length} failed.`);
+  }
+
+  if (!chunksOnly) {
+    const regions = await getRuleRegions();
+    const regionFailures = [];
+    let completedRegions = 0;
+    let skippedRegions = 0;
+    let processedRegionCells = 0;
+    await runWithConcurrency(regions, MAX_CONCURRENT_CHUNKS, async (region) => {
+      try {
+        const result = await processRegion(region);
+        completedRegions += 1;
+        if (result.skipped) skippedRegions += 1;
+        else processedRegionCells += result.cells || 0;
+        console.log(`PAD-US rule-region containment: ${completedRegions}/${regions.length} regions (${skippedRegions} skipped, ${processedRegionCells} cells processed)`);
+      } catch (error) {
+        completedRegions += 1;
+        regionFailures.push({
+          id: region.id,
+          label: region.label,
+          bbox: region.bbox,
+          message: error.message
+        });
+        console.error(`Failed ${region.id}: ${error.message}`);
+      }
+    });
+    await writeFile(REGION_FAILURES_PATH, `${JSON.stringify(regionFailures, null, 2)}\n`);
+    console.log(`PAD-US rule-region containment complete: ${regions.length - skippedRegions - regionFailures.length} written, ${skippedRegions} skipped, ${regionFailures.length} failed.`);
+    failures.push(...regionFailures);
+  }
+
   if (failures.length) process.exitCode = 1;
 }
 
