@@ -243,6 +243,70 @@ function findContainingProperties(point, features) {
     .map((feature) => feature.properties || {});
 }
 
+function findIntersectingProperties(cell, features) {
+  const box = getCellBbox(cell);
+  return features
+    .filter((feature) => cellIntersectsFeature(cell, box, feature))
+    .map((feature) => feature.properties || {});
+}
+
+function getCellBbox(cell) {
+  const [lng, lat] = cell.center;
+  const half = CELL_SIZE_DEGREES / 2;
+  return [
+    roundCoord(lng - half),
+    roundCoord(lat - half),
+    roundCoord(lng + half),
+    roundCoord(lat + half)
+  ];
+}
+
+function cellIntersectsFeature(cell, cellBbox, feature) {
+  const featureBbox = feature.__bbox;
+  if (!featureBbox || !bboxesIntersect(cellBbox, featureBbox)) return false;
+  const [west, south, east, north] = cellBbox;
+  const [lng, lat] = cell.center;
+  const samplePoints = [
+    [lng, lat],
+    [west, south],
+    [west, north],
+    [east, south],
+    [east, north]
+  ];
+  if (samplePoints.some((point) => pointInFeature(point, feature))) return true;
+  return featureHasVertexInBbox(feature, cellBbox);
+}
+
+function bboxesIntersect(a, b) {
+  return a[2] >= b[0]
+    && a[0] <= b[2]
+    && a[3] >= b[1]
+    && a[1] <= b[3];
+}
+
+function featureHasVertexInBbox(feature, bbox) {
+  const [west, south, east, north] = bbox;
+  let found = false;
+  const testRing = (ring) => {
+    for (const [lng, lat] of ring) {
+      if (lng >= west && lng <= east && lat >= south && lat <= north) {
+        found = true;
+        return;
+      }
+    }
+  };
+  const scanPolygon = (rings) => {
+    for (const ring of rings) {
+      if (found) return;
+      testRing(ring);
+    }
+  };
+  const geometry = feature.geometry;
+  if (geometry?.type === "Polygon") scanPolygon(geometry.coordinates);
+  else if (geometry?.type === "MultiPolygon") geometry.coordinates.forEach(scanPolygon);
+  return found;
+}
+
 function findMatchingDelimiter(source, startIndex, openChar, closeChar) {
   let depth = 0;
   let quote = "";
@@ -418,7 +482,7 @@ async function processRegion(region) {
   const features = await withRetry(() => fetchPadusFeatures(region.bbox));
   const populatedCells = cells.map((cell) => ({
     ...cell,
-    units: findContainingProperties(cell.center, features)
+    units: findIntersectingProperties(cell, features)
   }));
 
   const tempPath = `${cachePath}.tmp-${process.pid}`;

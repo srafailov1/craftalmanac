@@ -9,9 +9,9 @@ const CELL_CACHE_DIR = path.join(ROOT, "data", "falling-fruit", "us", "cell-cont
 const RASTER_PATH = path.join(ROOT, "data", "falling-fruit", "us", "status-raster.json");
 
 const TARGETS = [
-  { label: "Sequoia National Park", match: "sequoia national park", expectedFood: "allowed" },
-  { label: "Kings Canyon National Park", match: "kings canyon", expectedFood: "allowed" },
-  { label: "Indiana Dunes National Park", match: "indiana dunes", expectedFood: "allowed" }
+  { label: "Sequoia National Park", match: "sequoia national park", expectedFood: "allowed", minCells: 10 },
+  { label: "Kings Canyon National Park", match: "kings canyon", expectedFood: "allowed", minCells: 10 },
+  { label: "Indiana Dunes National Park", match: "indiana dunes", expectedFood: "allowed", minCells: 3 }
 ];
 
 function getPublicLandText(cell) {
@@ -42,6 +42,9 @@ function assertTargetCoverage(target, cells, raster) {
   const matches = cells.filter((cell) => getPublicLandText(cell).includes(target.match));
   if (!matches.length) {
     throw new Error(`${target.label}: found no cached PAD-US cells`);
+  }
+  if (matches.length < target.minCells) {
+    throw new Error(`${target.label}: expected at least ${target.minCells} cached PAD-US cells, got ${matches.length}`);
   }
   const allowedMatches = matches.filter((cell) => raster[cell.key]?.food === target.expectedFood);
   if (!allowedMatches.length) {

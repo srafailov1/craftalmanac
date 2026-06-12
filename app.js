@@ -2002,6 +2002,10 @@ function initControls() {
   });
 
   map.on("moveend", () => {
+    if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM && !isViewportCoveredByLoadedPoints()) {
+      state.pointDataReady = false;
+      updateLayerHandoff();
+    }
     updateFallingFruitAggregates();
     updateMarkerPointVisibility();
     scheduleINaturalistAggregateLoad();
@@ -2378,6 +2382,11 @@ function renderMarkers() {
 
 function updateFallingFruitAggregates() {
   if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+  // In the point band, keep the last complete overview aggregate on screen
+  // until viewport-specific point data is ready. Repainting aggregates here
+  // drops iNaturalist overview cells and creates the visible zoom-threshold
+  // falloff shown in dense areas.
+  if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) return;
   if (shouldShowPointLayers()) return;
   if (shouldDeferAggregatePaint()) return;
   window.clearTimeout(state.aggregateTimer);
@@ -3148,7 +3157,8 @@ function initMapLayers() {
 function shouldShowPointLayers() {
   return state.mapReady
     && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM
-    && state.pointDataReady;
+    && state.pointDataReady
+    && isViewportCoveredByLoadedPoints();
 }
 
 function updateLayerHandoff() {
@@ -3729,10 +3739,16 @@ function getINaturalistRequestBounds(bounds, zoom) {
       ? INATURALIST_MAX_PER_PAGE
       : INATURALIST_DEFAULT_PER_PAGE
   };
-  if (zoom < 5.4 || zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM) return [baseBounds];
+  if (zoom < 5.4) return [baseBounds];
 
-  const columns = getBoundsLngSpan(bounds) > 9 ? 3 : 2;
-  const rows = (bounds.getNorth() - bounds.getSouth()) > 5 ? 2 : 1;
+  const pointZoom = zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM;
+  const columns = pointZoom
+    ? Math.min(4, Math.max(1, Math.ceil(getBoundsLngSpan(bounds) / 1.5)))
+    : getBoundsLngSpan(bounds) > 9 ? 3 : 2;
+  const rows = pointZoom
+    ? Math.min(3, Math.max(1, Math.ceil((bounds.getNorth() - bounds.getSouth()) / 1.2)))
+    : (bounds.getNorth() - bounds.getSouth()) > 5 ? 2 : 1;
+  if (columns === 1 && rows === 1) return [baseBounds];
   const lngStep = (baseBounds.east - baseBounds.west) / columns;
   const latStep = (baseBounds.north - baseBounds.south) / rows;
   const tiles = [];
@@ -3743,7 +3759,7 @@ function getINaturalistRequestBounds(bounds, zoom) {
         south: baseBounds.south + row * latStep,
         east: column === columns - 1 ? baseBounds.east : baseBounds.west + (column + 1) * lngStep,
         north: row === rows - 1 ? baseBounds.north : baseBounds.south + (row + 1) * latStep,
-        perPage: INATURALIST_TILE_PER_PAGE
+        perPage: pointZoom ? INATURALIST_MAX_PER_PAGE : INATURALIST_TILE_PER_PAGE
       });
     }
   }
