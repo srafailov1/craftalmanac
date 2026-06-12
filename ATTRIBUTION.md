@@ -6,6 +6,8 @@ This prototype combines live and cached public-interest data. It is non-commerci
 
 The map queries the supported iNaturalist API at runtime and links each observation back to its iNaturalist observation page. iNaturalist states that user-contributed content remains owned by the contributor and, unless otherwise specified, is licensed under Creative Commons Attribution-NonCommercial (CC BY-NC). Do not reuse photos or other media from iNaturalist without checking the license on the individual observation.
 
+The local phenology histograms in `data/phenology/` are derived from aggregated iNaturalist observation counts returned by the histogram API. They do not include observation records, photos, observer names, or media; keep the derived use non-commercial, credit iNaturalist and its contributors, and do not imply that iNaturalist endorses the app.
+
 Source: https://www.inaturalist.org/pages/api+reference and https://www.inaturalist.org/pages/terms
 
 ## NOAA CO-OPS Tide Stations
