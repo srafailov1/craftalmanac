@@ -178,6 +178,8 @@
   #legend-toggle { display:none; }
   #legend-body { max-height:0; opacity:0; overflow:hidden; transition:max-height .28s ease, opacity .28s ease; }
   #legend:hover #legend-body { max-height:360px; opacity:1; }
+  .legcols { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .legcols .lcol .k { margin-bottom:6px; }
   .leg-cats { display:flex; flex-direction:column; gap:4px; margin-top:6px; }
   .leg-cats .lc { font-size:10.5px; color:var(--ink); }
   .leg-cats .lc i { display:inline-block; width:10px; height:10px; border-radius:2.5px;
@@ -340,6 +342,9 @@
     #mode-disclaimer { top:auto; bottom:108px; left:10px; }
     #legend { display:none; }                /* legend lives inside the slider card */
     #legend-mob { display:inline !important; }
+    #legend-slot #leg-map-m { display:block !important; }
+    #legend-slot .legcols { flex-direction:row; gap:18px; align-items:flex-start; }
+    #legend-slot .lcol { flex:1; }
     #season { width:auto; left:10px; right:10px; transform:none; bottom:10px; }
     #season:hover #season-hist { height:0; opacity:0; }       /* hover never sticks on touch */
     #season.pinned #season-hist { height:206px; opacity:1; }
@@ -373,12 +378,20 @@
 <div id="legend" class="floating">
   <button id="legend-toggle">LEGEND</button>
   <div class="k" id="leg-map"></div>
+  <div class="k2" style="margin-top:4px">FILL = MATERIAL TYPE · RING = ACCESS · HOVER FOR FILTERS</div>
   <div id="legend-body">
-  <div class="leg-cats" id="leg-cats"></div>
-  <div class="k" style="margin-top:10px">ACCESS — TAP TO FILTER</div>
-  <div class="leg-row" id="leg-row"></div>
-  <button id="only-allowed">ONLY ALLOWED</button>
-  <div class="k2">FILL = MATERIAL TYPE · RING = ACCESS</div>
+  <div class="k" id="leg-map-m" style="display:none; grid-column:1 / -1;"></div>
+  <div class="legcols">
+    <div class="lcol">
+      <div class="k">ACCESS — TAP TO FILTER</div>
+      <div class="leg-row" id="leg-row"></div>
+      <button id="only-allowed">ONLY ALLOWED</button>
+    </div>
+    <div class="lcol">
+      <div class="k">CATEGORIES</div>
+      <div class="leg-cats" id="leg-cats"></div>
+    </div>
+  </div>
   </div>
 </div>
 
@@ -736,13 +749,14 @@ const RADAR_MAX_ZOOM = 7.5;
 async function loadRadar() {
   try {
     const j = await (await fetch("https://api.rainviewer.com/public/weather-maps.json")).json();
-    const frames = (j.radar && (j.radar.nowcast || j.radar.past)) || [];
-    const frame = frames.length ? frames[frames.length - 1] : null;
+    const past = (j.radar && j.radar.past) || [];
+    const nowc = (j.radar && j.radar.nowcast) || [];
+    const frame = past.length ? past[past.length - 1] : nowc[0];   // nowcast may be [] (truthy!)
     if (!frame) return;
     const tiles = j.host + frame.path + "/256/{z}/{x}/{y}/2/1_1.png";
     map.addSource("radar", { type:"raster", tiles:[tiles], tileSize:256,
       attribution:"Radar © RainViewer" });
-    map.addLayer({ id:"radar", type:"raster", slot:"top",
+    map.addLayer({ id:"radar", type:"raster", source:"radar", slot:"top",
       paint:{ "raster-opacity":0, "raster-opacity-transition":{ duration:600 } } }, "occ-halo");
     updateZoomLayers();
   } catch (e) { /* radar is an enhancement; the map works without it */ }
@@ -1183,7 +1197,7 @@ function renderPanel() {
   } else if (openSeg === "wind" && w) {
     html = `<h3>WIND &amp; CLOUD</h3>
       <div class="fig">${windFlowHTML(w.windDir, w.wind)}</div>
-      <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>
+      <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%${w.clouds < 10 ? " (clear — map shows fair-weather wisps)" : ""}.<br>
       Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
       <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer">
         <input type="checkbox" id="fx-toggle" ${S.fxOn?"checked":""}> animate wind &amp; cloud layer on the map
@@ -1330,9 +1344,10 @@ function fxFrame(ts) {
   const cvlng = Math.sin(B) * pxCloud * degPerPxX * dt;
   const cvlat = Math.cos(B) * pxCloud * degPerPxY * dt;
   /* clouds — uniform translucency via offscreen compositing */
-  const cover = Math.max(0.15, w.clouds / 100);
-  const cloudAlpha = night ? Math.min(0.55, 0.32 + cover * 0.25)
-                           : Math.min(0.52, 0.3 + cover * 0.25);
+  /* clouds keep a visible floor: a clear sky shows light fair-weather wisps,
+     real cover thickens them (true % always lives in the wind panel) */
+  const cover = w.clouds / 100;
+  const cloudAlpha = night ? 0.36 + cover * 0.18 : 0.42 + cover * 0.13;
   clouds.forEach(cl => {
     cl.lng += cvlng * cl.v; cl.lat += cvlat * cl.v;
     cl.rot += cl.rotV * dt * 60;
@@ -1392,9 +1407,11 @@ function syncModeUI() {
   document.getElementById("mode-disclaimer").classList.toggle("show", S.mode === "herbalism");
   const hh = document.getElementById("season-hh");
   if (hh) hh.innerHTML = `IN SEASON BY MONTH · <b>${MODES[S.mode].label} MAP</b> · STACKED BY CATEGORY`;
-  document.getElementById("leg-map").innerHTML =
-    `ACTIVE MAP: <span style="color:var(--ink)">${MODES[S.mode].label}</span>` +
+  const mapLine = `ACTIVE MAP: <span style="color:var(--ink)">${MODES[S.mode].label}</span>` +
     ` <span class="mdot" style="display:inline-block;width:9px;height:9px;border-radius:2.5px;vertical-align:-1px;background:${MODES[S.mode].color}"></span>`;
+  document.getElementById("leg-map").innerHTML = mapLine;
+  const lm = document.getElementById("leg-map-m");
+  if (lm) lm.innerHTML = mapLine;
   document.getElementById("leg-cats").innerHTML =
     Object.keys(CATEGORIES).filter(c => CATEGORIES[c].mode === S.mode).map(c =>
       `<span class="lc"><i style="background:${CATEGORIES[c].color}"></i>${CATEGORIES[c].label}</span>`).join("");
