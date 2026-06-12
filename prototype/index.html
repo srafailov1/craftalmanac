@@ -401,8 +401,8 @@
     </div>
   </div>
   </div>
-  <div class="k" id="leg-map"></div>
-  <div class="titlebar">LEGEND</div>
+  <div class="titlebar">LEGEND: PERMISSIONS AND POINTS</div>
+  <div class="k" id="leg-map" style="margin-top:5px"></div>
 </div>
 
 <div id="season" class="floating">
@@ -441,7 +441,7 @@
 <div id="hover-tip"><div class="sp"></div><div class="nm"></div><div class="st"></div></div>
 
 <div id="proto-note" class="floating">
-  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS IN 10 TEST CLUSTERS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON, TIDE &amp; RADAR (© RAINVIEWER)
+  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS IN 10 TEST CLUSTERS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON, TIDE &amp; SATELLITE CLOUDS (NOAA GOES)
 </div>
 
 <div id="sheet-wrap"><div id="sheet" class="floating"></div></div>
@@ -760,32 +760,19 @@ function initMap() {
 /* zoomed out: live precipitation radar (RainViewer, free tiles, no key);
    zoomed in (>= 7.5): the graphic cloud & wind layer takes over */
 const RADAR_MAX_ZOOM = 7.5;
-async function loadRadar() {
-  /* satellite-cloud provider chain:
-     1. RainViewer infrared satellite — currently returns an empty list
-        (kept first in case the feed comes back)
-     2. OpenWeatherMap clouds_new — true transparent cloud overlay (the
-        Ventusky look); used when config.js provides owmKey (free tier)
-     3. RainViewer radar, grayscale + smoothed — soft monochrome fallback */
+function loadRadar() {
+  /* sky layer: NOAA nowCOAST GOES longwave (infrared) cloud mosaic — true
+     satellite imagery, transparent where clear, free and key-less, and a
+     clean ATTRIBUTION.md story (US government data). Live-verified.
+     (RainViewer's satellite feed is currently empty; OpenWeatherMap's
+     clouds_new is a paid-key alternative if NOAA ever retires this.) */
   try {
-    let tiles = null, attrib = "";
-    const j = await (await fetch("https://api.rainviewer.com/public/weather-maps.json")).json();
-    const sat = (j.satellite && j.satellite.infrared) || [];
-    const past = (j.radar && j.radar.past) || [];
-    const owmKey = (window.FORAGE_CONFIG || {}).owmKey;
-    if (sat.length) {
-      tiles = j.host + sat[sat.length - 1].path + "/256/{z}/{x}/{y}/0/0_0.png";
-      attrib = "Clouds © RainViewer";
-    } else if (owmKey) {
-      tiles = "https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=" + owmKey;
-      attrib = "Clouds © OpenWeatherMap";
-    } else if (past.length) {
-      tiles = j.host + past[past.length - 1].path + "/256/{z}/{x}/{y}/0/1_0.png";
-      attrib = "Precipitation © RainViewer";
-    }
-    if (!tiles) return;
-    map.addSource("radar", { type:"raster", tiles:[tiles], tileSize:256,
-      maxzoom:6, attribution:attrib });
+    const wms = "https://nowcoast.noaa.gov/geoserver/observations/satellite/ows" +
+      "?service=WMS&version=1.3.0&request=GetMap&layers=global_longwave_imagery_mosaic" +
+      "&styles=&crs=EPSG:3857&bbox={bbox-epsg-3857}&width=256&height=256" +
+      "&format=image/png&transparent=true";
+    map.addSource("radar", { type:"raster", tiles:[wms], tileSize:256,
+      maxzoom:7, attribution:"Clouds: NOAA nowCOAST / GOES" });
     map.addLayer({ id:"radar", type:"raster", source:"radar", slot:"top",
       paint:{ "raster-opacity":0, "raster-opacity-transition":{ duration:600 } } }, "occ-halo");
     updateZoomLayers();
@@ -795,7 +782,7 @@ function updateZoomLayers() {
   if (!S.mapOK) return;
   const low = map.getZoom() < RADAR_MAX_ZOOM;
   if (map.getLayer("radar"))
-    map.setPaintProperty("radar", "raster-opacity", low ? 0.55 : 0);
+    map.setPaintProperty("radar", "raster-opacity", low ? 0.7 : 0);
 }
 const tipEl = document.getElementById("hover-tip");
 function showHoverTip(f, pt) {
@@ -1648,7 +1635,12 @@ const mqMobile = matchMedia("(max-width:720px)");
 function placeLegendBody() {
   const body = document.getElementById("legend-body");
   if (mqMobile.matches) document.getElementById("legend-slot").appendChild(body);
-  else document.getElementById("legend").appendChild(body);
+  else {
+    /* body must sit ABOVE the anchored title lines, like the season chart —
+       appending after them made the titles ride up on hover */
+    const legend = document.getElementById("legend");
+    legend.insertBefore(body, legend.querySelector(".titlebar"));
+  }
 }
 if (mqMobile.addEventListener) mqMobile.addEventListener("change", placeLegendBody);
 placeLegendBody();
