@@ -174,8 +174,10 @@
   @media (prefers-reduced-motion: reduce) { .windflow i { animation:none; opacity:0.4; } }
 
   /* ---------- legend ---------- */
-  #legend { bottom:64px; left:14px; padding:10px 12px; }
+  #legend { bottom:14px; left:14px; padding:10px 12px; }
   #legend-toggle { display:none; }
+  #legend-body { max-height:0; opacity:0; overflow:hidden; transition:max-height .28s ease, opacity .28s ease; }
+  #legend:hover #legend-body { max-height:360px; opacity:1; }
   .leg-cats { display:flex; flex-direction:column; gap:4px; margin-top:6px; }
   .leg-cats .lc { font-size:10.5px; color:var(--ink); }
   .leg-cats .lc i { display:inline-block; width:10px; height:10px; border-radius:2.5px;
@@ -288,6 +290,11 @@
   .pt-card .flush.on { display:block; }
   .pt-card .close { position:absolute; top:8px; right:11px; background:none; border:none;
     color:var(--sub); cursor:pointer; font-size:15px; padding:2px; }
+  .pt-card.compact { width:min(270px, 80vw); }
+  .pt-card.compact .pad { padding:13px 14px 11px 19px; }
+  .pt-card.compact h2 { font-size:18px; }
+  #legend-slot #legend-body { display:none; }
+  #season.legend-open #legend-slot #legend-body { display:block; max-height:none; opacity:1; overflow:visible; }
 
   /* ---------- sheets ---------- */
   #sheet-wrap { position:absolute; inset:0; z-index:20; display:none; background:rgba(10,14,11,0.45); }
@@ -331,12 +338,8 @@
     #rail-panel { top:auto; bottom:0; left:0; right:0; width:auto; border-radius:14px 14px 0 0;
       max-height:62vh; overflow-y:auto; }
     #mode-disclaimer { top:auto; bottom:108px; left:10px; }
-    #legend { bottom:96px; left:10px; }
-    #legend-toggle { display:block; background:none; border:none; cursor:pointer;
-      color:var(--ink); font-size:10.5px; letter-spacing:0.1em; padding:2px;
-      font-family:ui-monospace, Menlo, monospace; }
-    #legend-body { display:none; }
-    #legend.open #legend-body { display:block; }
+    #legend { display:none; }                /* legend lives inside the slider card */
+    #legend-mob { display:inline !important; }
     #season { width:auto; left:10px; right:10px; transform:none; bottom:10px; }
     #season:hover #season-hist { height:0; opacity:0; }       /* hover never sticks on touch */
     #season.pinned #season-hist { height:206px; opacity:1; }
@@ -369,8 +372,8 @@
 
 <div id="legend" class="floating">
   <button id="legend-toggle">LEGEND</button>
-  <div id="legend-body">
   <div class="k" id="leg-map"></div>
+  <div id="legend-body">
   <div class="leg-cats" id="leg-cats"></div>
   <div class="k" style="margin-top:10px">ACCESS — TAP TO FILTER</div>
   <div class="leg-row" id="leg-row"></div>
@@ -386,6 +389,7 @@
     <div class="hist-months"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
     <div class="cats" id="season-cats"></div>
   </div>
+  <div id="legend-slot"></div>
   <div class="track" id="season-track">
     <div class="line"></div>
     <div class="cursor" id="season-cursor"></div>
@@ -397,6 +401,7 @@
     <span id="season-label">THIS WEEK</span>
     <span class="mbtns">
       <button id="hist-toggle" style="display:none">CHART ▴</button>
+      <button id="legend-mob" style="display:none">LEGEND ▴</button>
       <button id="season-reset">BACK TO NOW</button>
       <button id="when-toggle">SET DATE · TIME · PLACE</button>
     </span>
@@ -413,7 +418,7 @@
 <div id="hover-tip"><div class="sp"></div><div class="nm"></div><div class="st"></div></div>
 
 <div id="proto-note" class="floating">
-  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS (PROVIDENCE, RI), NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON &amp; TIDE
+  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS IN 10 TEST CLUSTERS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON, TIDE &amp; RADAR (© RAINVIEWER)
 </div>
 
 <div id="sheet-wrap"><div id="sheet" class="floating"></div></div>
@@ -553,14 +558,31 @@ const STATUS_DAY = { allowed:"#2F8F46", permit:"#D89B24", prohibited:"#C74437", 
 const STATUS_NIGHT = { allowed:"#5BE08A", permit:"#FFC94D", prohibited:"#FF6B5E", private:"#C99B7A", unknown:"#93A39A" };
 
 const rnd = mulberry32(20260611);
+/* demo clusters across the contiguous US for the zoomed-out test */
+const CLUSTERS = [
+  [-71.412, 41.82],   // Providence (primary demo viewport)
+  [-74.12, 41.98],    // Hudson Valley
+  [-82.55, 35.59],    // Asheville
+  [-84.39, 33.75],    // Atlanta
+  [-89.40, 43.07],    // Madison
+  [-93.27, 44.98],    // Twin Cities
+  [-97.74, 30.27],    // Austin
+  [-105.27, 39.74],   // Front Range
+  [-122.67, 45.52],   // Portland
+  [-122.27, 37.87],   // Bay Area
+];
 const POINTS = [];
 { const keys = Object.keys(SPECIES);
   const stats = ["allowed","allowed","allowed","permit","permit","prohibited","private","unknown"];
-  for (let i = 0; i < 40; i++) {
-    POINTS.push({ id:i, sp:keys[i % keys.length],
-      lng:DEMO_CENTER[0] + (rnd() - 0.5) * 0.085, lat:DEMO_CENTER[1] + (rnd() - 0.5) * 0.055,
-      status:stats[Math.floor(rnd() * stats.length)] });
-  }
+  let id = 0;
+  CLUSTERS.forEach((c, ci) => {
+    const n = ci === 0 ? 40 : 14;
+    for (let i = 0; i < n; i++) {
+      POINTS.push({ id:id++, sp:keys[(i + ci * 3) % keys.length],
+        lng:c[0] + (rnd() - 0.5) * 0.085, lat:c[1] + (rnd() - 0.5) * 0.055,
+        status:stats[Math.floor(rnd() * stats.length)] });
+    }
+  });
 }
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 
@@ -697,6 +719,8 @@ function initMap() {
               "circle-emissive-strength":1 } });
     paintPoints();
     fxInit();
+    loadRadar();
+    map.on("zoom", updateZoomLayers);
     map.on("click", "occ-core", e => openPointCard(e.features[0].id));
     map.on("mousemove", "occ-core", e => {
       map.getCanvas().style.cursor = "pointer";
@@ -705,6 +729,29 @@ function initMap() {
     map.on("mouseleave", "occ-core", () => { map.getCanvas().style.cursor = ""; hideHoverTip(); });
     map.on("moveend", fxRespawnOffscreen);
   });
+}
+/* zoomed out: live precipitation radar (RainViewer, free tiles, no key);
+   zoomed in (>= 7.5): the graphic cloud & wind layer takes over */
+const RADAR_MAX_ZOOM = 7.5;
+async function loadRadar() {
+  try {
+    const j = await (await fetch("https://api.rainviewer.com/public/weather-maps.json")).json();
+    const frames = (j.radar && (j.radar.nowcast || j.radar.past)) || [];
+    const frame = frames.length ? frames[frames.length - 1] : null;
+    if (!frame) return;
+    const tiles = j.host + frame.path + "/256/{z}/{x}/{y}/2/1_1.png";
+    map.addSource("radar", { type:"raster", tiles:[tiles], tileSize:256,
+      attribution:"Radar © RainViewer" });
+    map.addLayer({ id:"radar", type:"raster", slot:"top",
+      paint:{ "raster-opacity":0, "raster-opacity-transition":{ duration:600 } } }, "occ-halo");
+    updateZoomLayers();
+  } catch (e) { /* radar is an enhancement; the map works without it */ }
+}
+function updateZoomLayers() {
+  if (!S.mapOK) return;
+  const low = map.getZoom() < RADAR_MAX_ZOOM;
+  if (map.getLayer("radar"))
+    map.setPaintProperty("radar", "raster-opacity", low ? 0.55 : 0);
 }
 const tipEl = document.getElementById("hover-tip");
 function showHoverTip(f, pt) {
@@ -1208,7 +1255,7 @@ function makeCloud(b, dw, dh) {
 }
 function fxInit() {
   const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
-  parts = Array.from({length:90}, () => ({
+  parts = Array.from({length:55}, () => ({
     lng:b.w + Math.random()*dw, lat:b.s + Math.random()*dh, life:60+Math.random()*80 }));
   clouds = Array.from({length:4}, () => makeCloud(b, dw, dh));
 }
@@ -1266,6 +1313,7 @@ function fxFrame(ts) {
   lastTs = ts || 0;
   ctx.clearRect(0, 0, fx.width, fx.height);
   if (!S.fxOn || !S.weather) return;
+  if (S.mapOK && map.getZoom() < RADAR_MAX_ZOOM) return;  // radar owns low zooms
   const w = S.weather, night = isNightish();
   const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
   const t = (ts || 0) / 1000;
@@ -1283,8 +1331,8 @@ function fxFrame(ts) {
   const cvlat = Math.cos(B) * pxCloud * degPerPxY * dt;
   /* clouds — uniform translucency via offscreen compositing */
   const cover = Math.max(0.15, w.clouds / 100);
-  const cloudAlpha = night ? Math.min(0.5, 0.3 + cover * 0.25)
-                           : Math.min(0.34, 0.2 + cover * 0.18);
+  const cloudAlpha = night ? Math.min(0.55, 0.32 + cover * 0.25)
+                           : Math.min(0.52, 0.3 + cover * 0.25);
   clouds.forEach(cl => {
     cl.lng += cvlng * cl.v; cl.lat += cvlat * cl.v;
     cl.rot += cl.rotV * dt * 60;
@@ -1306,6 +1354,11 @@ function fxFrame(ts) {
       const py = side / 2 + Math.sin(drift) * pf.dist * R * 0.55;
       drawPuffTo(octx, px, py, R * pf.rf * breathe, night);
     });
+    if (!night) {                       // soft drop shadow gives daylight definition
+      ctx.globalAlpha = 0.12; ctx.filter = "brightness(0.35) blur(2px)";
+      ctx.drawImage(oc, cx - side / 2 + 5, cy - side / 2 + 7);
+      ctx.filter = "none";
+    }
     ctx.globalAlpha = cloudAlpha;
     ctx.drawImage(oc, cx - side / 2, cy - side / 2);
     ctx.globalAlpha = 1;
@@ -1330,8 +1383,6 @@ function fxFrame(ts) {
     ctx.strokeStyle = grad;
     ctx.lineWidth = 1.8;
     ctx.beginPath(); ctx.moveTo(tx2, ty2); ctx.lineTo(x, y); ctx.stroke();
-    ctx.fillStyle = "rgba(" + headCol + "," + a + ")";
-    ctx.beginPath(); ctx.arc(x, y, 1.6, 0, 7); ctx.fill();
   });
 }
 requestAnimationFrame(fxFrame);
@@ -1470,20 +1521,23 @@ function cardHTML(p) {
   const night = isNightish();
   const stCol = (night ? STATUS_NIGHT : STATUS_DAY)[p.status];
   const flush = sp.fungal && S.weather && S.weather.past72 >= 18;
-  return `<div class="pt-card">
+  const compact = matchMedia("(max-width:720px)").matches;
+  const full = compact ? "" : `
+      <div class="row"><span class="lab">USE</span><span class="val">${sp.uses}</span></div>`;
+  const tail = compact ? "" : `
+      <div class="season-line">${sparkline(sp.months, sp.pigment)}
+        <span class="t">RIPE ${weeksToMonths(sp.ripe[0], sp.ripe[1])}</span></div>
+      <div class="flush ${flush ? "on" : ""}">RAIN-FED FLUSH LIKELY THIS WEEK</div>
+      <div class="ethic">${sp.ethic}</div>`;
+  return `<div class="pt-card ${compact ? "compact" : ""}">
     <div class="spine" style="background:${sp.pigment}"></div>
     <button class="close" aria-label="Close">×</button>
     <div class="pad">
       <h2>${sp.name}</h2>
       <div class="sci">${sp.sci}</div>
       <div class="row access"><span class="lab">ACCESS</span>
-        <span class="val" style="color:${stCol}"><span class="ring"></span>${STATUS_RULE[p.status]}</span></div>
-      <div class="row"><span class="lab">USE</span><span class="val">${sp.uses}</span></div>
-      <div class="row safety"><span class="lab">SAFETY</span><span class="val">${sp.safety}</span></div>
-      <div class="season-line">${sparkline(sp.months, sp.pigment)}
-        <span class="t">RIPE ${weeksToMonths(sp.ripe[0], sp.ripe[1])}</span></div>
-      <div class="flush ${flush ? "on" : ""}">RAIN-FED FLUSH LIKELY THIS WEEK</div>
-      <div class="ethic">${sp.ethic}</div>
+        <span class="val" style="color:${stCol}"><span class="ring"></span>${STATUS_RULE[p.status]}</span></div>${full}
+      <div class="row safety"><span class="lab">SAFETY</span><span class="val">${sp.safety}</span></div>${tail}
       <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE</div>
       <div class="oinp" style="color:var(--sub)">SOURCE: DEMO RECORD, UNATTRIBUTED — PRODUCTION CARDS CITE OBSERVER + DATASET</div>
     </div></div>`;
@@ -1596,14 +1650,29 @@ wrapEl.addEventListener("click", e => { if (e.target === wrapEl) wrapEl.classLis
 addEventListener("keydown", e => { if (e.key === "Escape") { wrapEl.classList.remove("open"); closePointCard(); } });
 
 /* ------------------------- mobile toggles ------------------------- */
+const seasonEl = document.getElementById("season");
+const mqMobile = matchMedia("(max-width:720px)");
+function placeLegendBody() {
+  const body = document.getElementById("legend-body");
+  if (mqMobile.matches) document.getElementById("legend-slot").appendChild(body);
+  else document.getElementById("legend").appendChild(body);
+}
+if (mqMobile.addEventListener) mqMobile.addEventListener("change", placeLegendBody);
+placeLegendBody();
+function setSeasonPanel(which) {   // "chart" | "legend" | null — never both
+  seasonEl.classList.toggle("pinned", which === "chart");
+  seasonEl.classList.toggle("legend-open", which === "legend");
+  document.getElementById("hist-toggle").textContent =
+    which === "chart" ? "CHART ▾" : "CHART ▴";
+  document.getElementById("legend-mob").textContent =
+    which === "legend" ? "LEGEND ▾" : "LEGEND ▴";
+}
+document.getElementById("hist-toggle").addEventListener("click", () =>
+  setSeasonPanel(seasonEl.classList.contains("pinned") ? null : "chart"));
+document.getElementById("legend-mob").addEventListener("click", () =>
+  setSeasonPanel(seasonEl.classList.contains("legend-open") ? null : "legend"));
 document.getElementById("legend-toggle").addEventListener("click", () =>
   document.getElementById("legend").classList.toggle("open"));
-document.getElementById("hist-toggle").addEventListener("click", () => {
-  const s = document.getElementById("season");
-  s.classList.toggle("pinned");
-  document.getElementById("hist-toggle").textContent =
-    s.classList.contains("pinned") ? "CHART ▾" : "CHART ▴";
-});
 
 /* ================================================================== boot */
 setCursor();
