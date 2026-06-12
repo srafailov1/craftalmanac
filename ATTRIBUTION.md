@@ -8,6 +8,12 @@ The map queries the supported iNaturalist API at runtime and links each observat
 
 Source: https://www.inaturalist.org/pages/api+reference and https://www.inaturalist.org/pages/terms
 
+## NOAA CO-OPS Tide Stations
+
+The tide-station index is derived from the NOAA Center for Operational Oceanographic Products and Services (CO-OPS) metadata API, filtered to US tide-prediction stations and stored locally with station id, name, latitude, and longitude only. NOAA data and information are generally not copyrighted in the United States, but NOAA asks users to credit NOAA as the source and not imply endorsement.
+
+Source: https://api.tidesandcurrents.noaa.gov/mdapi/prod/
+
 ## Falling Fruit
 
 The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to matching species groups in the contiguous United States. The browser loads this data through a manifest and small viewport chunks rather than one national JSON file. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
