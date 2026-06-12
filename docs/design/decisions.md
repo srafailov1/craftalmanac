@@ -3,6 +3,19 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-12 — Prototype approved; migration work order written.** The
+  living-map prototype closed at rev 14 (`d4252a7`) after fourteen owner
+  review rounds. `docs/design/work-order-redesign.md` now governs the
+  migration to production: seven phases (tokens → Standard-style map +
+  registers → floating UI → conditions → mobile → hardening → cutover),
+  lanes for Claude (architecture/UI), Codex (tide-station index, real
+  phenology histograms, flush thresholds, aggregates-on-Standard audit),
+  and Qwen (gate-verified test/audit scripts), launch checklist, and five
+  owner decision asks (fonts, recipes, tide scope, style fallback,
+  timeline). Launch blockers: ATTRIBUTION.md entries and per-record
+  attribution on point cards.
+
+
 - **2026-06-12 — Round 5 delivered: live prototype.** `prototype/index.html`
   (single file, no build step; run `python3 -m http.server 4173` from repo
   root, open `/prototype/`). Owner adjustments honored: Quiet Pigment cards;
