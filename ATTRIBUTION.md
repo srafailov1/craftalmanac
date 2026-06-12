@@ -16,6 +16,12 @@ The tide-station index is derived from the NOAA Center for Operational Oceanogra
 
 Source: https://api.tidesandcurrents.noaa.gov/mdapi/prod/
 
+## Flush Threshold Source Notes
+
+The mushroom flush threshold table is a conservative owner-review data file, not a safety or identification source. Its morel entry cites public mycology/gardening references for the general relationship between morel fruiting, spring moisture, and mild weather; the exact `mm/72h` trigger is an app heuristic and is flagged low-confidence in the data file.
+
+Sources: https://www.mushroomexpert.com/morels/index.html and https://www.thespruce.com/how-to-grow-and-care-for-morel-mushrooms-4686369
+
 ## Falling Fruit
 
 The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to matching species groups in the contiguous United States. The browser loads this data through a manifest and small viewport chunks rather than one national JSON file. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.

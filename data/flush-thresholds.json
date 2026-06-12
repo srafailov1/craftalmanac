@@ -1,0 +1,23 @@
+{
+  "morel": {
+    "commonName": "Morel mushrooms",
+    "scientificName": "Morchella",
+    "thresholdMm72h": 25,
+    "windowHours": 72,
+    "confidence": "low",
+    "ownerReview": true,
+    "sourceNote": "Conservative heuristic for spring morel flush-likelihood only. Sources support cool, moist spring conditions and rain/moisture as important for morel fruiting, but no source found gives a defensible national mm-per-72h trigger.",
+    "sources": [
+      {
+        "title": "MushroomExpert.com: Morels",
+        "url": "https://www.mushroomexpert.com/morels/index.html",
+        "note": "General morel ecology and spring fruiting reference; no rainfall threshold."
+      },
+      {
+        "title": "The Spruce: How to Grow Morel Mushrooms",
+        "url": "https://www.thespruce.com/how-to-grow-and-care-for-morel-mushrooms-4686369",
+        "note": "Describes cool, moist weather, scattered rain, and 60-70 F days as favorable; no wild-foraging threshold."
+      }
+    ]
+  }
+}
