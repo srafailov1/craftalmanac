@@ -128,9 +128,24 @@ must make aggregate data for the wider view available (near-)instantly.
    but FF-only edges may read better than empty edges — note tradeoff in the
    commit and flag for owner review).
 
+**Live verification 2026-06-11 (Chrome automation on craftalmanac.com @
+point-band-rules-1):** both owner-reported symptoms PASS. Default
+permissions: z9 -> 6.5 -> pans -> z9 over Charlottesville, marker total 285
+(28 clusters + 23 singles) at t0 == t+5s, records held at 467 below z8.
+Allowed-only: 22 aggregate circles / 601 records at z6.5; 76 allowed records
+as 8 clusters + 7 singles at z9 (Shenandoah NP wineberry, BRP blueberry,
+34-cluster at Charlottesville). Remaining for owner: human wheel/pinch-zoom
+pass per the verification standard below (scripted jumpTo cannot reproduce
+gesture event timing), and the NYC cold-cache run.
+
 **Verification note for the loop:** rendering-dependent checks
 (`queryRenderedFeatures`) silently return 0 when the Chrome window is
-occluded — the map's rAF loop pauses. Use the instrumentation log +
+occluded — the map's rAF loop pauses. Additionally, after `jumpTo` or
+`setData` in an automated tab, GeoJSON source re-tiling can stall
+indefinitely (source `_data` updated, `querySourceFeatures` empty, nothing
+painted) until a real camera change drives frames — issue a tiny
+`map.panBy([2,0])` nudge before sampling, and never interpret a blank
+post-jumpTo read as a bug without one. Use the instrumentation log +
 source-data assertions instead, and call out in the run summary that final
 visual sign-off needs the owner (or a visible window).
 
