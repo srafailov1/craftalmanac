@@ -1224,6 +1224,7 @@ const state = {
   npsOrchardData: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
+  publicLandCoverage: null,
   stateBoundaries: null,
   accessRuleCache: new Map(),
   pointDataReady: false,
@@ -2783,6 +2784,10 @@ async function loadStatusRaster() {
       })
       .then((data) => {
         state.statusRaster = data || {};
+        // Record-level rules may have been computed (and cached) before the
+        // raster arrived; recompute them so provisional area statuses apply.
+        state.accessRuleCache.clear();
+        renderMarkers();
         return state.statusRaster;
       })
       .catch((error) => {
@@ -3599,6 +3604,21 @@ function getNonzeroAggregateItems(items) {
 }
 
 async function loadMapData() {
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    // Overview zooms render entirely from aggregate tiles. Loading viewport
+    // records here would overwrite the point-band record set with an
+    // iNat-only subset (Falling Fruit declines below the point band), so the
+    // cluster source — still claimed by loadedPointBounds and shown by the
+    // handoff bridge and on re-entry into covered bounds — would suddenly
+    // hold a fraction of its points: the "clusters fall off, then recover
+    // with a lag" bug. Keep the last point-band records intact instead.
+    if (state.records.length) {
+      setDataStatus(`${state.records.length} records held for the point view; overview shows aggregate counts`);
+    } else {
+      setDataStatus("Overview shows aggregate counts; zoom in to load records");
+    }
+    return;
+  }
   const requestId = state.activeRequest + 1;
   state.activeRequest = requestId;
   const config = getActiveMapConfig();
@@ -4023,6 +4043,7 @@ function schedulePublicLandLoad() {
   if (map.getZoom() < PUBLIC_LANDS_MIN_RENDER_ZOOM) {
     state.activePublicRequest += 1;
     state.publicLandFeatures = [];
+    state.publicLandCoverage = null;
     state.publicLayerLoadedKey = "";
     state.accessRuleCache.clear();
     updatePublicLandSource();
@@ -4046,6 +4067,7 @@ async function loadPublicLands() {
 
   try {
     const features = [];
+    let truncated = true;
     for (let page = 0; page < PUBLIC_LANDS_MAX_PAGES; page += 1) {
       const params = new URLSearchParams({
         where: "Pub_Access IN ('OA','RA')",
@@ -4072,12 +4094,26 @@ async function loadPublicLands() {
       if (data.error) throw new Error(`PAD-US query error: ${data.error.message || data.error.code || "unknown"}`);
       if (requestId !== state.activePublicRequest) return;
       features.push(...(data.features || []));
-      if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) break;
+      if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) {
+        truncated = false;
+        break;
+      }
     }
     features.forEach((feature) => {
       feature.__bbox = getFeatureBbox(feature);
     });
     state.publicLandFeatures = features;
+    // Coverage drives the raster fallback in computeRecordAccessRule: live
+    // containment is authoritative only where this load actually saw every
+    // intersecting polygon. A truncated page set means unseen polygons, so
+    // records there may still use the precomputed raster.
+    state.publicLandCoverage = {
+      west: bounds.getWest(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      north: bounds.getNorth(),
+      truncated
+    };
     state.publicLayerLoadedKey = boundsKey;
     state.accessRuleCache.clear();
     updatePublicLandSource();
@@ -4262,6 +4298,9 @@ function computeRecordAccessRule(record, species) {
     };
   }
 
+  const rasterRule = getStatusRasterAccessRule(record);
+  if (rasterRule) return rasterRule;
+
   if (record.publicLand && record.accessClass === "open") {
     return {
       status: "unknown",
@@ -4282,6 +4321,48 @@ function computeRecordAccessRule(record, species) {
     note: record.accessNote || "This point is not matched to a sourced public access area.",
     sourceLabel: "Access not sourced",
     sourceUrl: ""
+  };
+}
+
+function isRecordCoveredByLoadedPublicLands(record) {
+  const coverage = state.publicLandCoverage;
+  if (!coverage || coverage.truncated) return false;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  return lng >= coverage.west && lng <= coverage.east
+    && lat >= coverage.south && lat <= coverage.north;
+}
+
+function getStatusRasterAccessRule(record) {
+  // Provisional area-level rule from the precomputed PAD-US containment
+  // raster (0.05-degree cells; status of the cell center, computed offline by
+  // the same rules engine as the live path). Live PAD-US polygons only load
+  // per viewport at point zooms, take seconds, and can truncate at the paged
+  // query cap — without this fallback every record degrades to
+  // private-unsourced until the live polygons land, so filtered views (e.g.
+  // "Allowed" only) go empty at exactly the zooms where clusters appear.
+  // The fallback never overrides live containment (checked above via
+  // coverage), curated site rules, or record-level private flags, and the
+  // rule cache clears on every public-land load so live results replace it.
+  if (isRecordCoveredByLoadedPublicLands(record)) return null;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const status = state.statusRaster?.[getStatusRasterCellKey(lng, lat)]?.[state.activeMap];
+  if (status !== "allowed" && status !== "permit-required" && status !== "prohibited") return null;
+  const labels = {
+    allowed: "Allowed",
+    "permit-required": "Permit required",
+    prohibited: "Prohibited"
+  };
+  return {
+    status,
+    label: labels[status],
+    area: "Mapped public-access area (cached area rule)",
+    limit: "Area-level match at roughly 5 km resolution; the boundary-sourced rule replaces this as the map loads.",
+    note: "Provisional status from the precomputed access raster. Confirm the exact boundary and site rules before harvesting.",
+    sourceLabel: "USGS PAD-US containment raster (cached)",
+    sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview"
   };
 }
 
@@ -5046,6 +5127,9 @@ map.on("load", () => {
   setINaturalistAggregateReady(false);
   initMapLayers();
   loadStateBoundaries();
+  // The raster also backs provisional record-level rules at point zooms, so
+  // load it at startup rather than only via the overview aggregate path.
+  loadStatusRaster();
   render();
   loadMapData();
   schedulePublicLandLoad();

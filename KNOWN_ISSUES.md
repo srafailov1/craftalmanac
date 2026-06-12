@@ -34,6 +34,34 @@ fixed (commit "Stabilize aggregate counts across zoom and permission filters"):
    stable across continuous zooms (verified: identical tile ids from z6.0
    through z7.5).
 
+**Update 2026-06-11 late evening (owner retested after pushing 5a16cb6 — both
+symptoms persisted; two further root causes found and fixed, commit "Hold
+point-band records below zoom 8; provisional raster access rules"):**
+
+4. **Below-zoom-8 loads clobbered the cluster source.** `loadMapData` ran on
+   every moveend at ANY zoom; below 8, `loadFallingFruit` declines and returns
+   `[]`, so each overview pan/zoom replaced `state.records` (and the marker
+   source via `renderMarkers`) with a sparse iNat-only subset — while
+   `loadedPointBounds`/`pointDataReady` still claimed coverage. Zooming back
+   into "covered" bounds showed clusters instantly from the gutted set, which
+   then recovered after a refetch: the owner's "clusters rapidly fall off,
+   then recover with a lag." Fix: `loadMapData` early-returns below the point
+   band and keeps the last point-band record set intact (also removes
+   pointless iNat API traffic at overview zooms, and gives the downward
+   handoff bridge stable data).
+5. **Record-level "allowed" required live PAD-US polygons.** Live polygons
+   are cleared below zoom 8, fetched per viewport above it (seconds of
+   latency), and silently truncated at the 4-page query cap on wide
+   viewports — until they land, every record degraded to private-unsourced,
+   so the "Allowed"-only filter hid everything at exactly the zooms where
+   clusters appear. Fix: provisional area-level rule from the precomputed
+   PAD-US containment raster (`getStatusRasterAccessRule`), used only where
+   live polygons don't cover the record (`state.publicLandCoverage`, with
+   truncation tracked), never overriding site rules or record-level private
+   flags; rule cache clears on land load so live containment replaces it.
+   Raster now loads at startup, and `loadPublicLands` records coverage +
+   truncation.
+
 **Follow-ups for the 5am loop:**
 - Plan items 2 (prefetch/warm gz=2/4), 3 (data-availability-bounded bridge)
   and 4 (instrumentation) below are still open and still worth doing.
