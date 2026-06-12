@@ -5,20 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Craft Almanac — Living Map prototype</title>
 <!--
-  Round 5 living-map prototype, revision 2 (design/relaunch only — never main).
+  Round 5 living-map prototype, revision 3 (design/relaunch only — never main).
   Single file, no build step. Serve from repo root; open /prototype/.
 
-  DEMO RECORDS ONLY — points are invented for design review (clustered around
-  Providence, RI on purpose). Live data: Open-Meteo, NOAA CO-OPS, client-side
-  sun/moon, Mapbox Standard lightPreset. All degrade gracefully.
+  DEMO RECORDS ONLY — points are invented for design review (Providence, RI).
+  Live data: Open-Meteo, NOAA CO-OPS, client-side sun/moon, Mapbox lightPreset.
 
-  Rev 2 per owner review of the live page:
-  - map constrained to the contiguous US (site convention)
-  - points: core = material type pigment, ring = access status (both visible)
-  - popups anchored to the point; permission / use / safety lead, histogram demoted
-  - season slider expands on hover into a stacked by-type histogram
-  - conditions rail panels carry deck-style graphics (sun arc, moon disc, compass, tide dial)
-  - wind & cloud layer is geo-anchored: pans and scales with the map
+  Rev 3 per owner review of the live page:
+  - the sun is now an interactive solar dial: drag the sun around the earth to
+    move the displayed time of day; the light register follows solar altitude
+  - masthead is pure global navigation (register chip removed)
+  - season slider: seasons lead, months are detail; taller cleaner histogram;
+    text selection during drag fixed
+  - popup cards larger and more generous; species name shows on point hover
+  - clouds rebuilt as morphing multi-puff satellite-style masses
+  - rail icons redrawn to read at 20 px
 -->
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
@@ -73,24 +74,19 @@
     border:1px solid var(--hair); border-radius:10px; box-shadow:var(--glow);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
     transition:background 1.2s ease, border-color 1.2s ease, color 1.2s ease;
+    user-select:none; -webkit-user-select:none;
   }
 
-  /* ---------- masthead ---------- */
+  /* ---------- masthead: global navigation only ---------- */
   #masthead { top:14px; left:14px; padding:10px 14px; display:flex; align-items:center; gap:12px; }
   #masthead .wordmark { font-size:15px; letter-spacing:0.04em; }
-  #masthead .links { display:flex; gap:10px; border-left:1px solid var(--hair); padding-left:12px; }
+  #masthead .links { display:flex; gap:11px; border-left:1px solid var(--hair); padding-left:13px; }
   #masthead .links button {
     background:none; border:none; color:var(--sub); font-size:11px; cursor:pointer;
     padding:2px; letter-spacing:0.06em; text-transform:uppercase;
     font-family:ui-monospace, Menlo, monospace;
   }
   #masthead .links button:hover { color:var(--ink); }
-  #register-chip {
-    font-size:9.5px; letter-spacing:0.08em; color:var(--sub); cursor:pointer;
-    border:1px solid var(--hair); border-radius:20px; padding:4px 9px; background:none;
-    font-family:ui-monospace, Menlo, monospace;
-  }
-  #register-chip:hover { color:var(--ink); }
 
   /* ---------- conditions rail ---------- */
   #rail { top:14px; right:14px; display:flex; align-items:stretch; padding:6px 4px; }
@@ -100,23 +96,29 @@
     border-left:1px solid var(--hair); color:var(--ink);
   }
   .rail-seg:first-child { border-left:none; }
-  .rail-seg .ic { width:20px; height:20px; flex:none; }
+  .rail-seg .ic { width:22px; height:22px; flex:none; }
   .rail-seg .ic svg { width:100%; height:100%; display:block; }
   .rail-seg .k { display:block; font-size:8px; letter-spacing:0.1em; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
   .rail-seg .v { display:block; font-size:11px; margin-top:1px; }
   .rail-seg.active .k { color:var(--accent); }
-  #rail-panel { top:74px; right:14px; width:312px; display:none; font-size:11.5px; overflow:hidden; }
+  #rail-panel { top:74px; right:14px; width:316px; display:none; font-size:11.5px; overflow:hidden; }
   #rail-panel.open { display:block; }
   #rail-panel .spine { position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--accent); }
   #rail-panel .pad { padding:14px 14px 12px 19px; }
   #rail-panel h3 { margin:0 0 8px; font-size:10px; letter-spacing:0.1em; color:var(--accent);
     font-family:ui-monospace, Menlo, monospace; font-weight:600; }
   #rail-panel .fig { margin:4px 0 10px; }
-  #rail-panel .fig svg { display:block; width:100%; }
+  #rail-panel .fig svg { display:block; margin:0 auto; }
   #rail-panel .note { color:var(--sub); line-height:1.5; }
   #rail-panel .age { margin-top:9px; font-size:8px; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; letter-spacing:0.06em; }
+  #rail-panel .now-btn { display:none; margin-top:8px; background:var(--accent); border:none;
+    color:var(--panel); font-size:9px; letter-spacing:0.1em; padding:6px 12px; border-radius:14px;
+    cursor:pointer; font-family:ui-monospace, Menlo, monospace; }
+  #rail-panel.simulating .now-btn { display:inline-block; }
+  #sun-dial { cursor:grab; touch-action:none; }
+  #sun-dial.dragging { cursor:grabbing; }
   .bars { display:flex; align-items:flex-end; gap:3px; height:54px; margin:8px 0 2px; }
   .bars .b { flex:1; background:var(--accent); opacity:0.85; border-radius:2px 2px 0 0; min-height:2px; }
   .bars .b.past { background:var(--sub); opacity:0.55; }
@@ -125,7 +127,7 @@
     font-family:ui-monospace, Menlo, monospace; }
   .bars-labels span { flex:1; text-align:center; }
 
-  /* ---------- legend / status filter (ring = access) ---------- */
+  /* ---------- legend ---------- */
   #legend { bottom:64px; left:14px; padding:10px 12px; }
   #legend .k { font-size:8.5px; letter-spacing:0.1em; color:var(--sub); margin-bottom:7px;
     font-family:ui-monospace, Menlo, monospace; }
@@ -140,72 +142,88 @@
   #legend .k2 { font-size:7.5px; letter-spacing:0.08em; color:var(--sub); margin-top:8px;
     font-family:ui-monospace, Menlo, monospace; }
 
-  /* ---------- season slider: expands on hover into stacked histogram ---------- */
-  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(560px, 76vw);
-    padding:10px 16px 8px; }
-  #season-hist { height:0; opacity:0; overflow:hidden; transition:height .25s ease, opacity .25s ease; }
-  #season:hover #season-hist, #season.expanded #season-hist { height:96px; opacity:1; }
-  #season-hist .stack { display:flex; align-items:flex-end; gap:4px; height:64px; margin-top:8px; }
-  #season-hist .mcol { flex:1; display:flex; flex-direction:column-reverse; gap:1px; }
-  #season-hist .seg { width:100%; border-radius:1.5px; min-height:0; }
-  #season-hist .mcol.hot { outline:1.5px solid var(--ink); outline-offset:1px; border-radius:2px; }
-  #season-hist .cats { display:flex; gap:14px; margin-top:7px; font-size:7.5px; color:var(--sub);
+  /* ---------- season slider: seasons lead, months as detail ---------- */
+  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(600px, 78vw);
+    padding:10px 18px 8px; }
+  #season-hist { height:0; opacity:0; overflow:hidden; transition:height .28s ease, opacity .28s ease; }
+  #season:hover #season-hist { height:158px; opacity:1; }
+  #season-hist .stack { display:flex; align-items:flex-end; gap:5px; height:118px; margin-top:10px; }
+  #season-hist .mcol { flex:1; display:flex; flex-direction:column-reverse; position:relative;
+    border-radius:3px 3px 0 0; overflow:hidden; }
+  #season-hist .mcol.hot::after { content:""; position:absolute; inset:0;
+    background:transparent; border:1.5px solid var(--ink); border-radius:3px; }
+  #season-hist .seg { width:100%; }
+  #season-hist .cats { display:flex; gap:16px; margin-top:8px; font-size:8px; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; letter-spacing:0.06em; }
-  #season-hist .cats i { display:inline-block; width:8px; height:8px; border-radius:2px;
-    margin-right:4px; vertical-align:-1px; }
-  #season .track { position:relative; height:22px; cursor:pointer; }
-  #season .months { display:flex; justify-content:space-between; font-size:8px;
-    color:var(--sub); font-family:ui-monospace, Menlo, monospace; letter-spacing:0.05em;
-    pointer-events:none; padding-top:7px; }
+  #season-hist .cats i { display:inline-block; width:9px; height:9px; border-radius:2px;
+    margin-right:5px; vertical-align:-1px; }
+  #season .track { position:relative; height:34px; cursor:pointer; touch-action:none; }
+  #season .seasons { display:flex; font-size:9.5px; letter-spacing:0.14em; color:var(--ink);
+    padding-top:8px; pointer-events:none; font-family:ui-monospace, Menlo, monospace; }
+  #season .seasons span { text-align:center; }
+  #season .months { display:flex; justify-content:space-between; font-size:6.5px;
+    color:var(--sub); opacity:0.75; font-family:ui-monospace, Menlo, monospace;
+    pointer-events:none; padding-top:3px; }
   #season .line { position:absolute; left:0; right:0; top:3px; height:2px; background:var(--hair); }
-  #season .cursor { position:absolute; top:-1px; width:10px; height:10px; border-radius:50%;
-    background:var(--accent); transform:translateX(-50%); transition:left .08s linear; }
+  #season .cursor { position:absolute; top:-2px; width:12px; height:12px; border-radius:50%;
+    background:var(--accent); transform:translateX(-50%); transition:left .08s linear;
+    box-shadow:0 0 0 3px var(--panel-a); }
   #season .meta { display:flex; justify-content:space-between; align-items:center;
-    font-size:8.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace; margin-top:4px; }
+    font-size:8.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace; margin-top:5px; }
   #season .meta button { background:none; border:none; color:var(--accent); cursor:pointer;
     font:inherit; letter-spacing:0.08em; padding:0; display:none; }
   #season.scrubbed .meta button { display:inline; }
 
-  /* ---------- anchored point card (mapbox popup shell) ---------- */
+  /* ---------- hover name tip ---------- */
+  #hover-tip { position:absolute; z-index:8; display:none; pointer-events:none;
+    background:var(--panel-a); border:1px solid var(--hair); border-radius:7px;
+    box-shadow:var(--glow); padding:6px 10px 6px 12px; overflow:hidden; }
+  #hover-tip .sp { position:absolute; left:0; top:0; bottom:0; width:4px; }
+  #hover-tip .nm { font-family:Georgia, serif; font-size:12.5px; color:var(--ink); }
+  #hover-tip .st { font-size:7.5px; letter-spacing:0.08em; margin-top:1px;
+    font-family:ui-monospace, Menlo, monospace; }
+
+  /* ---------- anchored point card — generous ---------- */
   .ca-popup .mapboxgl-popup-content { background:none; padding:0; box-shadow:none; border-radius:0; }
   .ca-popup .mapboxgl-popup-tip { display:none; }
   .ca-popup { z-index:6; }
-  .pt-card { position:relative; width:252px; background:var(--panel-a); border:1px solid var(--hair);
-    border-radius:10px; box-shadow:var(--glow); overflow:hidden;
+  .pt-card { position:relative; width:312px; background:var(--panel-a); border:1px solid var(--hair);
+    border-radius:12px; box-shadow:var(--glow); overflow:hidden;
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-    color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  .pt-card .spine { position:absolute; left:0; top:0; bottom:0; width:5px; }
-  .pt-card .pad { padding:13px 14px 10px 19px; }
-  .pt-card h2 { margin:0; font-size:16.5px; font-weight:500; font-family:Georgia, serif; }
-  .pt-card .sci { font-size:8px; letter-spacing:0.08em; color:var(--sub); margin:2px 0 9px;
+    color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  .pt-card .spine { position:absolute; left:0; top:0; bottom:0; width:6px; }
+  .pt-card .pad { padding:17px 18px 13px 24px; }
+  .pt-card h2 { margin:0; font-size:21px; font-weight:500; font-family:Georgia, serif; }
+  .pt-card .sci { font-size:9px; letter-spacing:0.08em; color:var(--sub); margin:3px 0 12px;
     font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .row { display:flex; gap:8px; align-items:baseline; padding:5px 0;
+  .pt-card .row { display:flex; gap:10px; align-items:baseline; padding:8px 0;
     border-top:1px solid var(--hair); }
-  .pt-card .row .lab { flex:none; width:52px; font-size:7.5px; letter-spacing:0.1em;
+  .pt-card .row .lab { flex:none; width:58px; font-size:8px; letter-spacing:0.12em;
     color:var(--sub); font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .row .val { font-size:11px; line-height:1.4; }
-  .pt-card .row.access .val { font-weight:600; display:flex; align-items:center; gap:7px; }
-  .pt-card .row.access .ring { width:11px; height:11px; border-radius:50%; flex:none;
-    border:3px solid currentColor; }
-  .pt-card .row.safety .val { color:var(--ink); }
+  .pt-card .row .val { font-size:12.5px; line-height:1.5; }
+  .pt-card .row.access .val { font-weight:600; display:flex; align-items:center; gap:8px; }
+  .pt-card .row.access .ring { width:12px; height:12px; border-radius:50%; flex:none;
+    border:3.2px solid currentColor; }
   .pt-card .row.safety .lab { color:var(--warn); }
-  .pt-card .season-line { display:flex; align-items:center; gap:8px; margin-top:7px; }
+  .pt-card .season-line { display:flex; align-items:center; gap:10px; margin-top:9px; }
   .pt-card .season-line svg { display:block; }
-  .pt-card .season-line .t { font-size:7.5px; letter-spacing:0.06em; color:var(--sub);
+  .pt-card .season-line .t { font-size:8px; letter-spacing:0.06em; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .ethic { font-size:9.5px; color:var(--sub); line-height:1.45; margin-top:7px; }
-  .pt-card .oinp { margin-top:7px; font-size:7.5px; letter-spacing:0.08em; color:var(--warn);
+  .pt-card .ethic { font-size:10.5px; color:var(--sub); line-height:1.5; margin-top:9px; }
+  .pt-card .oinp { margin-top:9px; font-size:8px; letter-spacing:0.08em; color:var(--warn);
     font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .flush { margin-top:5px; font-size:8px; color:var(--accent); letter-spacing:0.06em;
+  .pt-card .flush { margin-top:6px; font-size:8.5px; color:var(--accent); letter-spacing:0.06em;
     font-family:ui-monospace, Menlo, monospace; display:none; }
   .pt-card .flush.on { display:block; }
-  .pt-card .close { position:absolute; top:6px; right:9px; background:none; border:none;
-    color:var(--sub); cursor:pointer; font-size:13px; padding:2px; }
+  .pt-card .close { position:absolute; top:8px; right:11px; background:none; border:none;
+    color:var(--sub); cursor:pointer; font-size:15px; padding:2px; }
 
   /* ---------- sheets ---------- */
   #sheet-wrap { position:absolute; inset:0; z-index:20; display:none; background:rgba(10,14,11,0.45); }
   #sheet-wrap.open { display:flex; align-items:center; justify-content:center; }
-  #sheet { width:min(680px, 90vw); max-height:80vh; overflow:auto; padding:28px 30px; }
+  #sheet { width:min(680px, 90vw); max-height:80vh; overflow:auto; padding:28px 30px;
+    user-select:text; -webkit-user-select:text; }
   #sheet h2 { margin:0 0 4px; font-weight:500; font-size:22px; }
   #sheet .k { font-size:9px; letter-spacing:0.12em; color:var(--accent); margin-bottom:14px;
     font-family:ui-monospace, Menlo, monospace; }
@@ -232,9 +250,7 @@
   @keyframes pulse { 0% { transform:scale(0.5); opacity:0.9; } 100% { transform:scale(2.6); opacity:0; } }
   @media (prefers-reduced-motion: reduce) { .pulse::after { animation:none; opacity:0.6; } }
 
-  @media (max-width:720px) {
-    #rail { display:none; }
-  }
+  @media (max-width:720px) { #rail { display:none; } }
 </style>
 </head>
 <body data-register="day">
@@ -245,7 +261,6 @@
 
 <div id="masthead" class="floating">
   <span class="wordmark serif">Craft Almanac</span>
-  <button id="register-chip" title="Light register — click to override">AUTO · DAY</button>
   <span class="links">
     <button data-sheet="plants">Plants</button>
     <button data-sheet="recipes">Recipes</button>
@@ -270,6 +285,9 @@
   <div class="track" id="season-track">
     <div class="line"></div>
     <div class="cursor" id="season-cursor"></div>
+    <div class="seasons">
+      <span style="width:12.5%">WINTER</span><span style="width:25%">SPRING</span><span style="width:25%">SUMMER</span><span style="width:25%">AUTUMN</span><span style="width:12.5%">WINTER</span>
+    </div>
     <div class="months"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
   </div>
   <div class="meta">
@@ -277,6 +295,8 @@
     <button id="season-reset">BACK TO NOW</button>
   </div>
 </div>
+
+<div id="hover-tip"><div class="sp"></div><div class="nm"></div><div class="st"></div></div>
 
 <div id="proto-note" class="floating">
   <b>DESIGN PROTOTYPE</b> · DEMO RECORDS (PROVIDENCE, RI), NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON &amp; TIDE
@@ -287,16 +307,21 @@
 <script>
 "use strict";
 /* =================================================================== state */
-const CENTER = [-71.412, 41.82];           // Providence, RI — demo viewport (intentional)
-const CONUS = [[-127.0, 22.5], [-65.0, 50.8]];  // site convention: contiguous US only
+const CENTER = [-71.412, 41.82];
+const CONUS = [[-127.0, 22.5], [-65.0, 50.8]];
 const TIDE_STATION = "8454000";
 const S = {
   week: isoWeek(new Date()), nowWeek: isoWeek(new Date()),
   statuses: new Set(["allowed","permit","prohibited","private","unknown"]),
-  register: "day", override: localStorage.getItem("ca-register") || "auto",
+  register: "", simMins: null,           // simMins: minutes-of-day when the user drags the sun
   weather: null, tide: null, selected: null, mapOK: false,
   fxOn: !matchMedia("(prefers-reduced-motion: reduce)").matches,
 };
+function simNow() {
+  if (S.simMins == null) return new Date();
+  const d = new Date(); d.setHours(0, 0, 0, 0);
+  return new Date(+d + S.simMins * 6e4);
+}
 
 /* ============================================================ demo catalog */
 function bellMonths(w0, w1) {
@@ -308,9 +333,9 @@ function bellMonths(w0, w1) {
   });
 }
 const CATS = {
-  food:  { label:"FOOD",      color:"#A63D2F" },   // madder
-  fungi: { label:"FUNGI",     color:"#D9A521" },   // weld
-  inkdye:{ label:"INK & DYE", color:"#2F4DA0" },   // indigo
+  food:  { label:"FOOD",      color:"#A63D2F" },
+  fungi: { label:"FUNGI",     color:"#D9A521" },
+  inkdye:{ label:"INK & DYE", color:"#2F4DA0" },
 };
 const SPECIES = {
   elderberry:  { name:"Elderberry", sci:"SAMBUCUS CANADENSIS", uses:"food · ink · dye", cat:"food", pigment:"#8E2D56", ripe:[24,33], fungal:false,
@@ -398,31 +423,25 @@ function moonPhase(date) {
   return { phase, illum, waxing: phase < 0.5 };
 }
 
-/* ============================================================== registers */
-function computeRegister(date = new Date()) {
+/* ====================================== registers: follow the (sim) sun */
+function computeRegister(date) {
   const alt = sunAltitude(date, CENTER[1], CENTER[0]);
   if (alt >= 8) return "day";
   if (alt <= -6) return "night";
-  return date.getHours() < 12 ? "dawn" : "dusk";
+  const rising = sunAltitude(new Date(+date + 20 * 6e4), CENTER[1], CENTER[0]) > alt;
+  return rising ? "dawn" : "dusk";
 }
 function applyRegister() {
-  const reg = S.override === "auto" ? computeRegister() : S.override;
+  const reg = computeRegister(simNow());
   if (reg !== S.register) {
     S.register = reg;
     document.body.dataset.register = reg;
     if (S.mapOK) try { map.setConfigProperty("basemap", "lightPreset", reg); } catch(e) {}
     paintPoints(); renderPointCard();
   }
-  document.getElementById("register-chip").textContent =
-    (S.override === "auto" ? "AUTO · " : "PINNED · ") + reg.toUpperCase();
+  renderRail();
 }
-document.getElementById("register-chip").addEventListener("click", () => {
-  const order = ["auto","day","dusk","night","dawn"];
-  S.override = order[(order.indexOf(S.override) + 1) % order.length];
-  localStorage.setItem("ca-register", S.override);
-  S.register = ""; applyRegister();
-});
-setInterval(applyRegister, 60e3);
+setInterval(() => { if (S.simMins == null) applyRegister(); }, 60e3);
 
 /* ==================================================================== map */
 let map = null, flushMarkers = [], popup = null;
@@ -446,11 +465,11 @@ function pointFilter() { return ["in", ["get","status"], ["literal", [...S.statu
 function seasonOpacity() {
   return ["case", ["all", ["<=", ["get","r0"], S.week], [">=", ["get","r1"], S.week]], 0.95, 0.22];
 }
+function isNightish() { return S.register === "night" || S.register === "dusk"; }
 function paintPoints() {
   if (!S.mapOK) { paintFallback(); return; }
-  const night = S.register === "night" || S.register === "dusk";
+  const night = isNightish();
   const colorExpr = ["get", night ? "nightColor" : "dayColor"];
-  /* core fill = material type pigment · ring = access status */
   map.setPaintProperty("occ-core", "circle-color", colorExpr);
   map.setPaintProperty("occ-core", "circle-opacity", seasonOpacity());
   map.setPaintProperty("occ-core", "circle-stroke-color", statusExpr(night));
@@ -483,12 +502,31 @@ function initMap() {
     paintPoints();
     fxInit();
     map.on("click", "occ-core", e => openPointCard(e.features[0].id));
-    map.on("mouseenter", "occ-core", () => map.getCanvas().style.cursor = "pointer");
-    map.on("mouseleave", "occ-core", () => map.getCanvas().style.cursor = "");
+    map.on("mousemove", "occ-core", e => {
+      map.getCanvas().style.cursor = "pointer";
+      showHoverTip(e.features[0], e.point);
+    });
+    map.on("mouseleave", "occ-core", () => { map.getCanvas().style.cursor = ""; hideHoverTip(); });
     map.on("moveend", fxRespawnOffscreen);
   });
 }
-/* fallback (no token/library): schematic dots so the UI still reviews */
+/* hover name tip */
+const tipEl = document.getElementById("hover-tip");
+function showHoverTip(f, pt) {
+  const sp = SPECIES[f.properties.sp];
+  const night = isNightish();
+  tipEl.querySelector(".sp").style.background = sp.pigment;
+  tipEl.querySelector(".nm").textContent = sp.name;
+  const st = f.properties.status;
+  tipEl.querySelector(".st").textContent = STATUS_LABEL[st].toUpperCase();
+  tipEl.querySelector(".st").style.color = (night ? STATUS_NIGHT : STATUS_DAY)[st];
+  tipEl.style.left = (pt.x + 16) + "px";
+  tipEl.style.top = (pt.y - 14) + "px";
+  tipEl.style.display = "block";
+}
+function hideHoverTip() { tipEl.style.display = "none"; }
+
+/* fallback */
 const FB = { dots:[] };
 function mapFallback() {
   document.getElementById("map").style.display = "none";
@@ -506,7 +544,7 @@ function mapFallback() {
   paintFallback();
 }
 function paintFallback() {
-  const night = S.register === "night" || S.register === "dusk";
+  const night = isNightish();
   FB.dots.forEach(([p, el]) => {
     const sp = SPECIES[p.sp];
     el.style.background = night ? NIGHT_COLORS[p.sp] : sp.pigment;
@@ -576,46 +614,108 @@ async function loadTide() {
   renderRail();
 }
 
-/* ============================================ svg figures for the rail */
-function svgSunArc(st, w = 270, h = 64) {
-  const now = +new Date();
-  let t = 0.5;
-  if (st.rise && st.set && +st.set > +st.rise)
-    t = Math.max(0, Math.min(1, (now - +st.rise) / (+st.set - +st.rise)));
-  const cx = w/2, cy = h - 12, rx = w/2 - 26, ry = h - 26;
-  const ang = Math.PI * (1 - t);
-  const sx = cx + rx * Math.cos(ang), sy = cy - ry * Math.sin(ang);
-  // golden segment: last 12% of the arc before set
-  const g0 = Math.PI * 0.12;
-  const gx = cx + rx * Math.cos(g0), gy = cy - ry * Math.sin(g0);
-  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
-    <path d="M ${cx-rx} ${cy} A ${rx} ${ry} 0 0 1 ${cx+rx} ${cy}" fill="none"
-      stroke="var(--hair)" stroke-width="1.5"/>
-    <path d="M ${gx} ${gy} A ${rx} ${ry} 0 0 1 ${cx+rx} ${cy}" fill="none"
-      stroke="var(--warn)" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="6" y1="${cy}" x2="${w-6}" y2="${cy}" stroke="var(--sub)" stroke-width="0.8"/>
-    <circle cx="${sx}" cy="${sy}" r="5" fill="var(--accent)"/>
-    <circle cx="${sx}" cy="${sy}" r="9" fill="var(--accent)" opacity="0.25"/>
-    <text x="6" y="${cy+11}" font-family="monospace" font-size="7" fill="var(--sub)">RISE</text>
-    <text x="${w-6}" y="${cy+11}" font-family="monospace" font-size="7" fill="var(--sub)" text-anchor="end">SET</text>
+/* ============================================ solar dial (interactive) */
+function dialAngle(date) {           // minutes-of-day → angle, noon at top
+  const mins = date.getHours() * 60 + date.getMinutes();
+  return ((mins - 720) / 1440) * 2 * Math.PI;
+}
+function dialPos(phi, c, r) {        // evening on the left (facing south)
+  return [c - r * Math.sin(phi), c - r * Math.cos(phi)];
+}
+function svgSunDial(size, interactive) {
+  const c = size / 2, r = size / 2 - 10;
+  const now = simNow();
+  const st = sunTimes(now, CENTER[1], CENTER[0]);
+  const phi = dialAngle(now);
+  const [sx, sy] = dialPos(phi, c, r);
+  // horizon chord from rise/set angles
+  let chord = "";
+  if (st.rise && st.set) {
+    const [rx_, ry_] = dialPos(dialAngle(st.rise), c, r);
+    const [sx_, sy_] = dialPos(dialAngle(st.set), c, r);
+    chord = `<line x1="${rx_}" y1="${ry_}" x2="${sx_}" y2="${sy_}" stroke="var(--sub)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="${rx_-2}" y="${ry_+11}" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="end">RISE</text>
+      <text x="${sx_+2}" y="${sy_+11}" font-family="monospace" font-size="6.5" fill="var(--sub)">SET</text>`;
+  }
+  // day arc tint: from rise to set over the top
+  let dayArc = "";
+  if (st.rise && st.set) {
+    const [ax, ay] = dialPos(dialAngle(st.rise), c, r);
+    const [bx, by] = dialPos(dialAngle(st.set), c, r);
+    dayArc = `<path d="M ${ax} ${ay} A ${r} ${r} 0 0 0 ${bx} ${by}" fill="none"
+      stroke="var(--warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
+  }
+  const night = sunAltitude(now, CENTER[1], CENTER[0]) < 0;
+  return `<svg id="${interactive ? "sun-dial" : ""}" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--hair)" stroke-width="1.4"/>
+    ${dayArc}${chord}
+    <circle cx="${c}" cy="${c}" r="${Math.max(3.5, r * 0.13)}" fill="var(--sub)" opacity="0.7"/>
+    <circle cx="${sx}" cy="${sy}" r="${Math.max(4.5, r * 0.12)}" fill="${night ? "var(--ink)" : "var(--accent)"}"
+      stroke="var(--panel)" stroke-width="1.5"/>
+    ${interactive ? `<circle cx="${sx}" cy="${sy}" r="${r * 0.3}" fill="transparent"/>` : ""}
+    <text x="${c}" y="13" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="middle">NOON</text>
+    <text x="${c}" y="${size - 5}" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="middle">MIDNIGHT</text>
   </svg>`;
+}
+function bindSunDial() {
+  const dial = document.getElementById("sun-dial");
+  if (!dial) return;
+  let dragging = false;
+  const fromEvent = e => {
+    const r = dial.getBoundingClientRect();
+    const dx = e.clientX - (r.left + r.width / 2);
+    const dy = e.clientY - (r.top + r.height / 2);
+    // invert dialPos: x = -sin, y = -cos
+    const phi = Math.atan2(-dx, -dy);
+    let mins = Math.round(phi / (2 * Math.PI) * 1440 + 720);
+    mins = ((mins % 1440) + 1440) % 1440;
+    S.simMins = mins;
+    applyRegister(); renderPanel();
+  };
+  dial.addEventListener("pointerdown", e => { dragging = true; dial.classList.add("dragging");
+    dial.setPointerCapture(e.pointerId); fromEvent(e); e.preventDefault(); });
+  dial.addEventListener("pointermove", e => { if (dragging) fromEvent(e); });
+  dial.addEventListener("pointerup", () => { dragging = false; dial.classList.remove("dragging"); });
+}
+
+/* ============================================ rail icons (20 px legible) */
+function icoSun() {
+  const now = simNow(), phi = dialAngle(now);
+  const [sx, sy] = dialPos(phi, 11, 8);
+  return `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="none" stroke="var(--sub)" stroke-width="1.2"/>
+    <line x1="3.5" y1="11" x2="18.5" y2="11" stroke="var(--hair)" stroke-width="1"/>
+    <circle cx="${sx}" cy="${sy}" r="3" fill="var(--accent)"/></svg>`;
+}
+function icoMoon(mp) { return svgMoon(mp, 8); }
+function icoRain() {
+  return `<svg viewBox="0 0 22 22"><path d="M11 3 C 14 8, 17 11, 17 14 A 6 6 0 1 1 5 14 C 5 11, 8 8, 11 3 Z"
+    fill="var(--accent)" opacity="0.8"/></svg>`;
+}
+function icoWind() {
+  return `<svg viewBox="0 0 22 22" fill="none" stroke="var(--sub)" stroke-width="1.6" stroke-linecap="round">
+    <path d="M3 8 H 13 a 2.6 2.6 0 1 0 -2.6 -2.6"/>
+    <path d="M3 13 H 16 a 2.6 2.6 0 1 1 -2.6 2.6"/></svg>`;
+}
+function icoTide(rising) {
+  return `<svg viewBox="0 0 22 22" fill="none" stroke="var(--sub)" stroke-width="1.6" stroke-linecap="round">
+    <path d="M2 14 Q 5.5 10, 9 14 T 16 14 T 23 14"/>
+    <path d="M11 ${rising ? "10 V 4 M 8.5 6.5 L 11 4 L 13.5 6.5" : "4 V 10 M 8.5 7.5 L 11 10 L 13.5 7.5"}"
+      stroke="var(--accent)"/></svg>`;
 }
 function svgMoon(mp, r = 22) {
   const d = r * 2 + 8, c = d / 2;
-  // phase shading via an offset ellipse mask approximation
-  const k = Math.cos(2 * Math.PI * mp.phase);          // 1 new → -1 full
+  const k = Math.cos(2 * Math.PI * mp.phase);
   const rx = Math.abs(k) * r;
-  const lit = "var(--ink)", dark = "var(--panel)";
   const half = mp.waxing ? 1 : -1;
   return `<svg viewBox="0 0 ${d} ${d}" width="${d}" height="${d}" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="${c}" cy="${c}" r="${r}" fill="${dark}" stroke="var(--sub)" stroke-width="1"/>
+    <circle cx="${c}" cy="${c}" r="${r}" fill="var(--panel)" stroke="var(--sub)" stroke-width="1"/>
     <path d="M ${c} ${c-r} A ${r} ${r} 0 0 ${half>0?1:0} ${c} ${c+r}
-             A ${rx} ${r} 0 0 ${ (half>0) === (k<0) ? 1 : 0 } ${c} ${c-r} Z" fill="${lit}" opacity="0.85"/>
+             A ${rx} ${r} 0 0 ${ (half>0) === (k<0) ? 1 : 0 } ${c} ${c-r} Z" fill="var(--ink)" opacity="0.85"/>
   </svg>`;
 }
 function svgCompass(dir, speed, r = 26) {
   const d = r * 2 + 10, c = d / 2;
-  const a = (dir + 180) * RAD;   // arrow points where wind goes
+  const a = (dir + 180) * RAD;
   const x2 = c + Math.sin(a) * (r - 6), y2 = c - Math.cos(a) * (r - 6);
   const x1 = c - Math.sin(a) * (r - 14), y1 = c + Math.cos(a) * (r - 14);
   const ticks = ["N","E","S","W"].map((t,i) => {
@@ -636,7 +736,7 @@ function svgTideDial(next, r = 26) {
   const n = next && next[0];
   const rising = n && n.type === "H";
   const mins = n ? Math.max(0, (+new Date(n.t) - Date.now()) / 6e4) : 0;
-  const frac = Math.min(1, 1 - mins / (6.2 * 60));   // fraction of half-cycle elapsed
+  const frac = Math.min(1, 1 - mins / (6.2 * 60));
   const end = -Math.PI/2 + frac * 2 * Math.PI;
   const large = frac > 0.5 ? 1 : 0;
   const ex = c + (r - 8) * Math.cos(end), ey = c + (r - 8) * Math.sin(end);
@@ -648,7 +748,7 @@ function svgTideDial(next, r = 26) {
     <text x="${c}" y="${c+10}" font-family="monospace" font-size="6" fill="var(--sub)" text-anchor="middle">${n?fmtT(n.t):""}</text>
   </svg>`;
 }
-function sparkline(months, color, w = 84, h = 20) {
+function sparkline(months, color, w = 100, h = 24) {
   const mx = Math.max(...months);
   const bars = months.map((v, i) =>
     `<rect x="${i * (w/12) + 1}" y="${h - v/mx*h}" width="${w/12 - 2}" height="${Math.max(1.5, v/mx*h)}" rx="1" fill="${color}"/>`).join("");
@@ -661,25 +761,27 @@ const panelEl = document.getElementById("rail-panel");
 const padEl = document.getElementById("rail-pad");
 let openSeg = null;
 function fmtT(d) { return d ? new Date(d).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "—"; }
-function miniSun(st) { return svgSunArc(st, 26, 18).replace('viewBox="0 0 26 18"', 'viewBox="0 0 26 18" preserveAspectRatio="xMidYMid meet"'); }
 function seg(id, k, v, icon) {
   return `<button class="rail-seg ${openSeg===id?"active":""}" data-seg="${id}">
     <span class="ic">${icon}</span><span><span class="k">${k}</span><span class="v">${v}</span></span></button>`;
 }
 function renderRail() {
-  const st = sunTimes(new Date(), CENTER[1], CENTER[0]);
-  const mp = moonPhase(new Date());
+  const now = simNow();
+  const st = sunTimes(now, CENTER[1], CENTER[0]);
+  const mp = moonPhase(now);
   const w = S.weather;
-  let html = seg("sun", "SUN", "set " + fmtT(st.set), svgSunArc(st, 26, 20));
-  html += seg("moon", "MOON", Math.round(mp.illum * 100) + "%", svgMoon(mp, 8));
+  const sunV = S.simMins != null
+    ? fmtT(now) + " · " + S.register.toUpperCase()
+    : S.register.toUpperCase() + " · set " + fmtT(st.set);
+  let html = seg("sun", "SUN", sunV, icoSun());
+  html += seg("moon", "MOON", Math.round(mp.illum * 100) + "% " + (mp.waxing ? "waxing" : "waning"), icoMoon(mp));
   if (w) {
-    html += seg("rain", "RAIN 72H", w.past72 + " mm" + (w.past72 >= 18 ? " · FLUSH" : ""),
-      sparkline(w.daily.map(x => x + 0.2), "var(--accent)", 20, 18));
-    html += seg("wind", "WIND", Math.round(w.wind) + " km/h", svgCompass(w.windDir, w.wind, 9));
+    html += seg("rain", "RAIN 72H", w.past72 + " mm" + (w.past72 >= 18 ? " · FLUSH" : ""), icoRain());
+    html += seg("wind", "WIND", Math.round(w.wind) + " km/h " + dirName(w.windDir), icoWind());
   }
   if (S.tide && S.tide.next) {
     const n = S.tide.next[0];
-    html += seg("tide", "TIDE", (n.type === "L" ? "low " : "high ") + fmtT(n.t), svgTideDial(S.tide.next, 9));
+    html += seg("tide", "TIDE", (n.type === "L" ? "low " : "high ") + fmtT(n.t), icoTide(n.type === "H"));
   }
   railEl.innerHTML = html;
   railEl.querySelectorAll(".rail-seg").forEach(b =>
@@ -688,21 +790,26 @@ function renderRail() {
 }
 function toggleSeg(id) { openSeg = openSeg === id ? null : id; panelEl.classList.toggle("open", !!openSeg); renderRail(); }
 function renderPanel() {
-  const st = sunTimes(new Date(), CENTER[1], CENTER[0]);
-  const mp = moonPhase(new Date());
+  const now = simNow();
+  const st = sunTimes(now, CENTER[1], CENTER[0]);
+  const mp = moonPhase(now);
   const w = S.weather, age = w && w.fetched ? Math.round((Date.now()-w.fetched)/6e4) : null;
   const srcLine = w ? `<div class="age">SOURCE: OPEN-METEO · ${w.src === "sample" ? "OFFLINE SAMPLE" : (age<=1?"JUST FETCHED":age+" MIN AGO")}</div>` : "";
+  panelEl.classList.toggle("simulating", S.simMins != null);
   let html = "";
   if (openSeg === "sun") {
-    html = `<h3>THE DAY'S EDGES</h3>
-      <div class="fig">${svgSunArc(st)}</div>
-      <div class="note">First light ${fmtT(st.dawnCivil)} · Rise ${fmtT(st.rise)}<br>
-      Golden hour from ${fmtT(st.goldenEve)} · Set ${fmtT(st.set)} · Dark ${fmtT(st.duskCivil)}<br><br>
-      Many parks close gathering at dusk — the register and the rules keep the same clock.</div>
+    html = `<h3>THE SUN — DRAG IT AROUND THE EARTH</h3>
+      <div class="fig">${svgSunDial(190, true)}</div>
+      <div class="note" style="text-align:center">
+      <b>${fmtT(now)}</b> · the site is in its <b>${S.register.toUpperCase()}</b> register${S.simMins != null ? " (simulated)" : ""}</div>
+      <div class="note">First light ${fmtT(st.dawnCivil)} · Rise ${fmtT(st.rise)} · Golden ${fmtT(st.goldenEve)} ·
+      Set ${fmtT(st.set)} · Dark ${fmtT(st.duskCivil)}. Many parks close gathering at dusk — the register and
+      the rules keep the same clock.</div>
+      <button class="now-btn" id="sun-now">BACK TO NOW</button>
       <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
   } else if (openSeg === "moon") {
     html = `<h3>MOON</h3>
-      <div class="fig" style="display:flex;justify-content:center">${svgMoon(mp)}</div>
+      <div class="fig">${svgMoon(mp)}</div>
       <div class="note" style="text-align:center">${Math.round(mp.illum*100)}% illuminated, ${mp.waxing?"waxing":"waning"}.</div>
       <div class="note">Bright-moon nights favor low-tide walks and evening-primrose watching; headlamps off when you can.</div>
       <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
@@ -719,7 +826,7 @@ function renderPanel() {
       ${pickWindows(w.daily)}</div>${srcLine}`;
   } else if (openSeg === "wind" && w) {
     html = `<h3>WIND &amp; CLOUD</h3>
-      <div class="fig" style="display:flex;justify-content:center">${svgCompass(w.windDir, w.wind)}</div>
+      <div class="fig">${svgCompass(w.windDir, w.wind)}</div>
       <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>
       Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
       <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer">
@@ -729,7 +836,7 @@ function renderPanel() {
     const rows = S.tide.next.map(n =>
       `${n.type === "L" ? "LOW" : "HIGH"} ${fmtT(n.t)} (${n.v} ft)`).join("<br>");
     html = `<h3>TIDE — PROVIDENCE STATION</h3>
-      <div class="fig" style="display:flex;justify-content:center">${svgTideDial(S.tide.next)}</div>
+      <div class="fig">${svgTideDial(S.tide.next)}</div>
       <div class="note">${rows}<br><br>
       The falling tide opens the intertidal window. <b>Biotoxin closures always override</b> —
       closures are hand-encoded like park rules, never inferred.</div>
@@ -738,6 +845,9 @@ function renderPanel() {
   padEl.innerHTML = html;
   const t = document.getElementById("fx-toggle");
   if (t) t.addEventListener("change", e => { S.fxOn = e.target.checked; });
+  const nb = document.getElementById("sun-now");
+  if (nb) nb.addEventListener("click", () => { S.simMins = null; applyRegister(); renderPanel(); });
+  bindSunDial();
 }
 function pickWindows(daily) {
   let rainDay = -1;
@@ -756,7 +866,7 @@ function pickWindows(daily) {
 }
 function dirName(d){return ["N","NE","E","SE","S","SW","W","NW"][Math.round(d/45)%8]}
 
-/* ================================ wind + cloud canvas — geo-anchored ===== */
+/* ============================ wind + clouds: geo-anchored, self-morphing */
 const fx = document.getElementById("fx"), ctx = fx.getContext("2d");
 let parts = [], clouds = [];
 function fxResize(){ fx.width = innerWidth; fx.height = innerHeight; }
@@ -766,51 +876,91 @@ function viewBounds() {
     return { w:b.getWest(), e:b.getEast(), s:b.getSouth(), n:b.getNorth() }; }
   return { w:CENTER[0]-0.06, e:CENTER[0]+0.06, s:CENTER[1]-0.04, n:CENTER[1]+0.04 };
 }
+function makeCloud(b, dw, dh) {
+  const puffN = 6 + Math.floor(Math.random() * 4);
+  return {
+    lng: b.w + Math.random() * dw, lat: b.s + Math.random() * dh,
+    rdeg: dw * (0.05 + Math.random() * 0.07), v: 0.5 + Math.random() * 0.7,
+    rot: Math.random() * Math.PI * 2, rotV: (Math.random() - 0.5) * 0.0012,
+    puffs: Array.from({length: puffN}, () => ({
+      ang: Math.random() * Math.PI * 2,             // position around the cloud core
+      dist: 0.2 + Math.random() * 0.75,             // fraction of rdeg
+      rf: 0.35 + Math.random() * 0.45,              // puff radius fraction
+      phase: Math.random() * Math.PI * 2,
+      freq: 0.25 + Math.random() * 0.5,             // morph speed (cycles/sec-ish)
+    })),
+  };
+}
 function fxInit() {
   const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
   parts = Array.from({length:110}, () => ({
     lng:b.w + Math.random()*dw, lat:b.s + Math.random()*dh, life:60+Math.random()*80 }));
-  clouds = Array.from({length:5}, () => ({
-    lng:b.w + Math.random()*dw, lat:b.s + Math.random()*dh,
-    rdeg:dw * (0.07 + Math.random()*0.08), v:0.5+Math.random()*0.7 }));
+  clouds = Array.from({length:5}, () => makeCloud(b, dw, dh));
 }
 fxInit();
 function fxRespawnOffscreen() {
   const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
-  const inB = o => o.lng > b.w - dw*0.1 && o.lng < b.e + dw*0.1 && o.lat > b.s - dh*0.1 && o.lat < b.n + dh*0.1;
+  const inB = o => o.lng > b.w - dw*0.15 && o.lng < b.e + dw*0.15 && o.lat > b.s - dh*0.15 && o.lat < b.n + dh*0.15;
   parts.forEach(p => { if (!inB(p)) { p.lng = b.w + Math.random()*dw; p.lat = b.s + Math.random()*dh; } });
-  clouds.forEach(cl => { if (!inB(cl)) { cl.lng = b.w + Math.random()*dw; cl.lat = b.s + Math.random()*dh;
-    cl.rdeg = dw * (0.07 + Math.random()*0.08); } });
+  clouds = clouds.map(cl => inB(cl) ? cl : makeCloud(b, dw, dh));
 }
 function project(lng, lat) {
   if (S.mapOK) { const p = map.project([lng, lat]); return [p.x, p.y]; }
   const b = viewBounds();
   return [ (lng - b.w) / (b.e - b.w) * fx.width, (1 - (lat - b.s) / (b.n - b.s)) * fx.height ];
 }
-function fxFrame() {
+function drawPuff(x, y, r, alpha, night) {
+  if (r < 2) return;
+  const g = ctx.createRadialGradient(x, y - r * 0.15, r * 0.1, x, y, r);
+  if (night) {
+    g.addColorStop(0, "rgba(205,220,212," + alpha + ")");
+    g.addColorStop(0.65, "rgba(195,212,205," + alpha * 0.55 + ")");
+    g.addColorStop(1, "rgba(190,210,200,0)");
+  } else {
+    g.addColorStop(0, "rgba(255,255,255," + alpha + ")");
+    g.addColorStop(0.6, "rgba(248,250,250," + alpha * 0.6 + ")");
+    g.addColorStop(1, "rgba(240,244,244,0)");
+  }
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+}
+function fxFrame(ts) {
   requestAnimationFrame(fxFrame);
   if (document.hidden) return;
   ctx.clearRect(0, 0, fx.width, fx.height);
   if (!S.fxOn || !S.weather) return;
-  const w = S.weather, night = S.register === "night" || S.register === "dusk";
+  const w = S.weather, night = isNightish();
   const b = viewBounds(), dw = b.e - b.w, dh = b.n - b.s;
-  /* wind vector in degrees/frame — scaled to viewport so motion reads at any zoom */
+  const t = (ts || 0) / 1000;
   const spd = Math.min(2.2, 0.25 + w.wind * 0.06) * dw * 0.0011;
   const dir = (w.windDir + 180) * RAD;
   const vlng = Math.sin(dir) * spd, vlat = -Math.cos(dir) * spd * (dh / dw) * (fx.width / fx.height);
-  /* clouds — anchored, drift slowly with the wind */
-  const cAlpha = Math.min(0.15, w.clouds / 100 * 0.17) * (night ? 0.8 : 1);
-  ctx.fillStyle = night ? "rgba(190,210,200," + cAlpha + ")" : "rgba(90,100,110," + cAlpha + ")";
+  /* clouds: multi-puff masses that morph (puff radii breathe, the mass slowly rotates) */
+  const cover = Math.max(0.12, w.clouds / 100);          // always a little sky
+  const baseAlpha = Math.min(0.5, 0.18 + cover * 0.4) * (night ? 0.65 : 1);
   clouds.forEach(cl => {
-    cl.lng += vlng * cl.v * 0.5; cl.lat += vlat * cl.v * 0.5;
-    if (cl.lng > b.e + cl.rdeg*2) cl.lng = b.w - cl.rdeg; if (cl.lng < b.w - cl.rdeg*2) cl.lng = b.e + cl.rdeg;
-    if (cl.lat > b.n + cl.rdeg*2) cl.lat = b.s - cl.rdeg; if (cl.lat < b.s - cl.rdeg*2) cl.lat = b.n + cl.rdeg;
+    cl.lng += vlng * cl.v * 0.45 + dw * 0.000012;        // minimum idle drift
+    cl.lat += vlat * cl.v * 0.45;
+    cl.rot += cl.rotV;
+    if (cl.lng > b.e + cl.rdeg * 3) cl.lng = b.w - cl.rdeg;
+    if (cl.lng < b.w - cl.rdeg * 3) cl.lng = b.e + cl.rdeg;
+    if (cl.lat > b.n + cl.rdeg * 3) cl.lat = b.s - cl.rdeg;
+    if (cl.lat < b.s - cl.rdeg * 3) cl.lat = b.n + cl.rdeg;
     const [cx, cy] = project(cl.lng, cl.lat);
     const [ex] = project(cl.lng + cl.rdeg, cl.lat);
-    const rx = Math.max(8, ex - cx);
-    ctx.beginPath(); ctx.ellipse(cx, cy, rx, rx * 0.42, 0, 0, 7); ctx.fill();
+    const R = Math.max(6, ex - cx);                       // projected radius → scales with zoom
+    if (cx < -R*3 || cx > fx.width + R*3 || cy < -R*3 || cy > fx.height + R*3) return;
+    // soft gray under-shadow gives the satellite read
+    if (!night) drawPuff(cx + R*0.12, cy + R*0.2, R * 1.05, baseAlpha * 0.22 * 0.6, true);
+    cl.puffs.forEach(pf => {
+      const breathe = 1 + 0.22 * Math.sin(t * pf.freq + pf.phase);
+      const drift = pf.ang + cl.rot;
+      const px = cx + Math.cos(drift) * pf.dist * R;
+      const py = cy + Math.sin(drift) * pf.dist * R * 0.55;  // flattened mass
+      drawPuff(px, py, R * pf.rf * breathe, baseAlpha, night);
+    });
   });
-  /* wind streaks — anchored; length = projected tail, so it scales with zoom */
+  /* wind streaks */
   ctx.lineWidth = 1;
   parts.forEach(p => {
     p.lng += vlng; p.lat += vlat; p.life -= 1;
@@ -818,10 +968,10 @@ function fxFrame() {
       p.lng = b.w + Math.random()*dw; p.lat = b.s + Math.random()*dh; p.life = 60 + Math.random()*80;
     }
     const [x, y] = project(p.lng, p.lat);
-    const [tx, ty] = project(p.lng - vlng * 9, p.lat - vlat * 9);
+    const [tx2, ty2] = project(p.lng - vlng * 9, p.lat - vlat * 9);
     const a = Math.min(1, p.life / 40) * (night ? 0.5 : 0.22);
     ctx.strokeStyle = night ? "rgba(215,232,220," + a + ")" : "rgba(90,97,91," + a + ")";
-    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx, ty); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx2, ty2); ctx.stroke();
     if (night) { ctx.fillStyle = "rgba(255,250,230," + a * 0.9 + ")";
       ctx.beginPath(); ctx.arc(x, y, 0.9, 0, 7); ctx.fill(); }
   });
@@ -842,9 +992,9 @@ LEG.querySelectorAll(".leg-chip").forEach(b => b.addEventListener("click", () =>
 
 /* ================================================= season slider + stack */
 const track = document.getElementById("season-track");
-const cursor = document.getElementById("season-cursor");
+const cursorEl = document.getElementById("season-cursor");
 function weekToX(w){ return (w - 1) / 51; }
-function setCursor(){ cursor.style.left = (weekToX(S.week) * 100) + "%";
+function setCursor(){ cursorEl.style.left = (weekToX(S.week) * 100) + "%";
   document.getElementById("season-label").textContent =
     S.week === S.nowWeek ? "THIS WEEK · WK " + S.week : "VIEWING WK " + S.week + " — TIME TRAVEL";
   document.getElementById("season").classList.toggle("scrubbed", S.week !== S.nowWeek);
@@ -854,14 +1004,18 @@ function trackWeek(e){
   const r = track.getBoundingClientRect();
   return Math.max(1, Math.min(52, Math.round(((e.clientX - r.left) / r.width) * 51) + 1));
 }
-let dragging = false;
-track.addEventListener("pointerdown", e => { dragging = true; S.week = trackWeek(e); setCursor(); paintPoints(); buildStack(); });
-addEventListener("pointermove", e => { if (dragging) { S.week = trackWeek(e); setCursor(); paintPoints(); buildStack(); } });
-addEventListener("pointerup", () => dragging = false);
+let draggingTrack = false;
+track.addEventListener("pointerdown", e => { draggingTrack = true; track.setPointerCapture(e.pointerId);
+  S.week = trackWeek(e); setCursor(); paintPoints(); buildStack(); e.preventDefault(); });
+track.addEventListener("pointermove", e => {
+  if (draggingTrack) { S.week = trackWeek(e); setCursor(); paintPoints(); }
+  buildStack(Math.min(11, Math.floor((trackWeek(e) - 1) / 4.345)));
+});
+track.addEventListener("pointerup", () => draggingTrack = false);
+track.addEventListener("pointerleave", () => { if (!draggingTrack) buildStack(); });
 document.getElementById("season-reset").addEventListener("click", () => {
   S.week = S.nowWeek; setCursor(); paintPoints(); buildStack();
 });
-/* stacked by-type histogram — revealed by the card's hover expansion */
 function buildStack(hoverMonth) {
   const hot = hoverMonth != null ? hoverMonth : Math.min(11, Math.floor((S.week - 1) / 4.345));
   const byCat = {};
@@ -872,23 +1026,18 @@ function buildStack(hoverMonth) {
   const mx = Math.max(...totals);
   document.getElementById("season-stack").innerHTML = Array.from({length:12}, (_, i) => {
     const segs = Object.keys(CATS).map(k =>
-      `<div class="seg" style="height:${byCat[k][i] / mx * 60}px; background:${CATS[k].color}"></div>`).join("");
+      `<div class="seg" style="height:${byCat[k][i] / mx * 118}px; background:${CATS[k].color}"></div>`).join("");
     return `<div class="mcol ${i === hot ? "hot" : ""}">${segs}</div>`;
   }).join("");
   document.getElementById("season-cats").innerHTML = Object.keys(CATS).map(k =>
     `<span><i style="background:${CATS[k].color}"></i>${CATS[k].label}</span>`).join("");
 }
 buildStack();
-track.addEventListener("pointermove", e => {
-  const w = trackWeek(e);
-  buildStack(Math.min(11, Math.floor((w - 1) / 4.345)));
-});
-track.addEventListener("pointerleave", () => buildStack());
 
-/* ============================== anchored point card (permission/use/safety) */
+/* ============================== anchored point card */
 function cardHTML(p) {
   const sp = SPECIES[p.sp];
-  const night = S.register === "night" || S.register === "dusk";
+  const night = isNightish();
   const stCol = (night ? STATUS_NIGHT : STATUS_DAY)[p.status];
   const flush = sp.fungal && S.weather && S.weather.past72 >= 18;
   return `<div class="pt-card">
@@ -910,12 +1059,12 @@ function cardHTML(p) {
 }
 function openPointCard(id, fbEl) {
   S.selected = POINTS[id];
+  hideHoverTip();
   if (S.mapOK) {
     if (popup) popup.remove();
     const node = document.createElement("div");
     node.innerHTML = cardHTML(S.selected);
-    popup = new mapboxgl.Popup({ closeButton:false, className:"ca-popup", maxWidth:"none",
-      offset:14, anchor:undefined })
+    popup = new mapboxgl.Popup({ closeButton:false, className:"ca-popup", maxWidth:"none", offset:18 })
       .setLngLat([S.selected.lng, S.selected.lat]).setDOMContent(node.firstElementChild).addTo(map);
     node.remove();
     bindCardClose();
@@ -924,8 +1073,8 @@ function openPointCard(id, fbEl) {
     const div = document.createElement("div");
     div.id = "fb-card"; div.innerHTML = cardHTML(S.selected);
     div.style.cssText = "position:absolute; z-index:7; left:" +
-      Math.min(parseFloat(fbEl.style.left), 70) + "%; top:" +
-      Math.min(parseFloat(fbEl.style.top), 55) + "%;";
+      Math.min(parseFloat(fbEl.style.left), 66) + "%; top:" +
+      Math.min(parseFloat(fbEl.style.top), 50) + "%;";
     document.getElementById("map-fallback").appendChild(div);
     bindCardClose();
   }
@@ -936,7 +1085,7 @@ function bindCardClose() {
 }
 function closeFbCard() { const d = document.getElementById("fb-card"); if (d) d.remove(); }
 function closePointCard() { if (popup) { popup.remove(); popup = null; } closeFbCard(); S.selected = null; }
-function renderPointCard() {  // re-skin on register change
+function renderPointCard() {
   if (!S.selected) return;
   if (popup) {
     const node = document.createElement("div");
@@ -949,7 +1098,7 @@ function renderPointCard() {  // re-skin on register change
   }
 }
 
-/* ========================================= sheets: about/plants/recipes */
+/* ========================================= sheets */
 const SHEETS = {
   about: () => `<button class="closer">×</button><div class="k">CRAFT ALMANAC · PROTOTYPE</div>
     <h2 class="serif">A map that keeps the almanac's hours</h2>
