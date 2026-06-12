@@ -309,13 +309,67 @@ function testNpsMushroomRules(context) {
   return passed;
 }
 
+// Parks added in the 2026-06-11 third pass. Food species should be allowed;
+// mushrooms follow each park's compendium; and a national-FOREST unit named
+// "Sequoia" must NOT pick up the national-PARK gathering allowance.
+function testNewNpsParks(context) {
+  reportSection("New NPS parks (2026-06-11 pass):");
+  const foodCases = [
+    { label: "Indiana Dunes food", stateCode: "IN", record: { lat: 41.65, lng: -87.05 },
+      props: { unit: "Indiana Dunes National Park", mng: "National Park Service", desTp: "National Park" },
+      species: FOOD_SPECIES, expected: "allowed" },
+    { label: "Indiana Dunes mushrooms", stateCode: "IN", record: { lat: 41.65, lng: -87.05 },
+      props: { unit: "Indiana Dunes National Park", mng: "National Park Service", desTp: "National Park" },
+      species: MUSHROOM_SPECIES, expected: "prohibited" },
+    { label: "Sequoia food", stateCode: "CA", record: { lat: 36.49, lng: -118.57 },
+      props: { unit: "Sequoia National Park", mng: "National Park Service", desTp: "National Park" },
+      species: FOOD_SPECIES, expected: "allowed" },
+    { label: "Sequoia mushrooms", stateCode: "CA", record: { lat: 36.49, lng: -118.57 },
+      props: { unit: "Sequoia National Park", mng: "National Park Service", desTp: "National Park" },
+      species: MUSHROOM_SPECIES, expected: "allowed" },
+    { label: "Kings Canyon mushrooms", stateCode: "CA", record: { lat: 36.89, lng: -118.55 },
+      props: { unit: "Kings Canyon National Park", mng: "National Park Service", desTp: "National Park" },
+      species: MUSHROOM_SPECIES, expected: "allowed" },
+    // Guard: Sequoia National Forest is USFS land, not the national park; it must
+    // fall through to the USFS allowance, not the NPS "sequoia national park" entry.
+    { label: "Sequoia National Forest (USFS, not NPS park)", stateCode: "CA", record: { lat: 36.0, lng: -118.6 },
+      props: { unit: "Sequoia National Forest", mng: "Forest Service", desTp: "National Forest" },
+      species: MUSHROOM_SPECIES, expected: "allowed" }
+  ];
+
+  let passed = true;
+  for (const c of foodCases) {
+    let actual;
+    let sourceLabel;
+    try {
+      context.state.activeMap = c.mode || "food";
+      const rule = context.getPublicLandAccessRule(landProps(c.props), c.species, c.stateCode, c.record);
+      actual = rule.status;
+      sourceLabel = rule.sourceLabel;
+    } catch (error) {
+      logResult(false, c.label, `error: ${error.message}`);
+      passed = false;
+      continue;
+    }
+    let ok = actual === c.expected;
+    // The guard case must additionally NOT be served by the SEKI national-park rule.
+    if (c.label.startsWith("Sequoia National Forest") && /Sequoia & Kings Canyon/.test(sourceLabel || "")) {
+      ok = false;
+    }
+    logResult(ok, c.label, `expected ${c.expected}, got ${actual} (${sourceLabel})`);
+    if (!ok) passed = false;
+  }
+  return passed;
+}
+
 async function main() {
   const context = await buildRuleContext();
 
   const results = [
     testStateCodeLookups(context),
     testStateSystemRules(context),
-    testNpsMushroomRules(context)
+    testNpsMushroomRules(context),
+    testNewNpsParks(context)
   ];
 
   const allPassed = results.every(Boolean);

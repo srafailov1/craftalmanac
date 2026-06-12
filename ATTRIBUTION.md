@@ -73,6 +73,8 @@ Primary rule sources currently encoded:
 - Redwood National and State Parks superintendent's compendium (verified June 2026): https://www.nps.gov/redw/learn/management/superintendent-s-compendium.htm
 - Capitol Reef Fruita orchard regulations (verified June 2026): https://www.nps.gov/care/learn/historyculture/orchards.htm
 - Death Valley superintendent's compendium via the park rules page (verified June 2026): https://www.nps.gov/deva/learn/management/rules-and-regulations.htm
+- Indiana Dunes National Park natural-items rules page (verified June 2026): https://www.nps.gov/indu/learn/management/naturalitems.htm
+- Sequoia & Kings Canyon National Parks edible-collection rules page (verified June 2026; per-species limits in the superintendent's compendium at https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm): https://www.nps.gov/seki/planyourvisit/wherecani.htm
 - BLM personal-use collection of renewable plant materials: https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits
 - National wildlife refuge default plant protection, 50 CFR Part 27: https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27
 - Army Corps project-land vegetation protection, 36 CFR Part 327: https://www.ecfr.gov/current/title-36/chapter-III/part-327

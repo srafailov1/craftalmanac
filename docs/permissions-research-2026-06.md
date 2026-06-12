@@ -33,10 +33,19 @@ in the app; **candidate** = found but not yet encoded.
 | Redwood | all berry species 1 gal/day; apples 5/day; tanoak acorns 10 gal; hazelnuts 1 gal; seashells 1 gal below storm-wave limit | No | **verified** (primary, June 2026) |
 | Capitol Reef | Fruita orchards: ripe fruit only from posted "U-Pick Fruit" orchards; fruit taken must be paid for at self-pay station (free-sampling claim dropped — not in current text) | No | **verified** (orchards page, June 2026) |
 | Death Valley | pine nuts, mesquite beans, grapes, non-native tree fruit (palms, apples, figs, black walnuts, pomegranates): <1 qt/day AND max 5 qt/calendar year | No | **verified** (rules page compendium, June 2026) |
+| Indiana Dunes | fruits, nuts & berries: a handful per person for personal use (36 CFR 2.1(c)(1)); prickly pear fully protected; unoccupied seashells small amount | **Explicitly prohibited** (mushrooms, flowers, leaves, seeds all protected under 2.1(a)(1)(ii)) | **verified** (natural-items rules page, June 2026) |
+| Sequoia & Kings Canyon | berries, mushrooms, and a few other plants for immediate personal consumption only; per-species limits in the compendium; inedible objects (wildflowers, cones, rocks) prohibited | Yes | **verified** (park rules page, June 2026; quantities in compendium) |
 
-All 16 encoded parks are now verified against current primary compendiums
-(June 2026). ~46 of 63 national parks reportedly allow some gathering — adding
-parks beyond this subset is the remaining NPS work.
+17 NPS parks now encoded (Sequoia and Kings Canyon are two PAD-US units sharing
+one rule), all verified against current primary sources (June 2026). Indiana
+Dunes (dense Chicago-metro data) and Sequoia & Kings Canyon (dense Sierra data)
+added this pass. Note: **Shenandoah is NOT in this table** — it already has a
+richer dedicated per-species code path (`shenandoahAllowed` flags +
+`getShenandoahLimit`, app.js ~4294) that runs ahead of `getNpsCompendiumRule`;
+do not add a `NPS_GATHERING_RULES` entry for it (a broad "shenandoah" match
+would also wrongly catch Shenandoah River State Park in VA). ~46 of 63 national
+parks reportedly allow some gathering — adding parks beyond this subset is the
+remaining NPS work.
 
 ## State systems (encoded)
 
@@ -122,6 +131,25 @@ getPublicLandAccessRule.
   same pattern as the encoded food forests, need policy + boundary checks.
 
 ## Run log
+
+- **2026-06-11 (third pass, NPS expansion):** Verified and encoded two NPS
+  gathering designations beyond the original 16. **Indiana Dunes** —
+  natural-items rules page (updated April 22, 2026) allows a handful of
+  fruits/nuts/berries per person for personal use; mushrooms (and
+  flowers/leaves/seeds) explicitly prohibited, so encoded with
+  `mushroomsAllowed: false` + mushroomNote. **Sequoia & Kings Canyon** — the
+  park's edible-collection rules page allows berries, mushrooms, and a few other
+  plants for immediate consumption (per-species limits live in the compendium);
+  encoded as two precise `NPS_GATHERING_RULES` entries ("sequoia national park"
+  and "kings canyon") to avoid false-matching Sequoia National Forest / Giant
+  Sequoia National Monument. Both added to `NPS_GATHERING_RULES`,
+  `ATTRIBUTION.md`, and the table above. **Correction:** I initially started to
+  encode **Shenandoah** here, then found it already has a dedicated per-species
+  code path (app.js ~4294) that is richer than a compendium entry and runs
+  first; reverted — see the note under the NPS table. Next in queue: more dense
+  NPS parks (Mammoth Cave, Congaree, Hot Springs, Pinnacles), then the
+  IL/Chicago + Denver state/city items and the Philadelphia Orchard Project /
+  Boston Food Forest Coalition site bounds.
 
 - **2026-06-11 (second pass, queue-clearing):** Verified all 12 remaining
   "sourced" NPS compendiums against current primary sources — every encoded

@@ -247,6 +247,31 @@ const NPS_GATHERING_RULES = [
     mushroomsAllowed: false,
     limit: "Pine nuts, mesquite beans, grapes, and fruit from non-native trees (palms, apples, figs, black walnuts, pomegranates): less than 1 quart per person per day and no more than 5 total quarts per calendar year.",
     note: "Death Valley designates several native and non-native foods for hand-gathering in small personal-use amounts. Verified against the current compendium, June 2026."
+  },
+  {
+    match: "indiana dunes",
+    sourceLabel: "Indiana Dunes natural-items rules",
+    sourceUrl: "https://www.nps.gov/indu/learn/management/naturalitems.htm",
+    mushroomsAllowed: false,
+    mushroomNote: "Indiana Dunes prohibits picking or removing mushrooms (along with all flowers, leaves, and seeds) under 36 CFR 2.1(a)(1)(ii); only fruits, nuts, and berries are designated for personal-use collection.",
+    limit: "Fruits, nuts, and berries: up to a handful per person for personal, non-commercial use (36 CFR 2.1(c)(1)); prickly pear cactus is fully protected. A small amount of unoccupied seashells may also be taken.",
+    note: "Indiana Dunes designates only fruits, nuts, and berries (a handful per person) for personal-use hand-collection; all other plant material, including mushrooms, flowers, leaves, and seeds, is protected. Verified against the park's natural-items rules page, June 2026."
+  },
+  {
+    match: "sequoia national park",
+    sourceLabel: "Sequoia & Kings Canyon park rules",
+    sourceUrl: "https://www.nps.gov/seki/planyourvisit/wherecani.htm",
+    mushroomsAllowed: true,
+    limit: "Berries, mushrooms, and a few other plants may be collected for immediate personal consumption only; per-species daily limits are set in the park compendium. Collecting inedible natural objects (wildflowers, cones, rocks, bones) is prohibited.",
+    note: "Sequoia and Kings Canyon allow gathering of berries, mushrooms, and a few designated plants for immediate consumption within the park; confirm the species and current limit in the superintendent's compendium (https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm). Verified against the park's rules page, June 2026."
+  },
+  {
+    match: "kings canyon",
+    sourceLabel: "Sequoia & Kings Canyon park rules",
+    sourceUrl: "https://www.nps.gov/seki/planyourvisit/wherecani.htm",
+    mushroomsAllowed: true,
+    limit: "Berries, mushrooms, and a few other plants may be collected for immediate personal consumption only; per-species daily limits are set in the park compendium. Collecting inedible natural objects (wildflowers, cones, rocks, bones) is prohibited.",
+    note: "Sequoia and Kings Canyon allow gathering of berries, mushrooms, and a few designated plants for immediate consumption within the park; confirm the species and current limit in the superintendent's compendium (https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm). Verified against the park's rules page, June 2026."
   }
 ];
 
