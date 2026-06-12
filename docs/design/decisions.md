@@ -3,6 +3,24 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-12 — Round 5 delivered: live prototype.** `prototype/index.html`
+  (single file, no build step; run `python3 -m http.server 4173` from repo
+  root, open `/prototype/`). Owner adjustments honored: Quiet Pigment cards;
+  season-slider histogram on hover only; permissions legend/filter
+  (toggleable status chips); About / Plants / Recipes entry points in the
+  masthead (sheets, not a nav menu). Built in priority order: map-dominant
+  UX → Mapbox Standard lightPreset registers (auto from client-side solar
+  math, manual override persisted) → sun/moon rail segments → rain memory
+  **and 7-day forecast** (Open-Meteo; flush pulses on fungal points ≥18 mm
+  /72 h; picking-window helper) → animated wind/cloud canvas (live wind
+  vector; reduced-motion + tab-hidden aware; toggle in rail) → tide (NOAA
+  CO-OPS station 8454000). Demo viewport: Providence, RI. All occurrence
+  points are invented and labeled DEMO; weather/sun/moon/tide are live with
+  cached fallbacks. Map failure degrades to schematic UI-review mode.
+  Live APIs could not be exercised from the sandbox (network allowlist) —
+  first browser run should verify Open-Meteo + CO-OPS fetches.
+  Before any public deploy: add Open-Meteo + NOAA CO-OPS to ATTRIBUTION.md.
+
 - **2026-06-11 — Round 4 delivered: The Living Map (synthesis).** Owner
   converged: Field Desk UX (map dominant, floating cards) + Pigment Index
   light-mode color/text (no seasonal typeface changes) + Night Survey as the

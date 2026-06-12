@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craft Almanac — Living Map prototype</title>
+<!--
+  Round 5 living-map prototype (design/relaunch only — never main).
+  Single file, no build step. Run from repo root:
+    python3 -m http.server 4173 --bind 127.0.0.1
+  then open http://127.0.0.1:4173/prototype/
+
+  DEMO RECORDS ONLY — points are invented for design review, not real
+  occurrences. Live data used: Open-Meteo (rain/wind/clouds), NOAA CO-OPS
+  (tide, station 8454000), client-side sun/moon math, Mapbox Standard
+  lightPreset. All degrade gracefully to baked samples.
+-->
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
+<script src="../config.js"></script>
+<style>
+  /* ---------- registers: Pigment Index day · Night Survey night ---------- */
+  :root, body[data-register="day"] {
+    --ground:#F1F5EC; --panel:#FFFFFF; --panel-a:rgba(255,255,255,0.93);
+    --ink:#1F2421; --sub:#5A615B; --hair:#D5DAD2; --accent:#6B7F2E;
+    --warn:#D89B24;
+    --st-allowed:#2F8F46; --st-permit:#D89B24; --st-prohibited:#C74437;
+    --st-private:#7E6654; --st-unknown:#8B8F86;
+    --glow:0 6px 24px rgba(31,36,33,0.10);
+  }
+  body[data-register="dawn"] {
+    --ground:#E9EEF2; --panel:#F7F9FB; --panel-a:rgba(247,249,251,0.93);
+    --ink:#2A3138; --sub:#6A7580; --hair:#D3DBE1; --accent:#D98A6A;
+    --warn:#D89B24;
+  }
+  body[data-register="dusk"] {
+    --ground:#453E4A; --panel:#544C5A; --panel-a:rgba(84,76,90,0.93);
+    --ink:#F2E9DC; --sub:#BCAFA5; --hair:#5E5664; --accent:#FF9447;
+    --warn:#FFC94D;
+    --st-allowed:#4FC979; --st-permit:#FFC94D; --st-prohibited:#FF7B6E;
+    --st-private:#C99B7A; --st-unknown:#93A39A;
+    --glow:0 6px 24px rgba(0,0,0,0.35);
+  }
+  body[data-register="night"] {
+    --ground:#121A16; --panel:#1C2721; --panel-a:rgba(28,39,33,0.93);
+    --ink:#EDF3EA; --sub:#9DB0A2; --hair:#2E3B33; --accent:#FFD166;
+    --warn:#FFC94D;
+    --st-allowed:#5BE08A; --st-permit:#FFC94D; --st-prohibited:#FF6B5E;
+    --st-private:#C99B7A; --st-unknown:#93A39A;
+    --glow:0 6px 28px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing:border-box; }
+  html, body { height:100%; margin:0; }
+  body {
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:var(--ground); color:var(--ink); overflow:hidden;
+    transition:background 1.2s ease, color 1.2s ease;
+  }
+  .mono { font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .serif { font-family:Georgia, "Times New Roman", serif; }
+
+  #map { position:absolute; inset:0; }
+  #map-fallback {
+    position:absolute; inset:0; display:none;
+    background:
+      radial-gradient(120% 90% at 70% 20%, transparent 0%, rgba(0,0,0,0.05) 100%),
+      var(--ground);
+  }
+  #fx { position:absolute; inset:0; pointer-events:none; z-index:3; }
+
+  .floating {
+    position:absolute; z-index:5; background:var(--panel-a);
+    border:1px solid var(--hair); border-radius:10px; box-shadow:var(--glow);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    transition:background 1.2s ease, border-color 1.2s ease, color 1.2s ease;
+  }
+
+  /* ---------- masthead ---------- */
+  #masthead { top:14px; left:14px; padding:10px 14px; display:flex; align-items:center; gap:12px; }
+  #masthead .wordmark { font-size:15px; letter-spacing:0.04em; }
+  #masthead .links { display:flex; gap:10px; border-left:1px solid var(--hair); padding-left:12px; }
+  #masthead .links button {
+    background:none; border:none; color:var(--sub); font-size:11px; cursor:pointer;
+    padding:2px 2px; letter-spacing:0.06em; text-transform:uppercase;
+    font-family:ui-monospace, Menlo, monospace;
+  }
+  #masthead .links button:hover { color:var(--ink); }
+  #register-chip {
+    font-size:9.5px; letter-spacing:0.08em; color:var(--sub); cursor:pointer;
+    border:1px solid var(--hair); border-radius:20px; padding:4px 9px; background:none;
+    font-family:ui-monospace, Menlo, monospace;
+  }
+  #register-chip:hover { color:var(--ink); }
+
+  /* ---------- conditions rail ---------- */
+  #rail { top:14px; right:14px; display:flex; align-items:stretch; padding:6px 4px; }
+  .rail-seg {
+    display:flex; flex-direction:column; justify-content:center; gap:2px;
+    padding:4px 12px; border:none; background:none; cursor:pointer; text-align:left;
+    border-left:1px solid var(--hair); color:var(--ink); min-width:86px;
+  }
+  .rail-seg:first-child { border-left:none; }
+  .rail-seg .k { font-size:8.5px; letter-spacing:0.1em; color:var(--sub);
+    font-family:ui-monospace, Menlo, monospace; }
+  .rail-seg .v { font-size:11.5px; }
+  .rail-seg.active .k { color:var(--accent); }
+  #rail-panel { top:74px; right:14px; width:300px; padding:14px; display:none; font-size:11.5px; }
+  #rail-panel.open { display:block; }
+  #rail-panel h3 { margin:0 0 6px; font-size:10px; letter-spacing:0.1em; color:var(--accent);
+    font-family:ui-monospace, Menlo, monospace; font-weight:600; }
+  #rail-panel .note { color:var(--sub); line-height:1.45; }
+  #rail-panel .age { margin-top:8px; font-size:8.5px; color:var(--sub);
+    font-family:ui-monospace, Menlo, monospace; letter-spacing:0.06em; }
+  .bars { display:flex; align-items:flex-end; gap:3px; height:54px; margin:8px 0 2px; }
+  .bars .b { flex:1; background:var(--accent); opacity:0.85; border-radius:2px 2px 0 0; min-height:2px; }
+  .bars .b.past { background:var(--sub); opacity:0.55; }
+  .bars .b.today { outline:1.5px solid var(--ink); outline-offset:1px; }
+  .bars-labels { display:flex; gap:3px; font-size:7px; color:var(--sub);
+    font-family:ui-monospace, Menlo, monospace; }
+  .bars-labels span { flex:1; text-align:center; }
+
+  /* ---------- legend / status filter ---------- */
+  #legend { bottom:64px; left:14px; padding:10px 12px; }
+  #legend .k { font-size:8.5px; letter-spacing:0.1em; color:var(--sub); margin-bottom:7px;
+    font-family:ui-monospace, Menlo, monospace; }
+  .leg-row { display:flex; flex-direction:column; gap:5px; }
+  .leg-chip {
+    display:flex; align-items:center; gap:7px; border:none; background:none; cursor:pointer;
+    color:var(--ink); font-size:10.5px; padding:1px 2px; opacity:1; transition:opacity .2s;
+  }
+  .leg-chip .dot { width:10px; height:10px; border-radius:50%; flex:none; }
+  .leg-chip.off { opacity:0.32; }
+  .leg-chip.off .dot { background:transparent !important; box-shadow:inset 0 0 0 1.5px var(--sub); }
+
+  /* ---------- season slider ---------- */
+  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(520px, 72vw);
+    padding:10px 16px 8px; }
+  #season .track { position:relative; height:22px; cursor:pointer; }
+  #season .months { display:flex; justify-content:space-between; font-size:8px;
+    color:var(--sub); font-family:ui-monospace, Menlo, monospace; letter-spacing:0.05em;
+    pointer-events:none; padding-top:7px; }
+  #season .line { position:absolute; left:0; right:0; top:3px; height:2px; background:var(--hair); }
+  #season .cursor { position:absolute; top:-1px; width:10px; height:10px; border-radius:50%;
+    background:var(--accent); transform:translateX(-50%); transition:left .08s linear; }
+  #season .meta { display:flex; justify-content:space-between; align-items:center;
+    font-size:8.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace; margin-top:4px; }
+  #season .meta button { background:none; border:none; color:var(--accent); cursor:pointer;
+    font:inherit; letter-spacing:0.08em; padding:0; display:none; }
+  #season.scrubbed .meta button { display:inline; }
+  #hist-tip {
+    position:absolute; bottom:64px; left:0; width:148px; padding:8px 10px 6px; display:none;
+    pointer-events:none; z-index:6;
+  }
+  #hist-tip .bars { height:40px; margin:4px 0 2px; }
+  #hist-tip .t { font-size:8.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace;
+    letter-spacing:0.05em; }
+
+  /* ---------- quiet pigment peek card ---------- */
+  #peek { top:50%; right:14px; transform:translateY(-50%); width:248px; display:none; overflow:hidden; }
+  #peek.open { display:block; }
+  #peek .spine { position:absolute; left:0; top:0; bottom:0; width:5px; }
+  #peek .inner { padding:16px 16px 12px 20px; }
+  #peek h2 { margin:0; font-size:18px; font-weight:500; }
+  #peek .sci { font-size:8.5px; letter-spacing:0.08em; color:var(--sub); margin:3px 0 10px;
+    font-family:ui-monospace, Menlo, monospace; }
+  #peek .bars { height:44px; }
+  #peek .status { display:inline-flex; align-items:center; gap:6px; margin:10px 0 4px;
+    font-size:10.5px; }
+  #peek .status .dot { width:9px; height:9px; border-radius:50%; }
+  #peek .ethic { font-size:10px; color:var(--sub); line-height:1.45; margin:4px 0 8px; }
+  #peek .oinp { font-size:8px; letter-spacing:0.08em; color:var(--warn);
+    font-family:ui-monospace, Menlo, monospace; }
+  #peek .close { position:absolute; top:8px; right:10px; background:none; border:none;
+    color:var(--sub); cursor:pointer; font-size:13px; }
+  #peek .flush { margin-top:6px; font-size:8.5px; color:var(--accent); letter-spacing:0.06em;
+    font-family:ui-monospace, Menlo, monospace; display:none; }
+  #peek .flush.on { display:block; }
+
+  /* ---------- sheets (about / plants / recipes) ---------- */
+  #sheet-wrap { position:absolute; inset:0; z-index:20; display:none;
+    background:rgba(10,14,11,0.45); }
+  #sheet-wrap.open { display:flex; align-items:center; justify-content:center; }
+  #sheet { width:min(680px, 90vw); max-height:80vh; overflow:auto; padding:28px 30px; }
+  #sheet h2 { margin:0 0 4px; font-weight:500; font-size:22px; }
+  #sheet .k { font-size:9px; letter-spacing:0.12em; color:var(--accent); margin-bottom:14px;
+    font-family:ui-monospace, Menlo, monospace; }
+  #sheet p { font-size:13px; line-height:1.6; color:var(--sub); }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:12px; margin-top:14px; }
+  .mini-card { position:relative; border:1px solid var(--hair); border-radius:8px;
+    background:var(--panel); padding:12px 12px 10px 17px; cursor:pointer; overflow:hidden; }
+  .mini-card:hover { box-shadow:var(--glow); }
+  .mini-card .spine { position:absolute; left:0; top:0; bottom:0; width:5px; }
+  .mini-card h4 { margin:0; font-size:13.5px; font-weight:500; }
+  .mini-card .m { font-size:8px; color:var(--sub); letter-spacing:0.06em; margin-top:3px;
+    font-family:ui-monospace, Menlo, monospace; }
+  .mini-card .uses { font-size:9.5px; color:var(--sub); margin-top:6px; }
+  #sheet .closer { position:sticky; top:0; float:right; background:none; border:none;
+    color:var(--sub); font-size:15px; cursor:pointer; }
+
+  /* ---------- prototype banner / toast ---------- */
+  #proto-note { bottom:14px; right:14px; padding:7px 11px; font-size:8px; letter-spacing:0.07em;
+    color:var(--sub); font-family:ui-monospace, Menlo, monospace; max-width:230px; line-height:1.5; }
+  #proto-note b { color:var(--warn); font-weight:600; }
+
+  /* pulsing flush markers */
+  .pulse { width:14px; height:14px; border-radius:50%; position:relative; pointer-events:none; }
+  .pulse::after { content:""; position:absolute; inset:0; border-radius:50%;
+    border:1.5px solid var(--accent); animation:pulse 2.4s ease-out infinite; }
+  @keyframes pulse { 0% { transform:scale(0.5); opacity:0.9; } 100% { transform:scale(2.6); opacity:0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse::after { animation:none; opacity:0.6; }
+  }
+
+  @media (max-width:720px) {
+    #rail { display:none; } /* phone: sky chip TBD in full build */
+    #peek { width:210px; }
+  }
+</style>
+</head>
+<body data-register="day">
+
+<div id="map"></div>
+<div id="map-fallback"></div>
+<canvas id="fx"></canvas>
+
+<div id="masthead" class="floating">
+  <span class="wordmark serif">Craft Almanac</span>
+  <button id="register-chip" title="Light register — click to override">AUTO · DAY</button>
+  <span class="links">
+    <button data-sheet="plants">Plants</button>
+    <button data-sheet="recipes">Recipes</button>
+    <button data-sheet="about">About</button>
+  </span>
+</div>
+
+<div id="rail" class="floating"></div>
+<div id="rail-panel" class="floating"></div>
+
+<div id="legend" class="floating">
+  <div class="k">ACCESS AT A GLANCE</div>
+  <div class="leg-row" id="leg-row"></div>
+</div>
+
+<div id="season" class="floating">
+  <div class="track" id="season-track">
+    <div class="line"></div>
+    <div class="cursor" id="season-cursor"></div>
+    <div class="months"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+  </div>
+  <div class="meta">
+    <span id="season-label">THIS WEEK</span>
+    <button id="season-reset">BACK TO NOW</button>
+  </div>
+  <div id="hist-tip" class="floating">
+    <div class="t" id="hist-tip-t"></div>
+    <div class="bars" id="hist-tip-bars"></div>
+  </div>
+</div>
+
+<div id="peek" class="floating">
+  <div class="spine"></div>
+  <button class="close" aria-label="Close">×</button>
+  <div class="inner">
+    <h2 class="serif" id="peek-name"></h2>
+    <div class="sci" id="peek-sci"></div>
+    <div class="bars" id="peek-bars"></div>
+    <div class="status"><span class="dot" id="peek-dot"></span><span id="peek-status"></span></div>
+    <div class="flush" id="peek-flush">RAIN-FED FLUSH LIKELY THIS WEEK</div>
+    <div class="ethic" id="peek-ethic"></div>
+    <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE</div>
+  </div>
+</div>
+
+<div id="proto-note" class="floating">
+  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON &amp; TIDE
+</div>
+
+<div id="sheet-wrap"><div id="sheet" class="floating"></div></div>
+
+<script>
+"use strict";
+/* =================================================================== state */
+const CENTER = [-71.412, 41.82];           // Providence, RI — demo viewport
+const TIDE_STATION = "8454000";            // NOAA CO-OPS Providence
+const S = {
+  week: isoWeek(new Date()),               // selected week (scrub)
+  nowWeek: isoWeek(new Date()),
+  statuses: new Set(["allowed","permit","prohibited","private","unknown"]),
+  register: "day", override: localStorage.getItem("ca-register") || "auto",
+  weather: null, tide: null, selected: null, mapOK: false,
+  fxOn: !matchMedia("(prefers-reduced-motion: reduce)").matches,
+};
+
+/* ============================================================ demo catalog */
+function bellMonths(w0, w1) { // 12-month histogram from ripe-week range
+  const m0 = (w0 - 1) / 4.345, m1 = (w1 - 1) / 4.345, mid = (m0 + m1) / 2;
+  const spread = Math.max((m1 - m0) / 2, 0.8);
+  return Array.from({length:12}, (_, i) => {
+    let d = Math.abs(i + 0.5 - mid); d = Math.min(d, 12 - d);
+    return Math.max(0.04, Math.exp(-(d * d) / (2 * spread * spread)));
+  });
+}
+const SPECIES = {
+  elderberry:  { name:"Elderberry", sci:"SAMBUCUS CANADENSIS", uses:"food · ink · dye", pigment:"#8E2D56", ripe:[24,33], fungal:false, ethic:"Abundant. Take ripe umbels only; leave stems standing for the birds.", no:12 },
+  walnut:      { name:"Black walnut", sci:"JUGLANS NIGRA", uses:"ink · dye", pigment:"#5C4632", ripe:[40,46], fungal:false, ethic:"Fallen hulls only — the tree never misses them. Gloves on; the stain is the lesson.", no:47 },
+  oakgall:     { name:"Oak gall", sci:"QUERCUS / CYNIPIDAE", uses:"ink", pigment:"#3A3F3D", ripe:[36,48], fungal:false, ethic:"Gather fallen galls with an exit hole — the wasp has already left.", no:31 },
+  mulberry:    { name:"Mulberry", sci:"MORUS ALBA / RUBRA", uses:"food · dye", pigment:"#6E2D8E", ripe:[22,28], fungal:false, ethic:"Street-tree abundance. Shake onto a sheet; share the sidewalk crop.", no:8 },
+  serviceberry:{ name:"Serviceberry", sci:"AMELANCHIER SPP.", uses:"food", pigment:"#A63D2F", ripe:[22,27], fungal:false, ethic:"Planted everywhere, picked nowhere. Birds first; there is plenty.", no:5 },
+  chanterelle: { name:"Chanterelle", sci:"CANTHARELLUS SPP.", uses:"food", pigment:"#D9A521", ripe:[27,38], fungal:true, ethic:"Cut, don't rake. ID with three field marks minimum — see the safety whitelist.", no:63 },
+  grape:       { name:"Wild grape", sci:"VITIS SPP.", uses:"food · dye", pigment:"#2F4DA0", ripe:[36,41], fungal:false, ethic:"Leave the high clusters for wildlife; the low ones beat any hedge.", no:22 },
+  sumac:       { name:"Staghorn sumac", sci:"RHUS TYPHINA", uses:"food · dye", pigment:"#B4552D", ripe:[30,38], fungal:false, ethic:"Clip a few drupes per stand before heavy rain washes the acid off.", no:17 },
+};
+Object.values(SPECIES).forEach(s => s.months = bellMonths(...s.ripe));
+const STATUS_LABEL = { allowed:"Allowed", permit:"Permit required", prohibited:"Prohibited",
+  private:"Private land", unknown:"Unknown — verify" };
+const STATUS_RULE = { allowed:"Allowed here — 1 gal/person/day", permit:"Permit required — link to issuer",
+  prohibited:"Gathering prohibited here", private:"Private parcel — ask first", unknown:"No rule found yet — verify" };
+
+const rnd = mulberry32(20260611);
+const POINTS = [];
+{ const keys = Object.keys(SPECIES);
+  const stats = ["allowed","allowed","allowed","permit","permit","prohibited","private","unknown"];
+  for (let i = 0; i < 26; i++) {
+    POINTS.push({
+      id:i, sp:keys[i % keys.length],
+      lng:CENTER[0] + (rnd() - 0.5) * 0.085,
+      lat:CENTER[1] + (rnd() - 0.5) * 0.055,
+      status:stats[Math.floor(rnd() * stats.length)],
+    });
+  }
+}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ============================================================== sun & moon */
+const RAD = Math.PI / 180;
+function isoWeek(d){const x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=(x.getUTCDay()+6)%7;x.setUTCDate(x.getUTCDate()-n+3);const f=new Date(Date.UTC(x.getUTCFullYear(),0,4));return 1+Math.round(((x-f)/864e5-3+(f.getUTCDay()+6)%7)/7)}
+function dayNum(d){ return d / 864e5 - 0.5 + 2440588 - 2451545; }
+function sunAltitude(date, lat, lng) {
+  const d = dayNum(+date);
+  const g = RAD * (357.5291 + 0.98560028 * d);                 // mean anomaly
+  const q = RAD * (280.459 + 0.98564736 * d);                  // mean longitude
+  const L = q + RAD * 1.915 * Math.sin(g) + RAD * 0.02 * Math.sin(2 * g);
+  const e = RAD * 23.439;
+  const dec = Math.asin(Math.sin(e) * Math.sin(L));
+  const ra = Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L));
+  const gmst = RAD * (280.16 + 360.9856235 * d);
+  const H = gmst + RAD * lng - ra;
+  return Math.asin(Math.sin(RAD*lat)*Math.sin(dec) + Math.cos(RAD*lat)*Math.cos(dec)*Math.cos(H)) / RAD;
+}
+function sunTimes(date, lat, lng) { // scan-based: simple + robust for a prototype
+  const day = new Date(date); day.setHours(0,0,0,0);
+  let rise=null,set=null,goldenEve=null,duskCivil=null,dawnCivil=null,prev=null;
+  for (let m = 0; m <= 1440; m += 4) {
+    const t = new Date(+day + m * 6e4), alt = sunAltitude(t, lat, lng);
+    if (prev !== null) {
+      if (prev < 0 && alt >= 0) rise = t;
+      if (prev >= 0 && alt < 0) set = t;
+      if (prev >= 10 && alt < 10) goldenEve = t;
+      if (prev >= -6 && alt < -6) duskCivil = t;
+      if (prev < -6 && alt >= -6) dawnCivil = t;
+    }
+    prev = alt;
+  }
+  return { rise, set, goldenEve, duskCivil, dawnCivil };
+}
+function moonPhase(date) { // synodic approximation
+  const synodic = 29.53058867;
+  const days = (+date / 864e5 - +new Date(Date.UTC(2000,0,6,18,14)) / 864e5);
+  const phase = ((days % synodic) + synodic) % synodic / synodic;     // 0 new → 0.5 full
+  const illum = 0.5 * (1 - Math.cos(2 * Math.PI * phase));
+  return { phase, illum, waxing: phase < 0.5 };
+}
+
+/* =========================================================== registers */
+function computeRegister(date = new Date()) {
+  const alt = sunAltitude(date, CENTER[1], CENTER[0]);
+  if (alt >= 8) return "day";
+  if (alt <= -6) return "night";
+  const inMorning = date.getHours() < 12;
+  return inMorning ? "dawn" : "dusk";
+}
+function applyRegister() {
+  const reg = S.override === "auto" ? computeRegister() : S.override;
+  if (reg !== S.register) {
+    S.register = reg;
+    document.body.dataset.register = reg;
+    if (S.mapOK) try { map.setConfigProperty("basemap", "lightPreset", reg); } catch(e) {}
+    paintPoints(); renderPeek();
+  }
+  document.getElementById("register-chip").textContent =
+    (S.override === "auto" ? "AUTO · " : "PINNED · ") + reg.toUpperCase();
+}
+document.getElementById("register-chip").addEventListener("click", () => {
+  const order = ["auto","day","dusk","night","dawn"];
+  S.override = order[(order.indexOf(S.override) + 1) % order.length];
+  localStorage.setItem("ca-register", S.override);
+  S.register = ""; applyRegister();
+});
+setInterval(applyRegister, 60e3);
+
+/* ================================================================== map */
+let map = null, flushMarkers = [];
+const DAY_COLORS = sp => SPECIES[sp].pigment;
+const NIGHT_COLORS = { elderberry:"#F2A7C3", walnut:"#FF9447", oakgall:"#D7E8DC",
+  mulberry:"#C9A7F2", serviceberry:"#FF8A75", chanterelle:"#FFD166", grape:"#9BD4E4", sumac:"#FFB489" };
+
+function geojson() {
+  return { type:"FeatureCollection", features: POINTS.map(p => ({
+    type:"Feature", id:p.id,
+    geometry:{ type:"Point", coordinates:[p.lng, p.lat] },
+    properties:{ sp:p.sp, status:p.status,
+      dayColor:DAY_COLORS(p.sp), nightColor:NIGHT_COLORS[p.sp],
+      r0:SPECIES[p.sp].ripe[0], r1:SPECIES[p.sp].ripe[1], fungal:SPECIES[p.sp].fungal ? 1 : 0 },
+  })) };
+}
+function pointFilter() {
+  return ["in", ["get","status"], ["literal", [...S.statuses]]];
+}
+function seasonOpacity() {  // in-season vivid, out-of-season ghosted
+  return ["case", ["all", ["<=", ["get","r0"], S.week], [">=", ["get","r1"], S.week]], 0.95, 0.22];
+}
+function paintPoints() {
+  if (!S.mapOK) { paintFallback(); return; }
+  const night = S.register === "night" || S.register === "dusk";
+  const colorExpr = ["get", night ? "nightColor" : "dayColor"];
+  map.setPaintProperty("occ-core", "circle-color", colorExpr);
+  map.setPaintProperty("occ-core", "circle-opacity", seasonOpacity());
+  map.setPaintProperty("occ-halo", "circle-color", colorExpr);
+  map.setPaintProperty("occ-halo", "circle-opacity", night ? 0.5 : 0.0);
+  map.setFilter("occ-core", pointFilter());
+  map.setFilter("occ-halo", pointFilter());
+  refreshFlush();
+}
+function initMap() {
+  const token = (window.FORAGE_CONFIG || {}).mapboxToken || "";
+  if (!window.mapboxgl || !token) return mapFallback();
+  mapboxgl.accessToken = token;
+  try {
+    map = new mapboxgl.Map({ container:"map", style:"mapbox://styles/mapbox/standard",
+      center:CENTER, zoom:12.6, attributionControl:true });
+  } catch (e) { return mapFallback(); }
+  map.on("error", ev => { if (!S.mapOK) mapFallback(); });
+  map.on("style.load", () => {
+    S.mapOK = true;
+    try { map.setConfigProperty("basemap", "lightPreset", S.register); } catch(e) {}
+    map.addSource("occ", { type:"geojson", data:geojson() });
+    map.addLayer({ id:"occ-halo", type:"circle", source:"occ", slot:"top",
+      paint:{ "circle-radius":13, "circle-blur":1.1, "circle-color":"#FFD166", "circle-opacity":0 } });
+    map.addLayer({ id:"occ-core", type:"circle", source:"occ", slot:"top",
+      paint:{ "circle-radius":5.5, "circle-color":"#6B7F2E", "circle-opacity":0.95,
+              "circle-stroke-width":1, "circle-stroke-color":"rgba(255,255,255,0.55)" } });
+    paintPoints();
+    map.on("click", "occ-core", e => openPeek(e.features[0].id));
+    map.on("mouseenter", "occ-core", () => map.getCanvas().style.cursor = "pointer");
+    map.on("mouseleave", "occ-core", () => map.getCanvas().style.cursor = "");
+  });
+}
+/* fallback: gradient ground + DOM dots (design still reviewable w/o token) */
+const FB = { dots:[] };
+function mapFallback() {
+  document.getElementById("map").style.display = "none";
+  const fb = document.getElementById("map-fallback");
+  fb.style.display = "block";
+  fb.innerHTML = "<div class='mono' style='position:absolute;top:46%;width:100%;text-align:center;font-size:9px;letter-spacing:0.1em;color:var(--sub)'>MAP UNAVAILABLE — UI PROTOTYPE MODE (DEMO DOTS BELOW ARE SCHEMATIC)</div>";
+  POINTS.forEach(p => {
+    const el = document.createElement("button");
+    el.style.cssText = "position:absolute;width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.5);cursor:pointer;";
+    el.style.left = (50 + (p.lng - CENTER[0]) / 0.05 * 38) + "%";
+    el.style.top  = (50 - (p.lat - CENTER[1]) / 0.035 * 38) + "%";
+    el.addEventListener("click", () => openPeek(p.id));
+    fb.appendChild(el); FB.dots.push([p, el]);
+  });
+  paintFallback();
+}
+function paintFallback() {
+  const night = S.register === "night" || S.register === "dusk";
+  FB.dots.forEach(([p, el]) => {
+    const sp = SPECIES[p.sp];
+    el.style.background = night ? NIGHT_COLORS[p.sp] : sp.pigment;
+    el.style.boxShadow = night ? "0 0 10px " + NIGHT_COLORS[p.sp] : "none";
+    const inSeason = sp.ripe[0] <= S.week && sp.ripe[1] >= S.week;
+    el.style.opacity = S.statuses.has(p.status) ? (inSeason ? 0.95 : 0.25) : 0;
+    el.style.pointerEvents = S.statuses.has(p.status) ? "auto" : "none";
+  });
+}
+
+/* ------- flush pulse markers on fungal points after real rain ------- */
+function refreshFlush() {
+  flushMarkers.forEach(m => m.remove()); flushMarkers = [];
+  if (!S.mapOK || !S.weather || S.weather.past72 < 18) return;
+  POINTS.filter(p => SPECIES[p.sp].fungal && S.statuses.has(p.status)).forEach(p => {
+    const el = document.createElement("div"); el.className = "pulse";
+    flushMarkers.push(new mapboxgl.Marker({ element:el }).setLngLat([p.lng, p.lat]).addTo(map));
+  });
+}
+
+/* ============================================================== weather */
+async function loadWeather() {
+  const KEY = "ca-wx", TTL = 30 * 60e3;
+  const cached = JSON.parse(localStorage.getItem(KEY) || "null");
+  if (cached && Date.now() - cached.t < TTL) { S.weather = cached.v; return afterWeather("cached"); }
+  const url = "https://api.open-meteo.com/v1/forecast?latitude=" + CENTER[1] +
+    "&longitude=" + CENTER[0] +
+    "&hourly=precipitation,cloud_cover,wind_speed_10m,wind_direction_10m" +
+    "&past_days=3&forecast_days=7&timezone=auto";
+  try {
+    const r = await fetch(url); const j = await r.json();
+    const H = j.hourly, nowI = H.time.findIndex(t => new Date(t) > new Date()) - 1;
+    const past72 = sum(H.precipitation.slice(Math.max(0, nowI - 72), nowI));
+    const daily = [];
+    for (let d = 0; d < 10; d++) daily.push(sum(H.precipitation.slice(d * 24, d * 24 + 24)));
+    S.weather = {
+      past72: round1(past72), daily: daily.map(round1),
+      wind: H.wind_speed_10m[nowI] || 0, windDir: H.wind_direction_10m[nowI] || 0,
+      clouds: H.cloud_cover[nowI] || 0, fetched: Date.now(),
+    };
+    localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), v: S.weather }));
+    afterWeather("live");
+  } catch (e) { // baked sample so the design always reviews
+    S.weather = { past72:31, daily:[2,14,15,0,0,4,11,0,0,2], wind:9, windDir:240, clouds:55, fetched:0, sample:true };
+    afterWeather("sample");
+  }
+}
+function afterWeather(src) { S.weather.src = src; renderRail(); refreshFlush(); renderPeek(); }
+const sum = a => a.reduce((x,y) => x + (y||0), 0);
+const round1 = x => Math.round(x * 10) / 10;
+
+/* ================================================================= tide */
+async function loadTide() {
+  const KEY = "ca-tide", TTL = 60 * 60e3;
+  const cached = JSON.parse(localStorage.getItem(KEY) || "null");
+  if (cached && Date.now() - cached.t < TTL) { S.tide = cached.v; return renderRail(); }
+  const today = new Date(), pad = n => String(n).padStart(2, "0");
+  const ds = today.getFullYear() + pad(today.getMonth()+1) + pad(today.getDate());
+  const url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions" +
+    "&application=craftalmanac-prototype&station=" + TIDE_STATION +
+    "&begin_date=" + ds + "&range=36&datum=MLLW&interval=hilo&units=english&time_zone=lst_ldt&format=json";
+  try {
+    const r = await fetch(url); const j = await r.json();
+    const next = (j.predictions || []).filter(p => new Date(p.t) > new Date());
+    if (next.length) {
+      S.tide = { next: next.slice(0, 3).map(p => ({ t:p.t, type:p.type, v:p.v })) };
+      localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), v: S.tide }));
+    }
+  } catch (e) { S.tide = null; }
+  renderRail();
+}
+
+/* ========================================================= conditions rail */
+const railEl = document.getElementById("rail");
+const panelEl = document.getElementById("rail-panel");
+let openSeg = null;
+function seg(id, k, v) {
+  return `<button class="rail-seg ${openSeg===id?"active":""}" data-seg="${id}">
+    <span class="k">${k}</span><span class="v">${v}</span></button>`;
+}
+function fmtT(d) { return d ? new Date(d).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "—"; }
+function renderRail() {
+  const st = sunTimes(new Date(), CENTER[1], CENTER[0]);
+  const mp = moonPhase(new Date());
+  const w = S.weather;
+  let html = seg("sun", "SUN", "set " + fmtT(st.set));
+  html += seg("moon", "MOON", Math.round(mp.illum * 100) + "% " + (mp.waxing ? "waxing" : "waning"));
+  if (w) {
+    html += seg("rain", "RAIN 72H", w.past72 + " mm" + (w.past72 >= 18 ? " ·⚡" : ""));
+    html += seg("wind", "WIND", Math.round(w.wind) + " km/h");
+  }
+  if (S.tide && S.tide.next) {
+    const n = S.tide.next[0];
+    html += seg("tide", "TIDE", (n.type === "L" ? "low " : "high ") + fmtT(n.t));
+  }
+  railEl.innerHTML = html;
+  railEl.querySelectorAll(".rail-seg").forEach(b =>
+    b.addEventListener("click", () => toggleSeg(b.dataset.seg)));
+  if (openSeg) renderPanel();
+}
+function toggleSeg(id) { openSeg = openSeg === id ? null : id; panelEl.classList.toggle("open", !!openSeg); renderRail(); }
+function renderPanel() {
+  const st = sunTimes(new Date(), CENTER[1], CENTER[0]);
+  const mp = moonPhase(new Date());
+  const w = S.weather, age = w && w.fetched ? Math.round((Date.now()-w.fetched)/6e4) : null;
+  const srcLine = w ? `<div class="age">SOURCE: OPEN-METEO · ${w.src === "sample" ? "OFFLINE SAMPLE" : (age<=1?"JUST FETCHED":age+" MIN AGO")}</div>` : "";
+  let html = "";
+  if (openSeg === "sun") {
+    html = `<h3>THE DAY'S EDGES</h3>
+      <div class="note">Rise ${fmtT(st.dawnCivil)} (civil) · ${fmtT(st.rise)} (sun)<br>
+      Golden hour from ${fmtT(st.goldenEve)} · Set ${fmtT(st.set)} · Dark ${fmtT(st.duskCivil)}<br><br>
+      Many parks close gathering at dusk — the register and the rules keep the same clock.</div>
+      <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
+  } else if (openSeg === "moon") {
+    html = `<h3>MOON</h3><div class="note">${Math.round(mp.illum*100)}% illuminated, ${mp.waxing?"waxing":"waning"}.
+      Bright-moon nights favor low-tide walks and evening-primrose watching; headlamps off when you can.</div>
+      <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
+  } else if (openSeg === "rain" && w) {
+    const labels = ["-3d","-2d","-1d","today","+1","+2","+3","+4","+5","+6"];
+    const mx = Math.max(...w.daily, 1);
+    const bars = w.daily.map((v,i) =>
+      `<div class="b ${i<3?"past":""} ${i===3?"today":""}" style="height:${Math.max(4, v/mx*100)}%" title="${v} mm"></div>`).join("");
+    const flush = w.past72 >= 18;
+    const windows = pickWindows(w.daily);
+    html = `<h3>RAIN — MEMORY & FORECAST</h3>
+      <div class="bars">${bars}</div><div class="bars-labels">${labels.map(l=>`<span>${l}</span>`).join("")}</div>
+      <div class="note" style="margin-top:8px">
+      Past 72 h: <b>${w.past72} mm</b>${flush ? " — <b>fungal flush likely</b>; chanterelle points are pulsing." : " — below flush threshold (18 mm)."}<br>
+      ${windows}</div>${srcLine}`;
+  } else if (openSeg === "wind" && w) {
+    html = `<h3>WIND & CLOUD</h3>
+      <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>
+      Calm dry days are drying days — fiber and dye plants cure fastest.<br>
+      Gusty days: stay clear of old canopy.</div>
+      <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer">
+        <input type="checkbox" id="fx-toggle" ${S.fxOn?"checked":""}> animate wind &amp; cloud layer
+      </label>${srcLine}`;
+  } else if (openSeg === "tide" && S.tide) {
+    const rows = S.tide.next.map(n =>
+      `${n.type === "L" ? "LOW" : "HIGH"} ${fmtT(n.t)} (${n.v} ft)`).join("<br>");
+    html = `<h3>TIDE — PROVIDENCE STATION</h3><div class="note">${rows}<br><br>
+      The falling tide opens the intertidal window. <b>Biotoxin closures always override</b> —
+      closure layers are hand-encoded like park rules, never inferred.</div>
+      <div class="age">SOURCE: NOAA CO-OPS · STATION ${TIDE_STATION}</div>`;
+  }
+  panelEl.innerHTML = html;
+  const t = document.getElementById("fx-toggle");
+  if (t) t.addEventListener("change", e => { S.fxOn = e.target.checked; });
+}
+function pickWindows(daily) {
+  // forecast helper: next rain day, then first dry day after = fungi window; 2+ dry days = berry/fiber window
+  let rainDay = -1;
+  for (let i = 4; i < 10; i++) if (daily[i] >= 5) { rainDay = i; break; }
+  let dryStart = -1, dryEnd = -1;
+  for (let i = 4; i < 9; i++) if (daily[i] < 1 && daily[i+1] < 1) {
+    dryStart = i; dryEnd = i + 1;
+    while (dryEnd + 1 < 10 && daily[dryEnd + 1] < 1) dryEnd++;
+    break;
+  }
+  const dn = i => ["today","+1","+2","+3","+4","+5","+6"][i-3] || "+?";
+  let out = [];
+  if (rainDay > 0) out.push(`Rain expected ${dn(rainDay)} — check fungi ${dn(Math.min(rainDay+2,9))}.`);
+  if (dryStart > 0) out.push(`Dry window ${dn(dryStart)}–${dn(dryEnd)}: berries, fiber, drying.`);
+  return out.join(" ") || "No strong windows in the forecast.";
+}
+function dirName(d){return ["N","NE","E","SE","S","SW","W","NW"][Math.round(d/45)%8]}
+
+/* =========================================== wind + cloud canvas (animated) */
+const fx = document.getElementById("fx"), ctx = fx.getContext("2d");
+let parts = [], clouds = [];
+function fxResize(){ fx.width = innerWidth; fx.height = innerHeight; }
+addEventListener("resize", fxResize); fxResize();
+function fxInit() {
+  parts = Array.from({length:110}, () => ({ x:Math.random()*fx.width, y:Math.random()*fx.height,
+    a:Math.random()*Math.PI*2, life:Math.random()*90 }));
+  clouds = Array.from({length:5}, () => ({ x:Math.random()*fx.width, y:Math.random()*fx.height*0.8,
+    w:180+Math.random()*260, h:50+Math.random()*60, v:0.06+Math.random()*0.1 }));
+}
+fxInit();
+function fxFrame() {
+  requestAnimationFrame(fxFrame);
+  if (document.hidden) return;
+  ctx.clearRect(0, 0, fx.width, fx.height);
+  if (!S.fxOn || !S.weather) return;
+  const w = S.weather, night = S.register === "night" || S.register === "dusk";
+  const speed = Math.min(2.4, 0.25 + w.wind * 0.07);
+  const dir = (w.windDir + 180) * RAD;            // direction wind blows TOWARD
+  const vx = Math.sin(dir) * speed, vy = -Math.cos(dir) * speed;
+  // clouds
+  const cAlpha = Math.min(0.16, w.clouds / 100 * 0.18) * (night ? 0.8 : 1);
+  ctx.fillStyle = night ? "rgba(190,210,200,"+cAlpha+")" : "rgba(90,100,110,"+cAlpha+")";
+  clouds.forEach(cl => {
+    cl.x += vx * cl.v * 6; cl.y += vy * cl.v * 2;
+    if (cl.x > fx.width + cl.w) cl.x = -cl.w; if (cl.x < -cl.w) cl.x = fx.width + cl.w;
+    if (cl.y > fx.height + cl.h) cl.y = -cl.h; if (cl.y < -cl.h) cl.y = fx.height + cl.h;
+    ctx.beginPath(); ctx.ellipse(cl.x, cl.y, cl.w, cl.h, 0, 0, 7); ctx.fill();
+  });
+  // wind streaks
+  ctx.lineWidth = 1;
+  parts.forEach(p => {
+    p.x += vx * 2.2; p.y += vy * 2.2; p.life -= 1;
+    if (p.life <= 0 || p.x < -20 || p.x > fx.width+20 || p.y < -20 || p.y > fx.height+20) {
+      p.x = Math.random()*fx.width; p.y = Math.random()*fx.height; p.life = 60+Math.random()*80;
+    }
+    const a = Math.min(1, p.life / 40) * (night ? 0.5 : 0.22);
+    ctx.strokeStyle = night ? "rgba(215,232,220,"+a+")" : "rgba(90,97,91,"+a+")";
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x - vx*9, p.y - vy*9); ctx.stroke();
+    if (night) { ctx.fillStyle = "rgba(255,250,230,"+(a*0.9)+")";
+      ctx.beginPath(); ctx.arc(p.x, p.y, 0.9, 0, 7); ctx.fill(); }
+  });
+}
+requestAnimationFrame(fxFrame);
+
+/* ====================================================== legend / filters */
+const LEG = document.getElementById("leg-row");
+LEG.innerHTML = Object.keys(STATUS_LABEL).map(k =>
+  `<button class="leg-chip" data-st="${k}">
+     <span class="dot" style="background:var(--st-${k})"></span>${STATUS_LABEL[k]}</button>`).join("");
+LEG.querySelectorAll(".leg-chip").forEach(b => b.addEventListener("click", () => {
+  const k = b.dataset.st;
+  if (S.statuses.has(k)) { S.statuses.delete(k); b.classList.add("off"); }
+  else { S.statuses.add(k); b.classList.remove("off"); }
+  paintPoints();
+}));
+
+/* ===================================================== season slider */
+const track = document.getElementById("season-track");
+const cursor = document.getElementById("season-cursor");
+const tip = document.getElementById("hist-tip");
+function weekToX(w){ return (w - 1) / 51; }
+function setCursor(){ cursor.style.left = (weekToX(S.week) * 100) + "%";
+  document.getElementById("season-label").textContent =
+    S.week === S.nowWeek ? "THIS WEEK · WK " + S.week : "VIEWING WK " + S.week + " — TIME TRAVEL";
+  document.getElementById("season").classList.toggle("scrubbed", S.week !== S.nowWeek);
+}
+setCursor();
+function trackWeek(e){
+  const r = track.getBoundingClientRect();
+  return Math.max(1, Math.min(52, Math.round(((e.clientX - r.left) / r.width) * 51) + 1));
+}
+let dragging = false;
+track.addEventListener("pointerdown", e => { dragging = true; S.week = trackWeek(e); setCursor(); paintPoints(); });
+addEventListener("pointermove", e => { if (dragging) { S.week = trackWeek(e); setCursor(); paintPoints(); } });
+addEventListener("pointerup", () => dragging = false);
+document.getElementById("season-reset").addEventListener("click", () => {
+  S.week = S.nowWeek; setCursor(); paintPoints();
+});
+/* histogram tooltip — on hover only, per owner */
+track.addEventListener("pointermove", e => {
+  const w = trackWeek(e), m = Math.min(11, Math.floor((w - 1) / 4.345));
+  const agg = Array.from({length:12}, (_, i) =>
+    Object.values(SPECIES).reduce((s, sp) => s + sp.months[i], 0));
+  const mx = Math.max(...agg);
+  document.getElementById("hist-tip-bars").innerHTML = agg.map((v,i) =>
+    `<div class="b" style="height:${v/mx*100}%; opacity:${i===m?1:0.45}"></div>`).join("");
+  document.getElementById("hist-tip-t").textContent =
+    "WHAT'S IN SEASON · " + ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][m];
+  const r = track.getBoundingClientRect();
+  tip.style.left = Math.max(0, Math.min(e.clientX - r.left - 74, r.width - 148)) + "px";
+  tip.style.display = "block";
+});
+track.addEventListener("pointerleave", () => tip.style.display = "none");
+
+/* ================================================== quiet pigment peek */
+function openPeek(id) {
+  S.selected = POINTS[id]; renderPeek();
+  document.getElementById("peek").classList.add("open");
+}
+document.querySelector("#peek .close").addEventListener("click", () =>
+  document.getElementById("peek").classList.remove("open"));
+function renderPeek() {
+  const p = S.selected; if (!p) return;
+  const sp = SPECIES[p.sp];
+  const night = S.register === "night" || S.register === "dusk";
+  document.querySelector("#peek .spine").style.background = sp.pigment;
+  document.getElementById("peek-name").textContent = sp.name;
+  document.getElementById("peek-sci").textContent =
+    "NO. " + String(sp.no).padStart(3,"0") + " · " + sp.sci + " · " + sp.uses.toUpperCase() +
+    " · RIPE WK " + sp.ripe[0] + "–" + sp.ripe[1];
+  const mx = Math.max(...sp.months);
+  document.getElementById("peek-bars").innerHTML = sp.months.map(v =>
+    `<div class="b" style="height:${v/mx*100}%; background:${night ? NIGHT_COLORS[p.sp] : sp.pigment}"></div>`).join("");
+  document.getElementById("peek-dot").style.background = `var(--st-${p.status})`;
+  document.getElementById("peek-status").textContent = STATUS_RULE[p.status];
+  document.getElementById("peek-ethic").textContent = sp.ethic;
+  document.getElementById("peek-flush").classList.toggle("on",
+    sp.fungal && S.weather && S.weather.past72 >= 18);
+}
+
+/* ============================================== sheets: about/plants/recipes */
+const SHEETS = {
+  about: () => `<button class="closer">×</button><div class="k">CRAFT ALMANAC · PROTOTYPE</div>
+    <h2 class="serif">A map that keeps the almanac's hours</h2>
+    <p>Craft Almanac shares local material availability, ethical harvesting practice, craft
+    knowledge, and safety information — in collaboration with the places it maps. The map is
+    the front door; plant profiles and project recipes live one tap away.</p>
+    <p><b>Occurrence is never permission.</b> Records show where something has been seen, not
+    that you may take it. Every point carries its parcel's rule, and unknowns say so.
+    Conditions (sun, rain, wind, tide) inform your planning; they never promise.</p>
+    <p class="mono" style="font-size:9px; letter-spacing:0.06em">THIS PAGE IS A DESIGN PROTOTYPE.
+    ALL OCCURRENCE RECORDS ARE INVENTED FOR REVIEW. WEATHER, SUN, MOON AND TIDE ARE LIVE.</p>`,
+  plants: () => `<button class="closer">×</button><div class="k">THE SHELF · ${Object.keys(SPECIES).length} DEMO PROFILES</div>
+    <h2 class="serif">Plant &amp; material profiles</h2>
+    <p>Each profile opens as a full page in the build; here, tap one to find it on the map.</p>
+    <div class="card-grid">` + Object.entries(SPECIES).map(([k, sp]) =>
+      `<div class="mini-card" data-sp="${k}"><div class="spine" style="background:${sp.pigment}"></div>
+       <h4 class="serif">${sp.name}</h4><div class="m">NO. ${String(sp.no).padStart(3,"0")} · WK ${sp.ripe[0]}–${sp.ripe[1]}</div>
+       <div class="uses">${sp.uses}</div></div>`).join("") + `</div>`,
+  recipes: () => `<button class="closer">×</button><div class="k">THE PRESS · 3 DEMO RECIPES</div>
+    <h2 class="serif">Project recipes</h2>
+    <p>Step decks with a hands-busy mode in the build; printable as broadsides.</p>
+    <div class="card-grid">` + [
+      ["Oak gall ink", "6 steps · 2 days", "#3A3F3D"],
+      ["Elderberry ink", "5 steps · evening", "#8E2D56"],
+      ["Walnut dye bath", "4 steps · weekend", "#5C4632"],
+    ].map(r => `<div class="mini-card"><div class="spine" style="background:${r[2]}"></div>
+      <h4 class="serif">${r[0]}</h4><div class="m">${r[1].toUpperCase()}</div>
+      <div class="uses">gather → prepare → make</div></div>`).join("") + `</div>`,
+};
+const wrapEl = document.getElementById("sheet-wrap"), sheetEl = document.getElementById("sheet");
+document.querySelectorAll("#masthead .links button").forEach(b =>
+  b.addEventListener("click", () => { sheetEl.innerHTML = SHEETS[b.dataset.sheet]();
+    wrapEl.classList.add("open"); bindSheet(); }));
+function bindSheet() {
+  sheetEl.querySelector(".closer").addEventListener("click", () => wrapEl.classList.remove("open"));
+  sheetEl.querySelectorAll("[data-sp]").forEach(card => card.addEventListener("click", () => {
+    const k = card.dataset.sp, pt = POINTS.find(p => p.sp === k);
+    wrapEl.classList.remove("open");
+    if (pt) { if (S.mapOK) map.flyTo({ center:[pt.lng, pt.lat], zoom:14 }); openPeek(pt.id); }
+  }));
+}
+wrapEl.addEventListener("click", e => { if (e.target === wrapEl) wrapEl.classList.remove("open"); });
+addEventListener("keydown", e => { if (e.key === "Escape") { wrapEl.classList.remove("open");
+  document.getElementById("peek").classList.remove("open"); } });
+
+/* ================================================================ boot */
+applyRegister();
+initMap();
+renderRail();
+loadWeather();
+loadTide();
+</script>
+</body>
+</html>
