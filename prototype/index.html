@@ -180,8 +180,8 @@
   /* expands upward above the permanent lines, exactly like the season chart */
   #legend-body { height:0; opacity:0; overflow:hidden; transition:height .28s ease, opacity .28s ease; }
   #legend:hover #legend-body { height:164px; opacity:1; }
-  #legend .titlebar { margin-top:7px; font-size:10.5px; letter-spacing:0.12em; color:var(--sub);
-    font-family:ui-monospace, Menlo, monospace; }
+  #legend .titlebar { margin-top:7px; font-size:10.5px; letter-spacing:0.12em; color:var(--ink);
+    font-weight:700; font-family:ui-monospace, Menlo, monospace; }
   .legcols { display:flex; flex-direction:row; gap:20px; margin-top:8px; align-items:flex-start; }
   .legcols .lcol { flex:none; }
   .legcols .lcol .k { margin-bottom:6px; }
@@ -441,7 +441,7 @@
 <div id="hover-tip"><div class="sp"></div><div class="nm"></div><div class="st"></div></div>
 
 <div id="proto-note" class="floating">
-  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS IN 10 TEST CLUSTERS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON, TIDE &amp; SATELLITE CLOUDS (NOAA GOES)
+  <b>DESIGN PROTOTYPE</b> · DEMO RECORDS IN 10 TEST CLUSTERS, NOT REAL OCCURRENCES · LIVE WEATHER, SUN, MOON, TIDE &amp; RADAR (© RAINVIEWER)
 </div>
 
 <div id="sheet-wrap"><div id="sheet" class="floating"></div></div>
@@ -760,29 +760,27 @@ function initMap() {
 /* zoomed out: live precipitation radar (RainViewer, free tiles, no key);
    zoomed in (>= 7.5): the graphic cloud & wind layer takes over */
 const RADAR_MAX_ZOOM = 7.5;
-function loadRadar() {
-  /* sky layer: NOAA nowCOAST GOES longwave (infrared) cloud mosaic — true
-     satellite imagery, transparent where clear, free and key-less, and a
-     clean ATTRIBUTION.md story (US government data). Live-verified.
-     (RainViewer's satellite feed is currently empty; OpenWeatherMap's
-     clouds_new is a paid-key alternative if NOAA ever retires this.) */
+async function loadRadar() {
+  /* sky layer: RainViewer precipitation radar (owner preference after
+     trying NOAA GOES satellite). Last past frame — nowcast can be an
+     empty-but-truthy array. maxzoom 6 avoids provider watermark tiles. */
   try {
-    const wms = "https://nowcoast.noaa.gov/geoserver/observations/satellite/ows" +
-      "?service=WMS&version=1.3.0&request=GetMap&layers=global_longwave_imagery_mosaic" +
-      "&styles=&crs=EPSG:3857&bbox={bbox-epsg-3857}&width=256&height=256" +
-      "&format=image/png&transparent=true";
-    map.addSource("radar", { type:"raster", tiles:[wms], tileSize:256,
-      maxzoom:7, attribution:"Clouds: NOAA nowCOAST / GOES" });
+    const j = await (await fetch("https://api.rainviewer.com/public/weather-maps.json")).json();
+    const past = (j.radar && j.radar.past) || [];
+    if (!past.length) return;
+    const tiles = j.host + past[past.length - 1].path + "/256/{z}/{x}/{y}/2/1_1.png";
+    map.addSource("radar", { type:"raster", tiles:[tiles], tileSize:256,
+      maxzoom:6, attribution:"Radar © RainViewer" });
     map.addLayer({ id:"radar", type:"raster", source:"radar", slot:"top",
       paint:{ "raster-opacity":0, "raster-opacity-transition":{ duration:600 } } }, "occ-halo");
     updateZoomLayers();
-  } catch (e) { /* sky layer is an enhancement; the map works without it */ }
+  } catch (e) { /* radar is an enhancement; the map works without it */ }
 }
 function updateZoomLayers() {
   if (!S.mapOK) return;
   const low = map.getZoom() < RADAR_MAX_ZOOM;
   if (map.getLayer("radar"))
-    map.setPaintProperty("radar", "raster-opacity", low ? 0.7 : 0);
+    map.setPaintProperty("radar", "raster-opacity", low ? 0.55 : 0);
 }
 const tipEl = document.getElementById("hover-tip");
 function showHoverTip(f, pt) {
@@ -1351,7 +1349,7 @@ function syncModeUI() {
   document.getElementById("mode-disclaimer").classList.toggle("show", S.mode === "herbalism");
   const hh = document.getElementById("season-hh");
   if (hh) hh.innerHTML = `IN SEASON BY MONTH · <b>${MODES[S.mode].label} MAP</b> · STACKED BY CATEGORY`;
-  const mapLine = `ACTIVE MAP: <span style="color:var(--ink)">${MODES[S.mode].label}</span>`;
+  const mapLine = `<b style="color:var(--ink)">ACTIVE MAP:</b> <span style="color:var(--ink)">${MODES[S.mode].label}</span>`;
   document.getElementById("leg-map").innerHTML = mapLine;
   const lm = document.getElementById("leg-map-m");
   if (lm) lm.innerHTML = mapLine;
