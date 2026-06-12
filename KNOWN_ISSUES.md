@@ -62,6 +62,19 @@ point-band records below zoom 8; provisional raster access rules"):**
    Raster now loads at startup, and `loadPublicLands` records coverage +
    truncation.
 
+**Update 2026-06-12 (owner retest: allowed-only clusters now appear much
+sooner, but still absent at FULL zoom out; fixed, commit "Resolve filtered
+overview tiles at status grid zoom"):** at gz 2-4 a UTFGrid response cell
+spans 0.35-1.4 degrees, so its single 0.05-degree raster lookup is noise —
+measured nationally: only 27 of 1,845 cells carried an "allowed" status and
+the filtered overview total collapsed to ~3.5k. Fix: when a permission filter
+is active, `getINaturalistAggregateTiles` resolves the whole region at gz 6
+(~84 tiles, capped at 96, concurrency 3 when fetching >24 tiles, cached per
+taxon set; identical tile ids to the viewport band so zooming under a filter
+hits cache). Default-permission behavior unchanged. First filtered overview
+paint waits a few seconds on the one-time fetch — previous paint holds via
+the existing gate.
+
 **Follow-ups for the 5am loop:**
 - Plan items 2 (prefetch/warm gz=2/4), 3 (data-availability-bounded bridge)
   and 4 (instrumentation) below are still open and still worth doing.

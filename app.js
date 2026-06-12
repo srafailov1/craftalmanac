@@ -16,6 +16,11 @@ const INATURALIST_AGGREGATE_DELAY = 260;
 const INATURALIST_GRID_MIN_ZOOM = 2;
 const INATURALIST_GRID_MAX_ZOOM = 7;
 const INATURALIST_GRID_MAX_TILES = 24;
+// When a permission filter is on, cell statuses must resolve against the
+// 0.05-degree raster, so tiles are fetched at this finer grid zoom even for
+// the whole-region overview (~84 tiles, fetched once per taxon set, cached).
+const INATURALIST_GRID_STATUS_ZOOM = 6;
+const INATURALIST_GRID_MAX_STATUS_TILES = 96;
 const INATURALIST_GRID_CELL_BUCKETS = 32;
 const AGGREGATE_FIRST_PAINT_GRACE_MS = 2500;
 const AGGREGATE_BRIDGE_MAX_MS = 2500;
@@ -3568,7 +3573,11 @@ async function loadINaturalistAggregates() {
     // never paint; the previous complete state stays up until the swap.
     setINaturalistAggregateReady(false);
     try {
-      await mapWithConcurrency(missingTiles, 6, async (tile) => {
+      // Large status-resolution tile sets (filtered overview) fetch at lower
+      // concurrency to stay polite to the iNaturalist tile API; they are a
+      // one-time cost per taxon set, cached afterwards.
+      const concurrency = missingTiles.length > INATURALIST_GRID_MAX_TILES ? 3 : 6;
+      await mapWithConcurrency(missingTiles, concurrency, async (tile) => {
         if (requestId !== state.activeINaturalistAggregateRequest) return null;
         const items = await fetchINaturalistAggregateTileWithRetry(taxonIds, tile);
         touchCacheEntry(state.inatAggregateCache, getINaturalistAggregateCacheKey(taxonIds, tile), items);
@@ -3875,8 +3884,20 @@ function getINaturalistAggregateTiles(bounds, zoom) {
   // resolution stays ample: every tile carries 64x64 response cells.
   const evenZoom = Math.floor(zoom / 2) * 2;
   let gridZoom = Math.min(INATURALIST_GRID_MAX_ZOOM, Math.max(INATURALIST_GRID_MIN_ZOOM, evenZoom));
+  let maxTiles = INATURALIST_GRID_MAX_TILES;
+  if (isAccessFilterActive()) {
+    // Permission statuses resolve per response cell against the 0.05-degree
+    // raster. At gz 2-4 a response cell spans 0.35-1.4 degrees, so its single
+    // raster lookup is noise and filtered counts collapse (measured: 27 of
+    // 1,845 national cells carried an "allowed" status — the rest of the
+    // iNat contribution vanished from filtered overviews). Use the gz-6 set
+    // whenever a filter is on: same per-cell fidelity as the viewport band,
+    // ~84 region tiles fetched once per taxon set and cached after.
+    gridZoom = Math.max(gridZoom, INATURALIST_GRID_STATUS_ZOOM);
+    maxTiles = INATURALIST_GRID_MAX_STATUS_TILES;
+  }
   let tiles = getGridTilesForArea(area, gridZoom);
-  while (tiles.length > INATURALIST_GRID_MAX_TILES && gridZoom > INATURALIST_GRID_MIN_ZOOM) {
+  while (tiles.length > maxTiles && gridZoom > INATURALIST_GRID_MIN_ZOOM) {
     gridZoom -= 2;
     tiles = getGridTilesForArea(area, gridZoom);
   }
