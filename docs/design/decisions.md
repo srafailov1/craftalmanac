@@ -3,6 +3,20 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-11 — Round 3 delivered: site versions.** Owner asked for a broad
+  contemporary-web-design pass, not mission-filtered, focused on UX/UI for
+  the site's needs (map, plant cards, project recipes), decoupled from the
+  Round 1–2 graphic identities. `round-3-site-versions.pdf` (23 pp,
+  generator `build_round3_deck.py`): genre research (Awwwards 2025 tier,
+  Linear/Felt/Raycast product-UX school, Snow Fall/Pudding/Stripe editorial
+  school, 2026 calm-UI currents) distilled into six static-buildable
+  patterns, then three UX skeletons: A **Field Desk** (map-as-app, cmd-K,
+  season scrubber, cook mode), B **The Long Season** (scrollytelling weekly
+  entry, sticky editorial plant spreads, stepped recipe stories),
+  C **Card Table** (bento home, literal tilt/flip plant cards, recipe step
+  decks). Identity and UX are now separate decisions; any Round 2 world can
+  skin any skeleton. Awaiting owner's four asks (p. 23).
+
 - **2026-06-11 — Round 1 rejected; Round 2 delivered.** Owner critique:
   Round 1's three directions read as variations of one cream-paper almanac
   world, too close to the current site. Round 2
