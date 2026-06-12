@@ -85,7 +85,7 @@
   #masthead .wordmark { font-size:15px; letter-spacing:0.04em; }
   #masthead .links { display:flex; gap:11px; border-left:1px solid var(--hair); padding-left:13px; }
   #masthead .links button {
-    background:none; border:none; color:var(--sub); font-size:11px; cursor:pointer;
+    background:none; border:none; color:var(--sub); font-size:12px; cursor:pointer;
     padding:2px; letter-spacing:0.06em; text-transform:uppercase;
     font-family:ui-monospace, Menlo, monospace;
   }
@@ -98,9 +98,9 @@
   .mode-card.on { border-color:var(--accent); box-shadow:var(--glow); }
   .mode-card .mdot { display:inline-block; width:10px; height:10px; border-radius:3px;
     margin-right:7px; vertical-align:-1px; }
-  .mode-card .dnote { font-size:7.5px; letter-spacing:0.06em; color:var(--warn); margin-top:7px;
+  .mode-card .dnote { font-size:10px; letter-spacing:0.06em; color:var(--warn); margin-top:7px;
     font-family:ui-monospace, Menlo, monospace; line-height:1.5; }
-  #mode-disclaimer { top:64px; left:14px; display:none; padding:6px 11px; font-size:8px;
+  #mode-disclaimer { top:64px; left:14px; display:none; padding:7px 12px; font-size:10.5px;
     letter-spacing:0.07em; color:var(--warn); font-family:ui-monospace, Menlo, monospace; }
   #mode-disclaimer.show { display:block; }
 
@@ -111,11 +111,11 @@
   .rail-seg:first-child { border-left:none; }
   .rail-seg .ic { width:22px; height:22px; flex:none; }
   .rail-seg .ic svg { width:100%; height:100%; display:block; }
-  .rail-seg .k { display:block; font-size:8px; letter-spacing:0.1em; color:var(--sub);
+  .rail-seg .k { display:block; font-size:10px; letter-spacing:0.1em; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
-  .rail-seg .v { display:block; font-size:11px; margin-top:1px; }
+  .rail-seg .v { display:block; font-size:12.5px; margin-top:1px; }
   .rail-seg.active .k { color:var(--accent); }
-  #rail-panel { top:74px; right:14px; width:340px; display:none; font-size:12.5px; overflow:hidden;
+  #rail-panel { top:74px; right:14px; width:368px; display:none; font-size:13px; overflow:hidden;
     --subject:var(--accent); }
   #rail-panel.open { display:block; }
   /* subject theming: border, spine and heading take the condition's color */
@@ -126,16 +126,16 @@
   #rail-panel[data-subject="tide"] { --subject:#4D8E9B; border-color:#4D8E9B; }
   #rail-panel .spine { position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--subject); }
   #rail-panel .pad { padding:15px 15px 13px 20px; }
-  #rail-panel h3 { margin:0 0 9px; font-size:11px; letter-spacing:0.1em; color:var(--subject);
+  #rail-panel h3 { margin:0 0 9px; font-size:12.5px; letter-spacing:0.1em; color:var(--subject);
     font-family:ui-monospace, Menlo, monospace; font-weight:600; }
   #rail-panel .fig { margin:4px 0 10px; position:relative; }
   #rail-panel .fig svg { display:block; margin:0 auto; }
-  #rail-panel .note { color:var(--sub); line-height:1.55; font-size:12.5px; }
+  #rail-panel .note { color:var(--sub); line-height:1.55; font-size:13px; }
   #rail-panel .note b { color:var(--ink); }
-  #rail-panel .age { margin-top:10px; font-size:9px; color:var(--sub);
+  #rail-panel .age { margin-top:10px; font-size:10.5px; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; letter-spacing:0.06em; }
   #rail-panel .now-btn { display:none; margin-top:8px; background:var(--accent); border:none;
-    color:var(--panel); font-size:9px; letter-spacing:0.1em; padding:6px 12px; border-radius:14px;
+    color:var(--panel); font-size:10.5px; letter-spacing:0.1em; padding:7px 13px; border-radius:14px;
     cursor:pointer; font-family:ui-monospace, Menlo, monospace; }
   #rail-panel.simulating .now-btn { display:inline-block; }
   #sun-dial { cursor:grab; touch-action:none; }
@@ -144,16 +144,16 @@
   @keyframes espin { to { transform:rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .earth-spin { animation:none; } }
 
-  .bars { display:flex; align-items:flex-end; gap:3px; height:68px; margin:8px 0 3px; }
+  .bars { display:flex; align-items:flex-end; gap:3px; height:76px; margin:8px 0 3px; }
   .bars .bwrap { flex:1; display:flex; flex-direction:column; justify-content:flex-end;
     align-items:center; height:100%; }
-  .bars .bval { font-size:8.5px; color:var(--ink); font-family:ui-monospace, Menlo, monospace;
+  .bars .bval { font-size:10.5px; color:var(--ink); font-family:ui-monospace, Menlo, monospace;
     margin-bottom:2px; }
   .bars .b { width:100%; background:var(--subject, var(--accent)); opacity:0.85;
     border-radius:2px 2px 0 0; min-height:2px; }
   .bars .b.past { background:var(--sub); opacity:0.55; }
   .bars .b.today { outline:1.5px solid var(--ink); outline-offset:1px; }
-  .bars-labels { display:flex; gap:3px; font-size:8.5px; color:var(--sub);
+  .bars-labels { display:flex; gap:3px; font-size:10.5px; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
   .bars-labels span { flex:1; text-align:center; }
   .bars-labels span.today { color:var(--ink); font-weight:600; }
@@ -175,7 +175,12 @@
 
   /* ---------- legend ---------- */
   #legend { bottom:64px; left:14px; padding:10px 12px; }
-  #legend .k { font-size:8.5px; letter-spacing:0.1em; color:var(--sub); margin-bottom:7px;
+  #legend-toggle { display:none; }
+  .leg-cats { display:flex; flex-direction:column; gap:4px; margin-top:6px; }
+  .leg-cats .lc { font-size:10.5px; color:var(--ink); }
+  .leg-cats .lc i { display:inline-block; width:10px; height:10px; border-radius:2.5px;
+    margin-right:7px; vertical-align:-1px; }
+  #legend .k { font-size:10.5px; letter-spacing:0.1em; color:var(--sub); margin-bottom:7px;
     font-family:ui-monospace, Menlo, monospace; }
   .leg-row { display:flex; flex-direction:column; gap:5px; }
   .leg-chip { display:flex; align-items:center; gap:7px; border:none; background:none; cursor:pointer;
@@ -184,19 +189,19 @@
   .leg-chip .ring { width:11px; height:11px; border-radius:50%; flex:none;
     border:2.5px solid currentColor; background:transparent; }
   .leg-chip.off { opacity:0.32; }
-  #legend .k2 { font-size:7.5px; letter-spacing:0.08em; color:var(--sub); margin-top:8px;
+  #legend .k2 { font-size:10px; letter-spacing:0.08em; color:var(--sub); margin-top:8px;
     font-family:ui-monospace, Menlo, monospace; }
   #only-allowed { margin-top:7px; border:1px solid var(--hair); background:none; cursor:pointer;
-    color:var(--sub); font-size:8px; letter-spacing:0.08em; border-radius:12px; padding:4px 10px;
+    color:var(--sub); font-size:10.5px; letter-spacing:0.08em; border-radius:12px; padding:5px 11px;
     font-family:ui-monospace, Menlo, monospace; }
   #only-allowed:hover { color:var(--ink); }
 
   /* ---------- season card ---------- */
-  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(620px, 80vw);
+  #season { bottom:14px; left:50%; transform:translateX(-50%); width:min(690px, 84vw);
     padding:10px 18px 8px; }
   #season-hist { height:0; opacity:0; overflow:hidden; transition:height .28s ease, opacity .28s ease; }
-  #season:hover #season-hist, #season.pinned #season-hist { height:188px; opacity:1; }
-  #season-hist .hh { font-size:8.5px; letter-spacing:0.12em; color:var(--sub); margin-top:2px;
+  #season:hover #season-hist, #season.pinned #season-hist { height:206px; opacity:1; }
+  #season-hist .hh { font-size:10.5px; letter-spacing:0.12em; color:var(--sub); margin-top:2px;
     font-family:ui-monospace, Menlo, monospace; }
   #season-hist .hh b { color:var(--ink); }
   #season-hist .stack { display:flex; align-items:flex-end; gap:5px; height:118px; margin-top:10px; }
@@ -205,15 +210,15 @@
   #season-hist .mcol.hot::after { content:""; position:absolute; inset:0;
     border:1.5px solid var(--ink); border-radius:3px; }
   #season-hist .seg { width:100%; }
-  #season-hist .hist-months { display:flex; gap:5px; margin-top:3px; font-size:7px;
+  #season-hist .hist-months { display:flex; gap:5px; margin-top:4px; font-size:10px;
     color:var(--sub); font-family:ui-monospace, Menlo, monospace; }
   #season-hist .hist-months span { flex:1; text-align:center; }
-  #season-hist .cats { display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:7px; font-size:7.5px;
+  #season-hist .cats { display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:8px; font-size:10.5px;
     color:var(--sub); font-family:ui-monospace, Menlo, monospace; letter-spacing:0.05em; }
   #season-hist .cats i { display:inline-block; width:8px; height:8px; border-radius:2px;
     margin-right:4px; vertical-align:-1px; }
   #season .track { position:relative; height:26px; cursor:pointer; touch-action:none; }
-  #season .seasons { display:flex; font-size:9.5px; letter-spacing:0.14em; color:var(--ink);
+  #season .seasons { display:flex; font-size:11.5px; letter-spacing:0.14em; color:var(--ink);
     padding-top:9px; pointer-events:none; font-family:ui-monospace, Menlo, monospace; }
   #season .seasons span { text-align:center; }
   #season .line { position:absolute; left:0; right:0; top:3px; height:2px; background:var(--hair); }
@@ -221,7 +226,7 @@
     background:var(--accent); transform:translateX(-50%); transition:left .08s linear;
     box-shadow:0 0 0 3px var(--panel-a); }
   #season .meta { display:flex; justify-content:space-between; align-items:center;
-    font-size:8.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace; margin-top:6px; }
+    font-size:10.5px; color:var(--sub); font-family:ui-monospace, Menlo, monospace; margin-top:7px; }
   #season .meta .mbtns { display:flex; gap:8px; }
   #season .meta button { background:none; border:1px solid transparent; color:var(--accent);
     cursor:pointer; font:inherit; letter-spacing:0.08em; padding:3px 8px; border-radius:10px;
@@ -233,10 +238,10 @@
   #when-form { display:none; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap; }
   #when-form.open { display:flex; }
   #when-form input { border:1px solid var(--hair); background:var(--panel); color:var(--ink);
-    border-radius:6px; padding:4px 7px; font-size:10px; font-family:ui-monospace, Menlo, monospace; }
+    border-radius:6px; padding:5px 8px; font-size:11.5px; font-family:ui-monospace, Menlo, monospace; }
   #when-form input[type="text"] { width:150px; }
   #when-form button { border:none; background:var(--accent); color:var(--panel); border-radius:10px;
-    padding:5px 10px; font-size:8.5px; letter-spacing:0.08em; cursor:pointer;
+    padding:6px 11px; font-size:10.5px; letter-spacing:0.08em; cursor:pointer;
     font-family:ui-monospace, Menlo, monospace; }
   #when-form button.ghost { background:none; color:var(--sub); border:1px solid var(--hair); }
 
@@ -245,40 +250,40 @@
     background:var(--panel-a); border:1px solid var(--hair); border-radius:7px;
     box-shadow:var(--glow); padding:6px 10px 6px 12px; overflow:hidden; }
   #hover-tip .sp { position:absolute; left:0; top:0; bottom:0; width:4px; }
-  #hover-tip .nm { font-family:Georgia, serif; font-size:12.5px; color:var(--ink); }
-  #hover-tip .st { font-size:7.5px; letter-spacing:0.08em; margin-top:1px;
+  #hover-tip .nm { font-family:Georgia, serif; font-size:14px; color:var(--ink); }
+  #hover-tip .st { font-size:10.5px; letter-spacing:0.08em; margin-top:1px;
     font-family:ui-monospace, Menlo, monospace; }
 
   .ca-popup .mapboxgl-popup-content { background:none; padding:0; box-shadow:none; border-radius:0; }
   .ca-popup .mapboxgl-popup-tip { display:none; }
   .ca-popup { z-index:6; }
-  .pt-card { position:relative; width:312px; background:var(--panel-a); border:1px solid var(--hair);
+  .pt-card { position:relative; width:min(336px, 88vw); background:var(--panel-a); border:1px solid var(--hair);
     border-radius:12px; box-shadow:var(--glow); overflow:hidden;
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
     color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     user-select:none; -webkit-user-select:none; }
   .pt-card .spine { position:absolute; left:0; top:0; bottom:0; width:6px; }
   .pt-card .pad { padding:17px 18px 13px 24px; }
-  .pt-card h2 { margin:0; font-size:21px; font-weight:500; font-family:Georgia, serif; }
-  .pt-card .sci { font-size:9px; letter-spacing:0.08em; color:var(--sub); margin:3px 0 12px;
+  .pt-card h2 { margin:0; font-size:22px; font-weight:500; font-family:Georgia, serif; }
+  .pt-card .sci { font-size:10.5px; letter-spacing:0.08em; color:var(--sub); margin:3px 0 12px;
     font-family:ui-monospace, Menlo, monospace; }
   .pt-card .row { display:flex; gap:10px; align-items:baseline; padding:8px 0;
     border-top:1px solid var(--hair); }
-  .pt-card .row .lab { flex:none; width:58px; font-size:8px; letter-spacing:0.12em;
+  .pt-card .row .lab { flex:none; width:68px; font-size:10.5px; letter-spacing:0.12em;
     color:var(--sub); font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .row .val { font-size:12.5px; line-height:1.5; }
+  .pt-card .row .val { font-size:13.5px; line-height:1.5; }
   .pt-card .row.access .val { font-weight:600; display:flex; align-items:center; gap:8px; }
   .pt-card .row.access .ring { width:12px; height:12px; border-radius:50%; flex:none;
     border:3.2px solid currentColor; }
   .pt-card .row.safety .lab { color:var(--warn); }
   .pt-card .season-line { display:flex; align-items:center; gap:10px; margin-top:9px; }
   .pt-card .season-line svg { display:block; }
-  .pt-card .season-line .t { font-size:8px; letter-spacing:0.06em; color:var(--sub);
+  .pt-card .season-line .t { font-size:10.5px; letter-spacing:0.06em; color:var(--sub);
     font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .ethic { font-size:10.5px; color:var(--sub); line-height:1.5; margin-top:9px; }
-  .pt-card .oinp { margin-top:9px; font-size:8px; letter-spacing:0.08em; color:var(--warn);
+  .pt-card .ethic { font-size:12px; color:var(--sub); line-height:1.5; margin-top:9px; }
+  .pt-card .oinp { margin-top:9px; font-size:10px; letter-spacing:0.08em; color:var(--warn);
     font-family:ui-monospace, Menlo, monospace; }
-  .pt-card .flush { margin-top:6px; font-size:8.5px; color:var(--accent); letter-spacing:0.06em;
+  .pt-card .flush { margin-top:6px; font-size:10.5px; color:var(--accent); letter-spacing:0.06em;
     font-family:ui-monospace, Menlo, monospace; display:none; }
   .pt-card .flush.on { display:block; }
   .pt-card .close { position:absolute; top:8px; right:11px; background:none; border:none;
@@ -290,7 +295,7 @@
   #sheet { width:min(680px, 90vw); max-height:80vh; overflow:auto; padding:28px 30px;
     user-select:text; -webkit-user-select:text; }
   #sheet h2 { margin:0 0 4px; font-weight:500; font-size:22px; }
-  #sheet .k { font-size:9px; letter-spacing:0.12em; color:var(--accent); margin-bottom:14px;
+  #sheet .k { font-size:10.5px; letter-spacing:0.12em; color:var(--accent); margin-bottom:14px;
     font-family:ui-monospace, Menlo, monospace; }
   #sheet p { font-size:13px; line-height:1.6; color:var(--sub); }
   .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:12px; margin-top:14px; }
@@ -298,15 +303,15 @@
     background:var(--panel); padding:12px 12px 10px 17px; cursor:pointer; overflow:hidden; }
   .mini-card:hover { box-shadow:var(--glow); }
   .mini-card .spine { position:absolute; left:0; top:0; bottom:0; width:5px; }
-  .mini-card h4 { margin:0; font-size:13.5px; font-weight:500; }
-  .mini-card .m { font-size:8px; color:var(--sub); letter-spacing:0.06em; margin-top:3px;
+  .mini-card h4 { margin:0; font-size:14.5px; font-weight:500; }
+  .mini-card .m { font-size:10.5px; color:var(--sub); letter-spacing:0.06em; margin-top:3px;
     font-family:ui-monospace, Menlo, monospace; }
-  .mini-card .uses { font-size:9.5px; color:var(--sub); margin-top:6px; }
+  .mini-card .uses { font-size:11.5px; color:var(--sub); margin-top:6px; }
   #sheet .closer { position:sticky; top:0; float:right; background:none; border:none;
     color:var(--sub); font-size:15px; cursor:pointer; }
 
-  #proto-note { bottom:14px; right:14px; padding:7px 11px; font-size:8px; letter-spacing:0.07em;
-    color:var(--sub); font-family:ui-monospace, Menlo, monospace; max-width:230px; line-height:1.5; }
+  #proto-note { bottom:14px; right:14px; padding:8px 12px; font-size:10px; letter-spacing:0.07em;
+    color:var(--sub); font-family:ui-monospace, Menlo, monospace; max-width:270px; line-height:1.5; }
   #proto-note b { color:var(--warn); font-weight:600; }
 
   .pulse { width:14px; height:14px; border-radius:50%; position:relative; pointer-events:none; }
@@ -315,7 +320,30 @@
   @keyframes pulse { 0% { transform:scale(0.5); opacity:0.9; } 100% { transform:scale(2.6); opacity:0; } }
   @media (prefers-reduced-motion: reduce) { .pulse::after { animation:none; opacity:0.6; } }
 
-  @media (max-width:720px) { #rail { display:none; } }
+  /* ============================= mobile ============================= */
+  @media (max-width:720px) {
+    #masthead { left:10px; right:10px; top:10px; justify-content:space-between; padding:9px 12px; }
+    #masthead .links { gap:9px; padding-left:9px; }
+    #rail { top:58px; left:10px; right:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+      scrollbar-width:none; }
+    #rail::-webkit-scrollbar { display:none; }
+    .rail-seg { flex:none; }
+    #rail-panel { top:auto; bottom:0; left:0; right:0; width:auto; border-radius:14px 14px 0 0;
+      max-height:62vh; overflow-y:auto; }
+    #mode-disclaimer { top:auto; bottom:108px; left:10px; }
+    #legend { bottom:96px; left:10px; }
+    #legend-toggle { display:block; background:none; border:none; cursor:pointer;
+      color:var(--ink); font-size:10.5px; letter-spacing:0.1em; padding:2px;
+      font-family:ui-monospace, Menlo, monospace; }
+    #legend-body { display:none; }
+    #legend.open #legend-body { display:block; }
+    #season { width:auto; left:10px; right:10px; transform:none; bottom:10px; }
+    #season:hover #season-hist { height:0; opacity:0; }       /* hover never sticks on touch */
+    #season.pinned #season-hist { height:206px; opacity:1; }
+    #hist-toggle { display:inline !important; }
+    #proto-note { display:none; }
+    .windbox { width:160px; height:160px; }
+  }
 </style>
 </head>
 <body data-register="day">
@@ -327,7 +355,7 @@
 <div id="masthead" class="floating">
   <span class="wordmark serif">Craft Almanac</span>
   <span class="links">
-    <button data-sheet="maps">Maps<span class="mdot" id="maps-dot"></span><span class="cur" id="maps-cur">FOOD</span></button>
+    <button data-sheet="maps">Maps</button>
     <button data-sheet="plants">Plants</button>
     <button data-sheet="recipes">Recipes</button>
     <button data-sheet="about">About</button>
@@ -340,10 +368,15 @@
 <div id="rail-panel" class="floating"><div class="spine"></div><div class="pad" id="rail-pad"></div></div>
 
 <div id="legend" class="floating">
-  <div class="k">ACCESS AT A GLANCE — TAP TO FILTER</div>
+  <button id="legend-toggle">LEGEND</button>
+  <div id="legend-body">
+  <div class="k" id="leg-map"></div>
+  <div class="leg-cats" id="leg-cats"></div>
+  <div class="k" style="margin-top:10px">ACCESS — TAP TO FILTER</div>
   <div class="leg-row" id="leg-row"></div>
   <button id="only-allowed">ONLY ALLOWED</button>
-  <div class="k2">FILL = MATERIAL TYPE · RING = ACCESS<br>FADED = OUT OF SEASON THIS WEEK</div>
+  <div class="k2">FILL = MATERIAL TYPE · RING = ACCESS</div>
+  </div>
 </div>
 
 <div id="season" class="floating">
@@ -357,12 +390,13 @@
     <div class="line"></div>
     <div class="cursor" id="season-cursor"></div>
     <div class="seasons">
-      <span style="width:12.5%">WINTER</span><span style="width:25%">SPRING</span><span style="width:25%">SUMMER</span><span style="width:25%">AUTUMN</span><span style="width:12.5%">WINTER</span>
+      <span style="width:25%">WINTER</span><span style="width:25%">SPRING</span><span style="width:25%">SUMMER</span><span style="width:25%">FALL</span>
     </div>
   </div>
   <div class="meta">
     <span id="season-label">THIS WEEK</span>
     <span class="mbtns">
+      <button id="hist-toggle" style="display:none">CHART ▴</button>
       <button id="season-reset">BACK TO NOW</button>
       <button id="when-toggle">SET DATE · TIME · PLACE</button>
     </span>
@@ -619,8 +653,8 @@ function pointFilter() {
     ["in", S.mode, ["get","modes"]]];
 }
 function seasonOpacity() {
-  /* one consistent in/out-of-season distinction (legend explains the fade) */
-  return ["case", ["all", ["<=", ["get","r0"], S.week], [">=", ["get","r1"], S.week]], 0.95, 0.45];
+  /* owner decision: full opacity is the only setting */
+  return 1;
 }
 function isNightish() { return S.register === "night" || S.register === "dusk"; }
 function paintPoints() {
@@ -693,7 +727,7 @@ function mapFallback() {
   document.getElementById("map").style.display = "none";
   const fb = document.getElementById("map-fallback");
   fb.style.display = "block";
-  fb.innerHTML = "<div class='mono' style='position:absolute;top:46%;width:100%;text-align:center;font-size:9px;letter-spacing:0.1em;color:var(--sub)'>MAP UNAVAILABLE — UI PROTOTYPE MODE (SCHEMATIC DOTS)</div>";
+  fb.innerHTML = "<div class='mono' style='position:absolute;top:46%;width:100%;text-align:center;font-size:10.5px;letter-spacing:0.1em;color:var(--sub)'>MAP UNAVAILABLE — UI PROTOTYPE MODE (SCHEMATIC DOTS)</div>";
   POINTS.forEach(p => {
     const el = document.createElement("button");
     el.style.cssText = "position:absolute;width:13px;height:13px;border-radius:50%;cursor:pointer;border:3px solid #888;";
@@ -711,9 +745,8 @@ function paintFallback() {
     el.style.background = sp.pigment;
     el.style.borderColor = STATUS_DAY[p.status];
     el.style.boxShadow = night ? "0 0 10px rgba(255,255,255,0.55)" : "none";
-    const inSeason = sp.ripe[0] <= S.week && sp.ripe[1] >= S.week;
     const modeOK = sp.modes.includes(S.mode);
-    el.style.opacity = (S.statuses.has(p.status) && modeOK) ? (inSeason ? 0.95 : 0.25) : 0;
+    el.style.opacity = (S.statuses.has(p.status) && modeOK) ? 1 : 0;
     el.style.pointerEvents = (S.statuses.has(p.status) && modeOK) ? "auto" : "none";
   });
 }
@@ -812,8 +845,8 @@ function svgSunDial(size) {
     const [rx_, ry_] = dialPos(dialAngle(st.rise), c, r);
     const [sx_, sy_] = dialPos(dialAngle(st.set), c, r);
     chord = `<line x1="${rx_}" y1="${ry_}" x2="${sx_}" y2="${sy_}" stroke="var(--sub)" stroke-width="1" stroke-dasharray="3 3"/>
-      <text x="${rx_-3}" y="${ry_+11}" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="end">RISE</text>
-      <text x="${sx_+3}" y="${sy_+11}" font-family="monospace" font-size="6.5" fill="var(--sub)">SET</text>`;
+      <text x="${rx_-3}" y="${ry_+13}" font-family="monospace" font-size="9.5" fill="var(--sub)" text-anchor="end">RISE</text>
+      <text x="${sx_+3}" y="${sy_+13}" font-family="monospace" font-size="9.5" fill="var(--sub)">SET</text>`;
     dayArc = `<path d="M ${rx_} ${ry_} A ${r} ${r} 0 0 0 ${sx_} ${sy_}" fill="none"
       stroke="var(--warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
   }
@@ -824,8 +857,8 @@ function svgSunDial(size) {
     ${earthSVG(c, Math.max(10, r * 0.22))}
     <circle id="sun-dot" cx="${sx}" cy="${sy}" r="${Math.max(5, r * 0.12)}"
       fill="${night ? "var(--ink)" : "#E8B931"}" stroke="var(--panel)" stroke-width="1.5"/>
-    <text x="${c}" y="13" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="middle">NOON</text>
-    <text x="${c}" y="${size - 5}" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="middle">MIDNIGHT</text>
+    <text x="${c}" y="14" font-family="monospace" font-size="9.5" fill="var(--sub)" text-anchor="middle">NOON</text>
+    <text x="${c}" y="${size - 4}" font-family="monospace" font-size="9.5" fill="var(--sub)" text-anchor="middle">MIDNIGHT</text>
   </svg>`;
 }
 function updateSunDial() {
@@ -899,9 +932,9 @@ function svgMoonAxis(mp, w = 300) {
     <circle cx="${x0}" cy="${y}" r="11" fill="var(--panel)" stroke="var(--sub)" stroke-width="1.6"/>
     <circle cx="${x1}" cy="${y}" r="11" fill="var(--ink)" opacity="0.85" stroke="var(--sub)" stroke-width="1.2"/>
     <circle cx="${x}" cy="${y}" r="8" fill="var(--subject, var(--accent))" stroke="var(--panel)" stroke-width="2"/>
-    <text x="${x0}" y="${y+26}" font-family="monospace" font-size="9" fill="var(--sub)" text-anchor="middle">NEW</text>
-    <text x="${x1}" y="${y+26}" font-family="monospace" font-size="9" fill="var(--sub)" text-anchor="middle">FULL</text>
-    <text x="${x}" y="${y-17}" font-family="monospace" font-size="10" fill="var(--ink)" text-anchor="middle">${Math.round(mp.illum*100)}% ${mp.waxing?"→":"←"}</text>
+    <text x="${x0}" y="${y+26}" font-family="monospace" font-size="10.5" fill="var(--sub)" text-anchor="middle">NEW</text>
+    <text x="${x1}" y="${y+26}" font-family="monospace" font-size="10.5" fill="var(--sub)" text-anchor="middle">FULL</text>
+    <text x="${x}" y="${y-17}" font-family="monospace" font-size="11.5" fill="var(--ink)" text-anchor="middle">${Math.round(mp.illum*100)}% ${mp.waxing?"→":"←"}</text>
   </svg>`;
 }
 function svgCompass(dir, speed, r = 88) {
@@ -915,7 +948,7 @@ function svgCompass(dir, speed, r = 88) {
     const ta = i * Math.PI / 4;
     const major = i % 2 === 0;
     return `<text x="${c + Math.sin(ta)*(r+2)}" y="${c - Math.cos(ta)*(r+2) + 3.5}"
-      font-family="monospace" font-size="${major?11:8.5}" fill="var(--${major?"ink":"sub"})" text-anchor="middle">${t}</text>`;
+      font-family="monospace" font-size="${major?12:10.5}" fill="var(--${major?"ink":"sub"})" text-anchor="middle">${t}</text>`;
   }).join("");
   let ring = "";
   for (let i = 0; i < 36; i++) {
@@ -931,9 +964,9 @@ function svgCompass(dir, speed, r = 88) {
     <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--subject, var(--accent))" stroke-width="4" stroke-linecap="round"/>
     <path d="M ${x2} ${y2} L ${x2 - Math.sin(a-0.42)*14} ${y2 + Math.cos(a-0.42)*14} L ${x2 - Math.sin(a+0.42)*14} ${y2 + Math.cos(a+0.42)*14} Z" fill="var(--subject, var(--accent))"/>
     <circle cx="${c}" cy="${c}" r="22" fill="var(--panel)" stroke="var(--hair)"/>
-    <text x="${c}" y="${c-1}" font-family="monospace" font-size="14" fill="var(--ink)" text-anchor="middle">${Math.round(speed)}</text>
-    <text x="${c}" y="${c+9}" font-family="monospace" font-size="6.5" fill="var(--sub)" text-anchor="middle">KM/H</text>
-    <text x="${c}" y="${c+17}" font-family="monospace" font-size="6.5" fill="var(--ink)" text-anchor="middle">${tier.toUpperCase()}</text>
+    <text x="${c}" y="${c-2}" font-family="monospace" font-size="15" fill="var(--ink)" text-anchor="middle">${Math.round(speed)}</text>
+    <text x="${c}" y="${c+8}" font-family="monospace" font-size="8" fill="var(--sub)" text-anchor="middle">KM/H</text>
+    <text x="${c}" y="${c+17}" font-family="monospace" font-size="8" fill="var(--ink)" text-anchor="middle">${tier.toUpperCase()}</text>
   </svg>`;
 }
 function windTier(kmh) { return kmh < 8 ? "calm" : kmh < 20 ? "medium" : "fast"; }
@@ -951,7 +984,7 @@ function windFlowHTML(dir, speed) {
     ${svgCompass(dir, speed)}
   </div>`;
 }
-function svgTideCurve(events, w = 286, h = 110) {
+function svgTideCurve(events, w = 300, h = 122) {
   if (!events || events.length < 2) return "";
   const now = Date.now();
   const t0 = now - 2 * 36e5, t1 = now + 26 * 36e5;
@@ -976,15 +1009,15 @@ function svgTideCurve(events, w = 286, h = 110) {
   const marks = events.filter(e => +new Date(e.t) >= t0 && +new Date(e.t) <= t1).map(e => {
     const x = X(+new Date(e.t)), y = Y(e.v);
     return `<circle cx="${x}" cy="${y}" r="3" fill="var(--accent)"/>
-      <text x="${x}" y="${y - 7}" font-family="monospace" font-size="6.5" fill="var(--ink)" text-anchor="middle">${e.type}</text>
-      <text x="${x}" y="${h - 4}" font-family="monospace" font-size="6" fill="var(--sub)" text-anchor="middle">${fmtT(e.t)}</text>`;
+      <text x="${x}" y="${y - 7}" font-family="monospace" font-size="9.5" fill="var(--ink)" text-anchor="middle">${e.type}</text>
+      <text x="${x}" y="${h - 4}" font-family="monospace" font-size="8.5" fill="var(--sub)" text-anchor="middle">${fmtT(e.t)}</text>`;
   }).join("");
   const nowX = X(now);
   return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
     <path d="${path} L ${pts[pts.length-1][0]} ${h-18} L ${pts[0][0]} ${h-18} Z" fill="var(--accent)" opacity="0.13"/>
     <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2"/>
     <line x1="${nowX}" y1="10" x2="${nowX}" y2="${h-18}" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2 3"/>
-    <text x="${nowX}" y="8" font-family="monospace" font-size="6.5" fill="var(--ink)" text-anchor="middle">NOW</text>
+    <text x="${nowX}" y="8" font-family="monospace" font-size="9.5" fill="var(--ink)" text-anchor="middle">NOW</text>
     ${marks}
   </svg>`;
 }
@@ -1239,19 +1272,21 @@ function fxFrame(ts) {
   /* wind quantized to three legible tiers (calm / medium / fast) — exact
      speed stays in the rail; the map communicates the tier */
   const tier = windTier(w.wind);
-  const tierKmh = tier === "calm" ? 5 : tier === "medium" ? 28 : 75;
-  const midLat = (b.s + b.n) / 2;
-  const degLatPerSec = tierKmh / 3600 / 111.32;
-  const degLngPerSec = degLatPerSec / Math.max(0.2, Math.cos(midLat * RAD));
+  /* screen-consistent tier speeds so the map reads like the rose at any zoom */
+  const pxStreak = tier === "calm" ? 16 : tier === "medium" ? 42 : 90;   // px/s
+  const pxCloud  = tier === "calm" ? 2.5 : tier === "medium" ? 7 : 16;
+  const degPerPxX = dw / fx.width, degPerPxY = dh / fx.height;
   const B = (w.windDir + 180) * RAD;
-  const vlng = Math.sin(B) * degLngPerSec * dt;
-  const vlat = Math.cos(B) * degLatPerSec * dt;
+  const vlng = Math.sin(B) * pxStreak * degPerPxX * dt;
+  const vlat = Math.cos(B) * pxStreak * degPerPxY * dt;
+  const cvlng = Math.sin(B) * pxCloud * degPerPxX * dt;
+  const cvlat = Math.cos(B) * pxCloud * degPerPxY * dt;
   /* clouds — uniform translucency via offscreen compositing */
   const cover = Math.max(0.15, w.clouds / 100);
   const cloudAlpha = night ? Math.min(0.5, 0.3 + cover * 0.25)
                            : Math.min(0.34, 0.2 + cover * 0.18);
   clouds.forEach(cl => {
-    cl.lng += vlng * cl.v; cl.lat += vlat * cl.v;
+    cl.lng += cvlng * cl.v; cl.lat += cvlat * cl.v;
     cl.rot += cl.rotV * dt * 60;
     if (cl.lng > b.e + cl.rdeg * 3) cl.lng = b.w - cl.rdeg;
     if (cl.lng < b.w - cl.rdeg * 3) cl.lng = b.e + cl.rdeg;
@@ -1277,8 +1312,8 @@ function fxFrame(ts) {
   });
   /* wind streaks — drawn like the rose: gradient tails fading behind a bright head */
   ctx.lineCap = "round";
-  const tailSec = tier === "calm" ? 60 : 45;
-  const tailLng = Math.sin(B) * degLngPerSec * tailSec, tailLat = Math.cos(B) * degLatPerSec * tailSec;
+  const tailPx = 34;            // matches the rose streak length
+  const tailLng = Math.sin(B) * tailPx * degPerPxX, tailLat = Math.cos(B) * tailPx * degPerPxY;
   const headCol = night ? "240,248,242" : "58,72,64";
   parts.forEach((p, i) => {
     if (tier === "calm" && i % 2) return;
@@ -1303,11 +1338,15 @@ requestAnimationFrame(fxFrame);
 
 /* ====================================================== mode state (single map) */
 function syncModeUI() {
-  document.getElementById("maps-cur").textContent = MODES[S.mode].label;
-  document.getElementById("maps-dot").style.background = MODES[S.mode].color;
   document.getElementById("mode-disclaimer").classList.toggle("show", S.mode === "herbalism");
   const hh = document.getElementById("season-hh");
   if (hh) hh.innerHTML = `IN SEASON BY MONTH · <b>${MODES[S.mode].label} MAP</b> · STACKED BY CATEGORY`;
+  document.getElementById("leg-map").innerHTML =
+    `ACTIVE MAP: <span style="color:var(--ink)">${MODES[S.mode].label}</span>` +
+    ` <span class="mdot" style="display:inline-block;width:9px;height:9px;border-radius:2.5px;vertical-align:-1px;background:${MODES[S.mode].color}"></span>`;
+  document.getElementById("leg-cats").innerHTML =
+    Object.keys(CATEGORIES).filter(c => CATEGORIES[c].mode === S.mode).map(c =>
+      `<span class="lc"><i style="background:${CATEGORIES[c].color}"></i>${CATEGORIES[c].label}</span>`).join("");
 }
 syncModeUI();
 
@@ -1502,7 +1541,7 @@ const SHEETS = {
     Conditions (sun, rain, wind, tide) inform your planning; they never promise.</p>
     <p><b>Herbalism content is educational reference only</b> — historical and traditional use,
     not medical advice.</p>
-    <p class="mono" style="font-size:9px; letter-spacing:0.06em">THIS PAGE IS A DESIGN PROTOTYPE.
+    <p class="mono" style="font-size:10.5px; letter-spacing:0.06em">THIS PAGE IS A DESIGN PROTOTYPE.
     ALL OCCURRENCE RECORDS ARE INVENTED FOR REVIEW. WEATHER, SUN, MOON AND TIDE ARE LIVE.</p>`,
   maps: () => `<button class="closer">×</button><div class="k">THE MAPS · ONE ACTIVE AT A TIME</div>
     <h2 class="serif">Choose your map</h2>
@@ -1555,6 +1594,16 @@ function bindSheet() {
 }
 wrapEl.addEventListener("click", e => { if (e.target === wrapEl) wrapEl.classList.remove("open"); });
 addEventListener("keydown", e => { if (e.key === "Escape") { wrapEl.classList.remove("open"); closePointCard(); } });
+
+/* ------------------------- mobile toggles ------------------------- */
+document.getElementById("legend-toggle").addEventListener("click", () =>
+  document.getElementById("legend").classList.toggle("open"));
+document.getElementById("hist-toggle").addEventListener("click", () => {
+  const s = document.getElementById("season");
+  s.classList.toggle("pinned");
+  document.getElementById("hist-toggle").textContent =
+    s.classList.contains("pinned") ? "CHART ▾" : "CHART ▴";
+});
 
 /* ================================================================== boot */
 setCursor();
