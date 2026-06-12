@@ -29,6 +29,19 @@ Codex queue:
 2. Mapbox Studio style implementation — BLOCKED until the `design/relaunch`
    Round 2 direction is chosen; Claude provides the style spec from Round 2.
    Do not start before the spec lands.
+3. **Link-checker reference-extraction spec (unblocks Qwen #7).** Author the
+   spec Qwen needs to build `scripts/check_links.mjs`. Define exactly what
+   counts as a local reference in `index.html`: which attributes (`href`,
+   `src`), how `?v=` cache-bust query strings are stripped before resolving to
+   disk, which schemes/hosts to skip (absolute `http(s)://`, the Mapbox CDN,
+   `data:` URIs), and how root-relative vs. relative paths resolve against the
+   repo root. Deliver as a short work order `docs/TODO-link-checker.md` with a
+   Boundaries section and the gate Qwen runs (`node scripts/check_links.mjs`
+   exits 0 on the current tree; the script is wired into `scripts/check.sh`).
+   Deciding what forms count as references is the senior part; Qwen runs the
+   implement→gate loop. Diagnostic context: 2026-06-11 health check confirmed
+   `index.html` cache tokens are consistent (`filtered-access-3`) and the tree
+   is clean, so this is greenfield, not a regression fix.
 
 ## Tier 3 — Qwen via opencode (junior, local, free)
 
@@ -153,9 +166,31 @@ Qwen queue (work top-down from the first item not marked DONE or BLOCKED, one pe
     shape, run it and format the output into the named file. You run the gate;
     you never author extraction logic or interpret `app.js`. Acceptance: the
     senior's stated verification command exits 0.
+11. **Create the escalation stub files.** `docs/work-split.md` and the TODO
+    docs route blocked work to `docs/qwen-questions.md` and
+    `docs/codex-questions.md`, but neither file exists yet.
+    - Files: create `docs/qwen-questions.md` and `docs/codex-questions.md`.
+    - Steps: give each an H1 title (`# Qwen Questions` / `# Codex Questions`)
+      and one sentence stating it is the escalation channel back to a senior
+      agent; leave the body empty (no invented questions).
+    - Verification: `test -f docs/qwen-questions.md && test -f docs/codex-questions.md`
+      exits 0.
+    - Acceptance: both files exist, each with a title line.
+    - Boundaries: create only these two files; touch nothing else.
+12. **Remove stray `.DS_Store` files from the working tree.** macOS left
+    `.DS_Store` files in the repo root and `docs/`; they are gitignored and
+    untracked but clutter the tree.
+    - Files: delete every `.DS_Store` under the repo (none are git-tracked, so
+      this only removes ignored junk).
+    - Steps: `find . -name .DS_Store -not -path './.git/*' -delete`.
+    - Verification: `find . -name .DS_Store -not -path './.git/*'` prints
+      nothing afterward, and `git status --short` stays clean.
+    - Boundaries: delete only `.DS_Store`; do not remove or modify any other
+      file.
 
-Items 6–9 are scoped and ready; 10 is a standing pattern. When the queue is
-empty, STOP — do not invent work. Ask for more via `docs/qwen-questions.md`.
+Items 6–9 and 11–12 are scoped and ready; 10 is a standing pattern. When the
+queue is empty, STOP — do not invent work. Ask for more via
+`docs/qwen-questions.md`.
 
 ## Review chain
 
