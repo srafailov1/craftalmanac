@@ -181,7 +181,8 @@
   #legend-body { height:0; opacity:0; overflow:hidden; transition:height .28s ease, opacity .28s ease; }
   #legend:hover #legend-body { height:164px; opacity:1; }
   #legend .titlebar { margin-top:7px; font-size:10.5px; letter-spacing:0.12em; color:var(--ink);
-    font-weight:700; font-family:ui-monospace, Menlo, monospace; }
+    font-family:ui-monospace, Menlo, monospace; }
+  #legend .titlebar b { font-weight:700; }
   .legcols { display:flex; flex-direction:row; gap:20px; margin-top:8px; align-items:flex-start; }
   .legcols .lcol { flex:none; }
   .legcols .lcol .k { margin-bottom:6px; }
@@ -401,7 +402,7 @@
     </div>
   </div>
   </div>
-  <div class="titlebar">LEGEND: PERMISSIONS AND POINTS</div>
+  <div class="titlebar"><b>LEGEND:</b> PERMISSIONS AND POINTS</div>
   <div class="k" id="leg-map" style="margin-top:5px"></div>
 </div>
 
@@ -460,6 +461,7 @@ const S = {
   cats: new Set(["berry","fruit","mushroom","nut"]),
   register: "", simMins: null, simDate: null,
   weather: null, tide: null, selected: null, mapOK: false,
+  locLabel: "PROVIDENCE, RI · DEFAULT",
   fxOn: !matchMedia("(prefers-reduced-motion: reduce)").matches,
 };
 function simNow() {
@@ -1208,7 +1210,7 @@ function renderPanel() {
       <div class="bars-labels">${labels.map(l=>`<span class="${l.today?"today":""}">${l.today?"TODAY":l.txt}</span>`).join("")}</div>
       <div class="note" style="margin-top:8px">
       Past 72 h: <b>${w.past72} mm</b>${flush ? " — <b>fungal flush likely</b>; mushroom points are pulsing." : " — below flush threshold (18 mm)."}<br>
-      ${pickWindows(w.daily)}</div>${srcLine}`;
+      ${pickWindows(w.daily)}</div>${locLine()}${srcLine}`;
   } else if (openSeg === "wind" && w) {
     html = `<h3>WIND &amp; CLOUD</h3>
       <div class="fig">${windFlowHTML(w.windDir, w.wind)}</div>
@@ -1216,7 +1218,7 @@ function renderPanel() {
       Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
       <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer">
         <input type="checkbox" id="fx-toggle" ${S.fxOn?"checked":""}> animate wind layer on the map
-      </label>${srcLine}`;
+      </label>${locLine()}${srcLine}`;
   } else if (openSeg === "tide" && S.tide) {
     const nt = nextTide();
     const lowNext = S.tide.events.find(e => e.type === "L" && +new Date(e.t) > Date.now());
@@ -1233,10 +1235,26 @@ function renderPanel() {
   padEl.innerHTML = html;
   const t = document.getElementById("fx-toggle");
   if (t) t.addEventListener("change", e => { S.fxOn = e.target.checked; });
+  const ua = document.getElementById("use-area");
+  if (ua) ua.addEventListener("click", useMapArea);
   const nb = document.getElementById("sun-now");
   if (nb) nb.addEventListener("click", () => { S.simMins = null; S.simDate = null;
     syncWeekFromSim(); applyRegister(); renderPanel(); });
   bindSunDial();
+}
+const WEATHER_AREA_MIN_ZOOM = 8;
+function locLine() {
+  const zoomOK = S.mapOK && map.getZoom() >= WEATHER_AREA_MIN_ZOOM;
+  return `<div class="age">FORECAST FOR: ${S.locLabel}</div>` + (zoomOK
+    ? `<button class="now-btn" id="use-area" style="display:inline-block">UPDATE TO MAP AREA</button>`
+    : `<div class="age">ZOOM IN CLOSER TO UPDATE THE FORECAST TO THE MAP AREA</div>`);
+}
+function useMapArea() {
+  const c = map.getCenter();
+  LOC = { lng:c.lng, lat:c.lat };
+  S.locLabel = "MAP AREA · " + Math.abs(c.lat).toFixed(1) + "°" + (c.lat >= 0 ? "N" : "S") +
+    " " + Math.abs(c.lng).toFixed(1) + "°" + (c.lng >= 0 ? "E" : "W");
+  loadWeather(true); loadTide(); applyRegister(); renderPanel();
 }
 function pickWindows(daily) {
   let rainDay = -1;
@@ -1481,6 +1499,7 @@ async function geocodePlace(q) {
     const f = j.features && j.features[0];
     if (f) {
       LOC = { lng:f.center[0], lat:f.center[1] };
+      S.locLabel = (f.text || q).toUpperCase();
       if (S.mapOK) map.flyTo({ center:f.center, zoom:11 });
       loadWeather(true); loadTide();
     }
