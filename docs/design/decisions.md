@@ -3,6 +3,23 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-11 — Round 4 delivered: The Living Map (synthesis).** Owner
+  converged: Field Desk UX (map dominant, floating cards) + Pigment Index
+  light-mode color/text (no seasonal typeface changes) + Night Survey as the
+  night register of a time-of-day light system + Overprint as a boldness
+  dial. New almanac layer: live conditions on the map — weather (rain
+  memory → fungi flush pulses, wind streaks, frost isoline), sun/moon
+  (client-side solar math drives four registers: dawn/day/dusk/night via
+  CSS variables + Mapbox lightPreset), tide (NOAA CO-OPS; intertidal bands,
+  tide clock, biotoxin closures override everything). All sources free and
+  key-less (NWS, Open-Meteo, CO-OPS); graceful degradation contract; new
+  sources require ATTRIBUTION.md entries. Card boldness options: 1 Quiet
+  Pigment / 2 Bold Edition (recommended default) / 3 Poster Overprint, as a
+  per-surface dial; safety chips fixed at every volume.
+  `round-4-living-map.pdf` (17 pp, generator `build_round4_deck.py`).
+  Proposed Round 5: live one-page prototype (real map, sun math, rain
+  memory, Bold Edition cards, day/night). Awaiting owner's five asks (p. 17).
+
 - **2026-06-11 — Round 3 delivered: site versions.** Owner asked for a broad
   contemporary-web-design pass, not mission-filtered, focused on UX/UI for
   the site's needs (map, plant cards, project recipes), decoupled from the
