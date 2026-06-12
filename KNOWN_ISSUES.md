@@ -75,6 +75,49 @@ hits cache). Default-permission behavior unchanged. First filtered overview
 paint waits a few seconds on the one-time fetch — previous paint holds via
 the existing gate.
 
+## 1b. Thin-park raster blindness — WORK ORDER for tonight's loops (queued 2026-06-12, owner-reported)
+
+**Symptom (owner screenshot, Indiana Dunes, allowed-only + all seasons,
+~z9.7):** inflated overview circles (170/444) that "break down" into far
+fewer points. The inflation half is fixed by "Resolve filtered overview tiles
+at status grid zoom" (fine cells can't grab whole-bucket counts). The
+remaining half is UNDER-counting in thin/patchwork parks, and it is a DATA
+problem, not app code.
+
+**Measured ground truth (live, Dunes viewport ~[-87.5,41.2]-[-86.6,41.9],
+food mode, all seasons):** 200 iNat records loaded; live PAD-US containment:
+80 allowed / 6 permit-required / 93 private-unsourced / 21 unknown.
+Recovery of those 80 by every cell-granularity scheme: per-record raster
+lookup = 17; gz6 centroid cells = ~0; gz7 = 13-20; area-weighted fraction
+apportioning = 0.8-13. Root cause: `fetch_padus_cell_containment.mjs` tests
+only each 0.05-degree cell's CENTER (`findContainingProperties(cell.center,
+features)`), so a 2-4 km park strip in ~5 km cells yields almost no allowed
+cells (Indiana Dunes: 12), and observations concentrate inside exactly those
+strips.
+
+**Work order (pipeline, then app):**
+1. `fetch_padus_cell_containment.mjs`: sample each cell at 5 points (center
+   + 4 quarter-diagonal offsets at ±0.0125 degrees). Containment is computed
+   LOCALLY against already-fetched chunk/region features, so this adds no
+   PAD-US API traffic for cached areas. Store per cell: `units` per sample
+   point hit, plus `insideFraction` per unit set.
+2. `build_status_raster.mjs`: emit per mode (a) `status` — CONSERVATIVE, for
+   record-level provisional rules: keep center-point semantics (or require
+   >=3/5 points) so individual points never overstate permission; (b)
+   `statusFractions` — share of sample points per status, for aggregate
+   apportioning.
+3. App: when a permission filter is active, split UTFGrid cell counts by
+   `statusFractions` of overlapped raster cells (footprint overlap as in
+   `getRasterStatusFractions` sketch in git history of this debugging
+   session) instead of the single-status lookup; record-level fallback keeps
+   using `status` unchanged.
+4. **Acceptance test:** in the Dunes viewport above, per-record raster
+   statuses should recover >= 60 of the 80 live-allowed records, and the
+   filtered overview total should land within ~2x of 80 (currently ~0-20).
+   Also re-run the Shenandoah check (allowed-only at z6.5 over
+   Charlottesville previously totalled ~601 — should not regress) and
+   `scripts/check.sh`.
+
 **Follow-ups for the 5am loop:**
 - Plan items 2 (prefetch/warm gz=2/4), 3 (data-availability-bounded bridge)
   and 4 (instrumentation) below are still open and still worth doing.
