@@ -189,6 +189,22 @@ getPublicLandAccessRule.
   features; nothing breaks for older cached features, they just fall through
   to the generic fallback.
 
+## Hand-offs
+
+- **Overview status-raster coverage gap (→ Codex, spec written).** The low-zoom
+  iNaturalist overview reads cell status from the baked status raster, which is
+  generated only for the Falling Fruit chunk footprint
+  (`fetch_padus_cell_containment.mjs` walks manifest chunks →
+  `build_status_raster.mjs` bakes those cells). Encoded rule areas without
+  Falling Fruit data (Sequoia / Kings Canyon NP have 0 FF chunks; the Indiana
+  Dunes park polygon falls outside its nearby chunk's cells) get no raster cell,
+  so the overview shows `"unknown"` and cannot reflect their encoded permission
+  even though the high-zoom point layer labels them correctly. This is why
+  rebuilding the manifest/raster after the 2026-06-11 NPS additions produced
+  byte-identical output. Full work order: `docs/TODO-overview-rule-coverage.md`
+  (queued as Codex item 4 in `docs/work-split.md`). Rule semantics stay
+  Claude-owned; the hand-off is only the cell-coverage/data-regen mechanism.
+
 ## Filtered aggregate maintenance
 
 - When permission rules in `app.js` change, rerun
