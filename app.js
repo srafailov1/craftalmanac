@@ -2137,10 +2137,6 @@ function getCheckedValues(name) {
   return [...document.querySelectorAll(`input[name='${name}']:checked`)].map((input) => input.value);
 }
 
-function getSelectedAccessStatuses() {
-  return getCheckedValues("access-status");
-}
-
 function getTaxonIds(species) {
   return species.inatTaxonIds || [];
 }
@@ -2661,6 +2657,13 @@ function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuse
   if (item.countsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID]) {
     const count = Number(item.countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
     if (!accessFilterActive) return count;
+    const statusCounts = item.statusCountsByMode?.[state.activeMap];
+    if (statusCounts) {
+      return [...selectedAccessStatuses].reduce((total, status) => (
+        total + Number(statusCounts[status] || 0)
+      ), 0);
+    }
+    // Legacy fallback for items cached before per-cell statuses existed.
     return accessStatusSelectionHas(selectedAccessStatuses, getINaturalistAggregateAccessStatus(item)) ? count : 0;
   }
   const modeAccessCounts = item.accessCounts?.[state.activeMap];
@@ -2677,7 +2680,16 @@ function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuse
 
 function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive) {
   const aggregateCentroid = item.centroidsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID];
-  if (Array.isArray(aggregateCentroid)) return [aggregateCentroid[0], aggregateCentroid[1]];
+  if (Array.isArray(aggregateCentroid)) {
+    const statusCentroid = accessFilterActive
+      ? getStatusWeightedCenter(
+        item.statusCountsByMode?.[state.activeMap],
+        item.statusCentroidsByMode?.[state.activeMap],
+        selectedAccessStatuses
+      )
+      : null;
+    return statusCentroid || [aggregateCentroid[0], aggregateCentroid[1]];
+  }
   const modeAccessCentroids = item.accessCentroids?.[state.activeMap];
   const modeAccessCounts = item.accessCounts?.[state.activeMap];
   if (accessFilterActive && modeAccessCentroids) {
@@ -2709,6 +2721,23 @@ function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses
   });
   if (count) return [weightedLng / count, weightedLat / count];
   return item.center || getBboxCenter(item.bbox);
+}
+
+function getStatusWeightedCenter(statusCounts, statusCentroids, selectedAccessStatuses) {
+  if (!statusCounts || !statusCentroids) return null;
+  let count = 0;
+  let weightedLng = 0;
+  let weightedLat = 0;
+  selectedAccessStatuses.forEach((status) => {
+    const centroid = statusCentroids[status];
+    const statusCount = Number(statusCounts[status] || 0);
+    if (!Array.isArray(centroid) || !statusCount) return;
+    weightedLng += centroid[0] * statusCount;
+    weightedLat += centroid[1] * statusCount;
+    count += statusCount;
+  });
+  if (!count) return null;
+  return [weightedLng / count, weightedLat / count];
 }
 
 function getFilteredAccessStatusCount(speciesCounts, selectedSpeciesIds) {
@@ -3507,11 +3536,13 @@ async function loadINaturalistAggregates() {
     state.inatAggregateItems = [];
     setINaturalistAggregateReady(false);
   }
-  if (isAccessFilterActive()) {
-    setINaturalistAggregateReady(false);
-    await loadStatusRaster();
-    if (requestId !== state.activeINaturalistAggregateRequest) return;
-  }
+  // Per-cell permission statuses are baked into grid items at fetch time, so
+  // the status raster must be in memory before any tile fetch — always, not
+  // just while a permission filter is active. Once cached this resolves
+  // immediately, and permission toggles repaint from the stored splits
+  // without re-arming the paint gate or refetching tiles.
+  await loadStatusRaster();
+  if (requestId !== state.activeINaturalistAggregateRequest) return;
   const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
   const missingTiles = tiles.filter((tile) => (
     !state.inatAggregateCache.has(getINaturalistAggregateCacheKey(taxonIds, tile))
@@ -3742,7 +3773,14 @@ function getINaturalistGridItems(tile, gridData) {
   // Merge the 64x64 response cells into 32x32 buckets per tile. Display buckets
   // are never finer than tile/8, so this is visually lossless but caps the item
   // count the per-frame aggregation code has to walk.
+  // Permission statuses are resolved here, per response cell — the finest
+  // resolution available — so each bucket carries stable per-status counts.
+  // Resolving statuses at paint time from a bucket's count-weighted centroid
+  // made whole buckets flip status (and pop in/out of filtered views) every
+  // time re-bucketing at a new zoom moved the centroid into a different
+  // status-raster cell.
   const bucketScale = (2 ** tile.z) * INATURALIST_GRID_CELL_BUCKETS;
+  const modes = Object.keys(MAP_MODE_CONFIG);
   const buckets = new Map();
   Object.values(gridData?.data || {}).forEach((cell) => {
     const count = Number(cell?.cellCount || 0);
@@ -3750,30 +3788,60 @@ function getINaturalistGridItems(tile, gridData) {
     const lat = Number(cell?.latitude);
     if (!count || !Number.isFinite(lng) || !Number.isFinite(lat)) return;
     const key = `${Math.floor(lngToTileX(lng, bucketScale))}_${Math.floor(latToTileY(lat, bucketScale))}`;
-    const bucket = buckets.get(key) || { count: 0, weightedLng: 0, weightedLat: 0 };
+    const bucket = buckets.get(key) || { count: 0, weightedLng: 0, weightedLat: 0, statusAgg: {} };
     bucket.count += count;
     bucket.weightedLng += lng * count;
     bucket.weightedLat += lat * count;
+    const rasterEntry = state.statusRaster?.[getStatusRasterCellKey(lng, lat)];
+    modes.forEach((mode) => {
+      const status = rasterEntry?.[mode] || "unknown";
+      const modeAgg = bucket.statusAgg[mode] || (bucket.statusAgg[mode] = {});
+      const statusBucket = modeAgg[status] || (modeAgg[status] = { count: 0, weightedLng: 0, weightedLat: 0 });
+      statusBucket.count += count;
+      statusBucket.weightedLng += lng * count;
+      statusBucket.weightedLat += lat * count;
+    });
     buckets.set(key, bucket);
   });
   return [...buckets.entries()].map(([key, bucket]) => {
     const lng = bucket.weightedLng / bucket.count;
     const lat = bucket.weightedLat / bucket.count;
+    const statusCountsByMode = {};
+    const statusCentroidsByMode = {};
+    Object.entries(bucket.statusAgg).forEach(([mode, modeAgg]) => {
+      statusCountsByMode[mode] = {};
+      statusCentroidsByMode[mode] = {};
+      Object.entries(modeAgg).forEach(([status, statusBucket]) => {
+        statusCountsByMode[mode][status] = statusBucket.count;
+        statusCentroidsByMode[mode][status] = [
+          statusBucket.weightedLng / statusBucket.count,
+          statusBucket.weightedLat / statusBucket.count
+        ];
+      });
+    });
     return {
       id: `inat-grid-${tile.id}-${key}`,
       bbox: [lng, lat, lng, lat],
       countsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: bucket.count },
-      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, bucket.count] }
+      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, bucket.count] },
+      statusCountsByMode,
+      statusCentroidsByMode
     };
   });
 }
 
 function getINaturalistAggregateTiles(bounds, zoom) {
   const area = getINaturalistAggregateBounds(bounds, zoom);
-  let gridZoom = Math.min(INATURALIST_GRID_MAX_ZOOM, Math.max(INATURALIST_GRID_MIN_ZOOM, Math.floor(zoom)));
+  // Snap the grid zoom to even values (2/4/6) so the tile-key set survives
+  // continuous zooming. Flooring to every integer zoom invalidated the whole
+  // cache key set at each crossing, forcing refetch + regroup mid-handoff —
+  // the source of circles dissolving into different ones while zooming. Cell
+  // resolution stays ample: every tile carries 64x64 response cells.
+  const evenZoom = Math.floor(zoom / 2) * 2;
+  let gridZoom = Math.min(INATURALIST_GRID_MAX_ZOOM, Math.max(INATURALIST_GRID_MIN_ZOOM, evenZoom));
   let tiles = getGridTilesForArea(area, gridZoom);
   while (tiles.length > INATURALIST_GRID_MAX_TILES && gridZoom > INATURALIST_GRID_MIN_ZOOM) {
-    gridZoom -= 1;
+    gridZoom -= 2;
     tiles = getGridTilesForArea(area, gridZoom);
   }
   return tiles;

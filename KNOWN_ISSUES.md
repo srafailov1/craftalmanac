@@ -4,7 +4,52 @@ Issues queued for the daily tune-up pass. Investigate, fix, and remove entries
 once verified on the live site. Keep this file current: future debugging
 sessions rely on it for context.
 
-## 1. Sparse-counts flash during zoom transitions around zoom 8 (STILL REPRODUCING — new diagnosis 2026-06-11, plan below)
+## 1. Sparse-counts flash during zoom transitions around zoom 8 (PARTIAL FIX SHIPPED 2026-06-11 evening — see update; plan items 2–4 still open)
+
+**Update 2026-06-11 evening (owner-reported, fixed in interactive session):**
+Owner reproduced two related symptoms: (a) with default permissions, overview
+circles dissolve into different smaller ones around zoom ~6.5–7 and "revive"
+when zooming further; (b) with "Allowed" only, much of the map is empty at low
+zoom and circle totals ride up and down with zoom. Three causes found and
+fixed (commit "Stabilize aggregate counts across zoom and permission filters"):
+
+1. **Duplicate `getSelectedAccessStatuses` definition** (was at lines 1535 and
+   2140) — the second, array-returning copy silently overrode the Set-returning
+   one, so `isAccessFilterActive()` compared `undefined !== 5` and returned
+   true ALWAYS. Every overview paint took the permission-approximation path
+   even with default permissions, and `loadINaturalistAggregates` re-armed the
+   paint gate on every pass. Duplicate removed. **Watch for this class of bug:
+   `node --check` passes on duplicate function declarations; consider a lint
+   pass for duplicate top-level names in the 5am loop.**
+2. **Per-bucket centroid status lookups** — iNat overview buckets (0.2°–1.4°)
+   were assigned ONE status by looking up their count-weighted centroid in the
+   0.05° status raster (82% unknown). Re-bucketing at each integer zoom moved
+   centroids into different raster cells, flipping whole buckets in/out of
+   filtered views. Now statuses are resolved per response cell at fetch time
+   (`getINaturalistGridItems`) and each item carries
+   `statusCountsByMode`/`statusCentroidsByMode`; counts and centroids blend
+   the selected statuses. Status raster now always loads before tile fetches.
+3. **Grid zoom churn** — plan item 1 below is DONE: `gridZoom` snaps to even
+   values (2/4/6) in `getINaturalistAggregateTiles`, so the tile-key set is
+   stable across continuous zooms (verified: identical tile ids from z6.0
+   through z7.5).
+
+**Follow-ups for the 5am loop:**
+- Plan items 2 (prefetch/warm gz=2/4), 3 (data-availability-bounded bridge)
+  and 4 (instrumentation) below are still open and still worth doing.
+- Bucket resolution near the handoff: gz now caps at 6, so buckets are tile/32
+  ≈ 0.175° while the display grid at zoom ~7.5–8 is finer (~0.09–0.12°). If
+  the band looks chunky, bump bucketing to 64 per tile for gz 6 (watch the
+  per-paint item count).
+- **Structural limit, flag for owner:** with "Allowed" only at low zoom, iNat
+  counts can only be as complete as the status raster (10.5k allowed cells of
+  31.5k rastered; everything unrastered is "unknown"). Points that PAD-US
+  marks allowed at point zoom will still be filtered out of the overview where
+  the raster has no coverage. Real fix is raster coverage (build pipeline),
+  not app code. Counts are now *stable* across zoom; completeness under
+  allowed-only is a data question.
+
+## 1a. Original report and plan (2026-06-11 morning, kept for context)
 
 **Owner-confirmed 2026-06-11 (after the downward-bridge fix shipped):** the
 flash still reproduces. Screenshot at ~zoom 7.5 over Charlottesville shows a
