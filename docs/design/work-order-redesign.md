@@ -182,19 +182,20 @@ authoritative sources for two test locations.
 - [ ] Rollback rehearsed.
 - [ ] `main` build re-promoted to production until the cutover moment.
 
-## 5. Owner decision asks
+## 5. Owner decisions (answered 2026-06-12)
 
-1. **Fonts.** Recommend self-hosted OFL set: Fraunces (display, fixed
-   instance), Public Sans (UI), IBM Plex Mono (labels). Approve or swap.
-2. **Recipe content.** Confirm the first three recipes and supply/approve
-   step text (templates will be ready in Phase 3).
-3. **Tide scope at launch.** Nearest-station for all US coasts (C1), or
-   Northeast-only MVP?
-4. **Standard-style fallback.** Pre-approve the two-classic-styles fallback
-   if Phase 2 hits its effort limit, or prefer we hold for Standard?
-5. **Timeline.** Phases 0–2 are sequential; 3–5 partially parallel. With
-   roughly one interactive session per phase plus agent lanes, this is a
-   2–3 week arc at current pace. Confirm or stretch.
+1. **Fonts — DECIDED.** Self-hosted OFL set approved: Fraunces (display,
+   fixed instance), Public Sans (UI), IBM Plex Mono (labels).
+2. **Recipe content — DECIDED.** The three sample recipes (oak-gall ink,
+   pokeberry ink, walnut dye bath) ship as placeholders through migration;
+   the owner authors real content after cutover prep.
+3. **Tide scope — DECIDED.** Same model as weather: tide follows the
+   forecast location (geocoded place or update-to-map-area at zoom ≥ 8),
+   nearest station nationwide. C1 builds the full US station index.
+4. **Standard-style fallback — DEFERRED.** No pre-approval; decide live if
+   Phase 2 hits its effort limit.
+5. **Timeline — accepted** (~2–3 weeks at current pace). Phase 0 begins via
+   scheduled session 2026-06-12 8:01 PM.
 
 ## 6. Standing risks
 
