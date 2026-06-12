@@ -33,10 +33,17 @@ Codex queue:
 ## Tier 3 — Qwen via opencode (junior, local, free)
 
 Operating manual: `AGENTS.md` at repo root (hard rules live there).
-Scope: documentation refreshes, scripts README, file inventories, simple shell
-runners over commands that already work, smoke tests, and tightly scoped
-mechanical edits whose pass/fail is obvious from the task text alone. Never
-core app logic, never safety/permissions semantics, never data regeneration.
+
+Goal: push as much of the project's mechanical, high-volume, low-judgment work
+onto Qwen as we safely can. It is free and local, so every task it clears is a
+Claude/Codex credit saved — the aim is to keep its queue full of well-formed,
+gated work, not to leave it idle. Scope: documentation refreshes, scripts
+README, file inventories, link/asset and version-consistency checkers,
+whitespace/newline normalization, smoke tests, simple shell runners over
+commands that already work, running senior-written extractor scripts, and
+tightly scoped mechanical edits whose pass/fail is obvious from the task text
+alone. Never core app logic, never safety/permissions semantics, never data
+regeneration.
 
 **Do NOT assign Qwen tasks that involve (route these to Codex or Claude):**
 - extracting functions or constants out of `app.js` into a VM/Node harness
@@ -57,6 +64,31 @@ failures, and wrote rule tests that passed without asserting real behavior
 (null records, synthetic land text that matched no app.js predicate, a
 mushroom test whose species lacked `category: "mushroom"`). It reliably
 handles docs and simple runners; it does not reliably handle app.js semantics.
+
+### Get more out of Qwen: the gate pattern
+
+The way to hand Qwen bigger jobs without raising risk is to make correctness
+machine-checkable. A senior (Claude or Codex) writes the spec **and a
+verification command** — a script or one-liner that exits 0 only when the task
+is done correctly. Qwen then runs the implement → run → fix loop against that
+gate for free. Spend senior credits on the part that needs judgment (defining
+"done" precisely and writing the gate); spend Qwen's local compute on the grind
+of satisfying it. A task with a real gate is safe for Qwen even when it touches
+several files; a task without one is not, however small it looks.
+
+### Qwen task template
+
+Every Qwen queue item should be written so it reads mechanically:
+
+- **Files:** exact path(s) to create or edit (line ranges for existing files).
+- **Steps:** the concrete actions, in order.
+- **Verification:** one command that exits 0 when done (e.g. `bash scripts/check.sh`,
+  a `grep`/`comm` one-liner, `node --check`).
+- **Acceptance:** the criteria that command enforces, stated plainly.
+- **Boundaries:** files/areas not to touch (always includes safety/permission text).
+
+If an item can't be written this way, it isn't a Qwen item — keep it with Codex
+or Claude.
 
 Qwen queue (work top-down from the first item not marked DONE or BLOCKED, one per fresh session):
 1. **Data validation script — DONE.** `scripts/validate_data.mjs` exists and
@@ -90,9 +122,40 @@ Qwen queue (work top-down from the first item not marked DONE or BLOCKED, one pe
 5. **Scripts README.** Create `scripts/README.md`: one paragraph per
    script — what it does, when to run it, inputs/outputs. Acceptance:
    covers every file in `scripts/`.
+6. **Docs inventory — `docs/INDEX.md`.** Create it: one line per file under
+   `docs/` (recursively), formatted `path — short description`. Take the
+   description from each file's first heading/title line only; do not summarize
+   or interpret permissions/rule content. Boundaries: read-only except the new
+   file. Verification (prints nothing when every doc is listed):
+   `comm -23 <(find docs -type f ! -name INDEX.md | sort) <(grep -oE 'docs/[^ —]+' docs/INDEX.md | sort)`.
+7. **Link/asset existence checker — `scripts/check_links.mjs`.** Using the
+   reference-extraction spec a senior hands you, assert every local file
+   referenced by `index.html` (href/src and `?v=` assets) exists on disk; exit
+   nonzero listing any miss. Wire it into `scripts/check.sh`. Boundaries: do not
+   modify `index.html`. Verification: `node scripts/check_links.mjs` exits 0 on
+   the current tree and `node --check scripts/check_links.mjs` passes. (If the
+   task arrives without the extraction spec, escalate — inventing what counts as
+   a reference is not your call.)
+8. **Cache-version consistency — fold into `scripts/check.sh`.** Add a step that
+   asserts the `?v=` query strings on `app.js` and `styles.css` in `index.html`
+   share the same version token. Boundaries: do not edit `index.html`; only add
+   a check. Verification: `bash scripts/check.sh` exits 0 now, and flips to
+   nonzero if you desync the two tokens in a scratch copy.
+9. **Whitespace / final-newline normalization (docs + scripts only).** Trim
+   trailing whitespace and ensure exactly one final newline on every `*.md`
+   under `docs/` and every file under `scripts/`. Boundaries: never touch
+   `app.js`, `styles.css`, `index.html`, `config.js`, `data/`, `ATTRIBUTION.md`,
+   `CLAUDE.md`, or any safety text. Verification: the normalizer is idempotent —
+   a second run leaves a clean `git status --short` — and `bash scripts/check.sh`
+   still exits 0.
+10. **Standing task — run senior-written extractors.** When a senior places an
+    extractor script in `scripts/` with its run command and expected output
+    shape, run it and format the output into the named file. You run the gate;
+    you never author extraction logic or interpret `app.js`. Acceptance: the
+    senior's stated verification command exits 0.
 
-When the queue is empty, STOP — do not invent work. Ask for more via
-`docs/qwen-questions.md`.
+Items 6–9 are scoped and ready; 10 is a standing pattern. When the queue is
+empty, STOP — do not invent work. Ask for more via `docs/qwen-questions.md`.
 
 ## Review chain
 
