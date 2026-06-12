@@ -174,16 +174,23 @@
   @media (prefers-reduced-motion: reduce) { .windflow i { animation:none; opacity:0.4; } }
 
   /* ---------- legend ---------- */
-  #legend { bottom:14px; left:14px; padding:10px 12px; }
+  #legend { bottom:14px; left:14px; padding:10px 14px 9px; min-height:64px;
+    display:flex; flex-direction:column; }
+  #legend #leg-collapsed-line { margin-top:auto; padding-top:6px; }
   #legend-toggle { display:none; }
   #legend-body { max-height:0; opacity:0; overflow:hidden; transition:max-height .28s ease, opacity .28s ease; }
   #legend:hover #legend-body { max-height:360px; opacity:1; }
-  .legcols { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .legcols { display:flex; flex-direction:row; gap:20px; margin-top:8px; align-items:flex-start; }
+  .legcols .lcol { flex:none; }
   .legcols .lcol .k { margin-bottom:6px; }
-  .leg-cats { display:flex; flex-direction:column; gap:4px; margin-top:6px; }
-  .leg-cats .lc { font-size:10.5px; color:var(--ink); }
-  .leg-cats .lc i { display:inline-block; width:10px; height:10px; border-radius:2.5px;
-    margin-right:7px; vertical-align:-1px; }
+  .leg-cats { display:flex; flex-direction:column; gap:5px; margin-top:6px; }
+  .leg-cats .lc { display:flex; align-items:center; gap:7px; border:none; background:none;
+    cursor:pointer; font-size:10.5px; color:var(--ink); padding:1px 2px; border-radius:5px;
+    transition:opacity .2s; text-align:left; }
+  .leg-cats .lc:hover { background:rgba(127,127,127,0.12); }
+  .leg-cats .lc i { display:inline-block; width:10px; height:10px; border-radius:2.5px; flex:none; }
+  .leg-cats .lc.off { opacity:0.32; }
+  .leg-cats .lc.off i { background:transparent !important; box-shadow:inset 0 0 0 1.5px var(--sub); }
   #legend .k { font-size:10.5px; letter-spacing:0.1em; color:var(--sub); margin-bottom:7px;
     font-family:ui-monospace, Menlo, monospace; }
   .leg-row { display:flex; flex-direction:column; gap:5px; }
@@ -378,12 +385,12 @@
 <div id="legend" class="floating">
   <button id="legend-toggle">LEGEND</button>
   <div class="k" id="leg-map"></div>
-  <div class="k2" style="margin-top:4px">FILL = MATERIAL TYPE · RING = ACCESS · HOVER FOR FILTERS</div>
+  <div class="k2" id="leg-collapsed-line">FILL = MATERIAL TYPE · RING = ACCESS</div>
   <div id="legend-body">
   <div class="k" id="leg-map-m" style="display:none; grid-column:1 / -1;"></div>
   <div class="legcols">
     <div class="lcol">
-      <div class="k">ACCESS — TAP TO FILTER</div>
+      <div class="k">ACCESS</div>
       <div class="leg-row" id="leg-row"></div>
       <button id="only-allowed">ONLY ALLOWED</button>
     </div>
@@ -447,6 +454,7 @@ const S = {
   week: isoWeek(new Date()), nowWeek: isoWeek(new Date()),
   statuses: new Set(["allowed","permit","prohibited","private","unknown"]),
   mode: "food",
+  cats: new Set(["berry","fruit","mushroom","nut"]),
   register: "", simMins: null, simDate: null,
   weather: null, tide: null, selected: null, mapOK: false,
   fxOn: !matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -674,6 +682,8 @@ function geojson() {
     properties:{ sp:p.sp, status:p.status, dayColor:SPECIES[p.sp].pigment,
       nightColor:NIGHT_COLORS[p.sp] || "#FFD166",
       modes:SPECIES[p.sp].modes.join("|"),
+      cat_food:SPECIES[p.sp].cats.food || "", cat_ink:SPECIES[p.sp].cats.ink || "",
+      cat_herbalism:SPECIES[p.sp].cats.herbalism || "",
       r0:SPECIES[p.sp].ripe[0], r1:SPECIES[p.sp].ripe[1] },
   })) };
 }
@@ -685,7 +695,8 @@ const statusExpr = night => {
 function pointFilter() {
   return ["all",
     ["in", ["get","status"], ["literal", [...S.statuses]]],
-    ["in", S.mode, ["get","modes"]]];
+    ["in", S.mode, ["get","modes"]],
+    ["in", ["get", "cat_" + S.mode], ["literal", [...S.cats]]]];
 }
 function seasonOpacity() {
   /* owner decision: full opacity is the only setting */
@@ -749,17 +760,23 @@ const RADAR_MAX_ZOOM = 7.5;
 async function loadRadar() {
   try {
     const j = await (await fetch("https://api.rainviewer.com/public/weather-maps.json")).json();
+    /* infrared satellite (white cloud masses, the Ventusky-satellite look);
+       arrays can be empty-but-truthy, so check lengths explicitly */
+    const sat = (j.satellite && j.satellite.infrared) || [];
     const past = (j.radar && j.radar.past) || [];
-    const nowc = (j.radar && j.radar.nowcast) || [];
-    const frame = past.length ? past[past.length - 1] : nowc[0];   // nowcast may be [] (truthy!)
+    const frame = sat.length ? sat[sat.length - 1]
+                : past.length ? past[past.length - 1] : null;
     if (!frame) return;
-    const tiles = j.host + frame.path + "/256/{z}/{x}/{y}/2/1_1.png";
+    const color = sat.length ? "0" : "2";        // 0 = grayscale clouds for satellite
+    const tiles = j.host + frame.path + "/256/{z}/{x}/{y}/" + color + "/0_0.png";
+    /* maxzoom 6: beyond the provider's native zoom Mapbox overzooms these
+       tiles instead of requesting unsupported levels (the watermark bug) */
     map.addSource("radar", { type:"raster", tiles:[tiles], tileSize:256,
-      attribution:"Radar © RainViewer" });
+      maxzoom:6, attribution:"Clouds © RainViewer" });
     map.addLayer({ id:"radar", type:"raster", source:"radar", slot:"top",
       paint:{ "raster-opacity":0, "raster-opacity-transition":{ duration:600 } } }, "occ-halo");
     updateZoomLayers();
-  } catch (e) { /* radar is an enhancement; the map works without it */ }
+  } catch (e) { /* satellite layer is an enhancement; the map works without it */ }
 }
 function updateZoomLayers() {
   if (!S.mapOK) return;
@@ -806,14 +823,14 @@ function paintFallback() {
     el.style.background = sp.pigment;
     el.style.borderColor = STATUS_DAY[p.status];
     el.style.boxShadow = night ? "0 0 10px rgba(255,255,255,0.55)" : "none";
-    const modeOK = sp.modes.includes(S.mode);
+    const modeOK = sp.modes.includes(S.mode) && S.cats.has(sp.cats[S.mode]);
     el.style.opacity = (S.statuses.has(p.status) && modeOK) ? 1 : 0;
     el.style.pointerEvents = (S.statuses.has(p.status) && modeOK) ? "auto" : "none";
   });
 }
 function refreshFlush() {
   flushMarkers.forEach(m => m.remove()); flushMarkers = [];
-  if (!S.mapOK || !S.weather || S.weather.past72 < 18 || S.mode !== "food") return;
+  if (!S.mapOK || !S.weather || S.weather.past72 < 18 || S.mode !== "food" || !S.cats.has("mushroom")) return;
   POINTS.filter(p => SPECIES[p.sp].fungal && S.statuses.has(p.status)).forEach(p => {
     const el = document.createElement("div"); el.className = "pulse";
     flushMarkers.push(new mapboxgl.Marker({ element:el }).setLngLat([p.lng, p.lat]).addTo(map));
@@ -1197,7 +1214,7 @@ function renderPanel() {
   } else if (openSeg === "wind" && w) {
     html = `<h3>WIND &amp; CLOUD</h3>
       <div class="fig">${windFlowHTML(w.windDir, w.wind)}</div>
-      <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%${w.clouds < 10 ? " (clear — map shows fair-weather wisps)" : ""}.<br>
+      <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%${w.clouds < 10 ? " — clear sky, so no cloud layer is drawn" : ""}.<br>
       Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
       <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px;cursor:pointer">
         <input type="checkbox" id="fx-toggle" ${S.fxOn?"checked":""}> animate wind &amp; cloud layer on the map
@@ -1344,11 +1361,12 @@ function fxFrame(ts) {
   const cvlng = Math.sin(B) * pxCloud * degPerPxX * dt;
   const cvlat = Math.cos(B) * pxCloud * degPerPxY * dt;
   /* clouds — uniform translucency via offscreen compositing */
-  /* clouds keep a visible floor: a clear sky shows light fair-weather wisps,
-     real cover thickens them (true % always lives in the wind panel) */
+  /* honest clouds: none when the sky is clear (the satellite layer at low
+     zoom makes this legible); density and alpha scale with real cover */
   const cover = w.clouds / 100;
-  const cloudAlpha = night ? 0.36 + cover * 0.18 : 0.42 + cover * 0.13;
-  clouds.forEach(cl => {
+  const cloudAlpha = night ? cover * 0.5 : cover * 0.52;
+  const skipClouds = cover < 0.06;
+  if (!skipClouds) clouds.forEach(cl => {
     cl.lng += cvlng * cl.v; cl.lat += cvlat * cl.v;
     cl.rot += cl.rotV * dt * 60;
     if (cl.lng > b.e + cl.rdeg * 3) cl.lng = b.w - cl.rdeg;
@@ -1412,9 +1430,20 @@ function syncModeUI() {
   document.getElementById("leg-map").innerHTML = mapLine;
   const lm = document.getElementById("leg-map-m");
   if (lm) lm.innerHTML = mapLine;
-  document.getElementById("leg-cats").innerHTML =
-    Object.keys(CATEGORIES).filter(c => CATEGORIES[c].mode === S.mode).map(c =>
-      `<span class="lc"><i style="background:${CATEGORIES[c].color}"></i>${CATEGORIES[c].label}</span>`).join("");
+  /* categories of the active map double as filters, like the access rings */
+  S.cats = new Set(Object.keys(CATEGORIES).filter(c => CATEGORIES[c].mode === S.mode));
+  renderLegCats();
+}
+function renderLegCats() {
+  const el = document.getElementById("leg-cats");
+  el.innerHTML = Object.keys(CATEGORIES).filter(c => CATEGORIES[c].mode === S.mode).map(c =>
+    `<button class="lc ${S.cats.has(c) ? "" : "off"}" data-cat="${c}">
+       <i style="background:${CATEGORIES[c].color}"></i>${CATEGORIES[c].label}</button>`).join("");
+  el.querySelectorAll("[data-cat]").forEach(b => b.addEventListener("click", () => {
+    const c = b.dataset.cat;
+    if (S.cats.has(c)) S.cats.delete(c); else S.cats.add(c);
+    renderLegCats(); paintPoints();
+  }));
 }
 syncModeUI();
 
