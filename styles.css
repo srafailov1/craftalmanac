@@ -2100,6 +2100,18 @@ body[data-register="night"] {
   opacity: 0.32;
 }
 
+/* ---- conditions rail (Phase 4a) ---- */
+
+#conditions-rail {
+  top: 14px;
+  right: 14px;
+  display: flex;
+  align-items: stretch;
+  padding: 3px 5px;
+  max-width: calc(100% - 28px);
+  overflow-x: auto;
+}
+
 .rail-seg {
   display: flex;
   align-items: center;

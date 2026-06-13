@@ -1359,6 +1359,176 @@ function applyRegister() {
 applyRegister();
 setInterval(applyRegister, 60e3);
 
+// ---------------------------------------------------------------------------
+// Phase 4 — Conditions (additive layer). Sun/moon are computed client-side at
+// state.location and always render. Rain/wind come from Open-Meteo; any fetch
+// failure leaves state.weather null and the rail simply omits those segments —
+// the map, popups, legend, season, and sheets never depend on conditions
+// (the graceful-degradation contract, work-order Phase 4 gate).
+// ---------------------------------------------------------------------------
+function sunTimes(date, lat, lng) {
+  const day = new Date(date);
+  day.setHours(0, 0, 0, 0);
+  let rise = null, set = null, goldenEve = null, duskCivil = null, dawnCivil = null, prev = null;
+  for (let m = 0; m <= 1440; m += 4) {
+    const t = new Date(+day + m * 6e4);
+    const alt = sunAltitude(t, lat, lng);
+    if (prev !== null) {
+      if (prev < 0 && alt >= 0) rise = t;
+      if (prev >= 0 && alt < 0) set = t;
+      if (prev >= 10 && alt < 10) goldenEve = t;
+      if (prev >= -6 && alt < -6) duskCivil = t;
+      if (prev < -6 && alt >= -6) dawnCivil = t;
+    }
+    prev = alt;
+  }
+  return { rise, set, goldenEve, duskCivil, dawnCivil };
+}
+
+function moonPhase(date) {
+  const synodic = 29.53058867;
+  const days = (+date / 864e5) - (Date.UTC(2000, 0, 6, 18, 14) / 864e5);
+  const phase = (((days % synodic) + synodic) % synodic) / synodic;
+  const illum = 0.5 * (1 - Math.cos(2 * Math.PI * phase));
+  return { phase, illum, waxing: phase < 0.5 };
+}
+
+const CONDITIONS_TTL_MS = 30 * 60 * 1000;
+
+function sumValues(values) {
+  return values.reduce((total, value) => total + (value || 0), 0);
+}
+function round1(value) {
+  return Math.round(value * 10) / 10;
+}
+function formatClockTime(date) {
+  return date ? new Date(date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—";
+}
+function windTier(kmh) {
+  return kmh < 8 ? "calm" : kmh < 20 ? "medium" : "fast";
+}
+
+function loadConditions(force) {
+  const { lat, lng } = state.location;
+  const cacheKey = `craftAlmanacWx:${lng.toFixed(2)},${lat.toFixed(2)}`;
+  if (!force) {
+    try {
+      const cached = JSON.parse(window.localStorage?.getItem(cacheKey) || "null");
+      if (cached && Date.now() - cached.t < CONDITIONS_TTL_MS) {
+        state.weather = { ...cached.v, src: "cached" };
+        renderConditionsRail();
+        return Promise.resolve(state.weather);
+      }
+    } catch {
+      // ignore cache read/parse errors
+    }
+  }
+  const url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat +
+    "&longitude=" + lng +
+    "&hourly=precipitation,cloud_cover,wind_speed_10m,wind_direction_10m" +
+    "&past_days=3&forecast_days=7&timezone=auto";
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error("open-meteo " + response.status);
+      return response.json();
+    })
+    .then((data) => {
+      const hourly = data.hourly;
+      const nowIndex = hourly.time.findIndex((t) => new Date(t) > new Date()) - 1;
+      const i = Math.max(0, nowIndex);
+      const past72 = sumValues(hourly.precipitation.slice(Math.max(0, i - 72), i));
+      const daily = [];
+      for (let d = 0; d < 7; d++) {
+        daily.push(round1(sumValues(hourly.precipitation.slice(d * 24, d * 24 + 24))));
+      }
+      const weather = {
+        past72: round1(past72),
+        daily,
+        wind: hourly.wind_speed_10m[i] || 0,
+        windDir: hourly.wind_direction_10m[i] || 0,
+        clouds: hourly.cloud_cover[i] || 0,
+        fetched: Date.now(),
+        src: "live"
+      };
+      state.weather = weather;
+      try {
+        window.localStorage?.setItem(cacheKey, JSON.stringify({ t: Date.now(), v: weather }));
+      } catch {
+        // ignore storage quota errors
+      }
+      renderConditionsRail();
+      return weather;
+    })
+    .catch(() => {
+      // Degrade gracefully: no live data and no fresh cache → leave whatever
+      // (possibly nothing) is in state.weather and never fabricate values.
+      renderConditionsRail();
+      return null;
+    });
+}
+
+function conditionsIconSun() {
+  return `<svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="4.4" fill="#e8b931"/>
+    <g stroke="#e8b931" stroke-width="1.4" stroke-linecap="round">
+    <line x1="11" y1="1.5" x2="11" y2="4"/><line x1="11" y1="18" x2="11" y2="20.5"/>
+    <line x1="1.5" y1="11" x2="4" y2="11"/><line x1="18" y1="11" x2="20.5" y2="11"/>
+    <line x1="4.2" y1="4.2" x2="6" y2="6"/><line x1="16" y1="16" x2="17.8" y2="17.8"/>
+    <line x1="17.8" y1="4.2" x2="16" y2="6"/><line x1="6" y1="16" x2="4.2" y2="17.8"/></g></svg>`;
+}
+function conditionsIconMoon(mp) {
+  const offset = (mp.waxing ? 1 : -1) * (11 * (1 - mp.illum));
+  return `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="var(--reg-sub)"/>
+    <circle cx="${(11 + offset).toFixed(1)}" cy="11" r="8" fill="var(--reg-panel-a)"/></svg>`;
+}
+function conditionsIconRain() {
+  return `<svg viewBox="0 0 22 22"><path d="M11 3 C 14 8, 17 11, 17 14 A 6 6 0 1 1 5 14 C 5 11, 8 8, 11 3 Z" fill="#3e63c4" opacity="0.85"/></svg>`;
+}
+function conditionsIconWind() {
+  return `<svg viewBox="0 0 22 22" fill="none" stroke="var(--reg-sub)" stroke-width="1.6" stroke-linecap="round">
+    <path d="M3 8 H 13 a 2.6 2.6 0 1 0 -2.6 -2.6"/><path d="M3 13 H 16 a 2.6 2.6 0 1 1 -2.6 2.6"/></svg>`;
+}
+
+function conditionsSegment(id, label, value, icon) {
+  return `<button type="button" class="rail-seg" data-seg="${id}">
+    <span class="ic">${icon}</span><span><span class="k">${escapeHTML(label)}</span><span class="v">${escapeHTML(value)}</span></span>
+  </button>`;
+}
+
+function renderConditionsRail() {
+  if (!conditionsRail) return;
+  const now = new Date();
+  const { lat, lng } = state.location;
+  const times = sunTimes(now, lat, lng);
+  const mp = moonPhase(now);
+  const weather = state.weather;
+  let html = "";
+  html += conditionsSegment("sun", "SUN", `${state.register.toUpperCase()} · set ${formatClockTime(times.set)}`, conditionsIconSun());
+  html += conditionsSegment("moon", "MOON", `${Math.round(mp.illum * 100)}% ${mp.waxing ? "waxing" : "waning"}`, conditionsIconMoon(mp));
+  if (weather) {
+    const flushNote = weather.past72 >= 18 ? " · FLUSH" : "";
+    html += conditionsSegment("rain", "RAIN 72H", `${weather.past72} mm${flushNote}`, conditionsIconRain());
+    html += conditionsSegment("wind", "WIND", `${Math.round(weather.wind)} km/h · ${windTier(weather.wind).toUpperCase()}`, conditionsIconWind());
+  }
+  conditionsRail.innerHTML = html;
+}
+
+// Forecast location follows the chosen place (Phase 4); default stays CONUS
+// center. Changing it re-runs the register and refetches conditions.
+function setForecastLocation(lat, lng) {
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+  state.location = { lat, lng };
+  applyRegister();
+  renderConditionsRail();
+  loadConditions(true);
+}
+
+function initConditions() {
+  renderConditionsRail();
+  loadConditions();
+  setInterval(renderConditionsRail, 60e3);
+  setInterval(() => loadConditions(), CONDITIONS_TTL_MS);
+}
+
 const dataStatus = document.querySelector("#dataStatus");
 const speciesCount = document.querySelector("#speciesCount");
 const daySlider = document.querySelector("#daySlider");
@@ -1373,6 +1543,7 @@ const categoryList = document.querySelector("#categoryList");
 const speciesList = document.querySelector("#speciesList");
 const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
+const conditionsRail = document.querySelector("#conditions-rail");
 const locationSearchForm = document.querySelector("#locationSearchForm");
 const locationSearchInput = document.querySelector("#locationSearchInput");
 const locationSearchSuggestions = document.querySelector("#locationSearchSuggestions");
@@ -2121,6 +2292,8 @@ function chooseLocationSuggestion(feature) {
   locationSearchInput.value = feature.place_name || feature.text || "";
   hideLocationSuggestions();
   setLocationSearchStatus("");
+  // Phase 4: conditions (sun/moon/rain/wind) follow the chosen place.
+  setForecastLocation(feature.center[1], feature.center[0]);
   if (Array.isArray(feature.bbox) && feature.bbox.length === 4) {
     map.fitBounds([
       [feature.bbox[0], feature.bbox[1]],
@@ -2164,6 +2337,7 @@ function initControls() {
   initAccessControls();
   initMapLegend();
   initSheets();
+  initConditions();
   initLocationSearch();
   syncPanelGripLabel();
 

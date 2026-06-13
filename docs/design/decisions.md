@@ -3,6 +3,39 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 4 spec drafted + 4a applied: conditions rail
+  foundation.** Wrote `docs/design/phase4-conditions-spec.md` (sequencing
+  4a–4e, the graceful-degradation gate, endpoints, forecast-location model,
+  C1/C3 + whitelist integration). Then landed **4a**: a floating
+  `#conditions-rail` (`.floating` + the Phase-1 `.rail-seg` shell) at top-right
+  of the map. SUN (register + sunset time) and MOON (illumination % +
+  waxing/waning) come from ported client astronomy (`sunTimes` built on the
+  existing `sunAltitude`, `moonPhase`) — no network, so they always render.
+  `loadConditions` fetches Open-Meteo (precip past-72h, daily, wind, clouds)
+  for `state.location` with a 30-min localStorage TTL cache + `data-age`/`src`
+  tagging; RAIN 72H and WIND segments appear only when weather is present.
+  **Degradation contract (the Phase 4 gate) is built in:** the fetch is
+  `try/catch`, resolves (never throws), and on failure leaves `state.weather`
+  null with **no fabricated values** — unlike the prototype's "offline sample",
+  production simply omits the weather segments. Forecast location now follows
+  place search (`chooseLocationSuggestion` → `setForecastLocation`, which also
+  re-runs `applyRegister`); `initConditions` renders once + refreshes the rail
+  each minute and refetches on the TTL. The conditions layer is fully
+  decoupled — the map/popups/legend/season/sheets never read it.
+
+  **Gate — passed.** `node --check` clean. Wrote `outputs/verify_4a.mjs`
+  (22-assertion harness over the real extracted functions): sun/moon math,
+  Open-Meteo parse (`past72`, 7-day `daily`, wind), the cache path (fresh cache
+  avoids network), and the **kill-switch** (stubbed `fetch` rejection → resolves
+  null, no throw, no fabricated data, rail keeps sun/moon) — all pass. Live via
+  Claude-in-Chrome (`?v=phase4a-1`): rail shows SUN/MOON/RAIN/WIND from live
+  Open-Meteo (`src:"live"`), register-aware bg; blocking `fetch` in-page leaves
+  the rail at sun/moon only with no throw and `state.weather` null;
+  `setForecastLocation(Providence)` updates location + refetches. No app console
+  errors (only an unrelated browser extension). Bumped both `index.html` tokens
+  to `?v=phase4a-1`. Next: 4b (detail panels + update-to-map-area), then 4c
+  wind canvas, 4d tide (C1), 4e radar + flush pulses (C3 + whitelist).
+
 - **2026-06-13 — Phase 3e applied: removed the replaced panel sections +
   migrated the access filter to state.** Removed three `#controlPanel` pieces
   now covered by the floating UI: the **Access & Permissions** section
