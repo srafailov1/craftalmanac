@@ -1860,6 +1860,7 @@ function setMapMode(mode) {
   renderFilterControls();
   updateLayerHandoff();
   render();
+  loadPhenology(mode).then(() => { if (state.activeMap === mode) renderHistogram(); });
 }
 
 function initLocationSearch() {
@@ -2401,41 +2402,65 @@ function renderSeasonControls() {
   allSeasonsButton.classList.toggle("active", state.allSeasons);
 }
 
+// C2 phenology: per-species 12-month relative-abundance (0-1) curves, loaded
+// per mode from data/phenology/<mode>.json. Cached; a null entry marks a failed
+// load so the histogram falls back to binary species.months (graceful).
+const phenologyByMode = {};
+function loadPhenology(mode) {
+  if (Object.prototype.hasOwnProperty.call(phenologyByMode, mode)) {
+    return Promise.resolve(phenologyByMode[mode]);
+  }
+  return fetch(`./data/phenology/${mode}.json`)
+    .then((response) => {
+      if (!response.ok) throw new Error(`phenology ${mode}: ${response.status}`);
+      return response.json();
+    })
+    .then((data) => { phenologyByMode[mode] = data; return data; })
+    .catch(() => { phenologyByMode[mode] = null; return null; });
+}
+
 function renderHistogram() {
   const selectedSpecies = getCheckedValues("species");
   const speciesForChart = speciesCatalog.filter((species) => (
     selectedSpecies.includes(species.id)
   ));
-  const monthBreakdowns = MONTHS.map((_, index) => {
+  const phenology = phenologyByMode[state.activeMap] || null;
+  const monthData = MONTHS.map((_, index) => {
     const month = index + 1;
-    const breakdown = Object.fromEntries(CATEGORIES.map((category) => [category, 0]));
+    const weighted = Object.fromEntries(CATEGORIES.map((category) => [category, 0]));
+    const counts = Object.fromEntries(CATEGORIES.map((category) => [category, 0]));
     speciesForChart.forEach((species) => {
-      if (species.months.includes(month)) breakdown[species.category] += 1;
+      const curve = phenology?.[species.id];
+      const inSeason = species.months.includes(month);
+      // Real abundance when a curve exists; otherwise binary in-season presence.
+      const intensity = curve ? (curve[index] || 0) : (inSeason ? 1 : 0);
+      weighted[species.category] += intensity;
+      if (inSeason || (curve && curve[index] >= 0.15)) counts[species.category] += 1;
     });
-    return breakdown;
+    return { weighted, counts };
   });
-  const totals = monthBreakdowns.map((breakdown) => (
-    CATEGORIES.reduce((sum, category) => sum + breakdown[category], 0)
+  const totals = monthData.map((entry) => (
+    CATEGORIES.reduce((sum, category) => sum + entry.weighted[category], 0)
   ));
-  const maxCount = Math.max(1, ...totals);
+  const maxTotal = Math.max(0.0001, ...totals);
   const activeMonth = getSelectedMonth();
 
-  seasonHistogram.innerHTML = monthBreakdowns.map((breakdown, index) => {
+  seasonHistogram.innerHTML = monthData.map((entry, index) => {
     const total = totals[index];
-    const height = total ? Math.max(8, Math.round((total / maxCount) * 68)) : 8;
+    const height = total > 0 ? Math.max(8, Math.round((total / maxTotal) * 68)) : 8;
     const activeClass = !state.allSeasons && index + 1 === activeMonth ? " active" : "";
     const segments = CATEGORIES.map((category) => {
-      const count = breakdown[category];
-      if (!count) return "";
-      const segmentHeight = Math.max(6, Math.round((count / total) * height));
+      const value = entry.weighted[category];
+      if (value <= 0) return "";
+      const segmentHeight = Math.max(3, Math.round((value / total) * height));
       return `<div class="histogram-segment ${category}" style="height: ${segmentHeight}px"></div>`;
     }).join("");
     const title = CATEGORIES
-      .filter((category) => breakdown[category])
-      .map((category) => `${category}: ${breakdown[category]}`)
+      .filter((category) => entry.counts[category])
+      .map((category) => `${getCategoryLabel(category)}: ${entry.counts[category]}`)
       .join(", ");
     return `
-      <div class="histogram-bar${activeClass}" style="height: ${height}px" title="${MONTHS[index]}: ${title || "none"}">
+      <div class="histogram-bar${activeClass}" style="height: ${height}px" title="${MONTHS[index]}: ${title || "none in season"}">
         ${segments}
         <span class="histogram-label">${MONTHS[index]}</span>
       </div>
@@ -5299,6 +5324,7 @@ function setDataStatus(message) {
 
 initControls();
 render();
+loadPhenology(state.activeMap).then(() => renderHistogram());
 map.on("load", () => {
   state.mapReady = true;
   syncLightPreset(state.register);

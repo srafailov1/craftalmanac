@@ -3,6 +3,34 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 3c applied: season histogram on real C2 phenology.**
+  Replaced the synthetic histogram (binary `species.months` membership counts)
+  with real per-species 12-month relative-abundance curves from C2
+  (`data/phenology/<mode>.json`). Added `phenologyByMode` cache + `loadPhenology`
+  (fetch per mode, cached, a cached `null` on failure → graceful fallback to
+  the old binary behavior). `renderHistogram` now weights each month/category
+  by summed abundance (`curve[monthIndex]`), falling back to binary presence
+  for any species lacking a curve; bar heights and stacked segments reflect
+  real intensity. The tooltip still reports the count of in-season species per
+  category (now using `getCategoryLabel`, "in season" = `species.months` or
+  abundance ≥ 0.15). DOM/CSS unchanged (same `.histogram-bar`/`.histogram-segment`
+  classes), and the date-availability marker filter
+  (`isSpeciesAvailableOnSelectedDate`) is untouched — so this is a visual
+  enrichment only, no filtering change. `loadPhenology` is fired at boot (after
+  the initial `render()`) and on `setMapMode`, each re-rendering the histogram
+  once data resolves.
+
+  **Gate — passed.** `node --check` clean. Live via Claude-in-Chrome
+  (`?v=phase3c-1`): `food.json` loads with 26 species curves; isolating
+  **morel** drives the histogram peak to month index 3 (April), exactly
+  matching morel's curve peak — proving the chart consumes the real curve, not
+  binary months; with all species selected the 12 bar heights vary (seasonal
+  arc peaking Jun–Aug). Screenshot confirms a natural abundance curve stacked
+  by category. Bumped `app.js` token to `?v=phase3c-1` (styles.css unchanged).
+  Deferred: per-mode "date · time · place" control and popup season
+  sparklines (both lean on Phase 4 location/conditions) — noted, not in 3c.
+  Next: 3d (masthead + sheets).
+
 - **2026-06-13 — Phase 3b applied: interactive `.leg-chip` legend.** Rebuilt
   `renderMapLegend()` from a passive dot/swatch legend into the redesign's
   interactive filter control. Two chip groups: **Access** (one chip per
