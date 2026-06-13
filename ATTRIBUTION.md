@@ -10,11 +10,23 @@ The local phenology histograms in `data/phenology/` are derived from aggregated 
 
 Source: https://www.inaturalist.org/pages/api+reference and https://www.inaturalist.org/pages/terms
 
-## NOAA CO-OPS Tide Stations
+## NOAA CO-OPS Tide Stations and Predictions
 
-The tide-station index is derived from the NOAA Center for Operational Oceanographic Products and Services (CO-OPS) metadata API, filtered to US tide-prediction stations and stored locally with station id, name, latitude, and longitude only. NOAA data and information are generally not copyrighted in the United States, but NOAA asks users to credit NOAA as the source and not imply endorsement.
+The tide-station index is derived from the NOAA Center for Operational Oceanographic Products and Services (CO-OPS) metadata API, filtered to US tide-prediction stations and stored locally with station id, name, latitude, and longitude only. At runtime, the conditions rail queries the CO-OPS Data API for tide predictions at the nearest station to the forecast location, nationwide. NOAA data and information are generally not copyrighted in the United States, but NOAA asks users to credit NOAA as the source and not imply endorsement.
 
-Source: https://api.tidesandcurrents.noaa.gov/mdapi/prod/
+Sources: https://api.tidesandcurrents.noaa.gov/mdapi/prod/ and https://api.tidesandcurrents.noaa.gov/api/prod/
+
+## Open-Meteo Weather
+
+The conditions rail (sun, rain memory and forecast, wind, flush pulses) queries the Open-Meteo forecast API at runtime for the forecast location (geocoded place, or the map area at zoom ≥ 8 via "update to map area"). Open-Meteo's API data is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0); this non-commercial educational use stays within Open-Meteo's free-tier rate limits. Attribution and a link to Open-Meteo are required wherever its data is displayed.
+
+Source: https://open-meteo.com/en/license
+
+## RainViewer Radar
+
+The low-zoom sky layer overlays RainViewer's animated precipitation radar tiles (past frames, refreshed every 5 minutes). Use is under RainViewer's free-tier terms for personal/educational/small-community projects, which require visible attribution ("Weather data by RainViewer") with a link back to rainviewer.com. RainViewer does not guarantee data availability or format stability; the conditions code degrades gracefully if a fetch fails.
+
+Source: https://www.rainviewer.com/api.html
 
 ## Flush Threshold Source Notes
 
@@ -53,6 +65,8 @@ Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-nat
 ## Mapbox (basemap and geocoding)
 
 The map renders Mapbox GL JS basemap tiles and uses the Mapbox Geocoding API for the address/place search box (public token in `config.js`, URL-scoped in the Mapbox account). Required Mapbox and OpenStreetMap attribution is displayed on the map itself via the Mapbox attribution control (`attributionControl: true`). Use is governed by the Mapbox Terms of Service; this is a rendering/geocoding service, not a craft data source.
+
+**Standard style note:** the redesign migrates the basemap from `outdoors-v12` to Mapbox Standard, using its `lightPreset` (dawn/day/dusk/night) to drive the site's light-register system, and `circle-emissive-strength: 1` on custom point layers so they stay visible under non-day lighting. Maps using Mapbox Standard or a style derived from it must display both the Mapbox logo and text attribution, same as other Mapbox styles; the existing `attributionControl: true` setup continues to satisfy this.
 
 Source: https://www.mapbox.com/legal/tos and https://docs.mapbox.com/help/getting-started/attribution/
 
