@@ -1,7 +1,12 @@
 # Mapbox Standard style spec (Phase 2)
 
-**Status: ready.** Unblocks `docs/work-split.md` Codex queue item #2 and C4.
-Map initialization edits stay Claude-only per `work-order-redesign.md` §2 —
+**Status: applied (`2a8936f`), live verification pending.** §1-2 are landed in
+`app.js`/`index.html`. §3's zoom 3-16 x 4-register verification gate needs an
+interactive session with a local HTTP server reachable from
+Claude-in-Chrome (`python3 -m http.server 4173 --bind 127.0.0.1`, then
+`http://127.0.0.1:4173/`) — see `docs/design/decisions.md` 2026-06-13 entry.
+§4 (C4) has not landed yet; fold it into the same verification pass. Map
+initialization edits stay Claude-only per `work-order-redesign.md` §2 —
 Codex's role here is the C4 audit in §4, delivered as a written note, not
 `app.js`/`styles.css`/`index.html` edits.
 

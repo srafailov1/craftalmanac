@@ -3,6 +3,40 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Standard style migration applied (`2a8936f`), live
+  verification still pending.** Applied `docs/design/standard-style-spec.md`
+  in full: `MAPBOX_STYLE` -> `mapbox://styles/mapbox/standard`; all 10
+  production layers got their `slot` (`bottom` for region mask/outline +
+  public-lands fill/line, `top` for the Falling Fruit aggregate/cluster/
+  marker layers); `circle-emissive-strength`/`text-emissive-strength`/
+  `icon-emissive-strength: 1` added to every `top`-slot point/symbol layer
+  per the rev6 night-dimming lesson; removed the now-dead
+  `getFirstLineOrSymbolLayerId`/`firstLineOrSymbolLayerId` plumbing. Updated
+  the register-engine comments (`syncLightPreset`) since
+  `map.setConfigProperty("basemap","lightPreset", reg)` is no longer a no-op.
+  `node --check app.js` passes; bumped `index.html`'s `app.js` cache token to
+  `?v=standard-style-1`.
+
+  **Could not complete the spec's zoom 3-16 x 4-register live-verification
+  gate this session** — no headless browser in the sandbox, and the
+  Claude-in-Chrome browser tool refuses `file://` navigation (treated as an
+  internal page) and there's no local HTTP server running for it to reach
+  (`http://127.0.0.1:4173/` -> connection refused). **Next interactive
+  session:** run `python3 -m http.server 4173 --bind 127.0.0.1` from the repo
+  root, then use Claude-in-Chrome against `http://127.0.0.1:4173/` to run the
+  spec §3 matrix (force `state.register`/`document.body.dataset.register`/
+  `map.setConfigProperty` per register, check zooms 3/5-7/8/11/16). This is
+  also the right moment to capture the deferred baseline screenshots (task
+  #11) — capture *before* forcing registers, since `day` should still match
+  pre-migration renders.
+
+  Rows 1-2 (region mask/outline) and 3-4 (public lands fill/line) were left
+  at default (no) emissive-strength per spec, flagged for verification —
+  specifically check the region outline (`#1f3d2b` @ 0.86) for contrast
+  against `--reg-ground` in dusk/night. Codex's C4 audit
+  (`docs/design/notes-codex-c4.md`, spec §4) has not landed yet — fold its
+  findings into the same verification pass when both are ready.
+
 - **2026-06-13 — Phase 2 started: register engine landed, Standard style
   spec written.** Codex C1-C3 (tide stations, phenology, flush thresholds)
   reviewed clean, no fixes needed — see `craftalmanac-design-round2`
