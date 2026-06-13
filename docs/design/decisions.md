@@ -3,6 +3,18 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Handed the rest of sidebar retirement to Codex.** Owner is out
+  of Claude usage for now, so the final two steps (species selection →
+  `state.selectedSpecies`, then delete `#controlPanel` + rewire
+  `renderModeChrome`/`panelGrip`/`setDataStatus`) are written up as an
+  executable, touchpoint-by-touchpoint work order in
+  `docs/design/codex-kickoff-sidebar-retirement.md`. This crosses into Claude's
+  normal lane (app.js filter logic + index.html + styles.css) — explicitly
+  owner-authorized. Current committed state (`3d37443`) is clean and pushable:
+  floating season slider + search live, panel down to brand block + species
+  list + data status. After Codex finishes, next is Phase 5 (mobile) / Phase 6
+  (hardening).
+
 - **2026-06-13 — Sidebar retirement (SR2 of 3): floating season slider +
   search.** With the owner clearing the per-species-multi-select constraint
   ("ok to get rid of the original sidebar; I'll reorganize filters later"),
