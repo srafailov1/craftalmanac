@@ -5,7 +5,11 @@
 interactive session with a local HTTP server reachable from
 Claude-in-Chrome (`python3 -m http.server 4173 --bind 127.0.0.1`, then
 `http://127.0.0.1:4173/`) — see `docs/design/decisions.md` 2026-06-13 entry.
-§4 (C4) has not landed yet; fold it into the same verification pass. Map
+§4 (C4) landed (`docs/design/notes-codex-c4.md`, `02e210c`): confirmed
+`text-emissive-strength`/`circle-emissive-strength`/`icon-emissive-strength`
+are all real properties in the pinned Mapbox GL JS v3.23.1 bundle (no
+property-name fix needed); rendered checks (pixel identity, zoom-handoff
+z-order, row 7 label collisions) are folded into §3's live pass below. Map
 initialization edits stay Claude-only per `work-order-redesign.md` §2 —
 Codex's role here is the C4 audit in §4, delivered as a written note, not
 `app.js`/`styles.css`/`index.html` edits.
@@ -43,11 +47,11 @@ Codex's role here is the C4 audit in §4, delivered as a written note, not
 | 3 | `PUBLIC_LANDS_FILL_LAYER_ID` | fill | before `firstLineOrSymbolLayerId`, `minzoom: PUBLIC_LANDS_MIN_RENDER_ZOOM` (8) | `bottom` | none (verify) | PAD-US polygons, `#3b8c7e`/`#75ad37` @ 0.16–0.18. Subtle by design; verify it stays visible (not washed out or over-saturated) across registers. |
 | 4 | `PUBLIC_LANDS_LINE_LAYER_ID` | line | before `firstLineOrSymbolLayerId`, same minzoom | `bottom` | none (verify) | `#2f786c`/`#4f8f32` @ 0.72, width 1. Same verification as #3. |
 | 5 | `FALLING_FRUIT_AGGREGATE_LAYER_ID` | circle | appended (no `beforeId`) | `top` | `circle-emissive-strength: 1` | Aggregate circles, `#f7f2df` fill / `#243a2a` stroke. **C4 layer** — also carries iNat aggregate items (Phase 5 raster). |
-| 6 | `FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID` | symbol | appended | `top` | `text-emissive-strength: 1` (verify property exists — §4) | Count labels, `#243a2a`. **C4 layer.** |
-| 7 | `FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID` | symbol | appended, `maxzoom: 4.2` | `top` | `text-emissive-strength: 1` (verify) | State-name labels at zoom < 4.2. **C4 layer. Flag:** already renders above outdoors-v12's place labels today (no `beforeId`); re-check overlap against Standard's place-label density at zoom 3–4. |
+| 6 | `FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID` | symbol | appended | `top` | `text-emissive-strength: 1` (confirmed in v3.23.1 bundle — C4) | Count labels, `#243a2a`. **C4 layer.** |
+| 7 | `FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID` | symbol | appended, `maxzoom: 4.2` | `top` | `text-emissive-strength: 1` (confirmed — C4) | State-name labels at zoom < 4.2. **C4 layer. Flag (open):** C4 confirms this renders in `slot: "top"`, above Standard's own place labels — re-check overlap at zoom 3–4 in the live pass; fallback options if it collides: lower `maxzoom`, reduce `text-size`, or hide pending legend/season-context redesign. |
 | 8 | `MARKER_CLUSTERS_LAYER_ID` | circle | appended, `minzoom: MARKER_CLUSTER_BRIDGE_MIN_ZOOM` (6.4) | `top` | `circle-emissive-strength: 1` | Cluster circles, step-colored by `point_count`, `#1f3d2b` stroke. |
-| 9 | `MARKER_CLUSTER_COUNT_LAYER_ID` | symbol | appended, same minzoom | `top` | `text-emissive-strength: 1` (verify) | Cluster count labels, `#1f3d2b`. |
-| 10 | `MARKERS_LAYER_ID` | symbol | appended, `minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM` (8) | `top` | `icon-emissive-strength: 1` (verify) | Individual point markers, canvas-drawn `icon-image` sprites via `map.addImage`. |
+| 9 | `MARKER_CLUSTER_COUNT_LAYER_ID` | symbol | appended, same minzoom | `top` | `text-emissive-strength: 1` (confirmed in v3.23.1 bundle — C4) | Cluster count labels, `#1f3d2b`. |
+| 10 | `MARKERS_LAYER_ID` | symbol | appended, `minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM` (8) | `top` | `icon-emissive-strength: 1` (confirmed in v3.23.1 bundle — C4) | Individual point markers, canvas-drawn `icon-image` sprites via `map.addImage`. |
 
 All `top`-slot layers (5–10) preserve their current relative order (they're
 all appended today with no `beforeId`); slot assignment alone should not
@@ -77,6 +81,9 @@ render under symbols regardless of slot.
   - The zoom-handoff bridge (`updateLayerHandoff`, `beginAggregateBridge`,
     aggregate↔point transitions around zoom 6.4–8) still fires — this logic
     is style-agnostic (`map.on("sourcedata", ...)`) but confirm empirically.
+    Per C4: with rows 5–7 and 8–10 sharing `slot: "top"`, specifically watch
+    for a frame where cluster circles render beneath aggregate circles or
+    Standard place labels during the swap.
 - `node --check app.js`; bump `?v=` query strings for `app.js`/`styles.css`
   in `index.html`.
 - `KNOWN_ISSUES.md` gains no new entries across two nightly runs.

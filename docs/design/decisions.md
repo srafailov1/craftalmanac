@@ -3,6 +3,22 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — C4 audit landed (`02e210c`), folded into the spec.** Codex
+  reviewed `app.js` at `2a8936f` against `standard-style-spec.md` §4
+  (rows 5-7, the `FALLING_FRUIT_AGGREGATE_*` layers): code matches the spec
+  exactly. It also confirmed, by reading the pinned Mapbox GL JS v3.23.1
+  bundle directly, that `text-emissive-strength`, `circle-emissive-strength`,
+  and `icon-emissive-strength` are all real, recognized paint properties (no
+  property-name fix needed anywhere in rows 5-10) — this resolves the
+  "(verify property exists)" flags on rows 6, 7, 9, 10. Codex hit the same
+  no-browser wall I did (its in-app test page got `ERR_BLOCKED_BY_CLIENT` on
+  the Mapbox GL bundle, no Playwright available) for the three rendered
+  checks (pixel identity across registers, zoom-handoff z-order with rows
+  5-7/8-10 sharing `slot: "top"`, and row 7 state-label collisions with
+  Standard's place labels at zoom 3-4) — folded these into task #15's live
+  pass, with row 7 fallback options (lower `maxzoom`, smaller `text-size`, or
+  hide) noted in the spec if it collides.
+
 - **2026-06-13 — Standard style migration applied (`2a8936f`), live
   verification still pending.** Applied `docs/design/standard-style-spec.md`
   in full: `MAPBOX_STYLE` -> `mapbox://styles/mapbox/standard`; all 10
