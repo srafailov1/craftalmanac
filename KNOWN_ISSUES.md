@@ -256,7 +256,20 @@ and over NYC with cold cache (hard reload between directions); counts must
 never visibly drop and recover. Test wheel-zoom, double-click zoom, and
 pinch-trackpad zoom separately — they produce different event timing.
 
-## 2. `falling-fruit-aggregate-labels` (row 7, state-name labels) never renders — dead filter, found during Phase 2 live verification (2026-06-13)
+## 2. `falling-fruit-aggregate-labels` (row 7, state-name labels) never renders — RESOLVED 2026-06-13 (removed dead layer)
+
+**Resolution (nightly loops paused, decided directly):** removed
+`FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID` (constant + `map.addLayer` block,
+`app.js`) rather than restoring a `level: "state"` generator. Rationale: the
+layer was permanently inert (filter `["==", ["get", "level"], "state"]` never
+matched any feature — every aggregate feature is `level: "grid"` with
+`label: ""`), it predates the grid-bucket rework, and the redesign's Phase 3
+floating legend/season UI is the intended place for state/region context, not
+a map-painted label layer. `docs/design/standard-style-spec.md` row 7 updated
+to record the removal. `node --check app.js` passes; bumped `index.html`'s
+`app.js` cache token to `?v=standard-style-3`.
+
+<details><summary>Original report (2026-06-13, kept for context)</summary>
 
 **Symptom:** at zoom 3-4, no state-name labels appear anywhere (verified via
 `queryRenderedFeatures`: 0 features for `falling-fruit-aggregate-labels` at
@@ -276,9 +289,4 @@ as part of Phase 2 verification. There's nothing to collide — the check
 trivially passes, but only because the feature is dead, not because it's
 fine.
 
-**Decision needed (owner/Claude):** either (a) restore a `level: "state"`
-aggregate generator with real state names/centroids so row 7 does what the
-redesign intends, or (b) remove `FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID` and
-its dead filter as part of Phase 2 cleanup. Routing to the 4am/5am loops to
-scope; not blocking Phase 2 sign-off since the live-verification gate (no
-label collisions) is satisfied either way.
+</details>

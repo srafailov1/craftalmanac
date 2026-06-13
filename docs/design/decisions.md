@@ -3,6 +3,16 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Resolved KNOWN_ISSUES #2 directly (nightly loops paused).**
+  Removed the dead `falling-fruit-aggregate-labels` layer
+  (`FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID`, constant + `map.addLayer` block)
+  rather than restoring a `level: "state"` aggregate generator — it was
+  permanently inert pre-grid-bucket legacy code, and state/region context
+  belongs in Phase 3's floating legend/season UI rather than a map-painted
+  label layer. Updated `standard-style-spec.md` row 7 and closed
+  `KNOWN_ISSUES.md` #2. `node --check app.js` passes; bumped `index.html`'s
+  `app.js` cache token to `?v=standard-style-3`.
+
 - **2026-06-13 — Phase 2 §3 live-verification gate run and closed.** Ran the
   `standard-style-spec.md` §3 zoom 3-16 x 4-register matrix via
   Claude-in-Chrome against `http://127.0.0.1:4173/` (local server from

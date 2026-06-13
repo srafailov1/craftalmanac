@@ -41,7 +41,6 @@ const MARKER_CLUSTER_RADIUS = 40;
 const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
 const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
 const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
-const FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-aggregate-labels";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
 const STATUS_RASTER_URL = "./data/falling-fruit/us/status-raster.json";
 const STATUS_RASTER_CELL_SIZE_DEGREES = 0.05;
@@ -3086,31 +3085,6 @@ function initMapLayers() {
       },
       paint: {
         "text-color": "#243a2a",
-        "text-emissive-strength": 1
-      }
-    });
-  }
-
-  if (!map.getLayer(FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID)) {
-    map.addLayer({
-      id: FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID,
-      type: "symbol",
-      source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
-      maxzoom: 4.2,
-      filter: ["==", ["get", "level"], "state"],
-      slot: "top",
-      layout: {
-        "text-field": ["get", "label"],
-        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-        "text-size": 10,
-        "text-offset": [0, 2.2],
-        "text-allow-overlap": false,
-        "text-ignore-placement": false
-      },
-      paint: {
-        "text-color": "#243a2a",
-        "text-halo-color": "#f7f2df",
-        "text-halo-width": 1.4,
         "text-emissive-strength": 1
       }
     });
