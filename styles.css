@@ -1959,6 +1959,176 @@ body[data-register="night"] {
   font-family: Georgia, "Times New Roman", serif;
 }
 
+/* ---- floating search bar + season slider (sidebar retirement) ---- */
+
+#search-bar {
+  top: 64px;
+  left: 14px;
+  width: min(264px, calc(100% - 28px));
+  padding: 8px 10px;
+}
+
+#search-bar .location-search-form input {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 11px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 7px;
+  background: var(--reg-panel);
+  color: var(--reg-ink);
+  font: inherit;
+  font-size: 13.5px;
+}
+
+#search-bar .location-search-form input:focus {
+  border-color: var(--reg-accent);
+  outline: 2px solid var(--reg-accent);
+  outline-offset: 1px;
+}
+
+#search-bar .location-suggestions {
+  display: grid;
+  gap: 5px;
+  margin-top: 7px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+#search-bar .location-suggestions[hidden] { display: none; }
+
+#search-bar .location-suggestion {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 7px;
+  background: var(--reg-panel);
+  color: var(--reg-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+#search-bar .location-suggestion:hover,
+#search-bar .location-suggestion:focus-visible {
+  border-color: var(--reg-accent);
+}
+
+#search-bar .location-search-status {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--reg-sub);
+}
+
+#search-bar .location-search-status:empty { display: none; }
+
+#season-bar {
+  bottom: 36px;
+  left: 14px;
+  width: min(440px, calc(100% - 28px));
+  padding: 12px 14px 13px;
+}
+
+#season-bar .season-bar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#season-bar .season-readout strong {
+  font-size: 19px;
+  color: var(--reg-ink);
+  font-family: Georgia, serif;
+  font-weight: 500;
+}
+
+#season-bar .season-readout span {
+  margin-left: 7px;
+  color: var(--reg-accent);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+#season-bar .season-actions {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+}
+
+#season-bar .text-button {
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--reg-sub);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#season-bar .text-button.active {
+  border-color: var(--reg-accent);
+  background: var(--reg-accent);
+  color: #fff;
+}
+
+#season-bar .season-histogram {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: end;
+  gap: 4px;
+  height: 78px;
+  margin: 10px 0 0;
+  padding: 16px 2px 4px;
+  border: none;
+  background: transparent;
+}
+
+#season-bar .histogram-bar { background: var(--reg-hair); }
+#season-bar .histogram-bar.active { outline-color: var(--reg-ink); }
+#season-bar .histogram-label { color: var(--reg-sub); }
+
+#season-bar .day-slider {
+  width: 100%;
+  margin: 6px 0 4px;
+  accent-color: var(--reg-accent);
+}
+
+#season-bar .season-bands {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  color: var(--reg-sub);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+#season-bar .date-entry {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-top: 11px;
+  color: var(--reg-sub);
+  font-size: 12px;
+}
+
+#season-bar .date-entry input {
+  width: 100%;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 6px;
+  background: var(--reg-panel);
+  color: var(--reg-ink);
+}
+
 /* ---- masthead (Phase 3d) ---- */
 
 #masthead {

@@ -3,6 +3,31 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Sidebar retirement (SR2 of 3): floating season slider +
+  search.** With the owner clearing the per-species-multi-select constraint
+  ("ok to get rid of the original sidebar; I'll reorganize filters later"),
+  began retiring `#controlPanel`. This step relocated the two controls the
+  floating UI didn't yet have a home for — the **season scrubber** and
+  **location search** — into floating elements, matching the redesign: a
+  bottom-left `#season-bar` (`.floating`) with the date readout, By date / All
+  seasons, the real-phenology histogram, the WINTER/SPRING/SUMMER/FALL slider
+  track, and the date field; and a top-left `#search-bar` (`.floating`) holding
+  the geocode search. **Reused the existing element ids** (`#daySlider`,
+  `#seasonHistogram`, `#locationSearchForm`, etc.) so all the working
+  date/geocoding JS is untouched — this is a DOM relocation + register-aware
+  restyle, no logic change. Removed the panel's location-search and Seasonality
+  sections; the panel now holds only the brand block + species list + data
+  status (removed next in SR1/SR3).
+
+  **Gate — passed.** `node --check` clean (app.js unchanged). Live
+  (`styles.css?v=floating-season-1`): both floating controls render
+  register-aware; the histogram shows 12 bars with the active month outlined;
+  scrubbing `#daySlider` updates the date readout ("July 19") and re-renders;
+  search input present. Screenshot confirms the redesign look. They sit 14px
+  from the map-area's left edge (right of the still-present panel) and will be
+  flush-left once the panel is gone. Next: SR1 (species selection → state,
+  remove species list), then SR3 (remove the panel shell + rewire).
+
 - **2026-06-13 — Phase 4e applied: RainViewer radar + flush pulses. Phase 4
   complete.** **Radar:** `loadRadar` fetches RainViewer `weather-maps.json`,
   takes the latest past frame, and adds a raster layer (slot `top`, maxzoom 6)
