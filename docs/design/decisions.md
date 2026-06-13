@@ -3,6 +3,31 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 4d applied: tide (NOAA CO-OPS via the C1 index).**
+  Tide now follows the forecast location (owner decision #3): `loadTideStations`
+  loads the 3,017-station C1 index (`data/tide-stations.json`), `nearestTideStation`
+  finds the closest by haversine, and tide only shows when that station is within
+  `TIDE_MAX_DISTANCE_KM` (100 km) — so deep-inland forecast locations show no
+  tide. For a nearby station, `loadTide` fetches NOAA CO-OPS hi/lo predictions
+  (48 h, MLLW, `interval=hilo`), cached 1 h per station id. Added a **TIDE** rail
+  segment (next high/low + time, `conditionsIconTide`) and a tide panel with the
+  ported `svgTideCurve` (cosine-interpolated curve, H/L marks, NOW line), the
+  next-low intertidal-window line, the **"biotoxin closures always override"**
+  safety note (preserved verbatim), and a NOAA CO-OPS source line. `loadTide`
+  runs on init, on `setForecastLocation`, and hourly; graceful — any failure or
+  inland location leaves `state.tide` null and the segment/panel simply absent.
+
+  **Gate — passed.** `node --check` clean. Live via Claude-in-Chrome
+  (`?v=phase4d-1`): C1 index loads (3,017 stations); CONUS-center default is
+  inland so `state.tide` is null and no TIDE segment shows; nearest station to
+  Providence resolves to "Providence, State Pier no.1" (id 8454000) at ~2 km;
+  setting that as the forecast location loads 8 CO-OPS hi/lo events (CORS works
+  from the browser), the rail shows "TIDE · high 07:22 PM", and the panel renders
+  the curve with the station name + "SOURCE: NOAA CO-OPS · STATION 8454000".
+  Screenshot confirms the curve + safety note. No CSS change (tide reuses the 4b
+  panel styles + `data-subject="tide"` accent); bumped `app.js` to `?v=phase4d-1`.
+  Next: 4e radar + flush pulses (C3 + whitelist) — the last Phase 4 sub-phase.
+
 - **2026-06-13 — Phase 4c applied: animated wind canvas.** Added a
   `pointer-events:none` `<canvas id="fx">` overlay (z-index 3, between basemap
   and the floating UI) inside `.map-area`. Ported the prototype's streak

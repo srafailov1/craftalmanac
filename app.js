@@ -1513,6 +1513,10 @@ function renderConditionsRail() {
     html += conditionsSegment("rain", "RAIN 72H", `${weather.past72} mm${flushNote}`, conditionsIconRain());
     html += conditionsSegment("wind", "WIND", `${Math.round(weather.wind)} km/h · ${windTier(weather.wind).toUpperCase()}`, conditionsIconWind());
   }
+  const nt = nextTide();
+  if (nt) {
+    html += conditionsSegment("tide", "TIDE", `${nt.type === "L" ? "low" : "high"} ${formatClockTime(nt.t)}`, conditionsIconTide(nt.type === "H"));
+  }
   conditionsRail.innerHTML = html;
 }
 
@@ -1678,6 +1682,19 @@ function renderConditionPanel() {
         <label class="fx-toggle"><input type="checkbox" id="fx-toggle"${state.fxOn ? " checked" : ""}> Animate wind on the map (zoom 7.5+)</label>
         ${conditionsLocLine()}${conditionsDataAge()}`
       : `<h3>WIND</h3><div class="note">Live wind data is unavailable right now.</div>${conditionsLocLine()}`;
+  } else if (openConditionSeg === "tide") {
+    if (state.tide && state.tide.events) {
+      const lowNext = state.tide.events.find((e) => e.type === "L" && +new Date(e.t) > Date.now());
+      const windowLine = lowNext
+        ? `Next low ${formatClockTime(lowNext.t)} (${lowNext.v.toFixed(1)} ft) — the intertidal window runs roughly 90 minutes either side.`
+        : "";
+      html = `<h3>TIDE — ${escapeHTML(state.tide.stationName || "NEAREST STATION")}</h3>
+        <div class="fig">${svgTideCurve(state.tide.events)}</div>
+        <div class="note">${windowLine}<br>Low tide is the gathering tide: seaweeds and shellfish beds open as the water falls. <b>Biotoxin closures always override</b> — closures are hand-encoded, never inferred.</div>
+        <div class="age">SOURCE: NOAA CO-OPS · STATION ${escapeHTML(state.tide.stationId)} · PREDICTIONS</div>`;
+    } else {
+      html = `<h3>TIDE</h3><div class="note">No tide station near this location.</div>`;
+    }
   }
   railPad.innerHTML = html;
   const useAreaButton = document.getElementById("use-map-area");
@@ -1707,6 +1724,7 @@ function setForecastLocation(lat, lng, label) {
   renderConditionsRail();
   renderConditionPanel();
   loadConditions(true);
+  loadTide();
 }
 
 function initConditions() {
@@ -1718,11 +1736,13 @@ function initConditions() {
   }
   renderConditionsRail();
   loadConditions();
+  loadTide();
   setInterval(() => {
     renderConditionsRail();
     if (openConditionSeg) renderConditionPanel();
   }, 60e3);
   setInterval(() => loadConditions(), CONDITIONS_TTL_MS);
+  setInterval(() => loadTide(), TIDE_TTL_MS);
   initWindCanvas();
 }
 
@@ -1816,6 +1836,133 @@ function initWindCanvas() {
     map.on("load", fxResize);
   }
   requestAnimationFrame(fxFrame);
+}
+
+// --- Phase 4d: tide (NOAA CO-OPS via the C1 station index) -----------------
+// Tide follows the forecast location (owner decision #3): the nearest of the
+// ~3,017 CO-OPS stations is found by haversine and only shown when it is within
+// TIDE_MAX_DISTANCE_KM (so deep-inland locations show no tide). Graceful: any
+// failure leaves state.tide null and the tide segment/panel simply don't show.
+const TIDE_MAX_DISTANCE_KM = 100;
+const TIDE_TTL_MS = 60 * 60 * 1000;
+let tideStationsCache = null;
+
+function loadTideStations() {
+  if (tideStationsCache) return Promise.resolve(tideStationsCache);
+  return fetch("./data/tide-stations.json")
+    .then((r) => { if (!r.ok) throw new Error("tide-stations " + r.status); return r.json(); })
+    .then((data) => { if (Array.isArray(data)) tideStationsCache = data; return tideStationsCache; })
+    .catch(() => tideStationsCache);
+}
+
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const r = 6371;
+  const dLat = (lat2 - lat1) * RAD, dLng = (lng2 - lng1) * RAD;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * RAD) * Math.cos(lat2 * RAD) * Math.sin(dLng / 2) ** 2;
+  return 2 * r * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+function nearestTideStation(lat, lng, stations) {
+  let best = null, bestDist = Infinity;
+  for (const station of stations) {
+    const dist = haversineKm(lat, lng, station.lat, station.lng);
+    if (dist < bestDist) { bestDist = dist; best = station; }
+  }
+  return best ? { station: best, distanceKm: bestDist } : null;
+}
+
+function nextTide() {
+  if (!state.tide || !state.tide.events) return null;
+  return state.tide.events.find((e) => +new Date(e.t) > Date.now()) || null;
+}
+
+function loadTide() {
+  return loadTideStations().then((stations) => {
+    if (!stations) { state.tide = null; renderConditionsRail(); return; }
+    const nearest = nearestTideStation(state.location.lat, state.location.lng, stations);
+    if (!nearest || nearest.distanceKm > TIDE_MAX_DISTANCE_KM) {
+      state.tide = null;
+      renderConditionsRail();
+      if (openConditionSeg === "tide") { openConditionSeg = null; renderConditionPanel(); }
+      return;
+    }
+    const station = nearest.station;
+    const cacheKey = `craftAlmanacTide:${station.id}`;
+    try {
+      const cached = JSON.parse(window.localStorage?.getItem(cacheKey) || "null");
+      if (cached && Date.now() - cached.t < TIDE_TTL_MS) {
+        state.tide = cached.v;
+        renderConditionsRail();
+        if (openConditionSeg === "tide") renderConditionPanel();
+        return;
+      }
+    } catch {
+      // ignore cache errors
+    }
+    const today = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    const ds = `${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}`;
+    const url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions" +
+      "&application=craftalmanac&station=" + encodeURIComponent(station.id) +
+      "&begin_date=" + ds + "&range=48&datum=MLLW&interval=hilo&units=english&time_zone=lst_ldt&format=json";
+    return fetch(url)
+      .then((r) => { if (!r.ok) throw new Error("co-ops " + r.status); return r.json(); })
+      .then((j) => {
+        const events = (j.predictions || []).map((p) => ({ t: p.t, type: p.type, v: parseFloat(p.v) }));
+        if (events.length) {
+          state.tide = { events, stationId: station.id, stationName: station.name };
+          try { window.localStorage?.setItem(cacheKey, JSON.stringify({ t: Date.now(), v: state.tide })); } catch { /* quota */ }
+        } else {
+          state.tide = null;
+        }
+        renderConditionsRail();
+        if (openConditionSeg === "tide") renderConditionPanel();
+      })
+      .catch(() => { state.tide = null; renderConditionsRail(); });
+  });
+}
+
+function conditionsIconTide(rising) {
+  return `<svg viewBox="0 0 22 22" fill="none" stroke="var(--reg-sub)" stroke-width="1.6" stroke-linecap="round">
+    <path d="M2 14 Q 5.5 10, 9 14 T 16 14 T 23 14"/>
+    <path d="M11 ${rising ? "10 V 4 M 8.5 6.5 L 11 4 L 13.5 6.5" : "4 V 10 M 8.5 7.5 L 11 10 L 13.5 7.5"}" stroke="var(--reg-accent)"/></svg>`;
+}
+
+function svgTideCurve(events, w = 320, h = 122) {
+  if (!events || events.length < 2) return "";
+  const now = Date.now();
+  const t0 = now - 2 * 36e5, t1 = now + 26 * 36e5;
+  const X = (t) => (t - t0) / (t1 - t0) * (w - 16) + 8;
+  const vs = events.map((e) => e.v);
+  const vmin = Math.min(...vs) - 0.4, vmax = Math.max(...vs) + 0.4;
+  const Y = (v) => h - 24 - (v - vmin) / (vmax - vmin) * (h - 44);
+  const pts = [];
+  for (let i = 0; i < events.length - 1; i++) {
+    const a = events[i], b = events[i + 1];
+    const ta = +new Date(a.t), tb = +new Date(b.t);
+    for (let s = 0; s <= 14; s++) {
+      const u = s / 14, t = ta + (tb - ta) * u;
+      if (t < t0 || t > t1) continue;
+      const v = a.v + (b.v - a.v) * (1 - Math.cos(Math.PI * u)) / 2;
+      pts.push([X(t), Y(v)]);
+    }
+  }
+  if (pts.length < 2) return "";
+  const path = "M " + pts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L ");
+  const marks = events.filter((e) => +new Date(e.t) >= t0 && +new Date(e.t) <= t1).map((e) => {
+    const x = X(+new Date(e.t)), y = Y(e.v);
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--reg-accent)"/>
+      <text x="${x.toFixed(1)}" y="${(y - 7).toFixed(1)}" font-family="monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">${e.type}</text>
+      <text x="${x.toFixed(1)}" y="${h - 4}" font-family="monospace" font-size="8.5" fill="var(--reg-sub)" text-anchor="middle">${formatClockTime(e.t)}</text>`;
+  }).join("");
+  const nowX = X(now);
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+    <path d="${path} L ${pts[pts.length - 1][0].toFixed(1)} ${h - 18} L ${pts[0][0].toFixed(1)} ${h - 18} Z" fill="var(--reg-accent)" opacity="0.13"/>
+    <path d="${path}" fill="none" stroke="var(--reg-accent)" stroke-width="2"/>
+    <line x1="${nowX.toFixed(1)}" y1="10" x2="${nowX.toFixed(1)}" y2="${h - 18}" stroke="var(--reg-ink)" stroke-width="1" stroke-dasharray="2 3"/>
+    <text x="${nowX.toFixed(1)}" y="8" font-family="monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">NOW</text>
+    ${marks}
+  </svg>`;
 }
 
 const dataStatus = document.querySelector("#dataStatus");
