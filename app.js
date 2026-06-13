@@ -1381,7 +1381,6 @@ const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
 const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
 let categoryInputs = [];
-let accessStatusInputs = [];
 const todayButton = document.querySelector("#todayButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
 const appShell = document.querySelector(".app-shell");
@@ -1522,7 +1521,8 @@ function renderModeChrome() {
   mapSafetyNote.textContent = config.safetyNote || "";
   mapSafetyNote.hidden = !config.safetyNote;
   speciesSectionTitle.textContent = config.speciesHeading;
-  document.querySelector(".attribution-block .section-body p").textContent = config.dataNotes;
+  const dataNotesEl = document.querySelector(".attribution-block .section-body p");
+  if (dataNotesEl) dataNotesEl.textContent = config.dataNotes;
   mapModeButtons.forEach((button) => {
     const isActive = button.dataset.mapMode === state.activeMap;
     button.classList.toggle("active", isActive);
@@ -1533,11 +1533,15 @@ function renderModeChrome() {
 
 function renderFilterControls() {
   const config = getActiveMapConfig();
-  categoryList.innerHTML = config.categories.map((category) => `
-    <label class="category-option ${category.id}">
-      <input type="checkbox" name="category" value="${category.id}" checked> ${category.label}
-    </label>
-  `).join("");
+  // #categoryList was removed in Phase 3e (replaced by the legend category
+  // chips); guard so the rest of the species controls still render.
+  if (categoryList) {
+    categoryList.innerHTML = config.categories.map((category) => `
+      <label class="category-option ${category.id}">
+        <input type="checkbox" name="category" value="${category.id}" checked> ${category.label}
+      </label>
+    `).join("");
+  }
 
   speciesList.innerHTML = getSpeciesListHTML();
 
@@ -1581,35 +1585,9 @@ function renderFilterControls() {
 }
 
 function initAccessControls() {
-  accessStatusList.innerHTML = ACCESS_STATUS_OPTIONS.map((status) => `
-    <label class="permission-option ${status.id}">
-      <input type="checkbox" name="access-status" value="${status.id}" ${status.defaultChecked ? "checked" : ""}>
-      ${status.label}
-    </label>
-  `).join("");
-  accessStatusInputs = [...document.querySelectorAll("input[name='access-status']")];
-  accessStatusInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      renderMapLegend();
-      render();
-    });
-  });
-
-  document.querySelector("#selectAllAccessButton").addEventListener("click", () => {
-    accessStatusInputs.forEach((input) => {
-      input.checked = true;
-    });
-    renderMapLegend();
-    render();
-  });
-
-  document.querySelector("#clearAccessButton").addEventListener("click", () => {
-    accessStatusInputs.forEach((input) => {
-      input.checked = false;
-    });
-    renderMapLegend();
-    render();
-  });
+  // Phase 3e: the access filter now lives in state and is driven by the
+  // floating legend's access chips; the old panel checkbox section is gone.
+  state.selectedAccessStatuses = new Set(getDefaultAccessStatuses());
 }
 
 function getDefaultAccessStatuses() {
@@ -1617,7 +1595,22 @@ function getDefaultAccessStatuses() {
 }
 
 function getSelectedAccessStatuses() {
-  return new Set(getCheckedValues("access-status"));
+  // Source of truth is state (Phase 3e removed the panel's access checkboxes);
+  // the legend access chips read and write this set.
+  if (!state.selectedAccessStatuses) {
+    state.selectedAccessStatuses = new Set(getDefaultAccessStatuses());
+  }
+  return new Set(state.selectedAccessStatuses);
+}
+
+function toggleAccessStatus(statusId) {
+  const set = state.selectedAccessStatuses
+    || (state.selectedAccessStatuses = new Set(getDefaultAccessStatuses()));
+  if (set.has(statusId)) {
+    set.delete(statusId);
+  } else {
+    set.add(statusId);
+  }
 }
 
 function isAccessFilterActive(selectedStatuses = getSelectedAccessStatuses()) {
@@ -1661,10 +1654,7 @@ function getCategoryLabel(categoryId) {
 function renderMapLegend() {
   if (!mapLegend) return;
   const config = getActiveMapConfig();
-  const accessInputs = document.querySelectorAll("input[name='access-status']");
-  const selectedAccess = accessInputs.length
-    ? new Set(getCheckedValues("access-status"))
-    : new Set(getDefaultAccessStatuses());
+  const selectedAccess = getSelectedAccessStatuses();
   const permissionOptions = [...LEGEND_PERMISSION_OPTIONS, { id: "prohibited", label: "Prohibited" }];
 
   const accessChips = permissionOptions.map((status) => {
@@ -1711,8 +1701,7 @@ function initMapLegend() {
   mapLegend.addEventListener("click", (event) => {
     const accessChip = event.target.closest("[data-leg-access]");
     if (accessChip) {
-      const input = document.querySelector(`input[name='access-status'][value='${CSS.escape(accessChip.dataset.legAccess)}']`);
-      if (input) input.checked = !input.checked;
+      toggleAccessStatus(accessChip.dataset.legAccess);
       render();
       return;
     }

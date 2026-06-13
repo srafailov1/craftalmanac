@@ -3,6 +3,53 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 3e applied: removed the replaced panel sections +
+  migrated the access filter to state.** Removed three `#controlPanel` pieces
+  now covered by the floating UI: the **Access & Permissions** section
+  (replaced by the legend's access chips), the **category-filter checkboxes**
+  (`#categoryList`, replaced by the legend's category chips), and the **Data
+  Notes** section (replaced by the About sheet's attribution link). To free the
+  access filter from the removed checkboxes, migrated its source of truth to
+  `state.selectedAccessStatuses` (init in `initAccessControls`, lazy-init guard
+  in `getSelectedAccessStatuses`, new `toggleAccessStatus` used by the legend
+  chip handler); `renderMapLegend` reads the set directly. Guarded the
+  now-optional DOM refs: `renderModeChrome`'s Data-Notes write and
+  `renderFilterControls`'s `#categoryList` populate both no-op when the element
+  is absent; removed the unused `accessStatusInputs` and the old
+  checkbox-wiring in `initAccessControls`.
+
+  **Intentionally retained** (noted for a later cutover pass / owner call, not
+  mechanical removals): the **species list** stays — it is the per-species
+  selection source of truth and the Plants sheet only *single*-selects, so
+  removing it would drop multi-species filtering (the approved prototype filters
+  by category only; confirm with owner before dropping per-species selection);
+  the **Seasonality** block stays in the panel (3c enriched its data but did not
+  relocate it to a floating `#season`); the **brand block** stays (its wordmark
+  is cosmetically duplicated by the masthead, but it also still hosts the mode
+  tabs and the lede/safety line); **location search** stays (not a Phase 3
+  surface). Old passive-legend CSS and the now-unused panel CSS classes are left
+  in place for a later cleanup.
+
+  **Gate — passed.** `node --check` clean. Live via Claude-in-Chrome
+  (`?v=phase3e-1`): the three sections are gone from the DOM, species list /
+  season / location search remain; `state.selectedAccessStatuses` initializes to
+  the five defaults (prohibited excluded); clicking the legend's Prohibited chip
+  adds it to both `state` and `getSelectedAccessStatuses()` (pipeline sees it)
+  and toggles back; category chips still drive species (none↔all); all four
+  sheets still open and the Plants sheet still single-selects; 26 species
+  selected by default. No app console errors (only an unrelated browser-extension
+  message). Map re-checked after load: `mapReady` true and all nine Phase-2
+  Standard layers present (region mask/outline, public-lands fill/line, the
+  Falling-Fruit aggregate + record cluster/point layers) — no regression to the
+  map/aggregates pipeline. Bumped `app.js` token to `?v=phase3e-1`.
+
+  **Phase 3 complete (3a–3e).** Launch-checklist items now satisfied: every
+  popup shows record attribution (observer + dataset + license) and the ethics
+  line; herbalism disclaimer appears in the Maps sheet, the medicine-mode popup,
+  and About. Remaining for later phases: Phase 4 conditions rail (`.rail-seg`
+  consumer), Phase 5 mobile, plus the deferred items above and popup season
+  sparklines.
+
 - **2026-06-13 — Phase 3d applied: masthead + Maps/Plants/Recipes/About
   sheets.** Added the floating `#masthead` (wordmark + four nav buttons) inside
   `.map-area` so it sits right of the panel during the transition and lands
