@@ -3,6 +3,42 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 3d applied: masthead + Maps/Plants/Recipes/About
+  sheets.** Added the floating `#masthead` (wordmark + four nav buttons) inside
+  `.map-area` so it sits right of the panel during the transition and lands
+  top-left once the panel is removed in 3e; added a body-level `#sheet-wrap`
+  modal (`position:fixed`, backdrop) holding a `.floating #sheet`. Four sheets,
+  all on the Phase-1 `.mini-card`/`.card-grid` shells: **Maps** (one mode card
+  per `MAP_MODE_CONFIG` mode — clicking calls `setMapMode`; active card flagged
+  `.on`; the Herbalism card keeps the not-medical-advice `.dnote`), **Plants**
+  (backed by the live `speciesCatalogByName` — name/scientific/season/uses,
+  category-colored spine; clicking selects only that species via
+  `selectOnlySpecies` and closes), **Recipes** (the three placeholders per
+  work-order §5 #2 — oak-gall ink, pokeberry ink, walnut dye bath — non-interactive
+  `.recipe-card`s), **About** (mission + "occurrence is never permission" +
+  herbalism-educational-only, plus an attribution link — drops the prototype's
+  demo-data disclaimer since production isn't demo). Open/close wired via a
+  delegated handler on `#sheet`, masthead buttons, backdrop click, and Escape;
+  cards are keyboard-activatable (Enter/Space). CSS ported register-aware
+  (`#masthead`, `#sheet-wrap`/`#sheet`, `.closer`, `.serif`, `.mode-card.on`,
+  `.mini-card .dnote`); `#sheet` overrides `.floating`'s
+  `position:absolute`→`relative` and `user-select:none`→`text` so it centers in
+  the flex wrap and stays selectable.
+
+  **Gate — passed.** `node --check` clean. Live via Claude-in-Chrome
+  (`?v=phase3d-1`): masthead shows maps/plants/recipes/about; all four sheets
+  open with correct headings and card counts (Maps 3, Plants 26 = food catalog,
+  Recipes 3, About text-only); Maps medicine card has the disclaimer and the
+  active card is `.on`; About contains the herbalism disclaimer (launch
+  checklist: disclaimer in menu + sheet + About). Interactions: clicking the
+  Apples profile selects only `apple` and closes the sheet (then restored to
+  26); clicking the Ink map card flips `state.activeMap` to `ink` and closes
+  (switched back to food). Screenshot confirms the card grid + masthead.
+  Bumped both `index.html` tokens to `?v=phase3d-1`. Next: 3e — remove the now-
+  duplicated `#controlPanel` sections (brand/tabs, category & access lists,
+  data-notes) and migrate the access-status source of truth off the removed
+  checkboxes; leave mobile mechanics for Phase 5.
+
 - **2026-06-13 — Phase 3c applied: season histogram on real C2 phenology.**
   Replaced the synthetic histogram (binary `species.months` membership counts)
   with real per-species 12-month relative-abundance curves from C2

@@ -6,7 +6,7 @@
     <title>Craft Almanac · United States Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=phase3b-1">
+    <link rel="stylesheet" href="./styles.css?v=phase3d-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -128,10 +128,23 @@
       </aside>
 
       <section class="map-area" aria-label="Craft Almanac map">
+        <div id="masthead" class="floating">
+          <span class="wordmark serif">Craft Almanac</span>
+          <span class="links">
+            <button type="button" data-sheet="maps">Maps</button>
+            <button type="button" data-sheet="plants">Plants</button>
+            <button type="button" data-sheet="recipes">Recipes</button>
+            <button type="button" data-sheet="about">About</button>
+          </span>
+        </div>
         <div id="map"></div>
         <div class="map-legend" id="mapLegend" aria-label="Map legend"></div>
       </section>
     </main>
+
+    <div id="sheet-wrap" aria-hidden="true">
+      <div id="sheet" class="floating" role="dialog" aria-modal="true" aria-label="Craft Almanac"></div>
+    </div>
 
     <div class="welcome-modal-backdrop" id="welcomeModal" hidden>
       <section class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-describedby="welcomeModalBody">
@@ -147,6 +160,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=phase3c-1"></script>
+    <script src="./app.js?v=phase3d-1"></script>
   </body>
 </html>

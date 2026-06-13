@@ -1726,6 +1726,161 @@ function initMapLegend() {
   renderMapLegend();
 }
 
+// ---------------------------------------------------------------------------
+// Masthead sheets (Phase 3d): Maps / Plants / Recipes / About overlays built on
+// the .mini-card/.card-grid shells. Maps switches mode; Plants is backed by the
+// live per-mode catalog; Recipes are the three placeholders per work-order §5
+// #2; About carries the ethics + herbalism disclaimers (launch checklist).
+// ---------------------------------------------------------------------------
+const MODE_SHEET_INFO = {
+  food: { label: "Food", color: "#6b7f2e", blurb: "Berries · fruit · mushrooms · nuts" },
+  ink: { label: "Ink", color: "#3a3f3d", blurb: "Pigments by color, oak gall to goldenrod" },
+  medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" }
+};
+const RECIPE_PLACEHOLDERS = [
+  { name: "Oak gall ink", meta: "6 steps · 2 days", color: "#3a3f3d" },
+  { name: "Pokeberry ink", meta: "5 steps · evening", color: "#c03b5a" },
+  { name: "Walnut dye bath", meta: "4 steps · weekend", color: "#5c4632" }
+];
+
+function sheetAboutHTML() {
+  return `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="k">CRAFT ALMANAC</div>
+    <h2 class="serif">A map that keeps the almanac's hours</h2>
+    <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. The map is the front door; plant profiles and project recipes live one tap away.</p>
+    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Every point carries its parcel's rule, and unknowns say so.</p>
+    <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice.</p>
+    <p><a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes →</a></p>
+  `;
+}
+
+function sheetMapsHTML() {
+  const cards = Object.keys(MODE_SHEET_INFO).map((mode) => {
+    const info = MODE_SHEET_INFO[mode];
+    const on = state.activeMap === mode ? " on" : "";
+    const dnote = mode === "medicine"
+      ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>`
+      : "";
+    return `
+      <div class="mini-card mode-card${on}" data-mode="${escapeHTML(mode)}" role="button" tabindex="0">
+        <div class="spine" style="background: ${escapeHTML(info.color)}"></div>
+        <h4 class="serif">${escapeHTML(info.label)}</h4>
+        <div class="uses">${escapeHTML(info.blurb)}</div>
+        ${dnote}
+      </div>`;
+  }).join("");
+  return `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="k">THE MAPS · ONE ACTIVE AT A TIME</div>
+    <h2 class="serif">Choose your map</h2>
+    <p>Each map shows the same places through a different practice. The legend categories and the season chart follow your choice.</p>
+    <div class="card-grid">${cards}</div>
+  `;
+}
+
+function sheetPlantsHTML() {
+  const config = getActiveMapConfig();
+  const cards = speciesCatalogByName.map((species) => {
+    const color = CATEGORY_COLORS[species.category] || "#777";
+    const season = getMonthRangeText(species.months);
+    const uses = species.usedParts || getCategoryLabel(species.category);
+    return `
+      <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
+        <div class="spine" style="background: ${escapeHTML(color)}"></div>
+        <h4 class="serif">${escapeHTML(species.commonName)}</h4>
+        <div class="m">${escapeHTML(species.scientificName)} · ${escapeHTML(season)}</div>
+        <div class="uses">${escapeHTML(uses)}</div>
+      </div>`;
+  }).join("");
+  return `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="k">THE SHELF · ${speciesCatalogByName.length} PROFILES</div>
+    <h2 class="serif">${escapeHTML(config.speciesHeading)}</h2>
+    <p>Tap a profile to show just that species on the map.</p>
+    <div class="card-grid">${cards}</div>
+  `;
+}
+
+function sheetRecipesHTML() {
+  const cards = RECIPE_PLACEHOLDERS.map((recipe) => `
+    <div class="mini-card recipe-card">
+      <div class="spine" style="background: ${escapeHTML(recipe.color)}"></div>
+      <h4 class="serif">${escapeHTML(recipe.name)}</h4>
+      <div class="m">${escapeHTML(recipe.meta.toUpperCase())}</div>
+      <div class="uses">gather → prepare → make</div>
+    </div>`).join("");
+  return `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="k">THE PRESS · 3 RECIPES</div>
+    <h2 class="serif">Project recipes</h2>
+    <p>Full step-by-step recipes arrive after launch — these three are placeholders for the template.</p>
+    <div class="card-grid">${cards}</div>
+  `;
+}
+
+const SHEET_BUILDERS = {
+  maps: sheetMapsHTML,
+  plants: sheetPlantsHTML,
+  recipes: sheetRecipesHTML,
+  about: sheetAboutHTML
+};
+
+function openSheet(name) {
+  const sheetWrap = document.querySelector("#sheet-wrap");
+  const sheetEl = document.querySelector("#sheet");
+  const builder = SHEET_BUILDERS[name];
+  if (!sheetWrap || !sheetEl || !builder) return;
+  sheetEl.innerHTML = builder();
+  sheetWrap.classList.add("open");
+  sheetWrap.setAttribute("aria-hidden", "false");
+  sheetEl.scrollTop = 0;
+  sheetEl.querySelector(".closer")?.focus?.();
+}
+
+function closeSheet() {
+  const sheetWrap = document.querySelector("#sheet-wrap");
+  if (!sheetWrap) return;
+  sheetWrap.classList.remove("open");
+  sheetWrap.setAttribute("aria-hidden", "true");
+}
+
+function selectOnlySpecies(speciesId) {
+  document.querySelectorAll("input[name='species']").forEach((input) => {
+    input.checked = input.value === speciesId;
+  });
+  render();
+}
+
+function initSheets() {
+  const sheetWrap = document.querySelector("#sheet-wrap");
+  const sheetEl = document.querySelector("#sheet");
+  if (!sheetWrap || !sheetEl) return;
+  document.querySelectorAll("#masthead .links button[data-sheet]").forEach((button) => {
+    button.addEventListener("click", () => openSheet(button.dataset.sheet));
+  });
+  sheetEl.addEventListener("click", (event) => {
+    if (event.target.closest(".closer")) { closeSheet(); return; }
+    const modeCard = event.target.closest("[data-mode]");
+    if (modeCard) { const mode = modeCard.dataset.mode; closeSheet(); setMapMode(mode); return; }
+    const speciesCard = event.target.closest("[data-species]");
+    if (speciesCard) { selectOnlySpecies(speciesCard.dataset.species); closeSheet(); }
+  });
+  sheetEl.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const card = event.target.closest("[data-mode], [data-species]");
+    if (!card) return;
+    event.preventDefault();
+    card.click();
+  });
+  sheetWrap.addEventListener("click", (event) => {
+    if (event.target === sheetWrap) closeSheet();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && sheetWrap.classList.contains("open")) closeSheet();
+  });
+}
+
 function getSpeciesSafetyTags(species) {
   return species.safetyTags || SAFETY_TAGS_BY_SPECIES[species.id] || [];
 }
@@ -2019,6 +2174,7 @@ function initControls() {
   renderFilterControls();
   initAccessControls();
   initMapLegend();
+  initSheets();
   initLocationSearch();
   syncPanelGripLabel();
 

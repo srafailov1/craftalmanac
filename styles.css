@@ -1937,6 +1937,136 @@ body[data-register="night"] {
   margin-top: 6px;
 }
 
+.mini-card .dnote {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--reg-warn);
+  margin-top: 7px;
+  font-family: ui-monospace, Menlo, monospace;
+  line-height: 1.5;
+}
+
+.mode-card.on {
+  border-color: var(--reg-accent);
+  box-shadow: var(--reg-glow);
+}
+
+.recipe-card {
+  cursor: default;
+}
+
+.serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* ---- masthead (Phase 3d) ---- */
+
+#masthead {
+  top: 14px;
+  left: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100% - 28px);
+  color: var(--reg-ink);
+}
+
+#masthead .wordmark {
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+
+#masthead .links {
+  display: flex;
+  gap: 11px;
+  border-left: 1px solid var(--reg-hair);
+  padding-left: 13px;
+}
+
+#masthead .links button {
+  background: none;
+  border: none;
+  color: var(--reg-sub);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+#masthead .links button:hover,
+#masthead .links button:focus-visible {
+  color: var(--reg-ink);
+}
+
+/* ---- sheets (Phase 3d) ---- */
+
+#sheet-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: none;
+  background: rgba(10, 14, 11, 0.45);
+}
+
+#sheet-wrap.open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#sheet {
+  position: relative;
+  width: min(680px, 92vw);
+  max-height: 84vh;
+  overflow: auto;
+  padding: 26px 30px 30px;
+  border-radius: 12px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+#sheet h2 {
+  margin: 0 0 4px;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--reg-ink);
+}
+
+#sheet .k {
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--reg-accent);
+  margin-bottom: 14px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+#sheet p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--reg-sub);
+  margin: 0 0 10px;
+}
+
+#sheet p a {
+  color: var(--reg-accent);
+}
+
+#sheet .closer {
+  position: sticky;
+  top: 0;
+  float: right;
+  background: none;
+  border: none;
+  color: var(--reg-sub);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
 /* ---- legend chip + rail segment (chip family) ---- */
 
 .leg-chip {
