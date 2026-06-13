@@ -1245,7 +1245,9 @@ const state = {
   locationSuggestions: [],
   favoriteSpecies: new Set(readFavoriteSpecies()),
   savedLocations: new Set(readSavedLocations()),
-  savedLocationsOnly: false
+  savedLocationsOnly: false,
+  register: "day",
+  location: { lat: 39.8, lng: -98.6 }
 };
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -1280,6 +1282,64 @@ window.addEventListener("resize", () => {
   syncPanelGripLabel();
   map.resize();
 });
+
+// ---------------------------------------------------------------------------
+// Light registers (dawn/day/dusk/night)
+//
+// Drives body[data-register], which selects the --reg-* token sets added in
+// Phase 1. Register is computed from real solar position at state.location
+// (defaults to the map's initial center; Phase 4 conditions work will update
+// it when the user searches a place or moves the map). On the current
+// outdoors-v12 style, map.setConfigProperty has no "basemap" config and the
+// call below is a no-op inside its try/catch; it takes effect once the
+// Mapbox Standard migration lands.
+// ---------------------------------------------------------------------------
+const RAD = Math.PI / 180;
+
+function dayNum(date) {
+  return date / 864e5 - 0.5 + 2440588 - 2451545;
+}
+
+function sunAltitude(date, lat, lng) {
+  const d = dayNum(+date);
+  const g = RAD * (357.5291 + 0.98560028 * d);
+  const q = RAD * (280.459 + 0.98564736 * d);
+  const L = q + RAD * 1.915 * Math.sin(g) + RAD * 0.02 * Math.sin(2 * g);
+  const e = RAD * 23.439;
+  const dec = Math.asin(Math.sin(e) * Math.sin(L));
+  const ra = Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L));
+  const gmst = RAD * (280.16 + 360.9856235 * d);
+  const H = gmst + RAD * lng - ra;
+  return Math.asin(Math.sin(RAD * lat) * Math.sin(dec) + Math.cos(RAD * lat) * Math.cos(dec) * Math.cos(H)) / RAD;
+}
+
+function computeRegister(date, lat, lng) {
+  const alt = sunAltitude(date, lat, lng);
+  if (alt >= 8) return "day";
+  if (alt <= -6) return "night";
+  const rising = sunAltitude(new Date(+date + 20 * 6e4), lat, lng) > alt;
+  return rising ? "dawn" : "dusk";
+}
+
+function syncLightPreset(reg) {
+  try {
+    map.setConfigProperty("basemap", "lightPreset", reg);
+  } catch {
+    // outdoors-v12 has no "basemap" config; no-op until the Standard
+    // migration lands.
+  }
+}
+
+function applyRegister() {
+  const reg = computeRegister(new Date(), state.location.lat, state.location.lng);
+  if (reg === state.register) return;
+  state.register = reg;
+  document.body.dataset.register = reg;
+  if (state.mapReady) syncLightPreset(reg);
+}
+
+applyRegister();
+setInterval(applyRegister, 60e3);
 
 const dataStatus = document.querySelector("#dataStatus");
 const speciesCount = document.querySelector("#speciesCount");
@@ -5161,6 +5221,7 @@ initControls();
 render();
 map.on("load", () => {
   state.mapReady = true;
+  syncLightPreset(state.register);
   setINaturalistAggregateReady(false);
   initMapLayers();
   loadStateBoundaries();
