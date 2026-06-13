@@ -1675,12 +1675,20 @@ function renderConditionPanel() {
       ? `<h3>WIND &amp; CLOUD</h3>
         <div class="fig">${svgCompass(w.windDir, w.wind)}</div>
         <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
+        <label class="fx-toggle"><input type="checkbox" id="fx-toggle"${state.fxOn ? " checked" : ""}> Animate wind on the map (zoom 7.5+)</label>
         ${conditionsLocLine()}${conditionsDataAge()}`
       : `<h3>WIND</h3><div class="note">Live wind data is unavailable right now.</div>${conditionsLocLine()}`;
   }
   railPad.innerHTML = html;
   const useAreaButton = document.getElementById("use-map-area");
   if (useAreaButton) useAreaButton.addEventListener("click", useMapArea);
+  const fxToggle = document.getElementById("fx-toggle");
+  if (fxToggle) {
+    fxToggle.addEventListener("change", (event) => {
+      state.fxOn = event.target.checked;
+      if (state.fxOn && !fxParticles.length) fxInitParticles();
+    });
+  }
 }
 
 function toggleConditionPanel(segId) {
@@ -1715,6 +1723,99 @@ function initConditions() {
     if (openConditionSeg) renderConditionPanel();
   }, 60e3);
   setInterval(() => loadConditions(), CONDITIONS_TTL_MS);
+  initWindCanvas();
+}
+
+// --- Phase 4c: animated wind streak canvas (zoom ≥ 7.5) --------------------
+// A pointer-events-none overlay sized to the map container. Particles are
+// advected by the live wind vector and projected through map.project so they
+// track the basemap. Off by default under prefers-reduced-motion; paused when
+// the tab is hidden; below the zoom threshold the canvas stays clear (radar
+// will own low zooms in 4e). Purely decorative — never blocks the map.
+const WIND_CANVAS_MIN_ZOOM = 7.5;
+const fxCanvas = document.getElementById("fx");
+const fxCtx = fxCanvas ? fxCanvas.getContext("2d") : null;
+let fxParticles = [];
+let fxLastTs = 0;
+
+function isNightish() {
+  return state.register === "night" || state.register === "dusk";
+}
+
+function fxResize() {
+  if (!fxCanvas) return;
+  const host = document.getElementById("map") || fxCanvas.parentElement;
+  if (!host) return;
+  const rect = host.getBoundingClientRect();
+  fxCanvas.width = Math.max(1, Math.round(rect.width));
+  fxCanvas.height = Math.max(1, Math.round(rect.height));
+}
+
+function fxViewBounds() {
+  const b = map.getBounds();
+  return { w: b.getWest(), e: b.getEast(), s: b.getSouth(), n: b.getNorth() };
+}
+
+function fxInitParticles() {
+  if (!state.mapReady) return;
+  const b = fxViewBounds(), dw = b.e - b.w, dh = b.n - b.s;
+  fxParticles = Array.from({ length: 55 }, () => ({
+    lng: b.w + Math.random() * dw, lat: b.s + Math.random() * dh, life: 60 + Math.random() * 80
+  }));
+}
+
+function fxFrame(ts) {
+  requestAnimationFrame(fxFrame);
+  if (!fxCtx || document.hidden) return;
+  const dt = Math.min(0.1, Math.max(0.001, ((ts || 0) - fxLastTs) / 1000));
+  fxLastTs = ts || 0;
+  fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+  if (!state.fxOn || !state.weather || !state.mapReady) return;
+  if (map.getZoom() < WIND_CANVAS_MIN_ZOOM) return;
+  if (!fxParticles.length) fxInitParticles();
+  const w = state.weather, night = isNightish();
+  const b = fxViewBounds(), dw = b.e - b.w, dh = b.n - b.s;
+  const tier = windTier(w.wind);
+  const pxStreak = tier === "calm" ? 16 : tier === "medium" ? 42 : 90;
+  const degPerPxX = dw / fxCanvas.width, degPerPxY = dh / fxCanvas.height;
+  const bearing = (w.windDir + 180) * RAD;
+  const vlng = Math.sin(bearing) * pxStreak * degPerPxX * dt;
+  const vlat = Math.cos(bearing) * pxStreak * degPerPxY * dt;
+  const tailPx = 34;
+  const tailLng = Math.sin(bearing) * tailPx * degPerPxX, tailLat = Math.cos(bearing) * tailPx * degPerPxY;
+  const headCol = night ? "240,248,242" : "58,72,64";
+  fxCtx.lineCap = "round";
+  fxCtx.lineWidth = 1.8;
+  fxParticles.forEach((p, i) => {
+    if (tier === "calm" && i % 2) return;
+    p.lng += vlng; p.lat += vlat; p.life -= dt * 30;
+    if (p.life <= 0 || p.lng < b.w - dw * 0.1 || p.lng > b.e + dw * 0.1 || p.lat < b.s - dh * 0.1 || p.lat > b.n + dh * 0.1) {
+      p.lng = b.w + Math.random() * dw; p.lat = b.s + Math.random() * dh; p.life = 60 + Math.random() * 80;
+    }
+    const head = map.project([p.lng, p.lat]);
+    const tail = map.project([p.lng - tailLng, p.lat - tailLat]);
+    const alpha = Math.min(1, p.life / 40) * (night ? 0.8 : 0.55);
+    const grad = fxCtx.createLinearGradient(tail.x, tail.y, head.x, head.y);
+    grad.addColorStop(0, "rgba(" + headCol + ",0)");
+    grad.addColorStop(1, "rgba(" + headCol + "," + alpha + ")");
+    fxCtx.strokeStyle = grad;
+    fxCtx.beginPath();
+    fxCtx.moveTo(tail.x, tail.y);
+    fxCtx.lineTo(head.x, head.y);
+    fxCtx.stroke();
+  });
+}
+
+function initWindCanvas() {
+  if (!fxCanvas) return;
+  state.fxOn = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  fxResize();
+  window.addEventListener("resize", fxResize);
+  if (typeof map !== "undefined" && map) {
+    map.on("resize", fxResize);
+    map.on("load", fxResize);
+  }
+  requestAnimationFrame(fxFrame);
 }
 
 const dataStatus = document.querySelector("#dataStatus");

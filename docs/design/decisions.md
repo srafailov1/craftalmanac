@@ -3,6 +3,33 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 4c applied: animated wind canvas.** Added a
+  `pointer-events:none` `<canvas id="fx">` overlay (z-index 3, between basemap
+  and the floating UI) inside `.map-area`. Ported the prototype's streak
+  particle system: 55 particles advected by the live wind vector
+  (tier-quantized speed: calm/medium/fast) and projected through `map.project`
+  so they track the basemap; gradient-tail streaks colored for day vs night.
+  **Key production fix:** the canvas is sized to the **map container**
+  (`#map` getBoundingClientRect) rather than the window, since the left panel
+  offsets the map — otherwise particles would misalign. Gated to zoom ≥ 7.5
+  (`WIND_CANVAS_MIN_ZOOM`; radar will own lower zooms in 4e), paused when the
+  tab is hidden, and **off by default under `prefers-reduced-motion`**
+  (`state.fxOn`). Added the "Animate wind on the map" toggle to the wind panel.
+  Purely decorative and fully guarded — never blocks the map (pointer-events
+  none) and draws nothing when off/hidden/zoomed-out/weatherless.
+
+  **Gate — passed.** `node --check` clean. `outputs/verify_4c.mjs` (8-check
+  harness over the real extracted `fxFrame`): particles populate to 55, a
+  stroke is drawn per active particle, calm draws fewer streaks than fast, and
+  each guard (tab-hidden, zoom < 7.5, `fxOn` off, no weather) correctly draws
+  nothing — all pass. Live via Claude-in-Chrome (`?v=phase4c-1`): `#fx` present
+  and sized to the map container (`1076×851`, not the window), `state.fxOn`
+  defaults true (no reduced-motion), the wind-panel toggle flips `state.fxOn`,
+  and `document.hidden` is honored (the automated tab is backgrounded, so the
+  canvas correctly stays paused there — visual confirmation of the streaks
+  needs a foreground tab). Bumped both `index.html` tokens to `?v=phase4c-1`.
+  Next: 4d tide (C1 nearest station).
+
 - **2026-06-13 — Phase 4b applied: condition detail panels.** Clicking a rail
   segment now opens a floating `#rail-panel` (`.floating` + `.spine` + `.pad`
   shells) with a per-subject accent (`data-subject` → `--subject` color + border).

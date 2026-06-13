@@ -2100,6 +2100,25 @@ body[data-register="night"] {
   opacity: 0.32;
 }
 
+/* ---- wind canvas overlay (Phase 4c) ---- */
+
+#fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+#rail-panel .fx-toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+  cursor: pointer;
+  color: var(--reg-sub);
+  font-size: 12px;
+}
+
 /* ---- conditions rail (Phase 4a) ---- */
 
 #conditions-rail {
