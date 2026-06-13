@@ -1653,36 +1653,77 @@ function getCategoryLabel(categoryId) {
   return getActiveMapConfig().categories.find((category) => category.id === categoryId)?.label || categoryId;
 }
 
+// Floating legend doubles as the interactive filter UI (Phase 3b). Category
+// chips bulk-toggle species selection (same mechanism as the panel category
+// checkboxes); access chips toggle the permission filter. Both drive the
+// existing checkbox inputs, so the filtered-aggregates pipeline is unchanged;
+// the panel's category/access sections are removed later in 3e.
 function renderMapLegend() {
   if (!mapLegend) return;
   const config = getActiveMapConfig();
-  const showProhibited = getCheckedValues("access-status").includes("prohibited");
-  const permissionOptions = showProhibited
-    ? [...LEGEND_PERMISSION_OPTIONS, { id: "prohibited", label: "Prohibited" }]
-    : LEGEND_PERMISSION_OPTIONS;
-  const permissionRows = permissionOptions.map((status) => `
-    <span class="legend-row">
-      <span class="legend-dot outline-${status.id}" aria-hidden="true"></span>
-      <span>${status.label}</span>
-    </span>
-  `).join("");
-  const categoryRows = config.categories.map((category) => `
-    <span class="legend-row">
-      <span class="legend-swatch" style="background: ${escapeHTML(config.categoryColors[category.id] || "#777")}" aria-hidden="true"></span>
-      <span>${escapeHTML(category.label)}</span>
-    </span>
-  `).join("");
+  const accessInputs = document.querySelectorAll("input[name='access-status']");
+  const selectedAccess = accessInputs.length
+    ? new Set(getCheckedValues("access-status"))
+    : new Set(getDefaultAccessStatuses());
+  const permissionOptions = [...LEGEND_PERMISSION_OPTIONS, { id: "prohibited", label: "Prohibited" }];
+
+  const accessChips = permissionOptions.map((status) => {
+    const token = ACCESS_STATUS_TOKEN[status.id] || "unknown";
+    const off = !selectedAccess.has(status.id);
+    return `<button type="button" class="leg-chip${off ? " off" : ""}" data-leg-access="${escapeHTML(status.id)}" aria-pressed="${String(!off)}"><span class="ring" style="color: var(--reg-st-${token})"></span>${escapeHTML(status.label)}</button>`;
+  }).join("");
+
+  const categoryChips = config.categories.map((category) => {
+    const selection = getCategorySelectionState(category.id);
+    const color = config.categoryColors[category.id] || "#777";
+    const cls = selection === "none" ? " off" : selection === "some" ? " partial" : "";
+    return `<button type="button" class="leg-chip${cls}" data-leg-category="${escapeHTML(category.id)}" aria-pressed="${String(selection !== "none")}"><span class="ring" style="color: ${escapeHTML(color)}"></span>${escapeHTML(category.label)}</button>`;
+  }).join("");
+
+  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
+  const catHeading = config.speciesHeading.replace(/\s*&\s*(Species|Materials)/i, "");
 
   mapLegend.innerHTML = `
+    <div class="legend-head"><strong>LEGEND</strong><span class="legend-active">${escapeHTML(modeName)}</span></div>
     <div class="legend-section">
-      <strong>Harvesting Permissions</strong>
-      <div class="legend-grid">${permissionRows}</div>
+      <span class="legend-k">Access · tap to filter</span>
+      <div class="legend-chips">${accessChips}</div>
     </div>
     <div class="legend-section">
-      <strong>${escapeHTML(config.speciesHeading.replace(" & Species", ""))}</strong>
-      <div class="legend-grid">${categoryRows}</div>
+      <span class="legend-k">${escapeHTML(catHeading)}</span>
+      <div class="legend-chips">${categoryChips}</div>
     </div>
   `;
+}
+
+function getCategorySelectionState(categoryId) {
+  const inCategory = speciesCatalog.filter((species) => species.category === categoryId);
+  if (!inCategory.length) return "none";
+  const selected = inCategory.filter((species) => getSpeciesInput(species.id)?.checked).length;
+  if (selected === 0) return "none";
+  if (selected === inCategory.length) return "all";
+  return "some";
+}
+
+// One delegated handler on the legend container; survives innerHTML rebuilds.
+function initMapLegend() {
+  if (!mapLegend) return;
+  mapLegend.addEventListener("click", (event) => {
+    const accessChip = event.target.closest("[data-leg-access]");
+    if (accessChip) {
+      const input = document.querySelector(`input[name='access-status'][value='${CSS.escape(accessChip.dataset.legAccess)}']`);
+      if (input) input.checked = !input.checked;
+      render();
+      return;
+    }
+    const categoryChip = event.target.closest("[data-leg-category]");
+    if (categoryChip) {
+      const id = categoryChip.dataset.legCategory;
+      setSpeciesByCategory(id, getCategorySelectionState(id) !== "all");
+      render();
+    }
+  });
+  renderMapLegend();
 }
 
 function getSpeciesSafetyTags(species) {
@@ -1976,6 +2017,7 @@ function initControls() {
   dateInput.max = `${ACTIVE_YEAR}-12-31`;
   renderFilterControls();
   initAccessControls();
+  initMapLegend();
   initLocationSearch();
   syncPanelGripLabel();
 
@@ -2326,6 +2368,7 @@ function getVisibleRecords() {
 function render() {
   renderSeasonControls();
   renderSpeciesState();
+  renderMapLegend();
   renderAccessFilterNote();
   renderHistogram();
   renderMarkers();

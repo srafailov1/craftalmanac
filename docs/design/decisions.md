@@ -3,6 +3,38 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 3b applied: interactive `.leg-chip` legend.** Rebuilt
+  `renderMapLegend()` from a passive dot/swatch legend into the redesign's
+  interactive filter control. Two chip groups: **Access** (one chip per
+  permission status incl. prohibited; ring colored by `--reg-st-<token>`;
+  `.off`/0.32-opacity when deselected) and **Categories** (one chip per
+  `MAP_MODE_CONFIG` category; ring = category color; `.off` when none of its
+  species are selected, `.partial` filled ring when some). Chips keep ink-color
+  labels with colored rings for contrast (Q2-friendly), rather than the
+  prototype's fully-colored chip. **Pipeline untouched:** chips drive the
+  existing checkbox inputs — access chips toggle the matching
+  `input[name='access-status']`, category chips call `setSpeciesByCategory`
+  (new `getCategorySelectionState` reports all/some/none from the species
+  inputs) — so `getSelectedAccessStatuses`/the filtered-aggregates path see no
+  change. A single delegated click handler (`initMapLegend`, wired after
+  `initAccessControls`) survives the innerHTML rebuilds; `render()` now also
+  calls `renderMapLegend()` so chip states stay in sync when species selection
+  changes from anywhere (e.g. the panel species list). The panel's
+  category/access sections still exist as the backing store and are removed in
+  3e (when the access-status source of truth migrates off the checkboxes).
+  `.map-legend` is now register-aware (`--reg-panel-a`/`--reg-hair`/`--reg-ink`/
+  `--reg-glow` + backdrop blur), matching `.pt-card`.
+
+  **Gate — passed.** `node --check` clean. Live via Claude-in-Chrome
+  (`?v=phase3b-1`): 5 access chips + 4 food category chips render; initial
+  off-state = `["prohibited"]` for access and `[]` for categories (correct
+  defaults); clicking the Prohibited chip flips its `.off` class and adds
+  `prohibited` to `getSelectedAccessStatuses()` (pipeline sees it), toggling
+  back restores it; clicking the Berries chip drives its category to "none"
+  (`.off`) and back to "all"; legend bg computes `--reg-panel-a`. Bumped
+  `index.html` tokens to `?v=phase3b-1`. Next: 3c (season slider w/ C2
+  phenology); old passive legend rules left dead for 3e cleanup.
+
 - **2026-06-13 — Phase 3a applied: anchored `.pt-card` popups (launch
   blocker).** Restructured `getMarkerPopupHTML` from the old `.popup-grid`
   `<dl>` into the Phase-1 `.pt-card` hierarchy (spine / `h2` / `.sci` /

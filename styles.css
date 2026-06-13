@@ -981,17 +981,59 @@ h2 {
   position: absolute;
   right: 72px;
   bottom: 44px;
-  z-index: 2;
+  z-index: 5;
   display: grid;
-  gap: 8px;
-  width: min(210px, calc(100vw - 48px));
-  padding: 9px 10px;
-  border: 1px solid rgba(62, 72, 56, 0.22);
-  border-radius: 8px;
-  background: rgba(239, 240, 231, 0.94);
-  box-shadow: 0 12px 32px rgba(31, 44, 28, 0.14);
-  color: var(--ink);
+  gap: 9px;
+  width: min(236px, calc(100vw - 48px));
+  padding: 11px 13px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 10px;
+  background: var(--reg-panel-a);
+  box-shadow: var(--reg-glow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--reg-ink);
   font-size: 11px;
+  transition: background 1.2s ease, border-color 1.2s ease, color 1.2s ease;
+}
+
+.legend-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.legend-head strong {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.legend-active {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--reg-accent);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.legend-k {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--reg-sub);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.legend-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  margin-top: 5px;
+}
+
+/* "some but not all species selected" — fill the ring with its own color */
+.leg-chip.partial .ring {
+  background: currentColor;
 }
 
 .legend-section {
