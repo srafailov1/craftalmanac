@@ -1561,3 +1561,384 @@ body.modal-open .app-shell {
   }
 
 }
+
+/* ===================================================================
+   Redesign design tokens (Phase 1, design/relaunch)
+   ===================================================================
+   Four light-register variable sets (day/dawn/dusk/night) and the
+   card/chip/spine component shells ported from prototype/index.html,
+   rev 14 (d4252a7). Tokens are namespaced --reg-* so they cannot
+   collide with the production tokens defined at the top of this file,
+   and the component classes below (.pt-card, .mini-card, .leg-chip,
+   .rail-seg, .card-grid, .floating, .spine) are not referenced by any
+   current markup. Net effect: zero visual change to the current site.
+   body[data-register="day"] is the default (see index.html); the
+   register engine landing in Phase 2 will switch this attribute and
+   Phase 3 will wire popups/legend/sheets into these classes.
+   =================================================================== */
+
+:root,
+body[data-register="day"] {
+  --reg-ground: #f1f5ec;
+  --reg-panel: #ffffff;
+  --reg-panel-a: rgba(255, 255, 255, 0.93);
+  --reg-ink: #1f2421;
+  --reg-sub: #5a615b;
+  --reg-hair: #d5dad2;
+  --reg-accent: #6b7f2e;
+  --reg-warn: #d89b24;
+  --reg-st-allowed: #2f8f46;
+  --reg-st-permit: #d89b24;
+  --reg-st-prohibited: #c74437;
+  --reg-st-private: #7e6654;
+  --reg-st-unknown: #8b8f86;
+  --reg-glow: 0 6px 24px rgba(31, 36, 33, 0.10);
+}
+
+body[data-register="dawn"] {
+  --reg-ground: #e9eef2;
+  --reg-panel: #f7f9fb;
+  --reg-panel-a: rgba(247, 249, 251, 0.93);
+  --reg-ink: #2a3138;
+  --reg-sub: #6a7580;
+  --reg-hair: #d3dbe1;
+  --reg-accent: #d98a6a;
+  --reg-warn: #d89b24;
+}
+
+body[data-register="dusk"] {
+  --reg-ground: #453e4a;
+  --reg-panel: #544c5a;
+  --reg-panel-a: rgba(84, 76, 90, 0.93);
+  --reg-ink: #f2e9dc;
+  --reg-sub: #bcafa5;
+  --reg-hair: #5e5664;
+  --reg-accent: #ff9447;
+  --reg-warn: #ffc94d;
+  --reg-st-allowed: #4fc979;
+  --reg-st-permit: #ffc94d;
+  --reg-st-prohibited: #ff7b6e;
+  --reg-st-private: #c99b7a;
+  --reg-st-unknown: #93a39a;
+  --reg-glow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+body[data-register="night"] {
+  --reg-ground: #121a16;
+  --reg-panel: #1c2721;
+  --reg-panel-a: rgba(28, 39, 33, 0.93);
+  --reg-ink: #edf3ea;
+  --reg-sub: #9db0a2;
+  --reg-hair: #2e3b33;
+  --reg-accent: #ffd166;
+  --reg-warn: #ffc94d;
+  --reg-st-allowed: #5be08a;
+  --reg-st-permit: #ffc94d;
+  --reg-st-prohibited: #ff6b5e;
+  --reg-st-private: #c99b7a;
+  --reg-st-unknown: #93a39a;
+  --reg-glow: 0 6px 28px rgba(0, 0, 0, 0.5);
+}
+
+/* ---- floating panel shell ---- */
+
+.floating {
+  position: absolute;
+  z-index: 5;
+  background: var(--reg-panel-a);
+  border: 1px solid var(--reg-hair);
+  border-radius: 10px;
+  box-shadow: var(--reg-glow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 1.2s ease, border-color 1.2s ease, color 1.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---- anchored point card (popups) ---- */
+
+.pt-card {
+  position: relative;
+  width: min(336px, 88vw);
+  background: var(--reg-panel-a);
+  border: 1px solid var(--reg-hair);
+  border-radius: 12px;
+  box-shadow: var(--reg-glow);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--reg-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pt-card .spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+}
+
+.pt-card .pad {
+  padding: 17px 18px 13px 24px;
+}
+
+.pt-card h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  font-family: Georgia, serif;
+}
+
+.pt-card .sci {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--reg-sub);
+  margin: 3px 0 12px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.pt-card .row {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-top: 1px solid var(--reg-hair);
+}
+
+.pt-card .row .lab {
+  flex: none;
+  width: 68px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--reg-sub);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.pt-card .row .val {
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.pt-card .row.access .val {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pt-card .row.access .ring {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: none;
+  border: 3.2px solid currentColor;
+}
+
+.pt-card .row.safety .lab {
+  color: var(--reg-warn);
+}
+
+.pt-card .season-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 9px;
+}
+
+.pt-card .season-line svg {
+  display: block;
+}
+
+.pt-card .season-line .t {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--reg-sub);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.pt-card .ethic {
+  font-size: 12px;
+  color: var(--reg-sub);
+  line-height: 1.5;
+  margin-top: 9px;
+}
+
+.pt-card .oinp {
+  margin-top: 9px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--reg-warn);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.pt-card .flush {
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: var(--reg-accent);
+  letter-spacing: 0.06em;
+  font-family: ui-monospace, Menlo, monospace;
+  display: none;
+}
+
+.pt-card .flush.on {
+  display: block;
+}
+
+.pt-card .close {
+  position: absolute;
+  top: 8px;
+  right: 11px;
+  background: none;
+  border: none;
+  color: var(--reg-sub);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px;
+}
+
+.pt-card.compact {
+  width: min(270px, 80vw);
+}
+
+.pt-card.compact .pad {
+  padding: 13px 14px 11px 19px;
+}
+
+.pt-card.compact h2 {
+  font-size: 18px;
+}
+
+/* ---- mini card grid (Plants / Recipes sheets) ---- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.mini-card {
+  position: relative;
+  border: 1px solid var(--reg-hair);
+  border-radius: 8px;
+  background: var(--reg-panel);
+  padding: 12px 12px 10px 17px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.mini-card:hover {
+  box-shadow: var(--reg-glow);
+}
+
+.mini-card .spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+}
+
+.mini-card h4 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.mini-card .m {
+  font-size: 10.5px;
+  color: var(--reg-sub);
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.mini-card .uses {
+  font-size: 11.5px;
+  color: var(--reg-sub);
+  margin-top: 6px;
+}
+
+/* ---- legend chip + rail segment (chip family) ---- */
+
+.leg-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--reg-ink);
+  font-size: 10.5px;
+  padding: 1px 2px;
+  transition: opacity 0.2s;
+  border-radius: 5px;
+}
+
+.leg-chip:hover {
+  background: rgba(127, 127, 127, 0.12);
+}
+
+.leg-chip .ring {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex: none;
+  border: 2.5px solid currentColor;
+  background: transparent;
+}
+
+.leg-chip.off {
+  opacity: 0.32;
+}
+
+.rail-seg {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  border-left: 1px solid var(--reg-hair);
+  color: var(--reg-ink);
+}
+
+.rail-seg:first-child {
+  border-left: none;
+}
+
+.rail-seg .ic {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+.rail-seg .ic svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.rail-seg .k {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--reg-sub);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.rail-seg .v {
+  display: block;
+  font-size: 12.5px;
+  margin-top: 1px;
+}
+
+.rail-seg.active .k {
+  color: var(--reg-accent);
+}
