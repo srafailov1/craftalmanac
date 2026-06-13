@@ -3,6 +3,47 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 2 started: register engine landed, Standard style
+  spec written.** Codex C1-C3 (tide stations, phenology, flush thresholds)
+  reviewed clean, no fixes needed — see `craftalmanac-design-round2`
+  memory. Then, on `design/relaunch`: ported `sunAltitude`/`computeRegister`
+  from prototype rev 14 (`fcb2856`) — `state.register`/`state.location`
+  added to `app.js`'s `state` object (location defaults to the map's CONUS
+  center, [-98.6, 39.8]; Phase 4 conditions work will update it from
+  place search/map moves). `applyRegister()` runs once at script load and
+  every 60s, setting `body[data-register]` from real solar position and
+  calling the new `syncLightPreset()` (`map.setConfigProperty("basemap",
+  "lightPreset", reg)` in try/catch — a no-op on outdoors-v12, activates once
+  Standard lands). Verified in Node: at the time of this session (day, mid-
+  June, CONUS center) the engine computes `"day"`, matching the existing
+  hardcoded default — zero visual change right now; a full-day sweep
+  produces all four registers (`day`/`dusk`/`night`/`dawn`), confirming the
+  thresholds (alt >= 8 day, <= -6 night, else dawn/dusk by rising sun) work
+  end to end. This *is* a real (intentional) visual change for users at
+  non-day local times — that's the point of Phase 2, per the "data graphics
+  consistent across registers" principle for the layers that get
+  emissive-strength in the next step.
+
+  **Standard style spec (`4f8fb95`):** wrote
+  `docs/design/standard-style-spec.md` — full layer-by-layer plan for all 10
+  production layers (slot assignments, `*-emissive-strength` per the rev6
+  night-dimming lesson, confirmed against Mapbox's current Standard docs:
+  `lightPreset` values are exactly `dawn`/`day`/`dusk`/`night`, slots are
+  `top`/`middle`/`bottom`, fill/line layers render under symbols regardless
+  of slot). Unblocked `docs/work-split.md` item #2/C4: Codex's part is a
+  written audit note on the 3 `FALLING_FRUIT_AGGREGATE_*` layers only
+  (emissive-strength property support in the pinned Mapbox GL JS 3.23.1,
+  cross-register color consistency, zoom-handoff interaction) — no app.js/
+  styles.css/index.html edits, Claude applies the actual migration.
+
+  **Still open for Phase 2:** the actual `MAPBOX_STYLE` → Standard migration
+  (task #14) — apply the spec, verify zoom 3-16 x 4 registers (can force
+  registers from devtools without waiting for real time/location), fold in
+  Codex's C4 note. Baseline screenshots (task #11) deferred to right before
+  that migration starts — the meaningful "before" state is pre-Standard-map,
+  not pre-register-engine (today's daytime render is unchanged). Fallback
+  (two classic styles) stays a live decision per owner decision #4.
+
 - **2026-06-12 (evening) — Phase 0 complete; Phase 1 deferred.** Scheduled
   run on `design/relaunch`. Cleared stale `.git/index.lock` (no running git
   process); removed nine untracked working-tree files/dirs left from a prior
