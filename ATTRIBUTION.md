@@ -50,6 +50,12 @@ The historic orchard layer is derived from the NPS Cultural Landscapes historic 
 
 Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm
 
+## Mapbox (basemap and geocoding)
+
+The map renders Mapbox GL JS basemap tiles and uses the Mapbox Geocoding API for the address/place search box (public token in `config.js`, URL-scoped in the Mapbox account). Required Mapbox and OpenStreetMap attribution is displayed on the map itself via the Mapbox attribution control (`attributionControl: true`). Use is governed by the Mapbox Terms of Service; this is a rendering/geocoding service, not a craft data source.
+
+Source: https://www.mapbox.com/legal/tos and https://docs.mapbox.com/help/getting-started/attribution/
+
 ## Access Rules
 
 The harvesting rules and limits shown in popups are rule summaries matched to the public-land polygon containing a record. They are not legal advice and should be treated as a starting point for checking posted rules, current compendiums, special closures, permits, and agency updates.
@@ -81,6 +87,8 @@ Primary rule sources currently encoded:
 - Redwood National and State Parks superintendent's compendium (verified June 2026): https://www.nps.gov/redw/learn/management/superintendent-s-compendium.htm
 - Capitol Reef Fruita orchard regulations (verified June 2026): https://www.nps.gov/care/learn/historyculture/orchards.htm
 - Death Valley superintendent's compendium via the park rules page (verified June 2026): https://www.nps.gov/deva/learn/management/rules-and-regulations.htm
+- Indiana Dunes National Park natural-items rules page (verified June 2026): https://www.nps.gov/indu/learn/management/naturalitems.htm
+- Sequoia & Kings Canyon National Parks edible-collection rules page (verified June 2026; per-species limits in the superintendent's compendium at https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm): https://www.nps.gov/seki/planyourvisit/wherecani.htm
 - BLM personal-use collection of renewable plant materials: https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits
 - National wildlife refuge default plant protection, 50 CFR Part 27: https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27
 - Army Corps project-land vegetation protection, 36 CFR Part 327: https://www.ecfr.gov/current/title-36/chapter-III/part-327
@@ -91,6 +99,8 @@ Primary rule sources currently encoded:
 - New York City parks vegetation rule, 56 RCNY 1-04: https://www.nycgovparks.org/rules/section-1-04/
 - Monticello guest policies (no collection on Foundation property): https://www.monticello.org/visit/tips-for-visiting/guest-policies
 - UVA pavilion gardens edible-landscape guidance: https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds
+- City of Charlottesville Parks & Trails (municipal-government informational page; no city-specific foraging rule confirmed — used as an access/locator label only, and records are displayed in-app as "rule not confirmed"): https://www.charlottesville.gov/658/Parks-Trails
+- Albemarle County Parks & Recreation (county-government informational page; no county-specific foraging rule confirmed — used as an access/locator label only, and records are displayed in-app as "rule not confirmed"): https://www.albemarle.org/government/parks-recreation
 - Beacon Food Forest open harvest policy (site bounds centered on 47.567, -122.313 at 15th Ave S & S Dakota St, Seattle; refine against parcel data if needed): https://www.beaconfoodforest.org/openharvest
 - Dr. George Washington Carver Edible Park visitor guidance, City of Asheville Parks & Recreation: https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/
 - Festival Beach Food Forest FAQ and harvest guidance (see also EPA brownfields success story, EPA 560-F-20-172): https://festivalbeach.org/frequently-asked-questions/

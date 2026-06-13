@@ -4,7 +4,136 @@ Issues queued for the daily tune-up pass. Investigate, fix, and remove entries
 once verified on the live site. Keep this file current: future debugging
 sessions rely on it for context.
 
-## 1. Sparse-counts flash during zoom transitions around zoom 8 (STILL REPRODUCING — new diagnosis 2026-06-11, plan below)
+## 1. Sparse-counts flash during zoom transitions around zoom 8 (PARTIAL FIX SHIPPED 2026-06-11 evening — see update; plan items 2–4 still open)
+
+**Update 2026-06-11 evening (owner-reported, fixed in interactive session):**
+Owner reproduced two related symptoms: (a) with default permissions, overview
+circles dissolve into different smaller ones around zoom ~6.5–7 and "revive"
+when zooming further; (b) with "Allowed" only, much of the map is empty at low
+zoom and circle totals ride up and down with zoom. Three causes found and
+fixed (commit "Stabilize aggregate counts across zoom and permission filters"):
+
+1. **Duplicate `getSelectedAccessStatuses` definition** (was at lines 1535 and
+   2140) — the second, array-returning copy silently overrode the Set-returning
+   one, so `isAccessFilterActive()` compared `undefined !== 5` and returned
+   true ALWAYS. Every overview paint took the permission-approximation path
+   even with default permissions, and `loadINaturalistAggregates` re-armed the
+   paint gate on every pass. Duplicate removed. **Watch for this class of bug:
+   `node --check` passes on duplicate function declarations; consider a lint
+   pass for duplicate top-level names in the 5am loop.**
+2. **Per-bucket centroid status lookups** — iNat overview buckets (0.2°–1.4°)
+   were assigned ONE status by looking up their count-weighted centroid in the
+   0.05° status raster (82% unknown). Re-bucketing at each integer zoom moved
+   centroids into different raster cells, flipping whole buckets in/out of
+   filtered views. Now statuses are resolved per response cell at fetch time
+   (`getINaturalistGridItems`) and each item carries
+   `statusCountsByMode`/`statusCentroidsByMode`; counts and centroids blend
+   the selected statuses. Status raster now always loads before tile fetches.
+3. **Grid zoom churn** — plan item 1 below is DONE: `gridZoom` snaps to even
+   values (2/4/6) in `getINaturalistAggregateTiles`, so the tile-key set is
+   stable across continuous zooms (verified: identical tile ids from z6.0
+   through z7.5).
+
+**Update 2026-06-11 late evening (owner retested after pushing 5a16cb6 — both
+symptoms persisted; two further root causes found and fixed, commit "Hold
+point-band records below zoom 8; provisional raster access rules"):**
+
+4. **Below-zoom-8 loads clobbered the cluster source.** `loadMapData` ran on
+   every moveend at ANY zoom; below 8, `loadFallingFruit` declines and returns
+   `[]`, so each overview pan/zoom replaced `state.records` (and the marker
+   source via `renderMarkers`) with a sparse iNat-only subset — while
+   `loadedPointBounds`/`pointDataReady` still claimed coverage. Zooming back
+   into "covered" bounds showed clusters instantly from the gutted set, which
+   then recovered after a refetch: the owner's "clusters rapidly fall off,
+   then recover with a lag." Fix: `loadMapData` early-returns below the point
+   band and keeps the last point-band record set intact (also removes
+   pointless iNat API traffic at overview zooms, and gives the downward
+   handoff bridge stable data).
+5. **Record-level "allowed" required live PAD-US polygons.** Live polygons
+   are cleared below zoom 8, fetched per viewport above it (seconds of
+   latency), and silently truncated at the 4-page query cap on wide
+   viewports — until they land, every record degraded to private-unsourced,
+   so the "Allowed"-only filter hid everything at exactly the zooms where
+   clusters appear. Fix: provisional area-level rule from the precomputed
+   PAD-US containment raster (`getStatusRasterAccessRule`), used only where
+   live polygons don't cover the record (`state.publicLandCoverage`, with
+   truncation tracked), never overriding site rules or record-level private
+   flags; rule cache clears on land load so live containment replaces it.
+   Raster now loads at startup, and `loadPublicLands` records coverage +
+   truncation.
+
+**Update 2026-06-12 (owner retest: allowed-only clusters now appear much
+sooner, but still absent at FULL zoom out; fixed, commit "Resolve filtered
+overview tiles at status grid zoom"):** at gz 2-4 a UTFGrid response cell
+spans 0.35-1.4 degrees, so its single 0.05-degree raster lookup is noise —
+measured nationally: only 27 of 1,845 cells carried an "allowed" status and
+the filtered overview total collapsed to ~3.5k. Fix: when a permission filter
+is active, `getINaturalistAggregateTiles` resolves the whole region at gz 6
+(~84 tiles, capped at 96, concurrency 3 when fetching >24 tiles, cached per
+taxon set; identical tile ids to the viewport band so zooming under a filter
+hits cache). Default-permission behavior unchanged. First filtered overview
+paint waits a few seconds on the one-time fetch — previous paint holds via
+the existing gate.
+
+## 1b. Thin-park raster blindness — WORK ORDER for tonight's loops (queued 2026-06-12, owner-reported)
+
+**Symptom (owner screenshot, Indiana Dunes, allowed-only + all seasons,
+~z9.7):** inflated overview circles (170/444) that "break down" into far
+fewer points. The inflation half is fixed by "Resolve filtered overview tiles
+at status grid zoom" (fine cells can't grab whole-bucket counts). The
+remaining half is UNDER-counting in thin/patchwork parks, and it is a DATA
+problem, not app code.
+
+**Measured ground truth (live, Dunes viewport ~[-87.5,41.2]-[-86.6,41.9],
+food mode, all seasons):** 200 iNat records loaded; live PAD-US containment:
+80 allowed / 6 permit-required / 93 private-unsourced / 21 unknown.
+Recovery of those 80 by every cell-granularity scheme: per-record raster
+lookup = 17; gz6 centroid cells = ~0; gz7 = 13-20; area-weighted fraction
+apportioning = 0.8-13. Root cause: `fetch_padus_cell_containment.mjs` tests
+only each 0.05-degree cell's CENTER (`findContainingProperties(cell.center,
+features)`), so a 2-4 km park strip in ~5 km cells yields almost no allowed
+cells (Indiana Dunes: 12), and observations concentrate inside exactly those
+strips.
+
+**Work order (pipeline, then app):**
+1. `fetch_padus_cell_containment.mjs`: sample each cell at 5 points (center
+   + 4 quarter-diagonal offsets at ±0.0125 degrees). Containment is computed
+   LOCALLY against already-fetched chunk/region features, so this adds no
+   PAD-US API traffic for cached areas. Store per cell: `units` per sample
+   point hit, plus `insideFraction` per unit set.
+2. `build_status_raster.mjs`: emit per mode (a) `status` — CONSERVATIVE, for
+   record-level provisional rules: keep center-point semantics (or require
+   >=3/5 points) so individual points never overstate permission; (b)
+   `statusFractions` — share of sample points per status, for aggregate
+   apportioning.
+3. App: when a permission filter is active, split UTFGrid cell counts by
+   `statusFractions` of overlapped raster cells (footprint overlap as in
+   `getRasterStatusFractions` sketch in git history of this debugging
+   session) instead of the single-status lookup; record-level fallback keeps
+   using `status` unchanged.
+4. **Acceptance test:** in the Dunes viewport above, per-record raster
+   statuses should recover >= 60 of the 80 live-allowed records, and the
+   filtered overview total should land within ~2x of 80 (currently ~0-20).
+   Also re-run the Shenandoah check (allowed-only at z6.5 over
+   Charlottesville previously totalled ~601 — should not regress) and
+   `scripts/check.sh`.
+
+**Follow-ups for the 5am loop:**
+- Plan items 2 (prefetch/warm gz=2/4), 3 (data-availability-bounded bridge)
+  and 4 (instrumentation) below are still open and still worth doing.
+- Bucket resolution near the handoff: gz now caps at 6, so buckets are tile/32
+  ≈ 0.175° while the display grid at zoom ~7.5–8 is finer (~0.09–0.12°). If
+  the band looks chunky, bump bucketing to 64 per tile for gz 6 (watch the
+  per-paint item count).
+- **Structural limit, flag for owner:** with "Allowed" only at low zoom, iNat
+  counts can only be as complete as the status raster (10.5k allowed cells of
+  31.5k rastered; everything unrastered is "unknown"). Points that PAD-US
+  marks allowed at point zoom will still be filtered out of the overview where
+  the raster has no coverage. Real fix is raster coverage (build pipeline),
+  not app code. Counts are now *stable* across zoom; completeness under
+  allowed-only is a data question.
+
+## 1a. Original report and plan (2026-06-11 morning, kept for context)
 
 **Owner-confirmed 2026-06-11 (after the downward-bridge fix shipped):** the
 flash still reproduces. Screenshot at ~zoom 7.5 over Charlottesville shows a
@@ -55,9 +184,24 @@ must make aggregate data for the wider view available (near-)instantly.
    but FF-only edges may read better than empty edges — note tradeoff in the
    commit and flag for owner review).
 
+**Live verification 2026-06-11 (Chrome automation on craftalmanac.com @
+point-band-rules-1):** both owner-reported symptoms PASS. Default
+permissions: z9 -> 6.5 -> pans -> z9 over Charlottesville, marker total 285
+(28 clusters + 23 singles) at t0 == t+5s, records held at 467 below z8.
+Allowed-only: 22 aggregate circles / 601 records at z6.5; 76 allowed records
+as 8 clusters + 7 singles at z9 (Shenandoah NP wineberry, BRP blueberry,
+34-cluster at Charlottesville). Remaining for owner: human wheel/pinch-zoom
+pass per the verification standard below (scripted jumpTo cannot reproduce
+gesture event timing), and the NYC cold-cache run.
+
 **Verification note for the loop:** rendering-dependent checks
 (`queryRenderedFeatures`) silently return 0 when the Chrome window is
-occluded — the map's rAF loop pauses. Use the instrumentation log +
+occluded — the map's rAF loop pauses. Additionally, after `jumpTo` or
+`setData` in an automated tab, GeoJSON source re-tiling can stall
+indefinitely (source `_data` updated, `querySourceFeatures` empty, nothing
+painted) until a real camera change drives frames — issue a tiny
+`map.panBy([2,0])` nudge before sampling, and never interpret a blank
+post-jumpTo read as a bug without one. Use the instrumentation log +
 source-data assertions instead, and call out in the run summary that final
 visual sign-off needs the owner (or a visible window).
 

@@ -6,6 +6,58 @@ precomputing a permission status for every Falling Fruit record offline.
 When this ships, the interim beacon layer and access-filter notice
 (`PERMISSION_BEACON_*`, `#accessFilterNote`) are removed.
 
+> **STATUS (reviewed by Claude, 2026-06-12):** Phases 1-4 delivered in
+> commits 9b4d453 / b73576a / 015583b and APPROVED. Independent validation:
+> 2,905/2,905 containment caches with zero failures; per-chunk status sums
+> reconcile (12,101 species checks, 0 violations); Manhattan majority
+> prohibited within NYC-park containment; Monticello chunk correctly has no
+> records inside the prohibition bounds. The NYC local-park inference
+> (`docs/permission-inferences-2026-06.md`) is approved — its bounding box
+> excludes Yonkers and the state-code guard excludes NJ; the nightly
+> permissions-research loop now owns refining it. The adapted Shenandoah
+> validation gate (FF has no in-park records) is accepted.
+> **Phase 5 below is the active Codex assignment.**
+
+## Phase 5 — iNaturalist overview statuses (approximate, clearly labeled)
+
+iNaturalist overview counts are live UTFGrid totals and can never carry
+exact per-record permissions. Approximate them by area instead of hiding
+them, and label the approximation honestly.
+
+1. **Cell containment cache.** New script or extension of
+   `scripts/fetch_padus_containment.mjs`: for each manifest chunk bbox,
+   while its PAD-US polygons are fetched (reuse the existing per-chunk
+   flow and its soft-error handling), classify the 3x3 grid of 0.05-degree
+   cell centers inside that bbox and write
+   `data/falling-fruit/us/cell-containment/{chunkId}.json` — per cell:
+   the containing-unit property objects (properties only, no geometry).
+   ~26k cells total; resumable and throttled exactly like Phase 1.
+2. **Status raster bake.** Extend `scripts/build_access_status.mjs` (or a
+   sibling sharing its extraction harness) to emit
+   `data/falling-fruit/us/status-raster.json`: one entry per 0.05-degree
+   cell -> `{food, ink, medicine}` statuses, computed through the SAME
+   extracted rule chain used for records (site rules by cell center, land
+   rule from cached units, fallback unknown). Note: medicine statuses are
+   computed here even though FF records don't load in medicine mode — the
+   raster is what makes the filter meaningful in Herbalism.
+   Validation gates: raster cells inside Great Smoky -> allowed (food);
+   inside Manhattan NYC-park cells -> prohibited; cells with no cached
+   units -> unknown. Rerun instruction joins the maintenance note in
+   `docs/permissions-research-2026-06.md`.
+3. **App integration.** When the access filter is active at overview zoom:
+   instead of dropping iNaturalist aggregate items, look up each item's
+   centroid in the status raster (simple lat/lng -> 0.05 cell key; load
+   the raster lazily once) and include the item only if its cell status
+   for the active mode is among the selected statuses. Centroids outside
+   raster coverage classify as "unknown". Update `#accessFilterNote` text:
+   live observation counts are filtered by AREA rules, approximately —
+   point-level labels remain exact. Falling Fruit aggregate behavior
+   (exact, baked) is unchanged.
+4. **Verification.** Unit-test the cell-key math and three raster lookups
+   with the extraction harness; `node --check app.js`; bump `?v=` strings;
+   one commit per step above. The same Boundaries section at the bottom of
+   this file still applies.
+
 Read `CLAUDE.md` first (project values, conventions, workflow). Key values
 here: occurrence is never permission; conservative defaults; every offline
 status must equal what the app itself would compute for the same record.

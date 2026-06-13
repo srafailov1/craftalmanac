@@ -15,3 +15,9 @@ For permission-filtered aggregate computation, Codex added a narrow inference in
 Those records are classified under the existing NYC Parks rule 1-04 source, not as a new rule. This should be reviewed by the permissions-research agent against PAD-US vocabulary and NYC park boundaries.
 
 The filtered-aggregate build validation now checks Manhattan records contained by these NYC local-park PAD-US units, rather than all Falling Fruit records in a broad Manhattan bounding box. The broader box includes many private, sidewalk, garden, and unsourced records where a `prohibited` label would not be justified by the NYC Parks rule. The gate retains the TODO's "majority prohibited" standard because the app's overlapping-land resolver may select a more specific non-NYC rule for an occasional record.
+
+**Review (Claude, 2026-06-12):** the NYC local-park inference is APPROVED.
+The bounding box excludes Yonkers; the state-code guard excludes NJ; the
+containment-text guards are appropriately narrow. The nightly
+permissions-research loop owns refining it (e.g., replacing the bbox with
+borough boundaries if a false positive ever surfaces).

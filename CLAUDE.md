@@ -28,16 +28,35 @@ Live: iNaturalist API (observations), USGS PAD-US ArcGIS service (public-access 
 
 ## Known issues
 
-`KNOWN_ISSUES.md` is the debug queue for the daily tune-up pass. Check it at
-the start of debugging sessions; update or clear entries as they're resolved.
+`KNOWN_ISSUES.md` is the debug queue owned by the 5am tune-up loop; the 3am
+health check also logs failures here. Check it at the start of debugging
+sessions; update or clear entries as they're resolved.
 
 ## Collaborators
 
-Two scheduled Claude agents run nightly at 4am (debug tune-up owning
-`KNOWN_ISSUES.md`; permissions research owning the rule tables and research
-docs). Codex works the filtered-aggregates pipeline per
-`docs/TODO-filtered-aggregates.md`. Stay out of each other's areas; the TODO
-file's Boundaries section is the contract.
+Three agent tiers — see `docs/work-split.md` for the full split and queues.
+Claude: architecture, design, rule semantics, reviews, and five staggered
+overnight scheduled loops that feed each other's outputs (times have
+load-balancing jitter):
+
+- **3am — data/source health check** (read-only): probes the iNaturalist and
+  USGS PAD-US APIs, Falling Fruit/GeoJSON integrity, and external source
+  links; logs failures to `KNOWN_ISSUES.md`.
+- **4am — permissions research**: verifies primary sources and encodes rules;
+  owns the rule tables and research docs; routes oversized work to a
+  "Hand-offs" section.
+- **5am — debug tune-up**: owns `KNOWN_ISSUES.md`; fixes bugs and perf, hands
+  off large refactors.
+- **6am — queue grooming** (doc-only): turns the night's hand-offs into scoped
+  work orders for Codex and Qwen, prunes/de-dupes the queues.
+- **7am — attribution/license audit**: confirms every data source has an
+  `ATTRIBUTION.md` entry with correct license terms; flags ambiguous licenses
+  for the owner.
+
+Codex: mid-level engineering from work orders (`docs/TODO-*.md`). Qwen (local,
+via opencode): junior tasks per `AGENTS.md` and the queue in
+`docs/work-split.md`. Stay out of each other's areas; Boundaries sections are
+the contract. Design work lives on the `design/relaunch` branch, never `main`.
 
 ## Workflow
 

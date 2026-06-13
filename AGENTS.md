@@ -39,11 +39,15 @@ You handle small, well-specified, low-risk tasks, top of the `docs/work-split.md
 tasks, expand scope, or make design or judgment calls. Senior agents (Claude,
 Codex) own architecture, rule semantics, and anything ambiguous.
 
-Tasks that fit you: documentation refreshes, a scripts README, file
-inventories, simple shell runners over commands that already work, smoke
-tests, mechanical edits across many files (renames, formatting, version-string
-bumps, find-replace), and running an existing test/build command and reporting
-its output.
+Tasks that fit you: documentation refreshes (README, `scripts/README.md`, a
+`docs/INDEX.md` inventory), file and asset inventories, link/existence and
+version-consistency checkers, whitespace/newline normalization on docs and
+scripts, smoke tests, simple shell runners over commands that already work,
+mechanical edits across many files (renames, formatting, version-string bumps,
+find-replace), and running an existing test/build command — or a senior-written
+extractor — and reporting its output. With a senior-written verification gate
+you can safely take on bigger, multi-file mechanical jobs too (see "How you
+work").
 
 ## How you work: against a gate, not from your own judgment
 
@@ -68,6 +72,22 @@ Two rules that follow from this, and that you must not break:
    it failing and escalate. A task reported as done while half-broken costs the
    senior agents more to repair than an honest "I'm stuck" — that exact pattern
    has already happened on this queue.
+
+## What a well-formed task looks like
+
+A queue item is ready for you only if it spells out, explicitly:
+
+- **Files** — the exact path(s) to create or edit (line ranges for existing files).
+- **Steps** — the concrete actions, in order.
+- **Verification** — one command that exits 0 when the task is done.
+- **Acceptance** — the criteria that command enforces.
+- **Boundaries** — what not to touch (always includes safety/permission text).
+
+If an item is missing the verification command, or reads as "figure out X" or
+"decide whether Y," it is not ready for you. Do not improvise the missing
+parts — escalate via `docs/qwen-questions.md`. Keeping your queue full depends on
+tasks arriving in this shape, so it is fine, and expected, to bounce ones that
+don't.
 
 ## Keep your working set small
 

@@ -33,10 +33,19 @@ in the app; **candidate** = found but not yet encoded.
 | Redwood | all berry species 1 gal/day; apples 5/day; tanoak acorns 10 gal; hazelnuts 1 gal; seashells 1 gal below storm-wave limit | No | **verified** (primary, June 2026) |
 | Capitol Reef | Fruita orchards: ripe fruit only from posted "U-Pick Fruit" orchards; fruit taken must be paid for at self-pay station (free-sampling claim dropped — not in current text) | No | **verified** (orchards page, June 2026) |
 | Death Valley | pine nuts, mesquite beans, grapes, non-native tree fruit (palms, apples, figs, black walnuts, pomegranates): <1 qt/day AND max 5 qt/calendar year | No | **verified** (rules page compendium, June 2026) |
+| Indiana Dunes | fruits, nuts & berries: a handful per person for personal use (36 CFR 2.1(c)(1)); prickly pear fully protected; unoccupied seashells small amount | **Explicitly prohibited** (mushrooms, flowers, leaves, seeds all protected under 2.1(a)(1)(ii)) | **verified** (natural-items rules page, June 2026) |
+| Sequoia & Kings Canyon | berries, mushrooms, and a few other plants for immediate personal consumption only; per-species limits in the compendium; inedible objects (wildflowers, cones, rocks) prohibited | Yes | **verified** (park rules page, June 2026; quantities in compendium) |
 
-All 16 encoded parks are now verified against current primary compendiums
-(June 2026). ~46 of 63 national parks reportedly allow some gathering — adding
-parks beyond this subset is the remaining NPS work.
+17 NPS parks now encoded (Sequoia and Kings Canyon are two PAD-US units sharing
+one rule), all verified against current primary sources (June 2026). Indiana
+Dunes (dense Chicago-metro data) and Sequoia & Kings Canyon (dense Sierra data)
+added this pass. Note: **Shenandoah is NOT in this table** — it already has a
+richer dedicated per-species code path (`shenandoahAllowed` flags +
+`getShenandoahLimit`, app.js ~4294) that runs ahead of `getNpsCompendiumRule`;
+do not add a `NPS_GATHERING_RULES` entry for it (a broad "shenandoah" match
+would also wrongly catch Shenandoah River State Park in VA). ~46 of 63 national
+parks reportedly allow some gathering — adding parks beyond this subset is the
+remaining NPS work.
 
 ## State systems (encoded)
 
@@ -123,6 +132,25 @@ getPublicLandAccessRule.
 
 ## Run log
 
+- **2026-06-11 (third pass, NPS expansion):** Verified and encoded two NPS
+  gathering designations beyond the original 16. **Indiana Dunes** —
+  natural-items rules page (updated April 22, 2026) allows a handful of
+  fruits/nuts/berries per person for personal use; mushrooms (and
+  flowers/leaves/seeds) explicitly prohibited, so encoded with
+  `mushroomsAllowed: false` + mushroomNote. **Sequoia & Kings Canyon** — the
+  park's edible-collection rules page allows berries, mushrooms, and a few other
+  plants for immediate consumption (per-species limits live in the compendium);
+  encoded as two precise `NPS_GATHERING_RULES` entries ("sequoia national park"
+  and "kings canyon") to avoid false-matching Sequoia National Forest / Giant
+  Sequoia National Monument. Both added to `NPS_GATHERING_RULES`,
+  `ATTRIBUTION.md`, and the table above. **Correction:** I initially started to
+  encode **Shenandoah** here, then found it already has a dedicated per-species
+  code path (app.js ~4294) that is richer than a compendium entry and runs
+  first; reverted — see the note under the NPS table. Next in queue: more dense
+  NPS parks (Mammoth Cave, Congaree, Hot Springs, Pinnacles), then the
+  IL/Chicago + Denver state/city items and the Philadelphia Orchard Project /
+  Boston Food Forest Coalition site bounds.
+
 - **2026-06-11 (second pass, queue-clearing):** Verified all 12 remaining
   "sourced" NPS compendiums against current primary sources — every encoded
   park is now **verified**, hedges removed, limits corrected (notable: Death
@@ -161,10 +189,28 @@ getPublicLandAccessRule.
   features; nothing breaks for older cached features, they just fall through
   to the generic fallback.
 
+## Hand-offs
+
+- **Overview status-raster coverage gap (→ Codex, spec written).** The low-zoom
+  iNaturalist overview reads cell status from the baked status raster, which is
+  generated only for the Falling Fruit chunk footprint
+  (`fetch_padus_cell_containment.mjs` walks manifest chunks →
+  `build_status_raster.mjs` bakes those cells). Encoded rule areas without
+  Falling Fruit data (Sequoia / Kings Canyon NP have 0 FF chunks; the Indiana
+  Dunes park polygon falls outside its nearby chunk's cells) get no raster cell,
+  so the overview shows `"unknown"` and cannot reflect their encoded permission
+  even though the high-zoom point layer labels them correctly. This is why
+  rebuilding the manifest/raster after the 2026-06-11 NPS additions produced
+  byte-identical output. Full work order: `docs/TODO-overview-rule-coverage.md`
+  (queued as Codex item 4 in `docs/work-split.md`). Rule semantics stay
+  Claude-owned; the hand-off is only the cell-coverage/data-regen mechanism.
+
 ## Filtered aggregate maintenance
 
 - When permission rules in `app.js` change, rerun
   `node scripts/build_access_status.mjs` so `data/falling-fruit/us/manifest.json`
   refreshes its baked `accessCounts` and `accessCentroids` from the current
-  rule logic. The PAD-US containment cache does not need to be rebuilt unless
-  PAD-US boundaries or public-access units are being refreshed.
+  rule logic. Then rerun `node scripts/build_status_raster.mjs` so live
+  iNaturalist overview filtering uses the same current area-rule statuses.
+  The PAD-US containment caches do not need to be rebuilt unless PAD-US
+  boundaries or public-access units are being refreshed.

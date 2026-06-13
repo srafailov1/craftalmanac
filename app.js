@@ -16,6 +16,11 @@ const INATURALIST_AGGREGATE_DELAY = 260;
 const INATURALIST_GRID_MIN_ZOOM = 2;
 const INATURALIST_GRID_MAX_ZOOM = 7;
 const INATURALIST_GRID_MAX_TILES = 24;
+// When a permission filter is on, cell statuses must resolve against the
+// 0.05-degree raster, so tiles are fetched at this finer grid zoom even for
+// the whole-region overview (~84 tiles, fetched once per taxon set, cached).
+const INATURALIST_GRID_STATUS_ZOOM = 6;
+const INATURALIST_GRID_MAX_STATUS_TILES = 96;
 const INATURALIST_GRID_CELL_BUCKETS = 32;
 const AGGREGATE_FIRST_PAINT_GRACE_MS = 2500;
 const AGGREGATE_BRIDGE_MAX_MS = 2500;
@@ -38,6 +43,8 @@ const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
 const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
 const FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID = "falling-fruit-aggregate-labels";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
+const STATUS_RASTER_URL = "./data/falling-fruit/us/status-raster.json";
+const STATUS_RASTER_CELL_SIZE_DEGREES = 0.05;
 const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
 const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
 // Live-data caches grow as the user pans; trim the oldest entries past these
@@ -245,6 +252,31 @@ const NPS_GATHERING_RULES = [
     mushroomsAllowed: false,
     limit: "Pine nuts, mesquite beans, grapes, and fruit from non-native trees (palms, apples, figs, black walnuts, pomegranates): less than 1 quart per person per day and no more than 5 total quarts per calendar year.",
     note: "Death Valley designates several native and non-native foods for hand-gathering in small personal-use amounts. Verified against the current compendium, June 2026."
+  },
+  {
+    match: "indiana dunes",
+    sourceLabel: "Indiana Dunes natural-items rules",
+    sourceUrl: "https://www.nps.gov/indu/learn/management/naturalitems.htm",
+    mushroomsAllowed: false,
+    mushroomNote: "Indiana Dunes prohibits picking or removing mushrooms (along with all flowers, leaves, and seeds) under 36 CFR 2.1(a)(1)(ii); only fruits, nuts, and berries are designated for personal-use collection.",
+    limit: "Fruits, nuts, and berries: up to a handful per person for personal, non-commercial use (36 CFR 2.1(c)(1)); prickly pear cactus is fully protected. A small amount of unoccupied seashells may also be taken.",
+    note: "Indiana Dunes designates only fruits, nuts, and berries (a handful per person) for personal-use hand-collection; all other plant material, including mushrooms, flowers, leaves, and seeds, is protected. Verified against the park's natural-items rules page, June 2026."
+  },
+  {
+    match: "sequoia national park",
+    sourceLabel: "Sequoia & Kings Canyon park rules",
+    sourceUrl: "https://www.nps.gov/seki/planyourvisit/wherecani.htm",
+    mushroomsAllowed: true,
+    limit: "Berries, mushrooms, and a few other plants may be collected for immediate personal consumption only; per-species daily limits are set in the park compendium. Collecting inedible natural objects (wildflowers, cones, rocks, bones) is prohibited.",
+    note: "Sequoia and Kings Canyon allow gathering of berries, mushrooms, and a few designated plants for immediate consumption within the park; confirm the species and current limit in the superintendent's compendium (https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm). Verified against the park's rules page, June 2026."
+  },
+  {
+    match: "kings canyon",
+    sourceLabel: "Sequoia & Kings Canyon park rules",
+    sourceUrl: "https://www.nps.gov/seki/planyourvisit/wherecani.htm",
+    mushroomsAllowed: true,
+    limit: "Berries, mushrooms, and a few other plants may be collected for immediate personal consumption only; per-species daily limits are set in the park compendium. Collecting inedible natural objects (wildflowers, cones, rocks, bones) is prohibited.",
+    note: "Sequoia and Kings Canyon allow gathering of berries, mushrooms, and a few designated plants for immediate consumption within the park; confirm the species and current limit in the superintendent's compendium (https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm). Verified against the park's rules page, June 2026."
   }
 ];
 
@@ -1189,12 +1221,15 @@ const state = {
   activeINaturalistAggregateRequest: 0,
   activePublicRequest: 0,
   fallingFruitManifest: null,
+  statusRaster: null,
+  statusRasterPromise: null,
   fallingFruitChunkCache: new Map(),
   fallingFruitChunkLoads: new Map(),
   fallingFruitRecords: null,
   npsOrchardData: null,
   npsOrchardRecords: null,
   publicLandFeatures: [],
+  publicLandCoverage: null,
   stateBoundaries: null,
   accessRuleCache: new Map(),
   pointDataReady: false,
@@ -1972,6 +2007,10 @@ function initControls() {
   });
 
   map.on("moveend", () => {
+    if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM && !isViewportCoveredByLoadedPoints()) {
+      state.pointDataReady = false;
+      updateLayerHandoff();
+    }
     updateFallingFruitAggregates();
     updateMarkerPointVisibility();
     scheduleINaturalistAggregateLoad();
@@ -2106,10 +2145,6 @@ function getSpeciesInput(speciesId) {
 
 function getCheckedValues(name) {
   return [...document.querySelectorAll(`input[name='${name}']:checked`)].map((input) => input.value);
-}
-
-function getSelectedAccessStatuses() {
-  return getCheckedValues("access-status");
 }
 
 function getTaxonIds(species) {
@@ -2352,6 +2387,11 @@ function renderMarkers() {
 
 function updateFallingFruitAggregates() {
   if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
+  // In the point band, keep the last complete overview aggregate on screen
+  // until viewport-specific point data is ready. Repainting aggregates here
+  // drops iNaturalist overview cells and creates the visible zoom-threshold
+  // falloff shown in dense areas.
+  if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) return;
   if (shouldShowPointLayers()) return;
   if (shouldDeferAggregatePaint()) return;
   window.clearTimeout(state.aggregateTimer);
@@ -2441,7 +2481,7 @@ function getAggregateItems(manifest, selectedSpeciesIds, bounds, accessFilterAct
   const items = getActiveMapConfig().loadFallingFruit
     ? [...(manifest.chunks || [])]
     : [];
-  if (!accessFilterActive && state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     items.push(...getINaturalistAggregateItems(bounds));
   }
   return items;
@@ -2630,7 +2670,16 @@ function getAggregateScreenRadius(count) {
 
 function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive) {
   if (item.countsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID]) {
-    return accessFilterActive ? 0 : Number(item.countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
+    const count = Number(item.countsBySpeciesId[INATURALIST_AGGREGATE_SPECIES_ID] || 0);
+    if (!accessFilterActive) return count;
+    const statusCounts = item.statusCountsByMode?.[state.activeMap];
+    if (statusCounts) {
+      return [...selectedAccessStatuses].reduce((total, status) => (
+        total + Number(statusCounts[status] || 0)
+      ), 0);
+    }
+    // Legacy fallback for items cached before per-cell statuses existed.
+    return accessStatusSelectionHas(selectedAccessStatuses, getINaturalistAggregateAccessStatus(item)) ? count : 0;
   }
   const modeAccessCounts = item.accessCounts?.[state.activeMap];
   if (accessFilterActive && modeAccessCounts) {
@@ -2646,7 +2695,16 @@ function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuse
 
 function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses, accessFilterActive) {
   const aggregateCentroid = item.centroidsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID];
-  if (Array.isArray(aggregateCentroid)) return [aggregateCentroid[0], aggregateCentroid[1]];
+  if (Array.isArray(aggregateCentroid)) {
+    const statusCentroid = accessFilterActive
+      ? getStatusWeightedCenter(
+        item.statusCountsByMode?.[state.activeMap],
+        item.statusCentroidsByMode?.[state.activeMap],
+        selectedAccessStatuses
+      )
+      : null;
+    return statusCentroid || [aggregateCentroid[0], aggregateCentroid[1]];
+  }
   const modeAccessCentroids = item.accessCentroids?.[state.activeMap];
   const modeAccessCounts = item.accessCounts?.[state.activeMap];
   if (accessFilterActive && modeAccessCentroids) {
@@ -2680,10 +2738,79 @@ function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses
   return item.center || getBboxCenter(item.bbox);
 }
 
+function getStatusWeightedCenter(statusCounts, statusCentroids, selectedAccessStatuses) {
+  if (!statusCounts || !statusCentroids) return null;
+  let count = 0;
+  let weightedLng = 0;
+  let weightedLat = 0;
+  selectedAccessStatuses.forEach((status) => {
+    const centroid = statusCentroids[status];
+    const statusCount = Number(statusCounts[status] || 0);
+    if (!Array.isArray(centroid) || !statusCount) return;
+    weightedLng += centroid[0] * statusCount;
+    weightedLat += centroid[1] * statusCount;
+    count += statusCount;
+  });
+  if (!count) return null;
+  return [weightedLng / count, weightedLat / count];
+}
+
 function getFilteredAccessStatusCount(speciesCounts, selectedSpeciesIds) {
   return Object.entries(speciesCounts || {}).reduce((total, [speciesId, count]) => (
     selectedSpeciesIds.has(speciesId) ? total + Number(count || 0) : total
   ), 0);
+}
+
+function accessStatusSelectionHas(selectedAccessStatuses, status) {
+  return typeof selectedAccessStatuses?.has === "function"
+    ? selectedAccessStatuses.has(status)
+    : selectedAccessStatuses.includes(status);
+}
+
+function getINaturalistAggregateAccessStatus(item) {
+  const centroid = item.centroidsBySpeciesId?.[INATURALIST_AGGREGATE_SPECIES_ID];
+  if (!Array.isArray(centroid)) return "unknown";
+  const key = getStatusRasterCellKey(Number(centroid[0]), Number(centroid[1]));
+  return state.statusRaster?.[key]?.[state.activeMap] || "unknown";
+}
+
+function getStatusRasterCellKey(lng, lat) {
+  if (!Number.isFinite(lng) || !Number.isFinite(lat)) return "";
+  const west = Math.floor(lng / STATUS_RASTER_CELL_SIZE_DEGREES) * STATUS_RASTER_CELL_SIZE_DEGREES;
+  const south = Math.floor(lat / STATUS_RASTER_CELL_SIZE_DEGREES) * STATUS_RASTER_CELL_SIZE_DEGREES;
+  return `${formatRasterCoord(west, "w", "e")}_${formatRasterCoord(south, "s", "n")}`;
+}
+
+function formatRasterCoord(value, negativePrefix, positivePrefix) {
+  const rounded = Number(value.toFixed(5));
+  const prefix = rounded < 0 ? negativePrefix : positivePrefix;
+  const absolute = Math.round(Math.abs(rounded) * 100);
+  return `${prefix}${String(absolute).padStart(5, "0")}`;
+}
+
+async function loadStatusRaster() {
+  if (state.statusRaster) return state.statusRaster;
+  if (!state.statusRasterPromise) {
+    state.statusRasterPromise = fetch(STATUS_RASTER_URL)
+      .then((response) => {
+        if (!response.ok) throw new Error(`status raster returned ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        state.statusRaster = data || {};
+        // Record-level rules may have been computed (and cached) before the
+        // raster arrived; recompute them so provisional area statuses apply.
+        state.accessRuleCache.clear();
+        renderMarkers();
+        return state.statusRaster;
+      })
+      .catch((error) => {
+        console.warn("Status raster unavailable; live overview permissions fall back to unknown.", error);
+        state.statusRaster = {};
+        return state.statusRaster;
+      });
+  }
+  return state.statusRasterPromise;
 }
 
 function getAggregateFeature({ id, level, label, center, count }) {
@@ -3035,7 +3162,8 @@ function initMapLayers() {
 function shouldShowPointLayers() {
   return state.mapReady
     && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM
-    && state.pointDataReady;
+    && state.pointDataReady
+    && isViewportCoveredByLoadedPoints();
 }
 
 function updateLayerHandoff() {
@@ -3402,13 +3530,6 @@ async function loadINaturalistAggregates() {
     updateFallingFruitAggregates();
     return;
   }
-  if (isAccessFilterActive() && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
-    state.inatAggregateItems = [];
-    state.inatAggregateTaxonKey = "";
-    setINaturalistAggregateReady(true);
-    updateFallingFruitAggregates();
-    return;
-  }
   if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
     // Keep the last aggregate cells: they bridge the handoff while point
     // data loads after crossing the point-zoom threshold.
@@ -3435,6 +3556,13 @@ async function loadINaturalistAggregates() {
     state.inatAggregateItems = [];
     setINaturalistAggregateReady(false);
   }
+  // Per-cell permission statuses are baked into grid items at fetch time, so
+  // the status raster must be in memory before any tile fetch — always, not
+  // just while a permission filter is active. Once cached this resolves
+  // immediately, and permission toggles repaint from the stored splits
+  // without re-arming the paint gate or refetching tiles.
+  await loadStatusRaster();
+  if (requestId !== state.activeINaturalistAggregateRequest) return;
   const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
   const missingTiles = tiles.filter((tile) => (
     !state.inatAggregateCache.has(getINaturalistAggregateCacheKey(taxonIds, tile))
@@ -3445,7 +3573,11 @@ async function loadINaturalistAggregates() {
     // never paint; the previous complete state stays up until the swap.
     setINaturalistAggregateReady(false);
     try {
-      await mapWithConcurrency(missingTiles, 6, async (tile) => {
+      // Large status-resolution tile sets (filtered overview) fetch at lower
+      // concurrency to stay polite to the iNaturalist tile API; they are a
+      // one-time cost per taxon set, cached afterwards.
+      const concurrency = missingTiles.length > INATURALIST_GRID_MAX_TILES ? 3 : 6;
+      await mapWithConcurrency(missingTiles, concurrency, async (tile) => {
         if (requestId !== state.activeINaturalistAggregateRequest) return null;
         const items = await fetchINaturalistAggregateTileWithRetry(taxonIds, tile);
         touchCacheEntry(state.inatAggregateCache, getINaturalistAggregateCacheKey(taxonIds, tile), items);
@@ -3491,6 +3623,21 @@ function getNonzeroAggregateItems(items) {
 }
 
 async function loadMapData() {
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    // Overview zooms render entirely from aggregate tiles. Loading viewport
+    // records here would overwrite the point-band record set with an
+    // iNat-only subset (Falling Fruit declines below the point band), so the
+    // cluster source — still claimed by loadedPointBounds and shown by the
+    // handoff bridge and on re-entry into covered bounds — would suddenly
+    // hold a fraction of its points: the "clusters fall off, then recover
+    // with a lag" bug. Keep the last point-band records intact instead.
+    if (state.records.length) {
+      setDataStatus(`${state.records.length} records held for the point view; overview shows aggregate counts`);
+    } else {
+      setDataStatus("Overview shows aggregate counts; zoom in to load records");
+    }
+    return;
+  }
   const requestId = state.activeRequest + 1;
   state.activeRequest = requestId;
   const config = getActiveMapConfig();
@@ -3601,10 +3748,16 @@ function getINaturalistRequestBounds(bounds, zoom) {
       ? INATURALIST_MAX_PER_PAGE
       : INATURALIST_DEFAULT_PER_PAGE
   };
-  if (zoom < 5.4 || zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM) return [baseBounds];
+  if (zoom < 5.4) return [baseBounds];
 
-  const columns = getBoundsLngSpan(bounds) > 9 ? 3 : 2;
-  const rows = (bounds.getNorth() - bounds.getSouth()) > 5 ? 2 : 1;
+  const pointZoom = zoom >= FALLING_FRUIT_MIN_LOAD_ZOOM;
+  const columns = pointZoom
+    ? Math.min(4, Math.max(1, Math.ceil(getBoundsLngSpan(bounds) / 1.5)))
+    : getBoundsLngSpan(bounds) > 9 ? 3 : 2;
+  const rows = pointZoom
+    ? Math.min(3, Math.max(1, Math.ceil((bounds.getNorth() - bounds.getSouth()) / 1.2)))
+    : (bounds.getNorth() - bounds.getSouth()) > 5 ? 2 : 1;
+  if (columns === 1 && rows === 1) return [baseBounds];
   const lngStep = (baseBounds.east - baseBounds.west) / columns;
   const latStep = (baseBounds.north - baseBounds.south) / rows;
   const tiles = [];
@@ -3615,7 +3768,7 @@ function getINaturalistRequestBounds(bounds, zoom) {
         south: baseBounds.south + row * latStep,
         east: column === columns - 1 ? baseBounds.east : baseBounds.west + (column + 1) * lngStep,
         north: row === rows - 1 ? baseBounds.north : baseBounds.south + (row + 1) * latStep,
-        perPage: INATURALIST_TILE_PER_PAGE
+        perPage: pointZoom ? INATURALIST_MAX_PER_PAGE : INATURALIST_TILE_PER_PAGE
       });
     }
   }
@@ -3665,7 +3818,14 @@ function getINaturalistGridItems(tile, gridData) {
   // Merge the 64x64 response cells into 32x32 buckets per tile. Display buckets
   // are never finer than tile/8, so this is visually lossless but caps the item
   // count the per-frame aggregation code has to walk.
+  // Permission statuses are resolved here, per response cell — the finest
+  // resolution available — so each bucket carries stable per-status counts.
+  // Resolving statuses at paint time from a bucket's count-weighted centroid
+  // made whole buckets flip status (and pop in/out of filtered views) every
+  // time re-bucketing at a new zoom moved the centroid into a different
+  // status-raster cell.
   const bucketScale = (2 ** tile.z) * INATURALIST_GRID_CELL_BUCKETS;
+  const modes = Object.keys(MAP_MODE_CONFIG);
   const buckets = new Map();
   Object.values(gridData?.data || {}).forEach((cell) => {
     const count = Number(cell?.cellCount || 0);
@@ -3673,30 +3833,72 @@ function getINaturalistGridItems(tile, gridData) {
     const lat = Number(cell?.latitude);
     if (!count || !Number.isFinite(lng) || !Number.isFinite(lat)) return;
     const key = `${Math.floor(lngToTileX(lng, bucketScale))}_${Math.floor(latToTileY(lat, bucketScale))}`;
-    const bucket = buckets.get(key) || { count: 0, weightedLng: 0, weightedLat: 0 };
+    const bucket = buckets.get(key) || { count: 0, weightedLng: 0, weightedLat: 0, statusAgg: {} };
     bucket.count += count;
     bucket.weightedLng += lng * count;
     bucket.weightedLat += lat * count;
+    const rasterEntry = state.statusRaster?.[getStatusRasterCellKey(lng, lat)];
+    modes.forEach((mode) => {
+      const status = rasterEntry?.[mode] || "unknown";
+      const modeAgg = bucket.statusAgg[mode] || (bucket.statusAgg[mode] = {});
+      const statusBucket = modeAgg[status] || (modeAgg[status] = { count: 0, weightedLng: 0, weightedLat: 0 });
+      statusBucket.count += count;
+      statusBucket.weightedLng += lng * count;
+      statusBucket.weightedLat += lat * count;
+    });
     buckets.set(key, bucket);
   });
   return [...buckets.entries()].map(([key, bucket]) => {
     const lng = bucket.weightedLng / bucket.count;
     const lat = bucket.weightedLat / bucket.count;
+    const statusCountsByMode = {};
+    const statusCentroidsByMode = {};
+    Object.entries(bucket.statusAgg).forEach(([mode, modeAgg]) => {
+      statusCountsByMode[mode] = {};
+      statusCentroidsByMode[mode] = {};
+      Object.entries(modeAgg).forEach(([status, statusBucket]) => {
+        statusCountsByMode[mode][status] = statusBucket.count;
+        statusCentroidsByMode[mode][status] = [
+          statusBucket.weightedLng / statusBucket.count,
+          statusBucket.weightedLat / statusBucket.count
+        ];
+      });
+    });
     return {
       id: `inat-grid-${tile.id}-${key}`,
       bbox: [lng, lat, lng, lat],
       countsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: bucket.count },
-      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, bucket.count] }
+      centroidsBySpeciesId: { [INATURALIST_AGGREGATE_SPECIES_ID]: [lng, lat, bucket.count] },
+      statusCountsByMode,
+      statusCentroidsByMode
     };
   });
 }
 
 function getINaturalistAggregateTiles(bounds, zoom) {
   const area = getINaturalistAggregateBounds(bounds, zoom);
-  let gridZoom = Math.min(INATURALIST_GRID_MAX_ZOOM, Math.max(INATURALIST_GRID_MIN_ZOOM, Math.floor(zoom)));
+  // Snap the grid zoom to even values (2/4/6) so the tile-key set survives
+  // continuous zooming. Flooring to every integer zoom invalidated the whole
+  // cache key set at each crossing, forcing refetch + regroup mid-handoff —
+  // the source of circles dissolving into different ones while zooming. Cell
+  // resolution stays ample: every tile carries 64x64 response cells.
+  const evenZoom = Math.floor(zoom / 2) * 2;
+  let gridZoom = Math.min(INATURALIST_GRID_MAX_ZOOM, Math.max(INATURALIST_GRID_MIN_ZOOM, evenZoom));
+  let maxTiles = INATURALIST_GRID_MAX_TILES;
+  if (isAccessFilterActive()) {
+    // Permission statuses resolve per response cell against the 0.05-degree
+    // raster. At gz 2-4 a response cell spans 0.35-1.4 degrees, so its single
+    // raster lookup is noise and filtered counts collapse (measured: 27 of
+    // 1,845 national cells carried an "allowed" status — the rest of the
+    // iNat contribution vanished from filtered overviews). Use the gz-6 set
+    // whenever a filter is on: same per-cell fidelity as the viewport band,
+    // ~84 region tiles fetched once per taxon set and cached after.
+    gridZoom = Math.max(gridZoom, INATURALIST_GRID_STATUS_ZOOM);
+    maxTiles = INATURALIST_GRID_MAX_STATUS_TILES;
+  }
   let tiles = getGridTilesForArea(area, gridZoom);
-  while (tiles.length > INATURALIST_GRID_MAX_TILES && gridZoom > INATURALIST_GRID_MIN_ZOOM) {
-    gridZoom -= 1;
+  while (tiles.length > maxTiles && gridZoom > INATURALIST_GRID_MIN_ZOOM) {
+    gridZoom -= 2;
     tiles = getGridTilesForArea(area, gridZoom);
   }
   return tiles;
@@ -3878,6 +4080,7 @@ function schedulePublicLandLoad() {
   if (map.getZoom() < PUBLIC_LANDS_MIN_RENDER_ZOOM) {
     state.activePublicRequest += 1;
     state.publicLandFeatures = [];
+    state.publicLandCoverage = null;
     state.publicLayerLoadedKey = "";
     state.accessRuleCache.clear();
     updatePublicLandSource();
@@ -3901,6 +4104,7 @@ async function loadPublicLands() {
 
   try {
     const features = [];
+    let truncated = true;
     for (let page = 0; page < PUBLIC_LANDS_MAX_PAGES; page += 1) {
       const params = new URLSearchParams({
         where: "Pub_Access IN ('OA','RA')",
@@ -3927,12 +4131,26 @@ async function loadPublicLands() {
       if (data.error) throw new Error(`PAD-US query error: ${data.error.message || data.error.code || "unknown"}`);
       if (requestId !== state.activePublicRequest) return;
       features.push(...(data.features || []));
-      if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) break;
+      if ((data.features || []).length < PUBLIC_LANDS_PAGE_SIZE) {
+        truncated = false;
+        break;
+      }
     }
     features.forEach((feature) => {
       feature.__bbox = getFeatureBbox(feature);
     });
     state.publicLandFeatures = features;
+    // Coverage drives the raster fallback in computeRecordAccessRule: live
+    // containment is authoritative only where this load actually saw every
+    // intersecting polygon. A truncated page set means unseen polygons, so
+    // records there may still use the precomputed raster.
+    state.publicLandCoverage = {
+      west: bounds.getWest(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      north: bounds.getNorth(),
+      truncated
+    };
     state.publicLayerLoadedKey = boundsKey;
     state.accessRuleCache.clear();
     updatePublicLandSource();
@@ -4117,6 +4335,9 @@ function computeRecordAccessRule(record, species) {
     };
   }
 
+  const rasterRule = getStatusRasterAccessRule(record);
+  if (rasterRule) return rasterRule;
+
   if (record.publicLand && record.accessClass === "open") {
     return {
       status: "unknown",
@@ -4137,6 +4358,48 @@ function computeRecordAccessRule(record, species) {
     note: record.accessNote || "This point is not matched to a sourced public access area.",
     sourceLabel: "Access not sourced",
     sourceUrl: ""
+  };
+}
+
+function isRecordCoveredByLoadedPublicLands(record) {
+  const coverage = state.publicLandCoverage;
+  if (!coverage || coverage.truncated) return false;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  return lng >= coverage.west && lng <= coverage.east
+    && lat >= coverage.south && lat <= coverage.north;
+}
+
+function getStatusRasterAccessRule(record) {
+  // Provisional area-level rule from the precomputed PAD-US containment
+  // raster (0.05-degree cells; status of the cell center, computed offline by
+  // the same rules engine as the live path). Live PAD-US polygons only load
+  // per viewport at point zooms, take seconds, and can truncate at the paged
+  // query cap — without this fallback every record degrades to
+  // private-unsourced until the live polygons land, so filtered views (e.g.
+  // "Allowed" only) go empty at exactly the zooms where clusters appear.
+  // The fallback never overrides live containment (checked above via
+  // coverage), curated site rules, or record-level private flags, and the
+  // rule cache clears on every public-land load so live results replace it.
+  if (isRecordCoveredByLoadedPublicLands(record)) return null;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const status = state.statusRaster?.[getStatusRasterCellKey(lng, lat)]?.[state.activeMap];
+  if (status !== "allowed" && status !== "permit-required" && status !== "prohibited") return null;
+  const labels = {
+    allowed: "Allowed",
+    "permit-required": "Permit required",
+    prohibited: "Prohibited"
+  };
+  return {
+    status,
+    label: labels[status],
+    area: "Mapped public-access area (cached area rule)",
+    limit: "Area-level match at roughly 5 km resolution; the boundary-sourced rule replaces this as the map loads.",
+    note: "Provisional status from the precomputed access raster. Confirm the exact boundary and site rules before harvesting.",
+    sourceLabel: "USGS PAD-US containment raster (cached)",
+    sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview"
   };
 }
 
@@ -4901,6 +5164,9 @@ map.on("load", () => {
   setINaturalistAggregateReady(false);
   initMapLayers();
   loadStateBoundaries();
+  // The raster also backs provisional record-level rules at point zooms, so
+  // load it at startup rather than only via the overview aggregate path.
+  loadStatusRaster();
   render();
   loadMapData();
   schedulePublicLandLoad();
