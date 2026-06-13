@@ -60,7 +60,7 @@ const REGION_BOUNDARY_SOURCE_ID = "region-boundary";
 const REGION_MASK_SOURCE_ID = "region-mask";
 const REGION_MASK_LAYER_ID = "region-mask-fill";
 const REGION_OUTLINE_LAYER_ID = "region-outline";
-const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
+const MAPBOX_STYLE = "mapbox://styles/mapbox/standard";
 const REGION_MAX_BOUNDS = [
   [-127.0, 22.5],
   [-65.0, 50.8]
@@ -1289,10 +1289,10 @@ window.addEventListener("resize", () => {
 // Drives body[data-register], which selects the --reg-* token sets added in
 // Phase 1. Register is computed from real solar position at state.location
 // (defaults to the map's initial center; Phase 4 conditions work will update
-// it when the user searches a place or moves the map). On the current
-// outdoors-v12 style, map.setConfigProperty has no "basemap" config and the
-// call below is a no-op inside its try/catch; it takes effect once the
-// Mapbox Standard migration lands.
+// it when the user searches a place or moves the map). MAPBOX_STYLE is
+// Mapbox Standard, whose "basemap" config exposes lightPreset
+// (dawn/day/dusk/night, matching these register names exactly) — the
+// try/catch below is just defensive against future style changes.
 // ---------------------------------------------------------------------------
 const RAD = Math.PI / 180;
 
@@ -1325,8 +1325,7 @@ function syncLightPreset(reg) {
   try {
     map.setConfigProperty("basemap", "lightPreset", reg);
   } catch {
-    // outdoors-v12 has no "basemap" config; no-op until the Standard
-    // migration lands.
+    // Defensive: no-op if the style ever lacks a "basemap" config.
   }
 }
 
@@ -2975,9 +2974,7 @@ function recordInBounds(record, bounds) {
 }
 
 function initMapLayers() {
-  const firstLineOrSymbolLayerId = getFirstLineOrSymbolLayerId();
-
-  initRegionBoundaryLayers(firstLineOrSymbolLayerId);
+  initRegionBoundaryLayers();
 
   if (!map.getSource(PUBLIC_LANDS_SOURCE_ID)) {
     map.addSource(PUBLIC_LANDS_SOURCE_ID, {
@@ -2992,6 +2989,7 @@ function initMapLayers() {
       type: "fill",
       source: PUBLIC_LANDS_SOURCE_ID,
       minzoom: PUBLIC_LANDS_MIN_RENDER_ZOOM,
+      slot: "bottom",
       paint: {
         "fill-color": [
           "case",
@@ -3006,7 +3004,7 @@ function initMapLayers() {
           0.18
         ]
       }
-    }, firstLineOrSymbolLayerId);
+    });
   }
 
   if (!map.getLayer(PUBLIC_LANDS_LINE_LAYER_ID)) {
@@ -3015,6 +3013,7 @@ function initMapLayers() {
       type: "line",
       source: PUBLIC_LANDS_SOURCE_ID,
       minzoom: PUBLIC_LANDS_MIN_RENDER_ZOOM,
+      slot: "bottom",
       paint: {
         "line-color": [
           "case",
@@ -3025,7 +3024,7 @@ function initMapLayers() {
         "line-width": 1,
         "line-opacity": 0.72
       }
-    }, firstLineOrSymbolLayerId);
+    });
   }
 
   if (!map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) {
@@ -3043,6 +3042,7 @@ function initMapLayers() {
       id: FALLING_FRUIT_AGGREGATE_LAYER_ID,
       type: "circle",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      slot: "top",
       paint: {
         "circle-color": "#f7f2df",
         "circle-opacity": 0.86,
@@ -3058,7 +3058,8 @@ function initMapLayers() {
         ],
         "circle-stroke-color": "#243a2a",
         "circle-stroke-opacity": 0.78,
-        "circle-stroke-width": 1.25
+        "circle-stroke-width": 1.25,
+        "circle-emissive-strength": 1
       }
     });
   }
@@ -3068,6 +3069,7 @@ function initMapLayers() {
       id: FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID,
       type: "symbol",
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
+      slot: "top",
       layout: {
         "text-field": ["get", "countLabel"],
         "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
@@ -3083,7 +3085,8 @@ function initMapLayers() {
         "text-ignore-placement": true
       },
       paint: {
-        "text-color": "#243a2a"
+        "text-color": "#243a2a",
+        "text-emissive-strength": 1
       }
     });
   }
@@ -3095,6 +3098,7 @@ function initMapLayers() {
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
       maxzoom: 4.2,
       filter: ["==", ["get", "level"], "state"],
+      slot: "top",
       layout: {
         "text-field": ["get", "label"],
         "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
@@ -3106,7 +3110,8 @@ function initMapLayers() {
       paint: {
         "text-color": "#243a2a",
         "text-halo-color": "#f7f2df",
-        "text-halo-width": 1.4
+        "text-halo-width": 1.4,
+        "text-emissive-strength": 1
       }
     });
   }
@@ -3131,6 +3136,7 @@ function initMapLayers() {
       source: MARKERS_SOURCE_ID,
       minzoom: MARKER_CLUSTER_BRIDGE_MIN_ZOOM,
       filter: ["has", "point_count"],
+      slot: "top",
       paint: {
         "circle-color": [
           "step",
@@ -3152,7 +3158,8 @@ function initMapLayers() {
         ],
         "circle-stroke-color": "#1f3d2b",
         "circle-stroke-opacity": 0.75,
-        "circle-stroke-width": 1.4
+        "circle-stroke-width": 1.4,
+        "circle-emissive-strength": 1
       }
     });
   }
@@ -3164,6 +3171,7 @@ function initMapLayers() {
       source: MARKERS_SOURCE_ID,
       minzoom: MARKER_CLUSTER_BRIDGE_MIN_ZOOM,
       filter: ["has", "point_count"],
+      slot: "top",
       layout: {
         "text-field": ["get", "point_count_abbreviated"],
         "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
@@ -3180,7 +3188,8 @@ function initMapLayers() {
         "text-ignore-placement": true
       },
       paint: {
-        "text-color": "#1f3d2b"
+        "text-color": "#1f3d2b",
+        "text-emissive-strength": 1
       }
     });
   }
@@ -3192,6 +3201,7 @@ function initMapLayers() {
       source: MARKERS_SOURCE_ID,
       filter: ["!", ["has", "point_count"]],
       minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
+      slot: "top",
       layout: {
         "visibility": "none",
         "icon-image": ["get", "markerIcon"],
@@ -3205,6 +3215,9 @@ function initMapLayers() {
         ],
         "icon-allow-overlap": true,
         "icon-ignore-placement": true
+      },
+      paint: {
+        "icon-emissive-strength": 1
       }
     });
   }
@@ -3314,7 +3327,7 @@ function viewportHasMarkerClusters() {
     });
 }
 
-async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
+async function initRegionBoundaryLayers() {
   try {
     const response = await fetch("./data/contiguous-us-boundary.json");
     if (!response.ok) return;
@@ -3345,11 +3358,12 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
         id: REGION_MASK_LAYER_ID,
         type: "fill",
         source: REGION_MASK_SOURCE_ID,
+        slot: "bottom",
         paint: {
           "fill-color": "#f2efe5",
           "fill-opacity": 0.58
         }
-      }, firstLineOrSymbolLayerId);
+      });
     }
 
     if (!map.getLayer(REGION_OUTLINE_LAYER_ID)) {
@@ -3357,6 +3371,7 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
         id: REGION_OUTLINE_LAYER_ID,
         type: "line",
         source: REGION_BOUNDARY_SOURCE_ID,
+        slot: "bottom",
         paint: {
           "line-color": "#1f3d2b",
           "line-opacity": 0.86,
@@ -3369,7 +3384,7 @@ async function initRegionBoundaryLayers(firstLineOrSymbolLayerId) {
             14, 3
           ]
         }
-      }, firstLineOrSymbolLayerId);
+      });
     }
   } catch {
     // The boundary is visual guidance; the app can still run without it.
@@ -3396,10 +3411,6 @@ function getOutsideRegionMask(geometry) {
       coordinates: [worldRing, ...holes]
     }
   };
-}
-
-function getFirstLineOrSymbolLayerId() {
-  return map.getStyle().layers.find((layer) => layer.type === "line" || layer.type === "symbol")?.id;
 }
 
 function bindMapInteractions() {
