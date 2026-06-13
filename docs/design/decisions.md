@@ -3,6 +3,27 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Sidebar retirement (Step 1): species selection moved to state.**
+  The original species checkbox list is no longer the source of truth. Added
+  `state.selectedSpecies`, initialized/reset from the active catalog in
+  `syncActiveCatalog()`, and moved visible-record filtering, aggregate species
+  selection, histogram filtering, legend category state, legend category
+  toggles, and Plants-sheet single-species selection onto that set. Removed the
+  `#speciesList` section and its action buttons from `index.html`; left the
+  panel shell, brand block, mode tabs, lede/safety copy, and `#dataStatus` for
+  Step 2.
+
+  **Gate — passed.** `node --check app.js` exited 0. `rg
+  "#speciesList|input\\[name='species'\\]" app.js index.html` exited 1 (no
+  matches). Live at `app.js?v=sidebar-state-1` in a foreground browser:
+  default food aggregates render with all species selected; the Berries legend
+  chip toggles off/on; selecting the Apples card from the Plants sheet leaves
+  Fruit partially selected and other categories off; switching to Ink through
+  the Maps sheet resets all Ink categories on; current-page console logs show
+  no warnings/errors. In the narrow in-app browser pane, the still-present panel
+  shell can crowd the masthead/conditions rail; Step 2 removes that shell and
+  confirms the final floating layout.
+
 - **2026-06-13 — Handed the rest of sidebar retirement to Codex.** Owner is out
   of Claude usage for now, so the final two steps (species selection →
   `state.selectedSpecies`, then delete `#controlPanel` + rewire

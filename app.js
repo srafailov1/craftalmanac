@@ -1262,6 +1262,7 @@ const state = {
   hoverPopup: null,
   locationSuggestionTimer: null,
   locationSuggestions: [],
+  selectedSpecies: new Set(),
   favoriteSpecies: new Set(readFavoriteSpecies()),
   savedLocations: new Set(readSavedLocations()),
   savedLocationsOnly: false,
@@ -2032,7 +2033,6 @@ function refreshFlush() {
 }
 
 const dataStatus = document.querySelector("#dataStatus");
-const speciesCount = document.querySelector("#speciesCount");
 const daySlider = document.querySelector("#daySlider");
 const dateInput = document.querySelector("#dateInput");
 const seasonDateLabel = document.querySelector("#seasonDateLabel");
@@ -2042,7 +2042,6 @@ const mapLede = document.querySelector("#mapLede");
 const mapSafetyNote = document.querySelector("#mapSafetyNote");
 const speciesSectionTitle = document.querySelector("#speciesSectionTitle");
 const categoryList = document.querySelector("#categoryList");
-const speciesList = document.querySelector("#speciesList");
 const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
 const conditionsRail = document.querySelector("#conditions-rail");
@@ -2184,6 +2183,7 @@ function getActiveMapConfig() {
 function syncActiveCatalog() {
   const config = getActiveMapConfig();
   speciesCatalog = config.catalog;
+  state.selectedSpecies = new Set(speciesCatalog.map((species) => species.id));
   speciesCatalogByName = sortCatalogByName(speciesCatalog);
   speciesCatalogById = new Map(speciesCatalog.map((species) => [species.id, species]));
   CATEGORIES = config.categories.map((category) => category.id);
@@ -2195,7 +2195,7 @@ function renderModeChrome() {
   mapLede.textContent = config.lede;
   mapSafetyNote.textContent = config.safetyNote || "";
   mapSafetyNote.hidden = !config.safetyNote;
-  speciesSectionTitle.textContent = config.speciesHeading;
+  if (speciesSectionTitle) speciesSectionTitle.textContent = config.speciesHeading;
   const dataNotesEl = document.querySelector(".attribution-block .section-body p");
   if (dataNotesEl) dataNotesEl.textContent = config.dataNotes;
   mapModeButtons.forEach((button) => {
@@ -2209,7 +2209,8 @@ function renderModeChrome() {
 function renderFilterControls() {
   const config = getActiveMapConfig();
   // #categoryList was removed in Phase 3e (replaced by the legend category
-  // chips); guard so the rest of the species controls still render.
+  // chips). Keep this guard for older markup, but species selection now lives
+  // in state and is driven by floating legend chips plus Plants-sheet cards.
   if (categoryList) {
     categoryList.innerHTML = config.categories.map((category) => `
       <label class="category-option ${category.id}">
@@ -2218,43 +2219,11 @@ function renderFilterControls() {
     `).join("");
   }
 
-  speciesList.innerHTML = getSpeciesListHTML();
-
   categoryInputs = [...document.querySelectorAll("input[name='category']")];
-  document.querySelectorAll("input[name='species']").forEach((input) => {
-    input.addEventListener("change", render);
-  });
-  document.querySelectorAll("input[name='species-group']").forEach((input) => {
-    input.addEventListener("click", (event) => event.stopPropagation());
-    input.addEventListener("change", () => {
-      setSpeciesByGroup(input.value, input.checked);
-      render();
-    });
-  });
-  document.querySelectorAll(".species-group-arrow-button").forEach((toggle) => {
-    toggle.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      toggleSpeciesGroup(toggle);
-    });
-    toggle.addEventListener("keydown", (event) => {
-      if (!["Enter", " "].includes(event.key)) return;
-      event.preventDefault();
-      toggleSpeciesGroup(toggle);
-    });
-  });
   categoryInputs.forEach((input) => {
     input.addEventListener("change", () => {
       setSpeciesByCategory(input.value, input.checked);
-      syncCategoryCheckboxes();
       render();
-    });
-  });
-  document.querySelectorAll("[data-favorite-species]").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      toggleFavoriteSpecies(button.dataset.favoriteSpecies);
     });
   });
 }
@@ -2364,7 +2333,7 @@ function renderMapLegend() {
 function getCategorySelectionState(categoryId) {
   const inCategory = speciesCatalog.filter((species) => species.category === categoryId);
   if (!inCategory.length) return "none";
-  const selected = inCategory.filter((species) => getSpeciesInput(species.id)?.checked).length;
+  const selected = inCategory.filter((species) => state.selectedSpecies.has(species.id)).length;
   if (selected === 0) return "none";
   if (selected === inCategory.length) return "all";
   return "some";
@@ -2510,9 +2479,8 @@ function closeSheet() {
 }
 
 function selectOnlySpecies(speciesId) {
-  document.querySelectorAll("input[name='species']").forEach((input) => {
-    input.checked = input.value === speciesId;
-  });
+  state.savedLocationsOnly = false;
+  state.selectedSpecies = new Set([speciesId]);
   render();
 }
 
@@ -2557,60 +2525,6 @@ function getSpeciesHarvestEthicLabel(species) {
   return HARVEST_ETHIC_LABELS[getSpeciesHarvestEthic(species)] || getSpeciesHarvestEthic(species);
 }
 
-function getSpeciesListHTML() {
-  const grouped = new Map();
-  const singleItems = [];
-  speciesCatalogByName.forEach((species) => {
-    if (!species.groupLabel) {
-      singleItems.push(species);
-      return;
-    }
-    if (!grouped.has(species.groupLabel)) grouped.set(species.groupLabel, []);
-    grouped.get(species.groupLabel).push(species);
-  });
-
-  const rows = [
-    ...singleItems.map((species) => ({
-      type: "single",
-      label: species.commonName,
-      html: getSpeciesCheckboxHTML(species)
-    })),
-    ...[...grouped.entries()].map(([label, speciesItems]) => ({
-      type: "group",
-      label,
-      html: getSpeciesGroupHTML(label, speciesItems)
-    }))
-  ];
-
-  return rows
-    .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }))
-    .map((row) => row.html)
-    .join("");
-}
-
-function getSpeciesCheckboxHTML(species) {
-  const favorite = isFavoriteSpecies(species.id);
-  return `
-    <label data-category="${species.category}" class="${species.groupLabel ? "is-child-species" : ""}">
-      <span class="species-name">
-        <input type="checkbox" name="species" value="${species.id}" checked>
-        ${species.commonName}
-      </span>
-      <span class="species-meta">
-        <button
-          class="favorite-button ${favorite ? "is-favorite" : ""}"
-          type="button"
-          data-favorite-species="${species.id}"
-          aria-pressed="${String(favorite)}"
-          aria-label="${favorite ? "Remove" : "Add"} ${escapeHTML(species.commonName)} ${favorite ? "from" : "to"} favorites"
-          title="${favorite ? "Remove from favorites" : "Add to favorites"}"
-        >&#9733;</button>
-        <span class="type-pill ${species.category}">${getCategoryLabel(species.category)}</span>
-      </span>
-    </label>
-  `;
-}
-
 function toggleFavoriteSpecies(speciesId) {
   if (!speciesId) return;
   if (state.favoriteSpecies.has(speciesId)) {
@@ -2619,45 +2533,6 @@ function toggleFavoriteSpecies(speciesId) {
     state.favoriteSpecies.add(speciesId);
   }
   saveFavoriteSpecies();
-  renderFavoriteSpeciesState();
-}
-
-function getSpeciesGroupHTML(label, speciesItems) {
-  const sortedItems = sortCatalogByName(speciesItems);
-  const category = sortedItems[0]?.category || "";
-  return `
-    <div class="species-group is-open">
-      <div class="species-group-summary">
-        <span class="species-group-title-wrap">
-          <label class="species-group-title">
-            <input type="checkbox" name="species-group" value="${escapeHTML(label)}" checked>
-            ${escapeHTML(label)}
-          </label>
-          <span class="species-group-arrow-button" role="button" tabindex="0" aria-label="Collapse ${escapeHTML(label)}">
-            <span class="species-group-arrow" aria-hidden="true"></span>
-          </span>
-        </span>
-        <span class="species-group-actions">
-          <span class="type-pill ${category}">${getCategoryLabel(category)}</span>
-        </span>
-      </div>
-      <div class="species-group-list">
-        ${sortedItems.map(getSpeciesCheckboxHTML).join("")}
-      </div>
-    </div>
-  `;
-}
-
-function toggleSpeciesGroup(toggle) {
-  const group = toggle.closest(".species-group");
-  if (!group) return;
-  const isOpen = group.classList.toggle("is-open");
-  group.querySelector(".species-group-list").hidden = !isOpen;
-  toggle.setAttribute("aria-label", `${isOpen ? "Collapse" : "Expand"} ${getSpeciesGroupLabel(group)}`);
-}
-
-function getSpeciesGroupLabel(group) {
-  return group.querySelector("input[name='species-group']")?.value || "group";
 }
 
 function setMapMode(mode) {
@@ -2888,44 +2763,6 @@ function initControls() {
     render();
   });
 
-  document.querySelector("#selectAllSpeciesButton").addEventListener("click", () => {
-    state.savedLocationsOnly = false;
-    document.querySelectorAll("input[name='species']").forEach((input) => {
-      input.checked = true;
-    });
-    syncCategoryCheckboxes();
-    render();
-  });
-
-  document.querySelector("#selectFavoriteSpeciesButton").addEventListener("click", () => {
-    state.savedLocationsOnly = false;
-    document.querySelectorAll("input[name='species']").forEach((input) => {
-      input.checked = state.favoriteSpecies.has(input.value);
-    });
-    syncCategoryCheckboxes();
-    render();
-  });
-
-  document.querySelector("#selectSavedLocationsButton").addEventListener("click", () => {
-    state.savedLocationsOnly = !state.savedLocationsOnly;
-    if (state.savedLocationsOnly) {
-      document.querySelectorAll("input[name='species']").forEach((input) => {
-        input.checked = true;
-      });
-      syncCategoryCheckboxes();
-    }
-    render();
-  });
-
-  document.querySelector("#clearSpeciesButton").addEventListener("click", () => {
-    state.savedLocationsOnly = false;
-    document.querySelectorAll("input[name='species']").forEach((input) => {
-      input.checked = false;
-    });
-    syncCategoryCheckboxes();
-    render();
-  });
-
   map.on("move", () => {
     if (shouldRebalanceAggregatesOnMove()) {
       scheduleFallingFruitAggregateUpdate();
@@ -3084,14 +2921,6 @@ function getSpecies(speciesId) {
   return speciesCatalogById.get(speciesId);
 }
 
-function getSpeciesInput(speciesId) {
-  return document.querySelector(`input[name='species'][value='${speciesId}']`);
-}
-
-function getCheckedValues(name) {
-  return [...document.querySelectorAll(`input[name='${name}']:checked`)].map((input) => input.value);
-}
-
 function getTaxonIds(species) {
   return species.inatTaxonIds || [];
 }
@@ -3101,74 +2930,20 @@ function getExpectedIconicTaxon(species) {
 }
 
 function getSelectedCatalogItems() {
-  const selectedIds = new Set(getCheckedValues("species"));
-  return speciesCatalog.filter((species) => selectedIds.has(species.id));
+  return speciesCatalog.filter((species) => state.selectedSpecies.has(species.id));
 }
 
 function setSpeciesByCategory(category, checked) {
   speciesCatalog
     .filter((species) => species.category === category)
     .forEach((species) => {
-      const input = getSpeciesInput(species.id);
-      if (input) input.checked = checked;
+      if (checked) state.selectedSpecies.add(species.id);
+      else state.selectedSpecies.delete(species.id);
     });
-}
-
-function setSpeciesByGroup(groupLabel, checked) {
-  speciesCatalog
-    .filter((species) => species.groupLabel === groupLabel)
-    .forEach((species) => {
-      const input = getSpeciesInput(species.id);
-      if (input) input.checked = checked;
-    });
-}
-
-function syncCategoryCheckboxes() {
-  categoryInputs.forEach((input) => {
-    const speciesInCategory = speciesCatalog.filter((species) => species.category === input.value);
-    const selectedCount = speciesInCategory.filter((species) => getSpeciesInput(species.id)?.checked).length;
-    input.checked = selectedCount === speciesInCategory.length;
-    input.indeterminate = selectedCount > 0 && selectedCount < speciesInCategory.length;
-  });
-}
-
-function syncSpeciesGroupCheckboxes() {
-  document.querySelectorAll("input[name='species-group']").forEach((input) => {
-    const speciesInGroup = speciesCatalog.filter((species) => species.groupLabel === input.value);
-    const selectedCount = speciesInGroup.filter((species) => getSpeciesInput(species.id)?.checked).length;
-    input.checked = selectedCount === speciesInGroup.length;
-    input.indeterminate = selectedCount > 0 && selectedCount < speciesInGroup.length;
-    input.closest(".species-group")?.querySelector(".species-group-summary")?.classList.toggle("is-selected", input.checked);
-  });
 }
 
 function renderSpeciesState() {
-  const selectedSpecies = getCheckedValues("species");
-  speciesCount.textContent = selectedSpecies.length;
-  document.querySelector("#selectSavedLocationsButton")?.classList.toggle("active", state.savedLocationsOnly);
-  document.querySelectorAll(".species-list label:not(.species-group-title)").forEach((label) => {
-    const input = label.querySelector("input[name='species']");
-    label.classList.toggle("is-selected", input?.checked);
-  });
-  document.querySelectorAll(".species-list .species-group-title").forEach((label) => {
-    label.classList.remove("is-selected");
-  });
-  syncCategoryCheckboxes();
-  syncSpeciesGroupCheckboxes();
-  renderFavoriteSpeciesState();
-}
-
-function renderFavoriteSpeciesState() {
-  document.querySelectorAll("[data-favorite-species]").forEach((button) => {
-    const species = getSpecies(button.dataset.favoriteSpecies);
-    const favorite = state.favoriteSpecies.has(button.dataset.favoriteSpecies);
-    button.classList.toggle("is-favorite", favorite);
-    button.setAttribute("aria-pressed", String(favorite));
-    if (species) {
-      button.setAttribute("aria-label", `${favorite ? "Remove" : "Add"} ${species.commonName} ${favorite ? "from" : "to"} favorites`);
-    }
-    button.setAttribute("title", favorite ? "Remove from favorites" : "Add to favorites");
-  });
+  // The original species checkbox list has been retired; selection is state-backed.
 }
 
 function isSpeciesAvailableOnSelectedDate(species) {
@@ -3176,11 +2951,10 @@ function isSpeciesAvailableOnSelectedDate(species) {
 }
 
 function getVisibleRecords() {
-  const selectedSpecies = new Set(getCheckedValues("species"));
   const selectedAccessStatuses = new Set(getSelectedAccessStatuses());
 
   return state.records.filter((record) => {
-    if (!selectedSpecies.has(record.speciesId)) return false;
+    if (!state.selectedSpecies.has(record.speciesId)) return false;
     const species = getSpecies(record.speciesId);
     if (!species) return false;
     if (state.savedLocationsOnly && !state.savedLocations.has(record.id)) return false;
@@ -3245,9 +3019,8 @@ function loadPhenology(mode) {
 }
 
 function renderHistogram() {
-  const selectedSpecies = getCheckedValues("species");
   const speciesForChart = speciesCatalog.filter((species) => (
-    selectedSpecies.includes(species.id)
+    state.selectedSpecies.has(species.id)
   ));
   const phenology = phenologyByMode[state.activeMap] || null;
   const monthData = MONTHS.map((_, index) => {
