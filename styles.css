@@ -2158,3 +2158,139 @@ body[data-register="night"] {
 .rail-seg.active .k {
   color: var(--reg-accent);
 }
+
+/* ---- conditions detail panel (Phase 4b) ---- */
+
+#rail-panel {
+  top: 74px;
+  right: 14px;
+  width: min(368px, calc(100% - 28px));
+  display: none;
+  font-size: 13px;
+  overflow: hidden;
+  padding: 0;
+}
+
+#rail-panel.open {
+  display: block;
+}
+
+#rail-panel[data-subject="sun"] { --subject: #e8b931; border-color: #e8b931; }
+#rail-panel[data-subject="moon"] { --subject: #9aa0a6; border-color: #9aa0a6; }
+#rail-panel[data-subject="rain"] { --subject: #3e63c4; border-color: #3e63c4; }
+#rail-panel[data-subject="wind"] { --subject: #4a5250; border-color: #4a5250; }
+#rail-panel[data-subject="tide"] { --subject: #4d8e9b; border-color: #4d8e9b; }
+
+#rail-panel .spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--subject, var(--reg-accent));
+}
+
+#rail-panel .pad {
+  padding: 15px 15px 13px 20px;
+}
+
+#rail-panel h3 {
+  margin: 0 0 9px;
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  color: var(--subject, var(--reg-accent));
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+#rail-panel .fig {
+  margin: 4px 0 10px;
+  position: relative;
+}
+
+#rail-panel .fig svg {
+  display: block;
+  margin: 0 auto;
+}
+
+#rail-panel .note {
+  color: var(--reg-sub);
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+#rail-panel .note b {
+  color: var(--reg-ink);
+}
+
+#rail-panel .age {
+  margin-top: 10px;
+  font-size: 10.5px;
+  color: var(--reg-sub);
+  letter-spacing: 0.06em;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+#rail-panel .now-btn {
+  margin-top: 8px;
+  background: var(--reg-accent);
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 76px;
+  margin: 8px 0 3px;
+}
+
+.bars .bwrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.bars .bval {
+  font-size: 10.5px;
+  color: var(--reg-ink);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.bars .b {
+  width: 100%;
+  background: var(--subject, var(--reg-accent));
+  opacity: 0.85;
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+}
+
+.bars .b.past { opacity: 0.4; }
+.bars .b.today { opacity: 1; outline: 1.5px solid var(--reg-ink); outline-offset: -1px; }
+
+.bars-labels {
+  display: flex;
+  gap: 3px;
+}
+
+.bars-labels span {
+  flex: 1;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: var(--reg-sub);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.bars-labels span.today {
+  color: var(--reg-ink);
+}

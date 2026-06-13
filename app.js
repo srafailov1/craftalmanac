@@ -1394,6 +1394,7 @@ function moonPhase(date) {
 }
 
 const CONDITIONS_TTL_MS = 30 * 60 * 1000;
+let openConditionSeg = null;
 
 function sumValues(values) {
   return values.reduce((total, value) => total + (value || 0), 0);
@@ -1437,8 +1438,10 @@ function loadConditions(force) {
       const nowIndex = hourly.time.findIndex((t) => new Date(t) > new Date()) - 1;
       const i = Math.max(0, nowIndex);
       const past72 = sumValues(hourly.precipitation.slice(Math.max(0, i - 72), i));
+      // 10 daily totals = 3 past days + today + 6 forecast (past_days=3); index 3
+      // is today. Powers the rain panel's memory+forecast bars (Phase 4b).
       const daily = [];
-      for (let d = 0; d < 7; d++) {
+      for (let d = 0; d < 10; d++) {
         daily.push(round1(sumValues(hourly.precipitation.slice(d * 24, d * 24 + 24))));
       }
       const weather = {
@@ -1489,7 +1492,8 @@ function conditionsIconWind() {
 }
 
 function conditionsSegment(id, label, value, icon) {
-  return `<button type="button" class="rail-seg" data-seg="${id}">
+  const active = openConditionSeg === id ? " active" : "";
+  return `<button type="button" class="rail-seg${active}" data-seg="${id}">
     <span class="ic">${icon}</span><span><span class="k">${escapeHTML(label)}</span><span class="v">${escapeHTML(value)}</span></span>
   </button>`;
 }
@@ -1512,20 +1516,204 @@ function renderConditionsRail() {
   conditionsRail.innerHTML = html;
 }
 
+// --- Phase 4b: condition detail panels (click a rail segment) --------------
+const WEATHER_AREA_MIN_ZOOM = 8;
+
+function dirName(deg) {
+  return ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(deg / 45) % 8];
+}
+
+function svgMoon(mp, r = 22) {
+  const d = r * 2 + 8, c = d / 2;
+  const k = Math.cos(2 * Math.PI * mp.phase);
+  const rx = Math.abs(k) * r;
+  const half = mp.waxing ? 1 : -1;
+  return `<svg viewBox="0 0 ${d} ${d}" width="${d}" height="${d}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r}" fill="var(--reg-panel)" stroke="var(--reg-sub)" stroke-width="1"/>
+    <path d="M ${c} ${c - r} A ${r} ${r} 0 0 ${half > 0 ? 1 : 0} ${c} ${c + r} A ${rx} ${r} 0 0 ${(half > 0) === (k < 0) ? 1 : 0} ${c} ${c - r} Z" fill="var(--reg-ink)" opacity="0.85"/>
+  </svg>`;
+}
+
+function svgMoonAxis(mp, w = 300) {
+  const h = 74, y = 42, x0 = 30, x1 = w - 30;
+  const x = x0 + mp.illum * (x1 - x0);
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+    <line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="var(--reg-hair)" stroke-width="2.2"/>
+    <circle cx="${x0}" cy="${y}" r="11" fill="var(--reg-panel)" stroke="var(--reg-sub)" stroke-width="1.6"/>
+    <circle cx="${x1}" cy="${y}" r="11" fill="var(--reg-ink)" opacity="0.85" stroke="var(--reg-sub)" stroke-width="1.2"/>
+    <circle cx="${x.toFixed(1)}" cy="${y}" r="8" fill="var(--subject, var(--reg-accent))" stroke="var(--reg-panel)" stroke-width="2"/>
+    <text x="${x0}" y="${y + 26}" font-family="monospace" font-size="10.5" fill="var(--reg-sub)" text-anchor="middle">NEW</text>
+    <text x="${x1}" y="${y + 26}" font-family="monospace" font-size="10.5" fill="var(--reg-sub)" text-anchor="middle">FULL</text>
+    <text x="${x.toFixed(1)}" y="${y - 17}" font-family="monospace" font-size="11.5" fill="var(--reg-ink)" text-anchor="middle">${Math.round(mp.illum * 100)}% ${mp.waxing ? "→" : "←"}</text>
+  </svg>`;
+}
+
+function svgCompass(dir, speed, r = 72) {
+  const d = r * 2 + 18, c = d / 2;
+  const a = (dir + 180) * RAD;
+  const x2 = c + Math.sin(a) * (r - 18), y2 = c - Math.cos(a) * (r - 18);
+  const x1 = c - Math.sin(a) * (r - 38), y1 = c + Math.cos(a) * (r - 38);
+  const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  const ticks = dirs.map((t, i) => {
+    const ta = i * Math.PI / 4;
+    const major = i % 2 === 0;
+    return `<text x="${(c + Math.sin(ta) * (r + 2)).toFixed(1)}" y="${(c - Math.cos(ta) * (r + 2) + 3.5).toFixed(1)}" font-family="monospace" font-size="${major ? 11 : 9.5}" fill="var(--reg-${major ? "ink" : "sub"})" text-anchor="middle">${t}</text>`;
+  }).join("");
+  let ring = "";
+  for (let i = 0; i < 36; i++) {
+    const ta = i * Math.PI / 18;
+    const rr = i % 9 === 0 ? r - 26 : r - 21;
+    ring += `<line x1="${(c + Math.sin(ta) * (r - 17)).toFixed(1)}" y1="${(c - Math.cos(ta) * (r - 17)).toFixed(1)}" x2="${(c + Math.sin(ta) * rr).toFixed(1)}" y2="${(c - Math.cos(ta) * rr).toFixed(1)}" stroke="var(--reg-hair)" stroke-width="1.2"/>`;
+  }
+  const tier = windTier(speed);
+  return `<svg viewBox="0 0 ${d} ${d}" width="${d}" height="${d}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r - 17}" fill="none" stroke="var(--reg-hair)" stroke-width="1.4"/>
+    ${ring}${ticks}
+    <line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--subject, var(--reg-accent))" stroke-width="4" stroke-linecap="round"/>
+    <path d="M ${x2.toFixed(1)} ${y2.toFixed(1)} L ${(x2 - Math.sin(a - 0.42) * 14).toFixed(1)} ${(y2 + Math.cos(a - 0.42) * 14).toFixed(1)} L ${(x2 - Math.sin(a + 0.42) * 14).toFixed(1)} ${(y2 + Math.cos(a + 0.42) * 14).toFixed(1)} Z" fill="var(--subject, var(--reg-accent))"/>
+    <circle cx="${c}" cy="${c}" r="22" fill="var(--reg-panel)" stroke="var(--reg-hair)"/>
+    <text x="${c}" y="${c - 2}" font-family="monospace" font-size="15" fill="var(--reg-ink)" text-anchor="middle">${Math.round(speed)}</text>
+    <text x="${c}" y="${c + 8}" font-family="monospace" font-size="8" fill="var(--reg-sub)" text-anchor="middle">KM/H</text>
+    <text x="${c}" y="${c + 17}" font-family="monospace" font-size="8" fill="var(--reg-ink)" text-anchor="middle">${tier.toUpperCase()}</text>
+  </svg>`;
+}
+
+function pickWindows(daily) {
+  let rainDay = -1;
+  for (let i = 4; i < 10; i++) if (daily[i] >= 5) { rainDay = i; break; }
+  let dryStart = -1, dryEnd = -1;
+  for (let i = 4; i < 9; i++) {
+    if (daily[i] < 1 && daily[i + 1] < 1) {
+      dryStart = i; dryEnd = i + 1;
+      while (dryEnd + 1 < 10 && daily[dryEnd + 1] < 1) dryEnd++;
+      break;
+    }
+  }
+  const start = new Date(); start.setDate(start.getDate() - 3);
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dn = (i) => (i === 3 ? "today" : dayNames[new Date(+start + i * 864e5).getDay()]);
+  const out = [];
+  if (rainDay > 0) out.push(`Rain expected ${dn(rainDay)} — check mushrooms ${dn(Math.min(rainDay + 2, 9))}.`);
+  if (dryStart > 0) out.push(`Dry window ${dn(dryStart)}–${dn(dryEnd)}: berries, fiber, drying.`);
+  return out.join(" ") || "No strong windows in the forecast.";
+}
+
+function conditionsDataAge() {
+  const w = state.weather;
+  if (!w || !w.fetched) return "";
+  const age = Math.round((Date.now() - w.fetched) / 6e4);
+  const freshness = w.src === "cached" ? `CACHED · ${age} MIN AGO` : age <= 1 ? "JUST FETCHED" : `${age} MIN AGO`;
+  return `<div class="age">SOURCE: OPEN-METEO · ${freshness}</div>`;
+}
+
+function conditionsLocLine() {
+  const label = state.locLabel || "DEFAULT AREA (CONUS)";
+  const zoomOK = state.mapReady && map.getZoom() >= WEATHER_AREA_MIN_ZOOM;
+  return `<div class="age">FORECAST FOR: ${escapeHTML(label)}</div>` + (zoomOK
+    ? `<button class="now-btn" type="button" id="use-map-area">UPDATE TO MAP AREA</button>`
+    : `<div class="age">ZOOM IN CLOSER TO UPDATE THE FORECAST TO THE MAP AREA</div>`);
+}
+
+function useMapArea() {
+  if (!state.mapReady) return;
+  const center = map.getCenter();
+  const label = "MAP AREA · " + Math.abs(center.lat).toFixed(1) + "°" + (center.lat >= 0 ? "N" : "S") +
+    " " + Math.abs(center.lng).toFixed(1) + "°" + (center.lng >= 0 ? "E" : "W");
+  setForecastLocation(center.lat, center.lng, label);
+}
+
+function rainBars(daily) {
+  const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const start = new Date(); start.setDate(start.getDate() - 3);
+  const labels = Array.from({ length: 10 }, (_, i) => {
+    const date = new Date(+start + i * 864e5);
+    return { txt: dayNames[date.getDay()], today: i === 3 };
+  });
+  const maxV = Math.max(...daily, 1);
+  const bars = daily.map((v, i) =>
+    `<div class="bwrap"><span class="bval">${v > 0 ? v : ""}</span><div class="b ${i < 3 ? "past" : ""}${i === 3 ? " today" : ""}" style="height:${Math.max(4, (v / maxV) * 100)}%" title="${v} mm"></div></div>`).join("");
+  const labelRow = labels.map((l) => `<span class="${l.today ? "today" : ""}">${l.today ? "TODAY" : l.txt}</span>`).join("");
+  return `<div class="bars">${bars}</div><div class="bars-labels">${labelRow}</div>`;
+}
+
+function renderConditionPanel() {
+  if (!railPanel || !railPad) return;
+  if (!openConditionSeg) {
+    railPanel.classList.remove("open");
+    railPanel.removeAttribute("data-subject");
+    railPad.innerHTML = "";
+    return;
+  }
+  railPanel.classList.add("open");
+  railPanel.dataset.subject = openConditionSeg;
+  const now = new Date();
+  const { lat, lng } = state.location;
+  const st = sunTimes(now, lat, lng);
+  const mp = moonPhase(now);
+  const w = state.weather;
+  let html = "";
+  if (openConditionSeg === "sun") {
+    html = `<h3>THE SUN</h3>
+      <div class="note">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
+      <div class="note" style="margin-top:8px">Currently the <b>${escapeHTML(state.register.toUpperCase())}</b> register. Many parks close gathering at dusk — the register and the rules keep the same clock.</div>
+      <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
+  } else if (openConditionSeg === "moon") {
+    html = `<h3>MOON</h3>
+      <div class="fig">${svgMoon(mp)}</div>
+      <div class="fig">${svgMoonAxis(mp)}</div>
+      <div class="note">${Math.round(mp.illum * 100)}% illuminated, ${mp.waxing ? "waxing" : "waning"}. Bright-moon nights favor low-tide walks and evening foraging; headlamps off when you can.</div>
+      <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
+  } else if (openConditionSeg === "rain") {
+    html = w
+      ? `<h3>RAIN — MEMORY &amp; FORECAST (MM)</h3>
+        ${rainBars(w.daily)}
+        <div class="note" style="margin-top:8px">Past 72 h: <b>${w.past72} mm</b>${w.past72 >= 18 ? " — <b>fungal flush likely</b> for whitelisted mushrooms." : " — below the flush threshold."}<br>${escapeHTML(pickWindows(w.daily))}</div>
+        ${conditionsLocLine()}${conditionsDataAge()}`
+      : `<h3>RAIN</h3><div class="note">Live rainfall data is unavailable right now.</div>${conditionsLocLine()}`;
+  } else if (openConditionSeg === "wind") {
+    html = w
+      ? `<h3>WIND &amp; CLOUD</h3>
+        <div class="fig">${svgCompass(w.windDir, w.wind)}</div>
+        <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
+        ${conditionsLocLine()}${conditionsDataAge()}`
+      : `<h3>WIND</h3><div class="note">Live wind data is unavailable right now.</div>${conditionsLocLine()}`;
+  }
+  railPad.innerHTML = html;
+  const useAreaButton = document.getElementById("use-map-area");
+  if (useAreaButton) useAreaButton.addEventListener("click", useMapArea);
+}
+
+function toggleConditionPanel(segId) {
+  openConditionSeg = openConditionSeg === segId ? null : segId;
+  renderConditionsRail();
+  renderConditionPanel();
+}
+
 // Forecast location follows the chosen place (Phase 4); default stays CONUS
 // center. Changing it re-runs the register and refetches conditions.
-function setForecastLocation(lat, lng) {
+function setForecastLocation(lat, lng, label) {
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
   state.location = { lat, lng };
+  if (label) state.locLabel = label;
   applyRegister();
   renderConditionsRail();
+  renderConditionPanel();
   loadConditions(true);
 }
 
 function initConditions() {
+  if (conditionsRail) {
+    conditionsRail.addEventListener("click", (event) => {
+      const seg = event.target.closest(".rail-seg");
+      if (seg) toggleConditionPanel(seg.dataset.seg);
+    });
+  }
   renderConditionsRail();
   loadConditions();
-  setInterval(renderConditionsRail, 60e3);
+  setInterval(() => {
+    renderConditionsRail();
+    if (openConditionSeg) renderConditionPanel();
+  }, 60e3);
   setInterval(() => loadConditions(), CONDITIONS_TTL_MS);
 }
 
@@ -1544,6 +1732,8 @@ const speciesList = document.querySelector("#speciesList");
 const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
 const conditionsRail = document.querySelector("#conditions-rail");
+const railPanel = document.querySelector("#rail-panel");
+const railPad = document.querySelector("#rail-pad");
 const locationSearchForm = document.querySelector("#locationSearchForm");
 const locationSearchInput = document.querySelector("#locationSearchInput");
 const locationSearchSuggestions = document.querySelector("#locationSearchSuggestions");
@@ -2293,7 +2483,7 @@ function chooseLocationSuggestion(feature) {
   hideLocationSuggestions();
   setLocationSearchStatus("");
   // Phase 4: conditions (sun/moon/rain/wind) follow the chosen place.
-  setForecastLocation(feature.center[1], feature.center[0]);
+  setForecastLocation(feature.center[1], feature.center[0], (feature.place_name || feature.text || "").toUpperCase());
   if (Array.isArray(feature.bbox) && feature.bbox.length === 4) {
     map.fitBounds([
       [feature.bbox[0], feature.bbox[1]],

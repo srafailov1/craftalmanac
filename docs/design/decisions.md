@@ -3,6 +3,31 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 4b applied: condition detail panels.** Clicking a rail
+  segment now opens a floating `#rail-panel` (`.floating` + `.spine` + `.pad`
+  shells) with a per-subject accent (`data-subject` → `--subject` color + border).
+  **Sun:** first-light/rise/golden/set/dark times + current register (computed
+  locally, no network). **Moon:** ported `svgMoon` + `svgMoonAxis` phase
+  visualizations. **Rain:** 10-day memory+forecast bars (3 past + today + 6
+  ahead, today outlined) from the now-10-entry `daily`, past-72h total with the
+  flush-threshold note, and `pickWindows` (rain/dry-window guidance). **Wind:**
+  ported `svgCompass` rose (direction + speed + tier) + cloud cover. Rain/wind
+  panels carry the **FORECAST FOR** label + **UPDATE TO MAP AREA** button
+  (shown only at zoom ≥ 8; otherwise a "zoom in closer" hint) and a SOURCE +
+  data-age line; `useMapArea` sets the forecast location to the map center.
+  `toggleConditionPanel` toggles open/active state; the 60 s tick refreshes an
+  open panel. Place search now passes a label to `setForecastLocation`.
+  Tide panel deferred to 4d; the wind-canvas toggle to 4c. Degradation holds:
+  rain/wind panels show "unavailable right now" when `state.weather` is null.
+
+  **Gate — passed.** `node --check` clean. Live via Claude-in-Chrome
+  (`?v=phase4b-1`): each segment opens its panel with the right heading,
+  subject accent, and visualization (moon SVGs, rain `.bars`, wind compass
+  SVG), marks its rail segment active, and toggles closed; the rain panel shows
+  the bars, picking windows, FORECAST FOR, the zoom-in hint (zoom < 8), and
+  SOURCE: OPEN-METEO · JUST FETCHED. No app console errors. Bumped both
+  `index.html` tokens to `?v=phase4b-1`. Next: 4c wind canvas.
+
 - **2026-06-13 — Phase 4 spec drafted + 4a applied: conditions rail
   foundation.** Wrote `docs/design/phase4-conditions-spec.md` (sequencing
   4a–4e, the graceful-degradation gate, endpoints, forecast-location model,
