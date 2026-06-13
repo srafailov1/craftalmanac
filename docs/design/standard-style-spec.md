@@ -1,10 +1,13 @@
 # Mapbox Standard style spec (Phase 2)
 
-**Status: applied (`2a8936f`), live verification pending.** §1-2 are landed in
-`app.js`/`index.html`. §3's zoom 3-16 x 4-register verification gate needs an
-interactive session with a local HTTP server reachable from
-Claude-in-Chrome (`python3 -m http.server 4173 --bind 127.0.0.1`, then
-`http://127.0.0.1:4173/`) — see `docs/design/decisions.md` 2026-06-13 entry.
+**Status: applied (`2a8936f`), §3 live-verified 2026-06-13 (see
+`docs/design/decisions.md`).** §1-2 are landed in `app.js`/`index.html`. §3's
+zoom 3-16 x 4-register verification gate ran via Claude-in-Chrome against
+`http://127.0.0.1:4173/`: all 10 layers present with correct slots/emissive
+properties, registers switch cleanly, zoom-handoff bridge fires correctly.
+One follow-up found: row 2 (region outline) loses contrast in `night` —
+tracked as a Phase 2 fix, not re-blocking the gate. Row 7 has nothing to
+collide with (separate dead-filter bug, `KNOWN_ISSUES.md` #2).
 §4 (C4) landed (`docs/design/notes-codex-c4.md`, `02e210c`): confirmed
 `text-emissive-strength`/`circle-emissive-strength`/`icon-emissive-strength`
 are all real properties in the pinned Mapbox GL JS v3.23.1 bundle (no
@@ -43,7 +46,7 @@ Codex's role here is the C4 audit in §4, delivered as a written note, not
 | # | Layer ID | Type | Current insertion | Target `slot` | Emissive property | Notes |
 |---|---|---|---|---|---|---|
 | 1 | `REGION_MASK_LAYER_ID` | fill | before `firstLineOrSymbolLayerId` | `bottom` | none (verify) | Masks everything outside the CONUS boundary (`#f2efe5` @ 0.58 opacity). Fill layers render under all symbols regardless of slot, so this mainly affects ordering vs. Standard's own land/water. Check it doesn't fight Standard's ocean/atmosphere styling in dusk/night. |
-| 2 | `REGION_OUTLINE_LAYER_ID` | line | before `firstLineOrSymbolLayerId` | `bottom` | none (verify) | CONUS border, `#1f3d2b` @ 0.86. **Flag:** this color may lose contrast against dark dusk/night grounds (`--reg-ground` is `#453e4a`/darker) — if so, this is one to set `line-emissive-strength: 1` on, or recolor via a `--reg-*` token in a later phase. |
+| 2 | `REGION_OUTLINE_LAYER_ID` | line | before `firstLineOrSymbolLayerId` | `bottom` | **confirmed needed** | CONUS border, `#1f3d2b` @ 0.86. **CONFIRMED 2026-06-13:** at zoom 3 in `night`, the outline against Standard's dark exterior is barely visible (low contrast). Fix needed: `line-emissive-strength: 1` (keeps it at its day color) or a `--reg-*`-driven recolor. Not yet applied — open follow-up. |
 | 3 | `PUBLIC_LANDS_FILL_LAYER_ID` | fill | before `firstLineOrSymbolLayerId`, `minzoom: PUBLIC_LANDS_MIN_RENDER_ZOOM` (8) | `bottom` | none (verify) | PAD-US polygons, `#3b8c7e`/`#75ad37` @ 0.16–0.18. Subtle by design; verify it stays visible (not washed out or over-saturated) across registers. |
 | 4 | `PUBLIC_LANDS_LINE_LAYER_ID` | line | before `firstLineOrSymbolLayerId`, same minzoom | `bottom` | none (verify) | `#2f786c`/`#4f8f32` @ 0.72, width 1. Same verification as #3. |
 | 5 | `FALLING_FRUIT_AGGREGATE_LAYER_ID` | circle | appended (no `beforeId`) | `top` | `circle-emissive-strength: 1` | Aggregate circles, `#f7f2df` fill / `#243a2a` stroke. **C4 layer** — also carries iNat aggregate items (Phase 5 raster). |

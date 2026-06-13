@@ -3,6 +3,45 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 2 §3 live-verification gate run and closed.** Ran the
+  `standard-style-spec.md` §3 zoom 3-16 x 4-register matrix via
+  Claude-in-Chrome against `http://127.0.0.1:4173/` (local server from
+  `python3 -m http.server 4173 --bind 127.0.0.1`):
+
+  - All 10 production layers present with the slots and `*-emissive-strength`
+    values the spec table prescribes — exact match, rows 1-10.
+  - Registers (`day`/`dawn`/`dusk`/`night`) switch cleanly via
+    `map.setConfigProperty("basemap","lightPreset", reg)` +
+    `state.register`/`document.body.dataset.register`; aggregate/cluster/
+    marker colors (rows 5-10) stay pixel-identical across registers as
+    intended.
+  - Zoom-handoff bridge (aggregates -> clusters) fires correctly at the
+    zoom 6.5/7.5/8.5 sample points (feature counts 130/0 -> 187/0 -> 0/63),
+    with no z-order flicker between `slot: "top"` aggregate and cluster
+    layers.
+  - Popups still render full species/ethics/permission text at zoom 16
+    (checked an Indiana Dunes raspberry point — "Harvesting rules and
+    limits: ALLOWED").
+  - **Found and fixed:** row 2 (`region-outline`, `#1f3d2b` @ 0.86) had
+    near-zero contrast against Standard's `night` exterior at zoom 3.
+    Added `"line-emissive-strength": 1` to its paint properties (same
+    mechanism as rows 5-10) — confirmed via screenshot that the CONUS
+    outline is now clearly visible against the dark `night` basemap.
+    `node --check app.js` passes; bumped `index.html`'s `app.js` cache
+    token to `?v=standard-style-2`.
+  - **Found, not a gate blocker:** row 7 (`falling-fruit-aggregate-labels`,
+    state-name labels at zoom < 4.2) is dead code — its `level === "state"`
+    filter never matches any feature, since `getGridAggregateFeatures` only
+    emits `level: "grid"` with `label: ""`. The spec's "no collision with
+    Standard's place labels" check trivially passes because there's nothing
+    to render. Logged as `KNOWN_ISSUES.md` #2 for the 4am/5am loops to
+    decide: restore a real `level: "state"` aggregate generator, or remove
+    the dead layer.
+
+  Gate closed: `docs/design/standard-style-spec.md` §3 is satisfied (one
+  follow-up fix applied, one pre-existing dead-code issue routed
+  separately).
+
 - **2026-06-13 — C4 audit landed (`02e210c`), folded into the spec.** Codex
   reviewed `app.js` at `2a8936f` against `standard-style-spec.md` §4
   (rows 5-7, the `FALLING_FRUIT_AGGREGATE_*` layers): code matches the spec

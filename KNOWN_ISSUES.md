@@ -255,3 +255,30 @@ until the aggregate swap for the current viewport completes, then flip. Check
 and over NYC with cold cache (hard reload between directions); counts must
 never visibly drop and recover. Test wheel-zoom, double-click zoom, and
 pinch-trackpad zoom separately — they produce different event timing.
+
+## 2. `falling-fruit-aggregate-labels` (row 7, state-name labels) never renders — dead filter, found during Phase 2 live verification (2026-06-13)
+
+**Symptom:** at zoom 3-4, no state-name labels appear anywhere (verified via
+`queryRenderedFeatures`: 0 features for `falling-fruit-aggregate-labels` at
+zoom 3 over CONUS, with 88 grid-aggregate features present).
+
+**Root cause:** the layer's filter is `["==", ["get", "level"], "state"]`
+(`app.js` ~line 3100), but every aggregate feature produced today comes from
+`getGridAggregateFeatures` with `level: "grid"` and a hardcoded `label: ""`
+(`app.js` ~lines 2563-2586). No code path ever emits `level: "state"`
+features — this looks like a leftover from a pre-grid-bucket design (possibly
+predating the "Resolve filtered overview tiles at status grid zoom" rework in
+item 1). The layer is currently inert.
+
+**Why it surfaced now:** `docs/design/standard-style-spec.md` row 7 flagged
+"check state labels don't collide with Standard's place labels at zoom 3-4"
+as part of Phase 2 verification. There's nothing to collide — the check
+trivially passes, but only because the feature is dead, not because it's
+fine.
+
+**Decision needed (owner/Claude):** either (a) restore a `level: "state"`
+aggregate generator with real state names/centroids so row 7 does what the
+redesign intends, or (b) remove `FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID` and
+its dead filter as part of Phase 2 cleanup. Routing to the 4am/5am loops to
+scope; not blocking Phase 2 sign-off since the live-verification gate (no
+label collisions) is satisfied either way.

@@ -3382,7 +3382,8 @@ async function initRegionBoundaryLayers() {
             6, 1.6,
             10, 2.2,
             14, 3
-          ]
+          ],
+          "line-emissive-strength": 1
         }
       });
     }
