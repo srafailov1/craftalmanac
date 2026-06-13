@@ -3,6 +3,56 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-12 (evening) — Phase 0 complete; Phase 1 deferred.** Scheduled
+  run on `design/relaunch`. Cleared stale `.git/index.lock` (no running git
+  process); removed nine untracked working-tree files/dirs left from a prior
+  session that were byte-identical to `main`'s committed versions, then
+  merged `main` cleanly (`c3d2ec3`) — one add/add conflict in `AGENTS.md`,
+  resolved by taking `main`'s more developed version per "production code
+  wins" (it's a strict superset of the design-branch copy: extra "well-formed
+  task" section, broader Qwen task list). `node --check app.js` passes
+  post-merge. ATTRIBUTION.md (`4321143`) gained NOAA CO-OPS tide-predictions
+  note (extends the existing station-index entry), Open-Meteo (CC BY 4.0,
+  non-commercial free tier), RainViewer (free-tier attribution required), and
+  a Mapbox Standard note (lightPreset + `circle-emissive-strength: 1`,
+  existing attribution control covers it) — all four sourced and verified via
+  web search this session. Fonts (`349e5ef`): could not download Fraunces/
+  Public Sans/IBM Plex Mono — sandbox network blocks `fonts.google.com`,
+  `fonts.gstatic.com`, `github.com`, `raw.githubusercontent.com`,
+  `cdn.jsdelivr.net` (all 403 blocked-by-allowlist). Documented the exact
+  file list, directory layout, and Fraunces fixed-instance choice (weight
+  600, optical size 144/"Display", SOFT=0/WONK=0, + italic) in
+  `docs/design/fonts-needed.md`, and added a commented (inert) `@font-face`
+  scaffold at the top of `styles.css` for `--font-display`/`--font-ui`/
+  `--font-mono` — zero visual change, drop-in once files exist. Baseline
+  screenshots: no headless browser in the sandbox (no chromium, npm registry
+  blocked for puppeteer/playwright) and computer-use needs interactive
+  owner approval — **baselines still await the next interactive session**.
+  **Gate:** `node --check app.js` clean, ATTRIBUTION.md complete for all four
+  new sources, git history clean (no stray locks, working tree clean) — gate
+  passes.
+
+  **Phase 1 (`35045d8`) done same session.** Ported the four register
+  variable sets (day/dawn/dusk/night, from rev 14 `prototype/index.html`
+  lines 31-59) and the card/chip/spine component shells (`.pt-card`,
+  `.mini-card`, `.card-grid`, `.leg-chip`, `.rail-seg`, `.floating`, `.spine`)
+  into `styles.css`, namespaced `--reg-*` to avoid colliding with the
+  existing production tokens (e.g. prototype `--ink:#1F2421` vs production
+  `--ink:#20241f` — same name, different value, would have shifted colors if
+  merged into one set). `body` in `index.html` now carries
+  `data-register="day"`; `:root, body[data-register="day"]` defines the day
+  set so it's always-on, dawn/dusk/night sit behind attribute selectors that
+  don't match anything yet. None of the new classes appear in current markup.
+  Net: zero visual change (verified by reasoning + brace-balance/`node --check`,
+  not a screenshot diff — baselines still pending). Bumped
+  `styles.css?v=filtered-access-4` → `?v=register-tokens-1` since the file
+  changed. **Next session:** Phase 2 (Standard map + register engine) is the
+  riskiest phase — start by getting baseline screenshots in an interactive
+  session before touching the map style, then wire the solar-math register
+  engine to actually set `data-register` and confirm dawn/dusk/night render
+  correctly with the new tokens before porting the ~10 production layers to
+  Standard slots.
+
 - **2026-06-12 — Prototype approved; migration work order written.** The
   living-map prototype closed at rev 14 (`d4252a7`) after fourteen owner
   review rounds. `docs/design/work-order-redesign.md` now governs the
