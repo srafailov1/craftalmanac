@@ -1,3 +1,84 @@
+/* ---------------------------------------------------------------------
+   Redesign font scaffold (Phase 0, design/relaunch) — self-hosted OFL
+   fonts: Fraunces (display, one fixed instance), Public Sans (UI), and
+   IBM Plex Mono (labels). Files not yet vendored (see
+   docs/design/fonts-needed.md for the exact list and why). This block is
+   inert: no rule references --font-display/--font-ui/--font-mono yet, so
+   uncommenting it alone causes zero visual change until Phase 1+ opts
+   elements in.
+
+@font-face {
+  font-family: "Fraunces Display";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/fraunces/Fraunces-Display.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Fraunces Display";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/fraunces/Fraunces-Display-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/public-sans/PublicSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/public-sans/PublicSans-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/public-sans/PublicSans-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/public-sans/PublicSans-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/ibm-plex-mono/IBMPlexMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/ibm-plex-mono/IBMPlexMono-Medium.woff2") format("woff2");
+}
+
+:root {
+  --font-display: "Fraunces Display", Georgia, serif;
+  --font-ui: "Public Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+*/
+/* --------------------------------------------------------------------- */
+
 :root {
   color-scheme: light;
   --ink: #20241f;
