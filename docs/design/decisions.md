@@ -3,6 +3,19 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 3 spec drafted (`docs/design/phase3-floating-ui-spec.md`),
+  not yet applied.** Confirmed all Phase 3 data deps (C1-C4) are landed and
+  Phase 1's `.pt-card`/`.mini-card`/`.leg-chip`/`.rail-seg`/`.floating` CSS
+  shells already exist unused in `styles.css`. Broke Phase 3 into 3a (anchored
+  popups — launch blocker, CSS ready, recommended start), 3b (legend), 3c
+  (season slider w/ C2 phenology), 3d (masthead + sheets), 3e (old panel
+  removal, after each replacement verified). All of Phase 3 is Claude-only
+  per `work-order-redesign.md` §2 — no Codex/Qwen prerequisite blocks
+  kickoff. 3a detailed: restructure `getMarkerPopupHTML` into `.pt-card`,
+  add a per-source license map (from `ATTRIBUTION.md`) and an `observer`
+  field for iNaturalist records to close the "observer + dataset + license"
+  attribution gap, keep the ethics line and medicine disclaimer.
+
 - **2026-06-13 — Resolved KNOWN_ISSUES #2 directly (nightly loops paused).**
   Removed the dead `falling-fruit-aggregate-labels` layer
   (`FALLING_FRUIT_AGGREGATE_LABEL_LAYER_ID`, constant + `map.addLayer` block)
