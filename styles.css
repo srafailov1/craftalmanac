@@ -1210,6 +1210,20 @@ body.modal-open .app-shell {
   font-size: 18px;
 }
 
+/* Anchored point card popup: let .pt-card own all chrome (its own bg, border,
+   radius, shadow). Strip the default Mapbox content box and hide the tip so
+   the card reads as a clean floating card per the redesign. */
+.pt-popup .mapboxgl-popup-content {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 12px;
+}
+
+.pt-popup .mapboxgl-popup-tip {
+  display: none;
+}
+
 .popup-title {
   margin: 0 0 6px;
   font-weight: 850;
@@ -1798,6 +1812,24 @@ body[data-register="night"] {
   cursor: pointer;
   font-size: 15px;
   padding: 2px;
+}
+
+.pt-card .src-link {
+  color: var(--reg-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Medicine-mode educational-use disclaimer — kept prominent (CLAUDE.md). */
+.pt-card .med-note {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-left: 3px solid var(--reg-warn);
+  border-radius: 0 6px 6px 0;
+  background: rgba(216, 155, 36, 0.12);
+  color: var(--reg-ink);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .pt-card.compact {

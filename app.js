@@ -465,6 +465,26 @@ const LEGEND_PERMISSION_OPTIONS = [
   { id: "private", label: "Private" },
   { id: "unknown", label: "Unverified" }
 ];
+// Maps an access status to its fixed-semantics register token suffix
+// (--reg-st-<suffix>). Safety/access colors are identical across registers
+// per CLAUDE.md; the token sets only shift lightness for contrast.
+const ACCESS_STATUS_TOKEN = {
+  allowed: "allowed",
+  "permit-required": "permit",
+  private: "private",
+  "private-unsourced": "private",
+  unknown: "unknown",
+  prohibited: "prohibited"
+};
+// Per-dataset license strings, transcribed verbatim from ATTRIBUTION.md so the
+// point card can show "observer + dataset + license" (launch blocker). Keep in
+// sync with ATTRIBUTION.md. nps-orchard has no CC license stated there (NPS
+// Historic Orchards section) — the clause is omitted rather than fabricated.
+const LICENSE_BY_SOURCE = {
+  inaturalist: "CC BY-NC",
+  fallingfruit: "CC BY-NC-SA 4.0",
+  "nps-orchard": "Public domain (U.S. Gov)"
+};
 const MARKER_ICON_SIZE = 26;
 const MARKER_ICON_PIXEL_RATIO = 3;
 const WELCOME_MODAL_STORAGE_KEY = "craftAlmanacWelcomeSeen";
@@ -2416,6 +2436,7 @@ function renderMarkers() {
         source: record.source,
         sourceLabel: sourceLabel(record.source),
         sourceUrl: record.sourceUrl || "",
+        observer: record.observer || "",
         idDate: record.idDate || "",
         name: record.name || species.commonName,
         usedParts: species.usedParts || "",
@@ -3448,11 +3469,11 @@ function bindMapInteractions() {
     state.hoverPopup = null;
     state.activePopup?.remove();
     state.activePopup = new mapboxgl.Popup({
-      className: "forage-popup",
-      closeButton: true,
+      className: "forage-popup pt-popup",
+      closeButton: false,
       closeOnClick: true,
-      maxWidth: "340px",
-      offset: 12
+      maxWidth: "none",
+      offset: 14
     })
       .setLngLat(feature.geometry.coordinates)
       .setHTML(getMarkerPopupHTML(feature.properties))
@@ -3464,13 +3485,19 @@ function bindMapInteractions() {
 
 function bindPopupActions(popup) {
   const element = popup.getElement();
-  const saveButton = element?.querySelector("[data-save-location]");
-  if (!saveButton) return;
-  saveButton.addEventListener("click", () => {
-    toggleSavedLocation(saveButton.dataset.saveLocation);
-    updateSaveLocationButton(saveButton);
-    render();
-  });
+  if (!element) return;
+  const closeButton = element.querySelector(".pt-card .close");
+  if (closeButton) {
+    closeButton.addEventListener("click", () => popup.remove());
+  }
+  const saveButton = element.querySelector("[data-save-location]");
+  if (saveButton) {
+    saveButton.addEventListener("click", () => {
+      toggleSavedLocation(saveButton.dataset.saveLocation);
+      updateSaveLocationButton(saveButton);
+      render();
+    });
+  }
 }
 
 function toggleSavedLocation(recordId) {
@@ -3491,53 +3518,76 @@ function updateSaveLocationButton(button) {
 }
 
 function getMarkerPopupHTML(properties) {
-  const sourceMarkup = properties.sourceUrl
-    ? `<a class="popup-source" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>${properties.idDate ? ` · ${escapeHTML(properties.idDate)}` : ""}`
-    : `<span class="popup-source">${escapeHTML(properties.sourceLabel)}${properties.idDate ? ` · ${escapeHTML(properties.idDate)}` : ""}</span>`;
-  const accessSourceMarkup = properties.accessSourceUrl
-    ? `<a class="popup-source" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel)}</a>`
+  const status = properties.accessStatus || "unknown";
+  const statusColor = `var(--reg-st-${ACCESS_STATUS_TOKEN[status] || "unknown"})`;
+  const accessLabel = escapeHTML(properties.accessStatusLabel || "Unknown");
+  const sci = escapeHTML(properties.scientificName || properties.observedScientificName || "");
+
+  // ID-source value: dataset (linked) · license · observer · observed date.
+  // License from LICENSE_BY_SOURCE (verbatim from ATTRIBUTION.md); observer
+  // present only on iNaturalist records — never fabricated for other sources.
+  const datasetMarkup = properties.sourceUrl
+    ? `<a class="src-link" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>`
+    : `<span>${escapeHTML(properties.sourceLabel)}</span>`;
+  const license = LICENSE_BY_SOURCE[properties.source] || "";
+  const sourceBits = [datasetMarkup];
+  if (license) sourceBits.push(escapeHTML(license));
+  if (properties.observer) sourceBits.push(`obs. ${escapeHTML(properties.observer)}`);
+  if (properties.idDate) sourceBits.push(escapeHTML(properties.idDate));
+  const sourceVal = sourceBits.join(" · ");
+
+  // Access rule citation, preserved verbatim from the access rule tables.
+  const ruleCite = properties.accessSourceUrl
+    ? `<a class="src-link" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel || "source")}</a>`
     : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
-  const accessStatusClass = escapeHTML(properties.accessStatus || "unknown");
-  const ruleStatus = `<span class="access-status ${accessStatusClass}">${escapeHTML(properties.accessStatusLabel || "Unknown")}</span>`;
-  const rulesText = [
-    properties.accessLimit || "Unknown; confirm local rules before harvesting."
-  ].filter(Boolean).map(escapeHTML).join(" · ");
-  const usedParts = properties.usedParts
-    ? `<dt>Used parts</dt><dd>${escapeHTML(properties.usedParts)}</dd>`
+  const ruleLimit = escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.");
+
+  const usedPartsRow = properties.usedParts
+    ? `<div class="row"><span class="lab">USE</span><span class="val">${escapeHTML(properties.usedParts)}</span></div>`
     : "";
-  const safetyTags = String(properties.safetyTags || "")
-    .split("|")
-    .filter(Boolean);
-  const safetyMarkup = safetyTags.length
-    ? `<dt>Safety tags</dt><dd><span class="tag-list">${safetyTags.map((tag) => `<span class="safety-tag">${escapeHTML(tag)}</span>`).join("")}</span></dd>`
+  const safetyTags = String(properties.safetyTags || "").split("|").filter(Boolean);
+  const safetyRow = safetyTags.length
+    ? `<div class="row safety"><span class="lab">SAFETY</span><span class="val">${safetyTags.map(escapeHTML).join(" · ")}</span></div>`
     : "";
-  const harvestEthic = properties.harvestEthic
-    ? `<dt>Harvest ethic</dt><dd><span class="ethic-tag">${escapeHTML(properties.harvestEthic)}</span></dd>`
+  const ethicRow = properties.harvestEthic
+    ? `<div class="row"><span class="lab">ETHIC</span><span class="val">${escapeHTML(properties.harvestEthic)}</span></div>`
     : "";
   const warning = properties.harvestStatus
-    ? `<p class="popup-warning">${escapeHTML(properties.harvestStatus)}: ${escapeHTML(properties.harvestNote)}</p>`
+    ? `<div class="oinp" style="color:var(--reg-warn)">${escapeHTML(properties.harvestStatus)} — ${escapeHTML(properties.harvestNote)}</div>`
+    : "";
+  // Medicine mode keeps the educational-use disclaimer prominent (CLAUDE.md).
+  const medSafetyNote = getActiveMapConfig().safetyNote;
+  const medNote = state.activeMap === "medicine" && medSafetyNote
+    ? `<div class="med-note">${escapeHTML(medSafetyNote)}</div>`
     : "";
   const saved = isSavedLocation(properties.id);
 
   return `
-    <p class="popup-title">${escapeHTML(properties.speciesName)}</p>
-    <p class="popup-meta">${escapeHTML(properties.observedName)} · ${escapeHTML(properties.observedScientificName)}</p>
-    <dl class="popup-grid">
-      <dt>Place</dt><dd>${escapeHTML(properties.name)}</dd>
-      <dt>ID source</dt><dd>${sourceMarkup}</dd>
-      ${usedParts}
-      ${safetyMarkup}
-      ${harvestEthic}
-      <dt>${escapeHTML(properties.rulesLabel || "Harvesting rules and limits")}</dt><dd>${ruleStatus} ${rulesText} · ${accessSourceMarkup}</dd>
-      <dt>Season</dt><dd>${escapeHTML(properties.season)}</dd>
-    </dl>
-    ${warning}
-    <button
-      class="save-location-button ${saved ? "is-saved" : ""}"
-      type="button"
-      data-save-location="${escapeHTML(properties.id)}"
-      aria-pressed="${String(saved)}"
-    >${saved ? "Saved location" : "Save location"}</button>
+    <div class="pt-card">
+      <div class="spine" style="background:${statusColor}"></div>
+      <button class="close" type="button" aria-label="Close">&times;</button>
+      <div class="pad">
+        <h2>${escapeHTML(properties.speciesName)}</h2>
+        <div class="sci">${sci}</div>
+        <div class="row access"><span class="lab">ACCESS</span><span class="val" style="color:${statusColor}"><span class="ring"></span>${accessLabel}</span></div>
+        <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}</span></div>
+        ${safetyRow}
+        ${usedPartsRow}
+        ${ethicRow}
+        <div class="row"><span class="lab">PLACE</span><span class="val">${escapeHTML(properties.name)}</span></div>
+        <div class="row"><span class="lab">SOURCE</span><span class="val">${sourceVal}</span></div>
+        <div class="season-line"><span class="t">SEASON · ${escapeHTML(properties.season)}</span></div>
+        ${warning}
+        <div class="oinp">OCCURRENCE IS NOT PERMISSION — VERIFY THE PARCEL RULE</div>
+        ${medNote}
+        <button
+          class="save-location-button ${saved ? "is-saved" : ""}"
+          type="button"
+          data-save-location="${escapeHTML(properties.id)}"
+          aria-pressed="${String(saved)}"
+        >${saved ? "Saved location" : "Save location"}</button>
+      </div>
+    </div>
   `;
 }
 
@@ -4253,6 +4303,7 @@ function mapINaturalistObservation(observation) {
     note: `Observed ${observation.observed_on || "date unknown"}; iNaturalist ID ${observation.id}.`,
     confidence: observation.quality_grade || "community",
     idDate: observation.observed_on || "",
+    observer: observation.user?.login || "",
     sourceUrl: observation.uri || `https://www.inaturalist.org/observations/${observation.id}`,
     accessClass: "unknown",
     publicLand: false,

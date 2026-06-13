@@ -60,6 +60,8 @@ Suggested citation: U.S. Geological Survey Gap Analysis Project, 2024, Protected
 
 The historic orchard layer is derived from the NPS Cultural Landscapes historic orchard map. NPS describes the map as informational and not for navigation or resource management. NPS also asks visitors not to take fruit or cuttings from these historic resources without permission, so orchard records in this app are displayed as "permission required."
 
+License: as a work of the U.S. National Park Service (a federal agency), the underlying orchard data is a U.S. Government work in the public domain under 17 U.S.C. § 105. The "permission required" status is an access/stewardship request, not a copyright term — the two are independent. Point cards therefore cite the dataset as "National Park Service · Public domain (U.S. Gov)." *(Owner/7am audit loop: please confirm this public-domain characterization.)*
+
 Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm
 
 ## Mapbox (basemap and geocoding)

@@ -3,6 +3,59 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 3a applied: anchored `.pt-card` popups (launch
+  blocker).** Restructured `getMarkerPopupHTML` from the old `.popup-grid`
+  `<dl>` into the Phase-1 `.pt-card` hierarchy (spine / `h2` / `.sci` /
+  `.row`s / `.season-line` / `.oinp` ethics line). The left spine and the
+  ACCESS ring+label are colored by a new `ACCESS_STATUS_TOKEN` map
+  (accessStatus → `--reg-st-*` suffix: allowed/permit/private/unknown/
+  prohibited; `private-unsourced` folds into `private`), so safety/access
+  color stays fixed-semantics across registers per CLAUDE.md. Closed the
+  launch-blocker "observer + dataset + license" gap: added `LICENSE_BY_SOURCE`
+  (transcribed verbatim from `ATTRIBUTION.md` — iNaturalist CC BY-NC,
+  Falling Fruit CC BY-NC-SA 4.0) surfaced in the SOURCE row, and threaded an
+  `observer` field from `mapINaturalistObservation` (`observation.user?.login`)
+  through the marker feature properties into the card ("obs. <login>"); omitted
+  for Falling Fruit / NPS (no observer concept — not fabricated). The ethics
+  line ("OCCURRENCE IS NOT PERMISSION — VERIFY THE PARCEL RULE") now renders on
+  **every** popup via `.oinp`; medicine mode additionally renders the
+  educational-use disclaimer prominently in a new `.med-note` callout. Rule
+  citations (accessSourceLabel/url) and limits are preserved verbatim.
+
+  **NPS-orchard license gap resolved + flagged.** `ATTRIBUTION.md` had no
+  license for NPS orchards, so the popup first omitted the clause (no
+  fabrication). Resolved it accurately: added a note that NPS Cultural
+  Landscapes data is a U.S. Government work in the public domain (17 U.S.C.
+  § 105) — orthogonal to the "permission required" *access* status — and set
+  `LICENSE_BY_SOURCE["nps-orchard"] = "Public domain (U.S. Gov)"`. Flagged in
+  `ATTRIBUTION.md` for owner / 7am-audit-loop confirmation.
+
+  **Wiring:** popup construction switched to `className: "forage-popup
+  pt-popup"`, `closeButton: false` (the card owns its own `.close`),
+  `maxWidth: "none"` (card sets `width: min(336px,88vw)`), offset 14;
+  `bindPopupActions` now wires the custom `.close` to `popup.remove()` and
+  keeps the unchanged save-location handler. CSS additions (small, no Phase-1
+  shell duplication): `.pt-popup .mapboxgl-popup-content` strips Mapbox's
+  default padding/bg/shadow and hides the tip so the card reads as a clean
+  floating card; `.pt-card .src-link` (accent underline) and `.pt-card
+  .med-note` (warn-bordered callout).
+
+  **Gate — passed.** `node --check app.js` clean. Wrote a 760-assertion
+  harness (`outputs/verify_3a.mjs`, throwaway) exercising the real extracted
+  `getMarkerPopupHTML` over every access-status × dataset-source × mode combo
+  + edge cases (missing url/observer/date, harvest warning, unknown-status
+  fallback) — all pass. Live-verified via Claude-in-Chrome against the owner's
+  running `http://127.0.0.1:4173/` (served the new `?v=phase3a-1` assets):
+  rendered sample cards show observer+dataset+license, ethics line, and the
+  medicine `.med-note`; allowed spine computes `rgb(47,143,70)` in `day` and
+  `rgb(91,224,138)` in `night` (= `--reg-st-allowed` per register), card
+  bg/ink follow `--reg-panel-a`/`--reg-ink`, and the `.pt-popup` content
+  wrapper is transparent with 0 padding. End-to-end on a **real** `mapboxgl.
+  Popup` built through the page's own path: opens, renders `.pt-card`, and the
+  custom close button closes it (`isOpen` true → false). Bumped `index.html`
+  asset tokens to `?v=phase3a-1` (both `app.js` and `styles.css`). Next: 3b
+  (legend) — the old `#controlPanel` species/access lists stay until 3e.
+
 - **2026-06-13 — Phase 3 spec drafted (`docs/design/phase3-floating-ui-spec.md`),
   not yet applied.** Confirmed all Phase 3 data deps (C1-C4) are landed and
   Phase 1's `.pt-card`/`.mini-card`/`.leg-chip`/`.rail-seg`/`.floating` CSS
