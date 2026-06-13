@@ -131,91 +131,10 @@ button {
 }
 
 .app-shell {
-  display: grid;
-  grid-template-columns: minmax(320px, 420px) 1fr;
+  position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-
-.app-shell.panel-collapsed {
-  grid-template-columns: 68px 1fr;
-}
-
-.panel {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-height: 0;
-  max-height: 100vh;
-  overflow-y: auto;
-  padding: 28px;
-  background: var(--panel);
-  border-right: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  z-index: 500;
-}
-
-.panel-topline {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 14px;
-}
-
-.panel-grip {
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: 42px;
-  min-height: 42px;
-  padding: 0 4px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-  color: var(--leaf-dark);
-  font-weight: 850;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.panel-grip:hover,
-.panel-grip:focus-visible {
-  border-color: var(--leaf-dark);
-  outline: none;
-}
-
-.panel-grip-bar {
-  display: block;
-  width: 24px;
-  height: 3px;
-  border-radius: 999px;
-  background: #aebca8;
-}
-
-.panel-grip-label {
-  font-size: 10px;
-  line-height: 1;
-}
-
-.panel.is-desktop-collapsed {
-  gap: 0;
-  min-width: 0;
-  overflow: hidden;
-  padding: 12px;
-}
-
-.panel.is-desktop-collapsed .brand-block,
-.panel.is-desktop-collapsed .panel-content {
-  display: none;
-}
-
-.panel.is-desktop-collapsed .panel-topline {
-  display: flex;
-  justify-content: center;
 }
 
 .section-toggle {
@@ -1384,47 +1303,12 @@ body.modal-open .app-shell {
 }
 
 @media (max-width: 860px) {
-  :root {
-    --mobile-panel-collapsed: 92px;
-    --panel-height: var(--mobile-panel-collapsed);
-  }
-
   .app-shell {
-    display: block;
-    position: relative;
     height: 100vh;
     height: 100dvh;
     min-height: 100vh;
     min-height: 100dvh;
     overflow: hidden;
-  }
-
-  .panel {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    z-index: 700;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    height: min(var(--panel-height), calc(100dvh - 20px));
-    max-height: calc(100dvh - 20px);
-    padding: 14px;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    box-shadow: 0 18px 60px rgba(35, 44, 30, 0.24);
-    transition: height 160ms ease, transform 180ms ease;
-    touch-action: none;
-  }
-
-  .panel.is-collapsed {
-    height: var(--mobile-panel-collapsed);
-  }
-
-  .panel::before {
-    content: none;
   }
 
   .brand-block {
@@ -1454,7 +1338,7 @@ body.modal-open .app-shell {
 
   .map-legend {
     right: 72px;
-    bottom: calc(var(--mobile-panel-collapsed) + 44px);
+    bottom: 112px;
     width: min(198px, calc(100vw - 24px));
     max-height: 42vh;
     overflow-y: auto;
@@ -1464,68 +1348,6 @@ body.modal-open .app-shell {
 
   .legend-grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .panel-topline {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(82px, auto);
-    align-items: center;
-    flex: 0 0 auto;
-    gap: 12px;
-    min-height: 64px;
-  }
-
-  .panel-grip {
-    display: flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    grid-column: 2;
-    justify-self: center;
-    min-height: 40px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--leaf-dark);
-    font-weight: 850;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    touch-action: none;
-  }
-
-  .panel-grip-bar {
-    display: block;
-    width: 46px;
-    height: 5px;
-    border-radius: 999px;
-    background: #aebca8;
-  }
-
-  .panel-grip-label {
-    font-size: 13px;
-  }
-
-  .panel-topline .brand-block {
-    grid-column: 1;
-  }
-
-  .panel-content {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding-bottom: 12px;
-  }
-
-  .panel.is-collapsed .panel-content {
-    display: none;
-  }
-
-  .panel.is-resizing {
-    transition: none;
   }
 
   .control-group {
@@ -1573,14 +1395,6 @@ body.modal-open .app-shell {
     height: 92px;
   }
 
-  .species-list {
-    gap: 6px;
-  }
-
-  .species-list label {
-    padding: 8px;
-  }
-
   .map-area {
     position: fixed;
     inset: 0;
@@ -1591,7 +1405,7 @@ body.modal-open .app-shell {
   }
 
   .mapboxgl-ctrl-bottom-right {
-    bottom: calc(var(--mobile-panel-collapsed) + 18px);
+    bottom: 18px;
     right: 12px;
   }
 

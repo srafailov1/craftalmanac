@@ -1299,7 +1299,6 @@ map.addControl(new mapboxgl.GeolocateControl({
 map.scrollZoom.setWheelZoomRate?.(1 / 280);
 map.scrollZoom.setZoomRate?.(1 / 60);
 window.addEventListener("resize", () => {
-  syncPanelGripLabel();
   map.resize();
 });
 
@@ -2038,9 +2037,6 @@ const dateInput = document.querySelector("#dateInput");
 const seasonDateLabel = document.querySelector("#seasonDateLabel");
 const seasonName = document.querySelector("#seasonName");
 const seasonHistogram = document.querySelector("#seasonHistogram");
-const mapLede = document.querySelector("#mapLede");
-const mapSafetyNote = document.querySelector("#mapSafetyNote");
-const speciesSectionTitle = document.querySelector("#speciesSectionTitle");
 const categoryList = document.querySelector("#categoryList");
 const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
@@ -2053,18 +2049,9 @@ const locationSearchSuggestions = document.querySelector("#locationSearchSuggest
 const locationSearchStatus = document.querySelector("#locationSearchStatus");
 const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
-const mapModeButtons = [...document.querySelectorAll("[data-map-mode]")];
 let categoryInputs = [];
 const todayButton = document.querySelector("#todayButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
-const appShell = document.querySelector(".app-shell");
-const controlPanel = document.querySelector("#controlPanel");
-const panelGrip = document.querySelector("#panelGrip");
-const sectionToggles = [...document.querySelectorAll(".section-toggle")];
-const MOBILE_PANEL_MIN_HEIGHT = 92;
-const MOBILE_PANEL_DEFAULT_HEIGHT = 420;
-const MOBILE_PANEL_MARGIN = 20;
-let panelDragState = null;
 
 function getDayOfYear(date) {
   // UTC math avoids daylight-saving off-by-one errors in local-time subtraction.
@@ -2192,17 +2179,8 @@ function syncActiveCatalog() {
 
 function renderModeChrome() {
   const config = getActiveMapConfig();
-  mapLede.textContent = config.lede;
-  mapSafetyNote.textContent = config.safetyNote || "";
-  mapSafetyNote.hidden = !config.safetyNote;
-  if (speciesSectionTitle) speciesSectionTitle.textContent = config.speciesHeading;
   const dataNotesEl = document.querySelector(".attribution-block .section-body p");
   if (dataNotesEl) dataNotesEl.textContent = config.dataNotes;
-  mapModeButtons.forEach((button) => {
-    const isActive = button.dataset.mapMode === state.activeMap;
-    button.classList.toggle("active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
   renderMapLegend();
 }
 
@@ -2267,7 +2245,7 @@ function initWelcomeModal() {
   const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
   if (hasSeenModal) return;
 
-  const focusAfterClose = panelGrip || document.querySelector(".mapboxgl-ctrl-zoom-in") || document.body;
+  const focusAfterClose = document.querySelector(".mapboxgl-ctrl-zoom-in") || document.body;
   welcomeModal.hidden = false;
   document.body.classList.add("modal-open");
   window.setTimeout(() => welcomeModalButton.focus(), 0);
@@ -2718,7 +2696,6 @@ function initControls() {
   initSheets();
   initConditions();
   initLocationSearch();
-  syncPanelGripLabel();
 
   daySlider.addEventListener("input", () => {
     state.selectedDay = Number(daySlider.value);
@@ -2734,23 +2711,7 @@ function initControls() {
     render();
   });
 
-  mapModeButtons.forEach((button) => {
-    button.addEventListener("click", () => setMapMode(button.dataset.mapMode));
-  });
-
-  panelGrip.addEventListener("pointerdown", handlePanelGripPointerDown);
   initWelcomeModal();
-
-  sectionToggles.forEach((toggle) => {
-    toggle.addEventListener("click", () => {
-      const section = toggle.closest(".mobile-section");
-      if (!section) return;
-      const shouldOpen = !section.classList.contains("is-open");
-      section.classList.toggle("is-open", shouldOpen);
-      toggle.setAttribute("aria-expanded", String(shouldOpen));
-      requestAnimationFrame(() => map.resize());
-    });
-  });
 
   todayButton.addEventListener("click", () => {
     state.selectedDay = getDayOfYear(new Date());
@@ -2799,122 +2760,6 @@ function initControls() {
     scheduleDataLoad();
     schedulePublicLandLoad();
   });
-}
-
-function setPanelCollapsed(collapsed) {
-  controlPanel.classList.toggle("is-collapsed", collapsed);
-  panelGrip.setAttribute("aria-expanded", String(!collapsed));
-  if (collapsed) {
-    setPanelHeight(MOBILE_PANEL_MIN_HEIGHT);
-  } else {
-    setPanelHeight(Math.max(MOBILE_PANEL_DEFAULT_HEIGHT, MOBILE_PANEL_MIN_HEIGHT));
-  }
-  requestAnimationFrame(() => map.resize());
-}
-
-function handlePanelGripPointerDown(event) {
-  if (!isMobilePanel()) {
-    event.preventDefault();
-    setDesktopPanelCollapsed(!controlPanel.classList.contains("is-desktop-collapsed"));
-    return;
-  }
-  event.preventDefault();
-  const startHeight = controlPanel.getBoundingClientRect().height;
-  panelDragState = {
-    pointerId: event.pointerId,
-    startY: event.clientY,
-    startHeight,
-    moved: false
-  };
-  controlPanel.classList.add("is-resizing");
-  panelGrip.setPointerCapture(event.pointerId);
-  panelGrip.addEventListener("pointermove", handlePanelGripPointerMove);
-  panelGrip.addEventListener("pointerup", handlePanelGripPointerUp);
-  panelGrip.addEventListener("pointercancel", handlePanelGripPointerUp);
-}
-
-function setDesktopPanelCollapsed(collapsed) {
-  controlPanel.classList.toggle("is-desktop-collapsed", collapsed);
-  appShell?.classList.toggle("panel-collapsed", collapsed);
-  panelGrip.setAttribute("aria-expanded", String(!collapsed));
-  syncPanelGripLabel();
-  resizeMapAfterLayoutChange();
-}
-
-function resizeMapAfterLayoutChange() {
-  if (!state.mapReady) return;
-  const view = {
-    center: map.getCenter(),
-    zoom: map.getZoom(),
-    bearing: map.getBearing(),
-    pitch: map.getPitch()
-  };
-  const resize = () => {
-    map.resize();
-    map.jumpTo(view);
-  };
-  requestAnimationFrame(resize);
-}
-
-function syncPanelGripLabel() {
-  const label = panelGrip?.querySelector(".panel-grip-label");
-  if (!label) return;
-  if (isMobilePanel()) {
-    label.textContent = "Menu";
-    return;
-  }
-  label.textContent = controlPanel.classList.contains("is-desktop-collapsed") ? "Menu" : "Map";
-}
-
-function handlePanelGripPointerMove(event) {
-  if (!panelDragState || event.pointerId !== panelDragState.pointerId) return;
-  const delta = panelDragState.startY - event.clientY;
-  if (Math.abs(delta) > 6) panelDragState.moved = true;
-  const nextHeight = panelDragState.startHeight + delta;
-  setPanelHeight(nextHeight);
-}
-
-function handlePanelGripPointerUp(event) {
-  if (!panelDragState || event.pointerId !== panelDragState.pointerId) return;
-  const wasTap = !panelDragState.moved;
-  panelGrip.releasePointerCapture(event.pointerId);
-  panelGrip.removeEventListener("pointermove", handlePanelGripPointerMove);
-  panelGrip.removeEventListener("pointerup", handlePanelGripPointerUp);
-  panelGrip.removeEventListener("pointercancel", handlePanelGripPointerUp);
-  controlPanel.classList.remove("is-resizing");
-  panelDragState = null;
-
-  if (wasTap) {
-    const isCollapsed = controlPanel.classList.contains("is-collapsed");
-    setPanelCollapsed(!isCollapsed);
-    return;
-  }
-
-  const currentHeight = controlPanel.getBoundingClientRect().height;
-  if (currentHeight <= MOBILE_PANEL_MIN_HEIGHT + 20) {
-    setPanelCollapsed(true);
-  } else {
-    controlPanel.classList.remove("is-collapsed");
-    panelGrip.setAttribute("aria-expanded", "true");
-    setPanelHeight(currentHeight);
-  }
-}
-
-function setPanelHeight(height) {
-  const maxHeight = getPanelMaxHeight();
-  const nextHeight = Math.min(Math.max(height, MOBILE_PANEL_MIN_HEIGHT), maxHeight);
-  controlPanel.style.setProperty("--panel-height", `${nextHeight}px`);
-  controlPanel.classList.toggle("is-collapsed", nextHeight <= MOBILE_PANEL_MIN_HEIGHT + 2);
-  panelGrip.setAttribute("aria-expanded", String(nextHeight > MOBILE_PANEL_MIN_HEIGHT + 2));
-  requestAnimationFrame(() => map.resize());
-}
-
-function getPanelMaxHeight() {
-  return Math.max(MOBILE_PANEL_MIN_HEIGHT, window.innerHeight - MOBILE_PANEL_MARGIN);
-}
-
-function isMobilePanel() {
-  return window.matchMedia("(max-width: 860px)").matches;
 }
 
 function getSpecies(speciesId) {
@@ -5917,6 +5762,7 @@ function pointInRing(point, ring) {
 }
 
 function setDataStatus(message) {
+  if (!dataStatus) return;
   dataStatus.textContent = message;
 }
 

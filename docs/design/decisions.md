@@ -3,6 +3,32 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Sidebar retirement (Step 2): `#controlPanel` fully retired.**
+  Deleted the original sidebar shell from `index.html`, including the panel
+  brand block, old mode tabs, lede/safety copy, panel grip, `#panelContent`,
+  and `#dataStatus`. Removed the associated JS refs/listeners/functions
+  (`mapLede`, `mapSafetyNote`, `mapModeButtons`, `panelGrip`,
+  `syncPanelGripLabel`, panel resize/collapse handlers) and guarded
+  `setDataStatus()` so missing status markup is inert. Changed `.app-shell`
+  from a two-column layout to a full-viewport map surface and removed the
+  panel/drawer CSS, including mobile offsets based on the old collapsed panel.
+  Cache tokens are now `app.js?v=sidebar-retired-1` and
+  `styles.css?v=sidebar-retired-1`.
+
+  **Gate — passed with one environment note.** `node --check app.js` exited 0.
+  Greps for `#controlPanel`, `#panelContent`, `.panel`, `panelGrip`, and
+  `syncPanelGripLabel` across `app.js`/`styles.css`/`index.html` returned no
+  matches. Live foreground browser: no `#controlPanel` in the DOM; masthead,
+  legend, season slider, search bar, and conditions rail render flush-left on
+  the full map; Berries toggles off/on; Plants-sheet Apples narrows the legend
+  to partial Fruit only; Maps-sheet Ink resets all Ink categories on; the
+  season slider updates to July 19; the Sun rail opens its panel; desktop and
+  mobile-size reloads log no current-page warnings/errors. Search input accepts
+  text and updates status without errors, but this local browser returned no
+  Mapbox suggestions for Boston/Providence during verification. Left only
+  non-panel legacy species-list/favorite CSS for a later dead-code cleanup;
+  there are no live DOM or JS references to the retired sidebar.
+
 - **2026-06-13 — Sidebar retirement (Step 1): species selection moved to state.**
   The original species checkbox list is no longer the source of truth. Added
   `state.selectedSpecies`, initialized/reset from the active catalog in

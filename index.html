@@ -6,35 +6,10 @@
     <title>Craft Almanac · United States Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=floating-season-1">
+    <link rel="stylesheet" href="./styles.css?v=sidebar-retired-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
-      <aside class="panel is-collapsed" aria-label="Map controls" id="controlPanel">
-        <div class="panel-topline">
-          <div class="brand-block">
-            <h1>Craft Almanac</h1>
-            <p class="site-slogan">Seasonal maps for making with place.</p>
-            <nav class="map-tabs" aria-label="Craft Almanac map types">
-              <button type="button" data-map-mode="ink" aria-pressed="false">Ink</button>
-              <button type="button" data-map-mode="objects" disabled>Objects</button>
-              <button class="active" type="button" data-map-mode="food" aria-pressed="true">Food</button>
-              <button type="button" data-map-mode="medicine" aria-pressed="false">Herbalism</button>
-            </nav>
-            <p class="lede" id="mapLede">Track edible plants and mushrooms across the contiguous United States by place, date, and permissions. The species list focuses on abundant, resilient edibles suited to responsible, low-impact harvesting.</p>
-            <p class="lede safety-lede" id="mapSafetyNote" hidden></p>
-          </div>
-          <button class="panel-grip" id="panelGrip" type="button" aria-expanded="false" aria-controls="controlPanel" aria-label="Resize filters menu">
-            <span class="panel-grip-bar" aria-hidden="true"></span>
-            <span class="panel-grip-label">Menu</span>
-          </button>
-        </div>
-
-        <div class="panel-content" id="panelContent">
-          <p class="fine-print" id="dataStatus">Loading current map data...</p>
-        </div>
-      </aside>
-
       <section class="map-area" aria-label="Craft Almanac map">
         <div id="masthead" class="floating">
           <span class="wordmark serif">Craft Almanac</span>
@@ -99,6 +74,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=sidebar-state-1"></script>
+    <script src="./app.js?v=sidebar-retired-1"></script>
   </body>
 </html>
