@@ -26,9 +26,13 @@ Codex queue:
    covers medicine mode end to end — step 2 bakes `{food, ink, medicine}`
    statuses into the cell raster and step 3 filters the iNat-only medicine
    overview through it.
-2. Mapbox Studio style implementation — BLOCKED until the `design/relaunch`
-   Round 2 direction is chosen; Claude provides the style spec from Round 2.
-   Do not start before the spec lands.
+2. **Mapbox Standard style — UNBLOCKED.** Spec is `docs/design/standard-style-spec.md`
+   (2026-06-13). Codex's part is the C4 audit (spec §4): a written note
+   `docs/design/notes-codex-c4.md` on the three `FALLING_FRUIT_AGGREGATE_*`
+   layers (emissive-strength property support in the pinned Mapbox GL JS
+   3.23.1, color consistency across `lightPreset`s, zoom-handoff bridge
+   interaction). No `app.js`/`styles.css`/`index.html` edits — Claude applies
+   the actual migration (map init is Claude-only per `work-order-redesign.md`).
 3. **Link-checker reference-extraction spec (unblocks Qwen #7).** Author the
    spec Qwen needs to build `scripts/check_links.mjs`. Define exactly what
    counts as a local reference in `index.html`: which attributes (`href`,
