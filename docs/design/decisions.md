@@ -3,6 +3,40 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 4e applied: RainViewer radar + flush pulses. Phase 4
+  complete.** **Radar:** `loadRadar` fetches RainViewer `weather-maps.json`,
+  takes the latest past frame, and adds a raster layer (slot `top`, maxzoom 6)
+  inserted *below* the Falling-Fruit aggregate circles so counts/points stay
+  readable; `updateRadarZoom` shows it at `raster-opacity` 0.55 below zoom 7.5
+  and 0 at/above — a clean handoff with the wind canvas (which owns ≥ 7.5).
+  Wired into the map `load` handler and the zoom handler. **Flush pulses:**
+  `refreshFlush` adds pulsing DOM markers on visible mushroom records when the
+  past-72h rainfall meets that species' C3 threshold, in food mode. C3
+  (`data/flush-thresholds.json`) currently lists only `morel` (25 mm,
+  `ownerReview`), so "has a threshold" is the whitelist gate; `.flush-pulse` is
+  reduced-motion aware. Called from `render()` and the 60 s tick. Both fail
+  safe — radar is skipped on fetch error; pulses clear whenever weather is
+  absent, mode isn't food, or the threshold isn't met.
+
+  **Gate — passed.** `node --check` clean. Flush verified live
+  (`?v=phase4e-1`): a synthetic morel record at past-72h 30 mm (≥ 25) in food
+  mode yields exactly 1 pulse; 10 mm → 0; ink mode → 0; C3 has only `morel`.
+  Radar verified in `outputs/verify_4e.mjs` (10 checks): source+raster layer
+  added with the latest-frame tile URL, inserted below the aggregate circles,
+  RainViewer attribution present, opacity handoff (0.55 < 7.5, 0 ≥ 7.5), and
+  graceful failure (fetch reject → no throw, no layer; empty past → no layer).
+  Note: the map's `load` event doesn't fire in the backgrounded automated tab
+  (WebGL render throttling), so `mapReady` stays false there and the radar's
+  *visual* render needs a foreground tab — the user verified the live site in
+  production. Bumped both `index.html` tokens to `?v=phase4e-1`.
+
+  **Phase 4 conditions complete (4a–4e):** rail (sun/moon/rain/wind/tide),
+  detail panels, wind canvas, tide, radar, flush pulses. The
+  graceful-degradation gate holds across the layer — every fetch is try/caught
+  and additive; with all of Open-Meteo / CO-OPS / RainViewer blocked the rail
+  falls back to client-only sun/moon and the map is unaffected. Remaining
+  work-order phases: Phase 5 mobile, Phase 6 hardening, Phase 7 content/cutover.
+
 - **2026-06-13 — Phase 4d applied: tide (NOAA CO-OPS via the C1 index).**
   Tide now follows the forecast location (owner decision #3): `loadTideStations`
   loads the 3,017-station C1 index (`data/tide-stations.json`), `nearestTideStation`

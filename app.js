@@ -1737,9 +1737,11 @@ function initConditions() {
   renderConditionsRail();
   loadConditions();
   loadTide();
+  loadFlushThresholds();
   setInterval(() => {
     renderConditionsRail();
     if (openConditionSeg) renderConditionPanel();
+    refreshFlush();
   }, 60e3);
   setInterval(() => loadConditions(), CONDITIONS_TTL_MS);
   setInterval(() => loadTide(), TIDE_TTL_MS);
@@ -1963,6 +1965,70 @@ function svgTideCurve(events, w = 320, h = 122) {
     <text x="${nowX.toFixed(1)}" y="8" font-family="monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">NOW</text>
     ${marks}
   </svg>`;
+}
+
+// --- Phase 4e: RainViewer radar (low zoom) + rain-fed flush pulses ----------
+// Radar is a raster precipitation layer shown below ~7.5 zoom (the wind canvas
+// owns higher zooms — a clean handoff). Flush pulses mark whitelisted fungal
+// points when the past-72h rainfall meets that species' C3 threshold, in food
+// mode, on currently-visible (selected) records. C3 only lists whitelisted
+// fungi, so "has a threshold" is the whitelist gate. Both fail safe: radar is
+// an enhancement that's skipped on error; pulses clear when conditions aren't met.
+let flushThresholds = null;
+let flushMarkers = [];
+let radarAdded = false;
+
+function loadFlushThresholds() {
+  if (flushThresholds) return Promise.resolve(flushThresholds);
+  return fetch("./data/flush-thresholds.json")
+    .then((r) => { if (!r.ok) throw new Error("flush-thresholds " + r.status); return r.json(); })
+    .then((data) => { flushThresholds = data; return data; })
+    .catch(() => flushThresholds);
+}
+
+function loadRadar() {
+  if (radarAdded || !state.mapReady || map.getSource("radar")) return;
+  fetch("https://api.rainviewer.com/public/weather-maps.json")
+    .then((r) => { if (!r.ok) throw new Error("rainviewer " + r.status); return r.json(); })
+    .then((j) => {
+      const past = (j.radar && j.radar.past) || [];
+      if (!past.length || map.getSource("radar")) return;
+      const tiles = j.host + past[past.length - 1].path + "/256/{z}/{x}/{y}/2/1_1.png";
+      map.addSource("radar", { type: "raster", tiles: [tiles], tileSize: 256, maxzoom: 6, attribution: "Radar © RainViewer" });
+      const beforeId = map.getLayer(FALLING_FRUIT_AGGREGATE_LAYER_ID) ? FALLING_FRUIT_AGGREGATE_LAYER_ID : undefined;
+      map.addLayer({
+        id: "radar", type: "raster", source: "radar", slot: "top",
+        paint: { "raster-opacity": 0, "raster-opacity-transition": { duration: 600 } }
+      }, beforeId);
+      radarAdded = true;
+      updateRadarZoom();
+    })
+    .catch(() => { /* radar is an enhancement; the map works without it */ });
+}
+
+function updateRadarZoom() {
+  if (!state.mapReady || !map.getLayer("radar")) return;
+  const low = map.getZoom() < WIND_CANVAS_MIN_ZOOM;
+  map.setPaintProperty("radar", "raster-opacity", low ? 0.55 : 0);
+}
+
+function refreshFlush() {
+  flushMarkers.forEach((m) => m.remove());
+  flushMarkers = [];
+  if (!state.mapReady || !state.weather || state.activeMap !== "food" || !flushThresholds) return;
+  const past72 = state.weather.past72;
+  getVisibleRecords().forEach((record) => {
+    const species = getSpecies(record.speciesId);
+    if (!species || species.category !== "mushroom") return;
+    const threshold = flushThresholds[species.id];
+    if (!threshold || past72 < threshold.thresholdMm72h) return;
+    const lat = Number(record.lat), lng = Number(record.lng);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    const el = document.createElement("div");
+    el.className = "flush-pulse";
+    el.title = `${species.commonName}: rain-fed flush likely (past 72 h ${past72} mm ≥ ${threshold.thresholdMm72h} mm)`;
+    flushMarkers.push(new mapboxgl.Marker({ element: el }).setLngLat([lng, lat]).addTo(map));
+  });
 }
 
 const dataStatus = document.querySelector("#dataStatus");
@@ -2882,6 +2948,7 @@ function initControls() {
     }
     state.wasBelowPointZoom = belowPointZoom;
     updateLayerHandoff();
+    updateRadarZoom();
   });
 
   map.on("moveend", () => {
@@ -3131,6 +3198,7 @@ function render() {
   renderHistogram();
   renderMarkers();
   updateFallingFruitAggregates();
+  refreshFlush();
   if (state.mapReady) {
     scheduleINaturalistAggregateLoad();
     scheduleDataLoad();
@@ -6087,6 +6155,7 @@ map.on("load", () => {
   syncLightPreset(state.register);
   setINaturalistAggregateReady(false);
   initMapLayers();
+  loadRadar();
   loadStateBoundaries();
   // The raster also backs provisional record-level rules at point zooms, so
   // load it at startup rather than only via the overview aggregate path.

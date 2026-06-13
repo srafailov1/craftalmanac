@@ -2109,6 +2109,34 @@ body[data-register="night"] {
   z-index: 3;
 }
 
+/* ---- rain-fed flush pulse (Phase 4e) ---- */
+
+.flush-pulse {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  position: relative;
+  pointer-events: none;
+}
+
+.flush-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--reg-accent);
+  animation: flush-pulse 2.4s ease-out infinite;
+}
+
+@keyframes flush-pulse {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flush-pulse::after { animation: none; opacity: 0.6; }
+}
+
 #rail-panel .fx-toggle {
   display: flex;
   gap: 8px;
