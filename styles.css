@@ -896,13 +896,16 @@ h2 {
 
 .map-legend {
   position: absolute;
-  right: 72px;
-  bottom: 44px;
+  left: 14px;
+  bottom: 14px;
   z-index: 5;
-  display: grid;
-  gap: 9px;
-  width: min(236px, calc(100vw - 48px));
-  padding: 11px 13px;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: max-content;
+  max-width: min(440px, calc(100vw - 28px));
+  padding: 10px 14px 8px;
   border: 1px solid var(--reg-hair);
   border-radius: 10px;
   background: var(--reg-panel-a);
@@ -914,24 +917,51 @@ h2 {
   transition: background 1.2s ease, border-color 1.2s ease, color 1.2s ease;
 }
 
-.legend-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
+/* Collapsed by default; expands UP on hover/focus, like the prototype legend. */
+.legend-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.28s ease;
 }
 
-.legend-head strong {
-  font-size: 11px;
-  letter-spacing: 0.16em;
+.map-legend:hover .legend-body,
+.map-legend:focus-within .legend-body {
+  max-height: 240px;
+  opacity: 1;
+}
+
+.legend-cols {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.legend-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.legend-title {
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--reg-ink);
   font-family: var(--font-mono);
+  margin-top: 7px;
+}
+
+.legend-title strong {
+  font-weight: 700;
 }
 
 .legend-active {
   font-size: 10px;
   letter-spacing: 0.1em;
-  color: var(--reg-accent);
+  color: var(--reg-sub);
   font-family: var(--font-mono);
+  margin-top: 5px;
 }
 
 .legend-k {
@@ -939,13 +969,37 @@ h2 {
   letter-spacing: 0.12em;
   color: var(--reg-sub);
   font-family: var(--font-mono);
+  margin-bottom: 6px;
 }
 
 .legend-chips {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px 12px;
-  margin-top: 5px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.legend-only {
+  margin-top: 7px;
+  align-self: flex-start;
+  border: 1px solid var(--reg-hair);
+  background: none;
+  cursor: pointer;
+  color: var(--reg-sub);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.legend-only:hover {
+  color: var(--reg-ink);
+}
+
+.legend-only.active {
+  color: var(--reg-ink);
+  border-color: var(--reg-accent);
 }
 
 /* Category swatch mirrors the point FILL: a filled square (the point's category

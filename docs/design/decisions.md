@@ -3,6 +3,21 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Parity pass 2: legend layout (prototype model).** Rebuilt
+  `#mapLegend` to the prototype's `#legend`: moved bottom-right → **bottom-left**;
+  it now **collapses to a title bar** (`LEGEND: PERMISSIONS AND POINTS` +
+  `ACTIVE MAP: <mode>`) and **expands UP on hover/focus** into a **two-column**
+  layout — ACCESS (rings) | CATEGORIES (filled squares), each a vertical chip
+  list — and added the **ONLY ALLOWED** quick filter (`setOnlyAllowed()` toggles
+  allowed-only ↔ the default status set). Used `:focus-within` as well as
+  `:hover` so keyboard users can expand it (the prototype was hover-only).
+  **Gate:** `node --check` clean. Verified live at desktop width (resized the
+  preview to 1280 — the default preview viewport is ≤720 and hits the mobile
+  rules): legend anchored 14px/14px bottom-left, two columns render, and ONLY
+  ALLOWED toggles allowed-only ↔ defaults and reflects its active state. Tokens
+  → `?v=parity-legend-1`. (Mobile fold-into-season-card is a later pass; the
+  ≤720 legend rule is unchanged for now.)
+
 - **2026-06-13 — Prototype parity audit + parity pass 1 (data points + legend + color).**
   Owner flagged that the relaunch is functional but diverges from the
   owner-approved prototype (`prototype/index.html`) in layout/features. Ran a

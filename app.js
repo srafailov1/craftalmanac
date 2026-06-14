@@ -2295,6 +2295,14 @@ function toggleAccessStatus(statusId) {
   }
 }
 
+// Legend "ONLY ALLOWED" quick filter (prototype #only-allowed): toggles between
+// allowed-only and the full default status set.
+function setOnlyAllowed() {
+  const set = getSelectedAccessStatuses();
+  const onlyAllowed = set.size === 1 && set.has("allowed");
+  state.selectedAccessStatuses = new Set(onlyAllowed ? getDefaultAccessStatuses() : ["allowed"]);
+}
+
 function isAccessFilterActive(selectedStatuses = getSelectedAccessStatuses()) {
   const defaults = getDefaultAccessStatuses();
   return selectedStatuses.size !== defaults.length || defaults.some((id) => !selectedStatuses.has(id));
@@ -2353,18 +2361,28 @@ function renderMapLegend() {
   }).join("");
 
   const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
-  const catHeading = config.speciesHeading.replace(/\s*&\s*(Species|Materials)/i, "");
+  const catHeading = config.speciesHeading.replace(/\s*&\s*(Species|Materials)/i, "").toUpperCase();
+  const selected = getSelectedAccessStatuses();
+  const onlyAllowedActive = selected.size === 1 && selected.has("allowed");
 
+  // Prototype layout: a collapsed title bar (bottom-left) that expands UP on
+  // hover/focus into two columns — ACCESS (rings) | CATEGORIES (filled squares).
   mapLegend.innerHTML = `
-    <div class="legend-head"><strong>LEGEND</strong><span class="legend-active">${escapeHTML(modeName)}</span></div>
-    <div class="legend-section">
-      <span class="legend-k">Access · tap to filter</span>
-      <div class="legend-chips">${accessChips}</div>
+    <div class="legend-body">
+      <div class="legend-cols">
+        <div class="legend-col">
+          <span class="legend-k">ACCESS</span>
+          <div class="legend-chips">${accessChips}</div>
+          <button type="button" class="legend-only${onlyAllowedActive ? " active" : ""}" data-legend-only="1" aria-pressed="${String(onlyAllowedActive)}">ONLY ALLOWED</button>
+        </div>
+        <div class="legend-col">
+          <span class="legend-k">${escapeHTML(catHeading)}</span>
+          <div class="legend-chips">${categoryChips}</div>
+        </div>
+      </div>
     </div>
-    <div class="legend-section">
-      <span class="legend-k">${escapeHTML(catHeading)}</span>
-      <div class="legend-chips">${categoryChips}</div>
-    </div>
+    <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
+    <div class="legend-active">ACTIVE MAP: ${escapeHTML(modeName)}</div>
   `;
 }
 
@@ -2381,6 +2399,11 @@ function getCategorySelectionState(categoryId) {
 function initMapLegend() {
   if (!mapLegend) return;
   mapLegend.addEventListener("click", (event) => {
+    if (event.target.closest("[data-legend-only]")) {
+      setOnlyAllowed();
+      render();
+      return;
+    }
     const accessChip = event.target.closest("[data-leg-access]");
     if (accessChip) {
       toggleAccessStatus(accessChip.dataset.legAccess);
