@@ -1546,9 +1546,9 @@ function svgMoonAxis(mp, w = 300) {
     <circle cx="${x0}" cy="${y}" r="11" fill="var(--reg-panel)" stroke="var(--reg-sub)" stroke-width="1.6"/>
     <circle cx="${x1}" cy="${y}" r="11" fill="var(--reg-ink)" opacity="0.85" stroke="var(--reg-sub)" stroke-width="1.2"/>
     <circle cx="${x.toFixed(1)}" cy="${y}" r="8" fill="var(--subject, var(--reg-accent))" stroke="var(--reg-panel)" stroke-width="2"/>
-    <text x="${x0}" y="${y + 26}" font-family="monospace" font-size="10.5" fill="var(--reg-sub)" text-anchor="middle">NEW</text>
-    <text x="${x1}" y="${y + 26}" font-family="monospace" font-size="10.5" fill="var(--reg-sub)" text-anchor="middle">FULL</text>
-    <text x="${x.toFixed(1)}" y="${y - 17}" font-family="monospace" font-size="11.5" fill="var(--reg-ink)" text-anchor="middle">${Math.round(mp.illum * 100)}% ${mp.waxing ? "→" : "←"}</text>
+    <text x="${x0}" y="${y + 26}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="10.5" fill="var(--reg-sub)" text-anchor="middle">NEW</text>
+    <text x="${x1}" y="${y + 26}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="10.5" fill="var(--reg-sub)" text-anchor="middle">FULL</text>
+    <text x="${x.toFixed(1)}" y="${y - 17}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="11.5" fill="var(--reg-ink)" text-anchor="middle">${Math.round(mp.illum * 100)}% ${mp.waxing ? "→" : "←"}</text>
   </svg>`;
 }
 
@@ -1561,7 +1561,7 @@ function svgCompass(dir, speed, r = 72) {
   const ticks = dirs.map((t, i) => {
     const ta = i * Math.PI / 4;
     const major = i % 2 === 0;
-    return `<text x="${(c + Math.sin(ta) * (r + 2)).toFixed(1)}" y="${(c - Math.cos(ta) * (r + 2) + 3.5).toFixed(1)}" font-family="monospace" font-size="${major ? 11 : 9.5}" fill="var(--reg-${major ? "ink" : "sub"})" text-anchor="middle">${t}</text>`;
+    return `<text x="${(c + Math.sin(ta) * (r + 2)).toFixed(1)}" y="${(c - Math.cos(ta) * (r + 2) + 3.5).toFixed(1)}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="${major ? 11 : 9.5}" fill="var(--reg-${major ? "ink" : "sub"})" text-anchor="middle">${t}</text>`;
   }).join("");
   let ring = "";
   for (let i = 0; i < 36; i++) {
@@ -1576,9 +1576,9 @@ function svgCompass(dir, speed, r = 72) {
     <line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--subject, var(--reg-accent))" stroke-width="4" stroke-linecap="round"/>
     <path d="M ${x2.toFixed(1)} ${y2.toFixed(1)} L ${(x2 - Math.sin(a - 0.42) * 14).toFixed(1)} ${(y2 + Math.cos(a - 0.42) * 14).toFixed(1)} L ${(x2 - Math.sin(a + 0.42) * 14).toFixed(1)} ${(y2 + Math.cos(a + 0.42) * 14).toFixed(1)} Z" fill="var(--subject, var(--reg-accent))"/>
     <circle cx="${c}" cy="${c}" r="22" fill="var(--reg-panel)" stroke="var(--reg-hair)"/>
-    <text x="${c}" y="${c - 2}" font-family="monospace" font-size="15" fill="var(--reg-ink)" text-anchor="middle">${Math.round(speed)}</text>
-    <text x="${c}" y="${c + 8}" font-family="monospace" font-size="8" fill="var(--reg-sub)" text-anchor="middle">KM/H</text>
-    <text x="${c}" y="${c + 17}" font-family="monospace" font-size="8" fill="var(--reg-ink)" text-anchor="middle">${tier.toUpperCase()}</text>
+    <text x="${c}" y="${c - 2}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="15" fill="var(--reg-ink)" text-anchor="middle">${Math.round(speed)}</text>
+    <text x="${c}" y="${c + 8}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="8" fill="var(--reg-sub)" text-anchor="middle">KM/H</text>
+    <text x="${c}" y="${c + 17}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="8" fill="var(--reg-ink)" text-anchor="middle">${tier.toUpperCase()}</text>
   </svg>`;
 }
 
@@ -1954,15 +1954,15 @@ function svgTideCurve(events, w = 320, h = 122) {
   const marks = events.filter((e) => +new Date(e.t) >= t0 && +new Date(e.t) <= t1).map((e) => {
     const x = X(+new Date(e.t)), y = Y(e.v);
     return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--reg-accent)"/>
-      <text x="${x.toFixed(1)}" y="${(y - 7).toFixed(1)}" font-family="monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">${e.type}</text>
-      <text x="${x.toFixed(1)}" y="${h - 4}" font-family="monospace" font-size="8.5" fill="var(--reg-sub)" text-anchor="middle">${formatClockTime(e.t)}</text>`;
+      <text x="${x.toFixed(1)}" y="${(y - 7).toFixed(1)}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">${e.type}</text>
+      <text x="${x.toFixed(1)}" y="${h - 4}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="8.5" fill="var(--reg-sub)" text-anchor="middle">${formatClockTime(e.t)}</text>`;
   }).join("");
   const nowX = X(now);
   return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
     <path d="${path} L ${pts[pts.length - 1][0].toFixed(1)} ${h - 18} L ${pts[0][0].toFixed(1)} ${h - 18} Z" fill="var(--reg-accent)" opacity="0.13"/>
     <path d="${path}" fill="none" stroke="var(--reg-accent)" stroke-width="2"/>
     <line x1="${nowX.toFixed(1)}" y1="10" x2="${nowX.toFixed(1)}" y2="${h - 18}" stroke="var(--reg-ink)" stroke-width="1" stroke-dasharray="2 3"/>
-    <text x="${nowX.toFixed(1)}" y="8" font-family="monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">NOW</text>
+    <text x="${nowX.toFixed(1)}" y="8" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="9.5" fill="var(--reg-ink)" text-anchor="middle">NOW</text>
     ${marks}
   </svg>`;
 }

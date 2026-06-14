@@ -72,6 +72,18 @@ The map renders Mapbox GL JS basemap tiles and uses the Mapbox Geocoding API for
 
 Source: https://www.mapbox.com/legal/tos and https://docs.mapbox.com/help/getting-started/attribution/
 
+## Fonts (self-hosted)
+
+The redesign self-hosts three typeface families as static `woff2` files under `fonts/`, each with its license alongside. All three are licensed under the SIL Open Font License, Version 1.1 (OFL-1.1), which permits embedding and redistribution with the license included; the full license text is committed as `fonts/<family>/OFL.txt`.
+
+- **Fraunces** (display / headings) — Copyright 2018 The Fraunces Project Authors. One fixed static instance is shipped (not the variable font): the 144 pt optical-size SemiBold cut (weight 600, `SOFT=0`, `WONK=0`) plus its italic, converted to `woff2` from the upstream static TTFs. Source: https://github.com/undercasetype/Fraunces
+- **Public Sans** (UI text) — Copyright 2015 The Public Sans Project Authors (U.S. Web Design System). Static weights 400/500/600/700. Source: https://github.com/uswds/public-sans
+- **IBM Plex Mono** (labels) — Copyright © 2017 IBM Corp. with Reserved Font Name "Plex". Static weights 400/500. Source: https://github.com/IBM/plex
+
+The Public Sans and IBM Plex Mono `woff2` are the Latin-subset static instances served by Google Fonts (same OFL faces); Fraunces was built from the upstream static TTFs. OFL Reserved Font Names ("Plex") mean any modified/rebuilt versions must be renamed — these files are unmodified and keep their original family names.
+
+Source: https://scripts.sil.org/OFL
+
 ## Access Rules
 
 The harvesting rules and limits shown in popups are rule summaries matched to the public-land polygon containing a record. They are not legal advice and should be treated as a starting point for checking posted rules, current compendiums, special closures, permits, and agency updates.

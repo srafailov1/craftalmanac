@@ -3,6 +3,51 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Vendored the OFL fonts; activated the type system.** The
+  redesign's three typefaces are now self-hosted and live (the prototype's main
+  remaining "reads like the original" gap — the site had been falling back to
+  Georgia/system). Vendored as static `woff2` under `fonts/`:
+  **Fraunces** (display) as a *fixed instance* per the spec — the upstream
+  144 pt-optical-size SemiBold cut (wght 600, `SOFT=0`, `WONK=0`) + its italic,
+  built from `undercasetype/Fraunces` static TTFs and converted to woff2 with
+  fonttools (698 glyphs each); **Public Sans** (UI) 400/500/600/700 and
+  **IBM Plex Mono** (labels) 400/500 as the Latin-subset static instances from
+  Google Fonts. Each family ships its `OFL.txt` alongside; all three confirmed
+  genuine SIL OFL-1.1.
+
+  *Activation:* uncommented the `@font-face` scaffold + the
+  `--font-display`/`--font-ui`/`--font-mono` `:root` vars at the top of
+  `styles.css` (previously inert in a comment), then repointed components at the
+  vars — `Georgia → var(--font-display)` (4 rules: wordmark/`.serif`/`.pt-card
+  h2`/season readout), `ui-monospace,Menlo → var(--font-mono)` (20 rules: all
+  mono labels), and the two `Inter` UI stacks → `var(--font-ui)` (body +
+  legend). The vars keep the old stacks as fallbacks. Also aligned the
+  conditions detail-panel SVG charts in `app.js` (moon/wind/tide) from generic
+  `font-family="monospace"` to the IBM Plex Mono stack (10 inline-SVG labels)
+  so those small labels match the rest of the mono UI.
+
+  **Gate — passed.** `node --check app.js` clean. Live at `?v=fonts-1` via the
+  local server + preview: all 8 `@font-face` faces register and load on demand
+  (incl. the converted Fraunces italic and Public Sans 500/600, force-loaded to
+  confirm every woff2 decodes); woff2 served as `font/woff2` (200). Computed
+  styles confirm wordmark→`"Fraunces Display"`, body→`"Public Sans"`,
+  mono label→`"IBM Plex Mono"`. Screenshots in the **dusk** and **night**
+  registers show the real faces rendering with no layout breakage; fonts are
+  register-independent so dawn/day render identically (their distinct ground
+  colors are Phase 6's contrast concern, not this task's). Console clean apart
+  from the pre-existing headless-only Geolocation warning. Note: the Public
+  Sans Latin subset omits ↑/↓ (U+2191/2193) — moot, neither glyph is used
+  anywhere in the app; any miss falls back gracefully to the UI stack. Added a
+  **Fonts** section to `ATTRIBUTION.md` (per-family copyright, OFL-1.1, the
+  Fraunces fixed-instance provenance, and the "Plex" Reserved-Font-Name note).
+  Bumped both cache tokens to `?v=fonts-1` (`styles.css` and `app.js`).
+
+  **Possible follow-ups:** `<link rel="preload">` for the two above-the-fold
+  faces (Fraunces 600 + Public Sans 400) to cut FOUT — deferred to Phase 6
+  perf since `font-display: swap` already covers correctness and a preload of a
+  not-immediately-used face would add a console warning the hardening sweep
+  wants to avoid. Next: Phase 6 (hardening) and Phase 7 (content/cutover).
+
 - **2026-06-13 — Verified Codex's sidebar retirement; applied Phase 5 (mobile).**
   *Verification of Codex's migration:* `outputs/verify_codex_species.mjs` (13
   checks over the real extracted selection functions) + a live Claude-in-Chrome

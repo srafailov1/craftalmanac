@@ -1,11 +1,10 @@
 /* ---------------------------------------------------------------------
-   Redesign font scaffold (Phase 0, design/relaunch) — self-hosted OFL
-   fonts: Fraunces (display, one fixed instance), Public Sans (UI), and
-   IBM Plex Mono (labels). Files not yet vendored (see
-   docs/design/fonts-needed.md for the exact list and why). This block is
-   inert: no rule references --font-display/--font-ui/--font-mono yet, so
-   uncommenting it alone causes zero visual change until Phase 1+ opts
-   elements in.
+   Redesign fonts (design/relaunch) — self-hosted OFL faces: Fraunces
+   (display, fixed 144pt SemiBold instance + italic), Public Sans (UI),
+   IBM Plex Mono (labels). Vendored under fonts/ (see
+   docs/design/fonts-needed.md and ATTRIBUTION.md). Components opt in via
+   the --font-display / --font-ui / --font-mono vars defined below.
+   --------------------------------------------------------------------- */
 
 @font-face {
   font-family: "Fraunces Display";
@@ -76,7 +75,6 @@
   --font-ui: "Public Sans", Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 }
-*/
 /* --------------------------------------------------------------------- */
 
 :root {
@@ -112,7 +110,7 @@ body {
   overflow: hidden;
   background: var(--paper);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-ui);
 }
 
 html,
@@ -163,7 +161,7 @@ button {
 
 .brand-block h1 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 38px;
   line-height: 1;
   letter-spacing: 0;
@@ -926,21 +924,21 @@ h2 {
 .legend-head strong {
   font-size: 11px;
   letter-spacing: 0.16em;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .legend-active {
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--reg-accent);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .legend-k {
   font-size: 10px;
   letter-spacing: 0.12em;
   color: var(--reg-sub);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .legend-chips {
@@ -1149,7 +1147,7 @@ body.modal-open .app-shell {
   border-radius: 8px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
   color: var(--ink);
-  font: 12px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 12px/1.5 var(--font-ui);
 }
 
 .forage-hover-popup .mapboxgl-popup-content {
@@ -1560,7 +1558,7 @@ body[data-register="night"] {
   margin: 0;
   font-size: 22px;
   font-weight: 500;
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
 }
 
 .pt-card .sci {
@@ -1568,7 +1566,7 @@ body[data-register="night"] {
   letter-spacing: 0.08em;
   color: var(--reg-sub);
   margin: 3px 0 12px;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .pt-card .row {
@@ -1585,7 +1583,7 @@ body[data-register="night"] {
   font-size: 10.5px;
   letter-spacing: 0.12em;
   color: var(--reg-sub);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .pt-card .row .val {
@@ -1627,7 +1625,7 @@ body[data-register="night"] {
   font-size: 10.5px;
   letter-spacing: 0.06em;
   color: var(--reg-sub);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .pt-card .ethic {
@@ -1642,7 +1640,7 @@ body[data-register="night"] {
   font-size: 10px;
   letter-spacing: 0.08em;
   color: var(--reg-warn);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .pt-card .flush {
@@ -1650,7 +1648,7 @@ body[data-register="night"] {
   font-size: 10.5px;
   color: var(--reg-accent);
   letter-spacing: 0.06em;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
   display: none;
 }
 
@@ -1742,7 +1740,7 @@ body[data-register="night"] {
   color: var(--reg-sub);
   letter-spacing: 0.06em;
   margin-top: 3px;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .mini-card .uses {
@@ -1756,7 +1754,7 @@ body[data-register="night"] {
   letter-spacing: 0.06em;
   color: var(--reg-warn);
   margin-top: 7px;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
   line-height: 1.5;
 }
 
@@ -1770,7 +1768,7 @@ body[data-register="night"] {
 }
 
 .serif {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
 }
 
 /* ---- floating search bar + season slider (sidebar retirement) ---- */
@@ -1853,7 +1851,7 @@ body[data-register="night"] {
 #season-bar .season-readout strong {
   font-size: 19px;
   color: var(--reg-ink);
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   font-weight: 500;
 }
 
@@ -1863,7 +1861,7 @@ body[data-register="night"] {
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 #season-bar .season-actions {
@@ -1920,7 +1918,7 @@ body[data-register="night"] {
   letter-spacing: 0.06em;
   text-align: center;
   text-transform: uppercase;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 #season-bar .date-entry {
@@ -1977,7 +1975,7 @@ body[data-register="night"] {
   padding: 2px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 #masthead .links button:hover,
@@ -2025,7 +2023,7 @@ body[data-register="night"] {
   letter-spacing: 0.12em;
   color: var(--reg-accent);
   margin-bottom: 14px;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 #sheet p {
@@ -2177,7 +2175,7 @@ body[data-register="night"] {
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--reg-sub);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .rail-seg .v {
@@ -2230,7 +2228,7 @@ body[data-register="night"] {
   font-size: 12.5px;
   letter-spacing: 0.1em;
   color: var(--subject, var(--reg-accent));
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 #rail-panel .fig {
@@ -2258,7 +2256,7 @@ body[data-register="night"] {
   font-size: 10.5px;
   color: var(--reg-sub);
   letter-spacing: 0.06em;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 #rail-panel .now-btn {
@@ -2271,7 +2269,7 @@ body[data-register="night"] {
   font-size: 10.5px;
   letter-spacing: 0.08em;
   cursor: pointer;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .bars {
@@ -2294,7 +2292,7 @@ body[data-register="night"] {
 .bars .bval {
   font-size: 10.5px;
   color: var(--reg-ink);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .bars .b {
@@ -2319,7 +2317,7 @@ body[data-register="night"] {
   font-size: 9px;
   letter-spacing: 0.04em;
   color: var(--reg-sub);
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--font-mono);
 }
 
 .bars-labels span.today {
