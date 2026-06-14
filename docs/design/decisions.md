@@ -3,6 +3,34 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-14 — Parity pass 8: point card (sparkline, flush, ethic, compact).**
+  Closed the completeness items that live in the point popup
+  (`getMarkerPopupHTML`). (1) **Seasonality sparkline** — ported the prototype's
+  `sparkline()` (100×24 SVG bar chart); the card now emits a `months` feature
+  property (`species.months` joined) which the card expands into a 12-element
+  binary array and renders as bars tinted to the **category color**, ahead of
+  the `SEASON · <range>` text. (2) **In-card RAIN-FED FLUSH line** — reuses the
+  dead `.flush.on` CSS; eligibility mirrors `refreshFlush` exactly (food mode,
+  `category === "mushroom"`, a `flushThresholds` entry, `past72 ≥
+  thresholdMm72h`). (3) **Ethic** moved from a labeled `.row` to a soft trailing
+  `.ethic` paragraph in the prototype's trailing slot (season-line → flush →
+  ethic → OINP). (4) **`.pt-card.compact`** is now applied on phones
+  (`matchMedia(max-width:720px)` at build time): drops USE / sparkline / flush /
+  ethic, **keeps** the non-negotiables (ACCESS, RULES, SAFETY, SOURCE
+  attribution, OINP, the medicine `.med-note`). (5) Card copy **VERIFY → CHECK
+  the parcel rule** (prototype wording; the contract is prototype-wins, and the
+  two verbs are semantically equal). (6) **med-note tint** `rgba(216,155,36,.12)`
+  → `color-mix(in srgb, var(--reg-warn) 12%, transparent)` so the box fill and
+  its left border share one register-tracking amber.
+  **Gate:** `node --check` + `scripts/check.sh` green (contrast audit clean).
+  Verified live by calling the real `getMarkerPopupHTML` in-page: desktop path →
+  12 sparkline rects filled `#b5651d`, `SEASON · Apr–Jun`, ethic paragraph (no
+  ETHIC row), USE present, flush ON only at 40 mm (off with no weather, off at
+  5 mm < the 25 mm morel threshold), trailing order season-line→flush→ethic→OINP;
+  compact path (the headless narrow viewport) → USE/sparkline/flush/ethic
+  dropped, OINP + SOURCE + save + CHECK wording kept; `color-mix` resolves to a
+  0.12-alpha amber and is supported. Tokens → `?v=parity-card-1`.
+
 - **2026-06-13 — Parity pass 7: herbalism disclaimer banner + rail chrome.**
   Restored the prototype's persistent on-map `#mode-disclaimer` (a CLAUDE.md
   non-negotiable — "the medicine/herbalism disclaimer stays prominent"): a

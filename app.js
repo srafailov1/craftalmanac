@@ -3259,6 +3259,7 @@ function renderMarkers() {
         accessSourceUrl: accessRule.sourceUrl,
         rulesLabel: getActiveMapConfig().rulesLabel,
         season: getMonthRangeText(species.months),
+        months: Array.isArray(species.months) ? species.months.join(",") : "",
         confidence: record.confidence || "community",
         harvestStatus: record.harvestStatus || "",
         harvestNote: record.accessNote || "Confirm site rules before harvesting."
@@ -4362,6 +4363,18 @@ function updateSaveLocationButton(button) {
   button.textContent = saved ? "Saved location" : "Save location";
 }
 
+// Monthly seasonality sparkline for the point card (ported from the prototype).
+// `months` is a 12-element relative-abundance array; bars are tinted to the
+// species' category color, mirroring the season histogram's fill.
+function sparkline(months, color, w = 100, h = 24) {
+  const mx = Math.max(...months, 1);
+  const bars = months.map((v, i) => {
+    const bh = Math.max(1.5, (v / mx) * h);
+    return `<rect x="${(i * (w / 12) + 1).toFixed(1)}" y="${(h - bh).toFixed(1)}" width="${(w / 12 - 2).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="${color}"/>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${bars}</svg>`;
+}
+
 function getMarkerPopupHTML(properties) {
   const status = properties.accessStatus || "unknown";
   const statusColor = `var(--reg-st-${ACCESS_STATUS_TOKEN[status] || "unknown"})`;
@@ -4387,16 +4400,42 @@ function getMarkerPopupHTML(properties) {
     : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
   const ruleLimit = escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.");
 
-  const usedPartsRow = properties.usedParts
+  // On phones the card renders compact (prototype parity): drop the optional
+  // USE row, seasonality sparkline, flush line, and harvest-ethic note.
+  const compact = typeof window !== "undefined" && typeof window.matchMedia === "function"
+    && window.matchMedia("(max-width: 720px)").matches;
+
+  const usedPartsRow = (!compact && properties.usedParts)
     ? `<div class="row"><span class="lab">USE</span><span class="val">${escapeHTML(properties.usedParts)}</span></div>`
     : "";
   const safetyTags = String(properties.safetyTags || "").split("|").filter(Boolean);
   const safetyRow = safetyTags.length
     ? `<div class="row safety"><span class="lab">SAFETY</span><span class="val">${safetyTags.map(escapeHTML).join(" · ")}</span></div>`
     : "";
-  const ethicRow = properties.harvestEthic
-    ? `<div class="row"><span class="lab">ETHIC</span><span class="val">${escapeHTML(properties.harvestEthic)}</span></div>`
+  // Ethic reads as a soft trailing paragraph, not a labeled row (prototype).
+  const ethicNote = (!compact && properties.harvestEthic)
+    ? `<div class="ethic">${escapeHTML(properties.harvestEthic)}</div>`
     : "";
+
+  // Seasonality sparkline + SEASON range, tinted to the category color.
+  const monthSet = new Set(String(properties.months || "").split(",").map(Number).filter(Boolean));
+  const monthsArr = Array.from({ length: 12 }, (_, i) => (monthSet.has(i + 1) ? 1 : 0));
+  const seasonSpark = monthSet.size
+    ? sparkline(monthsArr, properties.categoryColor || "var(--reg-accent)")
+    : "";
+  const seasonLine = compact
+    ? ""
+    : `<div class="season-line">${seasonSpark}<span class="t">SEASON · ${escapeHTML(properties.season)}</span></div>`;
+
+  // In-card rain-fed flush callout — same eligibility as the on-map pulses
+  // (food mode, whitelisted mushroom, past-72h rain ≥ the species threshold).
+  const flushThresh = (flushThresholds && properties.category === "mushroom" && properties.speciesId)
+    ? flushThresholds[properties.speciesId]
+    : null;
+  const flushOn = !compact && state.activeMap === "food" && state.weather && flushThresh
+    && state.weather.past72 >= flushThresh.thresholdMm72h;
+  const flushLine = flushOn ? `<div class="flush on">RAIN-FED FLUSH LIKELY THIS WEEK</div>` : "";
+
   const warning = properties.harvestStatus
     ? `<div class="oinp" style="color:var(--reg-warn)">${escapeHTML(properties.harvestStatus)} — ${escapeHTML(properties.harvestNote)}</div>`
     : "";
@@ -4408,7 +4447,7 @@ function getMarkerPopupHTML(properties) {
   const saved = isSavedLocation(properties.id);
 
   return `
-    <div class="pt-card">
+    <div class="pt-card${compact ? " compact" : ""}">
       <div class="spine" style="background:${statusColor}"></div>
       <button class="close" type="button" aria-label="Close">&times;</button>
       <div class="pad">
@@ -4418,12 +4457,13 @@ function getMarkerPopupHTML(properties) {
         <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}</span></div>
         ${safetyRow}
         ${usedPartsRow}
-        ${ethicRow}
         <div class="row"><span class="lab">PLACE</span><span class="val">${escapeHTML(properties.name)}</span></div>
         <div class="row"><span class="lab">SOURCE</span><span class="val">${sourceVal}</span></div>
-        <div class="season-line"><span class="t">SEASON · ${escapeHTML(properties.season)}</span></div>
+        ${seasonLine}
+        ${flushLine}
+        ${ethicNote}
         ${warning}
-        <div class="oinp">OCCURRENCE IS NOT PERMISSION — VERIFY THE PARCEL RULE</div>
+        <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE</div>
         ${medNote}
         <button
           class="save-location-button ${saved ? "is-saved" : ""}"

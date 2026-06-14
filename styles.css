@@ -1765,7 +1765,7 @@ body[data-register="night"] {
   padding: 9px 11px;
   border-left: 3px solid var(--reg-warn);
   border-radius: 0 6px 6px 0;
-  background: rgba(216, 155, 36, 0.12);
+  background: color-mix(in srgb, var(--reg-warn) 12%, transparent);
   color: var(--reg-ink);
   font-size: 12px;
   line-height: 1.45;
