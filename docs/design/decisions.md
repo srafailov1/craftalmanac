@@ -3,6 +3,39 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 6 (1/?): register contrast audit + token fixes.**
+  Built the Q2 deliverable as `scripts/audit_contrast.mjs`: it parses the four
+  `body[data-register]` token sets from `styles.css` (resolving the cascade —
+  dawn/dusk/night inherit any `--reg-st-*`/`--reg-glow` they don't redefine
+  from the `:root, day` base) and checks every foreground token's WCAG 2.1
+  contrast against that register's `--reg-panel` (with `--reg-ground` reported
+  for context). Floors: **4.5:1** for primary/secondary text
+  (`--reg-ink`/`--reg-sub`), **3.0:1** for accent/warn and the status colors
+  (`--reg-st-*`), which render as bold/large labels and graphical dots/spines.
+  These are the colors the *live* floating UI actually draws — popups and legend
+  chips color statuses via `var(--reg-st-*)` (app.js), not the legacy
+  fixed `--access-*` tokens (those drive only the retired sidebar classes).
+
+  *Failures found and fixed (7).* All in the light registers, the amber-on-white
+  trap plus dusk's muted text: day/dawn `--reg-warn` & `--reg-st-permit`
+  (`#d89b24`, 2.30–2.43:1) → `#a8730a` (≥3.89:1); dawn `--reg-accent`
+  (`#d98a6a`, 2.55:1) → `#b86844` (3.90:1); dawn `--reg-sub` (`#6a7580`, 4.45:1)
+  → `#646f7b` (4.85:1); dusk `--reg-sub` (`#bcafa5`, 3.84:1) → `#d4c9bd`
+  (5.04:1). Every change only shifts **lightness within the same hue**, per the
+  fixed-semantics rule (CLAUDE.md / `ACCESS_STATUS_TOKEN` comment): amber stays
+  amber, terracotta stays terracotta. dawn's permit chip inherits the day-base
+  `#a8730a` fix automatically; dusk/night already passed and were untouched.
+  Also caught a missed font surface from the prior commit: `.pt-card` (the popup
+  card) still used a raw `-apple-system` stack → `var(--font-ui)`.
+
+  **Gate — passed.** `node scripts/audit_contrast.mjs` exits 0 (all four
+  registers clean); wired it into `scripts/check.sh`, which is green end-to-end.
+  Live preview confirms day + dawn render the new colors legibly with no design
+  regression (darker amber permit ring, deeper dawn terracotta accent on the
+  "By date"/"SPRING"/"FOOD" labels). Bumped `styles.css` token to
+  `?v=contrast-1`. Remaining Phase 6: keyboard path, performance pass
+  (canvas/battery at zoom boundaries), console-clean sweep.
+
 - **2026-06-13 — Vendored the OFL fonts; activated the type system.** The
   redesign's three typefaces are now self-hosted and live (the prototype's main
   remaining "reads like the original" gap — the site had been falling back to

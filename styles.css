@@ -1454,9 +1454,9 @@ body[data-register="day"] {
   --reg-sub: #5a615b;
   --reg-hair: #d5dad2;
   --reg-accent: #6b7f2e;
-  --reg-warn: #d89b24;
+  --reg-warn: #a8730a;
   --reg-st-allowed: #2f8f46;
-  --reg-st-permit: #d89b24;
+  --reg-st-permit: #a8730a;
   --reg-st-prohibited: #c74437;
   --reg-st-private: #7e6654;
   --reg-st-unknown: #8b8f86;
@@ -1468,10 +1468,10 @@ body[data-register="dawn"] {
   --reg-panel: #f7f9fb;
   --reg-panel-a: rgba(247, 249, 251, 0.93);
   --reg-ink: #2a3138;
-  --reg-sub: #6a7580;
+  --reg-sub: #646f7b;
   --reg-hair: #d3dbe1;
-  --reg-accent: #d98a6a;
-  --reg-warn: #d89b24;
+  --reg-accent: #b86844;
+  --reg-warn: #a8730a;
 }
 
 body[data-register="dusk"] {
@@ -1479,7 +1479,7 @@ body[data-register="dusk"] {
   --reg-panel: #544c5a;
   --reg-panel-a: rgba(84, 76, 90, 0.93);
   --reg-ink: #f2e9dc;
-  --reg-sub: #bcafa5;
+  --reg-sub: #d4c9bd;
   --reg-hair: #5e5664;
   --reg-accent: #ff9447;
   --reg-warn: #ffc94d;
@@ -1537,7 +1537,7 @@ body[data-register="night"] {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--reg-ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-ui);
   user-select: none;
   -webkit-user-select: none;
 }

@@ -32,4 +32,8 @@ node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit
 echo "Running overview coverage tests..."
 node scripts/test_overview_coverage.mjs || { echo "FAIL: Overview coverage tests failed"; exit 1; }
 
+# Run register contrast audit (Phase 6)
+echo "Running register contrast audit..."
+node scripts/audit_contrast.mjs || { echo "FAIL: Register contrast audit failed"; exit 1; }
+
 echo "All checks PASSED"
