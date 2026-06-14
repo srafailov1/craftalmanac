@@ -1115,7 +1115,8 @@ h2 {
 }
 
 .welcome-primary:focus-visible {
-  outline: 0;
+  outline: 2px solid var(--leaf-dark);
+  outline-offset: 2px;
   border-color: var(--leaf-dark);
 }
 
@@ -2047,6 +2048,22 @@ body[data-register="night"] {
   font-size: 18px;
   cursor: pointer;
   padding: 2px 4px;
+}
+
+/* ---- keyboard focus indicators (Phase 6) ----
+   Register-aware focus ring for every interactive control in the floating
+   UI so the keyboard path stays visible in all four registers. Only the
+   masthead links carried a focus style before this. */
+.leg-chip:focus-visible,
+.rail-seg:focus-visible,
+#season-bar .text-button:focus-visible,
+#season-bar .day-slider:focus-visible,
+#masthead .links button:focus-visible,
+#sheet .closer:focus-visible,
+#rail-panel .closer:focus-visible,
+.pt-card .close:focus-visible {
+  outline: 2px solid var(--reg-accent);
+  outline-offset: 2px;
 }
 
 /* ---- legend chip + rail segment (chip family) ---- */

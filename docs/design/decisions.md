@@ -3,6 +3,31 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 6 (2/?): keyboard focus path.** Audited the keyboard
+  path through the floating UI. The markup was already sound — masthead nav,
+  season By date/All seasons, legend chips (`aria-pressed`), and rail segments
+  are all real `<button>`s; the slider is a native range input; sheets/modals
+  carry `role="dialog" aria-modal`; Escape closes the sheet and the welcome
+  modal traps Tab. The gap was **visibility**: only the masthead links had a
+  `:focus-visible` style, so a keyboard user couldn't see focus on the legend
+  chips, rail segments, season buttons, slider, or any close button. Added one
+  register-aware focus-ring rule (`outline: 2px solid var(--reg-accent);
+  outline-offset: 2px`) covering `.leg-chip`, `.rail-seg`,
+  `#season-bar .text-button`, the day slider, masthead links, `#sheet .closer`,
+  `#rail-panel .closer`, and `.pt-card .close`. Also fixed `.welcome-primary`,
+  whose `:focus-visible` set `outline: 0` with only a same-color border change
+  (effectively no indicator) — now a real `--leaf-dark` ring.
+
+  **Gate — passed.** CSS parses cleanly (rule confirmed in the live CSSOM with
+  the exact selector list; base selectors match 9 legend chips / 4 rail segs /
+  2 season buttons / 1 slider / 4 masthead links). `:focus-visible` is
+  keyboard-triggered so it can't be screenshotted via programmatic focus in the
+  headless preview; mirrored it as `:focus` in a throwaway inspection style and
+  confirmed the olive day-accent ring renders correctly around the focused
+  "Permit required" chip. `scripts/check.sh` green. Bumped `styles.css` to
+  `?v=focus-1`. Remaining Phase 6: performance pass (canvas/battery at zoom
+  boundaries), console-clean sweep.
+
 - **2026-06-13 — Phase 6 (1/?): register contrast audit + token fixes.**
   Built the Q2 deliverable as `scripts/audit_contrast.mjs`: it parses the four
   `body[data-register]` token sets from `styles.css` (resolving the cascade —
