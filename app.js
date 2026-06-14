@@ -1568,7 +1568,7 @@ function svgMoonAxis(mp, w = 300) {
   </svg>`;
 }
 
-function svgCompass(dir, speed, r = 72) {
+function svgCompass(dir, speed, r = 88) {
   const d = r * 2 + 18, c = d / 2;
   const a = (dir + 180) * RAD;
   const x2 = c + Math.sin(a) * (r - 18), y2 = c - Math.cos(a) * (r - 18);
@@ -1577,7 +1577,7 @@ function svgCompass(dir, speed, r = 72) {
   const ticks = dirs.map((t, i) => {
     const ta = i * Math.PI / 4;
     const major = i % 2 === 0;
-    return `<text x="${(c + Math.sin(ta) * (r + 2)).toFixed(1)}" y="${(c - Math.cos(ta) * (r + 2) + 3.5).toFixed(1)}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="${major ? 11 : 9.5}" fill="var(--reg-${major ? "ink" : "sub"})" text-anchor="middle">${t}</text>`;
+    return `<text x="${(c + Math.sin(ta) * (r + 2)).toFixed(1)}" y="${(c - Math.cos(ta) * (r + 2) + 3.5).toFixed(1)}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="${major ? 12 : 10.5}" fill="var(--reg-${major ? "ink" : "sub"})" text-anchor="middle">${t}</text>`;
   }).join("");
   let ring = "";
   for (let i = 0; i < 36; i++) {
@@ -1596,6 +1596,23 @@ function svgCompass(dir, speed, r = 72) {
     <text x="${c}" y="${c + 8}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="8" fill="var(--reg-sub)" text-anchor="middle">KM/H</text>
     <text x="${c}" y="${c + 17}" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="8" fill="var(--reg-ink)" text-anchor="middle">${tier.toUpperCase()}</text>
   </svg>`;
+}
+
+// Wind compass wrapped in an animated streak overlay (ported from the
+// prototype). Seven streaks advect at a speed-scaled duration; the .windflow
+// box is rotated to the wind direction so the streaks blow the way the arrow
+// points. Streaks pause under prefers-reduced-motion (CSS).
+function windFlowHTML(dir, speed) {
+  const dur = Math.max(1.4, 7 - speed * 0.18).toFixed(2) + "s";
+  const streaks = Array.from({ length: 7 }, (_, i) => {
+    const ox = (i - 3) * 14 + (i % 2 ? 5 : -4);
+    const delay = ((i * 0.37) % 2.2).toFixed(2);
+    return `<i style="--ox:${ox}px; --dur:${dur}; animation-delay:${delay}s"></i>`;
+  }).join("");
+  return `<div class="windbox">
+    <div class="windflow" style="transform:rotate(${dir % 360}deg)">${streaks}</div>
+    ${svgCompass(dir, speed)}
+  </div>`;
 }
 
 function pickWindows(daily) {
@@ -1807,7 +1824,7 @@ function renderConditionPanel() {
   } else if (openConditionSeg === "wind") {
     html = w
       ? `<h3>WIND &amp; CLOUD</h3>
-        <div class="fig">${svgCompass(w.windDir, w.wind)}</div>
+        <div class="fig">${windFlowHTML(w.windDir, w.wind)}</div>
         <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
         <label class="fx-toggle"><input type="checkbox" id="fx-toggle"${state.fxOn ? " checked" : ""}> Animate wind on the map (zoom 7.5+)</label>
         ${conditionsLocLine()}${conditionsDataAge()}`

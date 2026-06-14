@@ -3,6 +3,28 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-14 — Parity pass 10: wind panel windflow overlay + larger compass.**
+  Ported the prototype's `windFlowHTML()`: the WIND panel now wraps the compass
+  in a 190px `.windbox` with an animated `.windflow` overlay — 7 streak `<i>`
+  elements at a speed-scaled `--dur` (`max(1.4, 7 − speed·0.18)s`), the box
+  rotated to the wind direction so the streaks blow the way the arrow points.
+  Streak gradient uses `var(--reg-sub)` (register version of the prototype's
+  `--sub`); `@media (prefers-reduced-motion)` freezes them at 0.4 opacity.
+  Also bumped `svgCompass` default `r` 72 → 88 (and ticks 11/9.5 → 12/10.5 px —
+  the latter also clears the 10.5px font floor) to match the prototype dial
+  size; `.windbox svg` fills the box (`position:absolute; inset:0;
+  width/height:100%`) so the 194px-intrinsic compass scales to 190px.
+  **Kept** the relaunch's clearer fx-toggle copy "Animate wind on the map
+  (zoom 7.5+)" over the prototype's "animate wind layer on the map" — the audit
+  flags this as owner's-call and the relaunch copy adds the real zoom threshold
+  (an improvement, not drift).
+  **Gate:** `node --check` + `scripts/check.sh` green; console clean. Verified
+  live: `windFlowHTML(135,18)` → 190×190 windbox, 7 streaks, flow rotated
+  135°/overflow hidden, streak[0] `animation-name:wflow` `dur 3.76s`
+  `--ox:-46px` gradient→`#5a615b`, compass svg `position:absolute` `width:100%`
+  with 11 text labels; and a full desktop screenshot of the rendered WIND &
+  CLOUD panel shows the enlarged rose + streaks. Tokens → `?v=parity-wind-1`.
+
 - **2026-06-14 — Parity pass 9: hover tip (spine + status line, register tokens).**
   Replaced the plain `<p class="popup-title">name</p>` hover popup with the
   prototype's `#hover-tip` structure: a 4px **category-colored spine**

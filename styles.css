@@ -2502,6 +2502,51 @@ body[data-register="night"] {
   margin: 0 auto;
 }
 
+/* Animated wind-streak overlay over the compass rose (prototype parity). */
+.windbox {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin: 0 auto;
+}
+
+.windbox svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.windflow {
+  position: absolute;
+  inset: 14px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.windflow i {
+  position: absolute;
+  left: 50%;
+  top: -20%;
+  width: 1.8px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--reg-sub));
+  opacity: 0;
+  border-radius: 1px;
+  animation: wflow var(--dur) linear infinite;
+}
+
+@keyframes wflow {
+  0% { transform: translate(var(--ox), -40px); opacity: 0; }
+  12% { opacity: 0.8; }
+  88% { opacity: 0.8; }
+  100% { transform: translate(var(--ox), 190px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .windflow i { animation: none; opacity: 0.4; }
+}
+
 #rail-panel .note {
   color: var(--reg-sub);
   line-height: 1.55;
