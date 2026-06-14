@@ -3,6 +3,45 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Phase 6 (3/?): wind-canvas power heuristics + console sweep.**
+  *Performance.* The decorative wind-streak canvas (`#fx`, zoom ≥ 7.5) already
+  honored `prefers-reduced-motion`, paused when the tab was hidden, and cleared
+  below the zoom threshold — but it had no battery/low-power path and its rAF
+  loop ran even while idle (a per-frame `clearRect` no-op). Added feature-
+  detected `fxStaticDisabled()` (reduced-motion, `prefers-reduced-data`,
+  `navigator.connection.saveData`, `hardwareConcurrency ≤ 2`,
+  `deviceMemory ≤ 1`) and async `fxBatterySaving()` (`getBattery()` →
+  unplugged and `level ≤ 0.2`), combined in `refreshWindCanvasPower()` which
+  now **fully starts/stops** the rAF loop (`fxStart`/`fxStop`) instead of
+  blank-drawing, so a disabled canvas costs zero frames. Re-evaluates live on
+  reduced-motion / connection / battery (level+charging) changes and on
+  `visibilitychange`. All signals optional/graceful; on an unconstrained
+  machine the canvas animates exactly as before.
+
+  *Verification.* `outputs/verify_wind_power.mjs` (scratch harness, 16 checks)
+  slices the power fns out of `app.js` and runs them in a vm with stubbed
+  navigator/matchMedia/battery: clean desktop animates; each heuristic
+  (reduced-motion/data, Data Saver, 2 cores, 1 GB) disables; battery low+
+  unplugged disables but charging/high/absent does not; the loop starts once
+  (idempotent), stops on hidden/Data Saver, and a draining battery stops a
+  running loop. Live: `node --check` + `scripts/check.sh` green; reload clean
+  (no console errors); on this machine fxOn=true (10 cores/32 GB) so the canvas
+  runs normally; legend toggle / rail panel / sheet interactions throw nothing.
+
+  *Console-clean sweep.* No code change needed — `app.js` has a single
+  `console.warn` (a justified status-raster-unavailable fallback), no stray
+  debug logs. The only live-preview warning is Mapbox's GeolocateControl
+  "geolocation not available," which is a headless/insecure-context artifact
+  (the control is added once at top level); production over HTTPS has
+  geolocation, so it won't appear there.
+
+  *Note.* The `#rail-panel .closer` selector added in the focus commit is inert
+  — the rail panel toggles via its `.rail-seg` button (covered by
+  `.rail-seg:focus-visible`) and has no close button; left as-is (harmless).
+  Bumped `app.js` to `?v=wind-power-1`. Remaining Phase 6: optional Lighthouse
+  perf/a11y run (owner/CI) and the Q3 font-floor / Q4 reduced-motion sweeps
+  (Qwen's lane; this change is compliant with both).
+
 - **2026-06-13 — Phase 6 (2/?): keyboard focus path.** Audited the keyboard
   path through the floating UI. The markup was already sound — masthead nav,
   season By date/All seasons, legend chips (`aria-pressed`), and rail segments

@@ -1759,6 +1759,8 @@ const fxCanvas = document.getElementById("fx");
 const fxCtx = fxCanvas ? fxCanvas.getContext("2d") : null;
 let fxParticles = [];
 let fxLastTs = 0;
+let fxRafId = 0;
+let fxBattery = null;
 
 function isNightish() {
   return state.register === "night" || state.register === "dusk";
@@ -1787,7 +1789,7 @@ function fxInitParticles() {
 }
 
 function fxFrame(ts) {
-  requestAnimationFrame(fxFrame);
+  fxRafId = requestAnimationFrame(fxFrame);
   if (!fxCtx || document.hidden) return;
   const dt = Math.min(0.1, Math.max(0.001, ((ts || 0) - fxLastTs) / 1000));
   fxLastTs = ts || 0;
@@ -1828,16 +1830,69 @@ function fxFrame(ts) {
   });
 }
 
+// Power/data heuristics — the wind canvas is purely decorative, so it stays
+// off under reduced-motion/reduced-data, Data Saver, low-end hardware, or a
+// draining battery (Phase 6). Each signal is feature-detected and optional.
+function fxStaticDisabled() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+  try { if (window.matchMedia("(prefers-reduced-data: reduce)").matches) return true; } catch (e) {}
+  const conn = navigator.connection || navigator.webkitConnection || navigator.mozConnection;
+  if (conn && conn.saveData) return true;
+  const cores = navigator.hardwareConcurrency;
+  if (typeof cores === "number" && cores > 0 && cores <= 2) return true;
+  const mem = navigator.deviceMemory;
+  if (typeof mem === "number" && mem > 0 && mem <= 1) return true;
+  return false;
+}
+
+function fxBatterySaving() {
+  return !!fxBattery && !fxBattery.charging &&
+    typeof fxBattery.level === "number" && fxBattery.level <= 0.2;
+}
+
+function fxStart() {
+  if (fxRafId || !fxCtx) return;
+  fxLastTs = 0;
+  fxRafId = requestAnimationFrame(fxFrame);
+}
+
+function fxStop() {
+  if (fxRafId) { cancelAnimationFrame(fxRafId); fxRafId = 0; }
+  if (fxCtx) fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+}
+
+// Recompute whether the canvas may run and start/stop the rAF loop to match,
+// so a disabled canvas costs zero frames (not just a blank per-frame draw).
+function refreshWindCanvasPower() {
+  state.fxOn = !fxStaticDisabled() && !fxBatterySaving();
+  if (state.fxOn && !document.hidden) fxStart(); else fxStop();
+}
+
 function initWindCanvas() {
   if (!fxCanvas) return;
-  state.fxOn = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   fxResize();
   window.addEventListener("resize", fxResize);
   if (typeof map !== "undefined" && map) {
     map.on("resize", fxResize);
     map.on("load", fxResize);
   }
-  requestAnimationFrame(fxFrame);
+  // React live to power/data/motion changes (canvas turns off and back on) and
+  // to tab visibility so it never animates while hidden.
+  const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (rm.addEventListener) rm.addEventListener("change", refreshWindCanvasPower);
+  else if (rm.addListener) rm.addListener(refreshWindCanvasPower);
+  const conn = navigator.connection || navigator.webkitConnection || navigator.mozConnection;
+  if (conn && conn.addEventListener) conn.addEventListener("change", refreshWindCanvasPower);
+  document.addEventListener("visibilitychange", refreshWindCanvasPower);
+  if (typeof navigator.getBattery === "function") {
+    navigator.getBattery().then((bat) => {
+      fxBattery = bat;
+      bat.addEventListener("levelchange", refreshWindCanvasPower);
+      bat.addEventListener("chargingchange", refreshWindCanvasPower);
+      refreshWindCanvasPower();
+    }).catch(() => {});
+  }
+  refreshWindCanvasPower();
 }
 
 // --- Phase 4d: tide (NOAA CO-OPS via the C1 station index) -----------------
