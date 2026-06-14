@@ -2490,6 +2490,49 @@ body[data-register="night"] {
   font-family: var(--font-mono);
 }
 
+/* ---- solar dial (prototype #sun-dial) ---- */
+#sun-dial {
+  cursor: grab;
+  touch-action: none;
+}
+
+#sun-dial.dragging {
+  cursor: grabbing;
+}
+
+.earth-spin {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: espin 36s linear infinite;
+}
+
+@keyframes espin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .earth-spin { animation: none; }
+}
+
+/* "Back to now" — shown only while the dial is simulating a time (prototype). */
+#rail-panel .sun-now {
+  display: none;
+  margin-top: 8px;
+  background: var(--subject, var(--reg-accent));
+  border: none;
+  color: var(--reg-panel);
+  padding: 7px 13px;
+  border-radius: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+
+#rail-panel.simulating .sun-now {
+  display: inline-block;
+}
+
 .bars {
   display: flex;
   align-items: flex-end;

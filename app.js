@@ -1353,8 +1353,18 @@ function syncLightPreset(reg) {
   }
 }
 
+// simNow() lets the solar dial preview any hour: when state.simMins is set,
+// the register engine and sun panel read the simulated clock instead of the
+// wall clock. "Back to now" clears it.
+function simNow() {
+  if (state.simMins == null) return new Date();
+  const base = new Date();
+  base.setHours(0, 0, 0, 0);
+  return new Date(+base + state.simMins * 60000);
+}
+
 function applyRegister() {
-  const reg = computeRegister(new Date(), state.location.lat, state.location.lng);
+  const reg = computeRegister(simNow(), state.location.lat, state.location.lng);
   if (reg === state.register) return;
   state.register = reg;
   document.body.dataset.register = reg;
@@ -1645,6 +1655,118 @@ function rainBars(daily) {
   return `<div class="bars">${bars}</div><div class="bars-labels">${labelRow}</div>`;
 }
 
+// --- Solar dial (prototype #sun-dial): a draggable clock dial that simulates
+// the time of day. Dragging the sun sets state.simMins, re-deriving the light
+// register + map lightPreset WITHOUT rebuilding the panel (so the drag stays
+// smooth); "Back to now" clears it. A small earth spins at the hub. -----------
+const SUN_DIAL_SIZE = 200;
+const DIAL_MONO = "'IBM Plex Mono', ui-monospace, monospace";
+
+function dialAngle(date) {
+  const mins = date.getHours() * 60 + date.getMinutes();
+  return ((mins - 720) / 1440) * 2 * Math.PI;
+}
+
+function dialPos(phi, c, r) {
+  return [c - r * Math.sin(phi), c - r * Math.cos(phi)];
+}
+
+function earthSVG(c, r) {
+  return `<g>
+    <circle cx="${c}" cy="${c}" r="${r}" fill="#3e6e8e" opacity="0.9"/>
+    <g class="earth-spin">
+      <clipPath id="ca-earth-clip"><circle cx="${c}" cy="${c}" r="${r}"/></clipPath>
+      <g clip-path="url(#ca-earth-clip)" fill="#5e8e58" opacity="0.95">
+        <path d="M ${c - r * 0.9} ${c - r * 0.4} q ${r * 0.5} ${-r * 0.5} ${r * 0.9} ${-r * 0.1} q ${r * 0.3} ${r * 0.3} ${-r * 0.1} ${r * 0.5} q ${-r * 0.6} ${r * 0.2} ${-r * 0.8} ${-r * 0.4} Z"/>
+        <path d="M ${c + r * 0.2} ${c + r * 0.15} q ${r * 0.45} ${-r * 0.15} ${r * 0.6} ${r * 0.2} q ${-r * 0.1} ${r * 0.45} ${-r * 0.55} ${r * 0.35} q ${-r * 0.3} ${-r * 0.25} ${-r * 0.05} ${-r * 0.55} Z"/>
+        <path d="M ${c - r * 0.5} ${c + r * 0.45} q ${r * 0.3} ${-r * 0.1} ${r * 0.4} ${r * 0.15} q ${-r * 0.2} ${r * 0.3} ${-r * 0.45} ${r * 0.1} Z"/>
+      </g>
+      <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--reg-panel)" stroke-width="1"/>
+    </g></g>`;
+}
+
+function svgSunDial(size = SUN_DIAL_SIZE) {
+  const c = size / 2, r = size / 2 - 10;
+  const now = simNow();
+  const { lat, lng } = state.location;
+  const st = sunTimes(now, lat, lng);
+  const phi = dialAngle(now);
+  const [sx, sy] = dialPos(phi, c, r);
+  let chord = "", dayArc = "";
+  if (st.rise && st.set) {
+    const [rx, ry] = dialPos(dialAngle(st.rise), c, r);
+    const [ex, ey] = dialPos(dialAngle(st.set), c, r);
+    chord = `<line x1="${rx.toFixed(1)}" y1="${ry.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="var(--reg-sub)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="${(rx - 3).toFixed(1)}" y="${(ry + 13).toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="end">RISE</text>
+      <text x="${(ex + 3).toFixed(1)}" y="${(ey + 13).toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)">SET</text>`;
+    dayArc = `<path d="M ${rx.toFixed(1)} ${ry.toFixed(1)} A ${r} ${r} 0 0 0 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="var(--reg-warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
+  }
+  const night = sunAltitude(now, lat, lng) < 0;
+  return `<svg id="sun-dial" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--reg-hair)" stroke-width="1.4"/>
+    ${dayArc}${chord}
+    ${earthSVG(c, Math.max(10, r * 0.22))}
+    <circle id="sun-dot" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${Math.max(5, r * 0.12).toFixed(1)}" fill="${night ? "var(--reg-ink)" : "#e8b931"}" stroke="var(--reg-panel)" stroke-width="1.5"/>
+    <text x="${c}" y="14" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="middle">NOON</text>
+    <text x="${c}" y="${size - 4}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="middle">MIDNIGHT</text>
+  </svg>`;
+}
+
+function updateSunDial() {
+  const dial = document.getElementById("sun-dial");
+  if (!dial) return;
+  const size = SUN_DIAL_SIZE, c = size / 2, r = size / 2 - 10;
+  const now = simNow();
+  const { lat, lng } = state.location;
+  const [sx, sy] = dialPos(dialAngle(now), c, r);
+  const dot = document.getElementById("sun-dot");
+  if (dot) {
+    dot.setAttribute("cx", sx.toFixed(1));
+    dot.setAttribute("cy", sy.toFixed(1));
+    dot.setAttribute("fill", sunAltitude(now, lat, lng) < 0 ? "var(--reg-ink)" : "#e8b931");
+  }
+  const rd = document.getElementById("sun-readout");
+  if (rd) {
+    rd.innerHTML = `<b>${escapeHTML(formatClockTime(now))}</b> · ${escapeHTML(state.register.toUpperCase())} REGISTER${state.simMins != null ? " (SIMULATED)" : ""}`;
+  }
+  if (railPanel) railPanel.classList.toggle("simulating", state.simMins != null);
+}
+
+// Re-derive the register from the simulated time without rebuilding the panel.
+function applyRegisterLight() {
+  const reg = computeRegister(simNow(), state.location.lat, state.location.lng);
+  if (reg === state.register) return;
+  state.register = reg;
+  document.body.dataset.register = reg;
+  if (state.mapReady) syncLightPreset(reg);
+}
+
+function bindSunDial() {
+  const dial = document.getElementById("sun-dial");
+  if (!dial) return;
+  let dragging = false;
+  const fromEvent = (event) => {
+    const rect = dial.getBoundingClientRect();
+    const dx = event.clientX - (rect.left + rect.width / 2);
+    const dy = event.clientY - (rect.top + rect.height / 2);
+    const phi = Math.atan2(-dx, -dy);
+    const mins = Math.round((phi / (2 * Math.PI)) * 1440 + 720);
+    state.simMins = ((mins % 1440) + 1440) % 1440;
+    applyRegisterLight();
+    updateSunDial();
+  };
+  dial.addEventListener("pointerdown", (event) => {
+    dragging = true;
+    dial.classList.add("dragging");
+    try { dial.setPointerCapture(event.pointerId); } catch (e) { /* ignore */ }
+    fromEvent(event);
+    event.preventDefault();
+  });
+  dial.addEventListener("pointermove", (event) => { if (dragging) { fromEvent(event); event.preventDefault(); } });
+  dial.addEventListener("pointerup", () => { dragging = false; dial.classList.remove("dragging"); renderConditionsRail(); renderConditionPanel(); });
+  dial.addEventListener("pointercancel", () => { dragging = false; dial.classList.remove("dragging"); });
+}
+
 function renderConditionPanel() {
   if (!railPanel || !railPad) return;
   if (!openConditionSeg) {
@@ -1663,9 +1785,11 @@ function renderConditionPanel() {
   let html = "";
   if (openConditionSeg === "sun") {
     html = `<h3>THE SUN</h3>
-      <div class="note">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
-      <div class="note" style="margin-top:8px">Currently the <b>${escapeHTML(state.register.toUpperCase())}</b> register. Many parks close gathering at dusk — the register and the rules keep the same clock.</div>
-      <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
+      <div class="fig">${svgSunDial()}</div>
+      <div class="age" id="sun-readout"></div>
+      <button class="sun-now" type="button" id="sun-now">BACK TO NOW</button>
+      <div class="note" style="margin-top:10px">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
+      <div class="note" style="margin-top:8px"><b>Drag the sun</b> to preview any hour — the map's light and the register follow. Many parks close gathering at dusk; the register keeps the same clock.</div>`;
   } else if (openConditionSeg === "moon") {
     html = `<h3>MOON</h3>
       <div class="fig">${svgMoon(mp)}</div>
@@ -1708,8 +1832,25 @@ function renderConditionPanel() {
   if (fxToggle) {
     fxToggle.addEventListener("change", (event) => {
       state.fxOn = event.target.checked;
-      if (state.fxOn && !fxParticles.length) fxInitParticles();
+      if (state.fxOn) {
+        if (!fxParticles.length) fxInitParticles();
+        fxStart();
+      } else {
+        fxStop();
+      }
     });
+  }
+  if (openConditionSeg === "sun") {
+    bindSunDial();
+    updateSunDial();
+    const sunNow = document.getElementById("sun-now");
+    if (sunNow) {
+      sunNow.addEventListener("click", () => {
+        state.simMins = null;
+        applyRegister();
+        renderConditionPanel();
+      });
+    }
   }
 }
 

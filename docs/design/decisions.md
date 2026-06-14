@@ -3,6 +3,30 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Parity pass 4: the draggable solar dial (was absent).** The
+  relaunch sun panel was text-only; rebuilt the prototype's `#sun-dial`. Added a
+  simulated-clock hook — `simNow()` returns `state.simMins`-based time when set,
+  else the wall clock; `applyRegister()` (and its 60s tick) now read `simNow()`.
+  New SVG dial (`svgSunDial`): a clock ring with NOON at top / MIDNIGHT at
+  bottom, the warn-colored **day arc** between rise and set, RISE/SET markers,
+  the gold (day) / ink (night) **sun dot** at the current hour, and a small
+  **spinning earth** at the hub (`.earth-spin`, reduced-motion aware). `bindSunDial`
+  makes it **draggable**: pointer angle → `state.simMins` → `applyRegisterLight()`
+  re-derives the register + map `lightPreset` *without rebuilding the panel*
+  (smooth drag), and `updateSunDial()` moves the dot + live readout. A **BACK TO
+  NOW** pill (shown only while `.simulating`) clears the sim; the rail refreshes
+  on release. Reused the existing sun subject color (`#e8b931`). Also fixed the
+  WIND panel's fx-toggle to start/stop the canvas rAF loop (closing the Phase 6
+  manual-override gap).
+  **Gate:** `node --check` + `scripts/check.sh` green. Dial click→time math
+  verified by a node harness (8 round-trips: midnight→bottom, noon→top, 6am→right,
+  6pm→left). Live: opening the sun panel shows the dial at the real time
+  (11 PM/night, dark dot near MIDNIGHT); dragging to the top → "12:00 PM · DAY
+  REGISTER (SIMULATED)", gold dot, body+map → day, BACK TO NOW appears; dragging
+  to the bottom → night; BACK TO NOW → "11:06 PM · NIGHT REGISTER" (sim cleared).
+  Tokens → `?v=parity-dial-1`. (Simulation persists if the panel is closed, like
+  the prototype — reopen + BACK TO NOW to clear.)
+
 - **2026-06-13 — Parity pass 3: season slider (prototype model).** Rebuilt the
   `#season-bar` to the prototype's `#season`: moved bottom-left → **bottom-center**
   (`min(690px, 100vw-28px)`); the **histogram now collapses and expands UP on
