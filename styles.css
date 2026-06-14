@@ -2325,3 +2325,74 @@ body[data-register="night"] {
 .bars-labels span.today {
   color: var(--reg-ink);
 }
+
+/* =====================================================================
+   Phase 5 — mobile / responsive floating UI. Phones stack the chrome:
+   masthead → search → conditions rail across the top; the legend tucks
+   top-left under the rail; the season slider spans the bottom; detail
+   panels become bottom sheets. Scoped to <=720px, so desktop is untouched.
+   ===================================================================== */
+@media (max-width: 720px) {
+  #masthead {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  #masthead .wordmark { font-size: 14px; }
+  #masthead .links { gap: 10px; padding-left: 10px; }
+
+  #search-bar {
+    top: 66px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+  }
+
+  #conditions-rail {
+    top: 126px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #conditions-rail::-webkit-scrollbar { display: none; }
+  .rail-seg { flex: none; }
+
+  #rail-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    border-radius: 14px 14px 0 0;
+    max-height: 62vh;
+    overflow-y: auto;
+  }
+
+  #mapLegend {
+    top: 178px;
+    left: 10px;
+    right: auto;
+    bottom: auto;
+    width: min(230px, calc(100% - 20px));
+    max-height: 34vh;
+    overflow-y: auto;
+  }
+
+  #season-bar {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+  }
+
+  #season-bar .season-histogram { height: 70px; }
+}

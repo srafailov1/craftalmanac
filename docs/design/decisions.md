@@ -3,6 +3,37 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Verified Codex's sidebar retirement; applied Phase 5 (mobile).**
+  *Verification of Codex's migration:* `outputs/verify_codex_species.mjs` (13
+  checks over the real extracted selection functions) + a live Claude-in-Chrome
+  pass — 26 species selected by default, legend category chips add/remove a
+  category (Berries → none → all), the Plants sheet single-selects (apple),
+  mode switch resets to the new catalog (ink 13 / food 26), and no console
+  errors. `state.selectedSpecies` is a clean source of truth; no leftover
+  checkbox references. Migration confirmed correct.
+
+  *Phase 5 — mobile/responsive layer:* added a `@media (max-width: 720px)`
+  block for the floating UI (desktop untouched by construction). Phones stack
+  the chrome: masthead → search → conditions rail (horizontal-scroll, hidden
+  scrollbar) across the top; the legend tucks top-left under the rail; the
+  season slider spans the bottom; the condition detail panel becomes a
+  bottom sheet (`bottom:0`, rounded top, `max-height:62vh`); the season
+  histogram shortens to 70px. Verified the layout at 386px via a same-origin
+  iframe (the browser here renders a wide layout viewport regardless of window
+  size, so the iframe is how the ≤720px rules get exercised): measured rects
+  confirm **no overlaps** between masthead/search/rail/legend/season and the
+  season bar fits above the viewport bottom; a screenshot confirms every
+  control is readable. Tuned the top offsets (search 66, rail 126, legend 178)
+  after the first pass showed ~4–8px overlaps from the masthead being taller
+  than estimated. Bumped `styles.css` token to `?v=mobile-2`.
+
+  **Remaining for Phase 5:** the work-order gate is an owner walkthrough on a
+  real phone — this is a verified first pass (no-overlap layout) for the owner
+  to confirm on-device. Possible follow-ups: a histogram/legend collapse toggle
+  to reclaim space, and tuning the 720–860px (small-tablet) band, which still
+  uses the older `max-width:860px` legend rule. Next phases: 6 (hardening) and
+  7 (content/cutover), plus vendoring the OFL fonts.
+
 - **2026-06-13 — Sidebar retirement (Step 2): `#controlPanel` fully retired.**
   Deleted the original sidebar shell from `index.html`, including the panel
   brand block, old mode tabs, lede/safety copy, panel grip, `#panelContent`,
