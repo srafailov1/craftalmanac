@@ -34,6 +34,7 @@ const PUBLIC_LANDS_PAGE_SIZE = 1000;
 const PUBLIC_LANDS_MAX_PAGES = 4;
 const MARKERS_SOURCE_ID = "forage-records";
 const MARKERS_LAYER_ID = "forage-record-points";
+const MARKER_HALO_LAYER_ID = "forage-record-halo";
 const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
 const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
 const MARKER_CLUSTER_MAX_ZOOM = 12;
@@ -1368,7 +1369,7 @@ function applyRegister() {
   if (reg === state.register) return;
   state.register = reg;
   document.body.dataset.register = reg;
-  if (state.mapReady) syncLightPreset(reg);
+  if (state.mapReady) { syncLightPreset(reg); updateMarkerHalo(); }
 }
 
 applyRegister();
@@ -1738,7 +1739,7 @@ function applyRegisterLight() {
   if (reg === state.register) return;
   state.register = reg;
   document.body.dataset.register = reg;
-  if (state.mapReady) syncLightPreset(reg);
+  if (state.mapReady) { syncLightPreset(reg); updateMarkerHalo(); }
 }
 
 function bindSunDial() {
@@ -3998,6 +3999,28 @@ function initMapLayers() {
     });
   }
 
+  // Soft white halo behind individual markers, shown only at dusk/night so the
+  // points lift off the dark basemap (prototype occ-halo). Added before the
+  // marker symbol layer so it renders beneath; opacity is register-driven.
+  if (!map.getLayer(MARKER_HALO_LAYER_ID)) {
+    map.addLayer({
+      id: MARKER_HALO_LAYER_ID,
+      type: "circle",
+      source: MARKERS_SOURCE_ID,
+      filter: ["!", ["has", "point_count"]],
+      minzoom: FALLING_FRUIT_MIN_LOAD_ZOOM,
+      slot: "top",
+      layout: { "visibility": "none" },
+      paint: {
+        "circle-color": "#ffffff",
+        "circle-blur": 1,
+        "circle-opacity": 0,
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 11, 14, 15],
+        "circle-emissive-strength": 1
+      }
+    });
+  }
+
   if (!map.getLayer(MARKERS_LAYER_ID)) {
     map.addLayer({
       id: MARKERS_LAYER_ID,
@@ -4115,7 +4138,16 @@ function updateMarkerPointVisibility() {
   // Individual points stay hidden while any cluster is in the viewport, so a
   // given view reveals all of its points at once. Denser areas need more zoom.
   if (!state.mapReady || !map.getLayer(MARKERS_LAYER_ID)) return;
-  setLayerVisibility(MARKERS_LAYER_ID, shouldShowPointLayers() && !viewportHasMarkerClusters());
+  const show = shouldShowPointLayers() && !viewportHasMarkerClusters();
+  setLayerVisibility(MARKERS_LAYER_ID, show);
+  if (map.getLayer(MARKER_HALO_LAYER_ID)) setLayerVisibility(MARKER_HALO_LAYER_ID, show);
+  updateMarkerHalo();
+}
+
+// The marker halo only shows at dusk/night (prototype occ-halo opacity 0.38).
+function updateMarkerHalo() {
+  if (!state.mapReady || !map.getLayer(MARKER_HALO_LAYER_ID)) return;
+  map.setPaintProperty(MARKER_HALO_LAYER_ID, "circle-opacity", isNightish() ? 0.38 : 0);
 }
 
 function viewportHasMarkerClusters() {

@@ -3,6 +3,19 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Parity pass 6: night halo on markers.** Ported the prototype's
+  occ-halo. Added a white, blurred `circle` layer (`forage-record-halo`) on the
+  marker source, filtered to individual points and inserted **below** the marker
+  symbol layer; `updateMarkerHalo()` sets its `circle-opacity` to 0.38 at
+  dusk/night and 0 otherwise, called from `applyRegister`/`applyRegisterLight`
+  (so it also tracks the solar-dial simulation) and `updateMarkerPointVisibility`
+  (which now toggles the halo's visibility in lockstep with the markers).
+  **Gate:** `node --check` + `scripts/check.sh` green. Live at z12: the halo
+  layer exists, renders below `forage-record-points`, and its opacity is 0.38 in
+  the night register (would be 0 in day). The glow itself needs a foreground/
+  production look (markers don't paint under the headless WebGL throttle). Token
+  → `app.js?v=parity-halo-1`.
+
 - **2026-06-13 — Parity pass 5: mobile (legend folds into the season card).**
   Ported the prototype's key mobile move. Added `#legendSlot` inside the season
   card and two mobile-only meta toggles — **Chart** (pins the histogram, since
