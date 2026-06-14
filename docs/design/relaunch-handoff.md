@@ -6,9 +6,23 @@ prototype/relaunch line refs and verification notes) is in
 `docs/design/decisions.md` (newest first); the full parity catalog is in
 `docs/design/prototype-parity-audit.md`.
 
-Branch: **`design/relaunch`** (never `main`). All work below is committed and
-pushed. Current cache tokens: `styles.css?v=parity-disclaimer-1`,
-`app.js?v=parity-disclaimer-1`.
+Branch: **`design/relaunch`** (never `main`). Session-1 work (below) is
+committed and pushed; the **session-2 (2026-06-14)** parity-polish + cleanup
+commits (`de3e197`…`d71b93d`) are committed locally and **awaiting the owner's
+push**. Current cache tokens: `styles.css?v=cleanup-css-1`,
+`app.js?v=cleanup-css-1`.
+
+**Session 2 (2026-06-14) — completed the remaining parity polish + scoped
+cleanup** (detail in `decisions.md`, passes 8–11 + cleanup): point card
+(sparkline / in-card flush line / ethic paragraph / `.pt-card.compact` on phones
+/ CHECK wording / med-note `color-mix` tint); hover tip (category spine + serif
+name + register-colored status line); wind panel (animated `.windflow` overlay +
+larger r=88 compass); welcome modal rethemed to the register palette; and removal
+of the retired-sidebar `species-list`/`favorite`/`type-pill` + `season-actions`/
+`season-bands`/`date-entry` dead CSS. All five gated green (`node --check`,
+`scripts/check.sh`, console clean) and verified live in the preview. Sections A
+and B below are now **done**; what's left is Phase 7 content/cutover + the owner
+gates.
 
 ---
 
@@ -74,28 +88,53 @@ decisions captured this session:
 
 ## What remains before cutover
 
-### A. Remaining parity (completeness — all medium/low, optional polish)
-From `prototype-parity-audit.md`, not yet done:
-- **Point card** season-line: restore the monthly **sparkline + RIPE range**.
-- **Wind panel**: the animated **`.windflow` streak overlay** in the rose.
-- **Hover tip**: species spine + colored status line; move off non-register tokens.
-- **Welcome modal**: adapt to the register palette (currently day-only).
-- `.pt-card.compact` mobile variant is dead CSS (never applied).
-- Low: card **RAIN-FED FLUSH** line (`.flush` dead), ethic as a flowing paragraph,
-  card wording **CHECK → VERIFY**, compass dial size, `med-note` tint still old
-  amber, wind fx-toggle label copy.
+### A. Remaining parity — ✅ DONE (session 2, 2026-06-14)
+All the completeness items below shipped (`decisions.md` passes 8–11):
+- ✅ **Point card** season-line: monthly **sparkline** (tinted to the category
+  color) + the `SEASON · <range>` text. (Relaunch has no distinct RIPE field;
+  the range text is the equivalent.)
+- ✅ **Wind panel**: animated **`.windflow` streak overlay** + larger compass.
+- ✅ **Hover tip**: category spine + serif name + register-colored status line.
+- ✅ **Welcome modal**: rethemed to the register palette.
+- ✅ `.pt-card.compact` mobile variant now applied (`matchMedia` at build time).
+- ✅ Low items: card **RAIN-FED FLUSH** line; ethic as a flowing paragraph; card
+  wording **VERIFY → CHECK** (prototype); compass r 72→88; `med-note` tint via
+  `color-mix(var(--reg-warn))`.
+- **Deliberately kept** (documented): the wind **fx-toggle** label keeps the
+  relaunch's clearer "Animate wind on the map (zoom 7.5+)" copy (adds the real
+  zoom threshold).
 - **Intentional / no action** (owner-confirmed or deliberate): per-species pigment
   vs category fill, low-zoom aggregate circles, the dedicated search bar, the
   vendored fonts, `#sheet` closer size.
 
-### B. Cleanup
-- Dead CSS from the rebuilds: legacy `.season-actions` / `.season-bands` /
-  `.date-entry` and the retired-sidebar species-list/favorite rules.
+### B. Cleanup — ✅ DONE (scoped, session 2)
+- ✅ Removed `.season-actions` / `.season-bands` / `.date-entry` and the
+  retired-sidebar `species-list` / `species-group-*` / `favorite` / `type-pill`
+  rules (all 0 live refs, verified first).
+- **Deferred** (next dead-CSS pass): the retired *filter* CSS — `.filter-list` /
+  `.type-list` / `.category-option*` / `.access-list` / `.permission-*` and the
+  panel chrome `.control-group` / `.section-*` / `.fine-print` — left because
+  `.category-option` and `.attribution-block` still have inert guarded refs in
+  `app.js`, and these fall outside the handoff's named scope.
+
+### B2. Phase 7 scaffolding — already in place (verified session 2)
+- **About** sheet (`sheetAboutHTML`): real mission + "occurrence is never
+  permission" + herbalism-educational-only + attribution link. Launch-ready
+  (owner may still refine tone).
+- **Plants** sheet (`sheetPlantsHTML`): backed by the live `speciesCatalogByName`
+  (full per-mode catalog), tap-to-filter. Done.
+- **Recipes** sheet (`sheetRecipesHTML`): the three-card template + placeholders
+  (oak-gall / pokeberry / walnut) with the "full recipes after launch" note —
+  the intended pre-cutover state; **owner authors the recipe content**.
+- No demo banners/sample records exist to remove.
 
 ### C. Phase 7 — content + cutover (owner + Claude)
-- Real **About** copy; **Plants** sheet backed by the full catalogs; the three
-  sample **recipes** (owner authors content; template exists). Remove any demo
-  banners/records; retire `prototype/` → `docs/design/archive/`.
+Scaffolding done (see B2). What's left:
+- **Recipe content** (owner authors): swap the three placeholders in
+  `RECIPE_PLACEHOLDERS` / `sheetRecipesHTML` for real step-by-step recipes once
+  written. Template is ready.
+- **Retire `prototype/` → `docs/design/archive/`** — left in place for now
+  (it's still the parity reference); do this `git mv` at the cutover moment.
 - Cutover: owner merges `design/relaunch` → `main`, push, verify, tag
   `relaunch-1`; rollback rehearsed (re-promote last pre-merge build).
 
