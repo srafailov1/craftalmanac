@@ -1007,6 +1007,23 @@ h2 {
   display: none;
 }
 
+/* Persistent herbalism disclaimer (prototype #mode-disclaimer), medicine only. */
+#mode-disclaimer {
+  top: 116px;
+  left: 14px;
+  padding: 7px 12px;
+  max-width: min(300px, calc(100vw - 28px));
+  color: var(--reg-warn);
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  line-height: 1.4;
+  font-family: var(--font-mono);
+}
+
+#mode-disclaimer[hidden] {
+  display: none;
+}
+
 /* Category swatch mirrors the point FILL: a filled square (the point's category
    color). Access uses a ring (the point's status stroke). Off categories go
    hollow with an inset hairline, exactly like the prototype's .leg-cats .lc i. */
@@ -2356,7 +2373,7 @@ body[data-register="night"] {
   right: 14px;
   display: flex;
   align-items: stretch;
-  padding: 3px 5px;
+  padding: 6px 4px;
   max-width: calc(100% - 28px);
   overflow-x: auto;
 }
@@ -2483,11 +2500,11 @@ body[data-register="night"] {
   margin-top: 8px;
   background: var(--reg-accent);
   border: none;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 6px;
+  color: var(--reg-panel);
+  padding: 7px 13px;
+  border-radius: 14px;
   font-size: 10.5px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   cursor: pointer;
   font-family: var(--font-mono);
 }
@@ -2641,6 +2658,13 @@ body[data-register="night"] {
   /* Mobile-only CHART / LEGEND toggles appear in the season meta. */
   .mobile-only {
     display: inline-block;
+  }
+
+  #mode-disclaimer {
+    top: 178px;
+    left: 10px;
+    right: 10px;
+    max-width: none;
   }
 
   #season-bar {

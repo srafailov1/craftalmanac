@@ -3,6 +3,20 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Parity pass 7: herbalism disclaimer banner + rail chrome.**
+  Restored the prototype's persistent on-map `#mode-disclaimer` (a CLAUDE.md
+  non-negotiable — "the medicine/herbalism disclaimer stays prominent"): a
+  floating warn-colored banner ("HERBALISM MAP · EDUCATIONAL REFERENCE ONLY —
+  NOT MEDICAL ADVICE") shown only in the medicine map, toggled in
+  `renderModeChrome()`, placed top-left below the search bar (full-width below
+  the rail on mobile). Also two audit chrome fixes: `#rail-panel .now-btn`
+  (UPDATE TO MAP AREA) `color:#fff → var(--reg-panel)` + pill shape (fixes
+  white-on-yellow illegibility in the night register), and `#conditions-rail`
+  padding `3px 5px → 6px 4px` (prototype #rail).
+  **Gate:** `node --check` + `scripts/check.sh` green. Live: switching Food →
+  Herbalism reveals the banner (hidden in food) in the warn color; active map
+  reads HERBALISM. Tokens → `?v=parity-disclaimer-1`.
+
 - **2026-06-13 — Parity pass 6: night halo on markers.** Ported the prototype's
   occ-halo. Added a white, blurred `circle` layer (`forage-record-halo`) on the
   marker source, filtered to individual points and inserted **below** the marker

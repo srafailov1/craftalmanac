@@ -2393,6 +2393,10 @@ function renderModeChrome() {
   const config = getActiveMapConfig();
   const dataNotesEl = document.querySelector(".attribution-block .section-body p");
   if (dataNotesEl) dataNotesEl.textContent = config.dataNotes;
+  // Persistent on-map herbalism disclaimer (CLAUDE.md non-negotiable; prototype
+  // #mode-disclaimer) — shown only in the medicine/herbalism map.
+  const disclaimer = document.getElementById("mode-disclaimer");
+  if (disclaimer) disclaimer.hidden = state.activeMap !== "medicine";
   renderMapLegend();
 }
 
