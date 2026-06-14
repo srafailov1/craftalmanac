@@ -3,6 +3,29 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Parity pass 3: season slider (prototype model).** Rebuilt the
+  `#season-bar` to the prototype's `#season`: moved bottom-left → **bottom-center**
+  (`min(690px, 100vw-28px)`); the **histogram now collapses and expands UP on
+  hover/focus** with the header line `IN SEASON BY MONTH · <MODE> MAP · STACKED
+  BY CATEGORY`, a **taller 118px stacked-by-category** stack, a static
+  **month-letter** row (J…D), and a **category-swatch legend** below. The
+  scrubber is a native range input **restyled to the prototype's thin line +
+  12px round cursor** (keeps keyboard support the prototype's div-track lacked),
+  with **WINTER/SPRING/SUMMER/FALL** labels under it. Meta row: the date readout
+  + **Back to now** (shows only when scrubbed off today), **All seasons**, and
+  **Set date** (reveals an in-card date form). Per owner decision 2, the
+  dedicated **search bar is kept** for place entry (the prototype's when-form
+  place field is not duplicated). JS: dropped `#todayButton`, added
+  `seasonReset`/`whenToggle`/`whenApply`/`whenForm` + `renderSeasonCats()`;
+  `renderHistogram` now sets the header, drops the per-bar label, and renders
+  the swatches; `renderSeasonControls` shows/hides Back-to-now by scrubbed state.
+  **Gate:** `node --check` + `scripts/check.sh` green. Verified live at desktop
+  width: 690px centered card, 12 bars + 12 month letters + 4 swatches, header
+  with mode name, season labels; scrub → "March 1 / Winter" reveals Back-to-now,
+  reset returns to today, Set date opens the form, All seasons toggles. Tokens →
+  `?v=parity-season-1`. (Old `.season-actions/.season-bands/.date-entry` CSS is
+  now dead — left for a later cleanup; mobile season layout is the mobile pass.)
+
 - **2026-06-13 — Parity pass 2: legend layout (prototype model).** Rebuilt
   `#mapLegend` to the prototype's `#legend`: moved bottom-right → **bottom-left**;
   it now **collapses to a title bar** (`LEGEND: PERMISSIONS AND POINTS` +

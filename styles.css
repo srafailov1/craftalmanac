@@ -1901,17 +1901,177 @@ body[data-register="night"] {
 #search-bar .location-search-status:empty { display: none; }
 
 #season-bar {
-  bottom: 36px;
-  left: 14px;
-  width: min(440px, calc(100% - 28px));
-  padding: 12px 14px 13px;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(690px, calc(100vw - 28px));
+  padding: 10px 18px 9px;
 }
 
-#season-bar .season-bar-head {
+/* The histogram is collapsed and expands UP on hover/focus (prototype). */
+.season-hist {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.28s ease;
+}
+
+#season-bar:hover .season-hist,
+#season-bar:focus-within .season-hist,
+#season-bar.pinned .season-hist {
+  max-height: 230px;
+  opacity: 1;
+}
+
+.season-hh {
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+  margin: 2px 0 0;
+}
+
+.season-hh b {
+  color: var(--reg-ink);
+}
+
+#season-bar .season-histogram {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
+  gap: 5px;
+  height: 118px;
+  margin: 10px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+#season-bar .histogram-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
+  min-height: 6px;
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+  background: transparent;
+  outline: none;
+}
+
+#season-bar .histogram-bar.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--reg-ink);
+  border-radius: 3px;
+}
+
+.season-months {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+}
+
+.season-months span {
+  flex: 1;
+  text-align: center;
+}
+
+.season-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 8px;
+  font-size: 10.5px;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.season-cat i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+/* Track: a thin line with a small round cursor (native range, restyled so it
+   keeps keyboard support the prototype's div-track lacked) + season labels. */
+.season-track {
+  margin-top: 6px;
+}
+
+#season-bar .day-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+#season-bar .day-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--reg-hair);
+  border-radius: 2px;
+}
+
+#season-bar .day-slider::-moz-range-track {
+  height: 2px;
+  background: var(--reg-hair);
+  border-radius: 2px;
+}
+
+#season-bar .day-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--reg-accent);
+  box-shadow: 0 0 0 3px var(--reg-panel-a);
+  border: none;
+}
+
+#season-bar .day-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--reg-accent);
+  box-shadow: 0 0 0 3px var(--reg-panel-a);
+  border: none;
+}
+
+#season-bar .day-slider:disabled {
+  opacity: 0.5;
+}
+
+.season-seasons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 2px;
+  color: var(--reg-ink);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-align: center;
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+
+.season-meta {
+  display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
+  margin-top: 9px;
 }
 
 #season-bar .season-readout strong {
@@ -1930,81 +2090,57 @@ body[data-register="night"] {
   font-family: var(--font-mono);
 }
 
-#season-bar .season-actions {
+.season-mbtns {
   display: flex;
-  gap: 6px;
-  margin: 0;
+  gap: 8px;
 }
 
 #season-bar .text-button {
-  min-height: 28px;
-  padding: 0 9px;
-  border: 1px solid var(--reg-hair);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--reg-sub);
-  font-size: 11px;
+  min-height: 0;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--reg-accent);
   cursor: pointer;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  padding: 4px 9px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+#season-bar .text-button:hover {
+  background: rgba(127, 127, 127, 0.14);
+  border-color: var(--reg-hair);
+  color: var(--reg-ink);
 }
 
 #season-bar .text-button.active {
   border-color: var(--reg-accent);
-  background: var(--reg-accent);
-  color: #fff;
+  background: none;
+  color: var(--reg-ink);
 }
 
-#season-bar .season-histogram {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  align-items: end;
-  gap: 4px;
-  height: 78px;
-  margin: 10px 0 0;
-  padding: 16px 2px 4px;
-  border: none;
-  background: transparent;
-}
-
-#season-bar .histogram-bar { background: var(--reg-hair); }
-#season-bar .histogram-bar.active { outline-color: var(--reg-ink); }
-#season-bar .histogram-label { color: var(--reg-sub); }
-
-#season-bar .day-slider {
-  width: 100%;
-  margin: 6px 0 4px;
-  accent-color: var(--reg-accent);
-}
-
-#season-bar .season-bands {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin: 0;
-  color: var(--reg-sub);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-align: center;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-}
-
-#season-bar .date-entry {
-  display: grid;
-  grid-template-columns: auto 1fr;
+.when-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
   align-items: center;
-  gap: 10px;
-  margin-top: 11px;
-  color: var(--reg-sub);
-  font-size: 12px;
+  flex-wrap: wrap;
 }
 
-#season-bar .date-entry input {
-  width: 100%;
-  min-height: 32px;
-  padding: 0 10px;
+.when-form[hidden] {
+  display: none;
+}
+
+.when-form input {
   border: 1px solid var(--reg-hair);
-  border-radius: 6px;
   background: var(--reg-panel);
   color: var(--reg-ink);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 11.5px;
+  font-family: var(--font-mono);
 }
 
 /* ---- masthead (Phase 3d) ---- */

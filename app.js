@@ -2110,8 +2110,14 @@ const locationSearchStatus = document.querySelector("#locationSearchStatus");
 const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
 let categoryInputs = [];
-const todayButton = document.querySelector("#todayButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
+const seasonReset = document.querySelector("#seasonReset");
+const whenToggle = document.querySelector("#whenToggle");
+const whenApply = document.querySelector("#whenApply");
+const whenForm = document.querySelector("#whenForm");
+const seasonHist = document.querySelector("#seasonHist");
+const seasonHistHead = document.querySelector("#seasonHistHead");
+const seasonCats = document.querySelector("#seasonCats");
 
 function getDayOfYear(date) {
   // UTC math avoids daylight-saving off-by-one errors in local-time subtraction.
@@ -2796,7 +2802,8 @@ function initControls() {
 
   initWelcomeModal();
 
-  todayButton.addEventListener("click", () => {
+  // "Back to now" — reset the scrubber to today (prototype #season-reset).
+  seasonReset.addEventListener("click", () => {
     state.selectedDay = getDayOfYear(new Date());
     state.allSeasons = false;
     render();
@@ -2805,6 +2812,16 @@ function initControls() {
   allSeasonsButton.addEventListener("click", () => {
     state.allSeasons = !state.allSeasons;
     render();
+  });
+
+  // "Set date" reveals the precise date-entry form (prototype #when-form).
+  whenToggle.addEventListener("click", () => {
+    whenForm.hidden = !whenForm.hidden;
+    whenToggle.classList.toggle("active", !whenForm.hidden);
+  });
+  whenApply.addEventListener("click", () => {
+    whenForm.hidden = true;
+    whenToggle.classList.remove("active");
   });
 
   map.on("move", () => {
@@ -2924,9 +2941,11 @@ function renderSeasonControls() {
     : `${FULL_MONTHS[selectedDate.getMonth()]} ${selectedDate.getDate()}`;
   seasonName.textContent = state.allSeasons ? "Full year" : getSeason(selectedDate);
   daySlider.disabled = state.allSeasons;
-  dateInput.disabled = state.allSeasons;
-  todayButton.classList.toggle("active", !state.allSeasons);
   allSeasonsButton.classList.toggle("active", state.allSeasons);
+  // "Back to now" only shows once the scrubber has moved off today (prototype
+  // #season.scrubbed) or while in all-seasons mode.
+  const scrubbed = state.allSeasons || state.selectedDay !== getDayOfYear(new Date());
+  if (seasonReset) seasonReset.hidden = !scrubbed;
 }
 
 // C2 phenology: per-species 12-month relative-abundance (0-1) curves, loaded
@@ -2973,7 +2992,7 @@ function renderHistogram() {
 
   seasonHistogram.innerHTML = monthData.map((entry, index) => {
     const total = totals[index];
-    const height = total > 0 ? Math.max(8, Math.round((total / maxTotal) * 68)) : 8;
+    const height = total > 0 ? Math.max(6, Math.round((total / maxTotal) * 104)) : 6;
     const activeClass = !state.allSeasons && index + 1 === activeMonth ? " active" : "";
     const segments = CATEGORIES.map((category) => {
       const value = entry.weighted[category];
@@ -2985,12 +3004,22 @@ function renderHistogram() {
       .filter((category) => entry.counts[category])
       .map((category) => `${getCategoryLabel(category)}: ${entry.counts[category]}`)
       .join(", ");
-    return `
-      <div class="histogram-bar${activeClass}" style="height: ${height}px" title="${MONTHS[index]}: ${title || "none in season"}">
-        ${segments}
-        <span class="histogram-label">${MONTHS[index]}</span>
-      </div>
-    `;
+    // Month letters live in the static .season-months row below the bars now.
+    return `<div class="histogram-bar${activeClass}" style="height: ${height}px" title="${MONTHS[index]}: ${title || "none in season"}">${segments}</div>`;
+  }).join("");
+
+  // Header reflects the active map; the category swatch legend sits below.
+  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
+  if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY`;
+  renderSeasonCats();
+}
+
+function renderSeasonCats() {
+  if (!seasonCats) return;
+  const config = getActiveMapConfig();
+  seasonCats.innerHTML = config.categories.map((category) => {
+    const color = config.categoryColors[category.id] || "#777";
+    return `<span class="season-cat"><i style="background:${escapeHTML(color)}"></i>${escapeHTML(category.label)}</span>`;
   }).join("");
 }
 
