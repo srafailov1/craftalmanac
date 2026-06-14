@@ -451,13 +451,18 @@ const ACCESS_STATUS_OPTIONS = [
   { id: "unknown", label: "Unknown", defaultChecked: true },
   { id: "prohibited", label: "Prohibited", defaultChecked: false }
 ];
+// Access-status ring colors for the map markers. These mirror the prototype's
+// status hues and the day-register --reg-st-* tokens so the marker ring matches
+// the legend access ring (the legend brightens per register; markers stay
+// constant, exactly as the prototype does). Solid rings; the status is read by
+// hue. "permit" uses the legibility-tuned amber (#a8730a), per owner decision.
 const ACCESS_MARKER_STYLES = {
-  allowed: { label: "Allowed", color: "#111111", dashed: false },
-  "permit-required": { label: "Permit required", color: "#111111", dashed: true },
-  private: { label: "Private", color: "#ffffff", dashed: false, shadow: true },
-  "private-unsourced": { label: "Private / unsourced", color: "#ffffff", dashed: true, shadow: true },
-  unknown: { label: "Unknown", color: "#ffffff", dashed: true, shadow: true },
-  prohibited: { label: "Prohibited", color: "#d51f1f", dashed: false }
+  allowed: { label: "Allowed", color: "#2f8f46", dashed: false },
+  "permit-required": { label: "Permit required", color: "#a8730a", dashed: false },
+  private: { label: "Private", color: "#7e6654", dashed: false },
+  "private-unsourced": { label: "Private / unsourced", color: "#7e6654", dashed: false },
+  unknown: { label: "Unknown", color: "#8b8f86", dashed: false },
+  prohibited: { label: "Prohibited", color: "#c74437", dashed: false }
 };
 const LEGEND_PERMISSION_OPTIONS = [
   { id: "allowed", label: "Allowed" },
@@ -2344,7 +2349,7 @@ function renderMapLegend() {
     const selection = getCategorySelectionState(category.id);
     const color = config.categoryColors[category.id] || "#777";
     const cls = selection === "none" ? " off" : selection === "some" ? " partial" : "";
-    return `<button type="button" class="leg-chip${cls}" data-leg-category="${escapeHTML(category.id)}" aria-pressed="${String(selection !== "none")}"><span class="ring" style="color: ${escapeHTML(color)}"></span>${escapeHTML(category.label)}</button>`;
+    return `<button type="button" class="leg-chip${cls}" data-leg-category="${escapeHTML(category.id)}" aria-pressed="${String(selection !== "none")}"><span class="swatch" style="color: ${escapeHTML(color)}"></span>${escapeHTML(category.label)}</button>`;
   }).join("");
 
   const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
@@ -3500,8 +3505,14 @@ function ensureMarkerIcon(iconName, fillColor, accessStatus) {
   const context = canvas.getContext("2d");
   context.scale(MARKER_ICON_PIXEL_RATIO, MARKER_ICON_PIXEL_RATIO);
   const center = MARKER_ICON_SIZE / 2;
-  const fillRadius = 6.5;
-  const outlineRadius = 5.3;
+  // Match the prototype's occ-core: a category fill with the access-status color
+  // as an OUTER ring (circle-stroke semantics — painted outward from the fill
+  // edge), not an inner edge. Sizes are in the 26-unit icon space and scale with
+  // icon-size; at the dominant detail zoom they land near the prototype's
+  // on-screen radius 5.5 / stroke 2.4.
+  const ringWidth = 2.8;
+  const fillRadius = 6.4;
+  const outlineRadius = fillRadius + ringWidth / 2;
 
   context.clearRect(0, 0, MARKER_ICON_SIZE, MARKER_ICON_SIZE);
   context.beginPath();
@@ -3509,7 +3520,7 @@ function ensureMarkerIcon(iconName, fillColor, accessStatus) {
   context.fillStyle = fillColor;
   context.fill();
 
-  drawMarkerOutline(context, center, outlineRadius, style.color, style.dashed, 1.8);
+  drawMarkerOutline(context, center, outlineRadius, style.color, style.dashed, ringWidth);
 
   const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
   map.addImage(iconName, imageData, { pixelRatio: MARKER_ICON_PIXEL_RATIO });

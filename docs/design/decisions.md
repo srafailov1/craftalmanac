@@ -3,6 +3,56 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Prototype parity audit + parity pass 1 (data points + legend + color).**
+  Owner flagged that the relaunch is functional but diverges from the
+  owner-approved prototype (`prototype/index.html`) in layout/features. Ran a
+  `prototype-fidelity-audit` workflow (6 surface diffs, every finding
+  adversarially verified by an independent agent): **80 findings → 69
+  fix-targets, 7 intentional/architectural, 4 dropped**. Full catalog with
+  prototype/relaunch refs + fixes in `docs/design/prototype-parity-audit.md`.
+
+  *Two owner decisions (this session):* (1) **colors** — restore prototype hues,
+  but keep the permit/warn amber darkened where the prototype fails WCAG badly;
+  (2) **season controls** — hybrid: keep the dedicated search bar, otherwise
+  match the prototype's season controls.
+
+  *Pass 1 — data points + legend (owner's #3 + #1), tightly coupled by one
+  palette:*
+  - **Color reconciliation (per decision 1).** Reverted the dawn `--reg-accent`
+    (→ `#d98a6a`) and dawn/dusk `--reg-sub` (→ `#6a7580` / `#bcafa5`) to the
+    prototype values; kept the legible amber (`--reg-warn`/`--reg-st-permit`
+    `#a8730a`) in day/dawn. `audit_contrast.mjs` now records the three
+    owner-approved sub-floor pairs as `APPR` (transparent, non-failing); audit
+    stays green.
+  - **Data-point fill/stroke.** `ACCESS_MARKER_STYLES` colors were a black/white/
+    red palette (allowed=black, private=white) — replaced with the prototype
+    status hues = the day `--reg-st-*` values (allowed `#2f8f46`, permit
+    `#a8730a`, private `#7e6654`, unknown `#8b8f86`, prohibited `#c74437`), all
+    solid (dropped the half-implemented dashed/shadow set). `ensureMarkerIcon`
+    now draws the status ring as an **outer** collar (radius = fill + width/2,
+    matching Mapbox `circle-stroke`) at width 2.8 / fill 6.4 (≈ the prototype's
+    on-screen 5.5 fill + 2.4 ring) instead of a thin inner edge.
+  - **Legend mirror.** Category chips now render as **filled squares** (the
+    point fill; hollow with an inset hairline when off, like the prototype's
+    `.lc i`); access chips stay **rings** (the point stroke). Both draw from the
+    shared palette, so the legend mirrors the dots. Markers stay constant across
+    registers while the legend ring uses `--reg-st-*` — faithful to the
+    prototype (its map points are day-constant, its legend rings register-aware).
+
+  **Gate — passed.** `node --check` clean; `scripts/check.sh` green (contrast
+  audit incl. the APPR exceptions). Legend mirror verified live (5 access rings +
+  4 category filled squares, permit ring `#a8730a`). Marker geometry verified by
+  a node harness (6 checks): category fill `#d12f7a` at r6.4, then an OUTER
+  status ring `#2f8f46` at r7.8, width 2.8, fill-before-stroke. Individual
+  markers don't paint in the headless preview (WebGL throttle) — needs a
+  foreground/production look. Bumped both tokens to `?v=parity-points-1`.
+
+  **Remaining parity work (next passes):** night white halo on markers (needs a
+  synced circle layer — delicate handoff machinery); legend layout (bottom-left,
+  two-column, hover-expand, ONLY ALLOWED); season-slider restyle; the solar dial
+  (absent); mobile legend-into-season-card; completeness extras (mode-disclaimer
+  banner is a CLAUDE.md non-negotiable — high priority).
+
 - **2026-06-13 — Phase 6 (3/?): wind-canvas power heuristics + console sweep.**
   *Performance.* The decorative wind-streak canvas (`#fx`, zoom ≥ 7.5) already
   honored `prefers-reduced-motion`, paused when the tab was hidden, and cleared

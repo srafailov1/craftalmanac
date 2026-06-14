@@ -28,6 +28,16 @@ const css = readFileSync(join(ROOT, "styles.css"), "utf8");
 const AA_NORMAL = 4.5; // body + secondary text
 const AA_LARGE = 3.0; // bold/large labels, accent/warn, and graphical indicators
 
+// Owner-approved prototype values that sit below the floor (decision 2026-06-13:
+// "prototype look, keep amber legible" — the prototype wins on these hues; only
+// the permit/warn amber is kept darkened for legibility). Reported as APPROVED,
+// not failures. Keyed `${register}:${token}`.
+const APPROVED_BELOW_FLOOR = new Set([
+  "dawn:--reg-accent", // #d98a6a soft sunrise peach — prototype value (~2.5:1)
+  "dawn:--reg-sub", // #6a7580 — prototype value (~4.45:1, just under AA)
+  "dusk:--reg-sub" // #bcafa5 — prototype value (~3.84:1)
+]);
+
 // --- color parsing + WCAG contrast ------------------------------------------
 function hexToRgb(hex) {
   const h = hex.trim().replace("#", "");
@@ -109,12 +119,15 @@ for (const [reg, vars] of Object.entries(registers)) {
       continue;
     }
     const cr = contrast(fg, panel);
-    const ok = cr >= floor;
-    if (!ok) failures++;
+    const meets = cr >= floor;
+    const approved = !meets && APPROVED_BELOW_FLOOR.has(`${reg}:${token}`);
+    if (!meets && !approved) failures++;
     const grnd = contrast(fg, ground).toFixed(2);
+    const verdict = meets ? "PASS" : approved ? "APPR" : "FAIL";
     lines.push(
-      `  ${ok ? "PASS" : "FAIL"}  ${token.padEnd(20)} ${fg.padEnd(8)} ` +
-        `${cr.toFixed(2)}:1 (need ${floor})  [ground ${grnd}:1]  ${desc}`
+      `  ${verdict}  ${token.padEnd(20)} ${fg.padEnd(8)} ` +
+        `${cr.toFixed(2)}:1 (need ${floor})  [ground ${grnd}:1]  ${desc}` +
+        (approved ? "  — owner-approved prototype value" : "")
     );
   }
 }

@@ -948,9 +948,20 @@ h2 {
   margin-top: 5px;
 }
 
-/* "some but not all species selected" — fill the ring with its own color */
-.leg-chip.partial .ring {
+/* Category swatch mirrors the point FILL: a filled square (the point's category
+   color). Access uses a ring (the point's status stroke). Off categories go
+   hollow with an inset hairline, exactly like the prototype's .leg-cats .lc i. */
+.leg-chip .swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2.5px;
+  flex: none;
   background: currentColor;
+}
+
+.leg-chip.off .swatch {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--reg-sub);
 }
 
 .legend-section {
@@ -1469,9 +1480,9 @@ body[data-register="dawn"] {
   --reg-panel: #f7f9fb;
   --reg-panel-a: rgba(247, 249, 251, 0.93);
   --reg-ink: #2a3138;
-  --reg-sub: #646f7b;
+  --reg-sub: #6a7580;
   --reg-hair: #d3dbe1;
-  --reg-accent: #b86844;
+  --reg-accent: #d98a6a;
   --reg-warn: #a8730a;
 }
 
@@ -1480,7 +1491,7 @@ body[data-register="dusk"] {
   --reg-panel: #544c5a;
   --reg-panel-a: rgba(84, 76, 90, 0.93);
   --reg-ink: #f2e9dc;
-  --reg-sub: #d4c9bd;
+  --reg-sub: #bcafa5;
   --reg-hair: #5e5664;
   --reg-accent: #ff9447;
   --reg-warn: #ffc94d;
