@@ -1239,15 +1239,39 @@ body.modal-open .app-shell {
 }
 
 .forage-hover-popup .mapboxgl-popup-content {
+  position: relative;
+  overflow: hidden;
   min-width: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  padding: 6px 10px 6px 12px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 7px;
+  background: var(--reg-panel-a);
+  box-shadow: var(--reg-glow);
 }
 
-.forage-hover-popup .popup-title {
-  margin: 0;
-  font-size: 13px;
+.forage-hover-popup .mapboxgl-popup-tip {
+  display: none;
+}
+
+.forage-hover-popup .hover-sp {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.forage-hover-popup .hover-nm {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--reg-ink);
+}
+
+.forage-hover-popup .hover-st {
+  margin-top: 1px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
 }
 
 .mapboxgl-popup-close-button {

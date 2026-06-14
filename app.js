@@ -4291,6 +4291,9 @@ function bindMapInteractions() {
     const feature = event.features?.[0];
     if (!feature) return;
     state.hoverPopup?.remove();
+    const hp = feature.properties;
+    const hoverStatus = hp.accessStatus || "unknown";
+    const hoverStatusColor = `var(--reg-st-${ACCESS_STATUS_TOKEN[hoverStatus] || "unknown"})`;
     state.hoverPopup = new mapboxgl.Popup({
       className: "forage-hover-popup",
       closeButton: false,
@@ -4298,7 +4301,11 @@ function bindMapInteractions() {
       offset: 12
     })
       .setLngLat(feature.geometry.coordinates)
-      .setHTML(`<p class="popup-title">${escapeHTML(feature.properties.speciesName)}</p>`)
+      .setHTML(
+        `<div class="hover-sp" style="background:${hp.categoryColor || "var(--reg-accent)"}"></div>`
+        + `<div class="hover-nm">${escapeHTML(hp.speciesName)}</div>`
+        + `<div class="hover-st" style="color:${hoverStatusColor}">${escapeHTML((hp.accessStatusLabel || "Unknown").toUpperCase())}</div>`
+      )
       .addTo(map);
   });
 

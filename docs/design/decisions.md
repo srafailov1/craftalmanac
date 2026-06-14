@@ -3,6 +3,28 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-14 — Parity pass 9: hover tip (spine + status line, register tokens).**
+  Replaced the plain `<p class="popup-title">name</p>` hover popup with the
+  prototype's `#hover-tip` structure: a 4px **category-colored spine**
+  (`.hover-sp` from `categoryColor`), the species name in the **display font**
+  (`.hover-nm`, Fraunces 14px / `--reg-ink`), and an **UPPERCASE access-status
+  line** (`.hover-st`, IBM Plex Mono 10.5px) colored by the register status hue
+  (`var(--reg-st-<token>)` via `ACCESS_STATUS_TOKEN`, same map the card uses).
+  Re-themed `.forage-hover-popup .mapboxgl-popup-content` off the legacy
+  `var(--line)` + fixed-rgba shadow onto the register engine
+  (`--reg-panel-a` / `--reg-hair` / `--reg-glow`, `position:relative;
+  overflow:hidden`, 7px radius) and hid the Mapbox tip so it reads as a clean
+  card like the prototype's custom DOM tip. Dropped the now-dead
+  `.forage-hover-popup .popup-title` rule.
+  **Gate:** `node --check` + `scripts/check.sh` green; console clean. Verified
+  live on a probe matching the handler's exact markup: content bg
+  `rgba(255,255,255,0.93)` (`--reg-panel-a`), border `#d5dad2` (`--reg-hair`),
+  spine 4px `#b5651d` (categoryColor), name `"Fraunces Display"` 14px
+  `--reg-ink`, status `"IBM Plex Mono"` 10.5px `#2f8f46` (`--reg-st-allowed`).
+  (Real marker-hover firing still needs a foreground/production tab — markers
+  don't paint headlessly — but the markup + styling are confirmed.) Tokens →
+  `?v=parity-hover-1`.
+
 - **2026-06-14 — Parity pass 8: point card (sparkline, flush, ethic, compact).**
   Closed the completeness items that live in the point popup
   (`getMarkerPopupHTML`). (1) **Seasonality sparkline** — ported the prototype's
