@@ -3,6 +3,23 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-13 — Parity pass 5: mobile (legend folds into the season card).**
+  Ported the prototype's key mobile move. Added `#legendSlot` inside the season
+  card and two mobile-only meta toggles — **Chart** (pins the histogram, since
+  hover never sticks on touch → `#season-bar.pinned`) and **Legend** (reveals the
+  folded legend → `#season-bar.legend-open`). `initMobileSeasonControls()` uses a
+  `matchMedia(max-width:720px)` listener to **relocate `#mapLegend` into
+  `#legendSlot`** on phones (and back to the map on wider screens); in the slot
+  the legend is `position:static`, panel chrome stripped, two columns in a row,
+  title hidden, body controlled by the Legend toggle (not hover). Season card
+  goes full-width (`transform:none`, `max-height:86vh` scroll). Also reset the
+  ≤860 tablet legend to bottom-left to match the new desktop legend.
+  **Gate:** `node --check` + `scripts/check.sh` green. Verified live at 375px:
+  the floating legend is gone from the map; tapping Legend reveals the
+  two-column ACCESS|FOOD-TYPES legend + ONLY ALLOWED + ACTIVE MAP inside the
+  season card; tapping Chart pins the stacked histogram; both expand (360px) and
+  the card scrolls. Tokens → `?v=parity-mobile-1`.
+
 - **2026-06-13 — Parity pass 4: the draggable solar dial (was absent).** The
   relaunch sun panel was text-only; rebuilt the prototype's `#sun-dial`. Added a
   simulated-clock hook — `simNow()` returns `state.simMins`-based time when set,

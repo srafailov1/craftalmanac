@@ -1002,6 +1002,11 @@ h2 {
   border-color: var(--reg-accent);
 }
 
+/* mobile-only season controls (CHART / LEGEND toggles), shown at <=720 */
+.mobile-only {
+  display: none;
+}
+
 /* Category swatch mirrors the point FILL: a filled square (the point's category
    color). Access uses a ring (the point's status stroke). Off categories go
    hollow with an inset hairline, exactly like the prototype's .leg-cats .lc i. */
@@ -1401,12 +1406,9 @@ body.modal-open .app-shell {
   }
 
   .map-legend {
-    right: 72px;
-    bottom: 112px;
-    width: min(198px, calc(100vw - 24px));
-    max-height: 42vh;
-    overflow-y: auto;
-    padding: 9px;
+    left: 14px;
+    bottom: 14px;
+    padding: 9px 12px;
     font-size: 11px;
   }
 
@@ -2636,14 +2638,9 @@ body[data-register="night"] {
     overflow-y: auto;
   }
 
-  #mapLegend {
-    top: 178px;
-    left: 10px;
-    right: auto;
-    bottom: auto;
-    width: min(230px, calc(100% - 20px));
-    max-height: 34vh;
-    overflow-y: auto;
+  /* Mobile-only CHART / LEGEND toggles appear in the season meta. */
+  .mobile-only {
+    display: inline-block;
   }
 
   #season-bar {
@@ -2651,7 +2648,62 @@ body[data-register="night"] {
     right: 10px;
     bottom: 10px;
     width: auto;
+    transform: none;
+    max-height: 86vh;
+    overflow-y: auto;
   }
 
-  #season-bar .season-histogram { height: 70px; }
+  #season-bar .season-histogram { height: 92px; }
+
+  /* Hover never sticks on touch — the histogram pins via the CHART toggle. */
+  #season-bar:hover .season-hist {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  #season-bar.pinned .season-hist,
+  #season-bar:focus-within .season-hist {
+    max-height: 360px;
+    opacity: 1;
+  }
+
+  /* The floating legend folds into the season card's #legendSlot (prototype). */
+  #legendSlot .map-legend {
+    position: static;
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    margin-top: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* In the slot the body is controlled by the LEGEND toggle, not hover. */
+  #legendSlot .legend-body {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  #season-bar.legend-open #legendSlot .legend-body {
+    max-height: 360px;
+    opacity: 1;
+  }
+
+  #legendSlot .legend-cols {
+    flex-direction: row;
+    gap: 18px;
+  }
+
+  #legendSlot .legend-col {
+    flex: 1;
+  }
+
+  /* The collapsed title bar is redundant in the slot (the toggle is the label). */
+  #legendSlot .legend-title {
+    display: none;
+  }
 }

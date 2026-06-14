@@ -6,7 +6,7 @@
     <title>Craft Almanac · United States Material Maps</title>
     <link rel="preconnect" href="https://api.mapbox.com">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=parity-dial-1">
+    <link rel="stylesheet" href="./styles.css?v=parity-mobile-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -36,6 +36,7 @@
             <div class="season-months" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
             <div class="season-cats" id="seasonCats"></div>
           </div>
+          <div id="legendSlot"></div>
           <div class="season-track">
             <input class="day-slider" id="daySlider" type="range" min="1" max="365" value="140" aria-label="Choose day of year">
             <div class="season-seasons" aria-hidden="true"><span>WINTER</span><span>SPRING</span><span>SUMMER</span><span>FALL</span></div>
@@ -43,6 +44,8 @@
           <div class="season-meta">
             <span class="season-readout"><strong id="seasonDateLabel">May 20</strong> <span id="seasonName">Spring</span></span>
             <span class="season-mbtns">
+              <button class="text-button mobile-only" id="chartToggle" type="button">Chart</button>
+              <button class="text-button mobile-only" id="legendMob" type="button">Legend</button>
               <button class="text-button" id="allSeasonsButton" type="button">All seasons</button>
               <button class="text-button" id="seasonReset" type="button">Back to now</button>
               <button class="text-button" id="whenToggle" type="button">Set date</button>
@@ -77,6 +80,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=parity-dial-1"></script>
+    <script src="./app.js?v=parity-mobile-1"></script>
   </body>
 </html>

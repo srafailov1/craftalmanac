@@ -2259,6 +2259,10 @@ const whenForm = document.querySelector("#whenForm");
 const seasonHist = document.querySelector("#seasonHist");
 const seasonHistHead = document.querySelector("#seasonHistHead");
 const seasonCats = document.querySelector("#seasonCats");
+const seasonBar = document.querySelector("#season-bar");
+const legendSlot = document.querySelector("#legendSlot");
+const chartToggle = document.querySelector("#chartToggle");
+const legendMob = document.querySelector("#legendMob");
 
 function getDayOfYear(date) {
   // UTC math avoids daylight-saving off-by-one errors in local-time subtraction.
@@ -2965,6 +2969,8 @@ function initControls() {
     whenToggle.classList.remove("active");
   });
 
+  initMobileSeasonControls();
+
   map.on("move", () => {
     if (shouldRebalanceAggregatesOnMove()) {
       scheduleFallingFruitAggregateUpdate();
@@ -3087,6 +3093,39 @@ function renderSeasonControls() {
   // #season.scrubbed) or while in all-seasons mode.
   const scrubbed = state.allSeasons || state.selectedDay !== getDayOfYear(new Date());
   if (seasonReset) seasonReset.hidden = !scrubbed;
+}
+
+// Mobile (prototype): the floating legend folds INTO the season card, and the
+// histogram pins via a CHART toggle (hover doesn't stick on touch). On phones we
+// relocate #mapLegend into #legendSlot; on wider screens it returns to the map.
+function initMobileSeasonControls() {
+  if (!seasonBar || !legendSlot || !mapLegend) return;
+  const legendHome = mapLegend.parentNode;
+  const mq = window.matchMedia("(max-width: 720px)");
+  const placeLegend = () => {
+    if (mq.matches) {
+      if (mapLegend.parentNode !== legendSlot) legendSlot.appendChild(mapLegend);
+    } else if (mapLegend.parentNode !== legendHome) {
+      legendHome.appendChild(mapLegend);
+      seasonBar.classList.remove("legend-open");
+    }
+  };
+  placeLegend();
+  if (mq.addEventListener) mq.addEventListener("change", placeLegend);
+  else if (mq.addListener) mq.addListener(placeLegend);
+
+  if (chartToggle) {
+    chartToggle.addEventListener("click", () => {
+      const open = seasonBar.classList.toggle("pinned");
+      chartToggle.classList.toggle("active", open);
+    });
+  }
+  if (legendMob) {
+    legendMob.addEventListener("click", () => {
+      const open = seasonBar.classList.toggle("legend-open");
+      legendMob.classList.toggle("active", open);
+    });
+  }
 }
 
 // C2 phenology: per-species 12-month relative-abundance (0-1) curves, loaded
