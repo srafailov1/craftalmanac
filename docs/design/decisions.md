@@ -3,6 +3,31 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-14 — Cleanup: removed retired-sidebar dead CSS (scoped).** Deleted
+  the rebuild's dead rules named in the handoff: `.season-actions`,
+  `.season-bands`, `.date-entry`/`.date-entry input` (the floating season card
+  uses `.season-meta` / `.season-seasons` / `.when-form`), and the whole retired
+  species-list family — `.species-actions`, `.species-list`, every
+  `.species-group-*`, `.species-name`, `.species-meta`, `.favorite-button`
+  (+`.is-favorite`), `.species-list label.is-child-species`, and the
+  `.type-pill*` badge set. Also dropped the dead `.season-actions` mobile
+  override and trimmed the shared mobile `max-width/min-width` rule to drop its
+  `.date-entry` / `.species-list` selectors. Verified every removed class has
+  **0 live references** in `app.js`/`index.html` first.
+  **Deliberately kept** (out of the handoff's named scope, and one has a guarded
+  live ref): the retired *filter* CSS — `.filter-list`, `.type-list`,
+  `.category-option*` (still referenced in `renderFilterControls`'s inert
+  `#categoryList` guard), `.access-list`, `.permission-*`, plus the panel chrome
+  `.control-group` / `.section-*` / `.fine-print` / `.attribution-block`
+  (`.attribution-block` is still queried in `renderModeChrome`). `.species-list`
+  now survives only as a dead selector inside two shared `.filter-list …` rules.
+  These are a sensible next dead-CSS pass once the panel-era filter UI is fully
+  retired.
+  **Gate:** brace balance 391/391; `node --check` + `scripts/check.sh` green;
+  console clean. Live after reload: season card renders (12 bars, 652px slider,
+  readout "June 14 / Spring" at 19px, all six text-buttons), full desktop
+  layout intact (screenshot). Tokens → `?v=cleanup-css-1`.
+
 - **2026-06-14 — Parity pass 11: welcome modal adapts to the register palette.**
   The entry disclaimer modal was hardcoded to the legacy day tokens
   (`--panel`/`--muted`/`--ink`/`#cdd8c5`/`#f1f5ed`/`--leaf-dark`), so in

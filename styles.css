@@ -345,12 +345,6 @@ h2 {
   margin-bottom: 0;
 }
 
-.season-actions {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
 .text-button {
   min-height: 38px;
   border: 1px solid var(--line);
@@ -445,41 +439,10 @@ h2 {
 .histogram-segment.digestive { background: #b7792f; }
 .histogram-segment.lymphatic { background: #9a5f9f; }
 
-.season-bands {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 800;
-  text-align: center;
-  text-transform: uppercase;
-}
-
 .day-slider {
   width: 100%;
   margin: 8px 0 12px;
   accent-color: var(--leaf);
-}
-
-.date-entry {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 10px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.date-entry input {
-  width: 100%;
-  min-height: 38px;
-  padding: 0 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: #fff;
-  color: var(--ink);
 }
 
 .text-button {
@@ -629,223 +592,6 @@ h2 {
 .species-list input {
   accent-color: var(--leaf);
 }
-
-.species-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0 10px;
-}
-
-.species-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-}
-
-.species-group {
-  display: grid;
-  gap: 6px;
-}
-
-.species-group-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 7px 8px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 400;
-  cursor: default;
-}
-
-.species-group-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.species-group-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.species-list .species-group-title {
-  justify-content: flex-start;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  color: inherit;
-  font-size: inherit;
-}
-
-.species-list .species-group-title,
-.species-list .species-group-title:hover,
-.species-list .species-group-title:active,
-.species-list .species-group-title:focus-within {
-  background: transparent;
-  outline: none;
-  box-shadow: none;
-}
-
-.species-list .species-group-title,
-.species-list .species-group-title * {
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-.species-group-summary.is-selected {
-  border-color: #cdd8c5;
-  background: #f1f5ed;
-  color: var(--ink);
-}
-
-.species-group-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.species-group-arrow-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.species-group-arrow-button:hover,
-.species-group-arrow-button:focus-visible {
-  background: rgba(32, 36, 31, 0.08);
-  outline: none;
-}
-
-.species-group-arrow {
-  flex: 0 0 auto;
-  width: 7px;
-  height: 7px;
-  border-right: 2px solid var(--muted);
-  border-bottom: 2px solid var(--muted);
-  transform: rotate(45deg);
-  transition: transform 0.16s ease;
-}
-
-.species-group:not(.is-open) .species-group-arrow {
-  transform: rotate(-45deg);
-}
-
-.species-group-list {
-  display: grid;
-  gap: 4px;
-  padding-left: 14px;
-}
-
-.species-group-list[hidden] {
-  display: none;
-}
-
-.species-list label.is-child-species {
-  background: rgba(255, 255, 255, 0.72);
-}
-
-.species-list label {
-  justify-content: space-between;
-  gap: 12px;
-  padding: 7px 8px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-}
-
-.species-group:hover .species-group-summary:not(.is-selected),
-.species-list label:not(.is-selected):hover {
-  border-color: #cdd8c5;
-}
-
-.species-list label.is-selected {
-  border-color: #cdd8c5;
-  background: #f1f5ed;
-  color: var(--ink);
-}
-
-.species-list .species-group-title.is-selected,
-.species-list .species-group-title.is-selected:hover,
-.species-list .species-group-title.is-selected:active,
-.species-list .species-group-title.is-selected:focus-within {
-  border: 0;
-  background: transparent;
-  color: inherit;
-}
-
-.species-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.species-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.favorite-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: transparent;
-  color: #a0a79a;
-  font-size: 15px;
-  line-height: 1;
-}
-
-.favorite-button:hover,
-.favorite-button:focus-visible {
-  color: #c08a16;
-  outline: none;
-}
-
-.favorite-button.is-favorite {
-  color: #c08a16;
-}
-
-.type-pill {
-  min-width: 54px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 850;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.type-pill.berry { background: var(--berry); }
-.type-pill.fruit { background: var(--leaf); }
-.type-pill.nut { background: var(--nut); }
-.type-pill.mushroom { background: var(--mushroom); }
-.type-pill.black { background: #252321; }
-.type-pill.brown { background: #8a5a2b; }
-.type-pill.yellow { background: #d8a829; }
-.type-pill.red { background: #bf4150; }
-.type-pill.purple { background: #624c9f; }
-.type-pill.blue { background: #316d8f; }
-.type-pill.topical { background: #3f8d76; }
-.type-pill.immune { background: #6978b8; }
-.type-pill.digestive { background: #b7792f; }
-.type-pill.lymphatic { background: #9a5f9f; }
 
 .fine-print {
   margin: 10px 0 0;
@@ -1480,16 +1226,9 @@ body.modal-open .app-shell {
     overflow-x: hidden;
   }
 
-  .season-actions {
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-
   .season-histogram,
   .day-slider,
-  .date-entry,
-  .filter-list,
-  .species-list {
+  .filter-list {
     max-width: 100%;
     min-width: 0;
   }
