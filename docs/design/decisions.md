@@ -3,6 +3,25 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-14 — Parity pass 11: welcome modal adapts to the register palette.**
+  The entry disclaimer modal was hardcoded to the legacy day tokens
+  (`--panel`/`--muted`/`--ink`/`#cdd8c5`/`#f1f5ed`/`--leaf-dark`), so in
+  dusk/night it rendered light-paper against the dark chrome behind it. Re-themed
+  it onto the register engine (it's a `body` descendant, so the `--reg-*` custom
+  props cascade in): `.welcome-modal` bg `--reg-panel`, border `--reg-hair`,
+  shadow `--reg-glow`; `.welcome-copy` `--reg-sub`; `.welcome-opening`
+  `--reg-ink`; `.welcome-primary` bg `--reg-ground` / text `--reg-ink` / border
+  `--reg-hair`, with `:hover` and `:focus-visible` on `--reg-accent` (text
+  `--reg-panel` on the accent fill). Backdrop scrim left neutral (works over any
+  register). CSS-only.
+  **Gate:** `scripts/check.sh` green; console clean. Verified live by reading
+  the modal's inherited custom props across registers — day (ground #f1f5ec,
+  ink #1f2421), dusk (#453e4a / #f2e9dc), night (#121a16 / #edf3ea) all track —
+  and a night-register screenshot shows the dark panel, light copy, and legible
+  dark button. (The button's `background` transition means a synchronous
+  computed-color read catches the start frame; the custom-prop values are the
+  source of truth.) Tokens → `?v=parity-welcome-1`.
+
 - **2026-06-14 — Parity pass 10: wind panel windflow overlay + larger compass.**
   Ported the prototype's `windFlowHTML()`: the WIND panel now wraps the compass
   in a 190px `.windbox` with an animated `.windflow` overlay — 7 streak `<i>`
