@@ -1365,6 +1365,7 @@ body[data-register="night"] {
   border: 1px solid var(--reg-hair);
   border-radius: 10px;
   box-shadow: var(--reg-glow);
+  color: var(--reg-ink);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: background 1.2s ease, border-color 1.2s ease, color 1.2s ease;
@@ -2537,5 +2538,17 @@ body[data-register="night"] {
   /* The collapsed title bar is redundant in the slot (the toggle is the label). */
   #legendSlot .legend-title {
     display: none;
+  }
+
+  /* Let the readout + controls wrap so the buttons (e.g. SET DATE) never spill
+     past the card's right edge and get clipped by the viewport on phones. */
+  .season-meta {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .season-mbtns {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }

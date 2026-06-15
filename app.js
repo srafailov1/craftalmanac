@@ -1714,9 +1714,13 @@ function svgSunDial(size = SUN_DIAL_SIZE) {
   if (st.rise && st.set) {
     const [rx, ry] = dialPos(dialAngle(st.rise), c, r);
     const [ex, ey] = dialPos(dialAngle(st.set), c, r);
+    // When a point sits low on the dial (late sunset near solstice), drop its
+    // label above the point so RISE/SET don't collide with the MIDNIGHT anchor.
+    const riseLabelY = ry > c + r * 0.5 ? ry - 6 : ry + 13;
+    const setLabelY = ey > c + r * 0.5 ? ey - 6 : ey + 13;
     chord = `<line x1="${rx.toFixed(1)}" y1="${ry.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="var(--reg-sub)" stroke-width="1" stroke-dasharray="3 3"/>
-      <text x="${(rx - 3).toFixed(1)}" y="${(ry + 13).toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="end">RISE</text>
-      <text x="${(ex + 3).toFixed(1)}" y="${(ey + 13).toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)">SET</text>`;
+      <text x="${(rx - 3).toFixed(1)}" y="${riseLabelY.toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="end">RISE</text>
+      <text x="${(ex + 3).toFixed(1)}" y="${setLabelY.toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)">SET</text>`;
     dayArc = `<path d="M ${rx.toFixed(1)} ${ry.toFixed(1)} A ${r} ${r} 0 0 0 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="var(--reg-warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
   }
   const night = sunAltitude(now, lat, lng) < 0;
@@ -2321,9 +2325,23 @@ function getSeason(date) {
 }
 
 function getMonthRangeText(months) {
-  const sortedMonths = [...months].sort((a, b) => a - b);
+  // Coalesce into contiguous runs so a species dormant mid-year (e.g. chickweed,
+  // Feb–May + Oct–Dec) reads "Feb-May, Oct-Dec" instead of a misleading
+  // min–max "Feb-Dec" that implies summer availability.
+  const sortedMonths = [...new Set(months)].filter((m) => m >= 1 && m <= 12).sort((a, b) => a - b);
   if (!sortedMonths.length) return "Unknown";
-  return `${MONTHS[sortedMonths[0] - 1]}-${MONTHS[sortedMonths[sortedMonths.length - 1] - 1]}`;
+  const runs = [];
+  let start = sortedMonths[0];
+  let prev = sortedMonths[0];
+  for (let i = 1; i < sortedMonths.length; i++) {
+    if (sortedMonths[i] === prev + 1) { prev = sortedMonths[i]; continue; }
+    runs.push([start, prev]);
+    start = prev = sortedMonths[i];
+  }
+  runs.push([start, prev]);
+  return runs
+    .map(([a, b]) => (a === b ? MONTHS[a - 1] : `${MONTHS[a - 1]}-${MONTHS[b - 1]}`))
+    .join(", ");
 }
 
 function sourceLabel(source) {
