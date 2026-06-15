@@ -56,7 +56,9 @@ load-balancing jitter):
 Codex: mid-level engineering from work orders (`docs/TODO-*.md`). Qwen (local,
 via opencode): junior tasks per `AGENTS.md` and the queue in
 `docs/work-split.md`. Stay out of each other's areas; Boundaries sections are
-the contract. Design work lives on the `design/relaunch` branch, never `main`.
+the contract. The design relaunch is complete and merged into `main`; all work
+(including design changes) now happens on `main` — the `design/relaunch` branch
+is retired.
 
 ## Workflow
 
