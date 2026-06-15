@@ -510,6 +510,7 @@ const SAFETY_TAGS_BY_SPECIES = {
   "sour-cherry": ["toxic parts"],
   plum: ["toxic parts"],
   sumac: ["lookalikes"],
+  grape: ["lookalikes"],
   morel: ["lookalikes"],
   "wild-strawberry": ["lookalikes"],
   "ink-pokeweed": ["toxic parts", "do not ingest"],
@@ -528,6 +529,10 @@ const SAFETY_TAGS_BY_SPECIES = {
   "medicine-violet": ["lookalikes"],
   "medicine-cleavers": ["drug interactions"]
 };
+// Safety-first (CLAUDE.md): a park's "edible fungi" allowance applies only to
+// species on this whitelist. Any other mushroom stays prohibited, so a future
+// non-whitelisted fungus can never silently inherit an "allowed" park rule.
+const EDIBLE_FUNGUS_WHITELIST = new Set(["morel"]);
 const HARVEST_ETHIC_BY_SPECIES = {
   morel: "light harvest",
   blueberry: "light harvest",
@@ -646,7 +651,7 @@ const foodSpeciesCatalog = [
     months: [8, 9, 10],
     inatTaxonIds: [128931, 68053],
     parkLimit: "1 gallon per person per day in Shenandoah National Park",
-    notes: "Look for ripe clusters on vines along edges; avoid confusing unrelated vines."
+    notes: "Ripe clusters on woody vines with tendrils. Do not confuse with moonseed (Menispermum canadense), whose single crescent seed and toxic berries can be fatal."
   },
   {
     id: "elderberry",
@@ -1268,11 +1273,15 @@ const state = {
   hoverPopup: null,
   locationSuggestionTimer: null,
   locationSuggestions: [],
+  activeSuggestionIndex: -1,
   selectedSpecies: new Set(),
   favoriteSpecies: new Set(readFavoriteSpecies()),
   savedLocations: new Set(readSavedLocations()),
   savedLocationsOnly: false,
   register: "day",
+  // The user's explicit wind-animation choice, kept separate from the
+  // power/data gate so toggling tabs or battery state can't override intent.
+  fxUserEnabled: true,
   location: { lat: 39.8, lng: -98.6 }
 };
 
@@ -1295,13 +1304,21 @@ const map = new mapboxgl.Map({
 });
 
 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-map.addControl(new mapboxgl.GeolocateControl({
+const geolocateControl = new mapboxgl.GeolocateControl({
   positionOptions: {
     enableHighAccuracy: true
   },
   trackUserLocation: true,
   showUserHeading: true
-}), "bottom-right");
+});
+map.addControl(geolocateControl, "bottom-right");
+// Follow the GPS fix so the register, sun/moon dial, weather, and nearest tide
+// reflect the user's real location rather than the default CONUS center.
+geolocateControl.on("geolocate", (position) => {
+  if (position?.coords) {
+    setForecastLocation(position.coords.latitude, position.coords.longitude, "Current location");
+  }
+});
 map.scrollZoom.setWheelZoomRate?.(1 / 280);
 map.scrollZoom.setZoomRate?.(1 / 60);
 window.addEventListener("resize", () => {
@@ -1444,7 +1461,7 @@ function loadConditions(force) {
     "&longitude=" + lng +
     "&hourly=precipitation,cloud_cover,wind_speed_10m,wind_direction_10m" +
     "&past_days=3&forecast_days=7&timezone=auto";
-  return fetch(url)
+  return fetchWithTimeout(url)
     .then((response) => {
       if (!response.ok) throw new Error("open-meteo " + response.status);
       return response.json();
@@ -1500,7 +1517,9 @@ function conditionsIconMoon(mp) {
     <circle cx="${(11 + offset).toFixed(1)}" cy="11" r="8" fill="var(--reg-panel-a)"/></svg>`;
 }
 function conditionsIconRain() {
-  return `<svg viewBox="0 0 22 22"><path d="M11 3 C 14 8, 17 11, 17 14 A 6 6 0 1 1 5 14 C 5 11, 8 8, 11 3 Z" fill="#3e63c4" opacity="0.85"/></svg>`;
+  // Register-aware fill (matches the wind/moon glyphs); the fixed blue dropped
+  // below the contrast floor on the dark dusk/night rail.
+  return `<svg viewBox="0 0 22 22"><path d="M11 3 C 14 8, 17 11, 17 14 A 6 6 0 1 1 5 14 C 5 11, 8 8, 11 3 Z" fill="var(--reg-sub)"/></svg>`;
 }
 function conditionsIconWind() {
   return `<svg viewBox="0 0 22 22" fill="none" stroke="var(--reg-sub)" stroke-width="1.6" stroke-linecap="round">
@@ -1724,7 +1743,8 @@ function svgSunDial(size = SUN_DIAL_SIZE) {
     dayArc = `<path d="M ${rx.toFixed(1)} ${ry.toFixed(1)} A ${r} ${r} 0 0 0 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="var(--reg-warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
   }
   const night = sunAltitude(now, lat, lng) < 0;
-  return `<svg id="sun-dial" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  return `<svg id="sun-dial" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="slider" tabindex="0" aria-label="Preview time of day" aria-valuemin="0" aria-valuemax="1439" aria-valuenow="${nowMins}" aria-valuetext="${escapeHTML(formatClockTime(now))}" xmlns="http://www.w3.org/2000/svg">
     <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--reg-hair)" stroke-width="1.4"/>
     ${dayArc}${chord}
     ${earthSVG(c, Math.max(10, r * 0.22))}
@@ -1747,6 +1767,8 @@ function updateSunDial() {
     dot.setAttribute("cy", sy.toFixed(1));
     dot.setAttribute("fill", sunAltitude(now, lat, lng) < 0 ? "var(--reg-ink)" : "#e8b931");
   }
+  dial.setAttribute("aria-valuenow", String(now.getHours() * 60 + now.getMinutes()));
+  dial.setAttribute("aria-valuetext", formatClockTime(now));
   const rd = document.getElementById("sun-readout");
   if (rd) {
     rd.innerHTML = `<b>${escapeHTML(formatClockTime(now))}</b> · ${escapeHTML(state.register.toUpperCase())} REGISTER${state.simMins != null ? " (SIMULATED)" : ""}`;
@@ -1777,16 +1799,35 @@ function bindSunDial() {
     applyRegisterLight();
     updateSunDial();
   };
+  const readout = () => document.getElementById("sun-readout");
   dial.addEventListener("pointerdown", (event) => {
     dragging = true;
     dial.classList.add("dragging");
+    // Silence the readout's live region during the drag so the screen reader
+    // isn't flooded with a clock tick on every pointermove.
+    readout()?.setAttribute("aria-live", "off");
     try { dial.setPointerCapture(event.pointerId); } catch (e) { /* ignore */ }
     fromEvent(event);
     event.preventDefault();
   });
   dial.addEventListener("pointermove", (event) => { if (dragging) { fromEvent(event); event.preventDefault(); } });
-  dial.addEventListener("pointerup", () => { dragging = false; dial.classList.remove("dragging"); renderConditionsRail(); renderConditionPanel(); });
-  dial.addEventListener("pointercancel", () => { dragging = false; dial.classList.remove("dragging"); });
+  dial.addEventListener("pointerup", () => { dragging = false; dial.classList.remove("dragging"); readout()?.setAttribute("aria-live", "polite"); renderConditionsRail(); renderConditionPanel(); });
+  dial.addEventListener("pointercancel", () => { dragging = false; dial.classList.remove("dragging"); readout()?.setAttribute("aria-live", "polite"); });
+  // Keyboard scrubbing: arrows nudge the previewed time; Home/End jump to
+  // midnight/end of day. One announcement per keypress (live region stays on).
+  dial.addEventListener("keydown", (event) => {
+    const cur = state.simMins == null ? (new Date().getHours() * 60 + new Date().getMinutes()) : state.simMins;
+    let next = cur;
+    if (event.key === "ArrowRight" || event.key === "ArrowUp") next = cur + (event.shiftKey ? 60 : 15);
+    else if (event.key === "ArrowLeft" || event.key === "ArrowDown") next = cur - (event.shiftKey ? 60 : 15);
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = 1439;
+    else return;
+    event.preventDefault();
+    state.simMins = ((Math.round(next) % 1440) + 1440) % 1440;
+    applyRegisterLight();
+    updateSunDial();
+  });
 }
 
 function renderConditionPanel() {
@@ -1808,7 +1849,7 @@ function renderConditionPanel() {
   if (openConditionSeg === "sun") {
     html = `<h3>THE SUN</h3>
       <div class="fig">${svgSunDial()}</div>
-      <div class="age" id="sun-readout"></div>
+      <div class="age" id="sun-readout" role="status" aria-live="polite" aria-atomic="true"></div>
       <button class="sun-now" type="button" id="sun-now">BACK TO NOW</button>
       <div class="note" style="margin-top:10px">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
       <div class="note" style="margin-top:8px"><b>Drag the sun</b> to preview any hour — the map's light and the register follow. Many parks close gathering at dusk; the register keeps the same clock.</div>`;
@@ -1853,13 +1894,10 @@ function renderConditionPanel() {
   const fxToggle = document.getElementById("fx-toggle");
   if (fxToggle) {
     fxToggle.addEventListener("change", (event) => {
-      state.fxOn = event.target.checked;
-      if (state.fxOn) {
-        if (!fxParticles.length) fxInitParticles();
-        fxStart();
-      } else {
-        fxStop();
-      }
+      // Record intent, then let the shared gate apply the power/zoom policy and
+      // start/stop the loop — so the choice survives later auto-refreshes.
+      state.fxUserEnabled = event.target.checked;
+      refreshWindCanvasPower();
     });
   }
   if (openConditionSeg === "sun") {
@@ -1877,7 +1915,14 @@ function renderConditionPanel() {
 }
 
 function toggleConditionPanel(segId) {
+  const leavingSun = openConditionSeg === "sun" && segId !== "sun";
   openConditionSeg = openConditionSeg === segId ? null : segId;
+  // Leaving the sun panel ends the dial preview — otherwise the simulated
+  // clock stays frozen and the 60s applyRegister keeps recomputing from it.
+  if (leavingSun && state.simMins != null) {
+    state.simMins = null;
+    applyRegister();
+  }
   renderConditionsRail();
   renderConditionPanel();
 }
@@ -2031,9 +2076,25 @@ function fxStop() {
 
 // Recompute whether the canvas may run and start/stop the rAF loop to match,
 // so a disabled canvas costs zero frames (not just a blank per-frame draw).
+// fxOn combines user intent with the power/data gate; the loop additionally
+// only runs above the zoom threshold and while the tab is visible.
 function refreshWindCanvasPower() {
-  state.fxOn = !fxStaticDisabled() && !fxBatterySaving();
-  if (state.fxOn && !document.hidden) fxStart(); else fxStop();
+  state.fxOn = state.fxUserEnabled && !fxStaticDisabled() && !fxBatterySaving();
+  refreshWindCanvasZoomGate();
+}
+
+// Start/stop the loop for the transient conditions (zoom, visibility) without
+// re-running the power heuristics — cheap enough to call on every zoom tick.
+function refreshWindCanvasZoomGate() {
+  if (!fxCtx) return;
+  const shouldRun = state.fxOn && !document.hidden && state.mapReady
+    && map.getZoom() >= WIND_CANVAS_MIN_ZOOM;
+  if (shouldRun) {
+    if (!fxParticles.length) fxInitParticles();
+    fxStart();
+  } else {
+    fxStop();
+  }
 }
 
 function initWindCanvas() {
@@ -2130,7 +2191,7 @@ function loadTide() {
     const url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions" +
       "&application=craftalmanac&station=" + encodeURIComponent(station.id) +
       "&begin_date=" + ds + "&range=48&datum=MLLW&interval=hilo&units=english&time_zone=lst_ldt&format=json";
-    return fetch(url)
+    return fetchWithTimeout(url)
       .then((r) => { if (!r.ok) throw new Error("co-ops " + r.status); return r.json(); })
       .then((j) => {
         const events = (j.predictions || []).map((p) => ({ t: p.t, type: p.type, v: parseFloat(p.v) }));
@@ -2211,7 +2272,7 @@ function loadFlushThresholds() {
 
 function loadRadar() {
   if (radarAdded || !state.mapReady || map.getSource("radar")) return;
-  fetch("https://api.rainviewer.com/public/weather-maps.json")
+  fetchWithTimeout("https://api.rainviewer.com/public/weather-maps.json")
     .then((r) => { if (!r.ok) throw new Error("rainviewer " + r.status); return r.json(); })
     .then((j) => {
       const past = (j.radar && j.radar.past) || [];
@@ -2339,6 +2400,11 @@ function getMonthRangeText(months) {
     start = prev = sortedMonths[i];
   }
   runs.push([start, prev]);
+  // Merge a run that wraps the year boundary (e.g. [11,12,1] -> "Nov-Jan").
+  if (runs.length > 1 && runs[0][0] === 1 && runs[runs.length - 1][1] === 12) {
+    const head = runs.shift();
+    runs[runs.length - 1] = [runs[runs.length - 1][0], head[1]];
+  }
   return runs
     .map(([a, b]) => (a === b ? MONTHS[a - 1] : `${MONTHS[a - 1]}-${MONTHS[b - 1]}`))
     .join(", ");
@@ -2370,6 +2436,19 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
+// Externally-sourced URLs (iNaturalist observation.uri, Falling Fruit chunk
+// data) land in popup hrefs. escapeHTML neutralizes quotes but NOT a
+// `javascript:`/`data:` scheme, so restrict hrefs to http(s) before emitting.
+function safeHttpUrl(value) {
+  if (!value) return "";
+  try {
+    const parsed = new URL(String(value), window.location.href);
+    return (parsed.protocol === "http:" || parsed.protocol === "https:") ? parsed.href : "";
+  } catch {
+    return "";
+  }
+}
+
 function readFavoriteSpecies() {
   try {
     const storedFavorites = JSON.parse(window.localStorage?.getItem(FAVORITE_SPECIES_STORAGE_KEY) || "[]");
@@ -2380,7 +2459,9 @@ function readFavoriteSpecies() {
 }
 
 function saveFavoriteSpecies() {
-  window.localStorage?.setItem(FAVORITE_SPECIES_STORAGE_KEY, JSON.stringify([...state.favoriteSpecies]));
+  try {
+    window.localStorage?.setItem(FAVORITE_SPECIES_STORAGE_KEY, JSON.stringify([...state.favoriteSpecies]));
+  } catch { /* quota exceeded / Safari private mode — keep the in-memory set */ }
 }
 
 function isFavoriteSpecies(speciesId) {
@@ -2397,7 +2478,9 @@ function readSavedLocations() {
 }
 
 function saveSavedLocations() {
-  window.localStorage?.setItem(SAVED_LOCATIONS_STORAGE_KEY, JSON.stringify([...state.savedLocations]));
+  try {
+    window.localStorage?.setItem(SAVED_LOCATIONS_STORAGE_KEY, JSON.stringify([...state.savedLocations]));
+  } catch { /* quota exceeded / Safari private mode — keep the in-memory set */ }
 }
 
 function isSavedLocation(recordId) {
@@ -2509,14 +2592,23 @@ function initWelcomeModal() {
   document.body.classList.add("modal-open");
   window.setTimeout(() => welcomeModalButton.focus(), 0);
 
-  welcomeModalButton.addEventListener("click", () => {
-    window.localStorage?.setItem(WELCOME_MODAL_STORAGE_KEY, "true");
+  let dismissed = false;
+  const dismissWelcome = () => {
+    if (dismissed) return;
+    dismissed = true;
+    // Dismissal IS acknowledgement (the only exit is "I understand"), so both
+    // the button and Escape set the seen flag. Guard the write so a private-mode
+    // / quota failure still closes the modal instead of trapping the user.
+    try { window.localStorage?.setItem(WELCOME_MODAL_STORAGE_KEY, "true"); } catch { /* private mode */ }
     welcomeModal.hidden = true;
     document.body.classList.remove("modal-open");
     focusAfterClose?.focus?.();
-  }, { once: true });
+  };
+
+  welcomeModalButton.addEventListener("click", dismissWelcome, { once: true });
 
   welcomeModal.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); dismissWelcome(); return; }
     if (event.key !== "Tab") return;
     event.preventDefault();
     welcomeModalButton.focus();
@@ -2650,7 +2742,7 @@ function sheetMapsHTML() {
     return `
       <div class="mini-card mode-card${on}" data-mode="${escapeHTML(mode)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(info.color)}"></div>
-        <h4 class="serif">${escapeHTML(info.label)}</h4>
+        <h3 class="serif">${escapeHTML(info.label)}</h3>
         <div class="uses">${escapeHTML(info.blurb)}</div>
         ${dnote}
       </div>`;
@@ -2673,16 +2765,23 @@ function sheetPlantsHTML() {
     return `
       <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(color)}"></div>
-        <h4 class="serif">${escapeHTML(species.commonName)}</h4>
+        <h3 class="serif">${escapeHTML(species.commonName)}</h3>
         <div class="m">${escapeHTML(species.scientificName)} · ${escapeHTML(season)}</div>
         <div class="uses">${escapeHTML(uses)}</div>
       </div>`;
   }).join("");
+  // Herbalism profiles present medicinal use-parts, so the educational-use
+  // disclaimer must travel with them (CLAUDE.md), as it does on the map note,
+  // the Maps card, and the point card.
+  const medNote = state.activeMap === "medicine"
+    ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>`
+    : "";
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE SHELF · ${speciesCatalogByName.length} PROFILES</div>
     <h2 class="serif">${escapeHTML(config.speciesHeading)}</h2>
     <p>Tap a profile to show just that species on the map.</p>
+    ${medNote}
     <div class="card-grid">${cards}</div>
   `;
 }
@@ -2691,7 +2790,7 @@ function sheetRecipesHTML() {
   const cards = RECIPE_PLACEHOLDERS.map((recipe) => `
     <div class="mini-card recipe-card">
       <div class="spine" style="background: ${escapeHTML(recipe.color)}"></div>
-      <h4 class="serif">${escapeHTML(recipe.name)}</h4>
+      <h3 class="serif">${escapeHTML(recipe.name)}</h3>
       <div class="m">${escapeHTML(recipe.meta.toUpperCase())}</div>
       <div class="uses">gather → prepare → make</div>
     </div>`).join("");
@@ -2711,14 +2810,21 @@ const SHEET_BUILDERS = {
   about: sheetAboutHTML
 };
 
+let sheetOpener = null;
+
 function openSheet(name) {
   const sheetWrap = document.querySelector("#sheet-wrap");
   const sheetEl = document.querySelector("#sheet");
   const builder = SHEET_BUILDERS[name];
   if (!sheetWrap || !sheetEl || !builder) return;
+  // Remember who opened it and neutralize the background so the modal traps
+  // focus and pointer interaction (#sheet-wrap is a sibling of .app-shell).
+  sheetOpener = document.activeElement;
   sheetEl.innerHTML = builder();
   sheetWrap.classList.add("open");
   sheetWrap.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  document.querySelector(".app-shell")?.setAttribute("inert", "");
   sheetEl.scrollTop = 0;
   sheetEl.querySelector(".closer")?.focus?.();
 }
@@ -2728,6 +2834,11 @@ function closeSheet() {
   if (!sheetWrap) return;
   sheetWrap.classList.remove("open");
   sheetWrap.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  document.querySelector(".app-shell")?.removeAttribute("inert");
+  // Restore focus to the control that opened the sheet (un-inert it first).
+  if (sheetOpener && typeof sheetOpener.focus === "function") sheetOpener.focus();
+  sheetOpener = null;
 }
 
 function selectOnlySpecies(speciesId) {
@@ -2751,6 +2862,15 @@ function initSheets() {
     if (speciesCard) { selectOnlySpecies(speciesCard.dataset.species); closeSheet(); }
   });
   sheetEl.addEventListener("keydown", (event) => {
+    if (event.key === "Tab") {
+      const focusables = sheetEl.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      return;
+    }
     if (event.key !== "Enter" && event.key !== " ") return;
     const card = event.target.closest("[data-mode], [data-species]");
     if (!card) return;
@@ -2829,6 +2949,27 @@ function initLocationSearch() {
   locationSearchInput.addEventListener("focus", () => {
     renderLocationSuggestions();
   });
+  // Keyboard combobox navigation over the suggestion listbox.
+  locationSearchInput.addEventListener("keydown", (event) => {
+    const open = locationSearchSuggestions && !locationSearchSuggestions.hidden && state.locationSuggestions.length;
+    if (event.key === "ArrowDown") {
+      if (!open) return;
+      event.preventDefault();
+      moveActiveSuggestion(1);
+    } else if (event.key === "ArrowUp") {
+      if (!open) return;
+      event.preventDefault();
+      moveActiveSuggestion(-1);
+    } else if (event.key === "Enter") {
+      if (open && state.activeSuggestionIndex >= 0) {
+        event.preventDefault();
+        chooseLocationSuggestion(state.locationSuggestions[state.activeSuggestionIndex]);
+      }
+      // otherwise fall through to the form's submit handler (best-match search)
+    } else if (event.key === "Escape") {
+      if (open) { event.preventDefault(); hideLocationSuggestions(); }
+    }
+  });
 }
 
 async function searchLocation(query) {
@@ -2897,19 +3038,38 @@ function renderLocationSuggestions() {
     hideLocationSuggestions();
     return;
   }
+  state.activeSuggestionIndex = -1;
   locationSearchSuggestions.innerHTML = state.locationSuggestions.map((feature, index) => `
-    <button class="location-suggestion" type="button" role="option" data-suggestion-index="${index}">
+    <button class="location-suggestion" type="button" role="option" id="locSug-${index}" aria-selected="false" data-suggestion-index="${index}">
       <span>${escapeHTML(feature.text || "Location")}</span>
       <small>${escapeHTML(getLocationSuggestionContext(feature))}</small>
     </button>
   `).join("");
   locationSearchSuggestions.hidden = false;
+  locationSearchInput.setAttribute("aria-expanded", "true");
+  locationSearchInput.removeAttribute("aria-activedescendant");
   locationSearchSuggestions.querySelectorAll("[data-suggestion-index]").forEach((button) => {
     button.addEventListener("mousedown", (event) => {
       event.preventDefault();
       chooseLocationSuggestion(state.locationSuggestions[Number(button.dataset.suggestionIndex)]);
     });
   });
+}
+
+// Move the active option (keyboard ArrowUp/Down), wrapping, and mirror it to
+// aria-activedescendant + aria-selected so screen readers track the highlight.
+function moveActiveSuggestion(delta) {
+  if (!locationSearchSuggestions || locationSearchSuggestions.hidden) return;
+  const count = state.locationSuggestions.length;
+  if (!count) return;
+  const next = (state.activeSuggestionIndex + delta + count) % count;
+  state.activeSuggestionIndex = next;
+  locationSearchSuggestions.querySelectorAll(".location-suggestion").forEach((el, i) => {
+    const on = i === next;
+    el.classList.toggle("active", on);
+    el.setAttribute("aria-selected", String(on));
+  });
+  locationSearchInput.setAttribute("aria-activedescendant", `locSug-${next}`);
 }
 
 function getLocationSuggestionContext(feature) {
@@ -2948,6 +3108,11 @@ function hideLocationSuggestions() {
   if (!locationSearchSuggestions) return;
   locationSearchSuggestions.hidden = true;
   locationSearchSuggestions.innerHTML = "";
+  state.activeSuggestionIndex = -1;
+  if (locationSearchInput) {
+    locationSearchInput.setAttribute("aria-expanded", "false");
+    locationSearchInput.removeAttribute("aria-activedescendant");
+  }
 }
 
 function setLocationSearchStatus(message) {
@@ -3003,10 +3168,12 @@ function initControls() {
   whenToggle.addEventListener("click", () => {
     whenForm.hidden = !whenForm.hidden;
     whenToggle.classList.toggle("active", !whenForm.hidden);
+    whenToggle.setAttribute("aria-expanded", String(!whenForm.hidden));
   });
   whenApply.addEventListener("click", () => {
     whenForm.hidden = true;
     whenToggle.classList.remove("active");
+    whenToggle.setAttribute("aria-expanded", "false");
   });
 
   initMobileSeasonControls();
@@ -3034,6 +3201,7 @@ function initControls() {
     state.wasBelowPointZoom = belowPointZoom;
     updateLayerHandoff();
     updateRadarZoom();
+    refreshWindCanvasZoomGate();
   });
 
   map.on("moveend", () => {
@@ -3123,12 +3291,16 @@ function renderSeasonControls() {
   const selectedDate = getSelectedDate();
   daySlider.value = String(state.selectedDay);
   dateInput.value = getDateInputValue(selectedDate);
-  seasonDateLabel.textContent = state.allSeasons
+  const dayText = state.allSeasons
     ? "All seasons"
     : `${FULL_MONTHS[selectedDate.getMonth()]} ${selectedDate.getDate()}`;
+  seasonDateLabel.textContent = dayText;
+  // Announce the date, not the raw 1-365 number, to screen readers.
+  daySlider.setAttribute("aria-valuetext", dayText);
   seasonName.textContent = state.allSeasons ? "Full year" : getSeason(selectedDate);
   daySlider.disabled = state.allSeasons;
   allSeasonsButton.classList.toggle("active", state.allSeasons);
+  allSeasonsButton.setAttribute("aria-pressed", String(state.allSeasons));
   // "Back to now" only shows once the scrubber has moved off today (prototype
   // #season.scrubbed) or while in all-seasons mode.
   const scrubbed = state.allSeasons || state.selectedDay !== getDayOfYear(new Date());
@@ -3158,12 +3330,14 @@ function initMobileSeasonControls() {
     chartToggle.addEventListener("click", () => {
       const open = seasonBar.classList.toggle("pinned");
       chartToggle.classList.toggle("active", open);
+      chartToggle.setAttribute("aria-pressed", String(open));
     });
   }
   if (legendMob) {
     legendMob.addEventListener("click", () => {
       const open = seasonBar.classList.toggle("legend-open");
       legendMob.classList.toggle("active", open);
+      legendMob.setAttribute("aria-pressed", String(open));
     });
   }
 }
@@ -3200,7 +3374,9 @@ function renderHistogram() {
       // Real abundance when a curve exists; otherwise binary in-season presence.
       const intensity = curve ? (curve[index] || 0) : (inSeason ? 1 : 0);
       weighted[species.category] += intensity;
-      if (inSeason || (curve && curve[index] >= 0.15)) counts[species.category] += 1;
+      // Bar heights stay phenology-weighted, but the tooltip count must match
+      // the "IN SEASON BY MONTH" header: only count species listed for the month.
+      if (inSeason) counts[species.category] += 1;
     });
     return { weighted, counts };
   });
@@ -4374,18 +4550,37 @@ function bindMapInteractions() {
 function bindPopupActions(popup) {
   const element = popup.getElement();
   if (!element) return;
+  const card = element.querySelector(".pt-card");
   const closeButton = element.querySelector(".pt-card .close");
   if (closeButton) {
     closeButton.addEventListener("click", () => popup.remove());
+  }
+  // Move focus into the dialog and let Escape dismiss it (keyboard parity with
+  // the close button; the popup is non-modal so focus is not trapped).
+  if (card) {
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") { event.preventDefault(); popup.remove(); }
+    });
+    requestAnimationFrame(() => card.focus?.());
   }
   const saveButton = element.querySelector("[data-save-location]");
   if (saveButton) {
     saveButton.addEventListener("click", () => {
       toggleSavedLocation(saveButton.dataset.saveLocation);
       updateSaveLocationButton(saveButton);
-      render();
+      refreshSavedView();
     });
   }
+}
+
+// Bookmarking a location changes neither the catalog, the filters, nor which
+// data to fetch — so skip the full render()'s iNat/Falling-Fruit/PAD-US reloads
+// and map.resize, and just repaint the layers the saved set can affect (only
+// the saved-only view actually changes what's visible).
+function refreshSavedView() {
+  renderMarkers();
+  updateFallingFruitAggregates();
+  refreshFlush();
 }
 
 function toggleSavedLocation(recordId) {
@@ -4426,8 +4621,9 @@ function getMarkerPopupHTML(properties) {
   // ID-source value: dataset (linked) · license · observer · observed date.
   // License from LICENSE_BY_SOURCE (verbatim from ATTRIBUTION.md); observer
   // present only on iNaturalist records — never fabricated for other sources.
-  const datasetMarkup = properties.sourceUrl
-    ? `<a class="src-link" href="${escapeHTML(properties.sourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>`
+  const safeSourceUrl = safeHttpUrl(properties.sourceUrl);
+  const datasetMarkup = safeSourceUrl
+    ? `<a class="src-link" href="${escapeHTML(safeSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.sourceLabel)}</a>`
     : `<span>${escapeHTML(properties.sourceLabel)}</span>`;
   const license = LICENSE_BY_SOURCE[properties.source] || "";
   const sourceBits = [datasetMarkup];
@@ -4437,8 +4633,9 @@ function getMarkerPopupHTML(properties) {
   const sourceVal = sourceBits.join(" · ");
 
   // Access rule citation, preserved verbatim from the access rule tables.
-  const ruleCite = properties.accessSourceUrl
-    ? `<a class="src-link" href="${escapeHTML(properties.accessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel || "source")}</a>`
+  const safeAccessSourceUrl = safeHttpUrl(properties.accessSourceUrl);
+  const ruleCite = safeAccessSourceUrl
+    ? `<a class="src-link" href="${escapeHTML(safeAccessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel || "source")}</a>`
     : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
   const ruleLimit = escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.");
 
@@ -4489,7 +4686,7 @@ function getMarkerPopupHTML(properties) {
   const saved = isSavedLocation(properties.id);
 
   return `
-    <div class="pt-card${compact ? " compact" : ""}">
+    <div class="pt-card${compact ? " compact" : ""}" role="dialog" aria-label="${escapeHTML(properties.speciesName)} details" tabindex="-1">
       <div class="spine" style="background:${statusColor}"></div>
       <button class="close" type="button" aria-label="Close">&times;</button>
       <div class="pad">
@@ -5265,15 +5462,17 @@ function getSpeciesForObservation(observation) {
 function mapFallingFruitRecord(record) {
   const speciesId = getImportedSpeciesId(record.speciesId);
   const species = speciesCatalogById.get(speciesId);
-  if (!species || !record.lat || !record.lng) return null;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   return {
     id: `fallingfruit-${record.id}`,
     speciesId: species.id,
     name: record.name || sourceLabel("fallingfruit"),
     observedName: record.observedName || species.commonName,
     observedScientificName: record.observedScientificName || species.scientificName,
-    lat: record.lat,
-    lng: record.lng,
+    lat,
+    lng,
     source: "fallingfruit",
     note: record.note || "Imported Falling Fruit record.",
     confidence: record.confidence || "community",
@@ -5297,15 +5496,17 @@ function getImportedSpeciesId(speciesId) {
 function mapNpsOrchardRecord(record) {
   const speciesId = getImportedSpeciesId(record.speciesId);
   const species = speciesCatalogById.get(speciesId);
-  if (!species || !record.lat || !record.lng) return null;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   return {
     id: `nps-orchard-${record.id}`,
     speciesId: species.id,
     name: record.name || sourceLabel("nps-orchard"),
     observedName: record.observedName || "Historic orchard",
     observedScientificName: record.observedScientificName || species.scientificName,
-    lat: record.lat,
-    lng: record.lng,
+    lat,
+    lng,
     source: "nps-orchard",
     note: record.note || "Historic orchard or fruit tree documented by the National Park Service.",
     confidence: record.confidence || "cultural landscape record",
@@ -5534,6 +5735,8 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   }
 
   if (text.includes("blue ridge parkway")) {
+    const fungusBlock = unlistedFungusRule(species, area, "Blue Ridge Parkway compendium", ACCESS_RULE_SOURCES.blueRidge);
+    if (fungusBlock) return fungusBlock;
     return {
       status: "allowed",
       label: "Allowed",
@@ -5546,6 +5749,8 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   }
 
   if (text.includes("prince william forest park")) {
+    const fungusBlock = unlistedFungusRule(species, area, "Prince William Forest compendium", ACCESS_RULE_SOURCES.princeWilliam);
+    if (fungusBlock) return fungusBlock;
     return {
       status: "allowed",
       label: "Allowed",
@@ -5558,6 +5763,8 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   }
 
   if (text.includes("manassas national battlefield")) {
+    const fungusBlock = unlistedFungusRule(species, area, "Manassas compendium", ACCESS_RULE_SOURCES.manassas);
+    if (fungusBlock) return fungusBlock;
     return {
       status: "allowed",
       label: "Allowed",
@@ -5741,6 +5948,22 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
     note: "Public access does not always include permission to collect plants or fungi.",
     sourceLabel: "USGS PAD-US public access",
     sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/protected-areas"
+  };
+}
+
+// Curated park branches below allow "listed edible fungi" but carry no
+// per-species flag; this gate keeps an unlisted mushroom from inheriting their
+// "allowed" rule, mirroring the mushroomsAllowed check in getNpsCompendiumRule.
+function unlistedFungusRule(species, area, sourceLabel, sourceUrl) {
+  if (species.category !== "mushroom" || EDIBLE_FUNGUS_WHITELIST.has(species.id)) return null;
+  return {
+    status: "prohibited",
+    label: "Prohibited",
+    area,
+    limit: `${species.commonName} are not on the edible-fungus whitelist for this park; do not harvest without species-level confirmation and written park authorization.`,
+    note: "Foraging here is authorized only for specific edible fungi; unlisted mushrooms are treated as prohibited for safety.",
+    sourceLabel,
+    sourceUrl
   };
 }
 

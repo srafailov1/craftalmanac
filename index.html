@@ -4,32 +4,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Craft Almanac · United States Material Maps</title>
+    <meta name="description" content="A map of local material availability, ethical harvesting practice, craft knowledge, and safety information across the contiguous United States.">
+    <meta name="theme-color" content="#20241f">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2320241f'/%3E%3Cpath d='M8 2.5c3.2 1.6 3.2 6.4 0 11C4.8 8.9 4.8 4.1 8 2.5z' fill='%236b7f2e'/%3E%3C/svg%3E">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Craft Almanac · United States Material Maps">
+    <meta property="og:description" content="A map of local material availability, ethical harvesting practice, and safety information across the contiguous United States.">
+    <meta name="twitter:card" content="summary">
     <link rel="preconnect" href="https://api.mapbox.com">
+    <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=debug-pass-1">
+    <link rel="stylesheet" href="./styles.css?v=debug-pass-2">
   </head>
   <body data-register="day">
     <main class="app-shell">
       <section class="map-area" aria-label="Craft Almanac map">
         <div id="masthead" class="floating">
-          <span class="wordmark serif">Craft Almanac</span>
-          <span class="links">
+          <h1 class="wordmark serif">Craft Almanac</h1>
+          <nav class="links" aria-label="Primary">
             <button type="button" data-sheet="maps">Maps</button>
             <button type="button" data-sheet="plants">Plants</button>
             <button type="button" data-sheet="recipes">Recipes</button>
             <button type="button" data-sheet="about">About</button>
-          </span>
+          </nav>
         </div>
         <div id="map"></div>
         <canvas id="fx" aria-hidden="true"></canvas>
         <div id="search-bar" class="floating">
           <form class="location-search-form" id="locationSearchForm" role="search">
-            <input id="locationSearchInput" type="search" autocomplete="off" placeholder="Search a place…" aria-label="Search a place">
+            <input id="locationSearchInput" type="search" autocomplete="off" placeholder="Search a place…" aria-label="Search a place" role="combobox" aria-autocomplete="list" aria-controls="locationSearchSuggestions" aria-expanded="false">
           </form>
           <div class="location-suggestions" id="locationSearchSuggestions" role="listbox" aria-label="Suggested locations" hidden></div>
           <p class="location-search-status" id="locationSearchStatus" aria-live="polite"></p>
         </div>
-        <div id="mode-disclaimer" class="floating" role="note" hidden>HERBALISM MAP · EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>
+        <div id="mode-disclaimer" class="floating" role="note" aria-live="polite" hidden>HERBALISM MAP · EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>
         <div id="season-bar" class="floating" aria-label="Season">
           <div class="season-hist" id="seasonHist">
             <div class="season-hh" id="seasonHistHead">IN SEASON BY MONTH · <b>FOOD MAP</b> · STACKED BY CATEGORY</div>
@@ -45,20 +54,20 @@
           <div class="season-meta">
             <span class="season-readout"><strong id="seasonDateLabel">May 20</strong> <span id="seasonName">Spring</span></span>
             <span class="season-mbtns">
-              <button class="text-button mobile-only" id="chartToggle" type="button">Chart</button>
-              <button class="text-button mobile-only" id="legendMob" type="button">Legend</button>
-              <button class="text-button" id="allSeasonsButton" type="button">All seasons</button>
+              <button class="text-button mobile-only" id="chartToggle" type="button" aria-pressed="false">Chart</button>
+              <button class="text-button mobile-only" id="legendMob" type="button" aria-pressed="false">Legend</button>
+              <button class="text-button" id="allSeasonsButton" type="button" aria-pressed="false">All seasons</button>
               <button class="text-button" id="seasonReset" type="button">Back to now</button>
-              <button class="text-button" id="whenToggle" type="button">Set date</button>
+              <button class="text-button" id="whenToggle" type="button" aria-expanded="false" aria-controls="whenForm">Set date</button>
             </span>
           </div>
           <div class="when-form" id="whenForm" hidden>
-            <input id="dateInput" type="date">
+            <input id="dateInput" type="date" aria-label="Choose a date">
             <button class="text-button" id="whenApply" type="button">Go</button>
           </div>
         </div>
         <div id="conditions-rail" class="floating" aria-label="Current conditions"></div>
-        <div id="rail-panel" class="floating" aria-live="polite"><div class="spine"></div><div class="pad" id="rail-pad"></div></div>
+        <div id="rail-panel" class="floating"><div class="spine"></div><div class="pad" id="rail-pad"></div></div>
         <div class="map-legend" id="mapLegend" aria-label="Map legend"></div>
       </section>
     </main>
@@ -81,6 +90,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=debug-pass-1"></script>
+    <script src="./app.js?v=debug-pass-2"></script>
   </body>
 </html>

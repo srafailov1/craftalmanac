@@ -1035,6 +1035,9 @@ body.modal-open .app-shell {
   background: transparent;
   box-shadow: none;
   border-radius: 12px;
+  /* Let the inner .pt-card own its width; the base 240px min would otherwise
+     exceed the 88vw card on sub-273px viewports (matches the hover popup). */
+  min-width: 0;
 }
 
 .pt-popup .mapboxgl-popup-tip {
@@ -1142,19 +1145,21 @@ body.modal-open .app-shell {
   width: 100%;
   min-height: 34px;
   margin-top: 12px;
-  border: 1px solid #cdd8c5;
+  /* Register-aware to match its host .pt-card (was a fixed light button that
+     clashed on the dark dusk/night popup), mirroring .welcome-primary. */
+  border: 1px solid var(--reg-hair);
   border-radius: 6px;
-  background: #f1f5ed;
-  color: var(--ink);
+  background: var(--reg-ground);
+  color: var(--reg-ink);
   font-weight: 850;
 }
 
 .save-location-button:hover,
 .save-location-button:focus-visible,
 .save-location-button.is-saved {
-  border-color: var(--leaf-dark);
-  background: var(--leaf-dark);
-  color: #fffdf7;
+  border-color: var(--reg-accent);
+  background: var(--reg-accent);
+  color: var(--reg-panel);
   outline: none;
 }
 
@@ -1578,7 +1583,7 @@ body[data-register="night"] {
   width: 5px;
 }
 
-.mini-card h4 {
+.mini-card h3 {
   margin: 0;
   font-size: 14.5px;
   font-weight: 500;
@@ -1627,6 +1632,9 @@ body[data-register="night"] {
   left: 14px;
   width: min(264px, calc(100% - 28px));
   padding: 8px 10px;
+  /* Above the medicine-mode disclaimer (also z-index 5, directly below) so the
+     suggestions dropdown isn't painted over when it expands. */
+  z-index: 6;
 }
 
 #search-bar .location-search-form input {
@@ -1671,7 +1679,8 @@ body[data-register="night"] {
 }
 
 #search-bar .location-suggestion:hover,
-#search-bar .location-suggestion:focus-visible {
+#search-bar .location-suggestion:focus-visible,
+#search-bar .location-suggestion.active {
   border-color: var(--reg-accent);
 }
 
@@ -1940,7 +1949,9 @@ body[data-register="night"] {
 }
 
 #masthead .wordmark {
+  margin: 0;
   font-size: 15px;
+  font-weight: 500;
   letter-spacing: 0.04em;
 }
 
@@ -2044,7 +2055,7 @@ body[data-register="night"] {
 #season-bar .day-slider:focus-visible,
 #masthead .links button:focus-visible,
 #sheet .closer:focus-visible,
-#rail-panel .closer:focus-visible,
+#sheet .mini-card:focus-visible,
 .pt-card .close:focus-visible {
   outline: 2px solid var(--reg-accent);
   outline-offset: 2px;
@@ -2226,9 +2237,12 @@ body[data-register="night"] {
 
 #rail-panel h3 {
   margin: 0 0 9px;
+  /* Register-aware text: the fixed per-subject hues (wind/rain/tide/moon) are
+     dark/mid and fall below the contrast floor on the dark dusk/night panel.
+     The subject color survives on the .spine + border as a non-text accent. */
+  color: var(--reg-ink);
   font-size: 12.5px;
   letter-spacing: 0.1em;
-  color: var(--subject, var(--reg-accent));
   font-family: var(--font-mono);
 }
 
