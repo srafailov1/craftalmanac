@@ -2449,7 +2449,6 @@ const seasonHistHead = document.querySelector("#seasonHistHead");
 const seasonCats = document.querySelector("#seasonCats");
 const seasonBar = document.querySelector("#season-bar");
 const legendSlot = document.querySelector("#legendSlot");
-const chartToggle = document.querySelector("#chartToggle");
 const legendMob = document.querySelector("#legendMob");
 const masthead = document.querySelector("#masthead");
 const mastMenuBtn = document.querySelector("#mastMenuBtn");
@@ -3281,6 +3280,17 @@ function initControls() {
 
   // "Set date" reveals the precise date-entry form (prototype #when-form).
   whenToggle.addEventListener("click", () => {
+    // On phones SET DATE opens the day slider + histogram (.season-open) — the
+    // slider is the only date control there. On wider screens it still reveals
+    // the precise calendar entry form (prototype #when-form).
+    if (window.matchMedia("(max-width: 720px)").matches) {
+      const open = seasonBar.classList.toggle("season-open");
+      whenToggle.classList.toggle("active", open);
+      whenToggle.setAttribute("aria-expanded", String(open));
+      whenForm.hidden = true;
+      syncMapControlsOffset();
+      return;
+    }
     whenForm.hidden = !whenForm.hidden;
     whenToggle.classList.toggle("active", !whenForm.hidden);
     whenToggle.setAttribute("aria-expanded", String(!whenForm.hidden));
@@ -3445,13 +3455,6 @@ function initMobileSeasonControls() {
   if (mq.addEventListener) mq.addEventListener("change", placeLegend);
   else if (mq.addListener) mq.addListener(placeLegend);
 
-  if (chartToggle) {
-    chartToggle.addEventListener("click", () => {
-      const open = seasonBar.classList.toggle("pinned");
-      chartToggle.classList.toggle("active", open);
-      chartToggle.setAttribute("aria-pressed", String(open));
-    });
-  }
   if (legendMob) {
     legendMob.addEventListener("click", () => {
       const open = seasonBar.classList.toggle("legend-open");
@@ -3530,7 +3533,7 @@ function syncMapControlsOffset() {
     document.body.classList.remove("season-expanded");
     return;
   }
-  const expanded = seasonBar.classList.contains("pinned")
+  const expanded = seasonBar.classList.contains("season-open")
     || seasonBar.classList.contains("legend-open");
   document.body.classList.toggle("season-expanded", expanded);
   if (expanded) return;

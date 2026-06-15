@@ -1713,8 +1713,7 @@ body[data-register="night"] {
 }
 
 #season-bar:hover .season-hist,
-#season-bar:focus-within .season-hist,
-#season-bar.pinned .season-hist {
+#season-bar:focus-within .season-hist {
   max-height: 230px;
   opacity: 1;
 }
@@ -2519,19 +2518,29 @@ body[data-register="night"] {
     padding: 8px 13px 9px;
   }
 
-  #season-bar .season-track { margin-top: 4px; }
-  #season-bar .season-meta { margin-top: 7px; }
+  #season-bar .season-meta { margin-top: 2px; }
 
   #season-bar .season-histogram { height: 92px; }
 
-  /* Hover never sticks on touch — the histogram pins via the CHART toggle. */
+  /* Collapsed by default: only the date readout + buttons show. SET DATE opens
+     the day slider and the histogram together (.season-open) — the slider is
+     the sole date control on mobile, so there is no separate CHART toggle. */
+  #season-bar .season-track {
+    display: none;
+    margin-top: 8px;
+  }
+
+  #season-bar.season-open .season-track {
+    display: block;
+  }
+
+  /* Hover never sticks on touch; SET DATE drives the histogram. */
   #season-bar:hover .season-hist {
     max-height: 0;
     opacity: 0;
   }
 
-  #season-bar.pinned .season-hist,
-  #season-bar:focus-within .season-hist {
+  #season-bar.season-open .season-hist {
     max-height: 360px;
     opacity: 1;
   }
