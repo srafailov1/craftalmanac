@@ -2585,16 +2585,39 @@ body[data-register="night"] {
     display: none;
   }
 
-  /* Let the readout + controls wrap so the buttons (e.g. SET DATE) never spill
-     past the card's right edge and get clipped by the viewport on phones. */
+  /* One compact row, masthead-style: date · Set date on the left, Legend pinned
+     right; All seasons + Back to now surface only with the open date controls.
+     .season-mbtns becomes display:contents so its buttons are flex items of
+     .season-meta and can be ordered independently of the desktop layout. */
   .season-meta {
     flex-wrap: wrap;
-    gap: 8px 12px;
+    align-items: center;
+    gap: 6px 10px;
   }
 
   .season-mbtns {
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    display: contents;
+  }
+
+  #season-bar .season-readout { order: 0; }
+  #season-bar #whenToggle { order: 1; }
+  #season-bar #allSeasonsButton { order: 2; }
+  #season-bar #seasonReset { order: 3; }
+  #season-bar #legendMob { order: 4; margin-left: auto; }
+
+  #season-bar:not(.season-open) #allSeasonsButton,
+  #season-bar:not(.season-open) #seasonReset {
+    display: none;
+  }
+
+  /* Trim the row to one line: drop the season word and the active-map note
+     (the active map will resurface in the top nav later). */
+  #season-bar #seasonName {
+    display: none;
+  }
+
+  #legendSlot .legend-active {
+    display: none;
   }
 
   /* ---- masthead as the single top bar (search + conditions + nav) ---- */
