@@ -1381,6 +1381,18 @@ function simNow() {
   return new Date(+base + state.simMins * 60000);
 }
 
+// The solar dial reads the season scrubber's date (so sunrise/sunset and the
+// day arc track the selected day of year) while taking the time-of-day from
+// simNow() — dragging the sun previews an hour, sliding the season previews a
+// day. The map light/register stay on the real date (simNow), so the season
+// scrubber re-shapes the dial without changing the basemap lighting.
+function dialDate() {
+  const t = simNow();
+  const d = getSelectedDate();
+  d.setHours(t.getHours(), t.getMinutes(), t.getSeconds(), 0);
+  return d;
+}
+
 function applyRegister() {
   const reg = computeRegister(simNow(), state.location.lat, state.location.lng);
   if (reg === state.register) return;
@@ -1548,10 +1560,18 @@ function renderConditionsRail() {
     html += conditionsSegment("rain", "RAIN 72H", `${weather.past72} mm${flushNote}`, conditionsIconRain());
     html += conditionsSegment("wind", "WIND", `${Math.round(weather.wind)} km/h · ${windTier(weather.wind).toUpperCase()}`, conditionsIconWind());
   }
+  // Tide is always present in the rail (owner decision): near a NOAA station it
+  // shows the next high/low; inland it reads "none nearby" and the panel
+  // explains that tides are coastal-only.
   const nt = nextTide();
+  let tideValue, tideRising = false;
   if (nt) {
-    html += conditionsSegment("tide", "TIDE", `${nt.type === "L" ? "low" : "high"} ${formatClockTime(nt.t)}`, conditionsIconTide(nt.type === "H"));
+    tideValue = `${nt.type === "L" ? "low" : "high"} ${formatClockTime(nt.t)}`;
+    tideRising = nt.type === "H";
+  } else {
+    tideValue = state.tide ? "—" : "none nearby";
   }
+  html += conditionsSegment("tide", "TIDE", tideValue, conditionsIconTide(tideRising));
   conditionsRail.innerHTML = html;
 }
 
@@ -1722,25 +1742,37 @@ function earthSVG(c, r) {
     </g></g>`;
 }
 
+// Day-arc geometry for a given sunTimes result. Shared by the initial render
+// (svgSunDial) and the live in-place updater (updateSunArc) so the arc, chord,
+// and RISE/SET labels stay in sync as the season scrubber re-derives the times.
+function dialArcGeom(st, c, r) {
+  if (!st.rise || !st.set) return null;
+  const [rx, ry] = dialPos(dialAngle(st.rise), c, r);
+  const [ex, ey] = dialPos(dialAngle(st.set), c, r);
+  return {
+    rx, ry, ex, ey,
+    // When a point sits low on the dial (late sunset near solstice), drop its
+    // label above the point so RISE/SET don't collide with the MIDNIGHT anchor.
+    riseLabelY: ry > c + r * 0.5 ? ry - 6 : ry + 13,
+    setLabelY: ey > c + r * 0.5 ? ey - 6 : ey + 13,
+    arcD: `M ${rx.toFixed(1)} ${ry.toFixed(1)} A ${r} ${r} 0 0 0 ${ex.toFixed(1)} ${ey.toFixed(1)}`
+  };
+}
+
 function svgSunDial(size = SUN_DIAL_SIZE) {
   const c = size / 2, r = size / 2 - 10;
-  const now = simNow();
+  const now = dialDate();
   const { lat, lng } = state.location;
   const st = sunTimes(now, lat, lng);
   const phi = dialAngle(now);
   const [sx, sy] = dialPos(phi, c, r);
   let chord = "", dayArc = "";
-  if (st.rise && st.set) {
-    const [rx, ry] = dialPos(dialAngle(st.rise), c, r);
-    const [ex, ey] = dialPos(dialAngle(st.set), c, r);
-    // When a point sits low on the dial (late sunset near solstice), drop its
-    // label above the point so RISE/SET don't collide with the MIDNIGHT anchor.
-    const riseLabelY = ry > c + r * 0.5 ? ry - 6 : ry + 13;
-    const setLabelY = ey > c + r * 0.5 ? ey - 6 : ey + 13;
-    chord = `<line x1="${rx.toFixed(1)}" y1="${ry.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="var(--reg-sub)" stroke-width="1" stroke-dasharray="3 3"/>
-      <text x="${(rx - 3).toFixed(1)}" y="${riseLabelY.toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="end">RISE</text>
-      <text x="${(ex + 3).toFixed(1)}" y="${setLabelY.toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)">SET</text>`;
-    dayArc = `<path d="M ${rx.toFixed(1)} ${ry.toFixed(1)} A ${r} ${r} 0 0 0 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="var(--reg-warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
+  const geom = dialArcGeom(st, c, r);
+  if (geom) {
+    chord = `<line id="sun-chord" x1="${geom.rx.toFixed(1)}" y1="${geom.ry.toFixed(1)}" x2="${geom.ex.toFixed(1)}" y2="${geom.ey.toFixed(1)}" stroke="var(--reg-sub)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text id="sun-rise-label" x="${(geom.rx - 3).toFixed(1)}" y="${geom.riseLabelY.toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)" text-anchor="end">RISE</text>
+      <text id="sun-set-label" x="${(geom.ex + 3).toFixed(1)}" y="${geom.setLabelY.toFixed(1)}" font-family="${DIAL_MONO}" font-size="9.5" fill="var(--reg-sub)">SET</text>`;
+    dayArc = `<path id="sun-arc" d="${geom.arcD}" fill="none" stroke="var(--reg-warn)" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>`;
   }
   const night = sunAltitude(now, lat, lng) < 0;
   const nowMins = now.getHours() * 60 + now.getMinutes();
@@ -1754,12 +1786,42 @@ function svgSunDial(size = SUN_DIAL_SIZE) {
   </svg>`;
 }
 
+// In-place update of the day arc, chord, and RISE/SET labels — lets the dial
+// re-shape as the season scrubber changes the sunrise/sunset times without
+// rebuilding the SVG (which would restart the earth-spin animation).
+function updateSunArc(st, c, r) {
+  const arc = document.getElementById("sun-arc");
+  const chord = document.getElementById("sun-chord");
+  const riseLabel = document.getElementById("sun-rise-label");
+  const setLabel = document.getElementById("sun-set-label");
+  const geom = dialArcGeom(st, c, r);
+  const els = [arc, chord, riseLabel, setLabel];
+  if (!geom) { els.forEach((el) => { if (el) el.style.display = "none"; }); return; }
+  els.forEach((el) => { if (el) el.style.display = ""; });
+  if (arc) arc.setAttribute("d", geom.arcD);
+  if (chord) {
+    chord.setAttribute("x1", geom.rx.toFixed(1));
+    chord.setAttribute("y1", geom.ry.toFixed(1));
+    chord.setAttribute("x2", geom.ex.toFixed(1));
+    chord.setAttribute("y2", geom.ey.toFixed(1));
+  }
+  if (riseLabel) {
+    riseLabel.setAttribute("x", (geom.rx - 3).toFixed(1));
+    riseLabel.setAttribute("y", geom.riseLabelY.toFixed(1));
+  }
+  if (setLabel) {
+    setLabel.setAttribute("x", (geom.ex + 3).toFixed(1));
+    setLabel.setAttribute("y", geom.setLabelY.toFixed(1));
+  }
+}
+
 function updateSunDial() {
   const dial = document.getElementById("sun-dial");
   if (!dial) return;
   const size = SUN_DIAL_SIZE, c = size / 2, r = size / 2 - 10;
-  const now = simNow();
+  const now = dialDate();
   const { lat, lng } = state.location;
+  const st = sunTimes(now, lat, lng);
   const [sx, sy] = dialPos(dialAngle(now), c, r);
   const dot = document.getElementById("sun-dot");
   if (dot) {
@@ -1767,11 +1829,16 @@ function updateSunDial() {
     dot.setAttribute("cy", sy.toFixed(1));
     dot.setAttribute("fill", sunAltitude(now, lat, lng) < 0 ? "var(--reg-ink)" : "#e8b931");
   }
+  updateSunArc(st, c, r);
   dial.setAttribute("aria-valuenow", String(now.getHours() * 60 + now.getMinutes()));
   dial.setAttribute("aria-valuetext", formatClockTime(now));
   const rd = document.getElementById("sun-readout");
   if (rd) {
     rd.innerHTML = `<b>${escapeHTML(formatClockTime(now))}</b> · ${escapeHTML(state.register.toUpperCase())} REGISTER${state.simMins != null ? " (SIMULATED)" : ""}`;
+  }
+  const note = document.getElementById("sun-times-note");
+  if (note) {
+    note.innerHTML = `First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.`;
   }
   if (railPanel) railPanel.classList.toggle("simulating", state.simMins != null);
 }
@@ -1842,16 +1909,18 @@ function renderConditionPanel() {
   railPanel.dataset.subject = openConditionSeg;
   const now = new Date();
   const { lat, lng } = state.location;
-  const st = sunTimes(now, lat, lng);
   const mp = moonPhase(now);
   const w = state.weather;
   let html = "";
   if (openConditionSeg === "sun") {
+    // Sunrise/sunset follow the season scrubber (dialDate), and the note is kept
+    // live by updateSunDial() as the slider moves.
+    const st = sunTimes(dialDate(), lat, lng);
     html = `<h3>THE SUN</h3>
       <div class="fig">${svgSunDial()}</div>
       <div class="age" id="sun-readout" role="status" aria-live="polite" aria-atomic="true"></div>
       <button class="sun-now" type="button" id="sun-now">BACK TO NOW</button>
-      <div class="note" style="margin-top:10px">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
+      <div class="note" id="sun-times-note" style="margin-top:10px">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
       <div class="note" style="margin-top:8px"><b>Drag the sun</b> to preview any hour — the map's light and the register follow. Many parks close gathering at dusk; the register keeps the same clock.</div>`;
   } else if (openConditionSeg === "moon") {
     html = `<h3>MOON</h3>
@@ -1885,7 +1954,8 @@ function renderConditionPanel() {
         <div class="note">${windowLine}<br>Low tide is the gathering tide: seaweeds and shellfish beds open as the water falls. <b>Biotoxin closures always override</b> — closures are hand-encoded, never inferred.</div>
         <div class="age">SOURCE: NOAA CO-OPS · STATION ${escapeHTML(state.tide.stationId)} · PREDICTIONS</div>`;
     } else {
-      html = `<h3>TIDE</h3><div class="note">No tide station near this location.</div>`;
+      html = `<h3>TIDE</h3>
+        <div class="note">No NOAA tide station within ${TIDE_MAX_DISTANCE_KM} km of this location. Tides are coastal — search or pan the map to a shoreline and the nearest station's predictions load automatically.</div>`;
     }
   }
   railPad.innerHTML = html;
@@ -2169,7 +2239,9 @@ function loadTide() {
     if (!nearest || nearest.distanceKm > TIDE_MAX_DISTANCE_KM) {
       state.tide = null;
       renderConditionsRail();
-      if (openConditionSeg === "tide") { openConditionSeg = null; renderConditionPanel(); }
+      // Keep the tide panel open when moving inland — it now explains that
+      // tides are coastal-only rather than disappearing.
+      if (openConditionSeg === "tide") renderConditionPanel();
       return;
     }
     const station = nearest.station;
@@ -3266,6 +3338,10 @@ function getVisibleRecords() {
 
 function render() {
   renderSeasonControls();
+  // Keep the open solar dial in sync with the season scrubber: re-derive the
+  // sunrise/sunset arc and times live as the date slider moves (no-op when the
+  // sun panel is closed). updateSunDial self-guards on the dial's presence.
+  if (openConditionSeg === "sun") updateSunDial();
   renderSpeciesState();
   renderMapLegend();
   renderAccessFilterNote();
