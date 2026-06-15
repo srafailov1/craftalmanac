@@ -1354,9 +1354,23 @@ function getSeason(date) {
 }
 
 function getMonthRangeText(months) {
-  const sortedMonths = [...months].sort((a, b) => a - b);
+  // Coalesce into contiguous runs so a species dormant mid-year (e.g. chickweed,
+  // Feb–May + Oct–Dec) reads "Feb-May, Oct-Dec" instead of a misleading
+  // min–max "Feb-Dec" that implies summer availability.
+  const sortedMonths = [...new Set(months)].filter((m) => m >= 1 && m <= 12).sort((a, b) => a - b);
   if (!sortedMonths.length) return "Unknown";
-  return `${MONTHS[sortedMonths[0] - 1]}-${MONTHS[sortedMonths[sortedMonths.length - 1] - 1]}`;
+  const runs = [];
+  let start = sortedMonths[0];
+  let prev = sortedMonths[0];
+  for (let i = 1; i < sortedMonths.length; i++) {
+    if (sortedMonths[i] === prev + 1) { prev = sortedMonths[i]; continue; }
+    runs.push([start, prev]);
+    start = prev = sortedMonths[i];
+  }
+  runs.push([start, prev]);
+  return runs
+    .map(([a, b]) => (a === b ? MONTHS[a - 1] : `${MONTHS[a - 1]}-${MONTHS[b - 1]}`))
+    .join(", ");
 }
 
 function sourceLabel(source) {

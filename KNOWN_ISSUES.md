@@ -255,3 +255,74 @@ until the aggregate swap for the current viewport completes, then flip. Check
 and over NYC with cold cache (hard reload between directions); counts must
 never visibly drop and recover. Test wheel-zoom, double-click zoom, and
 pinch-trackpad zoom separately — they produce different event timing.
+
+
+## 2. Misleading month-range text for split-season species — RESOLVED 2026-06-15
+
+**Symptom:** `getMonthRangeText(species.months)` rendered a naive min–max range,
+so chickweed (the one catalog species with non-contiguous months,
+`[2,3,4,5,10,11,12]` — Feb–May then Oct–Dec, dormant in summer heat) displayed
+as **"Feb-Dec"** in the point card's availability/"season" line, implying it is
+gatherable all summer when it specifically is not. All other 15 distinct month
+patterns are contiguous and were unaffected.
+
+**Fix (commit "Coalesce split-season month ranges in availability text"):**
+`getMonthRangeText` now coalesces sorted, de-duplicated months into contiguous
+runs and joins them — chickweed reads **"Feb-May, Oct-Dec"**. Verified by
+extracting the live function from app.js and unit-testing: identical output to
+the old code on all 15 contiguous patterns (zero regressions), plus empty →
+"Unknown", single month, and unsorted/duplicate inputs. Display-text only — no
+permission-rule change, so no `build_access_status.mjs` rerun. Bumped
+`index.html` app.js token `allowed-overview-1` → `month-runs-1`.
+**Note for the owner / 6am loop:** `design/relaunch` carries an equivalent fix
+to this same function in its staged WIP; this implementation matches it
+textually so a future design→main merge stays conflict-free.
+
+## Tune-up run log — 2026-06-15 (5am debug loop)
+
+Health pass on `main` (no regressions found beyond item 2):
+- `node --check app.js` — clean.
+- **Duplicate top-level declaration scan** (explicitly requested under item 1
+  after the `getSelectedAccessStatuses` double-definition bug): clean — 323
+  distinct top-level names, zero duplicate `function`/`var` declarations that
+  `node --check` would silently accept. The harness lives at
+  `/tmp/dupscan.mjs` during the run; consider committing it to `scripts/` as a
+  permanent lint if the owner wants it to persist (small hand-off below).
+- All local data files referenced by app.js resolve: the 5 top-level JSON files,
+  plus all 2905 Falling Fruit chunk `path`s sampled (chunks/manifest counts
+  match: 2905 = 2905), status-raster, boundaries, states, NPS orchards.
+- Local serve (`python3 -m http.server 4173`) returns 200 for `/`, app.js,
+  styles.css, config.js, and the data endpoints above.
+
+## Hand-offs (for the 6am queue-grooming loop)
+
+1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work
+   order** — unchanged this run; it is a data/build problem
+   (`fetch_padus_cell_containment.mjs` center-only cell sampling), too large for
+   the debug pass. Route it to Codex (`docs/TODO-*.md`) per item 1b's pipeline
+   steps and acceptance test. Items 1/1a remain code-fixed and owner-verified at
+   `point-band-rules-1`; the residual is the structural raster-coverage limit
+   (data) plus the owner's human wheel/pinch-zoom sign-off — not app code.
+2. **(Optional) Persist the duplicate-name lint:** consider a small Codex/Qwen
+   task to add `scripts/lint_top_level_dupes.mjs` (the `/tmp/dupscan.mjs` logic)
+   and wire it into `scripts/check.sh`, so the `getSelectedAccessStatuses`-class
+   bug is caught automatically rather than re-scanned each 5am run.
+
+## Environment anomaly — FLAG FOR OWNER (2026-06-15)
+
+When this run started, the connected repo was **parked on `design/relaunch`**
+(not `main`) with staged design WIP (app.js/index.html/styles.css + a junk
+`__r2.md` that is a byte-identical copy of README.md), plus stale git lock files
+(`.git/index.lock`, `packed-refs.lock`, `refs/heads/design/relaunch.lock`,
+`refs/tags/__perm_probe__.lock`, `objects/maintenance.lock`) and untracked probe
+files (`__pb`, `__probe_root`, `outputs/__p2`) — the signature of a crashed
+permission-probe process (note the `__perm_probe__` tag). The mounted filesystem
+also **blocks `unlink` (Operation not permitted) while allowing create/rename**,
+so normal `git checkout main` (would need to delete 50 design-only files) and
+`git stash` are not possible in place. This loop therefore did its work on a
+**separate `main` worktree** (`git worktree add /tmp/ca-main main`), leaving the
+`design/relaunch` checkout and its staged WIP completely untouched, and committed
+on `main` there. Stale `.lock` files were renamed aside (could not be deleted).
+The design WIP and probe files are intact and were not committed. Owner may want
+to (a) clean up the probe junk + stale `.git/*.lock.*` files manually, and
+(b) check why the repo was left on `design/relaunch`.
