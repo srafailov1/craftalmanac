@@ -1983,6 +1983,13 @@ body[data-register="night"] {
   color: var(--reg-ink);
 }
 
+/* The icon triggers (menu / search / conditions) are a phones-only affordance;
+   on wider screens the search bar, conditions rail, and nav links float on
+   their own, so the triggers stay hidden. */
+.mast-triggers {
+  display: none;
+}
+
 /* ---- sheets (Phase 3d) ---- */
 
 #sheet-wrap {
@@ -2450,21 +2457,28 @@ body[data-register="night"] {
   #masthead .wordmark { font-size: 14px; }
   #masthead .links { gap: 10px; padding-left: 10px; }
 
+  /* Search + conditions are hidden until their masthead trigger opens them;
+     both drop down just under the bar (see the .search-open / .cond-open
+     rules below). */
   #search-bar {
-    top: 66px;
+    display: none;
+    top: 56px;
     left: 10px;
     right: 10px;
     width: auto;
+    z-index: 8;
   }
 
   #conditions-rail {
-    top: 126px;
+    display: none;
+    top: 56px;
     left: 10px;
     right: 10px;
     width: auto;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    z-index: 8;
   }
 
   #conditions-rail::-webkit-scrollbar { display: none; }
@@ -2488,7 +2502,7 @@ body[data-register="night"] {
   }
 
   #mode-disclaimer {
-    top: 178px;
+    top: 56px;
     left: 10px;
     right: 10px;
     max-width: none;
@@ -2502,7 +2516,11 @@ body[data-register="night"] {
     transform: none;
     max-height: 86vh;
     overflow-y: auto;
+    padding: 8px 13px 9px;
   }
+
+  #season-bar .season-track { margin-top: 4px; }
+  #season-bar .season-meta { margin-top: 7px; }
 
   #season-bar .season-histogram { height: 92px; }
 
@@ -2568,5 +2586,114 @@ body[data-register="night"] {
   .season-mbtns {
     flex-wrap: wrap;
     justify-content: flex-end;
+  }
+
+  /* ---- masthead as the single top bar (search + conditions + nav) ---- */
+  #masthead {
+    align-items: center;
+    /* Raise the whole bar above the disclaimer (5) and the search/conditions
+       drop-downs (8): #masthead forms a stacking context, so the menu drop-down
+       (its descendant) only clears those siblings when the bar itself outranks
+       them — otherwise it hides behind the medicine-mode disclaimer. */
+    z-index: 10;
+  }
+
+  /* Nav links fold behind the menu (☰) trigger and drop down on tap. */
+  #masthead .links {
+    display: none;
+  }
+
+  #masthead.menu-open .links {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 6px;
+    min-width: 152px;
+    gap: 2px;
+    padding: 7px;
+    border: none;
+    background: var(--reg-panel);
+    border: 1px solid var(--reg-hair);
+    border-radius: 11px;
+    box-shadow: var(--reg-glow);
+    z-index: 9;
+  }
+
+  #masthead.menu-open .links button {
+    padding: 9px 10px;
+    border-radius: 7px;
+    font-size: 12.5px;
+  }
+
+  #masthead.menu-open .links button:hover {
+    background: rgba(127, 127, 127, 0.12);
+  }
+
+  .mast-triggers {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .mast-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 36px;
+    height: 34px;
+    padding: 0 8px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: none;
+    color: var(--reg-sub);
+    cursor: pointer;
+  }
+
+  .mast-trigger svg {
+    width: 19px;
+    height: 19px;
+    display: block;
+  }
+
+  .mast-trigger:hover,
+  .mast-trigger[aria-expanded="true"] {
+    color: var(--reg-ink);
+    border-color: var(--reg-hair);
+    background: rgba(127, 127, 127, 0.10);
+  }
+
+  .mast-trigger.mast-cond .m-cond-val {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .mast-trigger.mast-cond .m-cond-val:empty {
+    display: none;
+  }
+
+  /* Each trigger reveals exactly one drop-down (mutually exclusive in JS). */
+  #masthead.search-open ~ #search-bar {
+    display: block;
+  }
+
+  #masthead.cond-open ~ #conditions-rail {
+    display: flex;
+  }
+
+  /* Park the zoom + "find my location" controls above the collapsed season
+     card (offset measured live in JS). While the card is expanded it covers
+     this corner, so the controls fade out until it collapses again. */
+  .mapboxgl-ctrl-bottom-right {
+    bottom: var(--map-ctrl-bottom, 150px);
+    right: 12px;
+    transition: bottom 0.2s ease, opacity 0.2s ease;
+  }
+
+  body.season-expanded .mapboxgl-ctrl-bottom-right {
+    opacity: 0;
+    pointer-events: none;
   }
 }

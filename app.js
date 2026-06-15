@@ -39,6 +39,11 @@ const MARKER_CLUSTERS_LAYER_ID = "forage-record-clusters";
 const MARKER_CLUSTER_COUNT_LAYER_ID = "forage-record-cluster-count";
 const MARKER_CLUSTER_MAX_ZOOM = 12;
 const MARKER_CLUSTER_RADIUS = 40;
+// Fraction of the loaded extent the viewport may drift past before the points
+// are treated as "uncovered" and handed back to the aggregate while a fresh
+// load runs. A non-zero margin keeps points on screen during ordinary panning
+// (the old zero-tolerance check blanked everything on the slightest drift).
+const MARKER_POINT_COVERAGE_TOLERANCE = 0.5;
 const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
 const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
 const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
@@ -1281,7 +1286,8 @@ const state = {
   register: "day",
   // The user's explicit wind-animation choice, kept separate from the
   // power/data gate so toggling tabs or battery state can't override intent.
-  fxUserEnabled: true,
+  // Off by default (owner decision); the rail's "Animate wind" toggle opts in.
+  fxUserEnabled: false,
   location: { lat: 39.8, lng: -98.6 }
 };
 
@@ -1598,6 +1604,8 @@ function renderConditionsRail() {
   }
   html += conditionsSegment("tide", "TIDE", tideValue, conditionsIconTide(tideRising));
   conditionsRail.innerHTML = html;
+  // Mirror the current light register onto the masthead's conditions chip.
+  if (mastCondVal) mastCondVal.textContent = (state.register || "").toUpperCase();
 }
 
 // --- Phase 4b: condition detail panels (click a rail segment) --------------
@@ -1965,7 +1973,7 @@ function renderConditionPanel() {
       ? `<h3>WIND &amp; CLOUD</h3>
         <div class="fig">${windFlowHTML(w.windDir, w.wind)}</div>
         <div class="note">${Math.round(w.wind)} km/h from ${dirName(w.windDir)} · cloud cover ${w.clouds}%.<br>Calm dry days are drying days; gusty days, stay clear of old canopy.</div>
-        <label class="fx-toggle"><input type="checkbox" id="fx-toggle"${state.fxOn ? " checked" : ""}> Animate wind on the map (zoom 7.5+)</label>
+        <label class="fx-toggle"><input type="checkbox" id="fx-toggle"${state.fxUserEnabled ? " checked" : ""}> Animate wind on the map (zoom 7.5+)</label>
         ${conditionsLocLine()}${conditionsDataAge()}`
       : `<h3>WIND</h3><div class="note">Live wind data is unavailable right now.</div>${conditionsLocLine()}`;
   } else if (openConditionSeg === "tide") {
@@ -2443,6 +2451,11 @@ const seasonBar = document.querySelector("#season-bar");
 const legendSlot = document.querySelector("#legendSlot");
 const chartToggle = document.querySelector("#chartToggle");
 const legendMob = document.querySelector("#legendMob");
+const masthead = document.querySelector("#masthead");
+const mastMenuBtn = document.querySelector("#mastMenuBtn");
+const mastSearchBtn = document.querySelector("#mastSearchBtn");
+const mastCondBtn = document.querySelector("#mastCondBtn");
+const mastCondVal = document.querySelector("#mastCondVal");
 
 function getDayOfYear(date) {
   // UTC math avoids daylight-saving off-by-one errors in local-time subtraction.
@@ -3064,7 +3077,10 @@ function initLocationSearch() {
       }
       // otherwise fall through to the form's submit handler (best-match search)
     } else if (event.key === "Escape") {
-      if (open) { event.preventDefault(); hideLocationSuggestions(); }
+      // Staged Escape: first press closes the open suggestions (and stops the
+      // masthead's document-level Escape from also collapsing the search panel);
+      // a second press, with no suggestions, falls through to close the panel.
+      if (open) { event.preventDefault(); event.stopPropagation(); hideLocationSuggestions(); }
     }
   });
 }
@@ -3180,6 +3196,8 @@ function chooseLocationSuggestion(feature) {
   locationSearchInput.value = feature.place_name || feature.text || "";
   hideLocationSuggestions();
   setLocationSearchStatus("");
+  // Collapse the mobile search drop-down once a place is chosen.
+  setMastPanel(null);
   // Phase 4: conditions (sun/moon/rain/wind) follow the chosen place.
   setForecastLocation(feature.center[1], feature.center[0], (feature.place_name || feature.text || "").toUpperCase());
   if (Array.isArray(feature.bbox) && feature.bbox.length === 4) {
@@ -3274,6 +3292,8 @@ function initControls() {
   });
 
   initMobileSeasonControls();
+  initMobileMasthead();
+  initMapControlsOffset();
 
   map.on("move", () => {
     if (shouldRebalanceAggregatesOnMove()) {
@@ -3302,10 +3322,8 @@ function initControls() {
   });
 
   map.on("moveend", () => {
-    if (map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM && !isViewportCoveredByLoadedPoints()) {
-      state.pointDataReady = false;
-      updateLayerHandoff();
-    }
+    // Panning keeps the loaded points on screen — the fresh viewport's records
+    // stream in underneath via scheduleDataLoad rather than blanking first.
     updateFallingFruitAggregates();
     updateMarkerPointVisibility();
     scheduleINaturalistAggregateLoad();
@@ -3441,6 +3459,95 @@ function initMobileSeasonControls() {
       legendMob.setAttribute("aria-pressed", String(open));
     });
   }
+}
+
+// --- Mobile masthead: collapse search + conditions into the top bar --------
+// On phones the location search, the conditions rail, and the primary nav each
+// occupied their own stacked card, eating ~180px off the top of the map. They
+// now hang off icon triggers in the masthead and drop down one at a time.
+function currentMastPanel() {
+  if (!masthead) return null;
+  if (masthead.classList.contains("menu-open")) return "menu";
+  if (masthead.classList.contains("search-open")) return "search";
+  if (masthead.classList.contains("cond-open")) return "cond";
+  return null;
+}
+
+function setMastPanel(name) {
+  if (!masthead) return;
+  const classes = { menu: "menu-open", search: "search-open", cond: "cond-open" };
+  Object.entries(classes).forEach(([key, cls]) => masthead.classList.toggle(cls, key === name));
+  mastMenuBtn?.setAttribute("aria-expanded", String(name === "menu"));
+  mastSearchBtn?.setAttribute("aria-expanded", String(name === "search"));
+  mastCondBtn?.setAttribute("aria-expanded", String(name === "cond"));
+  // Collapsing the conditions drop-down also closes any open detail panel, so a
+  // sun/moon/rain card can't be left floating on the map with no rail behind it.
+  if (name !== "cond" && openConditionSeg) toggleConditionPanel(openConditionSeg);
+  if (name === "search" && locationSearchInput) {
+    requestAnimationFrame(() => locationSearchInput.focus());
+  }
+}
+
+function initMobileMasthead() {
+  if (!masthead) return;
+  const toggle = (name) => setMastPanel(currentMastPanel() === name ? null : name);
+  mastMenuBtn?.addEventListener("click", (event) => { event.stopPropagation(); toggle("menu"); });
+  mastSearchBtn?.addEventListener("click", (event) => { event.stopPropagation(); toggle("search"); });
+  mastCondBtn?.addEventListener("click", (event) => { event.stopPropagation(); toggle("cond"); });
+  // Picking a destination from the menu closes it.
+  masthead.querySelectorAll(".links button[data-sheet]").forEach((button) => {
+    button.addEventListener("click", () => setMastPanel(null));
+  });
+  // A tap outside the bar and its drop-downs dismisses whatever is open. Use
+  // the event's composed path (captured at dispatch) rather than
+  // target.closest(): tapping a conditions segment re-renders the rail and
+  // detaches the tapped node mid-bubble, so closest() would see an orphan and
+  // wrongly treat the in-rail tap as "outside".
+  const SAFE = "#masthead, #search-bar, #conditions-rail, #rail-panel";
+  document.addEventListener("click", (event) => {
+    if (!currentMastPanel()) return;
+    const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+    const insideSafe = path.length
+      ? path.some((node) => node instanceof Element && node.matches?.(SAFE))
+      : !!event.target.closest?.(SAFE);
+    if (insideSafe) return;
+    setMastPanel(null);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && currentMastPanel()) setMastPanel(null);
+  });
+}
+
+// --- Keep the bottom-right map controls clear of the season card -----------
+// The full-width season card sits over the zoom + "find my location" controls
+// on phones. Park the controls just above the collapsed card (measured live so
+// wrapping buttons never clip them). When the histogram/legend is expanded the
+// card covers that corner anyway, so the controls fade out until it collapses.
+function syncMapControlsOffset() {
+  if (!seasonBar) return;
+  if (!window.matchMedia("(max-width: 720px)").matches) {
+    document.documentElement.style.removeProperty("--map-ctrl-bottom");
+    document.body.classList.remove("season-expanded");
+    return;
+  }
+  const expanded = seasonBar.classList.contains("pinned")
+    || seasonBar.classList.contains("legend-open");
+  document.body.classList.toggle("season-expanded", expanded);
+  if (expanded) return;
+  document.documentElement.style.setProperty(
+    "--map-ctrl-bottom",
+    `${Math.round(seasonBar.offsetHeight) + 16}px`
+  );
+}
+
+function initMapControlsOffset() {
+  if (!seasonBar) return;
+  syncMapControlsOffset();
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => syncMapControlsOffset()).observe(seasonBar);
+  }
+  window.addEventListener("resize", syncMapControlsOffset);
+  window.addEventListener("orientationchange", syncMapControlsOffset);
 }
 
 // C2 phenology: per-species 12-month relative-abundance (0-1) curves, loaded
@@ -4377,10 +4484,15 @@ function initMapLayers() {
 }
 
 function shouldShowPointLayers() {
+  // Once a point-band load has landed we keep the points up through any pan and
+  // just refresh the data underneath them; viewport coverage no longer gates
+  // visibility, so ordinary panning never blanks the map back to the aggregate
+  // (the "points vanish when I pan" complaint). pointDataReady is cleared only
+  // when crossing up into a genuinely new area (see the zoom handler), which is
+  // where the aggregate→points handoff still belongs.
   return state.mapReady
     && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM
-    && state.pointDataReady
-    && isViewportCoveredByLoadedPoints();
+    && state.pointDataReady;
 }
 
 function updateLayerHandoff() {
@@ -4445,17 +4557,27 @@ function isViewportCoveredByLoadedPoints() {
   const loaded = state.loadedPointBounds;
   if (!loaded) return false;
   const bounds = map.getBounds();
-  return bounds.getWest() >= loaded.west
-    && bounds.getEast() <= loaded.east
-    && bounds.getSouth() >= loaded.south
-    && bounds.getNorth() <= loaded.north;
+  // Allow the viewport to drift a fraction of the loaded extent past its edges
+  // before declaring it uncovered, so ordinary panning keeps the already-loaded
+  // points on screen instead of flashing back to the aggregate on every nudge.
+  const lngTol = (loaded.east - loaded.west) * MARKER_POINT_COVERAGE_TOLERANCE;
+  const latTol = (loaded.north - loaded.south) * MARKER_POINT_COVERAGE_TOLERANCE;
+  return bounds.getWest() >= loaded.west - lngTol
+    && bounds.getEast() <= loaded.east + lngTol
+    && bounds.getSouth() >= loaded.south - latTol
+    && bounds.getNorth() <= loaded.north + latTol;
 }
 
 function updateMarkerPointVisibility() {
-  // Individual points stay hidden while any cluster is in the viewport, so a
-  // given view reveals all of its points at once. Denser areas need more zoom.
+  // Individual (unclustered) points and clusters coexist: the two layers are
+  // separated by their point_count filters, so Mapbox draws clusters where
+  // records are dense and individual pins where they are sparse. We no longer
+  // hide every pin while a single cluster is on screen — that left dense areas
+  // pinless right up to clusterMaxZoom and forced a costly querySourceFeatures
+  // sweep on every sourcedata/move event (the "points never appear past the
+  // clusters" + cluster-breakdown lag complaints).
   if (!state.mapReady || !map.getLayer(MARKERS_LAYER_ID)) return;
-  const show = shouldShowPointLayers() && !viewportHasMarkerClusters();
+  const show = shouldShowPointLayers();
   setLayerVisibility(MARKERS_LAYER_ID, show);
   if (map.getLayer(MARKER_HALO_LAYER_ID)) setLayerVisibility(MARKER_HALO_LAYER_ID, show);
   updateMarkerHalo();
@@ -4465,19 +4587,6 @@ function updateMarkerPointVisibility() {
 function updateMarkerHalo() {
   if (!state.mapReady || !map.getLayer(MARKER_HALO_LAYER_ID)) return;
   map.setPaintProperty(MARKER_HALO_LAYER_ID, "circle-opacity", isNightish() ? 0.38 : 0);
-}
-
-function viewportHasMarkerClusters() {
-  if (map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) return false;
-  const bounds = map.getBounds();
-  return map.querySourceFeatures(MARKERS_SOURCE_ID, { filter: ["has", "point_count"] })
-    .some((feature) => {
-      const [lng, lat] = feature.geometry?.coordinates || [];
-      return lng >= bounds.getWest()
-        && lng <= bounds.getEast()
-        && lat >= bounds.getSouth()
-        && lat <= bounds.getNorth();
-    });
 }
 
 async function initRegionBoundaryLayers() {
