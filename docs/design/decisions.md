@@ -3,6 +3,28 @@
 Running log so identity choices stay coherent across sessions and
 collaborators. Newest first.
 
+- **2026-06-15 — Cutover prep: gate the conditions-rail fungal-flush hint
+  (whitelist + food-mode).** A pre-cutover launch-checklist audit (8 dimensions,
+  6 pass / 2 concern / 0 blockers; the other concern — committed probe junk — was
+  already fixed in `4e18abc`) caught the one remaining safety-messaging gap: the
+  RAIN rail badge (`" · FLUSH"`) and the rain-panel line ("fungal flush likely
+  for whitelisted mushrooms") were gated on a hardcoded `past72 >= 18`, with **no
+  food-mode guard** (so they showed in ink/medicine modes, where no mushrooms
+  exist in the catalog) and **unmoored from the C3 threshold table** (morel's real
+  trigger is 25 mm). The map flush pulses and the popup flush line were already
+  correctly gated; only this secondary widget wasn't. Fix: added
+  `minFlushThresholdMm()` (lowest `thresholdMm72h` across `flushThresholds`, null
+  until loaded) and `flushPanelNote()` (food-map-only, data-driven, silent
+  otherwise); both rail strings now require `state.activeMap === "food"` and
+  `past72 >= ` the table minimum — matching `refreshFlush` and the popup gate.
+  Honors CLAUDE.md ("no fungi without the species-level whitelist"): the rail no
+  longer asserts a flush the gated harvest surfaces wouldn't.
+  **Gate:** `node --check` + `scripts/check.sh` green; console clean. Verified
+  live across 5 scenarios — food 30 mm → badge + "flush likely"; food 20 mm and
+  5 mm → no badge, "below the flush threshold"; ink/medicine 30 mm → no badge, no
+  fungal clause at all; `minFlushThresholdMm()` returns 25. Tokens →
+  `?v=flush-gate-1`.
+
 - **2026-06-14 — Cleanup: removed retired-sidebar dead CSS (scoped).** Deleted
   the rebuild's dead rules named in the handoff: `.season-actions`,
   `.season-bands`, `.date-entry`/`.date-entry input` (the floating season card

@@ -1545,6 +1545,30 @@ function conditionsSegment(id, label, value, icon) {
   </button>`;
 }
 
+// Lowest per-species 72 h rainfall that could trigger a whitelisted-mushroom
+// flush, read from the C3 threshold table (not a magic constant). Null until
+// the table loads or if it is empty.
+function minFlushThresholdMm() {
+  if (!flushThresholds) return null;
+  const vals = Object.values(flushThresholds)
+    .map((t) => Number(t && t.thresholdMm72h))
+    .filter((n) => Number.isFinite(n));
+  return vals.length ? Math.min(...vals) : null;
+}
+
+// Fungal-flush messaging for the rain panel — food map only, driven by the C3
+// threshold table (whitelisted mushrooms). Silent outside the food map and
+// until the table loads, so the rail never asserts a flush the gated harvest
+// surfaces (pulses, popup) would not (CLAUDE.md: no fungi without the whitelist).
+function flushPanelNote(past72) {
+  if (state.activeMap !== "food") return "";
+  const min = minFlushThresholdMm();
+  if (min == null) return "";
+  return past72 >= min
+    ? " — <b>fungal flush likely</b> for whitelisted mushrooms."
+    : " — below the flush threshold.";
+}
+
 function renderConditionsRail() {
   if (!conditionsRail) return;
   const now = new Date();
@@ -1556,7 +1580,8 @@ function renderConditionsRail() {
   html += conditionsSegment("sun", "SUN", `${state.register.toUpperCase()} · set ${formatClockTime(times.set)}`, conditionsIconSun());
   html += conditionsSegment("moon", "MOON", `${Math.round(mp.illum * 100)}% ${mp.waxing ? "waxing" : "waning"}`, conditionsIconMoon(mp));
   if (weather) {
-    const flushNote = weather.past72 >= 18 ? " · FLUSH" : "";
+    const flushMin = minFlushThresholdMm();
+    const flushNote = (state.activeMap === "food" && flushMin != null && weather.past72 >= flushMin) ? " · FLUSH" : "";
     html += conditionsSegment("rain", "RAIN 72H", `${weather.past72} mm${flushNote}`, conditionsIconRain());
     html += conditionsSegment("wind", "WIND", `${Math.round(weather.wind)} km/h · ${windTier(weather.wind).toUpperCase()}`, conditionsIconWind());
   }
@@ -1932,7 +1957,7 @@ function renderConditionPanel() {
     html = w
       ? `<h3>RAIN — MEMORY &amp; FORECAST (MM)</h3>
         ${rainBars(w.daily)}
-        <div class="note" style="margin-top:8px">Past 72 h: <b>${w.past72} mm</b>${w.past72 >= 18 ? " — <b>fungal flush likely</b> for whitelisted mushrooms." : " — below the flush threshold."}<br>${escapeHTML(pickWindows(w.daily))}</div>
+        <div class="note" style="margin-top:8px">Past 72 h: <b>${w.past72} mm</b>${flushPanelNote(w.past72)}<br>${escapeHTML(pickWindows(w.daily))}</div>
         ${conditionsLocLine()}${conditionsDataAge()}`
       : `<h3>RAIN</h3><div class="note">Live rainfall data is unavailable right now.</div>${conditionsLocLine()}`;
   } else if (openConditionSeg === "wind") {
