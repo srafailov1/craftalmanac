@@ -38,3 +38,106 @@ iNaturalist taxon IDs, and seasonality before inclusion.
 |---|---|---|---|
 | Rose hips | RMNP (food list) | Already a popular tea/medicine material; dual-listed above | RMNP compendium |
 | Ginseng (*Panax quinquefolius*) | **Prohibited on PA state lands (vulnerable), most public land** | Catalog as a do-NOT-harvest educational entry rather than a target | PA DCNR |
+
+---
+
+# National-park completion pass additions (2026-06-15)
+
+From the 34 newly-researched National Parks (see
+`permissions-research-2026-06-nps-expansion.md`), these foods have documented
+**general-visitor** harvest permission in a current compendium but are **not** in
+the food catalog. None added to the app; each would still need safety tags,
+harvest-ethic labels, an iNaturalist taxon ID, and seasonality.
+
+**Strategic note for the owner:** the catalog today is temperate-Eastern. Most
+genuinely-new candidates fall into two clusters that would *extend the map's
+geography*: the desert Southwest and the tropics (Hawaiʻi, US Virgin Islands).
+The temperate group (§A) fits the existing footprint with the least friction; the
+desert (§B) and tropical (§C, §D) groups are a deliberate scope decision. Several
+carry cultural-harvest dimensions (saguaro, cholla, ʻōhelo, wild rice) where the
+general-visitor designation coexists with tribal/Native practice — those want a
+respect note, not just a limit, consistent with the project's ethics.
+
+## §A. Temperate — fit the current map footprint best
+
+| Material | Where permitted (this pass) | Notes / flags |
+|---|---|---|
+| Buffaloberry (*Shepherdia argentea*) | Theodore Roosevelt | Tart native berry; abundant/resilient — good fit |
+| Juniper berries (*Juniperus* spp.) | Mesa Verde, Theodore Roosevelt | Culinary spice; **safety:** use sparingly, avoid *J. sabina*-type ornamentals; not in pregnancy |
+| Hawthorn / haws (*Crataegus* spp.) | North Cascades | Fruit + a classic heart medicine — dual-mode candidate |
+| Kinnikinnick / bearberry (*Arctostaphylos uva-ursi*) | North Cascades | Mealy edible; also a medicine/smoking herb |
+| Wintergreen berries (*Gaultheria procumbens*) | Isle Royale | Also a tea/medicine material |
+| Pin cherry (*Prunus pensylvanica*) | Isle Royale | Distinct from cataloged black/sweet/sour cherries; **Prunus** pit/leaf caution |
+| Bush chinquapin (*Chrysolepis sempervirens*) | Lassen Volcanic | Chinquapin nuts |
+| Acorns, food use (*Quercus* spp.) | Gateway Arch, Guadalupe, Voyageurs | Leaching required; generalizes the existing tanoak-acorn entry to oak acorns broadly |
+| Wild rice / manoomin (*Zizania palustris*) | Voyageurs | **Culturally significant** (Ojibwe); regulated harvest — needs a respect/limit note if added |
+| Beach peas (*Lathyrus japonicus*) | Isle Royale | **Safety:** *Lathyrus* lathyrism risk in quantity — list with a strong caveat or omit |
+| Rhubarb (*Rheum*, naturalized homestead escapes) | Isle Royale | **Safety:** leaves toxic (oxalic acid); stalks only |
+
+## §B. Desert Southwest — new geography
+
+| Material | Where permitted (this pass) | Notes / flags |
+|---|---|---|
+| Prickly pear fruit / tunas (*Opuntia* spp.) | Big Bend, Carlsbad, Guadalupe, Saguaro, Mesa Verde | **Most broadly permitted new food in the pass.** Abundant, resilient; glochid-spine handling caution |
+| Saguaro fruit (*Carnegiea gigantea*) | Saguaro | Iconic, slow-growing; **Tohono Oʼodham** traditional harvest — cultural-respect note essential |
+| Cholla buds (*Cylindropuntia* spp.) | Saguaro | Traditional Oʼodham food; harvested in bud |
+| Barrel cactus fruit (*Ferocactus* spp.) | Saguaro | Lemony fruit |
+
+## §C. Tropical — Hawaiʻi — new geography
+
+| Material | Where permitted (this pass) | Notes / flags |
+|---|---|---|
+| ʻŌhelo berry (*Vaccinium reticulatum*) | Haleakalā, Hawaiʻi Volcanoes | Endemic *Vaccinium*; **culturally sacred** (Pele); HAVO caps it at 1 qt/person/month — distinct from cataloged blueberries |
+| ʻĀkala / Hawaiian raspberry (*Rubus hawaiiensis*) | Haleakalā | Endemic bramble |
+| Kukui nut / candlenut (*Aleurites moluccana*) | Haleakalā | **Safety:** strong laxative raw; traditionally roasted (ʻinamona condiment) |
+| Pohā / cape gooseberry (*Physalis peruviana*) | Hawaiʻi Volcanoes | Naturalized ground-cherry |
+| Guava (*Psidium guajava*) | Hawaiʻi Volcanoes, Virgin Islands | Naturalized, weedy |
+| Strawberry guava (*Psidium cattleianum*) | Hawaiʻi Volcanoes | **Invasive** — strong invasive-removal story, like Himalayan blackberry |
+| Passion fruit / lilikoʻi (*Passiflora edulis*; invasive banana poka *P. tarminiana*) | Hawaiʻi Volcanoes | Invasive-removal angle for banana poka |
+| Avocado (*Persea americana*, naturalized) | Hawaiʻi Volcanoes | Cultivated-escape, like cataloged figs |
+
+## §D. Tropical — Caribbean / US Virgin Islands — new geography
+
+| Material | Where permitted (this pass) | Notes / flags |
+|---|---|---|
+| Coconut (*Cocos nucifera*) | Biscayne, Dry Tortugas, Virgin Islands, Hawaiʻi Volcanoes | **Ground-fallen only** at Biscayne & Dry Tortugas — encode that limit precisely |
+| Sea grape (*Coccoloba uvifera*) | Dry Tortugas, Virgin Islands | Coastal; Dry Tortugas caps at 1 qt immediate consumption |
+| Guavaberry (*Myrciaria floribunda*) | Virgin Islands | Culturally important in the USVI (guavaberry liqueur) |
+| Genip / guinep (*Melicoccus bijugatus*) | Virgin Islands | — |
+| Soursop (*Annona muricata*) | Virgin Islands | — |
+| Sugar apple / sweetsop (*Annona squamosa*) | Virgin Islands | — |
+| Mammey apple (*Mammea americana*) | Virgin Islands | — |
+| Hog plum (*Spondias mombin*) | Virgin Islands | — |
+| Mango (*Mangifera indica*, naturalized) | Virgin Islands | Cultivated-escape |
+| Papaya (*Carica papaya*, naturalized) | Virgin Islands | Cultivated-escape |
+| Lime / sweet lime (*Citrus* spp., naturalized) | Virgin Islands | Naturalized citrus |
+
+## §E. Already flagged above — this pass only adds permitted locations
+
+No new entry needed; the national-park pass widens where these are permitted:
+
+- **Chokecherry** — add Mesa Verde, Theodore Roosevelt, Wind Cave, Voyageurs, Lassen, Isle Royale
+- **Rose hips** — add Isle Royale, Theodore Roosevelt, Voyageurs
+- **Cranberry** — add Isle Royale, Voyageurs
+- **Thimbleberry** — add North Cascades (plus a Hawaiian "thimble berry" at HAVO)
+- **Salmonberry** — add North Cascades
+- **Pinyon / pine nuts** (*Pinus edulis/monophylla*) — add Grand Canyon (25 lb/day!), Great Basin, Mesa Verde, Lassen; now the most broadly-permitted new **nut**
+- **Red mulberry** — add Mammoth Cave
+
+## §F. Loosely covered by an existing genus entry — decide whether to split out
+
+- **Muscadine** (*Vitis rotundifolia*, Hot Springs) — under cataloged "Wild grapes (*Vitis*)"
+- **Blue elderberry** (*Sambucus cerulea*, Lassen / North Cascades) — under "Elderberries (*Sambucus*)"
+- **Juneberry** (Theodore Roosevelt, Isle Royale, Hot Springs, etc.) — = cataloged "Serviceberries (*Amelanchier*)"
+- **White strawberry / yellow raspberry** (HAVO cultivated-escapes) — under strawberries / raspberries
+
+## Mushrooms
+
+No new species-level mushroom candidates emerged. The 17 mushroom-permitting
+parks in this pass designate "edible mushrooms" / "edible fungi" **generically**
+(no species list), so per the project's safety rule — no fungi taxon without a
+species-level edible whitelist — there is nothing to add here. The only
+named-species mushroom permissions remain those already encoded at New River
+Gorge (morel, oyster, chanterelle, puffball, black trumpet, dryad's saddle,
+sulphur shelf). Morel is the sole cataloged mushroom; the rest stay candidates
+for the separate whitelist decision, not this list.

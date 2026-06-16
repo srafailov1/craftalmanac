@@ -45,7 +45,11 @@ richer dedicated per-species code path (`shenandoahAllowed` flags +
 do not add a `NPS_GATHERING_RULES` entry for it (a broad "shenandoah" match
 would also wrongly catch Shenandoah River State Park in VA). ~46 of 63 national
 parks reportedly allow some gathering — adding parks beyond this subset is the
-remaining NPS work.
+remaining NPS work. **Update 2026-06-15:** that remaining work is now researched.
+All 44 not-yet-encoded National Parks were verified against current 2025–2026
+compendiums — 34 allow some general-visitor gathering, 10 prohibit it — in
+`permissions-research-2026-06-nps-expansion.md`, with the paste-ready encode work
+order in `TODO-nps-compendium-expansion.md` (not yet applied to `app.js`).
 
 ## State systems (encoded)
 
@@ -131,6 +135,23 @@ getPublicLandAccessRule.
   same pattern as the encoded food forests, need policy + boundary checks.
 
 ## Run log
+
+- **2026-06-15 (national-park completion pass):** Researched all 44 capital-P
+  National Parks not previously encoded (the 63 minus the 19 prior). One
+  research agent per park read the park's current superintendent's compendium
+  (many parsed straight from the signed PDF) plus official rules pages on
+  nps.gov; a second independent agent adversarially re-verified each finding,
+  biased toward catching overstated permission. Result: **34 allow** some
+  general-visitor personal gathering, **10 prohibit** it (general visitors);
+  all 44 **verified** against 2025–2026 sources. The adversarial pass caught
+  American Samoa (boilerplate 2.1(c) header, no populated species list → tribal
+  subsistence only → prohibited) and corrected Great Sand Dunes' limits; North
+  Cascades' mushroom flag was hand-corrected (its source designates edible
+  fungi). Findings: `permissions-research-2026-06-nps-expansion.md`; encode work
+  order (paste-ready entries, not yet applied): `TODO-nps-compendium-expansion.md`.
+  All 63 National Parks now have a verified gathering determination. Note on
+  Alaska parks: seven use 36 CFR 13.35(c) (general-visitor gathering), distinct
+  from ANILCA Title VIII subsistence — encoded as the general-visitor rule.
 
 - **2026-06-11 (third pass, NPS expansion):** Verified and encoded two NPS
   gathering designations beyond the original 16. **Indiana Dunes** —
