@@ -2043,12 +2043,49 @@ function setForecastLocation(lat, lng, label) {
   loadTide();
 }
 
+// Once a drag that starts on the conditions rail commits to the horizontal
+// axis, keep it scrolling the rail for the rest of the gesture — driving
+// scrollLeft directly and swallowing the move events — so a finger that drifts
+// off the rail (especially down onto the map) can't hand the gesture over to a
+// map pan. touchstart stays the event target for the whole gesture, so the
+// commitment survives the finger leaving the rail's bounds.
+function lockRailHorizontalScroll(rail) {
+  let startX = 0;
+  let startY = 0;
+  let scrollStart = 0;
+  let axis = null;
+  rail.addEventListener("touchstart", (event) => {
+    const touch = event.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    scrollStart = rail.scrollLeft;
+    axis = null;
+  }, { passive: true });
+  rail.addEventListener("touchmove", (event) => {
+    const touch = event.touches[0];
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if (axis === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+      axis = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+    }
+    if (axis === "x") {
+      rail.scrollLeft = scrollStart - dx;
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, { passive: false });
+  const release = () => { axis = null; };
+  rail.addEventListener("touchend", release, { passive: true });
+  rail.addEventListener("touchcancel", release, { passive: true });
+}
+
 function initConditions() {
   if (conditionsRail) {
     conditionsRail.addEventListener("click", (event) => {
       const seg = event.target.closest(".rail-seg");
       if (seg) toggleConditionPanel(seg.dataset.seg);
     });
+    lockRailHorizontalScroll(conditionsRail);
   }
   renderConditionsRail();
   loadConditions();
@@ -3288,6 +3325,12 @@ function initControls() {
       whenToggle.classList.toggle("active", open);
       whenToggle.setAttribute("aria-expanded", String(open));
       whenForm.hidden = true;
+      // Histogram (Set date) and legend never show at once on mobile.
+      if (open && legendMob) {
+        seasonBar.classList.remove("legend-open");
+        legendMob.classList.remove("active");
+        legendMob.setAttribute("aria-pressed", "false");
+      }
       syncMapControlsOffset();
       return;
     }
@@ -3460,6 +3503,13 @@ function initMobileSeasonControls() {
       const open = seasonBar.classList.toggle("legend-open");
       legendMob.classList.toggle("active", open);
       legendMob.setAttribute("aria-pressed", String(open));
+      // Histogram (Set date) and legend never show at once on mobile.
+      if (open && whenToggle) {
+        seasonBar.classList.remove("season-open");
+        whenToggle.classList.remove("active");
+        whenToggle.setAttribute("aria-expanded", "false");
+      }
+      syncMapControlsOffset();
     });
   }
 }

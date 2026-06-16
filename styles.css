@@ -1904,10 +1904,15 @@ body[data-register="night"] {
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-#season-bar .text-button:hover {
-  background: rgba(127, 127, 127, 0.14);
-  border-color: var(--reg-hair);
-  color: var(--reg-ink);
+/* Hover feedback only where a pointer can actually hover — on touch the :hover
+   state sticks after a tap, leaving toggle buttons looking "still selected"
+   after the close tap. */
+@media (hover: hover) {
+  #season-bar .text-button:hover {
+    background: rgba(127, 127, 127, 0.14);
+    border-color: var(--reg-hair);
+    color: var(--reg-ink);
+  }
 }
 
 #season-bar .text-button.active {
@@ -1977,9 +1982,26 @@ body[data-register="night"] {
   font-family: var(--font-mono);
 }
 
-#masthead .links button:hover,
 #masthead .links button:focus-visible {
   color: var(--reg-ink);
+}
+
+/* Hover states for the masthead live under (hover: hover) so a tap on a phone
+   doesn't leave the trigger/link looking active after it closes. */
+@media (hover: hover) {
+  #masthead .links button:hover {
+    color: var(--reg-ink);
+  }
+
+  #masthead.menu-open .links button:hover {
+    background: rgba(127, 127, 127, 0.12);
+  }
+
+  .mast-trigger:hover {
+    color: var(--reg-ink);
+    border-color: var(--reg-hair);
+    background: rgba(127, 127, 127, 0.10);
+  }
 }
 
 /* The icon triggers (menu / search / conditions) are a phones-only affordance;
@@ -2161,6 +2183,10 @@ body[data-register="night"] {
   padding: 6px 4px;
   max-width: calc(100% - 28px);
   overflow-x: auto;
+  /* Horizontal-only gesture surface: keep a sideways scroll inside the rail and
+     stop it from chaining out to a map pan (see lockRailHorizontalScroll). */
+  touch-action: pan-x;
+  overscroll-behavior: contain;
 }
 
 .rail-seg {
@@ -2468,6 +2494,11 @@ body[data-register="night"] {
     z-index: 8;
   }
 
+  /* 16px keeps iOS Safari from auto-zooming the viewport when the field gains
+     focus — a zoom that's then hard to undo because the map swallows the pinch
+     gesture you'd use to reset it. */
+  #search-bar .location-search-form input { font-size: 16px; }
+
   #conditions-rail {
     display: none;
     top: 56px;
@@ -2658,10 +2689,6 @@ body[data-register="night"] {
     font-size: 12.5px;
   }
 
-  #masthead.menu-open .links button:hover {
-    background: rgba(127, 127, 127, 0.12);
-  }
-
   .mast-triggers {
     display: flex;
     align-items: center;
@@ -2689,7 +2716,6 @@ body[data-register="night"] {
     display: block;
   }
 
-  .mast-trigger:hover,
   .mast-trigger[aria-expanded="true"] {
     color: var(--reg-ink);
     border-color: var(--reg-hair);
