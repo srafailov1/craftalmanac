@@ -328,6 +328,54 @@ Health pass on `main` (no regressions found beyond item 2):
 - Local serve (`python3 -m http.server 4173`) returns 200 for `/`, app.js,
   styles.css, config.js, and the data endpoints above.
 
+## Tune-up run log — 2026-06-16 (5am debug loop)
+
+Full health pass on `main` (clean working tree). No code-fixable correctness
+bug surfaced in the safely-verifiable zones, so this run is **doc-only** (queue
+triage + run log + environment flag); the open queue items are all either
+handed off or owner/rendering-verification-dependent (see below). Per the loop
+contract — "a local commit, or none if nothing is safe to fix; never ship an
+unverified fix" — no change was forced into the delicate aggregate/access path.
+
+Reproduced / verified this run:
+- `scripts/check.sh` — **ALL PASS**: `node --check app.js`, `node --check` on
+  every `scripts/*.mjs`, `validate_data.mjs`, `test_rules.mjs` (incl. the new
+  Illinois DNR cases), `test_overview_coverage.mjs`, and `audit_contrast.mjs`
+  (the two `APPR` rows are the owner-approved dawn/dusk prototype values, not
+  regressions).
+- **Duplicate top-level declaration scan** (item 1's recurring ask): clean — no
+  `function`/`const`/`let`/`var` name declared twice that `node --check` would
+  silently accept.
+- **Bug-pattern sweep**: no `parseInt` without radix; no bare `YYYY-MM-DD`
+  `new Date()` parsing (the two date paths deliberately force local time); no
+  unguarded `Math.max/min(...arr)` spreads (all length-checked or `,1`-floored).
+- **Safety invariants intact**: "Occurrence is never permission" + on-map
+  "OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE" banner; medicine
+  educational-use disclaimer (config `safetyNote` + card `med-note` + About
+  "NOT MEDICAL ADVICE"); NPS permit-required / historic-orchard labels;
+  `EDIBLE_FUNGUS_WHITELIST = {morel}` fungus gate (app.js ~541).
+- **Local serve**: 200 for `/`, index.html, app.js, styles.css, config.js, all
+  8 data endpoints, and a sampled Falling Fruit chunk fetched at its
+  root-relative `chunk.path` (an initial 404 was a test-path artifact, not a
+  broken load — `app.js:5515` fetches `chunk.path` relative to the page).
+- **NEW — phenology↔catalog consistency** (the Jun-15 phenology feature has no
+  automated test): every mode's curve set exactly matches its catalog —
+  **food 26/26, ink 13/13, medicine 14/14**, zero orphans, zero missing curves,
+  every species carries `months[]`. Curve files are format-valid (12 elements,
+  peak-normalized to 1, values in [0,1]). New optional lint hand-off #3 below.
+- Read ~25 pure helpers (date/season/month/format/geo/solar/tide/histogram/
+  popup) — all correct; the obvious display bugs were already fixed (items 2,3).
+- Reviewed the three newest app.js commits (IL DNR rule `6568c5e`, mobile
+  masthead/card `dd2f9d4`, season-card `f838c92`): well-formed, no non-rule bug.
+
+Open queue after this run: items 1/1a are code-fixed + owner-verified at
+`point-band-rules-1` (residual = the structural raster-coverage **data** limit
++ the owner's human wheel/pinch zoom sign-off); item 1b stays the queued
+data-pipeline work order for Codex; the item-1 plan follow-ups 2–4
+(prefetch/warm gz2-4, data-availability-bounded bridge, instrumentation) remain
+open but are rendering-**timing** work that needs a visible window / owner
+sign-off — not safely verifiable in a headless pass, so not attempted here.
+
 ## Hand-offs (for the 6am queue-grooming loop)
 
 1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work
@@ -341,6 +389,15 @@ Health pass on `main` (no regressions found beyond item 2):
    task to add `scripts/lint_top_level_dupes.mjs` (the `/tmp/dupscan.mjs` logic)
    and wire it into `scripts/check.sh`, so the `getSelectedAccessStatuses`-class
    bug is caught automatically rather than re-scanned each 5am run.
+3. **(Optional) Add a phenology↔catalog consistency check to
+   `scripts/validate_data.mjs`:** it already extracts `foodSpeciesCatalog` /
+   `inkSpeciesCatalog` via `vm.runInContext`, but nothing asserts that
+   `data/phenology/<mode>.json` keys match the per-mode catalog ids (incl.
+   `medicineSpeciesCatalog`) or that each curve is a 12-element array
+   normalized to a peak of 1. Verified clean by hand this run (food 26/26, ink
+   13/13, medicine 14/14), but a future catalog/curve edit could drift silently
+   — the histogram just falls back to binary `months[]`, so it wouldn't throw.
+   Small Codex/Qwen task; wire into `scripts/check.sh`.
 
 ## Environment anomaly — FLAG FOR OWNER (2026-06-15)
 
@@ -360,3 +417,21 @@ on `main` there. Stale `.lock` files were renamed aside (could not be deleted).
 The design WIP and probe files are intact and were not committed. Owner may want
 to (a) clean up the probe junk + stale `.git/*.lock.*` files manually, and
 (b) check why the repo was left on `design/relaunch`.
+
+**Update 2026-06-16 (5am loop):** the branch situation is **resolved** — the
+repo is now on `main` with a clean working tree (the `design/relaunch` merge
+landed: `f8a4604` "retire design/relaunch", plus the Phase-7 retire/merge
+commits). This loop worked **in place on `main`** (no separate worktree
+needed). Two carry-overs remain for the owner:
+- The **`unlink` block persists** (`rm` → "Operation not permitted"; create and
+  rename still work). `git status` itself re-creates a `.git/index.lock` it then
+  can't unlink, so each status read leaves a stale lock; I renamed the bare
+  `.git/index.lock` / `HEAD.lock` / `objects/maintenance.lock` aside into
+  `.git/_stalelocks/` before committing (rename is permitted). Commits succeed
+  via git's lock→target rename path. Stale `.git/**/*.lock*` files are
+  accumulating and can only be cleared by the owner (or once the mount allows
+  unlink).
+- **Probe junk lingers** at repo root: `.__probe_junk` (untracked, 0 bytes, from
+  the earlier crashed probe). I also created `.__unlink_test` while confirming
+  the unlink restriction and **could not delete it** (same block) — both are
+  untracked, were **not** staged/committed, and are safe for the owner to `rm`.
