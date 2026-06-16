@@ -123,6 +123,7 @@ const ACCESS_RULE_SOURCES = {
   northCarolinaParks: "http://reports.oah.state.nc.us/ncac/title%2007%20-%20natural%20and%20cultural%20resources/chapter%2013%20-%20parks%20and%20recreation%20area%20rules/chapter%2013%20rules.pdf",
   michiganDnr: "https://www.michigan.gov/dnr/things-to-do/foraging",
   minnesotaParks: "https://www.revisor.mn.gov/rules/6100.0900/",
+  illinoisDnr: "https://www.ilga.gov/agencies/JCAR/EntirePart?titlepart=01700110",
   carverEdiblePark: "https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/",
   festivalBeachFoodForest: "https://festivalbeach.org/frequently-asked-questions/",
   brownsMillFoodForest: "https://aglanta.atlantaga.gov/urban-food-forest-at-browns-mill-1",
@@ -6358,6 +6359,48 @@ function getStateSystemRule(stateCode, text, area) {
       sourceLabel: "Colorado parks regulations (2 CCR 405-1)",
       sourceUrl: ACCESS_RULE_SOURCES.coloradoParks
     };
+  }
+
+  if (stateCode === "IL") {
+    // Illinois dedicated Nature Preserves (Natural Areas Preservation Act,
+    // 525 ILCS 30) are excluded from the edible-collection exception in
+    // 17 Ill. Adm. Code 110.70(a)(3): collection there conflicts with the Act.
+    if (text.includes("nature preserve")) {
+      return {
+        status: "prohibited",
+        label: "Prohibited",
+        area,
+        limit: "Collecting plants, fungi, or other natural material is prohibited in dedicated Illinois Nature Preserves.",
+        note: "Illinois' edible-collection exception (17 Ill. Adm. Code 110.70(a)(3)) does not apply where collection would conflict with the Natural Areas Preservation Act (525 ILCS 30); dedicated nature preserves stay protected.",
+        sourceLabel: "17 Ill. Adm. Code 110.70",
+        sourceUrl: ACCESS_RULE_SOURCES.illinoisDnr
+      };
+    }
+    if (text.includes("state park") || text.includes("state recreation")
+      || text.includes("state fish") || text.includes("state forest")
+      || text.includes("state natural area") || text.includes("state habitat")
+      || text.includes("illinois department of natural resources")) {
+      if (!foodMode) {
+        return {
+          status: "prohibited",
+          label: "Prohibited",
+          area,
+          limit: "Removing any plant or plant part for craft or medicinal use is prohibited on Illinois DNR lands; the only exception is edible fungi, nuts, and berries gathered for personal consumption.",
+          note: "Illinois' rule (17 Ill. Adm. Code 110.70(a)) prohibits injuring or removing any plant or part thereof, with a narrow exception only for edible fungi, nuts, and berries — not for craft or medicinal plant material.",
+          sourceLabel: "17 Ill. Adm. Code 110.70",
+          sourceUrl: ACCESS_RULE_SOURCES.illinoisDnr
+        };
+      }
+      return {
+        status: "allowed",
+        label: "Allowed",
+        area,
+        limit: "Edible fungi, nuts, and berries (not ginseng berries) may be gathered for personal use only — not resale — during the site's regular open hours; not during open hunting-season hours, and not in dedicated nature preserves. Leaves, roots, stems, and whole plants are not covered.",
+        note: "Illinois DNR lands allow personal-use collection of edible fungi, nuts, and berries under 17 Ill. Adm. Code 110.70(a)(3); individual site managers may further restrict it, so check posted rules.",
+        sourceLabel: "17 Ill. Adm. Code 110.70",
+        sourceUrl: ACCESS_RULE_SOURCES.illinoisDnr
+      };
+    }
   }
 
   if (stateCode === "OR" && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area") || text.includes("state scenic"))) {

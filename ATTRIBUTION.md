@@ -141,6 +141,7 @@ Primary rule sources currently encoded:
 - North Carolina parks natural-resource protection, 07 NCAC 13B .0201: http://reports.oah.state.nc.us/ncac/title%2007%20-%20natural%20and%20cultural%20resources/chapter%2013%20-%20parks%20and%20recreation%20area%20rules/chapter%2013%20rules.pdf
 - Michigan DNR foraging guidance for state-managed lands: https://www.michigan.gov/dnr/things-to-do/foraging
 - Minnesota state park plant rules, Minnesota Rules 6100.0900 (rule text quoted verbatim in the Sept 2025 MN Sustainable Foraging Task Force memo): https://www.revisor.mn.gov/rules/6100.0900/
+- Illinois DNR public-lands plant rule, 17 Ill. Adm. Code 110.70 (edible fungi, nuts, and berries personal-use exception under 110.70(a)(3); official Illinois Administrative Code, a state government work): https://www.ilga.gov/agencies/JCAR/EntirePart?titlepart=01700110
 - Minnesota Sustainable Foraging Task Force 50-state foraging-law list (roadmap reference for future state passes): https://www.lcc.mn.gov/foraging/meetings/20250909/Foraging-Laws-List
 
 ## Safety

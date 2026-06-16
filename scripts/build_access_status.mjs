@@ -75,11 +75,20 @@ function extractConstExpression(source, name) {
   let expressionStart = equals + 1;
   while (/\s/.test(source[expressionStart])) expressionStart += 1;
   const openChar = source[expressionStart];
-  const closeChar = openChar === "[" ? "]" : openChar === "{" ? "}" : "";
-  if (!closeChar) throw new Error(`Const ${name} does not start with an object or array literal`);
-  const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
-  if (end < 0) throw new Error(`Could not parse const ${name}`);
-  return source.slice(expressionStart, end + 1);
+  if (openChar === "[" || openChar === "{") {
+    const closeChar = openChar === "[" ? "]" : "}";
+    const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
+    if (end < 0) throw new Error(`Could not parse const ${name}`);
+    return source.slice(expressionStart, end + 1);
+  }
+  // Constructor initializer such as `new Set([...])` or `new Map([...])`.
+  if (source.startsWith("new ", expressionStart)) {
+    const parenOpen = source.indexOf("(", expressionStart);
+    const end = findMatchingDelimiter(source, parenOpen, "(", ")");
+    if (end < 0) throw new Error(`Could not parse const ${name}`);
+    return source.slice(expressionStart, end + 1);
+  }
+  throw new Error(`Const ${name} does not start with an object, array, or constructor literal`);
 }
 
 function extractFunctionSource(source, name) {
@@ -107,6 +116,11 @@ async function buildRuleContext() {
   context.getContainingPublicLands = () => (
     context.__cachedUnits.map((properties) => ({ properties }))
   );
+  // getStatusRasterAccessRule is a runtime-only provisional fallback that reads
+  // the loaded status raster; the manifest baked here is the ground-truth source
+  // that FEEDS that raster, so the fallback must not bake back in. Stub to null
+  // (mirrors the live behavior when live PAD-US containment covers the record).
+  context.getStatusRasterAccessRule = () => null;
   vm.createContext(context);
 
   [
@@ -114,6 +128,7 @@ async function buildRuleContext() {
     "NPS_GATHERING_RULES",
     "SITE_ACCESS_RULES",
     "ACCESS_STATUS_OPTIONS",
+    "EDIBLE_FUNGUS_WHITELIST",
     "INK_FALLING_FRUIT_SPECIES_ALIASES",
     "foodSpeciesCatalog",
     "inkSpeciesCatalog"
@@ -130,6 +145,7 @@ async function buildRuleContext() {
     "getPublicLandAccessRule",
     "getNpsCompendiumRule",
     "getStateSystemRule",
+    "unlistedFungusRule",
     "getBestPublicLandAccessRule",
     "getPublicLandText",
     "getPublicLandName",

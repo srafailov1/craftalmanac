@@ -254,6 +254,14 @@ function testStateSystemRules(context) {
       props: { unit: "Pigeon River Country State Forest", mngTp: "State", desTp: "State Forest" }, expected: "allowed" },
     { label: "MN State Park", stateCode: "MN", record: { lat: 46.0, lng: -94.0 },
       props: { unit: "Itasca State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "IL State Park (food)", stateCode: "IL", mode: "food", record: { lat: 41.32, lng: -88.99 },
+      props: { unit: "Starved Rock State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "IL State Park (medicine, non-food)", stateCode: "IL", mode: "medicine", record: { lat: 41.32, lng: -88.99 },
+      props: { unit: "Starved Rock State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    { label: "IL State Fish & Wildlife Area (food)", stateCode: "IL", mode: "food", record: { lat: 40.4, lng: -91.0 },
+      props: { unit: "Mississippi River State Fish and Wildlife Area", mngTp: "State", desTp: "State Fish and Wildlife Area" }, expected: "allowed" },
+    { label: "IL dedicated Nature Preserve (food)", stateCode: "IL", mode: "food", record: { lat: 42.42, lng: -87.81 },
+      props: { unit: "Illinois Beach Nature Preserve", mngTp: "State", desTp: "Nature Preserve" }, expected: "prohibited" },
     // NYC local park: needs "city land" + "local government" + "local park" in
     // the text AND a record inside the NYC bounding box (isRecordInNycArea).
     { label: "NYC local park", stateCode: "NY", record: { lat: 40.785, lng: -73.968 },

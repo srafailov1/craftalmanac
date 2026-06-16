@@ -68,11 +68,14 @@ order in `TODO-nps-compendium-expansion.md` (not yet applied to `app.js`).
 | NC state parks/rec/natural areas | Prohibited (07 NCAC 13B .0201; research permits only, personal/commercial expressly barred) | verified (rule text, June 2026) |
 | MI DNR state lands (parks, rec areas, forests, game/wildlife areas) | Allowed (food) — mushrooms/nuts/berries/tree fruits, personal use, about 25 lb cap per state-land rules; no plants destroyed by harvest (no fiddleheads, ramps, ginseng, tapping); no resale | verified (DNR pages, June 2026) |
 | MN state parks & forest recreation areas | Allowed (food) — edible fruit & mushrooms ONLY, personal noncommercial use (Minn. R. 6100.0900 subp. 1, 2E); everything else incl. nuts prohibited; craft/medicine -> prohibited | sourced-verbatim (rule text quoted in official MN LCC task force memo, Sept 2025; revisor.mn.gov linked) |
+| IL DNR lands (state parks, recreation/fish & wildlife/forest/natural areas) | Allowed (food) — edible fungi, nuts & berries ONLY, personal use not for resale (17 Ill. Adm. Code 110.70(a)(3)); ginseng berries excluded; only during the site's regular open hours and NOT during open hunting-season hours; dedicated Nature Preserves (Natural Areas Preservation Act, 525 ILCS 30) excluded -> prohibited; craft/medicine -> prohibited | verified (primary: ilga.gov official admin code, confirmed against Justia codified text current through June 2025; June 2026) |
 
-**Remaining state/city queue:** IL/Chicago (Chicago Park District code — memo
-lists IL state parks as permitted under 17 IAC 110.70, worth encoding after
-reading the rule text), Denver parks + street-tree/right-of-way rules. Both
-need primary sources not reachable this session (search budget).
+**Remaining state/city queue:** Chicago Park District (city parks) code and
+Denver parks + street-tree/right-of-way rules — both still need primary sources.
+**(Update 2026-06-16:** Illinois *state* DNR lands are now encoded and verified —
+17 Ill. Adm. Code 110.70(a)(3), see the IL row above. The Chicago Park District
+*municipal* rule is a separate authority and is what remains for the Chicago
+metro; Denver is still queued.)
 
 **Roadmap reference:** the Minnesota Sustainable Foraging Task Force memo
 (Sept 9, 2025, lcc.mn.gov) compiles citations for all 50 states — prohibited
@@ -135,6 +138,29 @@ getPublicLandAccessRule.
   same pattern as the encoded food forests, need policy + boundary checks.
 
 ## Run log
+
+- **2026-06-16 (Illinois state-lands pass):** Verified and encoded **Illinois
+  DNR public lands** as a new state system in `getStateSystemRule`. Primary
+  source read this pass: 17 Ill. Adm. Code 110.70(a)(3) on the official Illinois
+  General Assembly admin-code site (ilga.gov), confirmed against the Justia
+  codified text (current through Register Vol. 49, June 2025). Food mode →
+  allowed for edible fungi, nuts, and berries (personal use, not for resale; no
+  ginseng berries; the site's regular open hours only, not during open hunting
+  seasons); dedicated Nature Preserves (Natural Areas Preservation Act) →
+  prohibited; craft/medicine → prohibited (the exception is food-only). Matchers
+  are IL-gated and anchored on state designations + the IDNR manager string, so
+  they don't catch Cook County forest-preserve / Chicago Park District /
+  municipal / federal land (federal matchers already resolve earlier). Added 4 IL
+  cases to `scripts/test_rules.mjs` (all pass), the source row to
+  `ATTRIBUTION.md`, and bumped the `index.html` asset token
+  `mobile-relayout-4 → il-foraging-1`. Manifest + status-raster regenerated:
+  exactly 8 manifest chunks and 8 raster cells changed, **all inside Illinois** —
+  ~37 Falling Fruit records moved unknown → allowed (food) / prohibited
+  (ink·medicine), nothing elsewhere drifted. Also fixed the two regen scripts,
+  which were broken on `main` before this pass (see Hand-offs). Next in queue:
+  Chicago Park District (city) + Denver primary sources; Philadelphia Orchard
+  Project / Boston Food Forest Coalition site bounds; broad sources (state trust
+  lands, TNC preserves).
 
 - **2026-06-15 (national-park completion pass):** Researched all 44 capital-P
   National Parks not previously encoded (the 63 minus the 19 prior). One
@@ -225,6 +251,26 @@ getPublicLandAccessRule.
   byte-identical output. Full work order: `docs/TODO-overview-rule-coverage.md`
   (queued as Codex item 4 in `docs/work-split.md`). Rule semantics stay
   Claude-owned; the hand-off is only the cell-coverage/data-regen mechanism.
+
+- **Regen-script extraction lists drifted from `app.js` (FIXED 2026-06-16; →
+  hardening hand-off).** Before this pass, both `scripts/build_access_status.mjs`
+  and `scripts/build_status_raster.mjs` crashed on current `main` (confirmed on a
+  pristine checkout): `computeRecordAccessRule` calls the runtime-only
+  `getStatusRasterAccessRule` (added with the 2026-06-11 provisional-raster fix)
+  and `getPublicLandAccessRule` calls `unlistedFungusRule`, neither of which was
+  in the scripts' VM extraction/stub lists — so the manifest/raster maintenance
+  gate was unrunnable. Fixed minimally and faithfully: stubbed
+  `getStatusRasterAccessRule → null` at bake time (the manifest is the
+  ground-truth source that *feeds* the raster, so the provisional fallback must
+  not bake back in — and the diff confirmed zero non-Illinois drift), extracted
+  `unlistedFungusRule` + the `EDIBLE_FUNGUS_WHITELIST` constant, and taught the
+  shared `extractConstExpression` helper to parse `new Set(...)`/`new Map(...)`
+  initializers. **Hand-off (→ Codex or the 5am tune-up):** add a guard so this
+  can't silently regress — e.g. a check that every identifier referenced by an
+  extracted function is itself extracted or stubbed, wired into
+  `scripts/check.sh`, or a tiny smoke step that runs both regen scripts to a
+  throwaway path and asserts exit 0. Rule semantics are unchanged; this is purely
+  build-tooling robustness.
 
 ## Filtered aggregate maintenance
 

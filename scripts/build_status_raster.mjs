@@ -79,11 +79,20 @@ function extractConstExpression(source, name) {
   let expressionStart = equals + 1;
   while (/\s/.test(source[expressionStart])) expressionStart += 1;
   const openChar = source[expressionStart];
-  const closeChar = openChar === "[" ? "]" : openChar === "{" ? "}" : "";
-  if (!closeChar) throw new Error(`Const ${name} does not start with an object or array literal`);
-  const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
-  if (end < 0) throw new Error(`Could not parse const ${name}`);
-  return source.slice(expressionStart, end + 1);
+  if (openChar === "[" || openChar === "{") {
+    const closeChar = openChar === "[" ? "]" : "}";
+    const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
+    if (end < 0) throw new Error(`Could not parse const ${name}`);
+    return source.slice(expressionStart, end + 1);
+  }
+  // Constructor initializer such as `new Set([...])` or `new Map([...])`.
+  if (source.startsWith("new ", expressionStart)) {
+    const parenOpen = source.indexOf("(", expressionStart);
+    const end = findMatchingDelimiter(source, parenOpen, "(", ")");
+    if (end < 0) throw new Error(`Could not parse const ${name}`);
+    return source.slice(expressionStart, end + 1);
+  }
+  throw new Error(`Const ${name} does not start with an object, array, or constructor literal`);
 }
 
 function extractFunctionSource(source, name) {
@@ -114,6 +123,7 @@ async function buildRuleContext() {
     "NPS_GATHERING_RULES",
     "SITE_ACCESS_RULES",
     "ACCESS_STATUS_OPTIONS",
+    "EDIBLE_FUNGUS_WHITELIST",
     "foodSpeciesCatalog",
     "inkSpeciesCatalog",
     "medicineSpeciesCatalog"
@@ -128,6 +138,7 @@ async function buildRuleContext() {
     "getPublicLandAccessRule",
     "getNpsCompendiumRule",
     "getStateSystemRule",
+    "unlistedFungusRule",
     "getBestPublicLandAccessRule",
     "getPublicLandText",
     "getPublicLandName",
