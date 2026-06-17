@@ -376,6 +376,56 @@ data-pipeline work order for Codex; the item-1 plan follow-ups 2–4
 open but are rendering-**timing** work that needs a visible window / owner
 sign-off — not safely verifiable in a headless pass, so not attempted here.
 
+## Tune-up run log — 2026-06-17 (5am debug loop)
+
+Full health pass on `main`. **No code-fixable correctness bug surfaced in the
+safely-verifiable zones, so this run is doc-only** (queue triage + run log + env
+flag refresh), per the loop contract ("a local commit, or none if nothing is
+safe to fix; never ship an unverified fix"). Note: `app.js`/`index.html` are
+unchanged since `6568c5e` (06-16) and `styles.css` since `dd2f9d4` — i.e.
+byte-identical to the 06-16 verified-clean pass — so **no asset-version bump**
+(no code change this run).
+
+Reproduced / verified this run:
+- `scripts/check.sh` — **ALL PASS**: `node --check app.js`, `node --check` on
+  every `scripts/*.mjs`, `validate_data.mjs`, `test_rules.mjs` (incl. the
+  Illinois DNR cases), `test_overview_coverage.mjs`, and `audit_contrast.mjs`
+  (the dawn `APPR` rows are the owner-approved prototype values, not regressions).
+- **Duplicate top-level declaration scan** (item 1's recurring ask): clean —
+  **426 distinct top-level names, zero** duplicate `function`/`const`/`let`/`var`
+  that `node --check` would silently accept.
+- **Bug-pattern sweep**: no `parseInt` without radix; the one date-string parse
+  (`formatFallingFruitDate`) deliberately forces local `T00:00:00`; every
+  `Math.max/min(...arr)` spread is length-guarded or `,1`-floored
+  (`svgTideCurve`'s is guarded by the `events.length < 2` early return).
+- **Safety invariants intact**: occurrence-is-not-permission (×2); medicine
+  "EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE" (About panel + 2 card
+  notes); `EDIBLE_FUNGUS_WHITELIST = {morel}` fungus gate (app.js 541 / 6222);
+  permit-required / historic-orchard labels (24 refs).
+- **Data**: all 10 top-level JSON files referenced by app.js resolve; Falling
+  Fruit manifest chunk count == on-disk (2905 == 2905; 41 sampled, 0 missing).
+  Local serve (`python3 -m http.server 4173`) returns 200 for `/`, index.html,
+  app.js, styles.css, config.js, and all data endpoints.
+- **Phenology↔catalog consistency re-verified** (still no automated test —
+  hand-off #3): **food 26/26, ink 13/13, medicine 14/14**; zero missing/orphan
+  curves; every curve is a 12-element array with values in [0,1] normalized to a
+  peak of 1; every species carries `months[]`. (Throwaway harness in `/tmp`
+  reusing `validate_data.mjs`'s `vm` const-extraction — now also covers
+  `medicineSpeciesCatalog`; see hand-off #3 to persist it.)
+- Read the newest/untested pure helpers (`renderHistogram`, `sparkline`, solar
+  `sunAltitude`/`sunTimes`/`computeRegister`, date helpers `getDayOfYear`/
+  `getDaysInYear`/`getDateForDay`/`getSeason`/`getMonthRangeText`/
+  `formatFallingFruitDate`) — all correct; item-3 split-season coalescing
+  verified by trace, including the year-boundary wrap merge.
+
+Open queue after this run (unchanged): items 1/1a are code-fixed + owner-verified
+at `point-band-rules-1` (residual = structural raster-coverage **data** limit +
+the owner's human wheel/pinch-zoom sign-off); item 1b stays the queued
+data-pipeline work order for Codex; the item-1 plan follow-ups 2–4
+(prefetch/warm gz2-4, data-availability-bounded bridge, instrumentation) remain
+open **rendering-timing** work that needs a visible window / owner sign-off — not
+safely verifiable in a headless pass, so not attempted.
+
 ## Hand-offs (for the 6am queue-grooming loop)
 
 1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work
@@ -435,3 +485,27 @@ needed). Two carry-overs remain for the owner:
   the earlier crashed probe). I also created `.__unlink_test` while confirming
   the unlink restriction and **could not delete it** (same block) — both are
   untracked, were **not** staged/committed, and are safe for the owner to `rm`.
+
+**Update 2026-06-17 (5am loop):** the `unlink` block **still persists** (`rm` →
+"Operation not permitted"; create/rename still work). `git status` now warns
+`unable to unlink '.git/index.lock'` on every read, leaving a fresh stale
+`index.lock` each time. State this run:
+- **Stale bare locks accumulating**: `.git/HEAD.lock` + `.git/objects/maintenance.lock`
+  from 06-16 (both 0-byte, Jun 16 09:20) are still present, plus a worktree lock
+  `.git/worktrees/ca-pristine/HEAD.lock`; `.git/_stalelocks/` still holds the 7
+  renamed-aside locks from 06-16. To commit, I renamed the bare
+  `index.lock`/`HEAD.lock`/`objects/maintenance.lock` aside into
+  `.git/_stalelocks/` (rename is permitted) so git could create fresh ones; the
+  commit succeeds via git's lock→target rename path.
+- **Extra worktrees registered** since 06-16: `/tmp/ca-pristine` (detached
+  @`1f70e29`, locked) and `/Users/sasson/Documents/CraftAlmanac-harness`
+  (`harness-test`, marked prunable). Owner may want `git worktree prune` / to
+  remove these.
+- **Litter I created and could NOT delete** (unlink blocked), untracked and
+  **not** staged/committed, safe to `rm`: `.__unlink_probe_5` at repo root (a
+  6-byte unlink-restriction probe). Pre-existing ignored junk
+  `_captest2` / `_committest.txt` (listed in `.git/info/exclude`) also remains.
+- **Owner action**: clear the stale `.git/**/*.lock*` + `.git/_stalelocks/` + the
+  probe/junk files manually (or once the mount allows `unlink`), and prune the
+  extra worktrees. Commits keep working in the meantime via the rename-aside
+  dance, but the lock cruft grows every run.
