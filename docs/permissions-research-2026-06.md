@@ -139,6 +139,21 @@ getPublicLandAccessRule.
 
 ## Run log
 
+- **2026-06-16 (state-park landscape pass):** Mapped foraging rules for all 50
+  state-park systems against primary administrative-code regulations (one
+  research agent per state + an independent adversarial verifier; conservative
+  default to prohibited). Result: **18 allowed, 4 allowed-if-posted, 3
+  permit-required, 25 prohibited**; mushrooms permitted in 16 systems, with three
+  category splits (Missouri food-but-not-mushrooms, Connecticut mushrooms-only,
+  Minnesota fruit-&-mushrooms-only). Re-checked the 11 already-encoded states:
+  all current except **Oregon**, whose limit dropped 5 gal → **1 gal/person/day**
+  (OAR amended March 2025) — a fix to existing code. Notable: **Oklahoma** newly
+  legalized foraging on state-managed land (61 O.S. § 335, eff. Nov 2025).
+  NC/TN/TX/UT independently re-verified after a run-UI hiccup (all re-confirmed).
+  Findings: `permissions-research-2026-06-state-parks.md`; encode work order
+  (Oregon fix + 39 new states + species-aware split, not yet applied):
+  `TODO-state-parks-expansion.md`.
+
 - **2026-06-16 (Illinois state-lands pass):** Verified and encoded **Illinois
   DNR public lands** as a new state system in `getStateSystemRule`. Primary
   source read this pass: 17 Ill. Adm. Code 110.70(a)(3) on the official Illinois
