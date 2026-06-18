@@ -93,11 +93,11 @@ The harvesting rules and limits shown in popups are rule summaries matched to th
 Primary rule sources currently encoded:
 
 - Shenandoah National Park superintendent's compendium: https://www.nps.gov/shen/learn/management/compendium.htm#CP_JUMP_5595647
-- Blue Ridge Parkway superintendent's compendium: https://www.nps.gov/blri/learn/management/superintendent-s-compendium.htm
-- Prince William Forest Park superintendent's compendium: https://www.nps.gov/prwi/learn/management/superintendents-compendium.htm
+- Blue Ridge Parkway superintendent's compendium (laws & policies): https://www.nps.gov/blri/learn/management/lawsandpolicies.htm
+- Prince William Forest Park superintendent's compendium (laws & policies): https://www.nps.gov/prwi/learn/management/lawsandpolicies.htm
 - Manassas National Battlefield Park superintendent's compendium: https://www.nps.gov/mana/learn/management/compendium.htm
 - National Park Service general plant-removal rule, 36 CFR 2.1: https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1
-- George Washington and Jefferson National Forests forest-products permits: https://www.fs.usda.gov/r08/gwj/permits/forest-products-permits
+- National-forest forest-products rule, 36 CFR 261.6 (the national-forest-wide default; specific designated species, free-use limits, and permits are set by each individual forest and ranger district, not abstracted from any one forest): https://www.ecfr.gov/current/title-36/chapter-II/part-261/subpart-A/section-261.6
 - Virginia state park regulation on plant removal and edible fruits, berries, fungi, and nuts: https://law.lis.virginia.gov/admincode/title4/agency5/chapter30/section50/
 - Virginia state forest regulation on plant removal and edible fruits, berries, fungi, and nuts: https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/
 - Virginia DWR Wildlife Management Area rules: https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf
@@ -109,7 +109,7 @@ Primary rule sources currently encoded:
 - Cuyahoga Valley superintendent's compendium (verified June 2026, approved April 2026): https://www.nps.gov/cuva/learn/management/superintendents-compendium.htm
 - Mount Rainier 2025 superintendent's compendium (verified June 2026): https://www.nps.gov/mora/learn/management/lawsandpolicies.htm
 - Rocky Mountain 2025 superintendent's compendium (verified June 2026): https://www.nps.gov/romo/learn/management/rmnp_compendium.htm
-- Yellowstone superintendent's compendium (verified June 2026): https://www.nps.gov/yell/learn/management/compendium.htm
+- Yellowstone superintendent's compendium (laws & policies; verified June 2026): https://www.nps.gov/yell/learn/management/lawsandpolicies.htm
 - Yosemite superintendent's compendium, September 2025 (verified June 2026): https://www.nps.gov/yose/learn/management/upload/yose-compendium.pdf
 - Glacier superintendent's compendium (verified June 2026): https://www.nps.gov/glac/learn/management/compendium.htm
 - Crater Lake superintendent's compendium (verified June 2026): https://www.nps.gov/crla/learn/management/superintendent-s-compendium.htm
@@ -124,7 +124,7 @@ Primary rule sources currently encoded:
 - Black Canyon of the Gunnison compendium (verified June 2026): https://www.nps.gov/blca/learn/management/superintendents-compendium.htm
 - Carlsbad Caverns compendium (verified June 2026): https://www.nps.gov/cave/learn/management/upload/2026-CAVE-Superintendent-s-Compendium-version-01-29-2026.pdf
 - Congaree compendium (verified June 2026): https://www.nps.gov/cong/learn/management/upload/CONG-Supt-Compendium_Updated-1-5-2026_Signed-1.pdf
-- Denali compendium (verified June 2026): https://www.nps.gov/dena/learn/management/superintendents-compendium.htm
+- Denali compendium (laws & policies; verified June 2026): https://www.nps.gov/dena/learn/management/lawsandpolicies.htm
 - Dry Tortugas compendium (verified June 2026): https://www.nps.gov/drto/learn/management/superintendent-s-compendium.htm
 - Gates of the Arctic compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/2026-GAAR-Superintendent-s-Compendium-508.pdf
 - Gateway Arch compendium (verified June 2026): https://www.nps.gov/jeff/learn/management/superintendent-s-compendium-for-2026.htm
@@ -201,7 +201,7 @@ Primary rule sources currently encoded:
 - New York City parks vegetation rule, 56 RCNY 1-04: https://www.nycgovparks.org/rules/section-1-04/
 - Monticello guest policies (no collection on Foundation property): https://www.monticello.org/visit/tips-for-visiting/guest-policies
 - UVA pavilion gardens edible-landscape guidance: https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds
-- City of Charlottesville Parks & Trails (municipal-government informational page; no city-specific foraging rule confirmed — used as an access/locator label only, and records are displayed in-app as "rule not confirmed"): https://www.charlottesville.gov/658/Parks-Trails
+- City of Charlottesville Parks & Trails (municipal-government informational page; no city-specific foraging rule confirmed — used as an access/locator label only, and records are displayed in-app as "rule not confirmed"): https://www.charlottesville.gov/166/Parks-Recreation
 - Albemarle County Parks & Recreation (county-government informational page; no county-specific foraging rule confirmed — used as an access/locator label only, and records are displayed in-app as "rule not confirmed"): https://www.albemarle.org/government/parks-recreation
 - Beacon Food Forest open harvest policy (site bounds centered on 47.567, -122.313 at 15th Ave S & S Dakota St, Seattle; refine against parcel data if needed): https://www.beaconfoodforest.org/openharvest
 - Dr. George Washington Carver Edible Park visitor guidance, City of Asheville Parks & Recreation: https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/
@@ -263,7 +263,7 @@ Primary rule sources currently encoded:
 - Bridal Veil Gardens public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/activities-events/harvesting/
 - Lyndale Farmstead public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/activities-events/harvesting/
 - Lovell Square (community orchard / urban-agriculture plots) public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/parks-destinations/parks-lakes/lovell_square/
-- U.S. National Arboretum rules and guidelines (representative source for the generic botanical-garden/arboretum prohibition): https://www.usna.usda.gov/visit/rules-and-guidelines/
+- U.S. National Arboretum conduct rules, 7 CFR Part 500 (representative source for the generic botanical-garden/arboretum prohibition): https://www.ecfr.gov/current/title-7/subtitle-A/part-500
 - Colorado Parks and Wildlife land regulations, 2 CCR 405-1 #100: https://www.law.cornell.edu/regulations/colorado/2-CCR-405-1-100
 - Oregon state park resources rule, OAR 736-010-0055: https://secure.sos.state.or.us/oard/view.action?ruleNumber=736-010-0055
 - Maryland state park plant protection, COMAR 08.07.06.13 (CC BY-NC-SA via Open Law Library): https://regs.maryland.gov/us/md/exec/comar/08.07.06.13

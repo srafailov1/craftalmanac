@@ -134,10 +134,10 @@ const ACCESS_RULE_SOURCES = {
   utahParks: "https://www.law.cornell.edu/regulations/utah/Utah-Admin-Code-R651-620-2",
   npsGeneral: "https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1",
   shenandoah: "https://www.nps.gov/shen/learn/management/compendium.htm#CP_JUMP_5595647",
-  blueRidge: "https://www.nps.gov/blri/learn/management/superintendent-s-compendium.htm",
-  princeWilliam: "https://www.nps.gov/prwi/learn/management/superintendents-compendium.htm",
+  blueRidge: "https://www.nps.gov/blri/learn/management/lawsandpolicies.htm",
+  princeWilliam: "https://www.nps.gov/prwi/learn/management/lawsandpolicies.htm",
   manassas: "https://www.nps.gov/mana/learn/management/compendium.htm",
-  usfs: "https://www.fs.usda.gov/r08/gwj/permits/forest-products-permits",
+  usfs: "https://www.ecfr.gov/current/title-36/chapter-II/part-261/subpart-A/section-261.6",
   blm: "https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits",
   usfws: "https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27",
   usace: "https://www.ecfr.gov/current/title-36/chapter-III/part-327",
@@ -145,7 +145,7 @@ const ACCESS_RULE_SOURCES = {
   virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
   virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
   beaconFoodForest: "https://www.beaconfoodforest.org/openharvest",
-  charlottesville: "https://www.charlottesville.gov/658/Parks-Trails",
+  charlottesville: "https://www.charlottesville.gov/166/Parks-Recreation",
   albemarle: "https://www.albemarle.org/government/parks-recreation",
   newYorkDec: "https://dec.ny.gov/nature/forests-trees/state-forests/rules-for-use",
   pennsylvaniaDcnr: "https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-forests/rules-and-regulations",
@@ -165,7 +165,7 @@ const ACCESS_RULE_SOURCES = {
   carverEdiblePark: "https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/",
   festivalBeachFoodForest: "https://festivalbeach.org/frequently-asked-questions/",
   brownsMillFoodForest: "https://aglanta.atlantaga.gov/urban-food-forest-at-browns-mill-1",
-  botanicalGardens: "https://www.usna.usda.gov/visit/rules-and-guidelines/"
+  botanicalGardens: "https://www.ecfr.gov/current/title-7/subtitle-A/part-500"
 };
 
 // Park-specific 36 CFR 2.1(c) gathering designations, matched against PAD-US
@@ -235,7 +235,7 @@ const NPS_GATHERING_RULES = [
   {
     match: "yellowstone",
     sourceLabel: "Yellowstone compendium",
-    sourceUrl: "https://www.nps.gov/yell/learn/management/compendium.htm",
+    sourceUrl: "https://www.nps.gov/yell/learn/management/lawsandpolicies.htm",
     mushroomsAllowed: true,
     limit: "Edible berries and mushrooms: 1 quart per species per person per day; possession and consumption are restricted to park areas.",
     note: "Yellowstone allows limited berry and mushroom gathering consumed inside the park. Verified against the current compendium, June 2026."
@@ -541,7 +541,7 @@ const NPS_GATHERING_RULES = [
   {
     match: "denali national park",
     sourceLabel: "Denali compendium",
-    sourceUrl: "https://www.nps.gov/dena/learn/management/superintendents-compendium.htm",
+    sourceUrl: "https://www.nps.gov/dena/learn/management/lawsandpolicies.htm",
     mushroomsAllowed: true,
     limit: "All edible fruits, berries, mushrooms, and nuts within the former Mount McKinley National Park area: gathered by hand for personal use or consumption (no numeric limit). The 1980 ANILCA park additions and the preserve carry separate subsistence rules.",
     note: "Denali designates all edible fruits, berries, mushrooms, and nuts in the historic park core for general-visitor hand-gathering (36 CFR 13.35(c)); this is separate from ANILCA Title VIII subsistence. Verified against the April 2025 compendium, June 2026."
@@ -7567,10 +7567,10 @@ function getStatusRasterAccessRule(record) {
   return {
     status,
     label: labels[status],
-    area: "Mapped public-access area (cached area rule)",
-    limit: "Area-level match at roughly 5 km resolution; the boundary-sourced rule replaces this as the map loads.",
-    note: "Provisional status from the precomputed access raster. Confirm the exact boundary and site rules before harvesting.",
-    sourceLabel: "USGS PAD-US containment raster (cached)",
+    area: "Mapped public-access land",
+    limit: "Area-level status for this location. Confirm the managing agency's posted rules and the exact boundary before collecting.",
+    note: "Estimated from mapped public-land boundaries (USGS PAD-US); a more specific rule may apply at this exact spot.",
+    sourceLabel: "USGS PAD-US public-access boundaries",
     sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview"
   };
 }
@@ -7674,8 +7674,8 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       label: "Prohibited",
       area,
       limit: "Botanical gardens and arboreta protect their living collections: do not collect plants or plant parts, including flowers, leaves, seeds, fruits, or cuttings.",
-      note: "Curated plant collections are research and conservation assets; collection is uniformly prohibited (e.g., the U.S. National Arboretum's rules) unless the institution explicitly authorizes it.",
-      sourceLabel: "U.S. National Arboretum rules (representative)",
+      note: "Curated plant collections are research and conservation assets; collection is uniformly prohibited (e.g., the U.S. National Arboretum, whose conduct rules bar removing any plant material) unless the institution explicitly authorizes it.",
+      sourceLabel: "U.S. National Arboretum conduct rules (7 CFR Part 500, representative)",
       sourceUrl: ACCESS_RULE_SOURCES.botanicalGardens
     };
   }
@@ -7791,8 +7791,8 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       label: "Allowed",
       area,
       limit: "Small amounts for personal use are generally allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
-      note: "Most national forests allow incidental personal-use gathering, but rules vary by forest — check the local ranger district for permit requirements and closures.",
-      sourceLabel: "USFS forest products permits",
+      note: `This is the national-forest-wide default under 36 CFR 261.6 — incidental personal-use gathering is usually allowed, with permits for larger or commercial harvests. The specific designated species, free-use limits, permits, and closures are set by ${area}; confirm them on ${area}'s forest-products page or with the local ranger district before collecting.`,
+      sourceLabel: "National-forest products rule (36 CFR 261.6)",
       sourceUrl: ACCESS_RULE_SOURCES.usfs
     };
   }
