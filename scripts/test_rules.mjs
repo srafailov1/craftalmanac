@@ -137,6 +137,7 @@ async function buildRuleContext() {
     "getPublicLandAccessRule",
     "getNpsCompendiumRule",
     "getStateSystemRule",
+    "getLocalParkRule",
     "getPublicLandText",
     "getPublicLandName",
     "isNationalParkServiceLand",

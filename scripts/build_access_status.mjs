@@ -9,6 +9,7 @@ const ROOT = path.resolve(path.dirname(__filename), "..");
 const APP_PATH = path.join(ROOT, "app.js");
 const MANIFEST_PATH = path.join(ROOT, "data", "falling-fruit", "us", "manifest.json");
 const STATE_BOUNDARY_PATH = path.join(ROOT, "data", "contiguous-us-states.json");
+const LOCAL_JURISDICTIONS_PATH = path.join(ROOT, "data", "local-jurisdictions.json");
 const CACHE_DIR = path.join(ROOT, "data", "falling-fruit", "us", "access-cache");
 
 const FALLING_FRUIT_MODES = ["food", "ink"];
@@ -103,12 +104,14 @@ function extractFunctionSource(source, name) {
 async function buildRuleContext() {
   const appSource = await readFile(APP_PATH, "utf8");
   const stateBoundaries = JSON.parse(await readFile(STATE_BOUNDARY_PATH, "utf8")).states || [];
+  const localJurisdictions = JSON.parse(await readFile(LOCAL_JURISDICTIONS_PATH, "utf8")).jurisdictions || [];
   const context = {
     console,
     Map,
     state: {
       activeMap: "food",
       stateBoundaries,
+      localJurisdictions,
       accessRuleCache: new Map()
     },
     __cachedUnits: []
@@ -145,6 +148,7 @@ async function buildRuleContext() {
     "getPublicLandAccessRule",
     "getNpsCompendiumRule",
     "getStateSystemRule",
+    "getLocalParkRule",
     "unlistedFungusRule",
     "getBestPublicLandAccessRule",
     "getPublicLandText",

@@ -42,6 +42,8 @@ Source: https://fallingfruit.org/data
 
 The state and national boundaries used to filter and chunk the Falling Fruit subset are derived from U.S. Census Bureau 2023 cartographic boundary files.
 
+City and county park-rule boundaries (`data/local-jurisdictions.json`) are simplified incorporated-place and county polygons retrieved from the U.S. Census Bureau TIGERweb REST services, paired with hand-encoded municipal/county foraging rules. PAD-US carries no city/agency identity for local park land (only "City Land"/"County Land"), so each record is located inside the Census polygon and matched to the jurisdiction's rule. The per-jurisdiction ordinance/source links are enumerated in that file (`sourceUrl` per entry) and in `docs/permissions-research-2026-06-local-parks.md`. License: Census TIGERweb geometry is a U.S. Government work in the public domain (17 U.S.C. § 105); municipal/county park codes are public government records cited as access-rule summaries, not harvest permission.
+
 ## U.S. Boundary
 
 The contiguous United States outline used for the map boundary and exterior opacity mask is derived from the U.S. Census Bureau 2023 cartographic boundary file for the national outline at 1:20,000,000 scale, filtered to the lower 48 states.

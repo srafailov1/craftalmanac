@@ -2949,6 +2949,7 @@ const state = {
   publicLandFeatures: [],
   publicLandCoverage: null,
   stateBoundaries: null,
+  localJurisdictions: null,
   accessRuleCache: new Map(),
   pointDataReady: false,
   loadedPointBounds: null,
@@ -7603,6 +7604,23 @@ async function loadStateBoundaries() {
   }
 }
 
+async function loadLocalJurisdictions() {
+  // City/county park rules are applied geographically: PAD-US carries no
+  // city/agency name (only "City Land"/"County Land" + "Local Government"), so
+  // each record is located inside a Census place/county polygon and matched to
+  // the jurisdiction's hand-encoded rule. See
+  // docs/permissions-research-2026-06-local-parks.md.
+  try {
+    const response = await fetch("./data/local-jurisdictions.json");
+    if (!response.ok) return;
+    state.localJurisdictions = (await response.json()).jurisdictions || [];
+    state.accessRuleCache.clear();
+    renderMarkers();
+  } catch {
+    // Local park rules degrade to the generic "unknown" fallback without geometry.
+  }
+}
+
 function getRecordStateCode(record) {
   if (!state.stateBoundaries) return "";
   const lat = Number(record.lat);
@@ -7614,6 +7632,36 @@ function getRecordStateCode(record) {
     && pointInFeature([lng, lat], entry)
   ));
   return match ? match.id.toUpperCase() : "";
+}
+
+function getLocalParkRule(record, text, stateCode, area) {
+  if (!state.localJurisdictions || !record) return null;
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  // Local-government park land (PAD-US "City Land"/"County Land") matched to the
+  // containing Census city/county polygon. The guard ("city land"/"county land")
+  // keeps a city park and a county park in the same place from cross-matching.
+  const match = state.localJurisdictions.find((j) => {
+    if (stateCode && j.stateCode && j.stateCode !== stateCode) return false;
+    const guardOk = j.guard === "both"
+      ? (text.includes("city land") || text.includes("county land"))
+      : text.includes(j.guard);
+    if (!guardOk) return false;
+    return lng >= j.bbox[0] && lng <= j.bbox[2]
+      && lat >= j.bbox[1] && lat <= j.bbox[3]
+      && pointInFeature([lng, lat], j);
+  });
+  if (!match) return null;
+  return {
+    status: match.status,
+    label: match.label,
+    area: area || match.area,
+    limit: match.limit,
+    note: match.note,
+    sourceLabel: match.sourceLabel,
+    sourceUrl: match.sourceUrl
+  };
 }
 
 function getPublicLandAccessRule(properties, species, stateCode, record) {
@@ -7787,6 +7835,9 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
 
   const stateRule = getStateSystemRule(stateCode, text, area, species);
   if (stateRule) return stateRule;
+
+  const localRule = getLocalParkRule(record, text, stateCode, area);
+  if (localRule) return localRule;
 
   if (stateCode === "VA" && isVirginiaWma(text)) {
     if (state.activeMap !== "food") {
@@ -8679,6 +8730,7 @@ map.on("load", () => {
   initMapLayers();
   loadRadar();
   loadStateBoundaries();
+  loadLocalJurisdictions();
   // The raster also backs provisional record-level rules at point zooms, so
   // load it at startup rather than only via the overview aggregate path.
   loadStatusRaster();
