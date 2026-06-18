@@ -606,6 +606,1369 @@ const NPS_GATHERING_RULES = [
 ];
 
 const SITE_ACCESS_RULES = [
+  // ---- 2026-06-16 food-forest / edible-park sites (geocoded, public-harvest policy) ----
+  {
+    name: "Bronx River Foodway",
+    bounds: { south: 40.8232, west: -73.8881, north: 40.8292, east: -73.8821 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Bronx River Foodway (Bronx, NY)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Bronx River Foodway is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Bronx River Foodway",
+        sourceUrl: "https://bronxriver.org/visit-the-river/explore-the-greenway/foodway"
+      },
+      medicine: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Bronx River Foodway (Bronx, NY)",
+        limit: "Medicinal plantings at this site are part of the open-harvest invitation; harvest gently and take only what is abundant.",
+        note: "Harvest is from cultivated, intentionally planted stock, not wild medicinal foraging. Confirm with the managing organization.",
+        sourceLabel: "Bronx River Foodway",
+        sourceUrl: "https://bronxriver.org/visit-the-river/explore-the-greenway/foodway"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Bronx River Foodway (Bronx, NY)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Bronx River Foodway",
+        sourceUrl: "https://bronxriver.org/visit-the-river/explore-the-greenway/foodway"
+      }
+    }
+  },
+  {
+    name: "Del Aire Public Fruit Park",
+    bounds: { south: 33.913312, west: -118.379988, north: 33.922312, east: -118.370988 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Del Aire Public Fruit Park (Hawthorne, CA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Del Aire Public Fruit Park is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Del Aire Public Fruit Park",
+        sourceUrl: "https://fallenfruit.org/projects/public-fruit-park-los-angeles/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Del Aire Public Fruit Park (Hawthorne, CA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Del Aire Public Fruit Park",
+        sourceUrl: "https://fallenfruit.org/projects/public-fruit-park-los-angeles/"
+      }
+    }
+  },
+  {
+    name: "Charlotte's Blueberry Park",
+    bounds: { south: 47.1856, west: -122.4311, north: 47.19, east: -122.4251 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Charlotte's Blueberry Park (Tacoma, WA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Charlotte's Blueberry Park is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Charlotte's Blueberry Park",
+        sourceUrl: "https://www.parkstacoma.gov/place/charlottes-blueberry-park/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Charlotte's Blueberry Park (Tacoma, WA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Charlotte's Blueberry Park",
+        sourceUrl: "https://www.parkstacoma.gov/place/charlottes-blueberry-park/"
+      }
+    }
+  },
+  {
+    name: "Bloomington Community Orchard",
+    bounds: { south: 39.137739, west: -86.518988, north: 39.143739, east: -86.512988 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Bloomington Community Orchard (Bloomington, IN)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Bloomington Community Orchard is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Bloomington Community Orchard",
+        sourceUrl: "https://bloomingtoncommunityorchard.org/site/visit/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Bloomington Community Orchard (Bloomington, IN)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Bloomington Community Orchard",
+        sourceUrl: "https://bloomingtoncommunityorchard.org/site/visit/"
+      }
+    }
+  },
+  {
+    name: "Refuge Food Forest",
+    bounds: { south: 40.5194, west: -88.9742, north: 40.5205, east: -88.973 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Refuge Food Forest (Normal, IL)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Refuge Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Refuge Food Forest",
+        sourceUrl: "https://www.normalil.gov/1372/Refuge-Food-Forest"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Refuge Food Forest (Normal, IL)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Refuge Food Forest",
+        sourceUrl: "https://www.normalil.gov/1372/Refuge-Food-Forest"
+      }
+    }
+  },
+  {
+    name: "Lawrence Community Orchard",
+    bounds: { south: 38.9571, west: -95.229, north: 38.9611, east: -95.225 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Lawrence Community Orchard (Lawrence, KS)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Lawrence Community Orchard is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Lawrence Community Orchard",
+        sourceUrl: "https://www.sunriseprojectks.org/lftp"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Lawrence Community Orchard (Lawrence, KS)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Lawrence Community Orchard",
+        sourceUrl: "https://www.sunriseprojectks.org/lftp"
+      }
+    }
+  },
+  {
+    name: "Emerson Street Food Forest",
+    bounds: { south: 38.9477, west: -76.9416, north: 38.9512, east: -76.938 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Emerson Street Food Forest (Hyattsville, MD)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Emerson Street Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Emerson Street Food Forest",
+        sourceUrl: "https://www.hyattsville.org/1122/Emerson-Street-Food-Forest"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Emerson Street Food Forest (Hyattsville, MD)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Emerson Street Food Forest",
+        sourceUrl: "https://www.hyattsville.org/1122/Emerson-Street-Food-Forest"
+      }
+    }
+  },
+  {
+    name: "McClanahan Food Forest (McClanahan Park)",
+    bounds: { south: 38.9596, west: -76.9563, north: 38.9636, east: -76.9523 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "McClanahan Food Forest (McClanahan Park) (Hyattsville, MD)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "McClanahan Food Forest (McClanahan Park) is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "McClanahan Food Forest (McClanahan Park)",
+        sourceUrl: "https://www.hyattsville.org/902/Food-Forests"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "McClanahan Food Forest (McClanahan Park) (Hyattsville, MD)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "McClanahan Food Forest (McClanahan Park)",
+        sourceUrl: "https://www.hyattsville.org/902/Food-Forests"
+      }
+    }
+  },
+  {
+    name: "White Marsh Park Edible Trail",
+    bounds: { south: 39.0601, west: -76.0499, north: 39.0721, east: -76.0379 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "White Marsh Park Edible Trail (Centreville, MD)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "White Marsh Park Edible Trail is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "White Marsh Park Edible Trail",
+        sourceUrl: "https://news.maryland.gov/dnr/2026/04/24/marylands-edible-understory-is-on-the-verge-of-being-discovered/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "White Marsh Park Edible Trail (Centreville, MD)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "White Marsh Park Edible Trail",
+        sourceUrl: "https://news.maryland.gov/dnr/2026/04/24/marylands-edible-understory-is-on-the-verge-of-being-discovered/"
+      }
+    }
+  },
+  {
+    name: "Wetherby Edible Forest",
+    bounds: { south: 41.6322, west: -91.5205, north: 41.6345, east: -91.5178 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Wetherby Edible Forest (Iowa City, IA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Wetherby Edible Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Wetherby Edible Forest",
+        sourceUrl: "https://www.backyardabundance.org/wetherby"
+      },
+      medicine: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Wetherby Edible Forest (Iowa City, IA)",
+        limit: "Medicinal plantings at this site are part of the open-harvest invitation; harvest gently and take only what is abundant.",
+        note: "Harvest is from cultivated, intentionally planted stock, not wild medicinal foraging. Confirm with the managing organization.",
+        sourceLabel: "Wetherby Edible Forest",
+        sourceUrl: "https://www.backyardabundance.org/wetherby"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Wetherby Edible Forest (Iowa City, IA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Wetherby Edible Forest",
+        sourceUrl: "https://www.backyardabundance.org/wetherby"
+      }
+    }
+  },
+  {
+    name: "Community Orchard of West Seattle",
+    bounds: { south: 47.5505, west: -122.354, north: 47.5519, east: -122.3518 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Community Orchard of West Seattle (Seattle, WA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Community Orchard of West Seattle is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Community Orchard of West Seattle",
+        sourceUrl: "https://southseattle.edu/community-orchard-west-seattle"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Community Orchard of West Seattle (Seattle, WA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Community Orchard of West Seattle",
+        sourceUrl: "https://southseattle.edu/community-orchard-west-seattle"
+      }
+    }
+  },
+  {
+    name: "Edgewater Food Forest",
+    bounds: { south: 42.2629, west: -71.1011, north: 42.2669, east: -71.0971 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Edgewater Food Forest (Mattapan, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Edgewater Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Edgewater Food Forest",
+        sourceUrl: "https://insideclimatenews.org/news/03102025/boston-edible-food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Edgewater Food Forest (Mattapan, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Edgewater Food Forest",
+        sourceUrl: "https://insideclimatenews.org/news/03102025/boston-edible-food-forests/"
+      }
+    }
+  },
+  {
+    name: "Boston Nature Center Food Forest",
+    bounds: { south: 42.2861, west: -71.1032, north: 42.2901, east: -71.0992 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Boston Nature Center Food Forest (Mattapan, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Boston Nature Center Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Boston Nature Center Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Boston Nature Center Food Forest (Mattapan, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Boston Nature Center Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Egleston Community Orchard",
+    bounds: { south: 42.3123, west: -71.1036, north: 42.3163, east: -71.0996 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Egleston Community Orchard (Jamaica Plain, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Egleston Community Orchard is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Egleston Community Orchard",
+        sourceUrl: "https://www.bostonfoodforest.org/egleston-page"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Egleston Community Orchard (Jamaica Plain, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Egleston Community Orchard",
+        sourceUrl: "https://www.bostonfoodforest.org/egleston-page"
+      }
+    }
+  },
+  {
+    name: "Ellington Street Community Food Forest",
+    bounds: { south: 42.2991, west: -71.0841, north: 42.3031, east: -71.0801 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Ellington Street Community Food Forest (Dorchester, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Ellington Street Community Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Ellington Street Community Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Ellington Street Community Food Forest (Dorchester, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Ellington Street Community Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Maple Street Food Forest",
+    bounds: { south: 42.307, west: -71.0875, north: 42.311, east: -71.0835 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Maple Street Food Forest (Roxbury, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Maple Street Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Maple Street Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Maple Street Food Forest (Roxbury, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Maple Street Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Uphams Corner Food Forest",
+    bounds: { south: 42.3133, west: -71.0651, north: 42.3173, east: -71.0611 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Uphams Corner Food Forest (Dorchester, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Uphams Corner Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Uphams Corner Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/uphams-corner-food-forest"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Uphams Corner Food Forest (Dorchester, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Uphams Corner Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/uphams-corner-food-forest"
+      }
+    }
+  },
+  {
+    name: "Old West Church Food Forest",
+    bounds: { south: 42.3597, west: -71.0662, north: 42.3637, east: -71.0622 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Old West Church Food Forest (Boston, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Old West Church Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Old West Church Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Old West Church Food Forest (Boston, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Old West Church Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Savin Hill Wildlife Garden Food Forest",
+    bounds: { south: 42.3098, west: -71.0541, north: 42.3138, east: -71.0501 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Savin Hill Wildlife Garden Food Forest (Dorchester, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Savin Hill Wildlife Garden Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Savin Hill Wildlife Garden Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Savin Hill Wildlife Garden Food Forest (Dorchester, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Savin Hill Wildlife Garden Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Hope Garden",
+    bounds: { south: 42.2986, west: -71.0685, north: 42.3026, east: -71.0645 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Hope Garden (Dorchester, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Hope Garden is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Hope Garden",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Hope Garden (Dorchester, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Hope Garden",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Leland Cooperative Garden Food Forest",
+    bounds: { south: 42.2949, west: -71.1138, north: 42.2989, east: -71.1098 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Leland Cooperative Garden Food Forest (Jamaica Plain, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Leland Cooperative Garden Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Leland Cooperative Garden Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Leland Cooperative Garden Food Forest (Jamaica Plain, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Leland Cooperative Garden Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Frederick Douglass Peace Park",
+    bounds: { south: 42.3349, west: -71.087, north: 42.3389, east: -71.083 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Frederick Douglass Peace Park (Roxbury, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Frederick Douglass Peace Park is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Frederick Douglass Peace Park",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Frederick Douglass Peace Park (Roxbury, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Frederick Douglass Peace Park",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Egleston Branch Library Food Forest",
+    bounds: { south: 42.3121, west: -71.0977, north: 42.3161, east: -71.0937 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Egleston Branch Library Food Forest (Roxbury, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Egleston Branch Library Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Egleston Branch Library Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Egleston Branch Library Food Forest (Roxbury, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Egleston Branch Library Food Forest",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Sherman Street Green Space / Fairy Hollow",
+    bounds: { south: 42.2802, west: -71.1294, north: 42.2842, east: -71.1254 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Sherman Street Green Space / Fairy Hollow (Roslindale, MA)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Sherman Street Green Space / Fairy Hollow is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Sherman Street Green Space / Fairy Hollow",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Sherman Street Green Space / Fairy Hollow (Roslindale, MA)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Sherman Street Green Space / Fairy Hollow",
+        sourceUrl: "https://www.bostonfoodforest.org/locations"
+      }
+    }
+  },
+  {
+    name: "Barnum Orchard (Barnum Food Forest)",
+    bounds: { south: 39.7157, west: -105.0375, north: 39.7227, east: -105.0305 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Barnum Orchard (Barnum Food Forest) (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Barnum Orchard (Barnum Food Forest) is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Barnum Orchard (Barnum Food Forest)",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Barnum Orchard (Barnum Food Forest) (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Barnum Orchard (Barnum Food Forest)",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Cook Park Food Forest",
+    bounds: { south: 39.6825, west: -104.9237, north: 39.6895, east: -104.9167 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Cook Park Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Cook Park Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Cook Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Cook Park Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Cook Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Living Light of Peace Food Forest",
+    bounds: { south: 39.801, west: -105.1181, north: 39.808, east: -105.1111 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Living Light of Peace Food Forest (Arvada, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Living Light of Peace Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Living Light of Peace Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Living Light of Peace Food Forest (Arvada, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Living Light of Peace Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Fairmont DCIS School Food Forest",
+    bounds: { south: 39.716, west: -104.9973, north: 39.723, east: -104.9903 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Fairmont DCIS School Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Fairmont DCIS School Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Fairmont DCIS School Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Fairmont DCIS School Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Fairmont DCIS School Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Samuels Elementary Food Forest",
+    bounds: { south: 39.64, west: -104.896, north: 39.647, east: -104.889 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Samuels Elementary Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Samuels Elementary Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Samuels Elementary Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Samuels Elementary Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Samuels Elementary Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Nome Park Food Forest",
+    bounds: { south: 39.7307, west: -104.855, north: 39.7377, east: -104.848 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Nome Park Food Forest (Aurora, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Nome Park Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Nome Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Nome Park Food Forest (Aurora, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Nome Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Wheat Ridge Food Forest",
+    bounds: { south: 39.7713, west: -105.0902, north: 39.7783, east: -105.0832 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Wheat Ridge Food Forest (Wheat Ridge, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Wheat Ridge Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Wheat Ridge Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Wheat Ridge Food Forest (Wheat Ridge, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Wheat Ridge Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "48th & Julian Food Forest",
+    bounds: { south: 39.7806, west: -105.0343, north: 39.7876, east: -105.0273 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "48th & Julian Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "48th & Julian Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "48th & Julian Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "48th & Julian Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "48th & Julian Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Athmar Park Food Forest",
+    bounds: { south: 39.6952, west: -105.0241, north: 39.7022, east: -105.0171 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Athmar Park Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Athmar Park Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Athmar Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Athmar Park Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Athmar Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Doull Elementary Food Forest",
+    bounds: { south: 39.6694, west: -105.0468, north: 39.6764, east: -105.0398 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Doull Elementary Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Doull Elementary Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Doull Elementary Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Doull Elementary Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Doull Elementary Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Kepner Food Forest",
+    bounds: { south: 39.6946, west: -105.0321, north: 39.7016, east: -105.0251 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Kepner Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Kepner Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Kepner Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Kepner Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Kepner Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "The Urban Farm Food Forest",
+    bounds: { south: 39.7647, west: -104.8738, north: 39.7717, east: -104.8668 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "The Urban Farm Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "The Urban Farm Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "The Urban Farm Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "The Urban Farm Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "The Urban Farm Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Ute Trail Food Forest",
+    bounds: { south: 39.6755, west: -105.1489, north: 39.6825, east: -105.1419 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Ute Trail Food Forest (Lakewood, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Ute Trail Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Ute Trail Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Ute Trail Food Forest (Lakewood, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Ute Trail Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "APDC Food Forest",
+    bounds: { south: 39.7376, west: -104.8866, north: 39.7446, east: -104.8796 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "APDC Food Forest (Aurora, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "APDC Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "APDC Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "APDC Food Forest (Aurora, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "APDC Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Morey Middle School Food Forest",
+    bounds: { south: 39.7344, west: -104.9809, north: 39.7414, east: -104.9739 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Morey Middle School Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Morey Middle School Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Morey Middle School Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Morey Middle School Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Morey Middle School Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Glenbrook Greenhouse Food Forest",
+    bounds: { south: 39.6238, west: -105.1024, north: 39.6308, east: -105.0954 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Glenbrook Greenhouse Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Glenbrook Greenhouse Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Glenbrook Greenhouse Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Glenbrook Greenhouse Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Glenbrook Greenhouse Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Maxwell Food Forest",
+    bounds: { south: 39.7796, west: -104.8267, north: 39.7866, east: -104.8197 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Maxwell Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Maxwell Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Maxwell Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Maxwell Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Maxwell Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Edgewater Kaizen Food Forest",
+    bounds: { south: 39.7502, west: -105.0715, north: 39.7572, east: -105.0645 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Edgewater Kaizen Food Forest (Edgewater, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Edgewater Kaizen Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Edgewater Kaizen Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Edgewater Kaizen Food Forest (Edgewater, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Edgewater Kaizen Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Vista Peak Food Forest",
+    bounds: { south: 39.7197, west: -104.7038, north: 39.7267, east: -104.6968 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Vista Peak Food Forest (Aurora, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Vista Peak Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Vista Peak Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Vista Peak Food Forest (Aurora, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Vista Peak Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "GES Food Forest (Globeville/Elyria-Swansea)",
+    bounds: { south: 39.7801, west: -104.9614, north: 39.7871, east: -104.9544 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "GES Food Forest (Globeville/Elyria-Swansea) (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "GES Food Forest (Globeville/Elyria-Swansea) is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "GES Food Forest (Globeville/Elyria-Swansea)",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "GES Food Forest (Globeville/Elyria-Swansea) (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "GES Food Forest (Globeville/Elyria-Swansea)",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Bradley International Food Forest",
+    bounds: { south: 39.6603, west: -104.9342, north: 39.6673, east: -104.9272 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Bradley International Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Bradley International Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Bradley International Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Bradley International Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Bradley International Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Greenway Food Forest",
+    bounds: { south: 39.7471, west: -104.9007, north: 39.7541, east: -104.8937 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Greenway Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Greenway Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Greenway Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Greenway Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Greenway Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "STEAM Academy Food Forest",
+    bounds: { south: 39.7559, west: -104.946, north: 39.7629, east: -104.939 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "STEAM Academy Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "STEAM Academy Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "STEAM Academy Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "STEAM Academy Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "STEAM Academy Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Lake Middle School Food Forest",
+    bounds: { south: 39.7418, west: -105.0367, north: 39.7488, east: -105.0297 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Lake Middle School Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Lake Middle School Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Lake Middle School Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Lake Middle School Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Lake Middle School Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Crumley Park Food Forest",
+    bounds: { south: 39.71, west: -105.0355, north: 39.717, east: -105.0285 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Crumley Park Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Crumley Park Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Crumley Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Crumley Park Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Crumley Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Newlon Food Forest",
+    bounds: { south: 39.7179, west: -105.0491, north: 39.7249, east: -105.0421 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Newlon Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Newlon Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Newlon Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Newlon Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Newlon Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Martinez Park Food Forest",
+    bounds: { south: 39.7273, west: -105.0438, north: 39.7343, east: -105.0368 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Martinez Park Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Martinez Park Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Martinez Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Martinez Park Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Martinez Park Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Sanderson Gulch Food Forest",
+    bounds: { south: 39.6848, west: -105.0155, north: 39.6918, east: -105.0085 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Sanderson Gulch Food Forest (Denver, CO)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Sanderson Gulch Food Forest is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Sanderson Gulch Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Sanderson Gulch Food Forest (Denver, CO)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Sanderson Gulch Food Forest",
+        sourceUrl: "https://dug.org/gardens-food-forests/food-forests/"
+      }
+    }
+  },
+  {
+    name: "Adams Triangle (Adams Grove Community Orchard)",
+    bounds: { south: 44.9278, west: -93.2201, north: 44.929, east: -93.2187 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Adams Triangle (Adams Grove Community Orchard) (Minneapolis, MN)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Adams Triangle (Adams Grove Community Orchard) is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Adams Triangle (Adams Grove Community Orchard)",
+        sourceUrl: "https://www.minneapolisparks.org/activities-events/harvesting/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Adams Triangle (Adams Grove Community Orchard) (Minneapolis, MN)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Adams Triangle (Adams Grove Community Orchard)",
+        sourceUrl: "https://www.minneapolisparks.org/activities-events/harvesting/"
+      }
+    }
+  },
+  {
+    name: "Bridal Veil Gardens",
+    bounds: { south: 44.9719, west: -93.2158, north: 44.9728, east: -93.2144 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Bridal Veil Gardens (Minneapolis, MN)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Bridal Veil Gardens is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Bridal Veil Gardens",
+        sourceUrl: "https://www.minneapolisparks.org/activities-events/harvesting/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Bridal Veil Gardens (Minneapolis, MN)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Bridal Veil Gardens",
+        sourceUrl: "https://www.minneapolisparks.org/activities-events/harvesting/"
+      }
+    }
+  },
+  {
+    name: "Lyndale Farmstead",
+    bounds: { south: 44.9312, west: -93.2922, north: 44.9331, east: -93.2896 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Lyndale Farmstead (Minneapolis, MN)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Lyndale Farmstead is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Lyndale Farmstead",
+        sourceUrl: "https://www.minneapolisparks.org/activities-events/harvesting/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Lyndale Farmstead (Minneapolis, MN)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Lyndale Farmstead",
+        sourceUrl: "https://www.minneapolisparks.org/activities-events/harvesting/"
+      }
+    }
+  },
+  {
+    name: "Lovell Square (community orchard / urban-agriculture plots)",
+    bounds: { south: 44.9876, west: -93.3013, north: 44.9887, east: -93.2994 },
+    rules: {
+      food: {
+        status: "allowed",
+        label: "Allowed",
+        area: "Lovell Square (community orchard / urban-agriculture plots) (Minneapolis, MN)",
+        limit: "Public edible planting — ripe fruit, nuts, and produce are free to harvest for personal use. Take a fair share, leave some for others, and don't damage the plants or pick rented community-garden plots.",
+        note: "Lovell Square (community orchard / urban-agriculture plots) is a public food forest/edible park with an open community-harvest policy. Geocoded and policy-confirmed June 2026.",
+        sourceLabel: "Lovell Square (community orchard / urban-agriculture plots)",
+        sourceUrl: "https://www.minneapolisparks.org/parks-destinations/parks-lakes/lovell_square/"
+      },
+      default: {
+        status: "unknown",
+        label: "Unknown",
+        area: "Lovell Square (community orchard / urban-agriculture plots) (Minneapolis, MN)",
+        limit: "Food harvesting is invited here, but collection of craft, fiber, or other non-food plant material is not addressed.",
+        note: "Ask the managing organization before collecting non-food material (\"take food, not the forest\").",
+        sourceLabel: "Lovell Square (community orchard / urban-agriculture plots)",
+        sourceUrl: "https://www.minneapolisparks.org/parks-destinations/parks-lakes/lovell_square/"
+      }
+    }
+  },
   {
     name: "Beacon Food Forest",
     bounds: { south: 47.5648, west: -122.3137, north: 47.5683, east: -122.3105 },

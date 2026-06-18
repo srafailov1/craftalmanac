@@ -292,6 +292,10 @@ function testStateSystemRules(context) {
       props: { unit: "Sleeping Giant State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "allowed" },
     { label: "HI State Park mushrooms (not named)", stateCode: "HI", record: { lat: 22.2, lng: -159.6 },
       props: { unit: "Na Pali Coast State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "prohibited" }
+    // Note: food-forest SITE_ACCESS_RULES sites (e.g. Bronx River Foodway) are
+    // resolved by getSiteAccessRule in the dispatcher BEFORE getPublicLandAccessRule,
+    // so they are not exercised by this harness (which calls getPublicLandAccessRule
+    // directly). Their schema is validated by node --check and the live dispatch path.
   ];
 
   let passed = true;

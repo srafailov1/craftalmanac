@@ -205,6 +205,62 @@ Primary rule sources currently encoded:
 - Dr. George Washington Carver Edible Park visitor guidance, City of Asheville Parks & Recreation: https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/
 - Festival Beach Food Forest FAQ and harvest guidance (see also EPA brownfields success story, EPA 560-F-20-172): https://festivalbeach.org/frequently-asked-questions/
 - Urban Food Forest at Browns Mill, AgLanta (City of Atlanta); detailed harvest-guidelines page offline as of June 2026: https://aglanta.atlantaga.gov/urban-food-forest-at-browns-mill-1
+- Bronx River Foodway public-harvest policy (geocoded June 2026): https://bronxriver.org/visit-the-river/explore-the-greenway/foodway
+- Del Aire Public Fruit Park public-harvest policy (geocoded June 2026): https://fallenfruit.org/projects/public-fruit-park-los-angeles/
+- Charlotte's Blueberry Park public-harvest policy (geocoded June 2026): https://www.parkstacoma.gov/place/charlottes-blueberry-park/
+- Bloomington Community Orchard public-harvest policy (geocoded June 2026): https://bloomingtoncommunityorchard.org/site/visit/
+- Refuge Food Forest public-harvest policy (geocoded June 2026): https://www.normalil.gov/1372/Refuge-Food-Forest
+- Lawrence Community Orchard public-harvest policy (geocoded June 2026): https://www.sunriseprojectks.org/lftp
+- Emerson Street Food Forest public-harvest policy (geocoded June 2026): https://www.hyattsville.org/1122/Emerson-Street-Food-Forest
+- McClanahan Food Forest (McClanahan Park) public-harvest policy (geocoded June 2026): https://www.hyattsville.org/902/Food-Forests
+- White Marsh Park Edible Trail public-harvest policy (geocoded June 2026): https://news.maryland.gov/dnr/2026/04/24/marylands-edible-understory-is-on-the-verge-of-being-discovered/
+- Wetherby Edible Forest public-harvest policy (geocoded June 2026): https://www.backyardabundance.org/wetherby
+- Community Orchard of West Seattle public-harvest policy (geocoded June 2026): https://southseattle.edu/community-orchard-west-seattle
+- Edgewater Food Forest public-harvest policy (geocoded June 2026): https://insideclimatenews.org/news/03102025/boston-edible-food-forests/
+- Boston Nature Center Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Egleston Community Orchard public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/egleston-page
+- Ellington Street Community Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Maple Street Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Uphams Corner Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/uphams-corner-food-forest
+- Old West Church Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Savin Hill Wildlife Garden Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Hope Garden public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Leland Cooperative Garden Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Frederick Douglass Peace Park public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Egleston Branch Library Food Forest public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Sherman Street Green Space / Fairy Hollow public-harvest policy (geocoded June 2026): https://www.bostonfoodforest.org/locations
+- Barnum Orchard (Barnum Food Forest) public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Cook Park Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Living Light of Peace Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Fairmont DCIS School Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Samuels Elementary Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Nome Park Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Wheat Ridge Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- 48th & Julian Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Athmar Park Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Doull Elementary Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Kepner Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- The Urban Farm Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Ute Trail Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- APDC Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Morey Middle School Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Glenbrook Greenhouse Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Maxwell Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Edgewater Kaizen Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Vista Peak Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- GES Food Forest (Globeville/Elyria-Swansea) public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Bradley International Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Greenway Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- STEAM Academy Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Lake Middle School Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Crumley Park Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Newlon Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Martinez Park Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Sanderson Gulch Food Forest public-harvest policy (geocoded June 2026): https://dug.org/gardens-food-forests/food-forests/
+- Adams Triangle (Adams Grove Community Orchard) public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/activities-events/harvesting/
+- Bridal Veil Gardens public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/activities-events/harvesting/
+- Lyndale Farmstead public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/activities-events/harvesting/
+- Lovell Square (community orchard / urban-agriculture plots) public-harvest policy (geocoded June 2026): https://www.minneapolisparks.org/parks-destinations/parks-lakes/lovell_square/
 - U.S. National Arboretum rules and guidelines (representative source for the generic botanical-garden/arboretum prohibition): https://www.usna.usda.gov/visit/rules-and-guidelines/
 - Colorado Parks and Wildlife land regulations, 2 CCR 405-1 #100: https://www.law.cornell.edu/regulations/colorado/2-CCR-405-1-100
 - Oregon state park resources rule, OAR 736-010-0055: https://secure.sos.state.or.us/oard/view.action?ruleNumber=736-010-0055
