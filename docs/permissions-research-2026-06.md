@@ -61,6 +61,8 @@ order in `TODO-nps-compendium-expansion.md` (not yet applied to `app.js`).
 | WA state parks | Allowed — 2 gal/person/day edibles unless posted (WAC 352-28-030); natural area preserves excluded | verified (WAC text) |
 | CA state parks | Prohibited unless posted per unit (14 CCR 4306) | verified (parks.ca.gov general provisions) |
 | NYC parks | Prohibited (56 RCNY 1-04) | verified (nycgovparks.org) |
+| Charlotte NC city parks/greenways (Mecklenburg County Park & Recreation) | Prohibited — official MCPRD Rules & Regulations bar "Collection, removal or disturbance of any natural or cultural object" (fishing per NC rules excepted) and "Damage or removal of park property"; codified in Charlotte Code of Ordinances Ch. 15 Art. VI (Conduct in Public Parks); corroborating code language "No person shall injure, take or gather in any manner any tree, flower, fern, shrub, rock, artifact or other plant." Edible Landscapes/community-garden programs are managed free-fruit distribution, NOT open foraging | verified (MCPRD rules PDF read directly, June 2026; Ch. 15 Art. VI Municode-blocked, corroborated via search) |
+| Sacramento CA city parks (City of Sacramento Dept. of Youth, Parks & Community Enrichment) | Prohibited — Sacramento City Code Ch. 12.32 §12.32.070 "Harming or removing vegetation": "No person shall dig, remove, destroy, injure, mutilate or cut any tree, plant, shrub, bloom or flower, or any portion thereof, growing in any park." Only "specific permission" clause covers *planting*, not collection; no harvest permit or posted-exception pathway. "Park" (§12.32.010) = every city-owned/managed/controlled park, golf course, play field, recreation area. Regional gleaning program (Harvest Sacramento / Soil Born Farms) harvests *private backyard* fruit for food banks — NOT a city-park foraging authorization | verified (city-hosted Park Codes.pdf read directly, June 2026; amlegal/qcode mirrors Cloudflare-blocked) |
 | CO state parks / CPW lands | Prohibited — no edible exception in 2 CCR 405-1 #100 (firewood areas & noxious weeds excepted) | verified (rule text, June 2026) |
 | OR state parks | Allowed (food) — berries/fruits/mushrooms/similar edibles 5 gal/person/day unless posted (OAR 736-010-0055(5)); uprooting & roots/flowers/stems prohibited (craft/medicine -> prohibited; tribal customary rights preserved) | verified (rule text, June 2026) |
 | MD state parks | Prohibited (COMAR 08.07.06.13, no edible exception) | verified (rule text, June 2026) |
@@ -138,6 +140,25 @@ getPublicLandAccessRule.
   same pattern as the encoded food forests, need policy + boundary checks.
 
 ## Run log
+
+- **2026-06-16 (local / municipal park pass):** Researched 66 major city /
+  county / regional park systems against their primary municipal codes (one
+  agent per system + adversarial verify for every definitive classification),
+  plus 6 nationwide sweeps for foraging-allowed exceptions. **Strictly
+  evidence-based, no conservative bias** (per owner): **43 prohibited, 16
+  permit-required, 1 allowed-if-posted (Columbus & Franklin County Metro Parks),
+  6 unknown** — and zero with a flat "allowed" general rule. The app's generic
+  `"unknown"` fallback for unmatched local PAD-US land **stays unchanged** — this
+  pass adds named overrides only. Foraging-allowed reality lives in (a) a few
+  county systems (Dane County WI; Ramsey/Dakota/Washington County MN) and (b)
+  dedicated food-forest / community-orchard sites (Bronx River Foodway, Boston
+  Food Forest Coalition, Denver Urban Gardens, etc.) → `SITE_ACCESS_RULES`. The
+  6 "unknown" cities (Houston, San Antonio, Fort Worth, Las Vegas, Kansas City,
+  St. Louis) get no entry — several were downgraded from prohibited to unknown
+  when the cited code didn't actually bar collection. Findings:
+  `permissions-research-2026-06-local-parks.md`; encode work order:
+  `TODO-local-parks-expansion.md` (proposes a `LOCAL_PARK_RULES` table +
+  `getLocalParkRule` matcher; not yet applied).
 
 - **2026-06-16 (state-park landscape pass):** Mapped foraging rules for all 50
   state-park systems against primary administrative-code regulations (one
