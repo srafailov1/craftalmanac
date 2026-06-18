@@ -10,6 +10,7 @@ const APP_PATH = path.join(ROOT, "app.js");
 const MANIFEST_PATH = path.join(ROOT, "data", "falling-fruit", "us", "manifest.json");
 const STATE_BOUNDARY_PATH = path.join(ROOT, "data", "contiguous-us-states.json");
 const LOCAL_JURISDICTIONS_PATH = path.join(ROOT, "data", "local-jurisdictions.json");
+const USFS_FOREST_RULES_PATH = path.join(ROOT, "data", "usfs-forest-rules.json");
 const CACHE_DIR = path.join(ROOT, "data", "falling-fruit", "us", "access-cache");
 
 const FALLING_FRUIT_MODES = ["food", "ink"];
@@ -105,6 +106,7 @@ async function buildRuleContext() {
   const appSource = await readFile(APP_PATH, "utf8");
   const stateBoundaries = JSON.parse(await readFile(STATE_BOUNDARY_PATH, "utf8")).states || [];
   const localJurisdictions = JSON.parse(await readFile(LOCAL_JURISDICTIONS_PATH, "utf8")).jurisdictions || [];
+  const usfsForestRules = JSON.parse(await readFile(USFS_FOREST_RULES_PATH, "utf8")).forests || [];
   const context = {
     console,
     Map,
@@ -112,6 +114,7 @@ async function buildRuleContext() {
       activeMap: "food",
       stateBoundaries,
       localJurisdictions,
+      usfsForestRules,
       accessRuleCache: new Map()
     },
     __cachedUnits: []
@@ -149,6 +152,7 @@ async function buildRuleContext() {
     "getNpsCompendiumRule",
     "getStateSystemRule",
     "getLocalParkRule",
+    "getUsfsForestRule",
     "unlistedFungusRule",
     "getBestPublicLandAccessRule",
     "getPublicLandText",

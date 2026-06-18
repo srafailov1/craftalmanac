@@ -2950,6 +2950,7 @@ const state = {
   publicLandCoverage: null,
   stateBoundaries: null,
   localJurisdictions: null,
+  usfsForestRules: null,
   accessRuleCache: new Map(),
   pointDataReady: false,
   loadedPointBounds: null,
@@ -7621,6 +7622,23 @@ async function loadLocalJurisdictions() {
   }
 }
 
+async function loadUsfsForestRules() {
+  // Each national forest sets its own forest-products rules, so a record on
+  // national-forest land is matched to its forest by name and gets that
+  // forest's status + its own forest-products page as the source
+  // (data/usfs-forest-rules.json). Forests without a researched entry fall
+  // back to the general national-forest rule in getPublicLandAccessRule.
+  try {
+    const response = await fetch("./data/usfs-forest-rules.json");
+    if (!response.ok) return;
+    state.usfsForestRules = (await response.json()).forests || [];
+    state.accessRuleCache.clear();
+    renderMarkers();
+  } catch {
+    // Falls back to the general national-forest rule without per-forest data.
+  }
+}
+
 function getRecordStateCode(record) {
   if (!state.stateBoundaries) return "";
   const lat = Number(record.lat);
@@ -7662,6 +7680,39 @@ function getLocalParkRule(record, text, stateCode, area) {
     sourceLabel: match.sourceLabel,
     sourceUrl: match.sourceUrl
   };
+}
+
+function getUsfsForestRule(text, species, area) {
+  if (!state.usfsForestRules) return null;
+  // match the specific national forest by name (entries are sorted
+  // longest-name-first so e.g. "george washington and jefferson" wins over
+  // "george washington")
+  const entry = state.usfsForestRules.find((forest) => text.includes(forest.match));
+  if (!entry) return null;
+  const isMushroom = !!(species && species.category === "mushroom");
+  const status = isMushroom ? entry.mush : entry.food;
+  const detail = (isMushroom ? entry.mushNote : entry.foodLimit) || "";
+  const base = { area, sourceLabel: `${area} forest-products rules`, sourceUrl: entry.url };
+  if (status === "allowed") {
+    return { ...base, status: "allowed", label: "Allowed",
+      limit: detail || "Edible items may be gathered for personal use at this forest without a permit; larger or commercial harvests require a forest-products permit.",
+      note: `Specific to ${area}; confirm current limits and seasonal closures on the forest's forest-products page before collecting.` };
+  }
+  if (status === "permit-required") {
+    return { ...base, status: "permit-required", label: "Permit required",
+      limit: detail || `${area} requires a forest-products permit (sometimes free of charge) to collect ${isMushroom ? "mushrooms" : "edible plant material"}; no general no-permit personal-use allowance is published.`,
+      note: `Specific to ${area}; obtain the forest-products permit from this forest before collecting.` };
+  }
+  if (status === "prohibited") {
+    return { ...base, status: "prohibited", label: "Prohibited",
+      limit: detail || `${area} does not permit ${isMushroom ? "mushroom" : "this"} collection.`,
+      note: `Specific to ${area}.` };
+  }
+  // Status unknown for this category: fall back to the national-forest baseline,
+  // but still cite THIS forest's own page so the user can confirm there.
+  return { ...base, status: "allowed", label: "Allowed",
+    limit: "Incidental personal-use gathering is generally allowed without a permit on national forests; larger or commercial harvests need a permit.",
+    note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm — this is the general national-forest policy; check ${area}'s forest-products page before collecting.` };
 }
 
 function getPublicLandAccessRule(properties, species, stateCode, record) {
@@ -7784,6 +7835,9 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
     };
   }
+
+  const usfsForestRule = getUsfsForestRule(text, species, area);
+  if (usfsForestRule) return usfsForestRule;
 
   if (isUsfsLand(text)) {
     return {
@@ -8731,6 +8785,7 @@ map.on("load", () => {
   loadRadar();
   loadStateBoundaries();
   loadLocalJurisdictions();
+  loadUsfsForestRules();
   // The raster also backs provisional record-level rules at point zooms, so
   // load it at startup rather than only via the overview aggregate path.
   loadStatusRaster();

@@ -138,6 +138,7 @@ async function buildRuleContext() {
     "getNpsCompendiumRule",
     "getStateSystemRule",
     "getLocalParkRule",
+    "getUsfsForestRule",
     "getPublicLandText",
     "getPublicLandName",
     "isNationalParkServiceLand",
