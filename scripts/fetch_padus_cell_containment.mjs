@@ -42,7 +42,41 @@ const NPS_REGION_BOUNDS_BY_MATCH = {
   "rocky mountain national park": { south: 40.15, west: -105.90, north: 40.55, east: -105.45 },
   "sequoia national park": { south: 36.25, west: -118.95, north: 36.85, east: -118.30 },
   "yellowstone": { south: 44.10, west: -111.20, north: 45.15, east: -109.80 },
-  "yosemite": { south: 37.45, west: -120.00, north: 38.20, east: -119.15 }
+  "yosemite": { south: 37.45, west: -120.00, north: 38.20, east: -119.15 },
+  // 2026-06-16: 29 of the 34 newly-encoded national parks (lower-48 + Hawaii +
+  // moderate Alaska). The 3 Alaska giants (Denali, Gates of the Arctic,
+  // Wrangell-St. Elias) are deferred — their 0.05-degree grids run to tens of
+  // thousands of cells and would bloat the raster for areas with negligible
+  // iNaturalist overview traffic; their point-level rules still apply.
+  "big bend national park": { south: 28.97, west: -103.78, north: 29.7, east: -102.84 },
+  "biscayne": { south: 25.32, west: -80.35, north: 25.67, east: -80.1 },
+  "black canyon of the gunnison": { south: 38.5, west: -107.83, north: 38.64, east: -107.62 },
+  "carlsbad caverns": { south: 32.07, west: -104.65, north: 32.2, east: -104.38 },
+  "congaree": { south: 33.74, west: -80.87, north: 33.84, east: -80.6 },
+  "dry tortugas": { south: 24.57, west: -82.97, north: 24.73, east: -81.76 },
+  "gateway arch": { south: 38.62, west: -90.19, north: 38.63, east: -90.18 },
+  "grand canyon national park": { south: 35.75, west: -113.98, north: 36.82, east: -111.63 },
+  "great basin national park": { south: 38.82, west: -114.36, north: 39.06, east: -114.12 },
+  "great sand dunes": { south: 37.66, west: -105.73, north: 37.92, east: -105.5 },
+  "guadalupe mountains": { south: 31.81, west: -105.03, north: 32, east: -104.71 },
+  "haleakala": { south: 20.63, west: -156.25, north: 20.77, east: -156.04 },
+  "hawaii volcanoes": { south: 18.97, west: -155.81, north: 19.5, east: -155.02 },
+  "hot springs national park": { south: 34.5, west: -93.11, north: 34.56, east: -93.02 },
+  "isle royale": { south: 47.12, west: -89.42, north: 48.26, east: -88.26 },
+  "kenai fjords": { south: 59.43, west: -150.98, north: 60.3, east: -149.52 },
+  "kobuk valley": { south: 67.0, west: -160.3, north: 67.87, east: -157.83 },
+  "lake clark": { south: 59.85, west: -154.25, north: 61.51, east: -152.2 },
+  "lassen volcanic": { south: 40.34, west: -121.61, north: 40.59, east: -121.27 },
+  "mammoth cave": { south: 37.1, west: -86.27, north: 37.27, east: -86.03 },
+  "mesa verde": { south: 37.16, west: -108.56, north: 37.35, east: -108.34 },
+  "north cascades": { south: 48.37, west: -121.64, north: 49.0, east: -120.64 },
+  "pinnacles": { south: 36.41, west: -121.25, north: 36.56, east: -121.1 },
+  "saguaro national park": { south: 32.12, west: -111.24, north: 32.35, east: -110.6 },
+  "theodore roosevelt national park": { south: 46.9, west: -103.63, north: 47.63, east: -103.26 },
+  "virgin islands national park": { south: 18.3, west: -64.94, north: 18.38, east: -64.68 },
+  "voyageurs": { south: 48.3, west: -93.2, north: 48.63, east: -92.46 },
+  "wind cave": { south: 43.5, west: -103.55, north: 43.64, east: -103.34 },
+  "zion national park": { south: 37.15, west: -113.21, north: 37.5, east: -112.86 }
 };
 
 const args = new Map();
@@ -449,7 +483,10 @@ async function getRuleRegions() {
   const regions = [];
   npsRules.forEach((rule) => {
     const bounds = NPS_REGION_BOUNDS_BY_MATCH[rule.match];
-    if (!bounds) throw new Error(`Missing NPS region bounds for ${rule.match}`);
+    if (!bounds) {
+      console.warn(`Skipping region cells for "${rule.match}": no bbox in NPS_REGION_BOUNDS_BY_MATCH (deferred — e.g. oversized Alaska parks). Point-level rules still apply.`);
+      return;
+    }
     regions.push({
       id: `nps-${slugify(rule.match)}`,
       label: rule.match,
