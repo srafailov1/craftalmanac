@@ -266,7 +266,32 @@ function testStateSystemRules(context) {
     // the text AND a record inside the NYC bounding box (isRecordInNycArea).
     { label: "NYC local park", stateCode: "NY", record: { lat: 40.785, lng: -73.968 },
       props: { unit: "Central Park", mng: "City Land", mngTp: "Local Government", desTp: "Local Park" },
-      expected: "prohibited" }
+      expected: "prohibited" },
+    // 2026-06-16 state-park completion pass (38 new states; incl. species splits)
+    { label: "AK State Park food", stateCode: "AK", record: { lat: 61.1, lng: -149.5 },
+      props: { unit: "Chugach State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "IN State Park food", stateCode: "IN", record: { lat: 39.2, lng: -86.2 },
+      props: { unit: "Brown County State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "OH State Park food", stateCode: "OH", record: { lat: 39.5, lng: -82.5 },
+      props: { unit: "Hocking Hills State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "WI State Park food", stateCode: "WI", record: { lat: 43.4, lng: -89.7 },
+      props: { unit: "Devil's Lake State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "AL State Park (prohibited)", stateCode: "AL", record: { lat: 33.3, lng: -86.7 },
+      props: { unit: "Oak Mountain State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    { label: "FL State Park (prohibited)", stateCode: "FL", record: { lat: 27.2, lng: -82.3 },
+      props: { unit: "Myakka River State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    { label: "TX State Park (prohibited)", stateCode: "TX", record: { lat: 29.6, lng: -99.7 },
+      props: { unit: "Garner State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    { label: "MO State Park food (fruit allowed)", stateCode: "MO", record: { lat: 38.0, lng: -92.8 },
+      props: { unit: "Ha Ha Tonka State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "MO State Park mushrooms (not covered)", stateCode: "MO", record: { lat: 38.0, lng: -92.8 },
+      props: { unit: "Ha Ha Tonka State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "prohibited" },
+    { label: "CT State Park food (prohibited)", stateCode: "CT", record: { lat: 41.4, lng: -72.9 },
+      props: { unit: "Sleeping Giant State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    { label: "CT State Park mushrooms (allowed)", stateCode: "CT", record: { lat: 41.4, lng: -72.9 },
+      props: { unit: "Sleeping Giant State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "allowed" },
+    { label: "HI State Park mushrooms (not named)", stateCode: "HI", record: { lat: 22.2, lng: -159.6 },
+      props: { unit: "Na Pali Coast State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "prohibited" }
   ];
 
   let passed = true;

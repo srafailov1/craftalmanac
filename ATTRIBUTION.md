@@ -158,6 +158,44 @@ Primary rule sources currently encoded:
 - Pennsylvania DCNR state forest rules and regulations: https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-forests/rules-and-regulations
 - Washington state parks edible harvest rule, WAC 352-28-030: https://app.leg.wa.gov/wac/default.aspx?cite=352-28-030
 - California state park plant protection (14 CCR 4306): https://www.parks.ca.gov/?page_id=21301
+- 11 AAC 12.170 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/alaska/11-AAC-12.170
+- 312 IAC 8-2-10 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/indiana/312-IAC-8-2-10
+- Iowa Admin. Code 571—54 (state-park foraging rule, verified June 2026): https://www.legis.iowa.gov/docs/iac/chapter/571.54.pdf
+- K.A.R. 115-8-20 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/kansas/K-A-R-115-8-20
+- Ohio Admin. Code 1501:46-3-10 (state-park foraging rule, verified June 2026): https://codes.ohio.gov/ohio-administrative-code/rule-1501:46-3-10
+- 61 O.S. § 335 (SB 447, 2025) (state-park foraging rule, verified June 2026): https://www.oklegislature.gov/cf_pdf/2025-26%20ENR/SB/SB447%20ENR.PDF
+- 12-020-009 Code Vt. R. (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/vermont/12-009-Code-Vt-R-12-020-009-X
+- Wis. Admin. Code NR 45.04 (state-park foraging rule, verified June 2026): https://docs.legis.wisconsin.gov/code/admin_code/nr/001/45/04
+- 10 CSR 90-2.040 (state-park foraging rule, verified June 2026): https://www.sos.mo.gov/cmsimages/adrules/csr/current/10csr/10c90-2.pdf
+- HAR 13-146-32 (state-park foraging rule, verified June 2026): https://dlnr.hawaii.gov/ecosystems/files/2013/09/HRS13-146_State-Parks.pdf
+- Tenn. Comp. R. & Regs. 0400-02-02-.18 (state-park foraging rule, verified June 2026): https://publications.tnsosfiles.com/rules/0400/0400-02/0400-02-02.20210422.pdf
+- Conn. Gen. Stat. § 23-4(b) (state-park foraging rule, verified June 2026): https://eregulations.ct.gov/eRegsPortal/Browse/getDocument?guid=%7B3C64A5F8-B731-4393-A6AB-EA64B91A3F63%7D
+- Ga. Comp. R. & Regs. r. 391-5-1-.04 (state-park foraging rule, verified June 2026): https://rules.sos.ga.gov/gac/391-5-1
+- 163 Neb. Admin. Code ch. 5 § 001.14 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/nebraska/163-Neb-Admin-Code-ch-5-SS-001
+- 024-1 Wyo. Code R. § 1-15 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/wyoming/024-1-Wyo-Code-R-SS-1-15
+- 19.5.2.43 NMAC (state-park foraging rule, verified June 2026): https://www.emnrd.nm.gov/wp-content/uploads/sites/7/19.5.2_integrated_appvdDBpublished6252019.pdf
+- S.C. Code Ann. § 51-3-145(D) (state-park foraging rule, verified June 2026): https://www.scstatehouse.gov/code/t51c003.php
+- W. Va. Code R. § 58-31-2 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/west-virginia/W-Va-C-S-R-SS-58-31-2
+- Ala. Admin. Code r. 220-5-.07(3) (state-park foraging rule, verified June 2026): https://www.outdooralabama.com/sites/default/files/Enforcement/STATE%20PARKS%20DIVISION%20REG%20FOR%20LE%20PAGE.pdf
+- A.A.C. R12-8-103 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/arizona/Ariz-Admin-Code-SS-R12-8-103
+- Ark. Admin. Code Title 3, Subpart 10 (state-park foraging rule, verified June 2026): https://www.arkansas.com/state-parks/about/rules-regulations
+- 7 Del. Admin. Code 9201-17.3 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/delaware/7-Del-Admin-Code-SS-9201-17.0
+- Fla. Admin. Code R. 62D-2.013 (state-park foraging rule, verified June 2026): http://flrules.elaws.us/fac/62d-2.013/
+- IDAPA 26.01.20.125 (state-park foraging rule, verified June 2026): https://adminrules.idaho.gov/rules/current/26/260120.pdf
+- KRS 433.750 (state-park foraging rule, verified June 2026): https://parks.ky.gov/parks/regulations
+- LAC Title 25, Pt. IX, § 303.B (state-park foraging rule, verified June 2026): https://www.lastateparks.com/sites/default/files/2023-09/OSP%20Title25v01-11.pdf
+- C.M.R. 01-670, ch. 1, § 1 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/maine/C-M-R-01-670-ch-1
+- 302 CMR 12.04 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/massachusetts/302-CMR-12-04
+- 40 Miss. Admin. Code Pt. 6, R. 1.2 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/mississippi/40-Miss-Code-R-SS-6-1-2
+- ARM 12.12.106 (state-park foraging rule, verified June 2026): https://fwp.mt.gov/binaries/content/assets/fwp/commission/2023/dec/public-use-rules-arm/final_12-603adp_11.16.2023.pdf
+- NRS 407.250 / NAC 407 (state-park foraging rule, verified June 2026): https://www.leg.state.nv.us/nrs/nrs-407.html
+- N.H. Code Admin. R. Res 7301.05 (state-park foraging rule, verified June 2026): https://www.nhstateparks.org/getmedia/78550992-2128-4844-97e3-ab8fde083a17/Res-7300-Parks-and-Rec-Adopted-Rule-eff-030114.aspx
+- N.J.A.C. 7:2-2.10(a) (state-park foraging rule, verified June 2026): https://dep.nj.gov/wp-content/uploads/rules/rules/njac7_2.pdf
+- N.D. Admin. Code 58-02-08-10 (state-park foraging rule, verified June 2026): https://ndlegis.gov/information/acdata/pdf/58-02-08.pdf
+- 250-RICR-100-00-7 § 7.20 (state-park foraging rule, verified June 2026): https://rules.sos.ri.gov/regulations/Part/250-100-00-7
+- SDAR 41:03:01:05 (state-park foraging rule, verified June 2026): https://sdlegislature.gov/Rules/Administrative/41:03:01
+- 31 TAC 59.134(l)(1) (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/texas/31-Tex-Admin-Code-SS-59-134
+- Utah Admin. Code R651-620-2 (state-park foraging rule, verified June 2026): https://www.law.cornell.edu/regulations/utah/Utah-Admin-Code-R651-620-2
 - New York City parks vegetation rule, 56 RCNY 1-04: https://www.nycgovparks.org/rules/section-1-04/
 - Monticello guest policies (no collection on Foundation property): https://www.monticello.org/visit/tips-for-visiting/guest-policies
 - UVA pavilion gardens edible-landscape guidance: https://sustainability.virginia.edu/blog/exploring-edible-food-grown-grounds
