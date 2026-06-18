@@ -7501,7 +7501,7 @@ function computeRecordAccessRule(record, species) {
       label: "Private",
       area: record.access || "Private or overhanging property",
       limit: "Secure explicit property-owner permission before collecting.",
-      note: record.accessNote || "Falling Fruit marks this record as private or overhanging.",
+      note: record.accessNote || "This point is on private or overhanging property.",
       sourceLabel: "Falling Fruit access note",
       sourceUrl: record.sourceUrl || "https://fallingfruit.org/"
     };
@@ -7514,9 +7514,9 @@ function computeRecordAccessRule(record, species) {
     return {
       status: "unknown",
       label: "Unknown",
-      area: record.access || "Community-marked public access",
-      limit: "Public access is reported, but harvest rules still need a local source.",
-      note: record.accessNote || "Falling Fruit marks this record as public; confirm rules before harvesting.",
+      area: record.access || "Reported public access",
+      limit: "This spot is reported as publicly accessible, but its harvesting rules aren't confirmed — check the managing agency's posted rules before collecting.",
+      note: record.accessNote || "Reported as publicly accessible; confirm the managing agency's rules before harvesting.",
       sourceLabel: "Falling Fruit access note",
       sourceUrl: record.sourceUrl || "https://fallingfruit.org/"
     };
@@ -7525,9 +7525,9 @@ function computeRecordAccessRule(record, species) {
   return {
     status: "private-unsourced",
     label: "Private / unsourced",
-    area: "No sourced public access match",
+    area: "Private or unverified location",
     limit: "Secure permission from the landowner or managing institution before collecting.",
-    note: record.accessNote || "This point is not matched to a sourced public access area.",
+    note: record.accessNote || "We don't have a confirmed public-access rule for this exact spot; treat it as private unless you can verify otherwise.",
     sourceLabel: "Access not sourced",
     sourceUrl: ""
   };
@@ -7569,7 +7569,7 @@ function getStatusRasterAccessRule(record) {
     label: labels[status],
     area: "Mapped public-access land",
     limit: "Area-level status for this location. Confirm the managing agency's posted rules and the exact boundary before collecting.",
-    note: "Estimated from mapped public-land boundaries (USGS PAD-US); a more specific rule may apply at this exact spot.",
+    note: "Estimated from public-land boundaries; a more specific rule may apply at this exact spot.",
     sourceLabel: "USGS PAD-US public-access boundaries",
     sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview"
   };
@@ -7686,7 +7686,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       label: "Prohibited",
       area,
       limit: "Removing plants, flowers, or other vegetation from New York City parks is prohibited without the Commissioner's permission.",
-      note: "PAD-US identifies this as local city parkland inside New York City; applying the NYC Parks vegetation rule.",
+      note: "This is New York City parkland; NYC Parks rules protect all park vegetation, so foraging is not permitted.",
       sourceLabel: "NYC Parks rules 1-04",
       sourceUrl: ACCESS_RULE_SOURCES.nycParks
     };
@@ -7845,7 +7845,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Rules for this plant use are not currently sourced; confirm access requirements and posted site rules before collecting.",
+        limit: "We don't have a confirmed rule for collecting this here; check access requirements and posted site rules before collecting.",
         note: "Confirm DWR access requirements and posted site rules before collecting plant material.",
         sourceLabel: "Virginia WMA rules",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaWma
@@ -7869,7 +7869,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Rules for this plant use are not currently sourced; confirm posted rules before collecting.",
+        limit: "We don't have a confirmed rule for collecting this here; check posted rules before collecting.",
         note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
         sourceLabel: "Virginia state forest regulations",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaStateForests
@@ -7893,7 +7893,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
         status: "unknown",
         label: "Unknown",
         area,
-        limit: "Rules for this plant use are not currently sourced; confirm posted rules before collecting.",
+        limit: "We don't have a confirmed rule for collecting this here; check posted rules before collecting.",
         note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
         sourceLabel: "Virginia state park regulations",
         sourceUrl: ACCESS_RULE_SOURCES.virginiaParks
