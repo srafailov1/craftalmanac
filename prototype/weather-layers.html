@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Craft Almanac — Weather &amp; Environment Layers (prototype)</title>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
+<!--
+  STANDALONE PROTOTYPE — does not touch app.js / index.html / styles.css / ATTRIBUTION.md.
+  Open with the project's local server, e.g.:
+      python3 -m http.server 4173 --bind 127.0.0.1
+  then visit  http://127.0.0.1:4173/prototype/weather-layers.html
+
+  All endpoints below were live-verified (HTTP 200, real data, CORS where needed) on 2026-06-18.
+  Attribution / license notes (for ATTRIBUTION.md when any of these graduate to the real site):
+   - Wildfire perimeters: NIFC / WFIGS Interagency Perimeters (US Gov public domain).
+   - Fire detections: NASA FIRMS / VIIRS via Esri Living Atlas (public domain source; credit Esri + NASA FIRMS).
+       NOTE: thermal anomalies, NOT confirmed wildfires (includes flares/ag burns).
+   - Air quality: World Air Quality Index (waqi.info), US data from EPA AirNow. demo token = prototype only;
+       free personal token at https://aqicn.org/data-platform/token/ . Non-commercial / educational use.
+   - Drought: US Drought Monitor (NDMC/UNL + USDA + NOAA) via Esri Living Atlas (public, weekly).
+   - Temperature: NOAA/NWS National Digital Forecast Database (NDFD) (US Gov public domain). Forecast, not observed.
+   - Wind: NOAA RTMA via Iowa Environmental Mesonet, Iowa State University (public domain data; courtesy host).
+   - Precipitation: RainViewer (same as the live site).
+-->
+<style>
+  :root{
+    --cream:#f5f1e6; --ink:#26301f; --sub:#5c6650; --line:#d8d0bd;
+    --card:rgba(247,243,233,.96); --accent:#3a6b4e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+  #map{position:absolute;inset:0}
+  #panel{
+    position:absolute;top:14px;left:14px;z-index:5;width:300px;max-height:calc(100% - 28px);
+    overflow:auto;background:var(--card);backdrop-filter:blur(6px);border:1px solid var(--line);
+    border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.18);padding:14px 14px 12px;
+  }
+  #panel h1{font-size:14px;margin:0 0 2px;letter-spacing:.02em}
+  #panel .tag{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+  #panel .caveat{font-size:10.5px;color:var(--sub);line-height:1.45;margin:8px 0 10px;border-left:2px solid var(--line);padding-left:8px}
+  .group{margin-top:10px}
+  .group > .glabel{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--sub);font-weight:700;margin:0 0 4px}
+  .row{padding:6px 0;border-top:1px dashed var(--line)}
+  .row:first-of-type{border-top:none}
+  .row .top{display:flex;align-items:center;gap:8px}
+  .row label{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;cursor:pointer;flex:1;min-width:0}
+  .row input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex:none}
+  .row .status{font-size:10px;color:var(--sub);flex:none;min-width:42px;text-align:right}
+  .row .status.err{color:#b10026;font-weight:700}
+  .ctrl{display:flex;align-items:center;gap:8px;margin:5px 0 2px;padding-left:24px}
+  .ctrl input[type=range]{flex:1;accent-color:var(--accent);height:3px}
+  .legend{padding-left:24px;font-size:10.5px;color:var(--sub);display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.4}
+  .row.off .legend,.row.off label{opacity:.5}
+  .sw{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:middle}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;border:.5px solid rgba(0,0,0,.3);vertical-align:middle}
+  .bar{display:inline-block;width:74px;height:9px;border-radius:3px;vertical-align:middle}
+  .aqi-extra{padding-left:24px;margin:4px 0 2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:10.5px;color:var(--sub)}
+  .aqi-extra input[type=text]{width:78px;font-size:11px;padding:2px 5px;border:1px solid var(--line);border-radius:5px}
+  .aqi-extra select{font-size:11px;padding:2px 4px;border:1px solid var(--line);border-radius:5px;background:#fff}
+  .foot{margin-top:12px;border-top:1px solid var(--line);padding-top:8px;font-size:10px;color:var(--sub);line-height:1.5}
+  .foot b{color:var(--ink)}
+  .foot .btn{display:inline-block;margin-top:6px;font-size:11px;font-weight:600;color:#fff;background:var(--accent);
+    border:none;border-radius:7px;padding:5px 10px;cursor:pointer}
+  .mapboxgl-popup-content{font-size:12px;line-height:1.5;padding:10px 12px;border-radius:8px}
+  .mapboxgl-popup-content b{color:#26301f}
+  .pop-h{font-weight:700;margin-bottom:3px}
+  .pop-k{color:#5c6650}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel">
+  <span class="tag">Prototype</span>
+  <h1>Weather &amp; Environment Layers</h1>
+  <div class="caveat">
+    Sandbox for trying map layers. Data shown is <b>observation/forecast only</b> — never harvest permission.
+    Fire detections are satellite <b>thermal anomalies</b>, not confirmed wildfires.
+  </div>
+  <div id="rows"></div>
+  <div class="foot">
+    <b>Zoom:</b> <span id="zoomval">—</span> · most rasters resolve best at z3–9.<br>
+    Toggle several at once to see how they interact. Click fire / drought shapes for details.<br>
+    <button class="btn" id="fitUS">Reset to US view</button>
+  </div>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
+<script src="../config.js"></script>
+<script>
+(function(){
+  "use strict";
+  var TOKEN = (window.FORAGE_CONFIG && window.FORAGE_CONFIG.mapboxToken) || "";
+  if(!TOKEN){ document.getElementById("rows").innerHTML = "<p style='color:#b10026;font-size:12px'>No Mapbox token found in ../config.js</p>"; return; }
+  mapboxgl.accessToken = TOKEN;
+
+  var map = new mapboxgl.Map({
+    container:"map",
+    style:"mapbox://styles/mapbox/standard",
+    center:[-98.6,39.8],
+    zoom:4,
+    minZoom:2.4,
+    maxZoom:19,
+    projection:"mercator"   // weather rasters are web-mercator (3857); mercator keeps them aligned
+  });
+  map.addControl(new mapboxgl.NavigationControl({showCompass:false}),"top-right");
+  map.addControl(new mapboxgl.ScaleControl({maxWidth:90,unit:"imperial"}),"bottom-right");
+
+  // ---- config -------------------------------------------------------------
+  var FIRE_URL  = "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters_Current/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson&resultRecordCount=1000";
+  var HOT_URL   = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Satellite_VIIRS_Thermal_Hotspots_and_Fire_Activity/FeatureServer/0/query?where=1%3D1&geometry=-125,24,-66,50&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=latitude,longitude,frp,confidence,bright_ti4,acq_date,daynight,hours_old&outSR=4326&resultRecordCount=16000&f=geojson";
+  var DRY_URL   = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/US_Drought_Intensity_v1/FeatureServer/3/query?where=1%3D1&outFields=*&outSR=4326&f=geojson";
+  var TEMP_URL  = "https://mapservices.weather.noaa.gov/raster/rest/services/NDFD/NDFD_temp/MapServer/export?bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&size=256,256&layers=show:0&format=png32&transparent=true&f=image";
+  // Wind: OpenWeatherMap wind_new needs a free key — there is no reliable key-free wind raster
+  // (the IEM RTMA tile endpoint returns only an "Invalid TMS Request" placeholder). Free key: openweathermap.org/api
+  var OWM_WIND  = "https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=";
+
+  // canonical bottom->top draw order so toggling order never changes how layers stack
+  var STACK = ["precip","temp","wind","aqi","drought","perimeters","hotspots"];
+  var LAYER_IDS = {
+    precip:["precip"], temp:["temp"], wind:["wind"], aqi:["aqi"],
+    drought:["drought-fill","drought-line"],
+    perimeters:["perimeters-fill","perimeters-line"],
+    hotspots:["hotspots"]
+  };
+  var SOURCE_IDS = {
+    precip:["precip"], temp:["temp"], wind:["wind"], aqi:["aqi"],
+    drought:["drought"], perimeters:["perimeters"], hotspots:["hotspots"]
+  };
+  var DEFAULT_OPACITY = { perimeters:.9, hotspots:.9, aqi:.6, drought:.85, temp:.6, wind:.6, precip:.7 };
+  var opacity = Object.assign({}, DEFAULT_OPACITY);
+
+  // ---- panel build --------------------------------------------------------
+  function ramp(cols){ return '<span class="bar" style="background:linear-gradient(90deg,'+cols.join(",")+')"></span>'; }
+  var PANEL = [
+    { group:"Fire", rows:[
+      { key:"perimeters", label:"Wildfire perimeters",
+        legend:'<span class="sw" style="background:rgba(215,48,31,.35);border:1.5px solid #7f0000"></span> active perimeter · click for info' },
+      { key:"hotspots", label:"Active fire detections",
+        legend:'<span class="dot" style="background:#ffeda0"></span><span class="dot" style="background:#feb24c"></span><span class="dot" style="background:#fc4e2a"></span><span class="dot" style="background:#b10026"></span> low→high heat (FRP)' }
+    ]},
+    { group:"Air", rows:[
+      { key:"aqi", label:"Air quality (US EPA AQI)", aqi:true,
+        legend:ramp(["#009966","#ffde33","#ff9933","#cc0033","#660099","#7e0023"])+" good→hazardous" }
+    ]},
+    { group:"Drought", rows:[
+      { key:"drought", label:"Drought intensity",
+        legend:ramp(["#FFFF00","#FCD37F","#FFAA00","#E60000","#730000"])+" D0→D4 · click for class" }
+    ]},
+    { group:"Weather", rows:[
+      { key:"temp", label:"Temperature (NWS NDFD)",
+        legend:ramp(["#2c7bb6","#abd9e9","#ffffbf","#fdae61","#d7191c"])+" cool→hot °F" },
+      { key:"wind", label:"Wind speed (OpenWeatherMap)", owm:true,
+        legend:ramp(["#edf8fb","#b2e2e2","#66c2a4","#2ca25f","#006d2c"])+" calm→strong · needs free key" },
+      { key:"precip", label:"Precipitation radar (RainViewer)",
+        legend:ramp(["#9bd3ae","#4aa6c9","#3b6fd0","#b14fd0"])+" light→heavy" }
+    ]}
+  ];
+
+  var rowsEl = document.getElementById("rows");
+  var aqiTokenInput, aqiMetricSel;
+  PANEL.forEach(function(g){
+    var gd = document.createElement("div"); gd.className = "group";
+    gd.innerHTML = '<p class="glabel">'+g.group+'</p>';
+    g.rows.forEach(function(r){
+      var row = document.createElement("div"); row.className = "row off"; row.dataset.key = r.key;
+      var pct = Math.round((DEFAULT_OPACITY[r.key]||.6)*100);
+      var html =
+        '<div class="top">'+
+          '<label><input type="checkbox" data-k="'+r.key+'"> '+r.label+'</label>'+
+          '<span class="status" data-status="'+r.key+'"></span>'+
+        '</div>'+
+        '<div class="ctrl"><span style="font-size:10px;color:var(--sub)">opacity</span>'+
+          '<input type="range" min="0" max="100" value="'+pct+'" data-op="'+r.key+'"></div>';
+      if(r.aqi){
+        html += '<div class="aqi-extra">token <input type="text" id="aqiToken" value="demo">'+
+                'metric <select id="aqiMetric"><option value="usepa-aqi">AQI</option><option value="usepa-pm25">PM2.5</option></select></div>';
+      }
+      if(r.owm){
+        html += '<div class="aqi-extra">OWM key <input type="text" id="owmKey" placeholder="free OpenWeatherMap key"></div>';
+      }
+      html += '<div class="legend">'+r.legend+'</div>';
+      row.innerHTML = html;
+      gd.appendChild(row);
+    });
+    rowsEl.appendChild(gd);
+  });
+  aqiTokenInput = document.getElementById("aqiToken");
+  aqiMetricSel  = document.getElementById("aqiMetric");
+  var owmKeyInput = document.getElementById("owmKey");
+
+  function statusEl(key){ return document.querySelector('[data-status="'+key+'"]'); }
+  function rowEl(key){ return document.querySelector('.row[data-key="'+key+'"]'); }
+  function setStatus(key,txt,err){ var s=statusEl(key); s.textContent=txt||""; s.className="status"+(err?" err":""); }
+
+  // ---- data helpers -------------------------------------------------------
+  var geoCache = {};
+  function getGeo(key,url){
+    if(geoCache[key]) return geoCache[key];
+    geoCache[key] = fetch(url).then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+      .catch(function(e){ delete geoCache[key]; throw e; });
+    return geoCache[key];
+  }
+  var rvTiles = null;
+  function rainviewerTiles(){
+    if(rvTiles) return Promise.resolve(rvTiles);
+    return fetch("https://api.rainviewer.com/public/weather-maps.json")
+      .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+      .then(function(j){
+        var past = (j.radar && j.radar.past) || [];
+        if(!past.length) throw new Error("no radar frames");
+        rvTiles = j.host + past[past.length-1].path + "/256/{z}/{x}/{y}/2/1_1.png";
+        return rvTiles;
+      });
+  }
+  function aqiTiles(){
+    var t = (aqiTokenInput.value || "demo").trim() || "demo";
+    var m = aqiMetricSel.value || "usepa-aqi";
+    return "https://tiles.waqi.info/tiles/"+m+"/{z}/{x}/{y}.png?token="+encodeURIComponent(t);
+  }
+  function windTiles(){
+    var k = (owmKeyInput && owmKeyInput.value || "").trim();
+    return k ? OWM_WIND + encodeURIComponent(k) : null;
+  }
+
+  // ---- add / remove / opacity --------------------------------------------
+  function isOn(key){ return LAYER_IDS[key].some(function(id){ return map.getLayer(id); }); }
+
+  function addRaster(id, tiles, slot, maxzoom, attribution, smooth){
+    if(map.getSource(id)) return;
+    map.addSource(id, { type:"raster", tiles:[tiles], tileSize:256, maxzoom:maxzoom||22, attribution:attribution });
+    var paint = { "raster-opacity": opacity[id] };
+    if(smooth) paint["raster-resampling"] = "linear";
+    map.addLayer({ id:id, type:"raster", source:id, slot:slot||"middle", paint:paint });
+  }
+
+  function addKey(key){
+    if(isOn(key)) return Promise.resolve();
+    switch(key){
+      case "precip":
+        return rainviewerTiles().then(function(t){ addRaster("precip", t, "middle", 7, "Radar © RainViewer"); restack(); });
+      case "temp":
+        addRaster("temp", TEMP_URL, "middle", 9, "Temp: NOAA/NWS NDFD", true); restack(); return Promise.resolve();
+      case "wind":
+        var wt = windTiles();
+        if(!wt) return Promise.reject(new Error("OpenWeatherMap key required"));
+        addRaster("wind", wt, "middle", 12, "Wind: © OpenWeatherMap", true); restack(); return Promise.resolve();
+      case "aqi":
+        addRaster("aqi", aqiTiles(), "middle", 10, "AQI © waqi.info / US EPA AirNow"); restack(); return Promise.resolve();
+      case "drought":
+        return getGeo("drought", DRY_URL).then(function(data){
+          map.addSource("drought", { type:"geojson", data:data, attribution:"Drought: US Drought Monitor (NDMC/USDA/NOAA) via Esri" });
+          map.addLayer({ id:"drought-fill", type:"fill", source:"drought", slot:"middle",
+            paint:{ "fill-color":["match",["get","dm"],0,"#FFFF00",1,"#FCD37F",2,"#FFAA00",3,"#E60000",4,"#730000","#cccccc"],
+                    "fill-opacity":opacity.drought*0.6 } });
+          map.addLayer({ id:"drought-line", type:"line", source:"drought", slot:"middle",
+            paint:{ "line-color":"#7a5c00", "line-width":0.4, "line-opacity":0.4 } });
+          restack();
+        });
+      case "perimeters":
+        return getGeo("perimeters", FIRE_URL).then(function(data){
+          map.addSource("perimeters", { type:"geojson", data:data, attribution:"Perimeters: NIFC / WFIGS" });
+          map.addLayer({ id:"perimeters-fill", type:"fill", source:"perimeters", slot:"middle",
+            paint:{ "fill-color":"#d7301f", "fill-opacity":opacity.perimeters*0.4 } });
+          map.addLayer({ id:"perimeters-line", type:"line", source:"perimeters", slot:"top",
+            paint:{ "line-color":"#7f0000", "line-width":1.5, "line-opacity":opacity.perimeters } });
+          restack();
+        });
+      case "hotspots":
+        return getGeo("hotspots", HOT_URL).then(function(data){
+          map.addSource("hotspots", { type:"geojson", data:data, attribution:"Fire detections: NASA FIRMS/VIIRS via Esri" });
+          map.addLayer({ id:"hotspots", type:"circle", source:"hotspots", slot:"top",
+            paint:{
+              "circle-radius":["interpolate",["linear"],["zoom"],4,2,10,6],
+              "circle-color":["step",["get","frp"],"#ffeda0",2,"#feb24c",10,"#fc4e2a",50,"#b10026"],
+              "circle-opacity":opacity.hotspots,
+              "circle-stroke-width":0.5, "circle-stroke-color":"rgba(0,0,0,.35)"
+            } });
+          restack();
+        });
+    }
+    return Promise.resolve();
+  }
+
+  function removeKey(key){
+    LAYER_IDS[key].forEach(function(id){ if(map.getLayer(id)) map.removeLayer(id); });
+    SOURCE_IDS[key].forEach(function(s){ if(map.getSource(s)) map.removeSource(s); });
+  }
+
+  function restack(){
+    STACK.forEach(function(k){ LAYER_IDS[k].forEach(function(id){ if(map.getLayer(id)) map.moveLayer(id); }); });
+  }
+
+  function setOpacity(key, v){
+    opacity[key] = v;
+    if(key === "drought"){
+      if(map.getLayer("drought-fill")) map.setPaintProperty("drought-fill","fill-opacity",v*0.6);
+    } else if(key === "perimeters"){
+      if(map.getLayer("perimeters-fill")) map.setPaintProperty("perimeters-fill","fill-opacity",v*0.4);
+      if(map.getLayer("perimeters-line")) map.setPaintProperty("perimeters-line","line-opacity",v);
+    } else if(key === "hotspots"){
+      if(map.getLayer("hotspots")){
+        map.setPaintProperty("hotspots","circle-opacity",v);
+        map.setPaintProperty("hotspots","circle-stroke-opacity",v);
+      }
+    } else {
+      if(map.getLayer(key)) map.setPaintProperty(key,"raster-opacity",v);
+    }
+  }
+
+  // ---- popups (bound once; fire only when the layer exists) ---------------
+  function fmtDate(ms){ var n = Number(ms); return isFinite(n) && n>0 ? new Date(n).toLocaleDateString() : "—"; }
+  function bindPopup(layerId, htmlFn){
+    map.on("click", layerId, function(e){
+      var f = e.features && e.features[0]; if(!f) return;
+      new mapboxgl.Popup({ maxWidth:"260px" }).setLngLat(e.lngLat).setHTML(htmlFn(f.properties)).addTo(map);
+    });
+    map.on("mouseenter", layerId, function(){ map.getCanvas().style.cursor = "pointer"; });
+    map.on("mouseleave", layerId, function(){ map.getCanvas().style.cursor = ""; });
+  }
+  var DM_NAMES = ["D0 · Abnormally Dry","D1 · Moderate","D2 · Severe","D3 · Extreme","D4 · Exceptional"];
+
+  // ---- wiring -------------------------------------------------------------
+  rowsEl.addEventListener("change", function(e){
+    var cb = e.target.closest && e.target.closest('input[type=checkbox]');
+    if(cb){
+      var key = cb.dataset.k, row = rowEl(key);
+      if(cb.checked){
+        if(key === "wind" && !windTiles()){ setStatus("wind","needs key",true); cb.checked=false; return; }
+        row.classList.remove("off"); setStatus(key,"loading…");
+        Promise.resolve().then(function(){ return addKey(key); })
+          .then(function(){ setStatus(key,""); })
+          .catch(function(err){ console.error("layer "+key+" failed:", err); setStatus(key,"⚠ failed",true); cb.checked=false; row.classList.add("off"); });
+      } else {
+        removeKey(key); setStatus(key,""); row.classList.add("off");
+      }
+    }
+    // AQI token / metric change: rebuild source if active
+    if(e.target.id === "aqiMetric"){
+      if(isOn("aqi")){ removeKey("aqi"); addKey("aqi"); }
+    }
+  });
+  rowsEl.addEventListener("input", function(e){
+    if(e.target.dataset && e.target.dataset.op){
+      setOpacity(e.target.dataset.op, Number(e.target.value)/100);
+    }
+  });
+  // AQI token / OWM key: rebuild on change (not every keystroke)
+  document.addEventListener("change", function(e){
+    if(e.target.id === "aqiToken" && isOn("aqi")){ removeKey("aqi"); addKey("aqi"); }
+    if(e.target.id === "owmKey"){
+      var cb = document.querySelector('input[data-k="wind"]');
+      if(windTiles()){
+        if(isOn("wind")) removeKey("wind");
+        if(cb && cb.checked){ setStatus("wind","loading…"); addKey("wind").then(function(){ setStatus("wind",""); }).catch(function(){ setStatus("wind","⚠ failed",true); }); }
+      }
+    }
+  });
+
+  document.getElementById("fitUS").addEventListener("click", function(){
+    map.easeTo({ center:[-98.6,39.8], zoom:4, duration:600 });
+  });
+
+  var zoomval = document.getElementById("zoomval");
+  function showZoom(){ zoomval.textContent = map.getZoom().toFixed(1); }
+  map.on("zoom", showZoom);
+
+  map.on("load", function(){
+    showZoom();
+    bindPopup("perimeters-fill", function(p){
+      var name = p.poly_IncidentName || p.attr_IncidentName || "Unnamed incident";
+      var acres = p.poly_GISAcres || p.attr_CalculatedAcres;
+      var kind = p.attr_IncidentTypeCategory === "RX" ? "Prescribed burn" : "Wildfire";
+      return '<div class="pop-h">'+name+'</div>'+
+        '<div><span class="pop-k">Type:</span> '+kind+'</div>'+
+        (acres ? '<div><span class="pop-k">Size:</span> '+Math.round(acres).toLocaleString()+' acres</div>' : '')+
+        (p.attr_PercentContained!=null ? '<div><span class="pop-k">Contained:</span> '+p.attr_PercentContained+'%</div>' : '')+
+        '<div><span class="pop-k">Discovered:</span> '+fmtDate(p.attr_FireDiscoveryDateTime)+'</div>'+
+        (p.attr_POOState ? '<div><span class="pop-k">State:</span> '+String(p.attr_POOState).replace("US-","")+'</div>' : '');
+    });
+    bindPopup("hotspots", function(p){
+      return '<div class="pop-h">Thermal detection</div>'+
+        '<div><span class="pop-k">Heat (FRP):</span> '+(p.frp!=null?Number(p.frp).toFixed(1)+" MW":"—")+'</div>'+
+        '<div><span class="pop-k">Confidence:</span> '+(p.confidence||"—")+'</div>'+
+        '<div><span class="pop-k">Brightness:</span> '+(p.bright_ti4!=null?Math.round(p.bright_ti4)+" K":"—")+'</div>'+
+        '<div><span class="pop-k">When:</span> '+fmtDate(p.acq_date)+(p.daynight?(" ("+(p.daynight==="D"?"day":"night")+")"):"")+'</div>'+
+        (p.hours_old!=null?'<div><span class="pop-k">Age:</span> '+Math.round(p.hours_old)+" h</div>":"")+
+        '<div style="margin-top:4px;color:#5c6650;font-size:10.5px">Satellite anomaly — not a confirmed fire.</div>';
+    });
+    bindPopup("drought-fill", function(p){
+      var dm = Number(p.dm);
+      return '<div class="pop-h">'+(DM_NAMES[dm]||"Drought")+'</div>'+
+        '<div class="pop-k" style="font-size:10.5px">US Drought Monitor, week of '+(p.period||"")+'</div>';
+    });
+  });
+})();
+</script>
+</body>
+</html>

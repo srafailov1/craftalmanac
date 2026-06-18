@@ -7692,7 +7692,12 @@ function getUsfsForestRule(text, species, area) {
   const isMushroom = !!(species && species.category === "mushroom");
   const status = isMushroom ? entry.mush : entry.food;
   const detail = (isMushroom ? entry.mushNote : entry.foodLimit) || "";
-  const base = { area, sourceLabel: `${area} forest-products rules`, sourceUrl: entry.url };
+  // When a forest has no edible-relevant page (its only page was timber/firewood,
+  // so the link was dropped), cite the national-forest default rule instead of a
+  // page that doesn't speak to edible foraging.
+  const sourceUrl = entry.url || ACCESS_RULE_SOURCES.usfs;
+  const sourceLabel = entry.url ? `${area} forest-products page` : "National-forest default rule (36 CFR 261.6)";
+  const base = { area, sourceLabel, sourceUrl };
   if (status === "allowed") {
     return { ...base, status: "allowed", label: "Allowed",
       limit: detail || "Edible items may be gathered for personal use at this forest without a permit; larger or commercial harvests require a forest-products permit.",
@@ -7712,7 +7717,7 @@ function getUsfsForestRule(text, species, area) {
   // but still cite THIS forest's own page so the user can confirm there.
   return { ...base, status: "allowed", label: "Allowed",
     limit: "Incidental personal-use gathering is generally allowed without a permit on national forests; larger or commercial harvests need a permit.",
-    note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm — this is the general national-forest policy; check ${area}'s forest-products page before collecting.` };
+    note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm — this is the general national-forest policy; ${entry.url ? ("check " + area + "'s forest-products page") : "contact the forest"} before collecting.` };
 }
 
 function getPublicLandAccessRule(properties, species, stateCode, record) {
