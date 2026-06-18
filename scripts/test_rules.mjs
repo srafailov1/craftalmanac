@@ -342,7 +342,29 @@ function testNewNpsParks(context) {
     // fall through to the USFS allowance, not the NPS "sequoia national park" entry.
     { label: "Sequoia National Forest (USFS, not NPS park)", stateCode: "CA", record: { lat: 36.0, lng: -118.6 },
       props: { unit: "Sequoia National Forest", mng: "Forest Service", desTp: "National Forest" },
-      species: MUSHROOM_SPECIES, expected: "allowed" }
+      species: MUSHROOM_SPECIES, expected: "allowed" },
+    // 2026-06-15 national-park completion pass (34 parks added).
+    { label: "Zion food", stateCode: "UT", record: { lat: 37.3, lng: -113.0 },
+      props: { unit: "Zion National Park", mng: "National Park Service", desTp: "National Park" },
+      species: FOOD_SPECIES, expected: "allowed" },
+    { label: "Zion mushrooms (not designated)", stateCode: "UT", record: { lat: 37.3, lng: -113.0 },
+      props: { unit: "Zion National Park", mng: "National Park Service", desTp: "National Park" },
+      species: MUSHROOM_SPECIES, expected: "prohibited" },
+    { label: "Mammoth Cave food", stateCode: "KY", record: { lat: 37.18, lng: -86.1 },
+      props: { unit: "Mammoth Cave National Park", mng: "National Park Service", desTp: "National Park" },
+      species: FOOD_SPECIES, expected: "allowed" },
+    { label: "Mammoth Cave mushrooms (designated)", stateCode: "KY", record: { lat: 37.18, lng: -86.1 },
+      props: { unit: "Mammoth Cave National Park", mng: "National Park Service", desTp: "National Park" },
+      species: MUSHROOM_SPECIES, expected: "allowed" },
+    { label: "Pinnacles mushrooms (designated)", stateCode: "CA", record: { lat: 36.49, lng: -121.18 },
+      props: { unit: "Pinnacles National Park", mng: "National Park Service", desTp: "National Park" },
+      species: MUSHROOM_SPECIES, expected: "allowed" },
+    { label: "Big Bend food", stateCode: "TX", record: { lat: 29.25, lng: -103.25 },
+      props: { unit: "Big Bend National Park", mng: "National Park Service", desTp: "National Park" },
+      species: FOOD_SPECIES, expected: "allowed" },
+    { label: "Arches food (no entry -> NPS default prohibited)", stateCode: "UT", record: { lat: 38.73, lng: -109.59 },
+      props: { unit: "Arches National Park", mng: "National Park Service", desTp: "National Park" },
+      species: FOOD_SPECIES, expected: "prohibited" }
   ];
 
   let passed = true;

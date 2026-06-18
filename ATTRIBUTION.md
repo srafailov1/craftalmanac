@@ -117,6 +117,40 @@ Primary rule sources currently encoded:
 - Death Valley superintendent's compendium via the park rules page (verified June 2026): https://www.nps.gov/deva/learn/management/rules-and-regulations.htm
 - Indiana Dunes National Park natural-items rules page (verified June 2026): https://www.nps.gov/indu/learn/management/naturalitems.htm
 - Sequoia & Kings Canyon National Parks edible-collection rules page (verified June 2026; per-species limits in the superintendent's compendium at https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm): https://www.nps.gov/seki/planyourvisit/wherecani.htm
+- Big Bend compendium (verified June 2026): https://www.nps.gov/bibe/learn/management/superintendents-compendium.htm
+- Biscayne compendium (verified June 2026): https://www.nps.gov/bisc/learn/management/superintendents-compendium.htm
+- Black Canyon of the Gunnison compendium (verified June 2026): https://www.nps.gov/blca/learn/management/superintendents-compendium.htm
+- Carlsbad Caverns compendium (verified June 2026): https://www.nps.gov/cave/learn/management/upload/2026-CAVE-Superintendent-s-Compendium-version-01-29-2026.pdf
+- Congaree compendium (verified June 2026): https://www.nps.gov/cong/learn/management/upload/CONG-Supt-Compendium_Updated-1-5-2026_Signed-1.pdf
+- Denali compendium (verified June 2026): https://www.nps.gov/dena/learn/management/superintendents-compendium.htm
+- Dry Tortugas compendium (verified June 2026): https://www.nps.gov/drto/learn/management/superintendent-s-compendium.htm
+- Gates of the Arctic compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/2026-GAAR-Superintendent-s-Compendium-508.pdf
+- Gateway Arch compendium (verified June 2026): https://www.nps.gov/jeff/learn/management/superintendent-s-compendium-for-2026.htm
+- Glacier Bay compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/GLBACompendium-2025_FINAL_11-25_SuptSigOnFile_508.pdf
+- Grand Canyon compendium (verified June 2026): https://www.nps.gov/grca/learn/management/upload/grca-supt-compendium.pdf
+- Great Basin compendium (verified June 2026): https://www.nps.gov/grba/learn/management/superintendent-s-compendium.htm
+- Great Sand Dunes compendium (verified June 2026): https://www.nps.gov/grsa/learn/management/superintendent-s-compendium-great-sand-dunes-national-park-2026.htm
+- Guadalupe Mountains compendium (verified June 2026): https://www.nps.gov/gumo/learn/management/upload/2026-NPS-GUMO_Superintendents_Compendium_.pdf
+- Haleakalā compendium (verified June 2026): https://www.nps.gov/hale/learn/management/compendium.htm
+- Hawaiʻi Volcanoes compendium (verified June 2026): https://www.nps.gov/havo/learn/management/superintendents-compendium.htm
+- Hot Springs compendium (verified June 2026): https://www.nps.gov/hosp/learn/management/superintendents-compendium.htm
+- Isle Royale compendium (verified June 2026): https://www.nps.gov/isro/learn/management/upload/ISRO_Web_Accessible_Superintendents_Compendium_2025_Updated.pdf
+- Katmai compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/KATM-Compendium-2026_final_508.pdf
+- Kenai Fjords collecting & harvesting page (verified June 2026): https://www.nps.gov/kefj/planyourvisit/collecting-and-harvesting.htm
+- Kobuk Valley (Western Arctic) compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/2026-WEAR-Superintendent-s-Compendium-508.pdf
+- Lake Clark compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/2026-LACL-Compendium-with-Maps-508.pdf
+- Lassen Volcanic compendium (verified June 2026): https://www.nps.gov/lavo/learn/management/compendium.htm
+- Mammoth Cave compendium (verified June 2026): https://www.nps.gov/maca/learn/management/superintendents-compendium.htm
+- Mesa Verde compendium (verified June 2026): https://www.nps.gov/meve/learn/management/upload/MEVE_Superintendents_Compendium_01-09-26_508.pdf
+- North Cascades compendium (verified June 2026): https://www.nps.gov/noca/learn/management/superintendent-compendium.htm
+- Pinnacles compendium (verified June 2026): https://www.nps.gov/pinn/learn/management/superintendent-s-compendium.htm
+- Saguaro compendium (verified June 2026): https://www.nps.gov/sagu/learn/management/compendium.htm
+- Theodore Roosevelt compendium (verified June 2026): https://www.nps.gov/thro/learn/management/superintendent-s-compendium.htm
+- Virgin Islands compendium (verified June 2026): https://www.nps.gov/viis/learn/management/upload/VIIS-Superintendent-Compendium-2022-07-20-508-compliant_signed.pdf
+- Voyageurs compendium (verified June 2026): https://www.nps.gov/voya/learn/management/superintendents-compendium.htm
+- Wind Cave compendium (verified June 2026): https://www.nps.gov/wica/learn/management/superintendent-s-compendium.htm
+- Wrangell–St. Elias compendium (verified June 2026): https://www.nps.gov/locations/alaska/upload/WRST-Compendium_with_maps_1-22-2026_508_signed.pdf
+- Zion compendium (verified June 2026): https://www.nps.gov/zion/learn/management/upload/2025-Superintendent-s-Compendium.pdf
 - BLM personal-use collection of renewable plant materials: https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits
 - National wildlife refuge default plant protection, 50 CFR Part 27: https://www.ecfr.gov/current/title-50/chapter-I/subchapter-C/part-27
 - Army Corps project-land vegetation protection, 36 CFR Part 327: https://www.ecfr.gov/current/title-36/chapter-III/part-327
