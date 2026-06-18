@@ -247,10 +247,10 @@
 {
 "match": "beaverhead national forest",
 "states": "Montana",
-"food": "unknown",
+"food": "permit-required",
 "mush": "permit-required",
-"foodLimit": "Recreational berry picking (e.g., huckleberries) is free personal use with no permit required up to a seasonal personal-use threshold (~10 gallons/season cited for recreational picking); commercial harvest requires a permit from the district office. The forest's own permits page lists no permit category for berries/fru",
-"mushNote": "Incidental use (up to one gallon in possession, limit five gallons per season) requires NO permit. A FREE permit is required to harvest more than five gallons (12.5 lbs.) per season, up to a maximum of 20 gallons (50 lbs.) for personal use per season. Permits obtained at district offices (Butte, Dillon, Ennis, Philipsb",
+"foodLimit": "Recreational huckleberry/berry picking: no permit required up to 10 gallons per season for personal use; commercial pickers must obtain a permit. (Sourced from the forest's legacy passes-permits content; the current /permits page does not itemize berries.)",
+"mushNote": "Incidental use is free (no permit) up to 1 gallon in possession / 5 gallons per season. Above that, a FREE personal-use permit is required, up to 20 gallons (50 lbs) per season with a 5-gallon possession limit. Mushrooms must be sliced in half lengthwise (stem to cap); resale prohibited. Post-fire morel seasons may req",
 "url": "https://www.fs.usda.gov/r01/beaverhead-deerlodge/permits"
 },
 {
@@ -808,7 +808,7 @@
 "food": "unknown",
 "mush": "allowed",
 "foodLimit": "No forest-specific rule for edible berries/fruits/nuts was quoted on the Bridger-Teton's own pages. The permits page lists fruit/berry collection only indirectly; only general (non-forest-specific) commentary about \"1 gallon incidental personal use\" surfaced, which is not substituted here.",
-"mushNote": "Forest's own safety/ethics page: up to one gallon of mushrooms per person per day for personal use, no permit mentioned for personal use; commercial harvesting not authorized; foraging mushrooms NOT permitted in wilderness areas (Bridger, Gros Ventre, Teton Wilderness). Forest's permits/forest-products page separately ",
+"mushNote": "Personal use: up to 1 gallon of mushrooms per person per day, no permit/free; commercial harvesting not authorized; foraging not permitted in wilderness areas. (Morel-specific permit/news guidance cites a 3-gallon/day personal-use threshold before a $300 commercial permit is required; the official forest safety-ethics ",
 "url": "https://www.fs.usda.gov/r04/bridger-teton/safety-ethics"
 },
 {
@@ -1033,7 +1033,7 @@
 "food": "unknown",
 "mush": "allowed",
 "foodLimit": "The forest's permit pages list \"Edible material (berries, plants and mushrooms)\" as a forest-products permit category but give NO explicit forest-specific personal-use rule for berries/fruits/nuts; the pages direct users to contact the district office. No free-incidental statement for berries was found, so classified u",
-"mushNote": "Personal-use mushroom picking is free with NO permit required under the legal limits: less than 1 gallon in Oregon, less than 5 gallons in Washington. Free mushrooms cannot be sold, bartered, or given away. A Commercial Mushroom Permit ($2/day, 10-day minimum = $20, or annual) is required to sell or to harvest/possess/",
+"mushNote": "Personal-use mushroom picking is free and requires no permit under personal-use limits: less than 1 gallon in Oregon (less than 5 gallons in Washington). Free mushrooms cannot be sold, bartered, or given away. Confirmed via the forest's official 2026 mushroom-season news release and the Forest Products Permits page.",
 "url": "https://www.fs.usda.gov/r06/wallowa-whitman/permits/forest-products-permits"
 },
 {
@@ -1104,7 +1104,7 @@
 "states": "Montana",
 "food": "unknown",
 "mush": "permit-required",
-"foodLimit": "No forest-specific guidance for edible fruits/berries/nuts found on the Helena-Lewis and Clark forest products or permits pages (verified June 2026: those pages list only mushroom, minerals, firewood, Christmas tree, and post-and-pole permits). A \"1 gallon/day, max 3 gallons/year\" huckleberry free-use figure appeared in web search, but that rule belongs to Gifford Pinchot NF (Region 6, Washington), not this forest — not substituted here.",
+"foodLimit": "No forest-specific guidance for edible fruits/berries/nuts found on the Helena-Lewis and Clark forest products or permits pages (verified June 2026: those pages list only mushroom, minerals, firewood, Christmas tree, and post-and-pole permits). A \"1 gallon/day, max 3 gallons/year\" huckleberry free-use figure appeared in web search, but that rule belongs to Gifford Pinchot NF (Region 6, Washington), not this forest \u2014 not substituted here.",
 "mushNote": "Region 1 rule governs: incidental use needs NO permit (up to 1 gallon in possession, max 5 gallons/season); above that a free Personal Use permit is required (up to 5 gal in possession, max 20 gal/season, valid through Sept 30). Forest page: \"A permit may be required to harvest mushrooms ... during the 2025 season.\" Mo",
 "url": "https://www.fs.usda.gov/r01/helena-lewisclark/forest-products/forest-products"
 },
