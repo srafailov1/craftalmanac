@@ -174,11 +174,19 @@ record with a respect note, like the NPS/state tribal carve-outs.
   designated community-orchard sites* (Adams Triangle, Bridal Veil Gardens, etc.).
   Encode Minneapolis city = prohibited, with the designated MPRB orchards as
   allowed site overrides.
-- **PAD-US matching caveat:** municipal overrides must key on the managing
-  agency/owner name as it appears in PAD-US (`MngNm_Desc`/`Unit_Nm`), e.g.
-  "city of los angeles", "chicago park district", "cook county forest preserve".
-  Where PAD-US doesn't carry the city/agency name, the record correctly falls
-  through to `"unknown"` — that's acceptable and intended.
+- **PAD-US matching — audited 2026-06-16, requires geography.** A live audit of
+  the PAD-US service confirmed the four fields the app reads
+  (`Unit_Nm/MngNm_Desc/MngTp_Desc/DesTp_Desc`) carry only **coarse categories**
+  for local land (`"City Land"`, `"Local Government"`, `"Local Park"`), **never
+  the city/agency name** (`"Chicago Park District"` → 0 records; Griffith Park
+  shows no "Los Angeles"). So per-jurisdiction municipal rules **cannot** be
+  text-matched on city/agency name — they must be applied **geographically**
+  (bounding box / boundary polygon + the `Local Government` category guard +
+  `stateCode`), exactly like the existing `isNycLocalPark`. Encode priority by
+  value: food-forest sites (small bboxes) → county systems (county polygons) →
+  city-wide rules (deferred; stay `unknown`). See
+  `TODO-local-parks-expansion.md` for the revised plan. (NPS/state passes are
+  unaffected — their unit/designation names are standardized in PAD-US.)
 - **The `"unknown"` fallback is unchanged.** No blanket "local park → prohibited"
   rule is added; the long tail of unresearched town parks stays honest-unknown.
 

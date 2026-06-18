@@ -20,7 +20,60 @@ food-forest sites found via sweep. Classification is strictly evidence-based (no
 conservative bias): the 6 "unknown" systems get **no entry** (they already render
 `"unknown"`).
 
-## Design: `LOCAL_PARK_RULES` table + `getLocalParkRule` matcher
+## ⚠ PAD-US AUDIT (2026-06-16) — matching approach REVISED
+
+A live audit of the PAD-US service the app uses ([app.js:32](../app.js)) found the
+text-match design below **does not work** and must not be shipped as written.
+The app reads only four fields — `Unit_Nm, MngNm_Desc, MngTp_Desc, DesTp_Desc` —
+and for local government land they contain only **coarse categories**, never the
+city/agency identity:
+
+- `MngTp_Desc` = `"Local Government"`; `MngNm_Desc` ∈ {`"City Land"`,
+  `"County Land"`, `"Other or Unknown Local Government"`}; `DesTp_Desc` ∈
+  {`"Local Park"`, `"Local Recreation Area"`, `"Local Conservation Area"`, …}.
+- City/agency names are essentially absent: `"Chicago Park District"` → **0
+  records**; `"New York City"` → 9; **Griffith Park** (LA's flagship) is stored as
+  `Unit_Nm="Griffith Park", MngNm_Desc="City Land", DesTp_Desc="Local Park"` —
+  "Los Angeles" appears nowhere. Park names also collide across cities ("Griffith
+  Park" also exists in Winston-Salem NC).
+
+**Consequence:** a `text.includes("los angeles")` / `"chicago park district"` rule
+matches (almost) nothing — a dead rule. The only way to apply a per-jurisdiction
+municipal rule is **geographically**: a bounding box / boundary polygon for the
+jurisdiction + the `Local Government` category guard + `stateCode` — exactly how
+the existing `isNycLocalPark` (NYC bbox + `city land` + `local government` +
+`local park`) already works. **The NPS and state passes are unaffected** (national
+park names are in `Unit_Nm`; `DesTp_Desc='State Park'` is standardized) — encode
+those as written.
+
+### Revised plan (by value, given the audit)
+
+- **Tier 1 — food-forest / edible-park sites → `SITE_ACCESS_RULES` (do first).**
+  These are point locations with small bounding boxes (the existing
+  Beacon/Browns Mill pattern), need no city-boundary data, and are the
+  *highest-value* change (they flip specific spots from `unknown` → `allowed`).
+  Next data step: geocode + bound each Phase-3 site and confirm current policy.
+- **Tier 2 — foraging-friendly county systems (fast-follow).** Encode Dane County
+  WI; Ramsey/Dakota/Washington County MN; Columbus & Franklin County Metro Parks
+  OH via **Census county boundary polygons** + the `Local Government` category
+  guard. Note: the three Twin Cities counties are adjacent with *different* rules
+  (Ramsey allowed; Dakota/Washington permit), so **county polygons (point-in-
+  polygon), not bounding boxes**, are required to tell them apart. This adds a
+  county-geometry data dependency (Census TIGER), analogous to the existing state
+  boundaries.
+- **Tier 3 — the ~59 city prohibitions/permits (defer / optional).** Each needs a
+  per-city boundary polygon to apply, and the payoff is only turning big-city
+  parks from `unknown` → `prohibited`/`permit`. Since the owner chose to **keep
+  the `unknown` fallback**, leaving these as `unknown` is consistent and honest.
+  The researched rules below remain the source of truth if/when city-boundary
+  geometry is added; do **not** encode them via text matching.
+
+The text-match design in the next section is **retained only for reference** and
+is **superseded** by the geographic approach above. Use the reference tables as
+the researched rule source-of-truth; do not implement the `LOCAL_PARK_RULES`
+text matcher.
+
+## Design (SUPERSEDED — see audit above): `LOCAL_PARK_RULES` table + `getLocalParkRule` matcher
 
 60 named overrides is too many for inline `if` branches. Mirror the
 `NPS_GATHERING_RULES` pattern: a data table + a matcher, keyed on the **managing
