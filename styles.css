@@ -1653,7 +1653,7 @@ body[data-register="night"] {
   background: none;
   border: none;
   padding: 0;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -1661,20 +1661,24 @@ body[data-register="night"] {
   cursor: pointer;
 }
 
-.recipe-detail .recipe-hook {
-  font-family: var(--font-display);
-  font-size: 15px;
-  line-height: 1.5;
-  font-style: italic;
+/* Recipe title + a short lead-in "hook". Colour is conveyed by the colour
+   tag below; the hook is a plain readable lead paragraph. */
+#sheet .recipe-detail > h2 {
+  margin: 4px 0 6px;
+}
+
+#sheet .recipe-detail .recipe-hook {
+  margin: 0 0 16px;
+  font-size: 14.5px;
+  line-height: 1.55;
   color: var(--reg-ink);
-  margin: 2px 0 14px;
 }
 
 .recipe-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 0 0 16px;
+  gap: 7px;
+  margin: 0 0 18px;
 }
 
 .recipe-meta .chip {
@@ -1682,38 +1686,40 @@ body[data-register="night"] {
   font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 999px;
   border: 1px solid var(--reg-hair);
   color: var(--reg-sub);
   white-space: nowrap;
 }
 
+/* color chip carries the ink color as its background (set inline) */
+.recipe-meta .chip.chip-color { border: none; }
 .recipe-meta .chip.lf-fugitive { color: var(--reg-st-prohibited); border-color: var(--reg-st-prohibited); }
 .recipe-meta .chip.lf-moderate { color: var(--reg-warn); border-color: var(--reg-warn); }
 .recipe-meta .chip.lf-good { color: var(--reg-st-allowed); border-color: var(--reg-st-allowed); }
 
 .recipe-sec {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 }
 
+/* Larger, bolder section headings (Ingredients / Tools / Steps …) reuse the
+   body sans for hierarchy without adding another typeface. */
 .recipe-sec > h3 {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  color: var(--reg-accent);
-  margin: 0 0 7px;
-  font-weight: 500;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--reg-ink);
+  margin: 0 0 8px;
 }
 
-.recipe-sec p,
-.recipe-sec li {
+#sheet .recipe-sec p,
+#sheet .recipe-sec li {
   font-size: 13px;
   line-height: 1.6;
   color: var(--reg-ink);
 }
-
-.recipe-sec .sub { color: var(--reg-sub); }
 
 .ing-list,
 .steps-list {
@@ -1722,35 +1728,40 @@ body[data-register="night"] {
 }
 
 .ing-list { list-style: none; padding-left: 0; }
-.ing-list li { margin: 0 0 5px; }
-.ing-list .amt { color: var(--reg-sub); }
-.ing-list .ing-note { color: var(--reg-sub); font-size: 12px; }
+.ing-list li { margin: 0 0 7px; }
+.ing-item { font-weight: 600; }
+.opt-tag { color: var(--reg-accent); }
 
-.steps-list li { margin: 0 0 8px; }
+.steps-list li { margin: 0 0 8px; padding-left: 2px; }
 
-.tool-row { margin: 0 0 5px; font-size: 13px; }
-.tool-row .lab {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: var(--reg-sub);
-  margin-right: 6px;
+.tool-row { margin: 0 0 5px; }
+.tool-row .tool-lab { font-weight: 600; margin-right: 4px; }
+
+.recipe-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--reg-accent);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .safety-box {
   border: 1px solid var(--reg-st-prohibited);
   border-radius: 8px;
-  padding: 10px 12px;
-  margin: 0 0 16px;
+  padding: 12px;
+  margin: 0 0 18px;
 }
-.safety-box h3 { color: var(--reg-st-prohibited); }
+.safety-box h3 { color: var(--reg-st-prohibited); margin: 0 0 6px; font-size: 14.5px; font-weight: 700; }
 .safety-box ul { margin: 0; padding-left: 18px; }
-.safety-box li { color: var(--reg-ink); margin: 0 0 4px; }
+.safety-box li { color: var(--reg-ink); margin: 0 0 4px; font-size: 13px; line-height: 1.6; }
+.safety-box li:last-child { margin-bottom: 0; }
 
 .beyond-box {
   border-left: 3px solid var(--reg-accent);
   padding: 2px 0 2px 12px;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 }
 
 .recipe-sources a {
