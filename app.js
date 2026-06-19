@@ -2261,6 +2261,7 @@ const HARVEST_ETHIC_BY_SPECIES = {
   "ink-elderberry": "light harvest",
   "ink-privet": "invasive removal",
   "ink-wild-grape": "light harvest",
+  "ink-tupelo": "light harvest",
   "medicine-jewelweed": "light harvest",
   "medicine-broadleaf-plantain": "light harvest",
   "medicine-yarrow": "light harvest",
@@ -2682,6 +2683,16 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [60773, 166162],
     shenandoahAllowed: false,
     notes: "Dark fruits can make blue-purple inks; this group includes inedible Boston ivy for pigment mapping."
+  },
+  {
+    id: "ink-tupelo",
+    commonName: "Black tupelo (black gum)",
+    scientificName: "Nyssa sylvatica",
+    category: "purple",
+    months: [9, 10, 11],
+    inatTaxonIds: [54802],
+    shenandoahAllowed: false,
+    notes: "Ripe blue-black drupes make a dusky grape-purple ink; the fruit is edible but very sour. Leave plenty — important fall food for birds."
   }
 ];
 
