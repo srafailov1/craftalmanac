@@ -4545,10 +4545,418 @@ const MODE_SHEET_INFO = {
   ink: { label: "Ink", color: "#3a3f3d", blurb: "Pigments by color, oak gall to goldenrod" },
   medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" }
 };
-const RECIPE_PLACEHOLDERS = [
-  { name: "Oak gall ink", meta: "6 steps · 2 days", color: "#3a3f3d" },
-  { name: "Pokeberry ink", meta: "5 steps · evening", color: "#c03b5a" },
-  { name: "Walnut dye bath", meta: "4 steps · weekend", color: "#5c4632" }
+// Project recipes: foraged-ink "Projects" replacing the launch placeholders.
+// Each opens a drilled-in recipe card (ingredient list with required vs
+// optional additives, required/optional tools, timeline, steps, color
+// modifiers, lightfastness, preservation, other uses, safety, sources).
+// Ink cards carry a `category` matching INK_CATEGORY_COLORS for the spine;
+// technique cards (modifier/binder/preservative) use a neutral spine.
+// Content is researched + safety/chemistry-verified; "craft, not food" and
+// "occurrence is not permission" travel with every card (CLAUDE.md values).
+const PROJECT_RECIPES = [
+  {
+    id: "ink-black-walnut",
+    plantId: "ink-black-walnut",
+    kind: "ink",
+    name: "Black walnut hull ink",
+    category: "black",
+    color: "Warm brown → near-black",
+    difficulty: "Beginner",
+    teaser: "Rich brown from fallen hulls",
+    toxic: true,
+    hook: "The green hulls rotting under any black walnut tree are so loaded with juglone and tannin that a few simmered handfuls make a rich brown ink with no mordant or chemistry kit at all. It is the gentlest way into ink-making — a true waste-stream pigment gathered off the ground.",
+    lightfastness: { rating: "moderate", note: "Moderately permanent on paper: genuine walnut ink shifts and fades under UV and is slightly acidic, so keep finished work out of direct sun. As a wool dye it behaves far better — among the more colorfast natural browns." },
+    timeline: { active: "45–60 min hands-on", total: "5–9 hrs (mostly unattended simmering); +1–2 days ahead if brewing iron water", steps: 8 },
+    ingredients: [
+      { item: "Fallen black walnut hulls (Juglans nigra), green-brown to blackened", amount: "16–24 nuts' worth, or ~6–8 cups broken hulls", required: true, note: "gather fallen nuts; blackened hulls often give the darkest ink" },
+      { item: "Water", amount: "6–8 cups, enough to just cover the hulls", required: true, note: "" },
+      { item: "Iron water (rusty nails or steel wool steeped in vinegar)", amount: "~1 Tbsp per cup of ink, to taste", required: false, note: "deepens the brown toward grey-black; see the Iron acetate card" },
+      { item: "Gum arabic", amount: "¼–½ tsp per cup of ink", required: false, note: "better flow and adhesion for pens/brushes; skip for a plain wash" },
+      { item: "Whole cloves, or a splash of isopropyl alcohol", amount: "3–5 cloves, or ~1 Tbsp 99% alcohol per cup", required: false, note: "preservative against mold; refrigeration also helps" }
+    ],
+    toolsRequired: ["Dedicated (non-food) pot — black walnut stains permanently", "Gloves (juglone dyes skin for weeks)", "Craft-only spoon or tongs", "Strainer/colander + coffee filters or cloth", "Glass jars or dark bottles"],
+    toolsOptional: ["Outdoor burner (keeps fumes and stains out of the kitchen)", "Hammer or nutcracker to break hulls", "Small jar for brewing iron water", "Eye protection and an apron", "Funnel"],
+    steps: [
+      "Gather fallen black walnuts where harvesting is permitted (occurrence is not permission — walnut is valued wildlife food). Prefer nuts already on the ground; don't strip green nuts from living trees.",
+      "Gloves on, working outdoors or over a protected surface, pull off the hulls and break them up. Keep any nutmeats separate to eat — but this ink is NOT food. Put the hulls in your craft pot and just cover with water (~6–8 cups).",
+      "Bring to a gentle simmer (not a hard boil) and hold it 4–6 hours; longer and lower makes a richer ink. Ventilate well — simmer outdoors or with a window open and a fan, since nut proteins go airborne (a real hazard for tree-nut allergies).",
+      "Let it reduce to about half (a third for a thick, dark ink) — it should look like strong, opaque coffee. Cool until safe to handle.",
+      "Strain out the hulls, then strain again through a coffee filter or cloth into a jar to remove grit.",
+      "Optional — deepen toward black: stir in iron water a little at a time (~1 Tbsp per cup) until you like the shade. It shifts cooler and greyer — the same iron-tannate chemistry as iron gall ink. Go sparingly; too much dulls it and, over decades, harms paper. (Brew iron water 1–2 days ahead — see the Iron acetate card.)",
+      "Optional — adjust body: stir in gum arabic a pinch at a time for better pen/brush flow, then strain once more. Skip it for plain writing or washes.",
+      "Add a preservative (cloves or a splash of isopropyl alcohol), cap, and label clearly as toxic, non-food craft ink. Store cool and dark. It looks lighter wet and darkens as it dries — test on scrap."
+    ],
+    modifiers: "No mordant needed — the hulls are loaded with tannin and juglone, so walnut bonds on its own. Iron is the main modifier: it reacts with the tannins to 'sadden' and darken the brown toward grey-black (iron-tannate, the iron-gall reaction). A splash of vinegar warms it slightly; heavy alkali can muddy it. Longer, lower simmering and more reduction just concentrate the color.",
+    preservation: "Mold is the main spoiler. Add 3–5 whole cloves or ~1 Tbsp of 99% isopropyl alcohol per cup, store capped in a cool dark place, and refrigerate to extend further. Re-strain if a film forms; re-bottle annually. The iron and alcohol additions both help suppress mold.",
+    yield: "Roughly 2–4 cups of ink from 16–24 nuts, depending on reduction. Properly stored, it keeps many months to a year-plus; discard if it grows fuzzy mold or smells off. The brown can keep deepening on the shelf as it oxidizes.",
+    beyondInk: "More than ink: a classic brown textile dye, a wood stain, and a traditional hair darkener. On wool and silk it is substantive — a long, hot hull bath gives rich brown with no mordant (alum deepens it and improves lightfastness). Cotton and linen need scouring, a tannin pre-treat, and alum, and still read paler. The ink is essentially a concentrated reduction of the same dye liquor.",
+    safety: [
+      "Craft ink, NOT food — juglone and high tannins. Never taste it; keep it from children and pets and label the jar toxic.",
+      "Heavy, lasting stainer: juglone dyes skin near-black (irritant dermatitis that can take weeks to fade) — wear gloves throughout and protect clothing and surfaces.",
+      "Use a dedicated pot, spoon, and jars; do not return them to food use. Walnut stains cookware permanently.",
+      "Airborne nut proteins during the long simmer are a genuine tree-nut-allergy hazard — simmer outdoors or with strong ventilation and keep allergic people away.",
+      "If you add iron, wear eye protection (the iron-vinegar solution is acidic) and use it sparingly — iron-tannate ink is acidic and slowly degrades paper over decades.",
+      "Juglone is toxic to many plants and to horses — don't pour leftover ink or hull water onto garden soil or where livestock could reach it."
+    ],
+    sources: [
+      { title: "Dyeing With Black Walnut Hull (Juglans nigra) — Shepherd Textiles", url: "https://shepherdtextiles.com/dyeing-with-walnut-hull" },
+      { title: "Walnut Powder Instructions — Botanical Colors", url: "https://botanicalcolors.com/walnut-powder-instructions/" },
+      { title: "Walnut ink — Wikipedia", url: "https://en.wikipedia.org/wiki/Walnut_ink" }
+    ]
+  },
+  {
+    id: "ink-oak",
+    plantId: "ink-oak",
+    kind: "ink",
+    name: "Oak gall & acorn cap iron-gall ink",
+    category: "black",
+    color: "Grey → blue-black → iron-black",
+    difficulty: "Intermediate",
+    teaser: "The permanent manuscript black",
+    toxic: true,
+    hook: "The blue-black ink of the Magna Carta, Bach's manuscripts, and Jefferson's draft Declaration was brewed from oak galls and iron — a recipe that ruled Western writing for over a thousand years. It is the rare natural ink that doesn't just stain paper but bonds chemically to it, which is exactly why it outlasted everything else.",
+    lightfastness: { rating: "good", note: "Genuinely permanent as inks go: it bonds to the fiber, which is why 800-year-old documents survive. It deepens as it dries, then slowly shifts blue-black toward warm brown over decades; a gall-heavy, low-iron recipe with gum arabic ages best, since excess iron's acidity can corrode paper." },
+    timeline: { active: "45–60 min", total: "1–2 days (iron water matures); the extract itself is ready in a day", steps: 9 },
+    ingredients: [
+      { item: "Oak galls, dried and crushed", amount: "~30 g (≈1 oz) for the strongest black", required: true, note: "highest tannin; or lean on acorn caps for a browner ink" },
+      { item: "Acorn caps (fallen), rinsed and crushed", amount: "1–2 cups", required: true, note: "add to or replace galls; more caps = deeper tannin" },
+      { item: "Water (distilled best; tap is fine)", amount: "~2 cups", required: true, note: "" },
+      { item: "Iron — homemade iron water (steel wool/rusty nails + vinegar) or ferrous sulfate", amount: "¼–½ cup iron water, or ~½ tsp ferrous sulfate per cup, added gradually", required: true, note: "this 'strikes' the black; omit it for a brown tannin ink" },
+      { item: "Gum arabic", amount: "~½ tsp", required: false, note: "improves flow, gloss, and adhesion" },
+      { item: "Whole cloves", amount: "1–2 per oz", required: false, note: "preservative against mold" }
+    ],
+    toolsRequired: ["Dedicated (non-food) pot", "Heat source", "Jars (one for iron water, one for ink)", "Coffee filters or cloth", "Craft-only stir stick", "Gloves"],
+    toolsOptional: ["Mortar or hammer to crush galls and caps", "Kitchen scale (repeatable iron dosing)", "pH strips", "Dropper bottle", "Dust mask (if using ferrous sulfate powder)"],
+    steps: [
+      "Make iron water first, 1–2 days ahead: cover steel wool or rusty iron with vinegar in a jar, lid resting loose (it releases hydrogen gas). It's ready when rusty-amber; strain off the clear liquid and label it non-food. (Or skip and use ferrous sulfate at step 5.)",
+      "Gather fallen oak galls — choose dry, firm ones with a tiny exit hole, meaning the wasp has emerged — and fallen acorn caps, where harvesting is permitted. Take only fallen material; don't strip living twigs.",
+      "Crush the galls and caps (gloves — tannin stains).",
+      "Simmer the crushed material in ~2 cups water 1–2 hours (or simmer briefly, then steep 12–24 hours) into a strong, very dark 'tea.' Top up water if it cooks down.",
+      "Strain to a clear tannin liquid. If using ferrous sulfate, dissolve ~½ tsp in a little warm water now.",
+      "Strike the black: add the iron a little at a time, stirring — it darkens almost instantly. Stop at deep blue-black; overdosing iron doesn't make it blacker, just more acidic and harder on paper.",
+      "Test on scrap: the line goes on pale grey-purple and darkens over minutes to hours as it oxidizes — that's a real iron-gall ink. Add a touch more iron if it stays weak.",
+      "Stir in gum arabic (dissolved in a little warm water if powdered) for flow, plus cloves to discourage mold.",
+      "Bottle and label: NON-FOOD · ACIDIC · keep from children and pets. Store cool and dark; shake before use. The color keeps deepening on the page for the first day."
+    ],
+    modifiers: "Iron is the active modifier (see the Iron acetate card): with little or no iron the tannin extract is a warm tan-brown; iron 'saddens' it toward grey, then blue-black as more complexes with the tannin. Galls push toward true black, acorn caps toward brown-grey. Heat during extraction pulls more tannin (deeper color), not a hue change.",
+    preservation: "Add 1–2 whole cloves per ounce and store in a sterilized, sealed bottle, cool and dark; refrigeration extends it. The ink is acidic, which slows microbes, but a tannin/water extract can still grow a film over weeks — strain before use. Make small batches; the dried writing is far more durable than the bottled liquid.",
+    yield: "Roughly 1–1.5 cups of ink. Bottled liquid keeps weeks to a few months (longer refrigerated). The key point: unlike fugitive berry inks, iron-gall writing is famously lightfast and effectively permanent — though it's acidic and slowly corrodes paper over decades, so it's not for irreplaceable substrates without buffering.",
+    beyondInk: "Beyond writing, oak-gall tannin is a classic vegetable tannin for leather and a cellulose mordant — a tannin pre-treatment that helps cotton and linen take other dyes. For black cloth, extract the galls, soak the fiber, then dip in dilute iron; the tannin itself mordants, so go light on iron to avoid weakening the fabric.",
+    safety: [
+      "NOT FOOD — toxic if swallowed. Keep ingredients and ink from children and pets; label every container non-food.",
+      "Ferrous sulfate is harmful if swallowed, irritates eyes, and shouldn't be inhaled as a powder — wear a dust mask. Iron is a real poisoning hazard for children even in small amounts.",
+      "The ink and the iron-vinegar solution are acidic — wear gloves and eye protection when mixing iron, and rinse splashes immediately.",
+      "Iron and tannin stain skin, nails, clothing, and surfaces deeply — protect everything and use a dedicated pot, spoon, and jars.",
+      "The homemade steel-wool/vinegar jar releases flammable hydrogen — keep the lid loose, work ventilated, and away from flame.",
+      "The finished writing is acidic and can corrode paper over decades — don't use it on documents you need to preserve unaltered without buffering."
+    ],
+    sources: [
+      { title: "Iron Gall Ink — Recipes and Instructions (irongallink.org)", url: "https://irongallink.org/how-to-make-ink-recipes-and-instructions.html" },
+      { title: "Making Ink from Oak Galls — The Huntington", url: "https://www.huntington.org/verso/making-ink-oak-galls" },
+      { title: "Iron Gall Ink Corrosion research — Library of Congress", url: "https://www.loc.gov/preservation/scientists/projects/iron_gall_ink.html" }
+    ]
+  },
+  {
+    id: "ink-sumac",
+    plantId: "ink-sumac",
+    kind: "ink",
+    name: "Sumac berry ink",
+    category: "red",
+    color: "Pink-purple → green (base) → near-black (iron)",
+    difficulty: "Beginner",
+    teaser: "A color-shifting chemistry set",
+    toxic: true,
+    hook: "Steep the fuzzy red berry cones of staghorn or smooth sumac and you get a tart pink-purple ink that behaves like a chemistry set: nudge it alkaline and it slides toward green; drop in iron and the tannins crash to a deep grey-black. Its cousin, Sicilian 'Tanner's sumac,' was one of Europe's most prized leather tannins.",
+    lightfastness: { rating: "fugitive", note: "Split personality: the pink-purple berry color is anthocyanin and fugitive (dulls and browns within months in light), while the iron-modified grey/black leans on tannin and is far more stable. For work that needs to last, go iron." },
+    timeline: { active: "~45 min", total: "1.5–3 hrs (+1–2 days if brewing iron water)", steps: 9 },
+    ingredients: [
+      { item: "True Rhus sumac berries — red, upright, fuzzy clusters (staghorn or smooth)", amount: "½–1 cup material per cup water", required: true, note: "berries give the pink-purple; leaves and spent 'bobs' give more tannin for grey/black" },
+      { item: "Water", amount: "1 cup per batch", required: true, note: "" },
+      { item: "Iron water (steel wool in vinegar) or ferrous sulfate", amount: "a few drops to ½ tsp per ¼ cup ink", required: false, note: "the dramatic modifier — shifts toward grey, then near-black" },
+      { item: "Baking soda", amount: "a small pinch", required: false, note: "alkaline shift — slides the berry color toward green" },
+      { item: "White vinegar", amount: "a splash", required: false, note: "keeps berry tones pink and bright" },
+      { item: "Gum arabic", amount: "~¼ tsp per ¼ cup ink", required: false, note: "flow and body for pen ink; a drop of honey works too" },
+      { item: "Whole cloves", amount: "1 per jar", required: false, note: "preservative against mold" }
+    ],
+    toolsRequired: ["Stainless or enamel pot reserved for craft use", "Heat source", "Coffee filter, fine sieve, or muslin", "Craft-only spoon", "Heatproof jar or bottle", "Gloves"],
+    toolsOptional: ["Second jar for the iron modifier", "Dropper for adding iron drop by drop", "pH strips", "Test paper and a pen/brush", "Scale for repeatable batches"],
+    steps: [
+      "IDENTIFY FIRST (non-negotiable): use only true Rhus sumac — UPRIGHT, fuzzy RED berry cones and TOOTHED leaflets, in dry sunny ground. NEVER poison sumac (Toxicodendron vernix): DROOPING WHITE/GREY berries, smooth leaflets, swampy habitat. If the berries aren't red and upright, walk away.",
+      "Harvest where permitted; snip a modest share of ripe red clusters from abundant stands, leaving the shrub intact. Gloves on — even true sumac's sap can irritate. Rinse the berries.",
+      "Optional, 1–2 days ahead: make iron water — cover steel wool with white vinegar in a jar, lid loose, until rusty-orange; strain. Label it and keep it out of food areas. (See the Iron acetate card.)",
+      "Combine sumac with water in the craft pot (~½–1 cup material per cup water). Bring just to a boil, then lower to a gentle simmer.",
+      "Simmer, stirring, until reduced by at least half and the color deepens — ~45–90 min. For leaves/bobs you can simmer longer or steep overnight for more tannin; for berries, avoid hard boiling, which dulls the pink.",
+      "Cool, then strain thoroughly through a coffee filter or muslin into a clean jar. You now have a pink-purple base ink.",
+      "Tune the color on a TEST swatch: a pinch of baking soda slides it toward green; a splash of vinegar keeps it pink; iron water, a few drops at a time, takes it to grey then near-black (and darkens further as it dries). Add iron sparingly — too much makes a dull, over-acidic, paper-damaging ink.",
+      "For pen/brush work, stir in a little gum arabic (or a drop of honey) for flow. Keep it thin for washes.",
+      "Bottle, drop in a clove, and label 'INK — NOT FOOD, contains iron/tannin.' Store cool and dark; test on your actual paper and let it dry, since iron inks darken as they oxidize."
+    ],
+    modifiers: "Sumac is tannin-and-anthocyanin chemistry. Acid (vinegar) keeps the berry color pink and bright. Alkali (a pinch of baking soda) slides it toward green. Iron is the dramatic modifier: tannin + iron forms iron tannate (the iron-gall reaction), turning pink to cool grey, grey-brown, or near-black, deepening as it oxidizes. Add iron gradually — too much yields a flat, strongly acidic black that corrodes paper and nibs.",
+    preservation: "Add one whole clove per jar and bottle in a sterilized jar. Berry ink is the most perishable — refrigerate and expect a few weeks to a couple of months. Iron-modified grey/black is more stable and keeps longer, since the iron and acidity discourage microbes.",
+    yield: "About ⅓–½ cup per batch. The pink/purple berry color is FUGITIVE (fades within weeks to months in light) — use it for sketchbooks and protected work. The iron grey/black is far more lightfast. Shelf life: berry ink a few weeks to ~2 months refrigerated; iron-tannate ink several months cool and dark.",
+    beyondInk: "Sumac's tannin makes it a quiet workhorse: 'Tanner's sumac' was a prized leather tannin, and it doubles as a cotton/linen pre-mordant for dyeing. On fiber the bright berry pink mutes to earthy tan/brown (alum mordant; iron afterbath for grey), so plan for the tannin browns as the lasting result. (The dried berries of true edible sumac are also the Middle-Eastern spice — never poison sumac.)",
+    safety: [
+      "IDENTIFICATION IS SAFETY: never use poison sumac (drooping white/grey berries, smooth leaflets, swampy habitat) — its urushiol causes severe rashes and is dangerous if burned. Use only true Rhus with upright red fuzzy fruit and toothed leaflets.",
+      "This is INK, NOT food. (Edible sumac makes sumac-ade in food contexts, but this concentrated craft prep may contain iron salts — don't consume it.)",
+      "Even true sumac's sap can irritate sensitive skin — wear gloves to harvest and handle.",
+      "The iron modifier is corrosive and an eye/skin irritant — label it, keep it from kids and pets, wear eye protection, and rinse splashes at once. The steel-wool/vinegar jar off-gasses hydrogen — keep its lid loose.",
+      "Iron-tannate ink is acidic (pH ~1–3) and corrodes paper and nibs over time — wipe nibs and don't use it on archival originals untreated.",
+      "Reserve the pot, spoon, and jars for craft only; never burn sumac brush you haven't positively identified."
+    ],
+    sources: [
+      { title: "Mordant Monday: Spotlight on Sumac — Botanical Colors", url: "https://botanicalcolors.com/mordant-monday-spotlight-on-sumac/" },
+      { title: "Natural Dyeing with Sumac Berries — Via Verde Farm", url: "http://viaverdefarm.blogspot.com/2020/11/natural-dyeing-with-sumac-berries.html" },
+      { title: "Poison Sumac identification — NC State Extension", url: "https://plants.ces.ncsu.edu/plants/toxicodendron-vernix/" }
+    ]
+  },
+  {
+    id: "ink-pokeweed",
+    plantId: "ink-pokeweed",
+    kind: "ink",
+    name: "Pokeberry ink",
+    category: "red",
+    color: "Vivid magenta / red-purple",
+    difficulty: "Beginner",
+    teaser: "The simplest ink — just crush & strain",
+    toxic: true,
+    hook: "Cut off from store-bought ink by the wartime blockade, Confederate soldiers wrote letters home in pokeberry juice — archivists still spot those letters by their telltale magenta cast. The same fuchsia that made it the wartime ink is exactly why it won't last.",
+    lightfastness: { rating: "fugitive", note: "Strongly fugitive — the magenta drifts to mauve, then tan-brown within months of light. Keep finished work in the dark or under UV glass and expect it to age, not endure." },
+    timeline: { active: "20–30 min", total: "~1 hr (mostly straining)", steps: 7 },
+    ingredients: [
+      { item: "Ripe pokeberries (dark purple-black, on fuchsia stems)", amount: "~2 cups", required: true, note: "use only fully ripe berries; green ones are more toxic and give poor color" },
+      { item: "White vinegar (or lemon juice)", amount: "1 tsp per ½ cup juice", required: false, note: "not needed, but keeps the color brighter and more magenta, and mildly preserves" },
+      { item: "Salt", amount: "a small pinch", required: false, note: "slight preservation help — but too much crystallizes and makes the ink drag on paper" },
+      { item: "Whole cloves or a crushed vitamin-C tablet", amount: "2–3 cloves, or a pinch of ascorbic acid", required: false, note: "vitamin C is a documented stabilizer; or just refrigerate" }
+    ],
+    toolsRequired: ["Waterproof gloves (nitrile/latex/dish)", "A bowl or wide-mouth jar", "A fork, masher, or spoon to crush", "A strainer lined with coffee filter, cheesecloth, or cloth", "A lidded jar for storage", "Newspaper or a tray to protect surfaces"],
+    toolsOptional: ["Funnel", "Dropper for testing color", "Craft-only mortar and pestle", "Apron or old clothes"],
+    steps: [
+      "Gloves on, surfaces covered, kids and pets out of the room. Pokeweed juice is toxic and can absorb through broken skin, and it stains permanently.",
+      "Collect ~2 cups of fully ripe (dark) berries, pulling them from the bright stems. Use only ripe berries. Harvest only where permitted. Rinse and drain.",
+      "Crush the berries with a fork, masher, or spoon until they release all their juice. Do NOT heat — heat turns the magenta brown. Keep it a cold process throughout.",
+      "Strain through a coffee filter or cloth into a clean jar; press gently. Strain twice for a smoother ink. Discard the spent pulp and seeds in the trash, not compost (seeds stay toxic), and never burn pokeweed.",
+      "Optional: stir in ~1 tsp vinegar per ½ cup juice to keep it bright, and/or a pinch of salt, a couple of cloves, or a little vitamin C to help it keep.",
+      "Test on the paper you'll actually use — expect vivid magenta. If too thin, let it sit uncovered in a cool spot to concentrate, or crush more berries.",
+      "Bottle, label TOXIC — NOT FOOD, NOT FOR SKIN, and refrigerate away from food, kids, and pets. Use within days for the best color, and keep finished art out of direct light."
+    ],
+    modifiers: "Pokeberry color is a betalain (betacyanin), not an anthocyanin, so it does NOT do the dramatic acid/base rainbow other berries do — it stays magenta. Vinegar or lemon keeps it brighter and a touch redder; strong alkali (baking soda) dulls and browns it, so avoid it. The real enemies are light, heat, oxygen, and time; keep it cold, dark, and slightly acidic to slow the fade.",
+    preservation: "Perishable and fugitive — there is no way to make it truly permanent at home. To stretch its life: vinegar or lemon plus a pinch of vitamin C (a documented betalain stabilizer), optionally a clove or two and a pinch of salt, and refrigeration in a sealed, light-blocking jar. Even so, expect noticeable color loss within days to a couple of weeks.",
+    yield: "About ½–1 cup of ink from 2 cups of berries. Best color in the first few days; usable ~1–2 weeks refrigerated before it dulls. Finished writing will visibly fade over weeks to months — treat it as a temporary, expressive ink, not an archival one.",
+    beyondInk: "Mostly an ink. As a dye it is poor and short-lived — an acid stain that only grabs wool/silk after an acidic mordant, and even then needs periodic re-dyeing. Treat any color from pokeweed as temporary.",
+    safety: [
+      "TOXIC PLANT — all parts are poisonous (berries, juice, leaves, stems, especially roots). This ink is NOT food and must never be tasted or swallowed.",
+      "The juice can absorb through broken skin and the sap can cause a rash — always wear waterproof gloves and avoid skin and eye contact; wash splashes off immediately.",
+      "If anyone swallows the berries or ink, contact Poison Control (US: 1-800-222-1222) or emergency services.",
+      "Keep berries, juice, and finished ink away from children and pets, who may mistake the bright magenta for food or drink. Label the bottle clearly.",
+      "Never burn pokeweed — the toxin carries in the smoke. Dispose of pulp, seeds, and skins in the regular trash, not compost.",
+      "The juice stains skin, clothing, counters, and grout permanently — protect surfaces. Reserve any pot or mortar as craft-only."
+    ],
+    sources: [
+      { title: "DIY Pokeberry Ink — Insteading", url: "https://insteading.com/blog/diy-pokeberry-ink/" },
+      { title: "Poke plant, an unsung Civil War hero (pokeberry ink history) — AJC", url: "https://www.ajc.com/lifestyles/home--garden/poke-plant-unsung-war-hero/ozy2UMz21YoTQ5dH9PWfKL/" },
+      { title: "UC ANR — pokeweed: all parts toxic, sap causes rash, do not burn", url: "https://ucanr.edu/node/115176/printable/print" }
+    ]
+  },
+  {
+    id: "ink-elderberry",
+    plantId: "ink-elderberry",
+    kind: "ink",
+    name: "Elderberry ink",
+    category: "purple",
+    color: "Purple → blue (base) / red (acid)",
+    difficulty: "Beginner",
+    teaser: "A living pH-shifting purple",
+    toxic: true,
+    hook: "Ripe elder berries crush into a wine-dark juice that Romans simmered to darken graying hair and that later hands used for ink, dye, and manuscript color — from a tree so wreathed in lore that folk would ask the 'Elder Mother' before cutting it. Because the color is anthocyanin, the juice doubles as a living pH paint: acid pulls it red, a pinch of alkali tips it toward grey-green.",
+    lightfastness: { rating: "fugitive", note: "Classically fugitive: expect noticeable shift and fading within weeks to months of light. Store finished work in a book or dark drawer; drift toward dull brown-grey is normal aging, not failure." },
+    timeline: { active: "30–40 min", total: "1.5–2 hrs (mostly cooling and straining)", steps: 9 },
+    ingredients: [
+      { item: "Ripe elderberries (fully dark purple-black), de-stemmed", amount: "2 cups (~250–300 g)", required: true, note: "ripe berries only — leaves, stems, and unripe fruit are toxic" },
+      { item: "Water", amount: "a splash (2–4 Tbsp), only if berries scorch", required: false, note: "" },
+      { item: "White vinegar", amount: "1–2 Tbsp", required: false, note: "mild acid + preservative; also shifts the color redder" },
+      { item: "Gum arabic", amount: "½–1 tsp per ½ cup ink", required: false, note: "a little body and gloss; or skip for a wash" },
+      { item: "Whole cloves", amount: "2–3 per small jar", required: false, note: "preservative against mold" }
+    ],
+    toolsRequired: ["Stainless saucepan reserved for craft use", "Fork or potato masher", "Fine sieve or strainer", "Coffee filter, cheesecloth, or pantyhose for fine straining", "Heatproof bowl", "A jar or bottle for storage"],
+    toolsOptional: ["Funnel", "Steel wool in vinegar for iron water (modifier)", "A pinch of alum (modifier)", "Craft-dedicated gloves", "A pen, nib, or brush for testing"],
+    steps: [
+      "Set up: this ink is NOT food. Work on a protected surface (elderberry permanently stains wood, fabric, grout, and skin), keep children and pets away, and use a pot, spoon, and jar you keep for craft only. Gloves if you don't want purple fingers.",
+      "Use only fully ripe, dark berries from where harvesting is permitted, and strip them off ALL stems. Discard green berries, leaves, and stems — these are toxic and never go in the pot.",
+      "Put the 2 cups of de-stemmed berries in the saucepan over low-medium heat, adding the vinegar and a splash of water only if needed to prevent scorching.",
+      "Mash thoroughly as they heat. Simmer gently ~15–20 min until fully broken down into a dark, juicy pulp. (Cooking also reduces the berries' natural toxins — never use a raw-juice method.)",
+      "Turn off the heat and let the pulp cool until comfortable to handle. Don't skip cooling — straining hot pulp is messy and risky.",
+      "Pour through a sieve into the bowl, pressing to squeeze out the colored liquid. Compost the spent pulp.",
+      "Strain again through a coffee filter, cheesecloth, or pantyhose so the ink flows cleanly in a pen.",
+      "Optional: stir in ½–1 tsp gum arabic per ½ cup for body. To play with color, touch test swatches with vinegar (redder), baking-soda water (bluer/greener), or iron water (slate-grey), then mix the batch you want.",
+      "Bottle, drop in 2–3 cloves and/or keep the vinegar in as a preservative, label TOXIC / NOT FOOD, and refrigerate. Expect a few weeks to a couple of months; shake before use."
+    ],
+    modifiers: "Elderberry is anthocyanin-based and strongly pH-sensitive. Acid (vinegar, lemon) pushes it red/magenta and slightly stabilizes it; base (baking soda) pushes it blue, blue-grey, then murky green. Iron water saddens it to slate grey-purple and can modestly improve lightfastness; alum brightens and deepens the purple. These shifts are reversible and part of the fun, but none make the ink permanent.",
+    preservation: "Cooking (already in the recipe) concentrates it and reduces spoilage; keep the vinegar in as a mild acid preservative; add 2–3 cloves per jar; store sealed in the refrigerator and shake before use. Still treat it as perishable — discard if it smells off or grows mold.",
+    yield: "Roughly ⅓–½ cup of ink from 2 cups of berries. Shelf life is short: a few weeks refrigerated, up to a couple of months with vinegar and cloves. The written color is fugitive and will fade/shift toward brown-grey over weeks to months in light regardless of preservation.",
+    beyondInk: "Also a fugitive textile dye (soft purples on alum-mordanted wool/silk; muted green with an alkaline afterbath) and a historical hair darkener — the Romans simmered the berries to darken graying hair. None of it is washfast; best for swatches and protected pieces.",
+    safety: [
+      "Elderberry is toxic and this ink is NOT food — do not drink, taste, or use it on lips/food surfaces; keep it from children and pets.",
+      "Leaves, stems, bark, roots, and unripe (green) berries contain cyanogenic glycosides that release cyanide; never include them. Use only ripe berries, fully de-stemmed.",
+      "Even ripe berries are mildly toxic raw — always cook them; do not use raw-juice shortcuts.",
+      "Avoid red elderberry (Sambucus racemosa); it is considered more toxic. Confirm the species before harvesting.",
+      "Elderberry juice permanently stains skin, clothing, wood, counters, and grout — protect surfaces and consider gloves; keep any iron water and alum labeled and out of reach.",
+      "Reserve the pot, spoon, strainer, and jar for craft use; wash thoroughly before any return to food use."
+    ],
+    sources: [
+      { title: "How to make Elderberry Ink — The Art Space", url: "https://theartspaceblog.wordpress.com/2014/09/04/how-to-make-elderberry-ink/" },
+      { title: "Play it safe when preserving elderberries (toxicity) — OSU Extension EM-9446", url: "https://extension.oregonstate.edu/catalog/em-9446-play-it-safe-when-preserving-elderberries" },
+      { title: "An artistic introduction to anthocyanin inks — Science in School", url: "https://scienceinschool.org/article/2015/artistic-introduction-anthocyanin-inks/" }
+    ]
+  },
+  {
+    id: "ink-tupelo",
+    plantId: "ink-tupelo",
+    kind: "ink",
+    name: "Tupelo (black gum) berry ink",
+    category: "purple",
+    color: "Dusky grape-purple (pH-shiftable)",
+    difficulty: "Beginner",
+    teaser: "A fleeting woodland violet",
+    toxic: false,
+    hook: "Black tupelo is one of the first trees to ignite each autumn, burning brilliant scarlet, and its early-summer flowers give us tupelo honey. Its small blue-black drupes are edible-but-mouth-puckeringly sour, packed with the anthocyanins that bleed a beautiful, fleeting violet ink.",
+    lightfastness: { rating: "fugitive", note: "Pure anthocyanin, so genuinely fugitive — the bright violet dulls toward grey-brown within weeks to months of light. Keep it out of sun and store flat in the dark; it ages like a berry stain, not a permanent ink." },
+    timeline: { active: "30–40 min", total: "1.5–2 hrs including cooling and straining", steps: 9 },
+    ingredients: [
+      { item: "Ripe black tupelo / black gum drupes (Nyssa sylvatica), blue-black and soft", amount: "1–1.5 cups (~150–225 g) of pulp", required: true, note: "gather fallen fruit or the loosest ripe drupes; leave plenty for wildlife" },
+      { item: "Water", amount: "1–1.5 cups (just enough to barely cover)", required: true, note: "" },
+      { item: "White vinegar or lemon juice", amount: "1–2 tsp", required: false, note: "acid modifier (warmer/pinker) and mild preservative" },
+      { item: "Baking soda", amount: "a pinch at a time", required: false, note: "base modifier — pushes toward blue-purple; overdoing it dulls or greys it" },
+      { item: "Gum arabic", amount: "¼–½ tsp powder per Tbsp ink", required: false, note: "so the ink flows instead of beading; skip for a stain-style ink" },
+      { item: "Whole cloves", amount: "2–3 simmered in", required: false, note: "preservative against mold" }
+    ],
+    toolsRequired: ["Non-reactive pot reserved for craft use (stainless or enamel)", "Spoon or masher", "Fine sieve or strainer", "Coffee filter, paper towel, or muslin", "Heatproof jar or bowl", "A lidded jar for storage"],
+    toolsOptional: ["Gloves (anthocyanins stain skin)", "Apron or old clothes", "pH paper or a scrap of paper to spot-test color", "A fork or small whisk for mixing in gum arabic", "Funnel"],
+    steps: [
+      "Harvest responsibly: gather ripe (soft, blue-black) drupes from the ground or the loosest ripe fruit, only where permitted. Take a small fraction so birds and wildlife still have plenty, and never strip or damage the tree. Pick out leaves, stems, and moldy fruit.",
+      "Gloves on, surface protected (the juice stains). Rinse the fruit and lightly crush it in your craft pot to break the skins — each drupe has one large seed, so just burst the pulp.",
+      "Add just enough water to barely cover the fruit. Add the cloves now if using them as the preservative.",
+      "Bring to a gentle simmer — not a hard boil — for 15–25 min, mashing occasionally, until deeply colored. Ventilate; the fruit produces steam but no dangerous fumes.",
+      "Turn off the heat and let it cool until safe to handle (about 20–30 min).",
+      "Strain out the solids — sieve first, then a coffee filter, paper towel, or muslin into a clean jar for a smooth ink. Squeeze the pulp gently, then compost the spent fruit and seeds.",
+      "Tune the color (optional): dip a scrap of paper, then split into batches — vinegar/lemon to push toward pink/magenta, a pinch of baking soda toward blue-purple. Test after each addition; baking soda can dull it if overdone.",
+      "Add binder and preservative: stir in gum arabic a little at a time until it flows off a pen without beading. If you didn't simmer in cloves, add a drop of clove oil per ~30 ml.",
+      "Bottle, label 'INK — NOT FOOD' with the date, and refrigerate. Test-write a swatch and date it to watch how fast it fades; use within a few weeks and discard at any sign of mold."
+    ],
+    modifiers: "Tupelo's purple comes from anthocyanins, which are strongly pH-sensitive. Acid (vinegar or lemon) shifts it warmer — toward pink, magenta, reddish-purple. A base (baking soda) shifts it cooler — toward blue-purple, and with too much it goes dull blue-grey or greenish. Iron (a rusty nail or iron water) saddens and darkens it toward grey-black rather than brightening the purple, and does not make it more lightfast.",
+    preservation: "Simmer 2–3 whole cloves into the ink, or add a drop of clove oil per ~30 ml; a pinch of salt and the splash of vinegar/lemon help slightly. It has no strong preservative system, so refrigerate it in a sealed labeled jar and pour rather than dip. Treat it as perishable — a few weeks of usable life. Freezing the strained extract before binding helps if you batch.",
+    yield: "About ¼–½ cup of finished ink from ~1–1.5 cups of fruit, depending on reduction. Shelf life is short: a few weeks refrigerated with clove. Separately, the written color is fugitive — even in the dark the line dulls over months, and anything in light fades within weeks. Scan finished work and keep originals out of light.",
+    beyondInk: "Ink and watercolor first. As a textile dye it's unreliable — an alum mordant and pH tweaks help, but the anthocyanin washes and fades out within weeks even on wool. The fruit's better second life is culinary (cooked into sour preserves) and as key fall food for migrating birds and bees.",
+    safety: [
+      "This is an INK, not a food or drink — don't ingest it, and keep it from children and pets. The fruit itself is edible (very sour), but the finished ink has non-food additives and is made in a craft-dedicated pot.",
+      "Anthocyanins stain readily: wear gloves and an apron and protect counters, fabric, wood, and grout. Skin stains are harmless but last a day or two.",
+      "Reserve the pot, sieve, and utensils for craft use afterward. A stainless or enamel pot is fine — avoid raw aluminum/iron unless you want the color to dull and darken.",
+      "Avoid eye contact; rinse with water if splashed. Keep clove oil away from skin and eyes undiluted and out of reach of children and pets (clove oil is toxic to cats).",
+      "Ventilate while simmering. The fruit produces no dangerous fumes, but good airflow is good practice for any craft cooking."
+    ],
+    sources: [
+      { title: "Black tupelo fruit: ID & use (deep purple, anthocyanin-rich, edible/sour) — Tyrant Farms", url: "https://www.tyrantfarms.com/black-tupelo-fruit-id-recipe-nyssa-sylvatica/" },
+      { title: "Nyssa sylvatica — NC State Extension Plant Toolbox", url: "https://plants.ces.ncsu.edu/plants/nyssa-sylvatica/" },
+      { title: "Anthocyanidins and anthocyanins: pH-dependent color — NIH/PMC", url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5613902/" }
+    ]
+  },
+  {
+    id: "tech-iron-acetate",
+    plantId: null,
+    kind: "modifier",
+    name: "Iron acetate (rust water)",
+    category: null,
+    color: "Modifier — no color of its own",
+    difficulty: "Beginner",
+    teaser: "Turns tannin inks grey to black",
+    toxic: true,
+    hook: "The cheapest, oldest ink trick there is: dissolve rust in vinegar. A few drops turns a plain brown tannin ink into deep grey or black — the same iron-and-tannin reaction behind centuries of iron gall ink.",
+    lightfastness: null,
+    timeline: { active: "15 min", total: "1–2 days steeping", steps: 9 },
+    ingredients: [
+      { item: "White vinegar (5%)", amount: "~2 cups, enough to cover the iron", required: true, note: "7% pickling vinegar works faster; avoid balsamic/seasoned" },
+      { item: "Steel wool (fine 0000) OR a handful of rusty iron — nails, bolts, an old scrubber", amount: "1 pad, or a small handful of rusty hardware", required: true, note: "stainless steel will NOT react; pre-rusted iron starts faster" },
+      { item: "Water", amount: "up to 4 cups, at 1 part vinegar : 2 parts water", required: false, note: "only for a gentler, refillable jar; plain vinegar is stronger" }
+    ],
+    toolsRequired: ["Glass jar with a loose-fitting lid (never sealed)", "Coffee filter, paper towel, or cheesecloth", "A second jar or bottle to store the strained liquid", "Gloves (iron stains skin and nails)", "A label and marker"],
+    toolsOptional: ["Dish soap, to degrease new steel wool so it reacts faster", "Funnel", "A dedicated stir stick (it will stain)", "Newspaper or a tray to catch drips", "A dropper, to add iron a drop at a time"],
+    steps: [
+      "Work in a ventilated spot over newspaper, gloves on — iron stains everything it touches permanently.",
+      "If using new steel wool, degrease it: swish in warm soapy water, rinse, and squeeze out. Pre-rusted hardware skips this.",
+      "Put the steel wool or rusty iron in the glass jar. For the strongest modifier, cover with plain white vinegar (~2 cups). For a gentler jar you can refill, use 1 part vinegar to 2 parts water.",
+      "Rest the lid on TOP loosely — never seal it. The reaction releases flammable hydrogen gas, which must escape. Keep the jar away from flames, stoves, and pilot lights.",
+      "Set it somewhere out of reach of kids and pets at room temperature. Small bubbles and rusty foam in the first hours are the iron dissolving.",
+      "Steep 1–2 days for fine steel wool in straight vinegar; up to ~2 weeks for rusty hardware or a diluted jar. Swirl gently each day (lid off, then rest it back).",
+      "It's ready when the liquid is a clear rust-amber to tea-brown, bubbling has mostly stopped, and the metal is eaten away or coated in orange sludge. Quick test: a drop on tea- or walnut-painted paper should grey within seconds.",
+      "Strain through a coffee filter into a clean jar, leaving the metal and sludge behind. Label it clearly: IRON MODIFIER — NOT FOOD — TOXIC. Store cool, dark, and loosely capped.",
+      "Use sparingly: add a few DROPS at a time to a tannin ink (walnut, oak gall, sumac, hickory) and stir, or brush a thin coat over dried ink. A little goes a long way — too much dulls the color and, over years, corrodes paper."
+    ],
+    modifiers: "This IS the modifier. Iron only works on tannin: in tannin-rich inks it forms dark ferric tannate (grey to black), the iron-gall reaction. Add it to acidic or neutral inks — an alkaline ink makes the iron drop out as orange sludge. Use the smallest effective amount; excess muddies color and, long-term, acidifies and weakens paper.",
+    preservation: "Stable for months to a year-plus in a loosely capped (not airtight) glass bottle, kept cool and dark. Strain off all metal and sludge before storing. It oxidizes from amber toward orange over time and may throw a sediment — re-strain before use, or drop in fresh steel wool to recharge it. Glass only; iron corrodes metal lids.",
+    yield: "About 2 cups of concentrated modifier (more if diluted) — a large amount, since it's used drops at a time. Keeps many months to over a year loosely capped, cool, and dark.",
+    beyondInk: "Beyond ink, this same steel-wool-and-vinegar solution is the classic iron mordant for natural dyeing (it 'saddens' plant dyes toward grey and olive on wool and cotton) and an 'ebonizing' wood stain that turns oak and other tannin-rich woods grey to black. Use it sparingly in all three roles.",
+    safety: [
+      "NOT FOOD — toxic if swallowed. Label the jar and keep it well away from children and pets; never use it near food or drink containers.",
+      "Releases flammable hydrogen gas. Keep the jar loosely covered (never sealed) so gas escapes, and away from flames, stoves, pilot lights, and sparks.",
+      "Stains permanently — skin, nails, clothing, wood, stone, countertops. Wear gloves, work over a protected surface, wipe spills at once.",
+      "The vinegar is acidic — avoid skin and especially eye contact; rinse with water if splashed and flush eyes thoroughly. Wear eye protection while straining or decanting.",
+      "Use a dedicated (non-food) jar, spoon, and strainer; don't return them to the kitchen.",
+      "Ventilate while steeping — vinegar fumes are sharp. Used sparingly on finished work: iron plus acid can, over years, embrittle and corrode paper (the iron-gall-ink corrosion problem)."
+    ],
+    sources: [
+      { title: "FiberArtsy — Easy DIY Iron Mordant Recipe", url: "https://www.fiberartsy.com/iron-mordant-recipe/" },
+      { title: "Mixed Color — Color with Rust: Making an Iron Mordant", url: "https://www.mixedcolor.net/blog/2018/5/13/color-with-rust-making-an-iron-mordant" },
+      { title: "Library of Congress — Iron Gall Ink corrosion research", url: "https://www.loc.gov/preservation/scientists/projects/iron_gall_ink.html" }
+    ]
+  },
+  {
+    id: "tech-preserving",
+    plantId: null,
+    kind: "preservative",
+    name: "Preserving inks naturally",
+    category: null,
+    color: "Keeps ink from molding",
+    difficulty: "Beginner",
+    teaser: "Make your ink last longer",
+    toxic: false,
+    hook: "A jar of plant ink is alive with the very things that spoil it — mold, yeast, bacteria. A sterilized jar, a single clove, and a cold dark shelf are the gentle, non-toxic tricks that keep a homemade ink usable for months instead of days.",
+    lightfastness: null,
+    timeline: { active: "10–15 min", total: "30–45 min", steps: 8 },
+    ingredients: [
+      { item: "Your finished, strained plant ink", amount: "any amount; works best in small batches (2 Tbsp–1 cup)", required: true, note: "" },
+      { item: "Whole cloves OR a drop of clove (eugenol) oil", amount: "1–2 cloves per small jar, or 1 drop oil per ~2 oz", required: false, note: "the gentlest antifungal; a whole clove needs no dropper" },
+      { item: "Table salt (non-iodized)", amount: "a small pinch per ounce", required: false, note: "discourages microbes, but too much crystallizes and makes the ink drag/run oddly on paper" },
+      { item: "White vinegar", amount: "a small splash per ¼ cup", required: false, note: "acidifies AND warms/brightens berry colors — add deliberately, since it shifts the hue" }
+    ],
+    toolsRequired: ["A clean glass jar or bottle with a tight lid", "Boiling water or a hot dishwasher cycle, to sterilize the jar", "A clean craft-only stir stick", "Labels and a pen (date every batch)"],
+    toolsOptional: ["A small dropper for one-drop oil dosing", "Coffee filter, to re-strain cloudy ink", "A refrigerator (the single biggest shelf-life win)", "Small amber/dark bottles, to slow light fading", "A dedicated non-food saucepan, if you re-simmer the ink to sterilize it"],
+    steps: [
+      "Know the enemy: spoilage is mold (fuzzy growth), bacterial slime, or fermentation (bubbles, sour smell, a bulging lid). Sugary berry, flower, and binder-added inks spoil fastest. Natural preservatives slow this; small batches you use up beat one big jar.",
+      "Sterilize the jar: wash in hot soapy water, then boil 10 minutes or run a hot dishwasher cycle and air-dry. Reserve it for craft use, not food.",
+      "Most effective option — sterilize the ink itself: gently simmer it a few minutes in a dedicated non-food pot, then pour it hot into the hot sterile jar and cap loosely until cool. This kills organisms already in the liquid. Ventilate; strong inks (pokeweed, walnut) give off harsh steam.",
+      "Optional: add a small pinch of salt per ounce. It makes the liquid less hospitable to microbes — but don't overdo it, or it crystallizes and leaves a gritty crust that affects how the ink flows.",
+      "Optional: add a small splash of white vinegar. It acidifies (discouraging microbes) and can brighten berry and flower colors — add it knowingly, as it shifts the hue.",
+      "Add one antifungal, in a tiny dose: drop in 1–2 whole cloves, OR a single drop of clove oil per ~2 oz. Clove's eugenol is a documented antifungal. More is not better.",
+      "Cap, label with the plant and date, and store cool and dark — the refrigerator is best and can stretch a room-temperature ink from weeks to months. Keep it away from kids and pets; mark it 'craft ink — not food.'",
+      "Check before every use: discard at once if you see fuzzy mold, a surface film, or slime, if it smells sour or rotten, or if the lid has bulged. When in doubt, throw it out and make a fresh small batch. Never taste ink to test it."
+    ],
+    modifiers: "Vinegar is the only preservative here that also shifts color: it lowers pH and warms berry/flower inks toward pink-red. Salt, refrigeration, and clove at these doses are color-neutral. Avoid raising pH (baking soda) to preserve — it tends to dull and destabilize plant color.",
+    preservation: "This card is the method. In order of impact: (1) sterilize the jar and, ideally, simmer the ink and bottle it hot; (2) refrigerate; (3) keep batches small; (4) a pinch of salt; (5) a splash of vinegar; (6) one clove or a drop of clove oil. Avoid wintergreen oil (acutely toxic) and old toxic recipes (phenol, formaldehyde, mercury/arsenic salts).",
+    yield: "Unchanged — this preserves whatever ink you made. Typical life: 2–4 weeks at room temperature for sugary berry/flower inks, extending to several months refrigerated and sterilized. Tannin/iron inks (walnut, oak gall) keep longest. Note: not spoiling is different from not fading.",
+    beyondInk: null,
+    safety: [
+      "Ink is NOT food. Never taste, drink, or pipe ink near food. Label every jar and store out of reach of children and pets.",
+      "Several ink plants are toxic (pokeweed, privet, Boston ivy, raw/leaf/stem elderberry) — preserving the ink does not make it safe to ingest. Wash hands after handling.",
+      "Clove and other essential oils are toxic to cats (and risky for dogs/birds) — keep oils and treated inks away from pets.",
+      "Do NOT use wintergreen oil (high in methyl salicylate — dangerously toxic if swallowed) or thymol (paper conservators warn it damages paper and yellows gum-arabic binders); a whole clove or refrigeration is safer.",
+      "When simmering ink to sterilize, ventilate — steam from strong inks (pokeweed, walnut) can irritate eyes and airways. Use a dedicated non-food pot.",
+      "Inks stain skin, clothes, counters, and grout — wear old clothes and protect surfaces."
+    ],
+    sources: [
+      { title: "Fountain Pen Revolution — How to Make Plant-Based Fountain Pen Ink", url: "https://fprevolutionusa.com/blogs/news/make-plant-based-fountain-pen-ink" },
+      { title: "PMC — Clove Essential Oil and Eugenol as Natural Antifungal Agents", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12525269/" },
+      { title: "Abbey/CoOL — The Effects of Thymol on Paper, Pigments, and Media", url: "https://cool.culturalheritage.org/byorg/abbey/an/an21/an21-3/an21-308.html" }
+    ]
+  }
 ];
 
 function sheetAboutHTML() {
@@ -4617,27 +5025,124 @@ function sheetPlantsHTML() {
   `;
 }
 
-function sheetRecipesHTML() {
-  const cards = RECIPE_PLACEHOLDERS.map((recipe) => `
-    <div class="mini-card recipe-card">
-      <div class="spine" style="background: ${escapeHTML(recipe.color)}"></div>
+function getProjectSpineColor(recipe) {
+  if (recipe.category && INK_CATEGORY_COLORS[recipe.category]) return INK_CATEGORY_COLORS[recipe.category];
+  return "#5a615b"; // technique / neutral
+}
+
+function projectCardHTML(recipe) {
+  const color = getProjectSpineColor(recipe);
+  const meta = [recipe.color, recipe.difficulty].filter(Boolean).join(" · ");
+  return `
+    <div class="mini-card project-card" data-recipe="${escapeHTML(recipe.id)}" role="button" tabindex="0">
+      <div class="spine" style="background: ${escapeHTML(color)}"></div>
       <h3 class="serif">${escapeHTML(recipe.name)}</h3>
-      <div class="m">${escapeHTML(recipe.meta.toUpperCase())}</div>
-      <div class="uses">gather → prepare → make</div>
-    </div>`).join("");
+      <div class="m">${escapeHTML(meta.toUpperCase())}</div>
+      <div class="uses">${escapeHTML(recipe.teaser || "")}<span class="pc-arrow" aria-hidden="true">→</span></div>
+    </div>`;
+}
+
+function sheetProjectsHTML() {
+  const inks = PROJECT_RECIPES.filter((r) => r.kind === "ink");
+  const techs = PROJECT_RECIPES.filter((r) => r.kind !== "ink");
+  const inkCards = inks.map(projectCardHTML).join("");
+  const techCards = techs.map(projectCardHTML).join("");
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
-    <div class="k">THE PRESS · 3 RECIPES</div>
-    <h2 class="serif">Project recipes</h2>
-    <p>Full step-by-step recipes arrive after launch — these three are placeholders for the template.</p>
-    <div class="card-grid">${cards}</div>
+    <div class="k">THE PRESS · ${PROJECT_RECIPES.length} PROJECTS</div>
+    <h2 class="serif">Projects</h2>
+    <p>Make ink, dye, and pigment from the plants on the map. Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Every recipe is craft, not food; harvest only where it is permitted.</p>
+    <div class="card-grid">
+      ${inks.length ? `<div class="card-grid-label">PLANT INKS</div>${inkCards}` : ""}
+      ${techs.length ? `<div class="card-grid-label">MODIFIERS · BINDERS · PRESERVING</div>${techCards}` : ""}
+    </div>
   `;
+}
+
+function recipeIngredientHTML(i) {
+  const note = i.note ? ` <span class="ing-note">— ${escapeHTML(i.note)}</span>` : "";
+  return `<li><strong>${escapeHTML(i.item)}</strong>${i.amount ? ` <span class="amt">· ${escapeHTML(i.amount)}</span>` : ""}${note}</li>`;
+}
+
+function recipeDetailHTML(recipe) {
+  const chips = [];
+  if (recipe.color) chips.push(`<span class="chip">${escapeHTML(recipe.color)}</span>`);
+  if (recipe.difficulty) chips.push(`<span class="chip">${escapeHTML(recipe.difficulty)}</span>`);
+  if (recipe.timeline) {
+    chips.push(`<span class="chip">${escapeHTML(recipe.timeline.active)} active</span>`);
+    chips.push(`<span class="chip">${escapeHTML(recipe.timeline.total)}</span>`);
+    if (recipe.timeline.steps) chips.push(`<span class="chip">${recipe.timeline.steps} steps</span>`);
+  }
+  if (recipe.lightfastness) chips.push(`<span class="chip lf-${escapeHTML(recipe.lightfastness.rating)}">lightfastness: ${escapeHTML(recipe.lightfastness.rating)}</span>`);
+
+  const ings = recipe.ingredients || [];
+  const req = ings.filter((i) => i.required);
+  const opt = ings.filter((i) => !i.required);
+  const reqHTML = req.map(recipeIngredientHTML).join("");
+  const optHTML = opt.map(recipeIngredientHTML).join("");
+  const stepsHTML = (recipe.steps || []).map((s) => `<li>${escapeHTML(s)}</li>`).join("");
+  const safetyHTML = (recipe.safety || []).map((s) => `<li>${escapeHTML(s)}</li>`).join("");
+  const srcHTML = (recipe.sources || []).map((s) => `<a href="${escapeHTML(s.url)}" target="_blank" rel="noreferrer">${escapeHTML(s.title)} →</a>`).join("");
+  const optTools = (recipe.toolsOptional || []).length
+    ? `<div class="tool-row"><span class="lab">OPTIONAL</span>${escapeHTML(recipe.toolsOptional.join(", "))}</div>`
+    : "";
+
+  return `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="recipe-detail">
+      <button class="proj-back" type="button" data-recipe-back>← All projects</button>
+      <div class="k">THE PRESS · RECIPE</div>
+      <h2 class="serif">${escapeHTML(recipe.name)}</h2>
+      ${recipe.hook ? `<div class="recipe-hook">${escapeHTML(recipe.hook)}</div>` : ""}
+      <div class="recipe-meta">${chips.join("")}</div>
+
+      ${recipe.toxic ? `<div class="safety-box"><h3>Safety first</h3><ul>${safetyHTML}</ul></div>` : ""}
+
+      <div class="recipe-sec"><h3>You'll need</h3><ul class="ing-list">${reqHTML}</ul></div>
+      ${opt.length ? `<div class="recipe-sec"><h3>Optional additives</h3><ul class="ing-list">${optHTML}</ul></div>` : ""}
+
+      <div class="recipe-sec"><h3>Tools</h3>
+        <div class="tool-row"><span class="lab">REQUIRED</span>${escapeHTML((recipe.toolsRequired || []).join(", "))}</div>
+        ${optTools}
+      </div>
+
+      <div class="recipe-sec"><h3>Steps</h3><ol class="steps-list">${stepsHTML}</ol></div>
+
+      ${recipe.modifiers ? `<div class="recipe-sec"><h3>Color &amp; modifiers</h3><p>${escapeHTML(recipe.modifiers)}</p></div>` : ""}
+      ${recipe.lightfastness ? `<div class="recipe-sec"><h3>Lightfastness</h3><p>${escapeHTML(recipe.lightfastness.note)}</p></div>` : ""}
+      ${recipe.preservation ? `<div class="recipe-sec"><h3>Preservation</h3><p>${escapeHTML(recipe.preservation)}</p></div>` : ""}
+      ${recipe.yield ? `<div class="recipe-sec"><h3>Yield &amp; shelf life</h3><p>${escapeHTML(recipe.yield)}</p></div>` : ""}
+      ${recipe.beyondInk ? `<div class="beyond-box"><div class="recipe-sec" style="margin:0"><h3>Beyond ink</h3><p>${escapeHTML(recipe.beyondInk)}</p></div></div>` : ""}
+
+      ${(!recipe.toxic && safetyHTML) ? `<div class="recipe-sec"><h3>Safety</h3><ul class="ing-list">${safetyHTML}</ul></div>` : ""}
+
+      ${srcHTML ? `<div class="recipe-sec recipe-sources"><h3>Sources</h3>${srcHTML}</div>` : ""}
+      <div class="recipe-oinp">CRAFT, NOT FOOD · OCCURRENCE IS NOT PERMISSION — HARVEST ONLY WHERE ALLOWED</div>
+    </div>
+  `;
+}
+
+function showProjectsGrid() {
+  const sheetEl = document.querySelector("#sheet");
+  if (!sheetEl) return;
+  sheetEl.innerHTML = sheetProjectsHTML();
+  sheetEl.scrollTop = 0;
+  sheetEl.querySelector(".closer")?.focus?.();
+}
+
+function openRecipeDetail(id) {
+  const recipe = PROJECT_RECIPES.find((r) => r.id === id);
+  const sheetEl = document.querySelector("#sheet");
+  if (!recipe || !sheetEl) return;
+  sheetEl.innerHTML = recipeDetailHTML(recipe);
+  sheetEl.scrollTop = 0;
+  sheetEl.querySelector(".proj-back")?.focus?.();
 }
 
 const SHEET_BUILDERS = {
   maps: sheetMapsHTML,
   plants: sheetPlantsHTML,
-  recipes: sheetRecipesHTML,
+  projects: sheetProjectsHTML,
   about: sheetAboutHTML
 };
 
@@ -4690,7 +5195,10 @@ function initSheets() {
     const modeCard = event.target.closest("[data-mode]");
     if (modeCard) { const mode = modeCard.dataset.mode; closeSheet(); setMapMode(mode); return; }
     const speciesCard = event.target.closest("[data-species]");
-    if (speciesCard) { selectOnlySpecies(speciesCard.dataset.species); closeSheet(); }
+    if (speciesCard) { selectOnlySpecies(speciesCard.dataset.species); closeSheet(); return; }
+    if (event.target.closest("[data-recipe-back]")) { showProjectsGrid(); return; }
+    const recipeCard = event.target.closest("[data-recipe]");
+    if (recipeCard) { openRecipeDetail(recipeCard.dataset.recipe); }
   });
   sheetEl.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
@@ -4703,7 +5211,7 @@ function initSheets() {
       return;
     }
     if (event.key !== "Enter" && event.key !== " ") return;
-    const card = event.target.closest("[data-mode], [data-species]");
+    const card = event.target.closest("[data-mode], [data-species], [data-recipe]");
     if (!card) return;
     event.preventDefault();
     card.click();
