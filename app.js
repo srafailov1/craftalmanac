@@ -2927,7 +2927,7 @@ const INK_FALLING_FRUIT_SPECIES_ALIASES = {
 };
 
 const state = {
-  activeMap: "food",
+  activeMap: "ink",
   selectedDay: getDayOfYear(new Date()),
   allSeasons: false,
   records: [],
@@ -6904,6 +6904,36 @@ function setMastPanel(name) {
   }
 }
 
+// Fold away the season drop-up (SET DATE histogram) and the legend, resetting
+// their triggers, so the bar collapses to its slim resting height.
+function closeSeasonExpanders() {
+  if (!seasonBar) return;
+  let changed = false;
+  if (seasonBar.classList.contains("season-open")) {
+    seasonBar.classList.remove("season-open");
+    whenToggle?.classList.remove("active");
+    whenToggle?.setAttribute("aria-expanded", "false");
+    changed = true;
+  }
+  if (seasonBar.classList.contains("legend-open")) {
+    seasonBar.classList.remove("legend-open");
+    legendMob?.classList.remove("active");
+    legendMob?.setAttribute("aria-pressed", "false");
+    changed = true;
+  }
+  if (changed) syncMapControlsOffset();
+}
+
+// Tapping the map itself should feel like "put everything away" — collapse every
+// open card at once instead of making people hunt for the same trigger that
+// opened each one. Phones only; map-canvas taps never land on the floating cards
+// (those sit above the canvas), so this fires only for genuine taps on the map.
+function collapseMobilePanels() {
+  if (!window.matchMedia("(max-width: 720px)").matches) return;
+  setMastPanel(null);     // search / conditions / menu drop-downs (+ rail detail)
+  closeSeasonExpanders(); // SET DATE histogram + folded legend
+}
+
 function initMobileMasthead() {
   if (!masthead) return;
   const toggle = (name) => setMastPanel(currentMastPanel() === name ? null : name);
@@ -6930,8 +6960,12 @@ function initMobileMasthead() {
     setMastPanel(null);
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && currentMastPanel()) setMastPanel(null);
+    if (event.key !== "Escape") return;
+    if (currentMastPanel()) setMastPanel(null);
+    closeSeasonExpanders();
   });
+  // Tapping back into the map collapses every open card (see collapseMobilePanels).
+  map.on("click", collapseMobilePanels);
 }
 
 // --- Keep the bottom-right map controls clear of the season card -----------
