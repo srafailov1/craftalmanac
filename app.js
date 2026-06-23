@@ -2215,7 +2215,29 @@ const SAFETY_TAGS_BY_SPECIES = {
   "medicine-bergamot": ["avoid pregnancy", "drug interactions"],
   "medicine-dandelion": ["drug interactions", "root harvest discouraged"],
   "medicine-violet": ["lookalikes"],
-  "medicine-cleavers": ["drug interactions"]
+  "medicine-cleavers": ["drug interactions"],
+  // ---- 2026-06 contiguous-US food expansion (safety tags reflect the
+  // adversarial safety-review pass; details live in each species' notes) ----
+  "red-mulberry": ["ripe fruit only", "toxic parts", "lookalikes", "conservation concern"],
+  thimbleberry: ["ripe fruit only", "lookalikes"],
+  salmonberry: ["ripe fruit only", "lookalikes"],
+  "himalayan-blackberry": ["lookalikes"],
+  cranberry: ["lookalikes", "drug interactions"],
+  "red-elderberry": ["toxic parts", "cook before eating", "remove seeds", "deadly lookalike"],
+  buffaloberry: ["eat in moderation", "lookalikes"],
+  "juniper-berry": ["positively identify species", "deadly lookalike", "avoid pregnancy", "drug interactions", "eat in moderation"],
+  kinnikinnick: ["cook before eating", "toxic parts", "lookalikes"],
+  wintergreen: ["salicylate content", "avoid pregnancy", "not for children", "drug interactions", "deadly lookalike"],
+  chokecherry: ["toxic parts", "remove seeds", "cook before eating", "lookalikes"],
+  "pin-cherry": ["toxic parts", "remove seeds", "lookalikes"],
+  "rose-hips": ["remove seeds", "lookalikes", "thorns"],
+  hawthorn: ["remove seeds", "lookalikes", "thorns", "drug interactions"],
+  mayapple: ["toxic parts", "ripe fruit only", "remove seeds", "eat in moderation", "avoid pregnancy", "drug interactions"],
+  "prickly-pear": ["spines/glochids", "ripe fruit only", "lookalikes", "eat in moderation"],
+  acorn: ["toxic raw", "leach before eating", "lookalikes"],
+  "pinyon-pine-nut": ["lookalikes", "over-harvest concern"],
+  "mesquite-bean": ["mold/aflatoxin risk", "lookalikes"],
+  chinquapin: ["spines", "lookalikes", "conservation concern"]
 };
 // Safety-first (CLAUDE.md): a park's "edible fungi" allowance applies only to
 // species on this whitelist. Any other mushroom stays prohibited, so a future
@@ -2275,7 +2297,28 @@ const HARVEST_ETHIC_BY_SPECIES = {
   "medicine-dandelion": "light harvest",
   "medicine-garlic-mustard": "invasive removal",
   "medicine-violet": "light harvest",
-  "medicine-cleavers": "light harvest"
+  "medicine-cleavers": "light harvest",
+  // ---- 2026-06 contiguous-US food expansion ----
+  "red-mulberry": "fallen material preferred",
+  thimbleberry: "light harvest",
+  salmonberry: "light harvest",
+  "himalayan-blackberry": "invasive removal",
+  cranberry: "light harvest",
+  "red-elderberry": "light harvest",
+  buffaloberry: "light harvest",
+  "juniper-berry": "light harvest",
+  kinnikinnick: "light harvest",
+  wintergreen: "light harvest",
+  chokecherry: "light harvest",
+  "pin-cherry": "light harvest",
+  "rose-hips": "light harvest",
+  hawthorn: "light harvest",
+  mayapple: "light harvest",
+  "prickly-pear": "light harvest",
+  acorn: "fallen material preferred",
+  "pinyon-pine-nut": "light harvest",
+  "mesquite-bean": "light harvest",
+  chinquapin: "fallen material preferred"
 };
 
 const foodSpeciesCatalog = [
@@ -2550,6 +2593,238 @@ const foodSpeciesCatalog = [
     parkLimit: "Not listed for Shenandoah National Park",
     shenandoahAllowed: false,
     notes: "Usually a cultivated or escaped planting; confirm property access before harvesting."
+  },
+  // ============================================================
+  // 2026-06 contiguous-US food expansion. Researched + adversarially
+  // safety-reviewed; notes carry the corrected toxic-parts and named
+  // lookalikes. All are absent from Shenandoah's compendium list
+  // (shenandoahAllowed: false); permission at the parks that DO designate
+  // them resolves through NPS_GATHERING_RULES at point zoom.
+  // ============================================================
+  {
+    id: "red-mulberry",
+    commonName: "Red mulberries",
+    scientificName: "Morus rubra",
+    category: "berry",
+    months: [6, 7, 8],
+    inatTaxonIds: [54801],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Native bottomland tree; ID by sandpaper-rough leaves. Eat only fully ripe deep purple-black fruit — unripe fruit, raw leaves/shoots, and the milky sap are toxic raw (stomach upset plus reported nervous-system effects) and the sap irritates skin. Don't confuse the dark fruit with pokeweed (a herbaceous plant with magenta stems and round berries in hanging clusters). Native and locally protected — take only ripe or fallen fruit and don't cut the tree."
+  },
+  {
+    id: "thimbleberry",
+    commonName: "Thimbleberries",
+    scientificName: "Rubus parviflorus",
+    category: "berry",
+    groupLabel: "Blackberries and raspberries",
+    months: [7, 8, 9],
+    inatTaxonIds: [51646],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Thornless montane/Pacific bramble with large maple-like fuzzy leaves and a soft red fruit that pulls off like a thimble cap. Eat only ripe fruit (not leaves or shoots). Confirm the aggregate-cap structure to avoid same-habitat red baneberry (deadly — single shiny berries on a stalk) and red elderberry; avoid poison oak/ivy contact while picking."
+  },
+  {
+    id: "salmonberry",
+    commonName: "Salmonberries",
+    scientificName: "Rubus spectabilis",
+    category: "berry",
+    groupLabel: "Blackberries and raspberries",
+    months: [5, 6, 7, 8],
+    inatTaxonIds: [47543],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Pacific Northwest bramble of moist coastal forests and stream banks; raspberry-like orange-to-red fruit that detaches like a cap. Eat ripe fruit. Distinguish from red elderberry (a woody shrub with compound leaves and conical clusters — toxic raw)."
+  },
+  {
+    id: "himalayan-blackberry",
+    commonName: "Himalayan blackberries",
+    scientificName: "Rubus armeniacus",
+    category: "berry",
+    groupLabel: "Blackberries and raspberries",
+    months: [7, 8, 9, 10],
+    inatTaxonIds: [61317],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Aggressive West Coast invasive forming dense thorny thickets — harvest freely as invasive removal. Eat fully ripe black fruit. The bumpy multi-bead aggregate berry distinguishes true blackberry from smooth-skinned toxic lookalikes (pokeweed, nightshade, Virginia creeper); mind the stout recurved thorns."
+  },
+  {
+    id: "cranberry",
+    commonName: "Wild cranberries",
+    scientificName: "Vaccinium macrocarpon and Vaccinium oxycoccos",
+    category: "berry",
+    months: [9, 10, 11],
+    inatTaxonIds: [63749, 126560],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Trailing wiry vine with tiny leathery leaves and firm tart red berries on acidic bog/fen moss; classic harvest after first frost. Reject any berry on an UPRIGHT shrub on the same moss hummock — bog rosemary (Andromeda) and bog laurel (Kalmia) are toxic in all parts. Peatlands are sensitive; tread lightly. May interact with warfarin."
+  },
+  {
+    id: "red-elderberry",
+    commonName: "Red elderberries",
+    scientificName: "Sambucus racemosa",
+    category: "berry",
+    months: [7, 8],
+    inatTaxonIds: [57824],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Bright-red berries in conical clusters (not the flat-topped clusters of blue/black elderberry), and more toxic raw than other elderberries. Eat only fully ripe berries, cooked, with all seeds removed — the seeds carry the highest toxin load; never eat raw fruit, stems, or leaves. DEADLY lookalike: red baneberry (Actaea rubra), a herbaceous plant whose red berries can be fatal."
+  },
+  {
+    id: "buffaloberry",
+    commonName: "Buffaloberries",
+    scientificName: "Shepherdia argentea",
+    category: "berry",
+    months: [7, 8, 9, 10],
+    inatTaxonIds: [79071],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Northern-plains streambank shrub with silvery scaly opposite leaves, thorns, and clustered red berries; best after frost. Raw berries foam from saponins and act as a laxative in quantity — eat in moderation or cook. Distinguish from invasive Russian olive (alternate leaves) and from bush honeysuckle (no thorns or silvery scales; mildly toxic)."
+  },
+  {
+    id: "juniper-berry",
+    commonName: "Juniper berries",
+    scientificName: "Juniperus",
+    category: "berry",
+    months: [9, 10, 11],
+    inatTaxonIds: [47574],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Culinary spice from the soft ripe blue-black cones of edible junipers (common, one-seed, alligator, California, eastern red cedar), used sparingly. NEVER eat ornamental savin juniper (Juniperus sabina) or cade (J. oxycedrus, red-brown berries) — toxic. Avoid in pregnancy/breastfeeding and with kidney disease; interacts with diabetes, diuretic, lithium, and blood-thinning medications."
+  },
+  {
+    id: "kinnikinnick",
+    commonName: "Kinnikinnick (bearberry)",
+    scientificName: "Arctostaphylos uva-ursi",
+    category: "berry",
+    months: [9, 10, 11, 12],
+    inatTaxonIds: [68049],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Low trailing evergreen mat-shrub with leathery paddle leaves and dry, mealy red berries best cooked. The berries are bland but edible; the leaves are a traditional medicine/smoking herb (not a food) and contain hydroquinone. Slow-growing — harvest lightly."
+  },
+  {
+    id: "wintergreen",
+    commonName: "Wintergreen berries",
+    scientificName: "Gaultheria procumbens",
+    category: "berry",
+    months: [9, 10, 11, 12, 1, 2, 3, 4],
+    inatTaxonIds: [62376],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Low evergreen woodland groundcover; crush a leaf or berry to confirm the strong wintergreen scent (separates it from scentless partridgeberry). Contains aspirin-like methyl salicylate — eat only small amounts and avoid with aspirin sensitivity or blood thinners, in pregnancy/breastfeeding, and in children. DEADLY lookalike: baneberry (Actaea), red berries in the same woods, separated by aroma, taller stature, and compound leaves."
+  },
+  {
+    id: "chokecherry",
+    commonName: "Chokecherries",
+    scientificName: "Prunus virginiana",
+    category: "fruit",
+    groupLabel: "Cherries and plums",
+    months: [7, 8, 9],
+    inatTaxonIds: [54835],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Elongated drooping clusters of pea-sized fruit ripening dark on finely toothed leaves. Use only ripe flesh, cooked; never crush or eat the pits, leaves, twigs, or bark (cyanogenic). Confirm the single hard pit and bottlebrush cluster — toxic lookalikes include buckthorn, red elderberry, and pokeweed/nightshade (the last two can be fatal). Culturally significant to Plains and northern tribes."
+  },
+  {
+    id: "pin-cherry",
+    commonName: "Pin cherries",
+    scientificName: "Prunus pensylvanica",
+    category: "fruit",
+    groupLabel: "Cherries and plums",
+    months: [7, 8, 9],
+    inatTaxonIds: [54833],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Bright-red single-seeded cherries on long stalks, on a fast-growing pioneer tree. Ripe flesh is edible (tart; usually cooked) — never crush or eat the pits, leaves, or bark (cyanogenic, like all wild cherries). Distinguish from buckthorn and bush honeysuckle berries."
+  },
+  {
+    id: "rose-hips",
+    commonName: "Rose hips",
+    scientificName: "Rosa",
+    category: "fruit",
+    months: [8, 9, 10, 11, 12],
+    inatTaxonIds: [53438],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Firm red-orange fruits on thorny canes with pinnate leaves and a dried five-point crown at the tip; sweetest after frost. Split each hip and remove the seeds and irritant internal hairs before eating. Confirm thorns + pinnate leaves + calyx crown to avoid toxic red-berried lookalikes (bittersweet nightshade on twining stems, yew arils with a deadly seed, honeysuckle). Naturalized multiflora rose is invasive; native roses warrant light harvest."
+  },
+  {
+    id: "hawthorn",
+    commonName: "Hawthorn haws",
+    scientificName: "Crataegus",
+    category: "fruit",
+    months: [9, 10, 11],
+    inatTaxonIds: [51148],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Small red-to-black pomes ('haws') on thorny shrubs. The flesh is edible — never crush or eat the cyanogenic seeds, and mind the sharp thorns (puncture-infection risk). Distinguish from blackthorn/sloe, thornless buckthorn, and firethorn. Hawthorn interacts with heart medications (digoxin, beta-blockers)."
+  },
+  {
+    id: "mayapple",
+    commonName: "Mayapple fruit",
+    scientificName: "Podophyllum peltatum",
+    category: "fruit",
+    months: [7, 8, 9],
+    inatTaxonIds: [49288],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Harvest ONLY the fully ripe (soft, yellow, often fallen) fruit; remove the seeds and skin and eat just a small amount (laxative in excess). EVERY other part — leaves, stem, root, seeds, and green unripe fruit — contains podophyllotoxin and is seriously toxic (potentially fatal, no antidote). Abortifacient: avoid in pregnancy and with chemotherapy/cell-cycle drugs; handling the foliage or root can irritate skin. Harvest sparingly from slow-spreading colonies."
+  },
+  {
+    id: "prickly-pear",
+    commonName: "Prickly pear fruit (tunas)",
+    scientificName: "Opuntia",
+    category: "fruit",
+    months: [8, 9, 10],
+    inatTaxonIds: [47902],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Ripe red-to-purple tunas pull free easily from the pad; burn, scrub, and peel to remove the tiny barbed glochids before eating, and chew or spit the hard seeds (impaction risk in quantity). Pads carry oxalates. Never eat a milky-sap succulent — that signals a toxic non-cactus. Some native Opuntia are protected; harvest abundant or naturalized stands and check local status."
+  },
+  {
+    id: "acorn",
+    commonName: "Acorns",
+    scientificName: "Quercus and tanoak (Notholithocarpus densiflorus)",
+    category: "nut",
+    months: [9, 10, 11],
+    inatTaxonIds: [47851, 69823],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Gather sound, ripe, fallen acorns under oaks (and Pacific tanoak). Raw acorns are tannin-toxic and MUST be leached (repeated water changes or boils) until no longer bitter before eating — white-oak acorns need less than red-oak. DEADLY lookalike: buckeye/horse chestnut (Aesculus), a smooth leathery husk with one large nut and no scaly cup, whose toxin is not cooked out. For Pacific tanoak, don't move acorns out of Sudden Oak Death quarantine zones. A culturally significant staple."
+  },
+  {
+    id: "pinyon-pine-nut",
+    commonName: "Pinyon pine nuts",
+    scientificName: "Pinus edulis and Pinus monophylla",
+    category: "nut",
+    months: [9, 10, 11],
+    inatTaxonIds: [57902, 57892],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Large wingless seeds from pinyon cones in pinyon-juniper woodland; edible raw or roasted. Don't confuse pinyon with the juniper 'berries' growing alongside, and never eat ornamental savin juniper or yew arils (deadly seed). Pinyon woodlands face drought die-off and the nuts are a vital Indigenous (Shoshone/Paiute/Washo/Navajo/Hopi) and wildlife food — take only a share and honor tribal collecting rights; occurrence is not permission."
+  },
+  {
+    id: "mesquite-bean",
+    commonName: "Mesquite pods",
+    scientificName: "Prosopis (Neltuma)",
+    category: "nut",
+    months: [7, 8, 9],
+    inatTaxonIds: [1493090],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Grind the sweet ripe pod pulp (not the hard seeds) into flour. Food-safety critical: pick dry, brittle pods straight off the tree BEFORE the summer monsoon and never wet or wash them — rain-dampened pods can carry aflatoxin even when they look clean; reject bitter, chalky, or mold-spotted pods. Confirm true mesquite: many desert legumes (mescal bean, coral bean, rattlebox, catclaw, paloverde, senna) are toxic. A keystone wildlife and Indigenous food."
+  },
+  {
+    id: "chinquapin",
+    commonName: "Chinquapin nuts",
+    scientificName: "Chrysolepis sempervirens and Castanea pumila",
+    category: "nut",
+    months: [8, 9, 10],
+    inatTaxonIds: [53386, 84363],
+    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
+    shenandoahAllowed: false,
+    notes: "Small sweet chestnut-relative nut in a dense, sea-urchin-spiny bur; collect fallen, opened burs (wear gloves). DEADLY-ish lookalike: buckeye/horse chestnut (Aesculus) has a smooth leathery husk with one large bitter nut, and its toxin survives cooking — only correct ID is safe. Note the name collision with chinquapin oak (an acorn, not a bur). Some chinquapin lineages are rare or blight-declining — harvest only abundant stands and leave seed for wildlife."
   }
 ];
 

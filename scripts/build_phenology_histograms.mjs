@@ -153,6 +153,15 @@ function relativeArray(counts) {
   return counts.map((count) => Number((count / max).toFixed(4)));
 }
 
+// Conifers (juniper cones, pinyon seeds) carry no iNaturalist "fruiting"
+// phenology annotations, so the histogram comes back empty. Fall back to a
+// flat curve over the species' catalog harvest months so the display + the
+// verify gate still have a (harvest-season) signal.
+function monthsFallbackArray(species) {
+  const months = new Set((species.months || []).map(Number));
+  return Array.from({ length: 12 }, (_, index) => (months.has(index + 1) ? 1 : 0));
+}
+
 function peakMonths(array) {
   const max = Math.max(...array);
   return array
@@ -203,8 +212,9 @@ async function buildPhenology() {
     for (const species of catalogs[mode]) {
       const annotation = getAnnotationForSpecies(mode, species);
       const counts = await fetchHistogram(species, annotation);
-      modeData[species.id] = relativeArray(counts);
-      console.log(`${mode}/${species.id}: ${counts.reduce((sum, count) => sum + count, 0)} observations`);
+      const total = counts.reduce((sum, count) => sum + count, 0);
+      modeData[species.id] = total > 0 ? relativeArray(counts) : monthsFallbackArray(species);
+      console.log(`${mode}/${species.id}: ${total} observations${total > 0 ? "" : " (no fruiting annotations — harvest-months fallback)"}`);
       await sleep(REQUEST_DELAY_MS);
     }
     dataByMode[mode] = modeData;
