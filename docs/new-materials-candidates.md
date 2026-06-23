@@ -1,9 +1,39 @@
 # New Material Candidates — June 2026 Permissions Pass
 
 Materials with documented harvest permission somewhere in the encoded rules
-that are NOT yet in any species catalog. Presented for owner decision; none
-have been added to the app. Each would need safety tags, harvest-ethic labels,
-iNaturalist taxon IDs, and seasonality before inclusion.
+that are NOT yet in any species catalog. Each needs safety tags, harvest-ethic
+labels, iNaturalist taxon IDs, and seasonality before inclusion.
+
+## ✅ Integration status — FOOD pass shipped 2026-06-23 (commit `2b3bff4`)
+
+The contiguous-US food candidates below were researched, adversarially
+safety-reviewed, and **20 were added to `foodSpeciesCatalog`** (Hawaiʻi/USVI
+excluded this pass): red mulberry, thimbleberry, salmonberry, Himalayan
+blackberry, wild cranberry, red elderberry, buffaloberry, juniper berries,
+kinnikinnick, wintergreen, chokecherry, pin cherry, rose hips, hawthorn,
+mayapple, prickly pear, acorns, pinyon pine nuts, mesquite pods, chinquapin.
+
+**Deferred for explicit owner decision (NOT added) — reasons:**
+- **Saguaro fruit** & **barrel cactus fruit** — legally restricted/protected:
+  Saguaro is AZ "Highly Safeguarded" (permit required) and tribal-only inside
+  Saguaro NP & most public land (2016 NPS gathering rule); *Ferocactus* is AZ-
+  protected (permit required) and only the fruit is edible (body/flesh toxic).
+  Conflicts with the project's permission-required labeling — add only as
+  permit-required/observe entries if desired.
+- **Ramps (Allium tricoccum)** — heavily overharvested, slow-growing, *not*
+  permitted at GRSM; conflicts with the abundance/low-impact ethic.
+- **Beach peas (Lathyrus japonicus)** — lathyrism toxicity risk.
+- **Wild rice / manoomin (Zizania palustris)** & **cholla buds
+  (Cylindropuntia)** — culturally significant (Ojibwe / Tohono Oʼodham) *and*
+  no fitting catalog category (would need a "grains/greens" category — owner call).
+- **Rhubarb (naturalized)** & **Death Valley pomegranate/palm** — marginal
+  single-park naturalized escapes; rhubarb also has toxic leaves + no "vegetable"
+  category.
+
+**Hawaiʻi / US Virgin Islands tropical groups (§C, §D below) remain candidates**
+— excluded this pass because the map focuses on the contiguous US.
+
+The food tables below are the source-of-truth research and are kept for context.
 
 ## Food candidates
 
