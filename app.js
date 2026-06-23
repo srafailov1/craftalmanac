@@ -7397,9 +7397,12 @@ function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuse
     if (!accessFilterActive) return count;
     const statusCounts = item.statusCountsByMode?.[state.activeMap];
     if (statusCounts) {
-      return [...selectedAccessStatuses].reduce((total, status) => (
+      // Status counts can be fractional when a cell's count was apportioned
+      // across statuses by area share (thin-park apportioning); round the
+      // displayed total so circle labels stay whole numbers.
+      return Math.round([...selectedAccessStatuses].reduce((total, status) => (
         total + Number(statusCounts[status] || 0)
-      ), 0);
+      ), 0));
     }
     // Legacy fallback for items cached before per-cell statuses existed.
     return accessStatusSelectionHas(selectedAccessStatuses, getINaturalistAggregateAccessStatus(item)) ? count : 0;
@@ -8685,12 +8688,24 @@ function getINaturalistGridItems(tile, gridData) {
     bucket.weightedLat += lat * count;
     const rasterEntry = state.statusRaster?.[getStatusRasterCellKey(lng, lat)];
     modes.forEach((mode) => {
-      const status = rasterEntry?.[mode] || "unknown";
       const modeAgg = bucket.statusAgg[mode] || (bucket.statusAgg[mode] = {});
-      const statusBucket = modeAgg[status] || (modeAgg[status] = { count: 0, weightedLng: 0, weightedLat: 0 });
-      statusBucket.count += count;
-      statusBucket.weightedLng += lng * count;
-      statusBucket.weightedLat += lat * count;
+      const addPortion = (status, portion) => {
+        if (!portion) return;
+        const statusBucket = modeAgg[status] || (modeAgg[status] = { count: 0, weightedLng: 0, weightedLat: 0 });
+        statusBucket.count += portion;
+        statusBucket.weightedLng += lng * portion;
+        statusBucket.weightedLat += lat * portion;
+      };
+      // Thin-park apportioning (KNOWN_ISSUES 1b): cells that straddle a permission
+      // boundary carry per-status area fractions (`fr`), so split the cell count
+      // across statuses by area share instead of assigning all of it to the
+      // single centre-point status. Uniform cells have no `fr` and behave as before.
+      const fractions = rasterEntry?.fr?.[mode];
+      if (fractions) {
+        Object.entries(fractions).forEach(([status, share]) => addPortion(status, count * share));
+      } else {
+        addPortion(rasterEntry?.[mode] || "unknown", count);
+      }
     });
     buckets.set(key, bucket);
   });

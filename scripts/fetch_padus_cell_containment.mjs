@@ -19,6 +19,20 @@ const REQUEST_SPACING_MS = 500;
 const RETRY_BACKOFF_MS = 2000;
 const CELL_SIZE_DEGREES = 0.05;
 
+// Thin-park apportioning (KNOWN_ISSUES 1b): each cell is sampled at 5 points
+// (center + 4 quarter-diagonal offsets at +/- CELL_SIZE/4) so build_status_raster
+// can bake per-status fractions for cells that straddle a permission boundary.
+// Fixed order: center, NE, NW, SE, SW — build_status_raster reconstructs the
+// same points from the cell center, so only the per-sample unit sets are stored.
+const CELL_SAMPLE_QUARTER = CELL_SIZE_DEGREES / 4;
+const CELL_SAMPLE_OFFSETS = [
+  [0, 0],
+  [CELL_SAMPLE_QUARTER, CELL_SAMPLE_QUARTER],
+  [-CELL_SAMPLE_QUARTER, CELL_SAMPLE_QUARTER],
+  [CELL_SAMPLE_QUARTER, -CELL_SAMPLE_QUARTER],
+  [-CELL_SAMPLE_QUARTER, -CELL_SAMPLE_QUARTER]
+];
+
 const OUT_FIELDS = "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres";
 const REGION_BBOX_PADDING_DEGREES = 0.05;
 
@@ -89,6 +103,9 @@ const limit = args.has("limit") ? Number(args.get("limit")) : Infinity;
 const force = args.get("force") === "true";
 const regionsOnly = args.get("regions-only") === "true";
 const chunksOnly = args.get("chunks-only") === "true";
+// Optional: restrict the region pass to regions whose id/label contains this
+// substring (case-insensitive). Useful for targeted re-fetches / validation.
+const regionMatch = args.has("region-match") ? String(args.get("region-match")).toLowerCase() : null;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -275,6 +292,28 @@ function findContainingProperties(point, features) {
       return pointInFeature(point, feature);
     })
     .map((feature) => feature.properties || {});
+}
+
+function unitSetSignature(units) {
+  return units
+    .map((u) => String(u.OBJECTID ?? `${u.Unit_Nm}|${u.MngNm_Desc}|${u.DesTp_Desc}`))
+    .sort()
+    .join(",");
+}
+
+// Per-sample-point containment for proportional apportioning. Returns the 5
+// per-sample unit arrays (CELL_SAMPLE_OFFSETS order) ONLY when the sample
+// points disagree; returns null for a uniform cell (every sample resolves to
+// the same unit set), in which case the cell's single `units`/`status` already
+// captures it and apportioning is trivially 1.0.
+function computeCellSamples(center, features) {
+  const [clng, clat] = center;
+  const sampleUnits = CELL_SAMPLE_OFFSETS.map(([dx, dy]) =>
+    findContainingProperties([roundCoord(clng + dx), roundCoord(clat + dy)], features)
+  );
+  const sigs = sampleUnits.map(unitSetSignature);
+  if (sigs.every((sig) => sig === sigs[0])) return null;
+  return sampleUnits;
 }
 
 function findIntersectingProperties(cell, features) {
@@ -517,10 +556,11 @@ async function processRegion(region) {
   };
   const cells = getRegionCells(bounds, existingKeys);
   const features = await withRetry(() => fetchPadusFeatures(region.bbox));
-  const populatedCells = cells.map((cell) => ({
-    ...cell,
-    units: findIntersectingProperties(cell, features)
-  }));
+  const populatedCells = cells.map((cell) => {
+    const units = findIntersectingProperties(cell, features);
+    const samples = computeCellSamples(cell.center, features);
+    return samples ? { ...cell, units, samples } : { ...cell, units };
+  });
 
   const tempPath = `${cachePath}.tmp-${process.pid}`;
   await writeFile(tempPath, `${JSON.stringify(populatedCells)}\n`);
@@ -533,10 +573,11 @@ async function processChunk(chunk) {
   if (!force && await fileExists(cachePath)) return { skipped: true };
 
   const features = await withRetry(() => fetchPadusFeatures(chunk.bbox));
-  const cells = getCellCenters(chunk.bbox).map((cell) => ({
-    ...cell,
-    units: findContainingProperties(cell.center, features)
-  }));
+  const cells = getCellCenters(chunk.bbox).map((cell) => {
+    const units = findContainingProperties(cell.center, features);
+    const samples = computeCellSamples(cell.center, features);
+    return samples ? { ...cell, units, samples } : { ...cell, units };
+  });
   if (cells.length !== 9) {
     throw new Error(`expected 9 cell centers, got ${cells.length}`);
   }
@@ -597,7 +638,11 @@ async function main() {
   }
 
   if (!chunksOnly) {
-    const regions = await getRuleRegions();
+    let regions = await getRuleRegions();
+    if (regionMatch) {
+      regions = regions.filter((region) =>
+        region.id.toLowerCase().includes(regionMatch) || region.label.toLowerCase().includes(regionMatch));
+    }
     const regionFailures = [];
     let completedRegions = 0;
     let skippedRegions = 0;

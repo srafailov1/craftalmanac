@@ -20,6 +20,23 @@ const REPRESENTATIVE_SPECIES_BY_MODE = {
   medicine: "medicine-broadleaf-plantain"
 };
 
+// Must match fetch_padus_cell_containment.mjs CELL_SAMPLE_OFFSETS exactly: the
+// per-cell `samples` arrays are stored in this fixed order so the sample points
+// can be reconstructed here from the cell center for thin-park apportioning.
+const CELL_SIZE_DEGREES = 0.05;
+const CELL_SAMPLE_QUARTER = CELL_SIZE_DEGREES / 4;
+const CELL_SAMPLE_OFFSETS = [
+  [0, 0],
+  [CELL_SAMPLE_QUARTER, CELL_SAMPLE_QUARTER],
+  [-CELL_SAMPLE_QUARTER, CELL_SAMPLE_QUARTER],
+  [CELL_SAMPLE_QUARTER, -CELL_SAMPLE_QUARTER],
+  [-CELL_SAMPLE_QUARTER, -CELL_SAMPLE_QUARTER]
+];
+
+function roundCoord(value) {
+  return Number(value.toFixed(5));
+}
+
 function findMatchingDelimiter(source, startIndex, openChar, closeChar) {
   let depth = 0;
   let quote = "";
@@ -197,15 +214,42 @@ function makeCellRecord(cell) {
   };
 }
 
-function getCellStatus(context, mode, species, cell) {
+function getStatusForUnitsAt(context, mode, species, point, units) {
   context.state.activeMap = mode;
-  const record = makeCellRecord(cell);
+  const record = makeCellRecord({ center: point });
   const siteRule = context.getSiteAccessRule(record);
   if (siteRule) return siteRule.status;
   const stateCode = context.getRecordStateCode(record);
-  const features = (cell.units || []).map((properties) => ({ properties }));
+  const features = (units || []).map((properties) => ({ properties }));
   const landRule = context.getBestPublicLandAccessRule(features, species, stateCode, record);
   return landRule?.status || "unknown";
+}
+
+function getCellStatus(context, mode, species, cell) {
+  return getStatusForUnitsAt(context, mode, species, cell.center, cell.units);
+}
+
+// Thin-park apportioning (KNOWN_ISSUES 1b): for a boundary cell (one carrying a
+// `samples` array of 5 per-sample-point unit sets), resolve the status at each
+// sample point and return the share per status. Returns null when this mode is
+// uniform across the 5 points (the single `status` already captures it).
+function getCellStatusFractions(context, mode, species, cell) {
+  if (!Array.isArray(cell.samples) || cell.samples.length !== CELL_SAMPLE_OFFSETS.length) return null;
+  const [clng, clat] = cell.center;
+  const counts = {};
+  CELL_SAMPLE_OFFSETS.forEach(([dx, dy], index) => {
+    const point = [roundCoord(clng + dx), roundCoord(clat + dy)];
+    const status = getStatusForUnitsAt(context, mode, species, point, cell.samples[index]);
+    counts[status] = (counts[status] || 0) + 1;
+  });
+  const statuses = Object.keys(counts);
+  if (statuses.length <= 1) return null;
+  const total = CELL_SAMPLE_OFFSETS.length;
+  const fractions = {};
+  statuses.forEach((status) => {
+    fractions[status] = Number((counts[status] / total).toFixed(3));
+  });
+  return fractions;
 }
 
 function getPublicLandTextFromCell(cell) {
@@ -228,6 +272,16 @@ function isManhattanNycParkCell(context, cell) {
   ));
 }
 
+const SAMPLE_POINT_COUNT = CELL_SAMPLE_OFFSETS.length;
+
+// Union a unit into a {list, sig} accumulator, deduping by JSON signature.
+function addUnit(acc, unit) {
+  const signature = JSON.stringify(unit);
+  if (acc.sig.has(signature)) return;
+  acc.sig.add(signature);
+  acc.list.push(unit);
+}
+
 async function readCellCacheFiles() {
   const files = (await readdir(CELL_CACHE_DIR))
     .filter((file) => file.endsWith(".json") && !file.startsWith("_"))
@@ -239,22 +293,39 @@ async function readCellCacheFiles() {
     if (!Array.isArray(chunkCells)) throw new Error(`${file}: expected a cell array`);
     if (!isRegionFile && chunkCells.length !== 9) throw new Error(`${file}: expected 9 cells, got ${chunkCells.length}`);
     chunkCells.forEach((cell) => {
-      const previous = cellsByKey.get(cell.key);
-      if (!previous) {
-        cellsByKey.set(cell.key, { ...cell, units: [...(cell.units || [])], chunkFile: file });
-        return;
+      // Uniform cells carry no `samples`; every sample point then equals `units`.
+      const sampleArrays = Array.isArray(cell.samples) && cell.samples.length === SAMPLE_POINT_COUNT
+        ? cell.samples
+        : Array.from({ length: SAMPLE_POINT_COUNT }, () => cell.units || []);
+      let entry = cellsByKey.get(cell.key);
+      if (!entry) {
+        entry = {
+          key: cell.key,
+          center: cell.center,
+          unitsAcc: { list: [], sig: new Set() },
+          sampleAccs: Array.from({ length: SAMPLE_POINT_COUNT }, () => ({ list: [], sig: new Set() })),
+          chunkFile: file
+        };
+        cellsByKey.set(cell.key, entry);
+      } else {
+        entry.chunkFile = `${entry.chunkFile},${file}`;
       }
-      const seenUnits = new Set((previous.units || []).map((unit) => JSON.stringify(unit)));
-      (cell.units || []).forEach((unit) => {
-        const signature = JSON.stringify(unit);
-        if (seenUnits.has(signature)) return;
-        seenUnits.add(signature);
-        previous.units.push(unit);
+      (cell.units || []).forEach((unit) => addUnit(entry.unitsAcc, unit));
+      sampleArrays.forEach((units, index) => {
+        (units || []).forEach((unit) => addUnit(entry.sampleAccs[index], unit));
       });
-      previous.chunkFile = `${previous.chunkFile},${file}`;
     });
   }
-  return [...cellsByKey.values()];
+  // Finalize: drop signature helpers; keep `samples` only for boundary cells
+  // (sample points that disagree). `units` stays the cross-file union, so the
+  // single-status bake is unchanged.
+  return [...cellsByKey.values()].map((entry) => {
+    const out = { key: entry.key, center: entry.center, units: entry.unitsAcc.list, chunkFile: entry.chunkFile };
+    const sampleSigs = entry.sampleAccs.map((acc) => [...acc.sig].sort().join(","));
+    const uniform = sampleSigs.every((sig) => sig === sampleSigs[0]);
+    if (!uniform) out.samples = entry.sampleAccs.map((acc) => acc.list);
+    return out;
+  });
 }
 
 function validateRaster(context, cells, raster, statusIds) {
@@ -275,16 +346,31 @@ function validateRaster(context, cells, raster, statusIds) {
   });
   if (!emptyUnknownCell) throw new Error("Raster validation failed: no empty cached-unit cell resolved unknown for every mode");
 
+  let fractionCells = 0;
   Object.entries(raster).forEach(([key, status]) => {
     MODES.forEach((mode) => {
       if (!statusIds.has(status[mode])) throw new Error(`${key} ${mode}: unexpected status ${status[mode]}`);
+    });
+    if (!status.fr) return;
+    fractionCells += 1;
+    Object.entries(status.fr).forEach(([mode, fractions]) => {
+      if (!MODES.includes(mode)) throw new Error(`${key}: fr has non-mode key ${mode}`);
+      let sum = 0;
+      Object.entries(fractions).forEach(([fractionStatus, share]) => {
+        if (!statusIds.has(fractionStatus)) throw new Error(`${key} fr.${mode}: unexpected status ${fractionStatus}`);
+        if (!(share > 0 && share <= 1)) throw new Error(`${key} fr.${mode}.${fractionStatus}: share out of range ${share}`);
+        sum += share;
+      });
+      if (Math.abs(sum - 1) > 0.005) throw new Error(`${key} fr.${mode}: fractions sum to ${sum}, expected 1`);
+      if (Object.keys(fractions).length < 2) throw new Error(`${key} fr.${mode}: single-status fraction should have been omitted`);
     });
   });
 
   return {
     smokyCells: smokyCells.length,
     manhattanParkCells: manhattanParkCells.length,
-    emptyUnknownSample: emptyUnknownCell.key
+    emptyUnknownSample: emptyUnknownCell.key,
+    fractionCells
   };
 }
 
@@ -301,18 +387,32 @@ async function main() {
   const cells = await readCellCacheFiles();
   const raster = {};
 
+  let fractionCellCount = 0;
   cells.forEach((cell) => {
     if (raster[cell.key]) throw new Error(`Duplicate status raster cell key ${cell.key}`);
-    raster[cell.key] = Object.fromEntries(MODES.map((mode) => [
+    const entry = Object.fromEntries(MODES.map((mode) => [
       mode,
       getCellStatus(context, mode, representativeSpecies[mode], cell)
     ]));
+    if (Array.isArray(cell.samples)) {
+      const fr = {};
+      MODES.forEach((mode) => {
+        const fractions = getCellStatusFractions(context, mode, representativeSpecies[mode], cell);
+        if (fractions) fr[mode] = fractions;
+      });
+      if (Object.keys(fr).length) {
+        entry.fr = fr;
+        fractionCellCount += 1;
+      }
+    }
+    raster[cell.key] = entry;
   });
 
   const validation = validateRaster(context, cells, raster, statusIds);
   await writeFile(RASTER_PATH, `${JSON.stringify(raster)}\n`);
   console.log(`Wrote status raster for ${cells.length} cells to ${path.relative(ROOT, RASTER_PATH)}.`);
   console.log(`Representative species: ${JSON.stringify(REPRESENTATIVE_SPECIES_BY_MODE)}`);
+  console.log(`Apportioned (statusFractions) cells: ${fractionCellCount}`);
   console.log(`Validation: ${JSON.stringify(validation)}`);
 }
 

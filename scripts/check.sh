@@ -42,6 +42,11 @@ node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit
 echo "Running overview coverage tests..."
 node scripts/test_overview_coverage.mjs || { echo "FAIL: Overview coverage tests failed"; exit 1; }
 
+# Verify thin-park apportioning (KNOWN_ISSUES 1b): boundary cells carry
+# per-status area fractions that reduce the allowed over-count in patchwork parks
+echo "Verifying thin-park apportioning..."
+node scripts/test_thin_park_apportioning.mjs || { echo "FAIL: Thin-park apportioning check failed"; exit 1; }
+
 # Run register contrast audit (Phase 6)
 echo "Running register contrast audit..."
 node scripts/audit_contrast.mjs || { echo "FAIL: Register contrast audit failed"; exit 1; }
