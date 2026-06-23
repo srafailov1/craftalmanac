@@ -2234,7 +2234,6 @@ const SAFETY_TAGS_BY_SPECIES = {
   hawthorn: ["remove seeds", "lookalikes", "thorns", "drug interactions"],
   mayapple: ["toxic parts", "ripe fruit only", "remove seeds", "eat in moderation", "avoid pregnancy", "drug interactions"],
   "prickly-pear": ["spines/glochids", "ripe fruit only", "lookalikes", "eat in moderation"],
-  acorn: ["toxic raw", "leach before eating", "lookalikes"],
   "pinyon-pine-nut": ["lookalikes", "over-harvest concern"],
   "mesquite-bean": ["mold/aflatoxin risk", "lookalikes"],
   chinquapin: ["spines", "lookalikes", "conservation concern"]
@@ -2315,7 +2314,6 @@ const HARVEST_ETHIC_BY_SPECIES = {
   hawthorn: "light harvest",
   mayapple: "light harvest",
   "prickly-pear": "light harvest",
-  acorn: "fallen material preferred",
   "pinyon-pine-nut": "light harvest",
   "mesquite-bean": "light harvest",
   chinquapin: "fallen material preferred"
@@ -2781,17 +2779,6 @@ const foodSpeciesCatalog = [
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
     notes: "Ripe red-to-purple tunas pull free easily from the pad; burn, scrub, and peel to remove the tiny barbed glochids before eating, and chew or spit the hard seeds (impaction risk in quantity). Pads carry oxalates. Never eat a milky-sap succulent — that signals a toxic non-cactus. Some native Opuntia are protected; harvest abundant or naturalized stands and check local status."
-  },
-  {
-    id: "acorn",
-    commonName: "Acorns",
-    scientificName: "Quercus and tanoak (Notholithocarpus densiflorus)",
-    category: "nut",
-    months: [9, 10, 11],
-    inatTaxonIds: [47851, 69823],
-    parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
-    shenandoahAllowed: false,
-    notes: "Gather sound, ripe, fallen acorns under oaks (and Pacific tanoak). Raw acorns are tannin-toxic and MUST be leached (repeated water changes or boils) until no longer bitter before eating — white-oak acorns need less than red-oak. DEADLY lookalike: buckeye/horse chestnut (Aesculus), a smooth leathery husk with one large nut and no scaly cup, whose toxin is not cooked out. For Pacific tanoak, don't move acorns out of Sudden Oak Death quarantine zones. A culturally significant staple."
   },
   {
     id: "pinyon-pine-nut",
