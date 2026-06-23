@@ -133,6 +133,31 @@ strips.
   not app code. Counts are now *stable* across zoom; completeness under
   allowed-only is a data question.
 
+**Update 2026-06-23 (status reconciliation, owner-directed verification pass):**
+The two halves of this item have diverged — be precise about what shipped:
+- **Missing-coverage half: DONE.** 5-point (center + 4 corners) + vertex
+  intersection sampling shipped in `b0f8a3b`; region-area raster coverage
+  (Sequoia/Kings Canyon/Indiana Dunes etc.) shipped in `2e82dac`/`4b5ee0b` and
+  is gated green by `scripts/test_overview_coverage.mjs`. Indiana Dunes now bakes
+  72 cells (25 non-empty).
+- **Proportional-apportioning half: NOT DONE (this item stays open).** The work
+  order's parts (a)–(d) are unimplemented: `statusFractions`/`insideFraction`
+  appear nowhere in `scripts/` or `app.js` (confirmed by grep). Today the region
+  path stores a *binary* `units` array and `build_status_raster.mjs` bakes ONE
+  status per cell per mode; `app.js getINaturalistGridItems` (~line 8688) assigns
+  each UTFGrid cell's entire count to that single status. So a cell that merely
+  *touches* an allowed park can over-count its whole count as allowed (the
+  inverse of the original under-count). The fix is the proportional split:
+  record per-sample-point units + `insideFraction` in the cache, bake
+  `statusFractions` per cell, and apportion the UTFGrid count by those fractions.
+- **Blocking dependency:** finishing requires a **live PAD-US re-fetch** of the
+  cell-containment cache (~13k region cells minimum, up to ~26k if the FF-chunk
+  path is also upgraded) — the geometry needed for fractional containment is not
+  cached, only the resolved properties are. Network-bound and rate-limited;
+  routed to the data-pipeline tier. The local re-bake scripts
+  (`build_access_status.mjs` / `build_status_raster.mjs`) are network-free and
+  confirmed in sync this pass — only the *fetch* step needs the network.
+
 ## 1a. Original report and plan (2026-06-11 morning, kept for context)
 
 **Owner-confirmed 2026-06-11 (after the downward-bridge fix shipped):** the

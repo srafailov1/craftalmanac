@@ -1,5 +1,13 @@
 # Work order: encode the 34 remaining National-Park gathering rules
 
+> **STATUS: ✅ COMPLETE — shipped 2026-06-18 in commit `d52ebee` ("Encode 34 NPS
+> gathering rules; regen access data"). Verified 2026-06-23: all 34 parks present
+> in `NPS_GATHERING_RULES`, exactly one Biscayne entry (duplicate-guard removed),
+> the 10 prohibited parks correctly have no entry, mushroom flags match (zion
+> false / pinnacles + mammoth cave true), ATTRIBUTION rows present, `node --check
+> app.js` passes. Access data re-baked 2026-06-23 → byte-identical (in sync). No
+> further action.**
+
 Owner tier: Codex (mechanical multi-entry edit inside guardrails). Author: Claude
 (2026-06-15 permissions completion pass). Branch: `main`.
 

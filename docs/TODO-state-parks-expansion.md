@@ -1,5 +1,13 @@
 # Work order: complete state-park foraging rules (50-state coverage)
 
+> **STATUS: ✅ COMPLETE — shipped 2026-06-18 in commit `d68227c` ("Encode
+> state-park foraging rules for 38 states; fix Oregon limit"). Verified
+> 2026-06-23: all 50 states covered (49 branches in `getStateSystemRule` + VA at
+> the call site); `species` param wired through; Oregon limit = 1 gallon; the 4
+> mushroom splits correct (MO/HI/TN prohibit, CT allows); GA/NE/WY
+> posted-prohibited; NM/SC/WV permit-required; every referenced
+> `ACCESS_RULE_SOURCES` key defined; ATTRIBUTION rows present. No further action.**
+
 Owner tier: Codex (multi-branch edit to one function, inside guardrails). Author:
 Claude (2026-06-16 state-park research pass). Branch: `main`.
 

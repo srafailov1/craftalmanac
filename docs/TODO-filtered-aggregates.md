@@ -16,7 +16,14 @@ When this ships, the interim beacon layer and access-filter notice
 > excludes Yonkers and the state-code guard excludes NJ; the nightly
 > permissions-research loop now owns refining it. The adapted Shenandoah
 > validation gate (FF has no in-park records) is accepted.
-> **Phase 5 below is the active Codex assignment.**
+>
+> **STATUS 2026-06-23: ✅ ALL PHASES COMPLETE.** Phase 5 (iNaturalist overview
+> statuses via the baked `status-raster.json`) shipped — the cell-containment
+> cache, the status-raster bake, and the app integration are all in place;
+> `status-raster.json` (39,388 cells) re-baked 2026-06-23 → byte-identical (in
+> sync). The only open refinement to the overview filter is the thin-park
+> proportional apportioning tracked in `KNOWN_ISSUES.md` item 1b (the raster
+> currently bakes one status per cell, not per-status fractions).
 
 ## Phase 5 — iNaturalist overview statuses (approximate, clearly labeled)
 

@@ -1,5 +1,21 @@
 # Work order: extend overview status-raster coverage to encoded-rule areas
 
+> **STATUS: ✅ COMPLETE — core deliverables shipped 2026-06-18 in `2e82dac`
+> ("Extend overview raster coverage"), broadened to 29 more parks in `4b5ee0b`
+> ("Extend low-zoom overview coverage to the new national parks"). Verified
+> 2026-06-23: `fetch_padus_cell_containment.mjs` has a region/bbox path
+> (`NPS_REGION_BOUNDS_BY_MATCH` + `getRuleRegions`) that reads the rule lists
+> from `app.js`; `build_status_raster.mjs` consumes the `region-*.json` cache;
+> `scripts/test_overview_coverage.mjs` (Sequoia 38 cells, Kings Canyon 87,
+> Indiana Dunes 12, all `food=allowed`) is wired into `scripts/check.sh` and
+> passes; the 0.05° cell grid / `getStatusRasterCellKey` formula is unchanged.
+> Raster re-baked 2026-06-23 → byte-identical (in sync). No further action.
+>
+> NOTE: This solved the **missing-coverage** half (rule areas with no Falling
+> Fruit chunks now have raster cells). The separate **thin-park under/over-count**
+> refinement (proportional `statusFractions` apportioning) is tracked in
+> `KNOWN_ISSUES.md` item 1b and is NOT done — see that item.**
+
 Owner tier: Codex. Author: Claude (2026-06-11 permissions pass). Branch: `main`.
 
 ## Problem (confirmed in code)

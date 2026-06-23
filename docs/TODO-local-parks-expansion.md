@@ -1,5 +1,18 @@
 # Work order: encode local / municipal park foraging rules
 
+> **STATUS: ✅ COMPLETE — shipped 2026-06-18 in commits `ebfdb09` (PAD-US audit /
+> plan revision), `386c5ae` ("Make local/municipal park rules functional via
+> geographic matching"), and `7c88873` ("Encode 56 food-forest / edible-park
+> sites"). Verified 2026-06-23: `getLocalParkRule` uses GEOGRAPHIC matching
+> (bbox + `pointInFeature` polygon + Local-Government category guard + stateCode)
+> — not city-name text matching — wired after `getStateSystemRule` and before the
+> preserved `"unknown"` fallback; Twin Cities counties distinguished by polygon
+> (Ramsey allowed, Dakota/Washington permit); `data/local-jurisdictions.json` has
+> 50 entries (34 prohibited / 14 permit / 2 allowed); 62 `SITE_ACCESS_RULES`
+> sites; ATTRIBUTION rows present. The Tier-3 city prohibitions that the audit
+> deemed low-value (city parks `unknown` → `prohibited`) were intentionally NOT
+> blanket-encoded; the `unknown` fallback stays. No further action.**
+
 Owner tier: Codex. Author: Claude (2026-06-16 local-parks pass). Branch: `main`.
 
 Rule **semantics** are Claude-owned and finalized in

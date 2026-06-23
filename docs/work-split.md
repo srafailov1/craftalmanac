@@ -48,7 +48,8 @@ Codex queue:
    implement→gate loop. Diagnostic context: 2026-06-11 health check confirmed
    `index.html` cache tokens are consistent (`filtered-access-3`) and the tree
    is clean, so this is greenfield, not a regression fix.
-4. **Extend overview status-raster coverage to encoded-rule areas — spec ready:
+4. **Extend overview status-raster coverage to encoded-rule areas — ✅ DONE
+   (2026-06-18, commits `2e82dac`/`4b5ee0b`; verified 2026-06-23). Spec:
    `docs/TODO-overview-rule-coverage.md`.** Root cause (confirmed in code): the
    low-zoom iNaturalist overview colors cells from the baked status raster,
    which is generated only for the Falling Fruit chunk footprint. Encoded rule
