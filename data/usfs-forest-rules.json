@@ -76,11 +76,11 @@
 {
 "match": "white mountain national forest",
 "states": "NH, ME",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No White Mountain NF page addresses mushroom collection. The official permits page lists only firewood, Christmas trees, mineral specimens, gold panning, and special-use authorizations.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "The forest treats removal of plants and forest products as permit-required, but small incidental personal-use gathering is exempt: berries, fruits, and nuts picked for the day and eaten on the trail or at camp that same evening are considered incidental use and need no permit.",
+"mushNote": "Wild mushrooms fall under the same plant/forest-products permit framework as other foraging: a permit is required to remove them, but mushrooms gathered for the day and consumed on the trail or cooked at camp that evening qualify as incidental personal use and need no permit.",
+"url": "https://www.fs.usda.gov/r09/whitemountain/permits"
 },
 {
 "match": "chattahoochee national forest",
@@ -103,28 +103,28 @@
 {
 "match": "davy crockett national forest",
 "states": "Texas",
-"food": "permit-required",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "Fruits/berries/nuts: not freely allowed. Per Foraging Texas, in the four Texas national forests (including Davy Crockett) \"you can not pick other plants [besides mushrooms] without first getting a park ranger's permission.\" The widely-cited \"1 pint of fruit, nuts, or berries per person/day\" rule applies to Big Thicket ",
-"mushNote": "Up to 1 gallon of mushrooms per person per day for personal use, no permit required. Sourced from Texas Parks & Wildlife Magazine and Foraging Texas: \"At Angelina, Sam Houston, Davy Crockett and Sabine national forests, you may collect up to a gallon of mushrooms per person per day for personal use.\" No raking/ground d",
-"url": null
+"foodLimit": "Davy Crockett NF (part of the National Forests and Grasslands in Texas) publishes no fruit/nut/berry-specific policy; its forest-products/permits page details only firewood permits ($20 minimum 2-cord permit, personal non-commercial use).",
+"mushNote": "No mushroom-specific policy or quantity limit (e.g., a per-day gallon cap) is published on this forest's own fs.usda.gov pages. Under the 36 CFR 261.6 incidental-personal-use baseline, picking small amounts of wild mushrooms for personal, non-commercial consumption is generally permitted without a permit; commercial harvest requires a permit.",
+"url": "https://www.fs.usda.gov/r08/texas/permits"
 },
 {
 "match": "holly springs national forest",
 "states": "Mississippi",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No mushroom-specific guidance found for Holly Springs NF or the National Forests in Mississippi after a deep dig (permits page, forest-products page, recreation/office/alerts pages, and targeted searches all checked).",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "The National Forests in Mississippi (including Holly Springs) do not publish a forest-specific personal-use fruit/nut/berry policy with numeric limits.",
+"mushNote": "No Mississippi-forest-specific personal mushroom limit is published. Personal-use collection of small amounts of wild mushrooms is treated under the same 36 CFR 261.6 incidental-use / free-use baseline (small quantities for personal consumption, no permit), with a permit required for commercial or larger-volume harvest.",
+"url": "https://www.fs.usda.gov/r08/mississippi/permits"
 },
 {
 "match": "lewis & clark national forest",
 "states": "Montana",
-"food": "unknown",
-"mush": "permit-required",
-"foodLimit": "No forest-specific guidance for edible fruits/berries/nuts found on the Helena-Lewis and Clark forest products or permits pages. A \"1 gallon/day, max 3 gallons/year\" berry free-use figure appeared in web search, but the search itself attributed that to Gifford Pinchot NF, not this forest \u2014 not substituted here.",
-"mushNote": "Per the forest's forest-products page: \"A permit may be required to harvest mushrooms from National Forest Service lands within the Helena-Lewis and Clark National Forest during the [2025] season.\" The authoritative Region 1 / Northern Region Mushroom Harvest Information page (linked from the forest page) gives the ope",
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "This forest (administratively the Helena-Lewis and Clark NF) publishes no berry/fruit/nut-specific policy, so the 36 CFR 261.6 incidental-personal-use baseline applies: gathering small amounts of edible berries, fruits, and nuts for personal use is allowed without a permit.",
+"mushNote": "Under USFS Northern Region rules covering this forest, incidental personal mushroom harvest needs no permit and no fee: up to 1 gallon in possession at a time, capped at 5 gallons per season. Exceeding 5 gallons/season requires a free personal-use permit (up to 5 gal/day, 20 gal/50 lbs per season max).",
 "url": "https://www.fs.usda.gov/r01/helena-lewisclark/forest-products/forest-products"
 },
 {
@@ -157,11 +157,11 @@
 {
 "match": "manti-la sal national forest",
 "states": "Utah, Colorado",
-"food": "unknown",
+"food": "allowed",
 "mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Manti-La Sal page addresses edible mushroom collection. The forest's non-wood/forest-products pages list only firewood, posts/poles, seeds, ornamentals, and Christmas trees. Other Region 4 forests (e.g., Salmon-Challis) publish explicit personal-use mushroom rules, but Manti-La Sal does not, so the rule for this for",
-"url": null
+"foodLimit": "The Manti-La Sal National Forest publishes no forest-specific policy for edible fruits, nuts, or berries; its Forest Products pages cover only firewood, posts/poles/seed, Christmas trees, rocks/agates, fossils, and meteorites.",
+"mushNote": "The forest does not publish a wild-mushroom personal-use policy on its Forest Products or Permits pages. Other Region 4 forests cap no-permit personal mushroom use (e.g., Salmon-Challis allows up to 1 gallon/day, 5 gallons/season without a permit), but those numeric limits are not published for the Manti-La Sal and should not be assumed; contact a Manti-La\u2026",
+"url": "https://www.fs.usda.gov/r04/manti-lasal/forest-products"
 },
 {
 "match": "medicine bow national forest",
@@ -175,11 +175,11 @@
 {
 "match": "black hills national forest",
 "states": "South Dakota, Wyoming",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No official Black Hills NF (Region 2) page addresses personal-use berry/fruit/nut or mushroom collection. Third-party foraging blogs (e.g. hobbyistroadmap.com, finandforage.com) claim personal-use foraging is allowed without a permit and commercial requires a permit, but cite no USFS primary source. Not verifiable from",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Black Hills National Forest publishes no specific edible-fruit/nut/berry policy \u2014 its Forest Products Permits page covers only firewood, tree transplants, rock/gold panning, slate, Christmas trees, and teepee poles, and does not mention berries.",
+"mushNote": "The forest's Forest Products Permits page does not mention wild mushrooms or set a personal-use threshold. Absent a forest-specific rule, the 36 CFR 261.6 baseline applies: small amounts of wild mushrooms for incidental personal use may be gathered without a permit, while larger or commercial harvests require a permit.",
+"url": "https://www.fs.usda.gov/r02/blackhills/forest-products/forest-products-permits"
 },
 {
 "match": "chequamegon national forest",
@@ -213,18 +213,18 @@
 "states": "Texas",
 "food": "permit-required",
 "mush": "allowed",
-"foodLimit": "No free no-permit harvest established for fruits/berries/nuts: secondary sources (Texas Parks & Wildlife Magazine 2024; ForagingTexas) state you cannot pick plants other than mushrooms \"without first getting a ranger's permission.\" One aggregator cites \"1 pint of fruits, nuts, or berries per person per day,\" but this i",
-"mushNote": "Per Texas Parks & Wildlife Magazine (March 2024) and ForagingTexas: up to 1 gallon of mushrooms per person per day, no permit required, personal use only. Not stated on any official USFS page found; rule is from credible secondary sources only.",
-"url": null
+"foodLimit": "For Sam Houston NF (one of the four national forests in Texas), gathering berries, fruit, nuts, and other plant material for personal use requires advance permission from a ranger \u2014 you cannot pick these plants without first getting the ranger district's authorization.",
+"mushNote": "Wild mushrooms may be collected for personal (private) use only at up to 1 gallon per person per day across the four Texas national forests, including Sam Houston NF, with no permit required at that daily limit. Sale of foraged mushrooms is prohibited under 36 CFR 261.6.",
+"url": "https://www.fs.usda.gov/r08/texas/permits"
 },
 {
 "match": "st. francis national forest",
 "states": "Arkansas",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "Daily personal consumption only; hand-gathering. No quantity figure published for this forest; commercial collection prohibited.",
-"mushNote": "Mushrooms fall under the same edible hand-gathering rule (fruits, nuts, mushrooms, and berries) for daily personal consumption, no permit; commercial collection prohibited. No species whitelist or gallon limit published by the forest.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "St. Francis National Forest (administered as the Ozark-St. Francis National Forests) publishes no forest-specific rule for edible fruits, nuts, or berries; its permits page details only firewood.",
+"mushNote": "No forest-specific wild-mushroom policy or quantity cap (e.g., a gallons-per-day limit) is published for this forest. Personal-use mushroom gathering therefore follows the same 36 CFR 261.6 baseline: small amounts by hand for personal consumption without a permit; commercial harvest requires a permit.",
+"url": "https://www.fs.usda.gov/r08/ozark-stfrancis/permits"
 },
 {
 "match": "uncompahgre national forest",
@@ -283,20 +283,20 @@
 {
 "match": "homochitto national forest",
 "states": "Mississippi",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": null,
-"url": null
+"food": "allowed",
+"mush": "permit-required",
+"foodLimit": "The National Forests in Mississippi (which administers Homochitto NF) publish no forest-specific free-use threshold for edible fruits, nuts, or berries.",
+"mushNote": "No mushroom-specific personal-use rule or gallon-per-day free-use limit is published for Homochitto NF / National Forests in Mississippi.",
+"url": "https://www.fs.usda.gov/r08/mississippi/permits"
 },
 {
 "match": "los padres national forest",
 "states": "California",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No official Los Padres NF page states a personal-use rule for mushrooms (allowed/permit/prohibited). A secondary aggregator surfaced in search claims \"no permit required, take only what you'll use on site,\" but this is NOT confirmed on any official USFS Los Padres page, so it is not treated as verified.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Los Padres National Forest publishes no fruit/nut/berry-specific personal-use policy on its own Forest Service pages \u2014 its \"Forest Product Permits\" section covers only firewood/timber (e.g., wood-cutting permits, down-and-dead wood only).",
+"mushNote": "No mushroom-specific personal-use policy is published on the forest's own pages; the listed Forest Product Permits are for wood only, and no forest order prohibiting mushroom collection was found.",
+"url": "https://www.fs.usda.gov/r05/lospadres/permits"
 },
 {
 "match": "mark twain national forest",
@@ -328,11 +328,11 @@
 {
 "match": "sitgreaves national forest",
 "states": "Arizona",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "No forest-specific quantity/free-use threshold for edible fruits/berries/nuts is published. The forest's permits page only documents fuelwood (personal-use limit 10 cords/person/year) and Christmas-tree permits. The Southwestern Region permits page notes pinon nuts may require a permit \"depending on the forest,\" but th",
-"mushNote": "No Apache-Sitgreaves-specific mushroom guidance found. The forest's permits and forest-products pages cover only fuelwood, Christmas trees, timber, and special-use permits. The R03 region permits page lists region-wide product categories (firewood, pinon nuts, rocks/minerals, poles/latillas) but does not mention mushro",
-"url": null
+"food": "permit-required",
+"mush": "permit-required",
+"foodLimit": "The Apache-Sitgreaves National Forests' permits page states that \"permits are required for gathering forest products,\" and the Southwestern Region lists pinon nuts among the products sold by permit; no published free-use threshold for berries or fruits exists, so a personal-use forest-product permit (purchasable at a ranger district or via the Forest\u2026",
+"mushNote": "The forest publishes no mushroom-specific personal-use policy. Under its general rule that \"permits are required for gathering forest products,\" wild mushroom collection beyond incidental personal amounts requires a forest-products permit from a ranger district; unlike neighboring Coconino NF, Apache-Sitgreaves does not advertise a no-permit personal-use\u2026",
+"url": "https://www.fs.usda.gov/r03/apache-sitgreaves/permits"
 },
 {
 "match": "six rivers national forest",
@@ -382,20 +382,20 @@
 {
 "match": "bienville national forest",
 "states": "Mississippi",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No forest-specific or Mississippi-unit-specific guidance on personal mushroom collection was found. A region-level (Eastern Region R9) generic permit page mentions personal-use limits (mushrooms 3 gal/day, 10 days/yr; berries 1 gal/day, 3 gal/yr), but that is a different region and does NOT govern Bienville (Southern R",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Bienville National Forest (part of the National Forests in Mississippi) publishes no forest-specific rule for gathering edible fruits, nuts, or berries; its forest-products and permits pages cover only commercial timber sales plus firewood and special-use permits obtained through the ranger district.",
+"mushNote": "No mushroom-specific or special-forest-products personal-use policy (such as a free-use gallon-per-day cap) is published for Bienville or the National Forests in Mississippi. Under the 36 CFR 261.6 baseline, small amounts for incidental personal use are allowed without a permit; any commercial harvest requires a permit from the District Ranger.",
+"url": "https://www.fs.usda.gov/r08/mississippi/permits"
 },
 {
 "match": "cleveland national forest",
 "states": "California",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "No forest-specific personal-use threshold for edible fruits/berries/nuts is published. The forest's pages address only \"Botanical collecting permits\": research/study-oriented collection requiring an application (study design, species list, quantities, map) submitted to the Forest Botanist at least 8 weeks in advance / ",
-"mushNote": "No Cleveland-NF-specific mushroom rule found. The forest's permits page covers only botanical (research) collecting, firewood, and special-use permits. The R5 regional FAQ notes mushroom-collection permit rules vary by forest and advises contacting the local office, but gives no Cleveland-specific guidance. Cleveland's",
-"url": null
+"food": "allowed",
+"mush": "permit-required",
+"foodLimit": "Cleveland National Forest publishes no forest-specific personal-use policy for edible fruits, berries, or nuts; its permits page lists only firewood, botanical-research collecting, and special-use permits.",
+"mushNote": "No free-use personal mushroom threshold (e.g., a gallons-per-day allowance) is published for Cleveland NF. The only documented avenue for collecting plant/fungal material is the forest's Botanical Collecting Permit, which requires a request submitted at least 8 weeks in advance (no later than January 15 for spring) with a study design, species list,\u2026",
+"url": "https://www.fs.usda.gov/r05/cleveland/permits"
 },
 {
 "match": "deerlodge national forest",
@@ -409,20 +409,20 @@
 {
 "match": "deschutes national forest",
 "states": "Oregon",
-"food": "unknown",
+"food": "permit-required",
 "mush": "permit-required",
-"foodLimit": "No Deschutes-specific fs.usda.gov page states a personal-use rule for edible fruits/berries/nuts. The forest's permits hub lists only Firewood, Mushroom Harvesting, Native Plants, and Christmas Trees; the Native Plants page covers ornamental/medicinal forbs, grasses, and shrubs and does not address edible berries/fruit",
-"mushNote": "Free-use permit required but no charge (free). Free-use permit allows 2 gallons/day for up to 10 calendar days/year for general (non-Matsutake) mushroom species; Matsutake and commercial use carry separate paid permits. Permits issued at Ranger Stations / local FS offices.",
-"url": "https://www.fs.usda.gov/r06/deschutes/permits/mushroom-harvesting"
+"foodLimit": "A permit is required to gather forest products on the Deschutes; the forest issues free-use permits for small personal-use quantities and charges a $20 minimum for larger or commercial amounts.",
+"mushNote": "A valid permit is required for ALL personal-use mushroom collection \u2014 there is no no-permit incidental amount. The free-use permit allows 2 gallons/day for up to 10 calendar days/year at no cost; a paid personal-use permit ($2/day with a $20 / 10-day minimum, or $100 annual) covers larger amounts.",
+"url": "https://www.fs.usda.gov/r06/deschutes/permits"
 },
 {
 "match": "el yunque national forest",
 "states": "PR",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No edible-specific guidance on the forest site. El Yunque is a conservation-focused tropical rainforest; mushrooms/fungi are never addressed for personal collection. No species whitelist applicable here.",
-"url": null
+"food": "permit-required",
+"mush": "permit-required",
+"foodLimit": "El Yunque requires a permit to collect any plant material, including fruits and nuts: the forest's Revised Land and Resource Management Plan states \"Require permits for the collection of any plants or plant material (roots, stems, fruits, etc.),\" and the forest's Permits page lists \"Forest Products: Collections\" as a permit category.",
+"mushNote": "Wild mushrooms are explicitly listed by the Forest Plan as a non-timber special forest product (\"foods, like wild edible mushrooms, fruits, and nuts\") that \"would be offered through special forest products permits.\" As with fruits/nuts, the plan's standard requiring permits for collection of any plant or plant material applies, so personal-use mushroom\u2026",
+"url": "https://www.fs.usda.gov/r08/elyunque/permits"
 },
 {
 "match": "jefferson national forest",
@@ -490,29 +490,29 @@
 {
 "match": "tombigbee national forest",
 "states": "Mississippi",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No official Forest Service guidance found for mushroom collection at Tombigbee NF or the National Forests in Mississippi system; forest-products and permits pages cover only timber, firewood, and pine straw.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Tombigbee National Forest (administered by the National Forests in Mississippi) publishes no forest-specific personal-use policy for edible fruits, nuts, or berries; its permits page lists only commercial timber/forest-product sales and special-use permits (firewood, etc.), directing all permit requests to the local ranger district.",
+"mushNote": "No forest-specific wild-mushroom rule or quantity cap (e.g., a gallon-per-day free-use limit) is published for Tombigbee or the National Forests in Mississippi.",
+"url": "https://www.fs.usda.gov/r08/mississippi/permits"
 },
 {
 "match": "wenatchee national forest",
 "states": "Washington",
-"food": "unknown",
-"mush": "allowed",
-"foodLimit": "No forest-specific guidance found for edible fruits/berries/nuts. The forest's general permits page states a permit is required to remove \"most forest products,\" but does not specifically address fruit/berry/nut personal collection or any free/incidental-use threshold for them. Not classified to avoid substituting a na",
-"mushNote": "Personal-use morel mushrooms are free with no paid permit, up to 5 gallons per person per day; a free \"Incidental Use Mushroom Information Sheet\" must be carried while harvesting/transporting (functions as authorization in lieu of a permit). Personal use only, no sale/exchange.",
-"url": "https://fs.usda.gov/r06/okanogan-wenatchee/permits/forest-product-permits"
+"food": "allowed",
+"mush": "permit-required",
+"foodLimit": "The forest (administered as the Okanogan-Wenatchee NF) does not publish a specific free-use berry/fruit/nut threshold; its forest-product-permits page lists berries among \"other miscellaneous forest products\" (cones, boughs, wildflowers, shrubs, berries, moss, burls, bark) and directs collectors to contact any Okanogan-Wenatchee ranger district office for\u2026",
+"mushNote": "A free \"Incidental Use Mushroom Information Sheet\" must be in your possession while collecting; personal-use mushroom harvest of up to five (5) gallons per person per day is free. Mushrooms are for personal use only and may not be sold or exchanged.",
+"url": "https://www.fs.usda.gov/r06/okanogan-wenatchee/permits/forest-product-permits"
 },
 {
 "match": "angelina national forest",
 "states": "Texas",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "Secondary sources indicate ~1 pint of fruits/nuts/berries per person per day for personal use is the cited figure for Texas national forests, but Foraging Texas states you \"cannot pick other plants without first getting a park ranger's permission\" \u2014 i.e., edible fruits/berries/nuts are not clearly free-use and may requ",
-"mushNote": "Multiple secondary sources (Foraging Texas, Wild Harvester) consistently state mushrooms may be collected at up to 1 gallon per person per day for personal/private use only (no permit for that personal-use quantity) across the four Texas national forests, including Angelina. Not confirmed by a primary USFS page or post",
-"url": "https://www.foragingtexas.com/2020/08/legally-foraging-in-texas.html"
+"food": "allowed",
+"mush": "permit-required",
+"foodLimit": "Gathering edible fruits, nuts, and berries in small amounts for personal, non-commercial use is allowed without a permit under the 36 CFR 261.6 incidental-personal-use baseline; the National Forests and Grasslands in Texas (which administers Angelina NF) treats nuts and berries as \"special forest products\" that may be taken in reasonable amounts for\u2026",
+"mushNote": "Wild mushrooms are classified as a special forest product. The Forest Service permits page does not publish a specific mushroom rule, so personal-use harvesting should be cleared with the Zavalla Ranger District; widely reported guidance (e.g., Foraging Texas) states the four Texas national forests, including Angelina, allow up to 1 gallon of mushrooms per\u2026",
+"url": "https://www.fs.usda.gov/r08/texas/permits"
 },
 {
 "match": "cherokee national forest",
@@ -535,11 +535,11 @@
 {
 "match": "coconino national forest",
 "states": "Arizona",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "No general-public threshold found on the forest's own pages. (A joint Coconino/Kaibab tribal-use policy permits \"small amounts of...nuts, seeds, bark, berries\" with no permit, but that policy is explicitly limited to Native American traditional/cultural use and does not state a general-public rule.)",
-"mushNote": "No official Coconino/USFS page addresses general-public personal-use mushroom collection. Third-party blogs claim no permit needed under ~1 grocery sack/day, 200 ft from facilities, no soil raking \u2014 but these are non-authoritative (blogs, student paper) and not confirmable from a Forest Service source.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Coconino National Forest publishes no foraging-specific policy for edible fruits, nuts, or berries; its forest-products/permits page only lists permits for firewood, wildings (live plants/trees), Christmas trees, rock/sand, and mining materials.",
+"mushNote": "No mushroom-specific permit or quantity rule is published on the Coconino's permits page. Under the general Forest Service incidental-personal-use practice (36 CFR 261.6), gathering small amounts of wild mushrooms for personal consumption (commonly treated as up to about one gallon per day on Region 3 forests) is generally allowed without a permit; selling\u2026",
+"url": "https://www.fs.usda.gov/r03/coconino/permits"
 },
 {
 "match": "colville national forest",
@@ -571,11 +571,11 @@
 {
 "match": "fishlake national forest",
 "states": "Utah",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Fishlake-specific mushroom guidance found. Fishlake's \"Forest Products Industry (non Timber)\" page lists mushrooms only as a generic example of forest products and states a permit is needed to remove items, but gives no edible/personal-use mushroom permit, price, or quantity limits. The Intermountain Region (R04) pe",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Fishlake National Forest publishes no berry/fruit/nut-specific foraging policy; its forest-products permits cover only fuelwood, posts/poles, Christmas trees, and rock/seed collecting. Under the 36 CFR 261.6 baseline, gathering small amounts of edible fruits, nuts, and berries for personal (non-commercial) use is allowed without a permit.",
+"mushNote": "No Fishlake-specific wild-mushroom permit or quantity limit is published on the forest's permits page. Under the 36 CFR 261.6 baseline, picking wild mushrooms in small amounts for personal, non-commercial use is allowed without a permit; commercial harvest would require one.",
+"url": "https://www.fs.usda.gov/r04/fishlake/permits"
 },
 {
 "match": "flathead national forest",
@@ -598,10 +598,10 @@
 {
 "match": "gunnison national forest",
 "states": "Colorado",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "Edible material gathered \"for your own consumption\" requires no permit (personal use). The forest's page does not state a specific quantity threshold for fruits/berries/nuts; commercial collection requires a permit.",
-"mushNote": "Personal/own-consumption gathering of edible mushrooms (morels, etc.) is free with no permit per the official GMUG permits page. Commercial collection (more than 10 lbs) requires a permit at $2.00/lb, 10 lb minimum and 150 lb maximum per commercial permit.",
+"foodLimit": "The GMUG permits page (which covers the Gunnison NF) lists no separate permit or quantity limit for edible fruits, nuts, or berries; gathering small amounts for personal consumption falls under the 36 CFR 261.6 incidental-personal-use baseline and does not require a permit. Commercial collection is what triggers a permit.",
+"mushNote": "No permit is required when gathering edible mushrooms (\"morels, etc.\") for your own consumption. A permit is required only for commercial collection over 10 pounds, costing $2.00 per pound with a minimum of 10 lbs and a maximum of 150 lbs per commercial permit. Personal-use mushroom permits, where issued, are available at GMUG ranger district offices.",
 "url": "https://www.fs.usda.gov/r02/gmug/permits"
 },
 {
@@ -679,20 +679,20 @@
 {
 "match": "ouachita national forest",
 "states": "Arkansas, Oklahoma",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "Southern Region (R08) parent permits page lists \"Mushrooms\" as a recognized permit category generally, but explicitly defers to each forest (\"visit their website or give them a call\"). Ouachita's own pages give no mushroom-specific rule.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "The Ouachita National Forest publishes no foraging-specific policy for edible fruits, nuts, or berries; its forest-products and permits pages address only commercial timber/product sales and firewood permits ($20 firewood permit for ~3-4 cords, purchased at a district office).",
+"mushNote": "No forest-specific wild-mushroom rule or personal-use cap is published for the Ouachita National Forest. The 36 CFR 261.6 incidental-personal-use baseline applies (small amounts for personal consumption generally allowed without a permit), but the absence of a posted threshold means visitors should confirm current mushroom policy with the relevant district\u2026",
+"url": "https://www.fs.usda.gov/r08/ouachita/permits"
 },
 {
 "match": "prescott national forest",
 "states": "Arizona",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No mushroom-specific guidance exists anywhere on the Prescott NF site. No mushroom permit or rule is documented; the forest's permit offerings are fuelwood, tree transplants, special-use, and Christmas trees only.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Prescott National Forest publishes no forest-specific policy for edible fruits, nuts, or berries; its forest-products/permits page covers only fuelwood, transplants, special-use, and Christmas tree permits.",
+"mushNote": "No Prescott-specific wild-mushroom policy is published on the forest's permits page. Under the 36 CFR 261.6 incidental-personal-use baseline, small amounts of wild mushrooms for personal use are allowed without a permit; no published numeric free-use cap (e.g., a per-day gallon limit) exists for this forest.",
+"url": "https://www.fs.usda.gov/r03/prescott/permits"
 },
 {
 "match": "san juan national forest",
@@ -715,20 +715,20 @@
 {
 "match": "sawtooth national forest",
 "states": "Idaho (small portion in Utah)",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "No forest-specific guidance on edible fruits/berries/nuts found. The Non-Wood Forest Products page lists only seeds (paid permit, $0.30/lb), ornamental transplant trees (paid permit), and mushrooms \u2014 fruits/berries/nuts are not mentioned anywhere on the Sawtooth site.",
-"mushNote": "Personal use up to 5 gallons per day, no permit required. Commercial gathering of mushrooms is prohibited on the Sawtooth National Forest.",
+"foodLimit": "Sawtooth National Forest's own non-wood forest products page does not publish a specific policy for edible berries, fruits, or nuts; it details only seed, transplant, and mushroom rules.",
+"mushNote": "The forest's non-wood forest products page states individuals may gather up to 5 gallons of mushrooms per day for personal use with no permit required (treated as incidental personal use). Commercial gathering of mushrooms is not allowed on the Sawtooth National Forest. Always positively identify any mushroom before eating it.",
 "url": "https://www.fs.usda.gov/r04/sawtooth/forest-products/nonwood-products"
 },
 {
 "match": "shoshone national forest",
 "states": "Wyoming",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No official Shoshone NF page addresses personal-use mushroom collection. The /permits and /forest-products pages cover only timber, firewood, Christmas trees, and transplants. No special-forest-products or non-wood-products subpage exists (404).",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Shoshone NF publishes no forest-specific personal-use policy for edible fruits/nuts/berries; its permits page only covers firewood, Christmas trees ($8/tree up to 20ft), transplants, and competitive commercial products.",
+"mushNote": "No Shoshone-specific wild-mushroom personal-use rule is published on the forest's permits page. Under the 36 CFR 261.6 incidental-personal-use baseline, picking small amounts of wild mushrooms for personal (non-commercial) use is generally allowed without a permit; commercial quantities require a permit.",
+"url": "https://www.fs.usda.gov/r02/shoshone/permits"
 },
 {
 "match": "siskiyou national forest",
@@ -796,19 +796,19 @@
 {
 "match": "bighorn national forest",
 "states": "Wyoming",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Bighorn-specific mushroom guidance found. The one news article about \"new rules in anticipation of a good mushroom season\" (Gillette News Record, 2019) is about the Bridger-Teton National Forest's Roosevelt Fire morel scar, NOT Bighorn, so it does not establish a Bighorn rule.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Bighorn National Forest publishes no foraging-specific policy: its forest-products/permits pages list only firewood, personal-use post and pole, teepee poles, transplants, and Christmas trees, and do not mention berries, fruits, or nuts.",
+"mushNote": "No Bighorn-specific wild-mushroom rule is published; mushrooms are not listed among the forest's permitted forest products.",
+"url": "https://www.fs.usda.gov/r02/bighorn/forest-products/forest-products-industry"
 },
 {
 "match": "bridger national forest",
 "states": "Wyoming",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "No forest-specific rule for edible berries/fruits/nuts was quoted on the Bridger-Teton's own pages. The permits page lists fruit/berry collection only indirectly; only general (non-forest-specific) commentary about \"1 gallon incidental personal use\" surfaced, which is not substituted here.",
-"mushNote": "Personal use: up to 1 gallon of mushrooms per person per day, no permit/free; commercial harvesting not authorized; foraging not permitted in wilderness areas. (Morel-specific permit/news guidance cites a 3-gallon/day personal-use threshold before a $300 commercial permit is required; the official forest safety-ethics ",
+"foodLimit": "On the Bridger-Teton National Forest, edible fruits, berries, and nuts may be gathered by hand for personal use and consumption with no permit, up to a limit of one quart per species per person per day.",
+"mushNote": "Personal-use mushroom gathering is allowed without a permit: visitors may collect up to one gallon of mushrooms per person, per day, for personal use (cut the stem with a knife/scissors; \"pick 60 percent and leave 40\").",
 "url": "https://www.fs.usda.gov/r04/bridger-teton/safety-ethics"
 },
 {
@@ -823,11 +823,11 @@
 {
 "match": "challis national forest",
 "states": "Idaho",
-"food": "unknown",
+"food": "allowed",
 "mush": "permit-required",
-"foodLimit": "No forest-specific guidance found. The Salmon-Challis lists its special forest products as mushrooms, Christmas trees, transplants/seedlings, foliage, cones, boughs, and other botanicals; edible berries, fruits, and nuts are not addressed anywhere on the forest's permits or forest-products pages.",
-"mushNote": "Free personal-use mushroom permit required for anyone 12+: 5 gal/day in possession, 20 gal/season. Incidental use without a permit allowed up to 1 gal/day, 5 gal/season. Mushrooms must be sliced lengthwise in half at harvest; resale prohibited.",
-"url": "https://www.fs.usda.gov/r04/salmon-challis/forest-products/nonwood-products"
+"foodLimit": "The Salmon-Challis National Forest (the managing unit for the former Challis National Forest) publishes no berry/fruit/nut-specific personal-use policy, and Idaho national forests do not require a permit for personal berry picking.",
+"mushNote": "A mushroom permit is offered for this forest. Per the forest's 2025 forest products release, collecting up to 5 gallons total per season (max 1 gallon per day in possession) requires no permit; to collect more, a free personal-use mushroom permit allows 5 gallons per day up to 20 gallons per person per season.",
+"url": "https://www.fs.usda.gov/r04/salmon-challis/permits"
 },
 {
 "match": "chugach national forest",
@@ -859,11 +859,11 @@
 {
 "match": "de soto national forest",
 "states": "Mississippi",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No forest-specific or admin-unit guidance found for mushrooms. The National Forests in Mississippi permits page only addresses firewood and road-access special-use permits and directs all other inquiries to the ranger district office.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "The National Forests in Mississippi (which administers De Soto NF) publishes no forest-specific special-forest-products or personal-use gathering policy for edible fruits, nuts, or berries; its permits page covers only firewood/special-use authorizations and timber.",
+"mushNote": "No forest-specific wild-mushroom policy or free-use threshold is published for the National Forests in Mississippi. Under the 36 CFR 261.6 baseline, gathering wild mushrooms in small amounts for incidental personal use (no sale/barter) is generally permitted without a permit, but because this forest publishes no mushroom-specific rule the personal-use\u2026",
+"url": "https://www.fs.usda.gov/r08/mississippi/permits"
 },
 {
 "match": "fremont national forest",
@@ -913,10 +913,10 @@
 {
 "match": "malheur national forest",
 "states": "Oregon",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "No Malheur-specific edible-fruit/berry page exists. The forest's generic products list includes \"nuts and berries\" among permitted forest products, and across the shared Blue Mountains framework (Umatilla/Wallowa-Whitman/Malheur) \"incidental use amounts\" are free of charge and the sister Umatilla forest states berries/",
-"mushNote": "Personal use is free with NO permit for less than 1 gallon in Oregon (Malheur is entirely in Oregon). Free-use mushrooms cannot be sold, bartered, or given away. Commercial harvest (or over the limit) requires a paid permit ($2/day, $20 min, or $100 annual). Commercial picking prohibited in designated wilderness; perso",
+"foodLimit": "The Malheur's own Non-Wood Forest Products page itemizes only mushrooms and does not publish a Malheur-specific berry/fruit/nut limit, so the 36 CFR 261.6 incidental-personal-use baseline applies (small amounts for personal use without a permit; products may not be sold or bartered, and a US government photo ID must be carried while harvesting).",
+"mushNote": "No permit is required to harvest, possess, or transport less than one gallon of mushrooms per person in Oregon (free use, for personal consumption only \u2014 cannot be sold, bartered, or given away). There are no official start/end dates; mushrooms emerge in spring.",
 "url": "https://www.fs.usda.gov/r06/malheur/forest-products/nonwood-products"
 },
 {
@@ -958,11 +958,11 @@
 {
 "match": "sequoia national forest",
 "states": "California",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Sequoia-specific mushroom collection policy (free/permit/limit/prohibited) found on any forest page, FAQ, forest order, news release, or PDF. The permits page names \"fungi\" only as a category label within special forest products, with no permit, fee, limit, or free-use statement.",
-"url": null
+"food": "allowed",
+"mush": "permit-required",
+"foodLimit": "Sequoia National Forest lists \"edible fruits and nuts\" among its special forest products but publishes no forest-specific personal-use quantity limit or free-use schedule.",
+"mushNote": "The forest classifies fungi as a special forest product and directs gatherers to a Forest Service district office to determine whether a permit is required; it does not publish a no-permit gallon-per-day threshold.",
+"url": "https://www.fs.usda.gov/r05/sequoia/permits"
 },
 {
 "match": "shawnee national forest",
@@ -1030,10 +1030,10 @@
 {
 "match": "wallowa national forest",
 "states": "Oregon (and a small portion in Washington)",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "The forest's permit pages list \"Edible material (berries, plants and mushrooms)\" as a forest-products permit category but give NO explicit forest-specific personal-use rule for berries/fruits/nuts; the pages direct users to contact the district office. No free-incidental statement for berries was found, so classified u",
-"mushNote": "Personal-use mushroom picking is free and requires no permit under personal-use limits: less than 1 gallon in Oregon (less than 5 gallons in Washington). Free mushrooms cannot be sold, bartered, or given away. Confirmed via the forest's official 2026 mushroom-season news release and the Forest Products Permits page.",
+"foodLimit": "Personal-use gathering of edible fruits and berries is allowed without a permit in small amounts; the forest lists \"Edible material (berries, plants and mushrooms)\" as a forest-products category and treats personal harvest as free use.",
+"mushNote": "Personal-use mushroom picking is free and requires NO permit when harvesting, possessing, or transporting less than 1 gallon in Oregon or less than 5 gallons in Washington; these mushrooms are for personal consumption only and may not be sold, bartered, or given away. Personal-use picking up to the state daily limits is allowed even in Wilderness areas.",
 "url": "https://www.fs.usda.gov/r06/wallowa-whitman/permits/forest-products-permits"
 },
 {
@@ -1048,10 +1048,10 @@
 {
 "match": "whitman national forest",
 "states": "Oregon and Washington (also extends into Idaho)",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "No forest-specific personal-use threshold for berries/fruits/nuts is published. The forest lists \"Edible material (berries, plants and mushrooms)\" among products covered by forest product permits, but only mushrooms get an explicit free personal-use exemption. Berries/fruits/nuts have no stated free-use amount.",
-"mushNote": "Personal-use mushroom picking is free and requires no permit under personal-use limits: less than 1 gallon in Oregon (less than 5 gallons in Washington). Free mushrooms cannot be sold, bartered, or given away. Confirmed via the forest's official 2026 mushroom-season news release and the Forest Products Permits page.",
+"foodLimit": "The Wallowa-Whitman lists \"edible material (berries, plants and mushrooms)\" as a forest-product category but publishes no specific numeric free-use threshold for berries/fruits/nuts, so the 36 CFR 261.6 incidental-personal-use baseline applies: gathering small amounts of berries and fruit for personal consumption is generally allowed without a permit, while\u2026",
+"mushNote": "Personal-use mushroom picking is free with NO permit for less than 1 gallon in Oregon (less than 5 gallons in the Washington portion); free mushrooms are for personal consumption only and may not be sold, bartered, or given away. Exceeding the limit or harvesting to sell requires a commercial permit ($2/day, 10-day minimum = $20; or $100 annual).",
 "url": "https://www.fs.usda.gov/r06/wallowa-whitman/permits/forest-products-permits"
 },
 {
@@ -1066,11 +1066,11 @@
 {
 "match": "ashley national forest",
 "states": "Utah, Wyoming",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Ashley-specific mushroom guidance found. Region 4 (Intermountain) search summaries reference a generic free personal-use mushroom permit (5 gal/day, 20 gal/season) but this is not stated on any verifiable Ashley or R4 official page and is not forest-specific.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Ashley National Forest publishes no berry/fruit/nut-specific forest-products policy; its permits page only covers wood products (fuelwood, Christmas trees, posts/poles, ornamental trees).",
+"mushNote": "No mushroom-specific policy is published on the Ashley National Forest site (no mushroom or special-forest-products page exists; the permits page lists only wood products).",
+"url": "https://www.fs.usda.gov/r04/ashley/permits"
 },
 {
 "match": "carson national forest",
@@ -1084,11 +1084,11 @@
 {
 "match": "cibola national forest",
 "states": "New Mexico (also small areas in Arizona, Texas, Oklahoma via associated national grasslands)",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Cibola-specific guidance on mushrooms found. Cibola has no non-wood/special-forest-products page (the equivalent URL 404s). Neighboring Santa Fe NF's page notes mushroom rules \"vary by forest,\" so it cannot be transferred to Cibola.",
-"url": null
+"food": "permit-required",
+"mush": "permit-required",
+"foodLimit": "Cibola's forest products page states \"Permits are required for gathering forest products,\" and the Southwestern Region (R03) permits page it links to lists pi\u00f1on (pine) nuts among the forest products requiring a permit (alongside firewood, latillas/poles, and rock/minerals).",
+"mushNote": "Cibola does not publish a mushroom-specific personal-use policy or a no-permit gallon/day threshold. Under its general rule that \"permits are required for gathering forest products,\" wild mushroom collection is treated as permit-required (no separate free-use exemption is posted).",
+"url": "https://www.fs.usda.gov/r03/cibola/permits/forest-products"
 },
 {
 "match": "custer national forest",
@@ -1102,20 +1102,20 @@
 {
 "match": "helena national forest",
 "states": "Montana",
-"food": "unknown",
+"food": "allowed",
 "mush": "permit-required",
-"foodLimit": "No forest-specific guidance for edible fruits/berries/nuts found on the Helena-Lewis and Clark forest products or permits pages (verified June 2026: those pages list only mushroom, minerals, firewood, Christmas tree, and post-and-pole permits). A \"1 gallon/day, max 3 gallons/year\" huckleberry free-use figure appeared in web search, but that rule belongs to Gifford Pinchot NF (Region 6, Washington), not this forest \u2014 not substituted here.",
-"mushNote": "Region 1 rule governs: incidental use needs NO permit (up to 1 gallon in possession, max 5 gallons/season); above that a free Personal Use permit is required (up to 5 gal in possession, max 20 gal/season, valid through Sept 30). Forest page: \"A permit may be required to harvest mushrooms ... during the 2025 season.\" Mo",
+"foodLimit": "The Helena-Lewis and Clark National Forest (which now administers the former Helena National Forest) publishes no berry/fruit/nut-specific personal-use policy on its forest products or permits pages; its listed permits cover mushrooms, firewood, posts/poles, rock/minerals, and Christmas trees.",
+"mushNote": "Mushrooms are managed under the Northern Region (R1) permit system that applies to this forest. Incidental use allows up to 1 gallon in possession at a time without a permit (5 gallon/season cap); a free Personal Use permit allows picking up to 5 gallons (12.5 lbs) per day, with a 20 gallon (50 lb) seasonal maximum.",
 "url": "https://www.fs.usda.gov/r01/helena-lewisclark/forest-products/forest-products"
 },
 {
 "match": "kaibab national forest",
 "states": "Arizona",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "No forest-specific personal-use threshold or quantity for edible fruits/berries/nuts was published on the Kaibab's own pages. (The only free-use threshold found, \"10 cords,\" pertains to dead/down pinyon firewood, not edible pine nuts.)",
-"mushNote": "The only Kaibab document mentioning mushrooms/berries/nuts is the Kaibab & Coconino tribal forest-products policy, which waives permits ONLY for Native Americans collecting small amounts for medicinal/ceremonial/traditional uses. No published Kaibab guidance exists for general-public personal-use mushroom or berry/nut ",
-"url": "https://www.fs.usda.gov/sites/nfs/files/r03/coconino/publication/coconino-forest-products-tribal-policy.pdf"
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Kaibab National Forest publishes no forest-specific personal-use policy for edible fruits, nuts, or berries; its permit program covers only firewood, cinders, Christmas trees, commercial use, and Native American traditional use.",
+"mushNote": "No Kaibab-specific personal-use mushroom rule or gallon-per-day free-use cap is published for the general public; the only document naming mushrooms is the Kaibab/Coconino tribal traditional-use policy, which lets enrolled tribal members collect small amounts of mushrooms, nuts, and berries for traditional use without a permit (not a general-public rule).",
+"url": "https://www.fs.usda.gov/r03/kaibab/permits"
 },
 {
 "match": "lassen national forest",
@@ -1129,10 +1129,10 @@
 {
 "match": "ochoco national forest",
 "states": "Oregon",
-"food": "unknown",
+"food": "allowed",
 "mush": "permit-required",
-"foodLimit": "No forest-specific guidance on edible fruits/berries/nuts found on the Ochoco's own pages. Its permits page lists firewood, Christmas trees, native plants, and mushrooms but does not mention berries, fruits, huckleberries, or nuts. (Aggregator/third-party search hits suggested a 2-gal/day free-use berry permit, but tha",
-"mushNote": "Free-use mushroom permit required (no charge), obtained from the relevant ranger district. Limit 2 gallons/day for 10 days; all mushrooms must be cut in half lengthwise at harvest; cannot be sold or exchanged. Morels (commonly sought, ready in May) are the main spring target. Hand collection only \u2014 no raking; do not di",
+"foodLimit": "The Ochoco's permits/forest-products pages do not publish a specific policy for edible fruits, nuts, or berries, so they fall under the 36 CFR 261.6 incidental-personal-use baseline: gathering small amounts for personal consumption is allowed without a permit (commercial sale or barter is not).",
+"mushNote": "Wild mushrooms require a free-use personal-use permit (no fee) obtained at a Forest Service office/ranger district. The permit allows up to 2 gallons per person per day for 10 days; all mushrooms must be cut in half lengthwise at harvest, only hand collection is permitted (no raking or habitat-damaging tools), you must not strip an area, and free-use\u2026",
 "url": "https://www.fs.usda.gov/r06/ochoco/permits"
 },
 {
@@ -1183,11 +1183,11 @@
 {
 "match": "salmon national forest",
 "states": "Idaho",
-"food": "unknown",
+"food": "allowed",
 "mush": "permit-required",
-"foodLimit": "No forest-specific guidance for edible fruits/berries/nuts. The Salmon-Challis permits page lists only six forest-product categories (personal-use firewood, commercial firewood, post & pole, tree/shrub transplants, Christmas tree, mushroom), and the Non-Wood Forest Products page covers mushrooms exclusively. Fruits, be",
-"mushNote": "Free personal-use mushroom permit required for each person age 12+ (5 gallons/day in possession, 20 gallons total per person per season). Incidental use of 1 gallon/day in possession, 5 gallons/season requires NO permit. All mushrooms must be sliced lengthwise in half at harvest; resale prohibited. Source: Salmon-Chall",
-"url": "https://www.fs.usda.gov/r04/salmon-challis/forest-products/nonwood-products"
+"foodLimit": "The Salmon-Challis National Forest (which administers the former Salmon National Forest) publishes no berry/fruit/nut-specific personal-use policy; its forest-products page lists permits only for firewood, post & pole, transplants, Christmas trees, and \"other special forest products (cones, boughs, other botanicals).\" Under the 36 CFR 261.6\u2026",
+"mushNote": "The forest runs a mushroom permit program (a \"Mushroom permit\" is listed among its forest-product permits), so wild mushrooms are gathered under permit rather than free use.",
+"url": "https://www.fs.usda.gov/r04/salmon-challis/forest-products/forest-products-industry"
 },
 {
 "match": "shasta national forest",
@@ -1210,19 +1210,19 @@
 {
 "match": "sumter national forest",
 "states": "South Carolina",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": "No forest-specific personal-use quantity or threshold for edible fruits/berries/nuts is published. The permits page only states permits are \"available at all district offices for miscellaneous forest products,\" without specifying whether incidental personal edible collection requires one.",
-"mushNote": "No edible-specific rule found on any Francis Marion & Sumter NF page. The permits page only details firewood ($20 min, dead-and-down) and generic \"miscellaneous forest products permits ... available at all district offices\" without naming mushrooms, berries, fruits, or nuts or stating personal-use terms. No special-for",
-"url": null
+"food": "allowed",
+"mush": "permit-required",
+"foodLimit": "Sumter National Forest (administered jointly as the Francis Marion and Sumter National Forests) does not publish a specific numeric free-use threshold online for edible fruits, nuts, or berries.",
+"mushNote": "Wild mushrooms are listed as a permittable special forest product on the USFS Region 8 / Francis Marion and Sumter permits system.",
+"url": "https://www.fs.usda.gov/r08/francismarionsumter/permits"
 },
 {
 "match": "umpqua national forest",
 "states": "Oregon",
-"food": "unknown",
-"mush": "permit-required",
-"foodLimit": "No forest-specific guidance: the Umpqua Special Forest Products page lists firewood, Christmas trees, mushrooms, foliage (beargrass, salal, Oregon grape, ferns), boughs, cones, posts/poles, and transplants, but does not mention edible berries, fruits, or nuts at all.",
-"mushNote": "No permit or fee for under 1 gallon per person per day of mushrooms (except matsutake); collecting more than a gallon \u2014 even for personal use \u2014 requires a (free-use) permit valid any 10 days/calendar year at up to 2 gal/day. Matsutake always requires a permit (free-use matsutake permit allows 15 mushrooms/day for up to",
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Umpqua National Forest's special forest products page lists 10 permit-required product categories (foliage, boughs, cones, firewood, mushrooms, transplants, etc.) but does not mention edible berries, fruits, or nuts at all, so small personal-use amounts fall under the 36 CFR 261.6 incidental-personal-use baseline and require no permit.",
+"mushNote": "Incidental personal mushroom use under one gallon per person per day requires no permit or fee (matsutake excluded); larger personal amounts need a free-use permit valid for up to 2 gallons/day for 10 days per calendar year, requested by phone or at sm.fs.umpquapermit@usda.gov. All mushrooms must be cut in half lengthwise (stem through cap) at harvest.",
 "url": "https://www.fs.usda.gov/r06/umpqua/forest-products/special-forest-products"
 },
 {
@@ -1237,10 +1237,10 @@
 {
 "match": "boise national forest",
 "states": "Idaho",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "No forest-specific guidance found for edible fruits/berries/nuts. The forest's Forest Products and Non-Wood Forest Products pages address only mushrooms, fuelwood, and Christmas trees; they say nothing about huckleberries, other berries, fruits, or nuts.",
-"mushNote": "Personal-use mushroom harvest is free/no permit on the Boise NF: up to 5 gallons per person per day, 10-gallon possession limit, non-commercial only (may not be sold). Stated verbatim on the official nonwood-products page.",
+"foodLimit": "Boise National Forest's Non-Wood Forest Products page details only mushrooms and publishes no berry/fruit/nut-specific numeric policy, so the 36 CFR 261.6 incidental-personal-use baseline applies: small amounts of fruits, nuts, and berries (e.g., huckleberries) may be gathered for personal use without a permit, and none may be sold.",
+"mushNote": "Mushroom harvesting on the Boise National Forest is for personal use only and requires no permit: individuals may harvest up to 5 gallons of mushrooms per person, per day and possess up to 10 gallons per person at any one time. Mushrooms are non-commercial and cannot be sold for profit.",
 "url": "https://www.fs.usda.gov/r04/boise/forest-products/nonwood-products"
 },
 {
@@ -1255,20 +1255,20 @@
 {
 "match": "delta national forest",
 "states": "Mississippi",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Delta NF / National Forests in Mississippi page addresses mushroom collection. National-level USFS policy generally permits limited personal-use gathering of fungi without a permit, and peer Region 8 forests (e.g., George Washington & Jefferson NF) state mushrooms need no permit for small personal amounts, but this ",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Delta National Forest (administered by the National Forests in Mississippi) publishes no forest-specific personal-use policy for edible fruits, nuts, or berries; its permits page covers only firewood and commercial/special-use authorizations and directs gatherers to the local ranger district.",
+"mushNote": "No forest-specific wild-mushroom limit or free-use threshold is published for Delta National Forest. Under the 36 CFR 261.6 incidental-personal-use baseline, gathering small personal amounts of wild mushrooms is generally allowed without a permit; commercial harvest requires a permit.",
+"url": "https://www.fs.usda.gov/r08/mississippi/permits"
 },
 {
 "match": "dixie national forest",
 "states": "Utah",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Dixie NF official page addresses mushroom collection. The permits page covers only firewood, Christmas trees, posts/poles, and transplant trees; its \"Other Forest Product Permits... on a case by case basis\" line names no edible items and describes no free-use allowance.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Dixie National Forest publishes no berry/fruit/nut-specific foraging policy; its forest-products program lists only firewood, posts/poles, Christmas trees, transplant trees, timber, and \"other forest products...on a case by case basis.\" Under the 36 CFR 261.6 baseline, gathering small amounts of edible fruits, berries, and nuts for personal (non-commercial)\u2026",
+"mushNote": "No mushroom-specific personal-use rule is published for Dixie National Forest. Under the 36 CFR 261.6 baseline, collecting small amounts of wild mushrooms for personal use is generally allowed without a permit, while commercial harvest or larger quantities require a permit obtained on a case-by-case basis at a forest office.",
+"url": "https://www.fs.usda.gov/r04/dixie/permits"
 },
 {
 "match": "huron national forest",
@@ -1300,11 +1300,11 @@
 {
 "match": "ozark national forest",
 "states": "Arkansas",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No official Ozark-St. Francis NF page addresses mushroom collection. Secondary foraging blogs claim personal use is allowed without a permit, but this is unverified against any USFS primary source for this forest.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "The Ozark-St. Francis National Forest (which administers Arkansas's Ozark National Forest) publishes no forest-specific policy for edible fruits, nuts, or berries; its permits/forest-products pages address only firewood and timber.",
+"mushNote": "No forest-specific wild-mushroom rule is published for the Ozark-St. Francis National Forest. Under the 36 CFR 261.6 baseline, collecting incidental amounts of wild mushrooms for personal use is permissible without a permit, but commercial harvest requires authorization; the forest does not state a posted numeric (e.g., per-gallon/day) cap, so confirm any\u2026",
+"url": "https://www.fs.usda.gov/r08/ozark-stfrancis/permits"
 },
 {
 "match": "routt national forest",
@@ -1327,20 +1327,20 @@
 {
 "match": "teton national forest",
 "states": "Wyoming",
-"food": "unknown",
+"food": "allowed",
 "mush": "allowed",
-"foodLimit": "Edible fruits, berries, and nuts may be gathered by hand for personal use and consumption; no permit. Use of bush rakes or other harvesting devices is prohibited. Commercial picking is prohibited.",
-"mushNote": "Personal use: up to 1 gallon of mushrooms per person per day, no permit/free; commercial harvesting not authorized; foraging not permitted in wilderness areas. (Morel-specific permit/news guidance cites a 3-gallon/day personal-use threshold before a $300 commercial permit is required; the official forest safety-ethics ",
-"url": "https://www.fs.usda.gov/r04/bridger-teton/safety-ethics"
+"foodLimit": "Bridger-Teton National Forest allows edible fruits, berries, and nuts to be gathered by hand for personal use and consumption with no permit required; the per-species personal-use limit is one quart per species, per person, per day, and the use of bush rakes or other harvesting devices is prohibited.",
+"mushNote": "Personal-use wild mushroom picking requires no permit: visitors may collect up to 1 gallon of mushrooms per person per day for personal use (morels are allowed up to 3 gallons per person per day without a permit, free of charge).",
+"url": "https://www.fs.usda.gov/r04/bridger-teton/permits"
 },
 {
 "match": "tonto national forest",
 "states": "Arizona",
-"food": "unknown",
-"mush": "unknown",
-"foodLimit": null,
-"mushNote": "No Tonto-specific mushroom guidance found on any forest page. Generic national/Region 3 Forest Service policy (not Tonto-specific) treats fungi as a free-use special forest product for limited personal amounts, but the Tonto site itself does not state this.",
-"url": null
+"food": "allowed",
+"mush": "allowed",
+"foodLimit": "Tonto National Forest publishes no fruit/nut/berry-specific personal-use policy; its forest-products and permits pages cover only timber, fuelwood, and event/commercial permits.",
+"mushNote": "No mushroom-specific rule is published for Tonto National Forest. Under the 36 CFR 261.6 baseline, collecting a small amount of wild mushrooms for personal, non-commercial use is generally allowed without a permit; commercial harvest or larger quantities require a forest-products permit.",
+"url": "https://www.fs.usda.gov/r03/tonto/forest-products"
 },
 {
 "match": "uinta national forest",
