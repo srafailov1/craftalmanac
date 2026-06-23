@@ -13,8 +13,8 @@
 >
 > NOTE: This solved the **missing-coverage** half (rule areas with no Falling
 > Fruit chunks now have raster cells). The separate **thin-park under/over-count**
-> refinement (proportional `statusFractions` apportioning) is tracked in
-> `KNOWN_ISSUES.md` item 1b and is NOT done — see that item.**
+> refinement (proportional `statusFractions` apportioning) shipped 2026-06-23
+> (commits `2b89aa8`/`13bf83b`) — see `KNOWN_ISSUES.md` item 1b (RESOLVED).**
 
 Owner tier: Codex. Author: Claude (2026-06-11 permissions pass). Branch: `main`.
 

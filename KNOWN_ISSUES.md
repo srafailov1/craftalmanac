@@ -75,7 +75,27 @@ hits cache). Default-permission behavior unchanged. First filtered overview
 paint waits a few seconds on the one-time fetch — previous paint holds via
 the existing gate.
 
-## 1b. Thin-park raster blindness — WORK ORDER for tonight's loops (queued 2026-06-12, owner-reported)
+## 1b. Thin-park raster blindness — RESOLVED 2026-06-23 (apportioning shipped)
+
+**Resolution 2026-06-23 (commits `2b89aa8` code + `13bf83b` data):** the
+proportional `statusFractions` apportioning is implemented and live. A full
+`--force` PAD-US re-fetch (2907 chunks + 109 rule regions, 0 failures) now
+records per-sample-point containment; `build_status_raster.mjs` bakes sparse
+per-status area fractions (`fr`) on the 6708 boundary cells; and
+`getINaturalistGridItems` splits each iNaturalist UTFGrid cell's count across
+statuses by area share instead of assigning all of it to one centre/union
+status. Single-status semantics are unchanged (0 changes across 39,388 common
+cells), so the overview-coverage gate is unaffected. New gate
+`scripts/test_thin_park_apportioning.mjs` (wired into `scripts/check.sh`)
+asserts the Indiana Dunes allowed over-count shrinks (whole-cell weight 13 →
+apportioned 9.80). Live visual sign-off (allowed-only overview at the Dunes no
+longer inflating, per the verification standard in item 1) is still owner-owned
+— the data gates prove the math, but headless `queryRenderedFeatures` is
+unreliable for the final paint. Minor follow-up flagged: the region cell set is
+mildly nondeterministic across `--force` runs (the `loadExistingCellKeys`
+exclusion is concurrency-order dependent); this run netted +113 cells
+(+coverage in Sequoia/Kings Canyon, 4 churned off Carlsbad's padded margin).
+History below kept for context.
 
 **Symptom (owner screenshot, Indiana Dunes, allowed-only + all seasons,
 ~z9.7):** inflated overview circles (170/444) that "break down" into far

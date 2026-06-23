@@ -21,9 +21,9 @@ When this ships, the interim beacon layer and access-filter notice
 > statuses via the baked `status-raster.json`) shipped — the cell-containment
 > cache, the status-raster bake, and the app integration are all in place;
 > `status-raster.json` (39,388 cells) re-baked 2026-06-23 → byte-identical (in
-> sync). The only open refinement to the overview filter is the thin-park
-> proportional apportioning tracked in `KNOWN_ISSUES.md` item 1b (the raster
-> currently bakes one status per cell, not per-status fractions).
+> sync). The thin-park proportional apportioning (per-status fractions on
+> boundary cells) shipped 2026-06-23 (commits `2b89aa8`/`13bf83b`); see
+> `KNOWN_ISSUES.md` item 1b (RESOLVED). No open refinements remain.
 
 ## Phase 5 — iNaturalist overview statuses (approximate, clearly labeled)
 
