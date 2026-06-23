@@ -426,6 +426,84 @@ data-pipeline work order for Codex; the item-1 plan follow-ups 2–4
 open **rendering-timing** work that needs a visible window / owner sign-off — not
 safely verifiable in a headless pass, so not attempted.
 
+## Tune-up run log — 2026-06-23 (debug + maintenance pass)
+
+Full health pass on `main` (clean tree, @`3ea8405`). **This run SHIPPED fixes** —
+first non-doc-only pass since the 06-16 IL-DNR work — covering the body of new
+code/data added since the 06-17 baseline (`6568c5e`): the Projects section
+(`1379f92`/`c1e4164`), per-forest USFS rules (`abce11e`/`bc84166`/`fa99d6f`,
+`data/usfs-forest-rules.json`, 1400+ lines), local/municipal geo-matching
+(`386c5ae`), 56 food-forest site rules (`7c88873`), and black tupelo ink species
+(`3ea8405`). Method: ran a 5-dimension audit (diff review, whole-file
+bug-pattern sweep, safety invariants, data integrity, live link/API health),
+each finding **adversarially verified** by an independent agent before it
+counted (~110 live external requests across the API/link dimension).
+
+**Fixed and verified this run:**
+1. **`ink-tupelo` phenology drift** (the exact silent-drift class hand-off #3
+   warned about). `3ea8405` added black tupelo to `inkSpeciesCatalog` (14
+   species) but not to `data/phenology/ink.json` (13 curves), so its point card
+   and the ink season histogram fell back to the binary `months[]` shape. Fetched
+   the fruits-annotated histogram for taxon 54802 from iNaturalist (443 research-
+   grade obs, Sep peak — matches `months:[9,10,11]`), peak-normalized, and
+   appended in catalog order. `build_phenology_histograms.mjs --verify` now passes
+   `ink: 14`. Verified end-to-end in the browser: ink-mode season histogram
+   re-renders with the new curve, zero console errors.
+2. **Stale USFS breakdown in `ATTRIBUTION.md`** (audit finding, verified). The
+   per-forest entry read "64 allow / 36 permit / 55 unconfirmed" — accurate at
+   `abce11e` but stale after `7091baf`/`bc84166` re-encoded statuses. Current data
+   is **69 allowed / 41 permit-required / 45 unknown** (food) and 61/55/1/38
+   (mushrooms); updated the doc to match, added the mushroom breakdown. CLAUDE.md
+   requires data sources be documented accurately.
+
+**Two recurring 5am checks now AUTOMATED (resolves hand-offs #2 and #3):**
+- `scripts/lint_top_level_dupes.mjs` (NEW) — flags duplicate top-level
+  `function`/`const`/`let`/`var` in app.js (the `getSelectedAccessStatuses`
+  double-definition class, item 1, that `node --check` silently accepts). Wired
+  into `scripts/check.sh`. Passes clean: 438 distinct names.
+- `build_phenology_histograms.mjs --verify` wired into `scripts/check.sh` — asserts
+  every mode's phenology curves match its catalog and are well-formed 12-element
+  peak-normalized arrays. Would have caught fix #1 automatically.
+
+**Clean (audit + verification, no action needed):**
+- `scripts/check.sh` — ALL PASS (now incl. the two new guards).
+- **Code review** of all `6568c5e..HEAD` app.js/styles.css/index.html: no
+  correctness bug. Projects/recipe-card rendering, USFS per-forest matching +
+  fallback, local-jurisdiction geo-matching, and plain-language rule rewrites
+  (`405bf37`, wording-only — no rule-semantics change) all sound.
+- **Bug-pattern sweep**: no duplicate top-level decls, no `parseInt` w/o radix, no
+  bare `YYYY-MM-DD` `new Date()`, no unguarded `Math.max/min(...arr)` spreads.
+- **Safety invariants intact**: occurrence-is-not-permission banner; medicine
+  "EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE" (confirmed live in the map
+  chooser + cards); `EDIBLE_FUNGUS_WHITELIST = {morel}`; permit-required /
+  historic-orchard labels. Black tupelo carries a `HARVEST_ETHIC_BY_SPECIES`
+  entry ("light harvest") + a wildlife-sharing caution in its catalog `notes`; it
+  has no `SAFETY_TAGS_BY_SPECIES` entry, which is correct — those are reserved for
+  hazards (toxic look-alikes, irritants), only 4 of 14 ink species carry one, and
+  the accessor defaults safely to `[]` (edible, sour, no look-alike risk).
+- **Data integrity**: `usfs-forest-rules.json` 155 forests, no dup `match` keys,
+  all `food`/`mush` values in-enum; `local-jurisdictions.json`, the 56 new
+  `region-site-*.json`, manifest chunk counts, boundaries, tides, NPS orchards all
+  resolve/parse.
+- **Live external health**: iNaturalist (observations + histogram), USGS PAD-US
+  ArcGIS FeatureServer (incl. the app's exact `Pub_Access IN ('OA','RA')` spatial
+  query), Mapbox token + Standard style, NOAA tides, open-meteo, rainviewer — all
+  200. All 51 Projects source links + both new tupelo URLs (tyrantfarms,
+  ncsu) + a stratified sample of catalog/jurisdiction/ATTRIBUTION links resolve;
+  the only non-200s are bot-protection challenges that serve real content to
+  browsers (botanicalcolors, wiley, ecfr.gov, etc.), not dead endpoints.
+
+**Environment note (supersedes the 06-15→06-17 anomaly flags):** in THIS
+environment `unlink` **works** — the `rm`-blocked mount was loop-environment-
+specific. Cleaned up the accumulated cruft the prior loops could only rename
+aside: removed `.git/_stalelocks/` (8 files) and the orphaned probe litter
+(`_captest2`, `_committest.txt`). No active `.git/*.lock` remain; tree healthy.
+Extra worktrees still registered (`git worktree list`): `CraftAlmanac-permissions`
+(under a live `/sessions` mount — left alone), `/tmp/ca-pristine` (locked),
+`CraftAlmanac-harness`. `git worktree prune` found nothing auto-prunable; owner
+can `git worktree remove` the latter two if they're truly done. No asset-version
+bump (no `app.js`/`styles.css` change this run).
+
 ## Hand-offs (for the 6am queue-grooming loop)
 
 1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work
@@ -435,19 +513,17 @@ safely verifiable in a headless pass, so not attempted.
    steps and acceptance test. Items 1/1a remain code-fixed and owner-verified at
    `point-band-rules-1`; the residual is the structural raster-coverage limit
    (data) plus the owner's human wheel/pinch-zoom sign-off — not app code.
-2. **(Optional) Persist the duplicate-name lint:** consider a small Codex/Qwen
-   task to add `scripts/lint_top_level_dupes.mjs` (the `/tmp/dupscan.mjs` logic)
-   and wire it into `scripts/check.sh`, so the `getSelectedAccessStatuses`-class
-   bug is caught automatically rather than re-scanned each 5am run.
-3. **(Optional) Add a phenology↔catalog consistency check to
-   `scripts/validate_data.mjs`:** it already extracts `foodSpeciesCatalog` /
-   `inkSpeciesCatalog` via `vm.runInContext`, but nothing asserts that
-   `data/phenology/<mode>.json` keys match the per-mode catalog ids (incl.
-   `medicineSpeciesCatalog`) or that each curve is a 12-element array
-   normalized to a peak of 1. Verified clean by hand this run (food 26/26, ink
-   13/13, medicine 14/14), but a future catalog/curve edit could drift silently
-   — the histogram just falls back to binary `months[]`, so it wouldn't throw.
-   Small Codex/Qwen task; wire into `scripts/check.sh`.
+2. **DONE (2026-06-23): Persist the duplicate-name lint** — added
+   `scripts/lint_top_level_dupes.mjs` (scans top-level `function`/`const`/`let`/
+   `var` for redeclarations, exits non-zero on any) and wired it into
+   `scripts/check.sh`. The `getSelectedAccessStatuses`-class bug is now caught
+   automatically. Passes clean (438 distinct names).
+3. **DONE (2026-06-23): Phenology↔catalog consistency check** — wired
+   `node scripts/build_phenology_histograms.mjs --verify` into `scripts/check.sh`
+   (reuses its existing `assertPhenologyData`, which checks per-mode key match +
+   12-element peak-normalized curves, incl. `medicineSpeciesCatalog`) rather than
+   duplicating the logic in `validate_data.mjs`. This caught/guards the
+   `ink-tupelo` drift fixed this run. Now food 26 / ink 14 / medicine 14.
 
 ## Environment anomaly — FLAG FOR OWNER (2026-06-15)
 

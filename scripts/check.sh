@@ -20,9 +20,19 @@ for script in scripts/*.mjs; do
     fi
 done
 
+# Lint for duplicate top-level declarations in app.js (node --check silently
+# accepts a redeclared top-level function/var — the cause of KNOWN_ISSUES item 1)
+echo "Checking for duplicate top-level declarations..."
+node scripts/lint_top_level_dupes.mjs || { echo "FAIL: duplicate top-level declaration in app.js"; exit 1; }
+
 # Run data validation
 echo "Running data validation..."
 node scripts/validate_data.mjs || { echo "FAIL: Data validation failed"; exit 1; }
+
+# Verify phenology curves match each mode's species catalog (catches the silent
+# drift where a new catalog species ships without a data/phenology/<mode>.json curve)
+echo "Verifying phenology<->catalog consistency..."
+node scripts/build_phenology_histograms.mjs --verify || { echo "FAIL: phenology/catalog mismatch"; exit 1; }
 
 # Run permission rule tests
 echo "Running permission rule tests..."
