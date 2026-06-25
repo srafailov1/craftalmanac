@@ -2302,7 +2302,6 @@ const HARVEST_ETHIC_BY_SPECIES = {
   "ink-oak": "fallen material preferred",
   "ink-hickory": "fallen material preferred",
   "ink-sumac": "light harvest",
-  "ink-honeysuckle": "invasive removal",
   "ink-goldenrod": "light harvest",
   "ink-osage-orange": "fallen material preferred",
   "ink-pokeweed": "light harvest",
@@ -2924,17 +2923,6 @@ const inkSpeciesCatalog = [
     shenandoahAllowed: false,
     usedParts: "Ripe berry clusters (drupes).",
     notes: "True Rhus sumacs are tannin-rich and useful for brown or modifier inks."
-  },
-  {
-    id: "ink-honeysuckle",
-    commonName: "Honeysuckle",
-    scientificName: "Lonicera",
-    category: "yellow",
-    months: [5, 6, 7],
-    inatTaxonIds: [51874],
-    shenandoahAllowed: false,
-    usedParts: "Flowers and leaves.",
-    notes: "Flowers and leaves can shift toward pale yellow or greenish ink."
   },
   {
     id: "ink-goldenrod",
@@ -10347,121 +10335,6 @@ const PROJECT_RECIPES = [
       {
         title: "Cercocarpus montanus — NC Extension Gardener Plant Toolbox",
         url: "https://plants.ces.ncsu.edu/plants/cercocarpus-montanus/"
-      }
-    ]
-  },
-  {
-    id: "ink-honeysuckle",
-    plantId: "ink-honeysuckle",
-    kind: "dye",
-    name: "Honeysuckle flower & leaf dye",
-    category: "yellow",
-    swatch: "#c8b84a",
-    color: "Pale yellow-green",
-    difficulty: "Beginner",
-    teaser: "Pale yellow-green from flowers & leaves",
-    toxic: false,
-    educationalOnly: false,
-    hook: "Across the eastern and midwestern US, bush honeysuckles — Amur (Lonicera maackii), Morrow, and tangly Japanese honeysuckle — leaf out before almost anything native, throwing dense early shade that starves the spring woodland floor. Cutting them for the dyepot is removal that does double duty: the white-to-yellow paired flowers (late May into June) give a faint warm yellow, and the tannin-bearing leaves push the bath toward green. It is a modest, low-saturation color from a flavonoid yellow rather than the durable luteolin of weld, so treat it as a gentle souvenir of a brush pile, not a fast color. The honesty of it is part of the appeal: an aggressive invader, cut back, reduced to a quiet yellow-green on a length of wool.",
-    lightfastness: {
-      rating: "fugitive",
-      note: "Honestly fugitive. The yellow comes from ordinary flavonoids, not the lightfast luteolin found in weld and goldenrod, so even on an alum mordant expect noticeable fading and a drift toward dull tan-green over weeks to a few months of light exposure. An iron afterbath shifts it greener and somewhat steadier, but nothing here makes it a reliable lasting color — keep finished pieces out of direct sun."
-    },
-    timeline: {
-      active: "2-3 hr",
-      passive: "Overnight"
-    },
-    ingredients: [
-      {
-        item: "Honeysuckle flowers and leaves (Lonicera spp., invasive bush or Japanese honeysuckle preferred)",
-        amount: "Equal weight or more, fresh, vs. dry weight of fiber (100-200% WOF); pack the pot full",
-        required: true,
-        note: "Yield and saturation are modest — more material gives deeper color. Flowers contribute the yellow, leaves the green; including stems pushes toward brown. Use fresh; chop leaves to expose more surface. Leave the berries off — they are mildly toxic and add nothing to the color."
-      },
-      {
-        item: "Protein fiber — wool or silk",
-        amount: "A skein or small length (e.g. 50-100 g)",
-        required: true,
-        note: "This is an adjective (mordant-dependent) dye that takes best on protein fiber. Cotton and linen need a tannin-plus-alum pre-treatment and still read paler."
-      },
-      {
-        item: "Alum (potassium aluminum sulfate) mordant",
-        amount: "10-15% of dry fiber weight (WOF)",
-        required: true,
-        note: "Essential — without a metal mordant the flavonoid color barely bonds and washes straight out. A pinch of cream of tartar with the alum brightens wool and softens the hand."
-      },
-      {
-        item: "Water",
-        amount: "Enough to cover fiber and material freely in each bath",
-        required: true,
-        note: "Soft or rainwater gives a cleaner yellow; hard water can dull it."
-      },
-      {
-        item: "Iron water (ferrous acetate)",
-        amount: "A small splash as an afterbath, to taste",
-        required: false,
-        note: "Optional [[tech-iron-acetate|iron water]] afterbath saddens and greens the color and modestly improves its staying power. Add gradually — too much turns it muddy grey-green."
-      },
-      {
-        item: "Washing soda or wood-ash lye (alkali)",
-        amount: "A small pinch, optional",
-        required: false,
-        note: "An alkaline nudge ([[tech-wood-ash-lye|wood-ash alkali]]) can brighten and warm the yellow; acid pulls it paler. See [[tech-acid-base|acid & base shifters]]."
-      }
-    ],
-    toolsRequired: [
-      "Dedicated non-food dye pot (stainless steel; never used for food afterward)",
-      "Dedicated stainless or wooden stirring spoon/tongs",
-      "Nitrile or rubber gloves",
-      "Strainer or muslin/cheesecloth to remove plant matter",
-      "Kitchen scale (for weighing fiber and alum)",
-      "Hand pruners or loppers for cutting honeysuckle"
-    ],
-    toolsOptional: [
-      "Second dedicated pot or jar for the iron afterbath",
-      "pH strips to track acid/alkali shifts",
-      "Thermometer to hold a gentle simmer",
-      "Bucket for transporting cut material"
-    ],
-    steps: [
-      "Harvest only where removal is permitted — occurrence on the map is not permission. On land where you have the right to cut, bush and Japanese honeysuckles are aggressive invasives, so taking flowering, leafy branches counts as ecologically positive removal: cut generously in late May to June when flowers are open. Bag or pile the rest of the cut brush for proper disposal (do not compost berried or rooting stems, which can resprout or spread seed).",
-      "Strip flowers and leaves from the branches into your dedicated pot, chopping the leaves to expose more surface. Aim for at least the dry weight of your fiber in fresh material, ideally more — the color is modest, so volume helps. Leave the berries out of the pot.",
-      "Pre-mordant the fiber: dissolve alum (10-15% WOF, plus an optional pinch of cream of tartar) in warm water, add the wetted-out wool or silk, hold just below a simmer about an hour, and let it cool in the bath (overnight is best). Wearing gloves, lift out and gently squeeze — do not wring wool.",
-      "Make the dyebath: cover the flowers and leaves with water in the dedicated pot and bring to a gentle simmer (do not hard-boil, which dulls and browns flavonoid yellows). Hold around 1 hour, then strain out all plant matter through muslin so it won't mat into the fiber.",
-      "Dye the fiber: return the strained liquor to the pot, add the damp mordanted fiber, and hold at a gentle simmer 45-60 minutes, turning occasionally for even uptake. Then cut the heat and let the fiber steep as the bath cools — several hours or overnight deepens a pale color.",
-      "Optional shifts: for a greener, slightly steadier result, lift the fiber and dip it briefly in a separate jar of iron water, adding the iron gradually until you like the shade. A small pinch of washing soda or wood-ash lye in the bath warms the yellow; acid pales it. Wear gloves and avoid splashing — the alkali is mildly caustic. Make these tweaks in a separate vessel so you can stop at the color you want.",
-      "Rinse and cure: squeeze out excess, let the fiber cure dry a day or two to set, then rinse in cool water with a drop of pH-neutral soap until it runs clear. Dry out of direct sun. Label the result as a craft dye, not food, and keep dye tools separate from kitchenware for good."
-    ],
-    modifiers: "Flowers carry the yellow; the leaves' tannin pushes the bath green, and adding stems drags it toward brown — so you can steer the hue just by what you put in the pot. Beyond that: [[tech-iron-acetate|iron water]] (ferrous acetate) saddens and greens the color and modestly firms its lightfastness — the most useful modifier here, since the unmodified yellow is so fugitive. Alkali (washing soda or [[tech-wood-ash-lye|wood-ash alkali]]) tends to brighten and warm the yellow; acid pales and cools it — see [[tech-acid-base|acid & base shifters]]. The base color still depends entirely on the alum mordant; the modifiers only tune a hue that the mordant has already fixed.",
-    preservation: "Use the strained dyebath fresh — within a day or two. Like most leaf-and-flower liquors it has no keeping qualities: left at room temperature it ferments, smells sour, and grows mold within days, and chilling only buys a little time. There is nothing to bottle or shelve here; if you want to bank color, dye the fiber now rather than storing liquid. Dried honeysuckle flowers and leaves keep far better than the bath — store them airtight and dry, away from light, and rehydrate when you are ready to dye. See [[tech-preserving|preserving plant material]] for drying notes.",
-    yield: "Be honest with yourself: this is a low-yield, low-saturation dye. A full pot of fresh flowers and leaves typically gives only a pale, slightly greenish yellow on a small skein of wool — think a soft butter-to-sage tint, not a bold gold. You can deepen it with more material, a longer cool-down steep, or a second dyebath, but it will never read as a saturated weld-style yellow. The honest framing is that the appeal is the source (cutting back an invasive) and the gentle color, not strength or permanence.",
-    beyondInk: "First and foremost a textile dye — soft yellow-greens on alum-mordanted wool and silk, greener with an iron afterbath, paler on cotton and linen even with a tannin pre-treat. The same simmered, strained liquor can be brushed on paper as a fugitive botanical wash or watercolor (bind with [[tech-gum-arabic|gum arabic]] for paint), though expect it to fade like the dye. It also suits eco-printing and bundle-dyeing: lay fresh honeysuckle flowers and leaves directly on damp mordanted cloth, roll, and steam to print soft yellow and green impressions. In every use, treat the color as a craft material and a gentle one — lovely for swatches, scarves, and protected pieces, not for anything that must hold up to sun or hard washing.",
-    safety: [
-      "Craft material, not food. This is a dye, not a culinary preparation — keep it out of the kitchen and off your plate. The bright berries of the invasive bush honeysuckles (and of Japanese honeysuckle) are mildly toxic — saponins, plus cyanogenic glycosides in Japanese honeysuckle — and can cause stomach cramps, vomiting, and diarrhea if eaten, so keep berries out of the dyepot entirely and never let any dye material near food. (Honeysuckle flowers appear in some herbal teas, but that is a separate, species-specific food use — do not treat this dye material as edible.)",
-      "Use dedicated non-food tools: a separate pot, spoon/tongs, and strainer reserved for dyeing only, and never returned to cooking use. Mordant residue and concentrated plant liquor should not contaminate cookware.",
-      "Wear nitrile or rubber gloves throughout. Hot dye liquor stains skin, and alum mordant is a mild irritant to skin and eyes.",
-      "Handle alum carefully: keep it labeled, sealed, and out of reach of children and pets; do not breathe the powder. It is a low-hazard mordant but still a chemical, not a seasoning.",
-      "Washing soda and wood-ash lye are alkaline and mildly caustic — wear gloves, avoid splashing them in your eyes, and keep them labeled and away from children. Add only small pinches.",
-      "Confirm identification and that cutting is permitted before you harvest — occurrence on the map is not permission. Cut invasive bush/Japanese honeysuckle only on land where removal is allowed, and dispose of berried or rooting stems properly rather than composting, since they can resprout or spread seed.",
-      "Simmer in a ventilated space; the plant steam is harmless but the pot is hot — avoid burns and keep the dyebath from boiling over.",
-      "If you use an iron afterbath, keep iron water clearly labeled and away from food and children; over-iron baths can weaken protein fiber over time."
-    ],
-    sources: [
-      {
-        title: "Natural Dyeing with Honeysuckle — Obovate Designs (parts used and colors: leaves green from tannin, flowers yellow, stems brown)",
-        url: "https://obovate.wordpress.com/2015/05/01/natural-dyeing-honeysuckle/"
-      },
-      {
-        title: "Invasive Amur Bush Honeysuckle — University of Illinois Extension (invasive status, phenology, removal methods)",
-        url: "https://extension.illinois.edu/invasives/invasive-amur-bush-honeysuckle"
-      },
-      {
-        title: "Amur Honeysuckle (Lonicera maackii) — Wisconsin DNR (identification, ecological harm, control)",
-        url: "https://dnr.wisconsin.gov/topic/Invasives/fact/AmurHoneysuckle"
-      },
-      {
-        title: "The Effect of pH on Yellow Dyes from the Garden — Catharine Ellis, Natural Dye Experiments (flavonoid yellows and their mordant dependence)",
-        url: "https://blog.ellistextiles.com/2020/06/23/the-effect-of-ph-on-yellow-dyes-from-the-garden/"
       }
     ]
   },
