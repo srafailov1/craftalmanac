@@ -2889,6 +2889,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11],
     inatTaxonIds: [54504],
     shenandoahAllowed: false,
+    usedParts: "Fallen green-to-black hulls.",
     notes: "Green hulls make dark brown to black ink; wear gloves and avoid damaging trees."
   },
   {
@@ -2899,6 +2900,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11, 12],
     inatTaxonIds: [47851],
     shenandoahAllowed: false,
+    usedParts: "Fallen oak galls and acorn caps.",
     notes: "Tannin-rich galls and caps can make gray, brown, and iron-black inks."
   },
   {
@@ -2909,6 +2911,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11],
     inatTaxonIds: [54788],
     shenandoahAllowed: false,
+    usedParts: "Outer nut hulls (fallen).",
     notes: "Outer hulls produce warm brown ink and dye; gather fallen hulls where allowed."
   },
   {
@@ -2919,6 +2922,7 @@ const inkSpeciesCatalog = [
     months: [8, 9, 10, 11],
     inatTaxonIds: [54765],
     shenandoahAllowed: false,
+    usedParts: "Ripe berry clusters (drupes).",
     notes: "True Rhus sumacs are tannin-rich and useful for brown or modifier inks."
   },
   {
@@ -2929,6 +2933,7 @@ const inkSpeciesCatalog = [
     months: [5, 6, 7],
     inatTaxonIds: [51874],
     shenandoahAllowed: false,
+    usedParts: "Flowers and leaves.",
     notes: "Flowers and leaves can shift toward pale yellow or greenish ink."
   },
   {
@@ -2939,6 +2944,7 @@ const inkSpeciesCatalog = [
     months: [8, 9, 10],
     inatTaxonIds: [48678],
     shenandoahAllowed: false,
+    usedParts: "Flowering tops in bloom.",
     notes: "Flowering tops produce yellow ink and dye when collected in bloom."
   },
   {
@@ -2949,6 +2955,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11],
     inatTaxonIds: [58205],
     shenandoahAllowed: false,
+    usedParts: "Heartwood and fallen fruit.",
     notes: "Wood and fruit can produce strong yellow tones; avoid cutting living wood without permission."
   },
   {
@@ -2959,6 +2966,7 @@ const inkSpeciesCatalog = [
     months: [8, 9, 10],
     inatTaxonIds: [48599],
     shenandoahAllowed: false,
+    usedParts: "Ripe dark berries.",
     notes: "Berries make vivid magenta ink but the plant is toxic; handle carefully and label clearly."
   },
   {
@@ -2969,6 +2977,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11],
     inatTaxonIds: [64697],
     shenandoahAllowed: false,
+    usedParts: "Ripe red fruit.",
     notes: "Ripe fruit can make pink-red ink; this invasive shrub is common on edges."
   },
   {
@@ -2979,6 +2988,7 @@ const inkSpeciesCatalog = [
     months: [6, 7, 8],
     inatTaxonIds: [84227],
     shenandoahAllowed: false,
+    usedParts: "Ripe fruit.",
     notes: "Fruit gives pink-red stains and inks; plants are bristly and often invasive."
   },
   {
@@ -2989,6 +2999,7 @@ const inkSpeciesCatalog = [
     months: [7, 8, 9],
     inatTaxonIds: [52689],
     shenandoahAllowed: false,
+    usedParts: "Ripe berries (ripe only).",
     notes: "Ripe berries can make purple ink; leaves, stems, and unripe parts are unsafe."
   },
   {
@@ -2999,6 +3010,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11, 12],
     inatTaxonIds: [69819],
     shenandoahAllowed: false,
+    usedParts: "Ripe berries.",
     notes: "Berries can shift blue, purple, or green; many privets are invasive and fruits are not edible."
   },
   {
@@ -3009,6 +3021,7 @@ const inkSpeciesCatalog = [
     months: [8, 9, 10],
     inatTaxonIds: [60773, 166162],
     shenandoahAllowed: false,
+    usedParts: "Dark ripe fruit.",
     notes: "Dark fruits can make blue-purple inks; this group includes inedible Boston ivy for pigment mapping."
   },
   {
@@ -3019,6 +3032,7 @@ const inkSpeciesCatalog = [
     months: [9, 10, 11],
     inatTaxonIds: [54802],
     shenandoahAllowed: false,
+    usedParts: "Ripe blue-black drupes.",
     notes: "Ripe blue-black drupes make a dusky grape-purple ink; the fruit is edible but very sour. Leave plenty — important fall food for birds."
   },
   // ---- 2026-06 ink/dye expansion beyond the temperate East (candidates pass).
