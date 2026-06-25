@@ -69,18 +69,30 @@ const DISCOVERY_SCHEMA = {
   required: ['candidates'],
 }
 
-const CONSOLIDATE_FIELDS = Object.assign({}, CANDIDATE_FIELDS, {
-  prelimVerdict: { type: 'string', description: 'feature | flag | exclude' },
-  mergedFrom: { type: 'string', description: 'which craft/region lenses surfaced it' },
-})
+// Compact on purpose: the verify phase re-researches each material from scratch,
+// so consolidation must NOT echo the long discovery prose (that blew the 64k
+// output cap on the first run). Short fields + a one-line note only.
 const CONSOLIDATE_SCHEMA = {
   type: 'object',
   properties: {
     master: {
       type: 'array',
-      items: { type: 'object', properties: CONSOLIDATE_FIELDS, required: ['material', 'scientificName', 'craft', 'partUsed', 'region', 'proposedHarvestEthic', 'geolocatability', 'prelimVerdict'] },
+      items: {
+        type: 'object',
+        properties: {
+          material: { type: 'string', description: 'Common/material name' },
+          scientificName: { type: 'string' },
+          craftShort: { type: 'string', description: 'The 3D craft use, <= 12 words' },
+          partUsed: { type: 'string', description: '<= 8 words' },
+          regionShort: { type: 'string', description: 'Contiguous-US region(s), <= 8 words' },
+          proposedHarvestEthic: { type: 'string', description: ETHIC_LABELS },
+          prelimVerdict: { type: 'string', description: 'feature | flag | exclude' },
+          note: { type: 'string', description: 'ONE compact line (<= 30 words): the key reason it fits or is flagged, incl. any cultural/appropriation flag.' },
+        },
+        required: ['material', 'scientificName', 'craftShort', 'proposedHarvestEthic', 'prelimVerdict', 'note'],
+      },
     },
-    coverageGaps: { type: 'array', items: { type: 'string' }, description: 'Craft types, regions, or material classes that look under-covered and deserve a focused gap-fill search' },
+    coverageGaps: { type: 'array', items: { type: 'string' }, description: 'Under-covered craft types/culture areas/material classes for a focused follow-up search' },
   },
   required: ['master', 'coverageGaps'],
 }
@@ -104,6 +116,13 @@ const VERIFY_SCHEMA = {
     citations: { type: 'array', items: { type: 'string' } },
   },
   required: ['material', 'scientificName', 'inatTaxonId', 'geolocatable', 'verdict', 'correctedHarvestEthic', 'permissionFit', 'rationale'],
+}
+// Verify a small batch per agent (keeps agent count ~20 instead of ~100, and
+// each agent's output stays tiny — a few VERIFY objects, far under any cap).
+const VERIFY_BATCH_SCHEMA = {
+  type: 'object',
+  properties: { results: { type: 'array', items: VERIFY_SCHEMA } },
+  required: ['results'],
 }
 
 const EXISTING_SCHEMA = {
@@ -192,7 +211,7 @@ log(`Discovery surfaced ${allCandidates.length} raw candidate rows across ${CRAF
 // ---------- Phase 2: Consolidate ----------
 phase('Consolidate')
 const consolidated = await agent(
-  `${SITE}\n\nYou are CONSOLIDATING the raw discovery output for the 3D/Objects map. Below is a JSON array of candidate material rows surfaced by ${CRAFT_DOMAINS.length} craft-domain researchers and ${REGIONS.length} Indigenous-craft researchers (many overlap — e.g. willow, sumac, yucca, devil's claw appear across regions).\n\nProduce a DEDUPED, MERGED master list. Merge rows for the same material/species into one entry, combining the craft uses, regions, cultural contexts, and the strictest applicable safety/ethic. For each merged entry assign a prelimVerdict of "feature" (abundant/secular/mappable + plausibly harvestable), "flag" (sacred/stewarded/appropriated/protected/slow-growing/overharvested/legally-restricted/seriously-toxic -> show as observe-only/cautionary), or "exclude" (not actually a 3D craft material, not geolocatable AND no value, or out of contiguous-US scope). Keep entries that are flagged — flagging is valuable. Also return a coverageGaps list: craft types, culture areas, or material classes that look under-covered and warrant a focused follow-up search.\n\nRAW CANDIDATES JSON:\n${JSON.stringify(allCandidates)}`,
+  `${SITE}\n\nYou are CONSOLIDATING raw discovery output for the 3D/Objects map. Below is a JSON array of candidate rows from ${CRAFT_DOMAINS.length} craft-domain researchers and ${REGIONS.length} Indigenous-craft researchers. There is HEAVY overlap — willow, sumac, yucca, devil's claw, cattail, redbud, dogbane, etc. recur across many lenses.\n\nProduce a DEDUPED, MERGED master list, ONE entry per distinct material/species.\n\n*** CRITICAL — KEEP EVERY FIELD COMPACT. *** The next phase re-researches each material from scratch, so it needs only a short name plus a one-line note. Do NOT copy the long discovery prose (cultural context, safety paragraphs, source URLs). A previous attempt failed by emitting verbose fields and exceeding the output limit. Each entry: material, scientificName, craftShort (<=12 words), partUsed (<=8 words), regionShort (<=8 words), proposedHarvestEthic (${ETHIC_LABELS}), prelimVerdict, and a single compact note (<=30 words). \n\nAssign prelimVerdict: "feature" (abundant/secular/mappable + plausibly harvestable somewhere), "flag" (sacred/stewarded/appropriated/protected/slow-growing/overharvested/legally-restricted/seriously-toxic -> keep as observe-only/cautionary), or "exclude" (not a 3D craft material, or out of contiguous-US scope). KEEP flagged entries — flagging is valuable. Also return coverageGaps: under-covered craft types, culture areas, or material classes worth a focused follow-up. Keep the ENTIRE response compact.\n\nRAW CANDIDATES JSON:\n${JSON.stringify(allCandidates)}`,
   { label: 'consolidate', phase: 'Consolidate', schema: CONSOLIDATE_SCHEMA, effort: 'high' }
 )
 let master = consolidated.master || []
@@ -207,28 +226,65 @@ if (gaps.length) {
     { label: `gap:${g.slice(0, 28)}`, phase: 'Gap-fill', schema: DISCOVERY_SCHEMA }
   )))).filter(Boolean)
   const gapCandidates = gapResults.flatMap(r => r.candidates || [])
-  const seen = new Set(master.map(m => (m.scientificName || '').toLowerCase().trim()))
+  const seen = new Set(master.map(m => (m.scientificName || m.material || '').toLowerCase().trim()))
   let added = 0
   for (const c of gapCandidates) {
-    const k = (c.scientificName || '').toLowerCase().trim()
-    if (k && !seen.has(k)) { seen.add(k); master.push(Object.assign({ prelimVerdict: 'feature', mergedFrom: 'gap-fill' }, c)); added++ }
+    const k = (c.scientificName || c.material || '').toLowerCase().trim()
+    if (k && !seen.has(k)) {
+      seen.add(k)
+      // map verbose discovery shape -> compact master shape
+      master.push({
+        material: c.material,
+        scientificName: c.scientificName,
+        craftShort: c.craft,
+        partUsed: c.partUsed,
+        regionShort: c.region,
+        proposedHarvestEthic: c.proposedHarvestEthic,
+        prelimVerdict: 'feature',
+        note: (c.whyFitsOrFlag || '').slice(0, 200),
+      })
+      added++
+    }
   }
   log(`Gap-fill added ${added} new candidates (from ${gapCandidates.length} surfaced).`)
 } else {
   log('No coverage gaps flagged; skipping gap-fill.')
 }
 
-// ---------- Phase 4: Verify (adversarial, per candidate) ----------
+// ---------- Phase 4: Verify (adversarial, batched ~4 per agent) ----------
 phase('Verify')
-const verified = (await parallel(master.map(c => () => agent(
-  `${SITE}\n\n${WEBTOOLS}\n\nYou are an ADVERSARIAL VERIFIER. Pressure-test this candidate material for the 3D/Objects map. Be skeptical: the project's reputation depends on not recommending something that is protected, illegal to harvest, culturally inappropriate to wild-harvest, or unmappable.\n\nCANDIDATE (JSON): ${JSON.stringify(c)}\n\nVerify and report, with citations:\n- iNaturalist taxon id + approximate US observation count (use the API as described). Decide geolocatable = yes / weak / no.\n- Conservation status (NatureServe, United Plant Savers at-risk/to-watch, state rare/protected lists). Is it genuinely abundant?\n- Legal restrictions on harvesting THIS PART for craft: noxious-weed status, state protected-plant laws, the Migratory Bird Treaty Act / Bald & Golden Eagle Protection Act (for feathers), antler/wildlife-part rules, NPS/federal collection prohibition.\n- Cultural sensitivity: is wild-harvest of this material sacred/ceremonially-restricted/stewarded/appropriated? How should the site handle it?\n- Permission fit: WHERE is craft harvest of this part plausibly permitted given the site's rule types (USFS/BLM personal-use special-forest-products, private/cultivated land, invasive-removal), and where is it NOT (NPS general plant-collection prohibition — remember the 36 CFR 2.1 food exception does NOT cover craft material)?\n- correctedHarvestEthic (${ETHIC_LABELS}) and a final verdict: "feature" (safe, abundant, mappable, harvestable somewhere defensibly), "flag" (include only as observe-only / cautionary), or "exclude" (drop). Give confidence + rationale.`,
-  { label: `verify:${(c.material || '?').slice(0, 26)}`, phase: 'Verify', schema: VERIFY_SCHEMA, effort: 'high' }
-).then(v => v ? Object.assign({}, c, v) : null)))).filter(Boolean)
+const normKey = (s) => (s || '').toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/).slice(0, 2).join(' ').trim()
+const masterByKey = new Map()
+for (const m of master) masterByKey.set(normKey(m.scientificName || m.material), m)
+
+// Only verify candidates worth featuring or flagging; consolidation-excluded skip straight to the report.
+const toVerify = master.filter(c => (c.prelimVerdict || 'feature') !== 'exclude')
+const excludedPre = master.filter(c => c.prelimVerdict === 'exclude')
+
+const BATCH = 4
+const batches = []
+for (let i = 0; i < toVerify.length; i += BATCH) batches.push(toVerify.slice(i, i + BATCH))
+log(`Verifying ${toVerify.length} candidates in ${batches.length} batches of ${BATCH} (${excludedPre.length} pre-excluded).`)
+
+const verifiedNested = (await parallel(batches.map((batch, bi) => () => agent(
+  `${SITE}\n\n${WEBTOOLS}\n\nYou are an ADVERSARIAL VERIFIER. Independently pressure-test EACH of the candidate materials below for the 3D/Objects map. Be skeptical — the project's reputation depends on never recommending something that is protected, illegal to harvest, culturally inappropriate to wild-harvest, or unmappable. Be efficient: a few targeted lookups per material, then decide.\n\nFor EACH candidate return one result object (echo back its material and scientificName EXACTLY so it can be matched) with, citing sources:\n- iNaturalist taxon id + approximate US observation count (use the API). Decide geolocatable = yes / weak / no.\n- Conservation status (NatureServe, United Plant Savers at-risk/to-watch, state rare/protected lists). Genuinely abundant?\n- Legal restrictions on harvesting THIS PART for craft: noxious-weed status, state protected-plant laws, Migratory Bird Treaty Act / Bald & Golden Eagle Protection Act (feathers), antler/wildlife-part rules, NPS/federal collection prohibition.\n- Cultural sensitivity: is wild-harvest sacred/ceremonially-restricted/stewarded/appropriated? How should the site handle it?\n- Permission fit: WHERE is craft harvest of this part plausibly permitted given the site's rule types (USFS/BLM personal-use special-forest-products, private/cultivated land, invasive-removal), and where is it NOT (NPS general plant-collection prohibition — the 36 CFR 2.1 food exception does NOT cover craft material)?\n- correctedHarvestEthic (${ETHIC_LABELS}) and a final verdict: "feature" (safe, abundant, mappable, harvestable somewhere defensibly), "flag" (observe-only / cautionary), or "exclude" (drop). Give confidence + rationale.\n\nCANDIDATES (JSON array): ${JSON.stringify(batch)}`,
+  { label: `verify:batch-${bi + 1}`, phase: 'Verify', schema: VERIFY_BATCH_SCHEMA, effort: 'medium' }
+).then(r => (r && Array.isArray(r.results)) ? r.results : [])))).filter(Boolean)
+
+// merge each verify result back onto its compact master entry (craftShort/partUsed/region)
+const verified = verifiedNested.flat().map(v => {
+  const base = masterByKey.get(normKey(v.scientificName || v.material)) || {}
+  return Object.assign({}, base, v)
+})
 
 const feature = verified.filter(v => v.verdict === 'feature')
 const flag = verified.filter(v => v.verdict === 'flag')
 const exclude = verified.filter(v => v.verdict === 'exclude')
-log(`Verified ${verified.length}: ${feature.length} feature, ${flag.length} flag (observe-only), ${exclude.length} exclude.`)
+// Excluded set for the report = consolidation-excluded + verify-excluded
+const excludedForReport = excludedPre
+  .map(e => ({ material: e.material, scientificName: e.scientificName, rationale: e.note }))
+  .concat(exclude.map(e => ({ material: e.material, scientificName: e.scientificName, rationale: e.rationale })))
+log(`Verified ${verified.length}: ${feature.length} feature, ${flag.length} flag (observe-only), ${exclude.length} verify-excluded; ${excludedPre.length} pre-excluded.`)
 
 // ---------- Phase 5: Synthesize ----------
 phase('Synthesize')
@@ -244,7 +300,7 @@ OUTPUT FORMAT for markdownSection — match the existing docs/new-materials-cand
 Use real iNaturalist taxon ids where the verification found them.`
 
 const synthesis = await agent(
-  `${SITE}\n\nYou are SYNTHESIZING the final research deliverable for the project owner. You have verified candidate data and the re-evaluation of the four existing candidates. Write (1) markdownSection to append to the candidates doc, and (2) findingsSummary — a clear, honest narrative report answering the owner's request: a breadth survey of crafts whose materials fit the harvest ethics, with the strongest recommendations called out; the permission-structure insight; the Indigenous-practices findings with appropriation flags; and the verdict on the four existing candidates (especially the seashell geolocation question). Recommend a concrete shortlist of the best initial materials for the map and note the biggest caveats.\n\n${FORMAT}\n\nFEATURE candidates (JSON): ${JSON.stringify(feature)}\n\nFLAGGED candidates (JSON): ${JSON.stringify(flag)}\n\nEXCLUDED (JSON, names+rationale only): ${JSON.stringify(exclude.map(e => ({ material: e.material, scientificName: e.scientificName, rationale: e.rationale })))}\n\nEXISTING-4 re-evaluation (JSON): ${JSON.stringify(existingEval.evaluations)}`,
+  `${SITE}\n\nYou are SYNTHESIZING the final research deliverable for the project owner. You have verified candidate data and the re-evaluation of the four existing candidates. Write (1) markdownSection to append to the candidates doc, and (2) findingsSummary — a clear, honest narrative report answering the owner's request: a breadth survey of crafts whose materials fit the harvest ethics, with the strongest recommendations called out; the permission-structure insight; the Indigenous-practices findings with appropriation flags; and the verdict on the four existing candidates (especially the seashell geolocation question). Recommend a concrete shortlist of the best initial materials for the map and note the biggest caveats.\n\n${FORMAT}\n\nFEATURE candidates (JSON): ${JSON.stringify(feature)}\n\nFLAGGED candidates (JSON): ${JSON.stringify(flag)}\n\nEXCLUDED (JSON, names+rationale only): ${JSON.stringify(excludedForReport)}\n\nEXISTING-4 re-evaluation (JSON): ${JSON.stringify(existingEval.evaluations)}`,
   { label: 'synthesize', phase: 'Synthesize', schema: SYNTH_SCHEMA, effort: 'high' }
 )
 
