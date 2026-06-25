@@ -1,0 +1,1752 @@
+[
+{
+"id": "mrds-10260143",
+"speciesId": "mineral-slate",
+"lat": 34.73342,
+"lng": -92.42576,
+"name": "No Name",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260143",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10210979",
+"speciesId": "mineral-clay",
+"lat": 34.48042,
+"lng": -94.40162,
+"name": "Unk",
+"county": "Polk",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210979",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10113957",
+"speciesId": "mineral-quartz",
+"lat": 34.66572,
+"lng": -93.42599,
+"name": "Chalybeates Springs Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10113957",
+"perm": "USFS"
+},
+{
+"id": "mrds-10111285",
+"speciesId": "mineral-gemstone",
+"lat": 34.03374,
+"lng": -93.67353,
+"name": "Prairie Creek Kimberlite",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10111285",
+"perm": "State park"
+},
+{
+"id": "mrds-10113938",
+"speciesId": "mineral-clay",
+"lat": 35.04821,
+"lng": -92.44906,
+"name": "Unk",
+"county": "Faulkner",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10113938",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10113960",
+"speciesId": "mineral-clay",
+"lat": 34.96621,
+"lng": -93.23459,
+"name": "Unk",
+"county": "Yell",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10113960",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114041",
+"speciesId": "mineral-clay",
+"lat": 35.07761,
+"lng": -92.41656,
+"name": "Unk",
+"county": "Faulkner",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114041",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114048",
+"speciesId": "mineral-quartz",
+"lat": 34.50012,
+"lng": -93.5671,
+"name": "Fiddler's Ridge Crystal Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114048",
+"perm": "USFS"
+},
+{
+"id": "mrds-10114159",
+"speciesId": "mineral-quartz",
+"lat": 34.52012,
+"lng": -93.41689,
+"name": "Starfire Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114159",
+"perm": "USFS"
+},
+{
+"id": "mrds-10114198",
+"speciesId": "mineral-clay",
+"lat": 34.35202,
+"lng": -92.78267,
+"name": "Malvern Brick & Tile",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114198",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114209",
+"speciesId": "mineral-clay",
+"lat": 35.03481,
+"lng": -93.07458,
+"name": "Unk",
+"county": "Perry",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114209",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114224",
+"speciesId": "mineral-silica",
+"lat": 34.53652,
+"lng": -93.38159,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114224",
+"perm": "USFS"
+},
+{
+"id": "mrds-10114339",
+"speciesId": "mineral-silica",
+"lat": 34.66232,
+"lng": -93.21629,
+"name": "Phillips Claim",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114339",
+"perm": "USFS"
+},
+{
+"id": "mrds-10114345",
+"speciesId": "mineral-slate",
+"lat": 34.49952,
+"lng": -93.34099,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114345",
+"perm": "USFS"
+},
+{
+"id": "mrds-10114452",
+"speciesId": "mineral-clay",
+"lat": 34.57872,
+"lng": -92.56627,
+"name": "Unknown",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114452",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114487",
+"speciesId": "mineral-gemstone",
+"lat": 34.03293,
+"lng": -93.6671,
+"name": "Prairie Creek Diamond Area",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114487",
+"perm": "State park"
+},
+{
+"id": "mrds-10114627",
+"speciesId": "mineral-clay",
+"lat": 34.56622,
+"lng": -92.55516,
+"name": "Hicks and Rodenbaugh Clay Banks",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114627",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114673",
+"speciesId": "mineral-clay",
+"lat": 34.76931,
+"lng": -93.92191,
+"name": "Okay Pit & Plant",
+"county": "Howard",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114673",
+"perm": "USFS"
+},
+{
+"id": "mrds-10114688",
+"speciesId": "mineral-silica",
+"lat": 34.74182,
+"lng": -93.10408,
+"name": "J W Ellison Tract",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114688",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114718",
+"speciesId": "mineral-clay",
+"lat": 35.01731,
+"lng": -92.41826,
+"name": "Unk",
+"county": "Faulkner",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114718",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10114723",
+"speciesId": "mineral-clay",
+"lat": 34.96621,
+"lng": -93.24549,
+"name": "Unk",
+"county": "Yell",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114723",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138535",
+"speciesId": "mineral-clay",
+"lat": 34.94181,
+"lng": -93.8369,
+"name": "Unk",
+"county": "Scott",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138535",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138650",
+"speciesId": "mineral-gemstone",
+"lat": 34.03323,
+"lng": -93.6741,
+"name": "American Mines",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138650",
+"perm": "State park"
+},
+{
+"id": "mrds-10138058",
+"speciesId": "mineral-clay",
+"lat": 34.14433,
+"lng": -92.66407,
+"name": "Unk",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138058",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138073",
+"speciesId": "mineral-clay",
+"lat": 33.91513,
+"lng": -94.38692,
+"name": "Unk",
+"county": "Little River",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138073",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138092",
+"speciesId": "mineral-quartz",
+"lat": 34.50012,
+"lng": -93.6302,
+"name": "Leatherhead Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138092",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138119",
+"speciesId": "mineral-clay",
+"lat": 34.47762,
+"lng": -94.40162,
+"name": "Unk",
+"county": "Polk",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138119",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138120",
+"speciesId": "mineral-clay",
+"lat": 34.23203,
+"lng": -93.8249,
+"name": "Unknown Shale Pit",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138120",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138205",
+"speciesId": "mineral-silica",
+"lat": 34.35292,
+"lng": -93.93081,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138205",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138226",
+"speciesId": "mineral-clay",
+"lat": 34.35702,
+"lng": -92.84187,
+"name": "Acme Brick Co.",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138226",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138253",
+"speciesId": "mineral-quartz",
+"lat": 34.45932,
+"lng": -93.6774,
+"name": "Wegner Quartz Crystals",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138253",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138270",
+"speciesId": "mineral-clay",
+"lat": 34.74702,
+"lng": -92.34456,
+"name": "Arkansas Calcine Mill",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138270",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138385",
+"speciesId": "mineral-clay",
+"lat": 34.02933,
+"lng": -92.83237,
+"name": "Unk",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138385",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138398",
+"speciesId": "mineral-clay",
+"lat": 34.57932,
+"lng": -92.68327,
+"name": "Henderson and Davis Clay Banks",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138398",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138506",
+"speciesId": "mineral-silica",
+"lat": 34.73182,
+"lng": -92.96488,
+"name": "Hogan Green Area",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138506",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138517",
+"speciesId": "mineral-clay",
+"lat": 34.52872,
+"lng": -93.22348,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138517",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138529",
+"speciesId": "mineral-quartz",
+"lat": 34.74872,
+"lng": -92.75437,
+"name": "H.L.Barber Prospect",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138529",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138531",
+"speciesId": "mineral-quartz",
+"lat": 34.53822,
+"lng": -93.45459,
+"name": "Kimes Crystal Area",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138531",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138595",
+"speciesId": "mineral-quartz",
+"lat": 34.50012,
+"lng": -93.5635,
+"name": "Crystal Pyramid Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138595",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138721",
+"speciesId": "mineral-silica",
+"lat": 34.65762,
+"lng": -93.32659,
+"name": "A C Avant Area",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138721",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138750",
+"speciesId": "mineral-clay",
+"lat": 34.27983,
+"lng": -92.79827,
+"name": "Malvern Pit",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138750",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138770",
+"speciesId": "mineral-slate",
+"lat": 34.76622,
+"lng": -92.58877,
+"name": "No Name",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138770",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10138807",
+"speciesId": "mineral-slate",
+"lat": 34.42432,
+"lng": -94.06351,
+"name": "Avant & Heath",
+"county": "Polk",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138807",
+"perm": "USFS"
+},
+{
+"id": "mrds-10138809",
+"speciesId": "mineral-clay",
+"lat": 35.07761,
+"lng": -93.39299,
+"name": "Unk",
+"county": "Yell",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138809",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10159374",
+"speciesId": "mineral-quartz",
+"lat": 34.67762,
+"lng": -93.09408,
+"name": "John Mcearl Tract",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10159374",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10159418",
+"speciesId": "mineral-clay",
+"lat": 33.90573,
+"lng": -93.06708,
+"name": "Unk",
+"county": "Clark",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10159418",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10161598",
+"speciesId": "mineral-clay",
+"lat": 33.95593,
+"lng": -93.23548,
+"name": "Unk",
+"county": "Clark",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10161598",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162068",
+"speciesId": "mineral-clay",
+"lat": 33.93953,
+"lng": -92.40936,
+"name": "Unk",
+"county": "Cleveland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162068",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162155",
+"speciesId": "mineral-clay",
+"lat": 34.12293,
+"lng": -93.28099,
+"name": "Arkadelphia Mine",
+"county": "Clark",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162155",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162415",
+"speciesId": "mineral-clay",
+"lat": 34.21153,
+"lng": -93.5891,
+"name": "Unknown Shale Pit",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162415",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162421",
+"speciesId": "mineral-silica",
+"lat": 34.66682,
+"lng": -93.10598,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162421",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162426",
+"speciesId": "mineral-clay",
+"lat": 34.55372,
+"lng": -92.60127,
+"name": "Woolsey Clay Bank",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162426",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162427",
+"speciesId": "mineral-slate",
+"lat": 34.39292,
+"lng": -93.8266,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162427",
+"perm": "USFS"
+},
+{
+"id": "mrds-10162554",
+"speciesId": "mineral-silica",
+"lat": 34.77952,
+"lng": -92.41956,
+"name": "Quartz Crystal Prospect",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162554",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162641",
+"speciesId": "mineral-silica",
+"lat": 34.70042,
+"lng": -93.06128,
+"name": "Miller Mountain Quarry",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162641",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162657",
+"speciesId": "mineral-silica",
+"lat": 34.39792,
+"lng": -93.5874,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162657",
+"perm": "USFS"
+},
+{
+"id": "mrds-10162710",
+"speciesId": "mineral-silica",
+"lat": 34.40262,
+"lng": -93.7385,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162710",
+"perm": "USFS"
+},
+{
+"id": "mrds-10162784",
+"speciesId": "mineral-novaculite",
+"lat": 34.51452,
+"lng": -93.07658,
+"name": "Natural Hones Mill",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162784",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162827",
+"speciesId": "mineral-silica",
+"lat": 34.27122,
+"lng": -94.35852,
+"name": "Little Missouri",
+"county": "Polk",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162827",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162906",
+"speciesId": "mineral-silica",
+"lat": 34.72702,
+"lng": -92.84457,
+"name": "Marler Mine",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162906",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10162913",
+"speciesId": "mineral-silica",
+"lat": 34.78622,
+"lng": -92.82127,
+"name": "Fairchild #1 Claim",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162913",
+"perm": "USFS"
+},
+{
+"id": "mrds-10163093",
+"speciesId": "mineral-quartz",
+"lat": 34.30122,
+"lng": -94.09241,
+"name": "Unknown",
+"county": "Howard",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163093",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10163109",
+"speciesId": "mineral-quartz",
+"lat": 34.54512,
+"lng": -93.6185,
+"name": "Robins Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163109",
+"perm": "USFS"
+},
+{
+"id": "mrds-10163168",
+"speciesId": "mineral-soapstone",
+"lat": 34.55182,
+"lng": -92.75877,
+"name": "Congo Pit",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163168",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10163170",
+"speciesId": "mineral-silica",
+"lat": 34.66702,
+"lng": -93.06018,
+"name": "W T Coleman Tract",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163170",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10163173",
+"speciesId": "mineral-silica",
+"lat": 34.77182,
+"lng": -92.53766,
+"name": "H. J. White Prospect",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163173",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187065",
+"speciesId": "mineral-silica",
+"lat": 34.35702,
+"lng": -93.92941,
+"name": "Little Missouri",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187065",
+"perm": "USFS"
+},
+{
+"id": "mrds-10183829",
+"speciesId": "mineral-clay",
+"lat": 34.35792,
+"lng": -92.91548,
+"name": "Unk",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10183829",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10183911",
+"speciesId": "mineral-clay",
+"lat": 34.87571,
+"lng": -93.16988,
+"name": "Unk",
+"county": "Perry",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10183911",
+"perm": "USFS"
+},
+{
+"id": "mrds-10184303",
+"speciesId": "mineral-silica",
+"lat": 34.46092,
+"lng": -93.44489,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10184303",
+"perm": "USFS"
+},
+{
+"id": "mrds-10186558",
+"speciesId": "mineral-clay",
+"lat": 33.99123,
+"lng": -93.18348,
+"name": "Unk",
+"county": "Clark",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10186558",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10186867",
+"speciesId": "mineral-silica",
+"lat": 34.74152,
+"lng": -92.76347,
+"name": "Pritchard Prospect",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10186867",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10186873",
+"speciesId": "mineral-clay",
+"lat": 34.73292,
+"lng": -92.98708,
+"name": "Unk",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10186873",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10186978",
+"speciesId": "mineral-silica",
+"lat": 34.80042,
+"lng": -92.80127,
+"name": "J.T.Willis",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10186978",
+"perm": "USFS"
+},
+{
+"id": "mrds-10186993",
+"speciesId": "mineral-silica",
+"lat": 34.66152,
+"lng": -93.10268,
+"name": "Dierks Quartz Area No.4",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10186993",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187026",
+"speciesId": "mineral-silica",
+"lat": 34.77512,
+"lng": -92.80207,
+"name": "Ouachita National Forest",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187026",
+"perm": "USFS"
+},
+{
+"id": "mrds-10187044",
+"speciesId": "mineral-clay",
+"lat": 34.57012,
+"lng": -92.38736,
+"name": "Unknown",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187044",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187167",
+"speciesId": "mineral-clay",
+"lat": 34.54872,
+"lng": -93.05688,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187167",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187173",
+"speciesId": "mineral-silica",
+"lat": 34.54872,
+"lng": -92.94238,
+"name": "Hot Springs Pit",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187173",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187214",
+"speciesId": "mineral-silica",
+"lat": 34.33593,
+"lng": -92.73907,
+"name": "Unk",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187214",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187272",
+"speciesId": "mineral-silica",
+"lat": 34.67232,
+"lng": -93.06128,
+"name": "Dierks Tract No 3",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187272",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187312",
+"speciesId": "mineral-clay",
+"lat": 35.04871,
+"lng": -93.35209,
+"name": "Unk",
+"county": "Yell",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187312",
+"perm": "USFS"
+},
+{
+"id": "mrds-10187384",
+"speciesId": "mineral-gemstone",
+"lat": 34.03483,
+"lng": -93.6716,
+"name": "Crater of Diamonds -North",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187384",
+"perm": "State park"
+},
+{
+"id": "mrds-10187491",
+"speciesId": "mineral-clay",
+"lat": 34.32682,
+"lng": -93.30299,
+"name": "Glenwood",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187491",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10187612",
+"speciesId": "mineral-gemstone",
+"lat": 34.03203,
+"lng": -93.6735,
+"name": "Crater of Diamonds -South",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187612",
+"perm": "State park"
+},
+{
+"id": "mrds-10187650",
+"speciesId": "mineral-slate",
+"lat": 34.34182,
+"lng": -93.6669,
+"name": "Unknown",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187650",
+"perm": "USFS"
+},
+{
+"id": "mrds-10207671",
+"speciesId": "mineral-clay",
+"lat": 33.96183,
+"lng": -93.01628,
+"name": "Unk",
+"county": "Clark",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10207671",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10207711",
+"speciesId": "mineral-silica",
+"lat": 34.66762,
+"lng": -93.20768,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10207711",
+"perm": "USFS"
+},
+{
+"id": "mrds-10210252",
+"speciesId": "mineral-quartz",
+"lat": 34.67482,
+"lng": -93.21959,
+"name": "Miller Mountain Tract",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210252",
+"perm": "USFS"
+},
+{
+"id": "mrds-10210262",
+"speciesId": "mineral-slate",
+"lat": 34.50232,
+"lng": -93.37939,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210262",
+"perm": "USFS"
+},
+{
+"id": "mrds-10210650",
+"speciesId": "mineral-clay",
+"lat": 34.46122,
+"lng": -92.99798,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210650",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10210893",
+"speciesId": "mineral-clay",
+"lat": 34.55952,
+"lng": -93.07878,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210893",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10210966",
+"speciesId": "mineral-silica",
+"lat": 34.40982,
+"lng": -93.7374,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210966",
+"perm": "USFS"
+},
+{
+"id": "mrds-10210991",
+"speciesId": "mineral-clay",
+"lat": 34.24763,
+"lng": -93.8127,
+"name": "Unknown Shale Pit",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210991",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211008",
+"speciesId": "mineral-quartz",
+"lat": 34.59512,
+"lng": -93.7385,
+"name": "Magic Presance Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211008",
+"perm": "USFS"
+},
+{
+"id": "mrds-10211044",
+"speciesId": "mineral-slate",
+"lat": 34.32572,
+"lng": -93.8416,
+"name": "Pike Mining Co",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211044",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211045",
+"speciesId": "mineral-clay",
+"lat": 34.35932,
+"lng": -92.77827,
+"name": "Malvern Pit",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211045",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211145",
+"speciesId": "mineral-slate",
+"lat": 34.54592,
+"lng": -93.21378,
+"name": "Unk",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211145",
+"perm": "USFS"
+},
+{
+"id": "mrds-10211151",
+"speciesId": "mineral-quartz",
+"lat": 34.29232,
+"lng": -94.18021,
+"name": "Unknown",
+"county": "Howard",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211151",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211209",
+"speciesId": "mineral-silica",
+"lat": 34.38872,
+"lng": -92.67937,
+"name": "Wilcox Group Kaolin",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211209",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211269",
+"speciesId": "mineral-clay",
+"lat": 35.01481,
+"lng": -92.78847,
+"name": "Unk",
+"county": "Perry",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211269",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211366",
+"speciesId": "mineral-silica",
+"lat": 34.36902,
+"lng": -92.74347,
+"name": "Unk",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211366",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211400",
+"speciesId": "mineral-clay",
+"lat": 34.54432,
+"lng": -92.50706,
+"name": "Unknown",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211400",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211490",
+"speciesId": "mineral-clay",
+"lat": 34.17483,
+"lng": -93.95881,
+"name": "Unknown Shale Pit",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211490",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211505",
+"speciesId": "mineral-silica",
+"lat": 34.55012,
+"lng": -92.51016,
+"name": "Saline County",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211505",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211511",
+"speciesId": "mineral-clay",
+"lat": 34.24263,
+"lng": -93.93741,
+"name": "Shale Pit",
+"county": "Howard",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211511",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211512",
+"speciesId": "mineral-quartz",
+"lat": 34.50012,
+"lng": -93.5985,
+"name": "Forgotten Aye Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211512",
+"perm": "USFS"
+},
+{
+"id": "mrds-10211545",
+"speciesId": "mineral-soapstone",
+"lat": 34.72842,
+"lng": -92.59597,
+"name": "Wallis Soapstone Pit",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211545",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211550",
+"speciesId": "mineral-quartz",
+"lat": 34.81511,
+"lng": -92.83847,
+"name": "Kuhn Mine",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211550",
+"perm": "USFS"
+},
+{
+"id": "mrds-10211572",
+"speciesId": "mineral-clay",
+"lat": 34.55682,
+"lng": -92.46826,
+"name": "Unknown",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211572",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211673",
+"speciesId": "mineral-clay",
+"lat": 35.06091,
+"lng": -92.98708,
+"name": "Unk",
+"county": "Perry",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211673",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10211709",
+"speciesId": "mineral-quartz",
+"lat": 34.55182,
+"lng": -93.7702,
+"name": "Mcgrew Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211709",
+"perm": "USFS"
+},
+{
+"id": "mrds-10211757",
+"speciesId": "mineral-silica",
+"lat": 34.80012,
+"lng": -92.64377,
+"name": "Jeff and Robert Koon",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211757",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10232191",
+"speciesId": "mineral-quartz",
+"lat": 34.50512,
+"lng": -93.5852,
+"name": "Burch Lode Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10232191",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235142",
+"speciesId": "mineral-silica",
+"lat": 34.82451,
+"lng": -93.21349,
+"name": "Beard Area",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235142",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235153",
+"speciesId": "mineral-silica",
+"lat": 34.80791,
+"lng": -92.81407,
+"name": "Monro Johnson",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235153",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235203",
+"speciesId": "mineral-quartz",
+"lat": 34.61682,
+"lng": -93.6069,
+"name": "Diamond Drill Carbon #3",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235203",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235217",
+"speciesId": "mineral-slate",
+"lat": 34.54952,
+"lng": -93.18658,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235217",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235250",
+"speciesId": "mineral-silica",
+"lat": 33.92623,
+"lng": -92.75877,
+"name": "Unk",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235250",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235306",
+"speciesId": "mineral-silica",
+"lat": 34.79872,
+"lng": -92.81237,
+"name": "Hester Prospect",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235306",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235374",
+"speciesId": "mineral-soapstone",
+"lat": 34.70952,
+"lng": -92.58377,
+"name": "Unknown",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235374",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235382",
+"speciesId": "mineral-quartz",
+"lat": 34.61042,
+"lng": -92.60577,
+"name": "Ben J.Field",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235382",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235418",
+"speciesId": "mineral-slate",
+"lat": 34.39872,
+"lng": -93.8133,
+"name": "C.F. Saviac Quarry",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235418",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235479",
+"speciesId": "mineral-soapstone",
+"lat": 34.73012,
+"lng": -92.57097,
+"name": "Inman Soapstone Prospect",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235479",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235482",
+"speciesId": "mineral-quartz",
+"lat": 34.62982,
+"lng": -93.52189,
+"name": "George Shieffield No. 2 Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235482",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235552",
+"speciesId": "mineral-gemstone",
+"lat": 34.67012,
+"lng": -93.33019,
+"name": "Delinde Wavellite Mine",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235552",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235567",
+"speciesId": "mineral-quartz",
+"lat": 34.50842,
+"lng": -93.5635,
+"name": "Fisher Mountain Tract",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235567",
+"perm": "USFS"
+},
+{
+"id": "mrds-10235579",
+"speciesId": "mineral-clay",
+"lat": 34.03933,
+"lng": -93.6546,
+"name": "Twin Knobs Claypit",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235579",
+"perm": "State park"
+},
+{
+"id": "mrds-10235580",
+"speciesId": "mineral-clay",
+"lat": 35.03821,
+"lng": -92.42956,
+"name": "Unk",
+"county": "Faulkner",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235580",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235616",
+"speciesId": "mineral-silica",
+"lat": 34.49452,
+"lng": -93.06438,
+"name": "Hot Springs Mill",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235616",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235626",
+"speciesId": "mineral-clay",
+"lat": 34.36202,
+"lng": -92.79797,
+"name": "P D Holder",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235626",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235678",
+"speciesId": "mineral-clay",
+"lat": 34.46792,
+"lng": -94.37442,
+"name": "Unk",
+"county": "Polk",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235678",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235740",
+"speciesId": "mineral-clay",
+"lat": 34.24153,
+"lng": -93.23268,
+"name": "Unk",
+"county": "Clark",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235740",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235770",
+"speciesId": "mineral-gemstone",
+"lat": 34.03573,
+"lng": -93.6788,
+"name": "Ozark Mine",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235770",
+"perm": "State park"
+},
+{
+"id": "mrds-10235783",
+"speciesId": "mineral-silica",
+"lat": 34.69762,
+"lng": -93.06688,
+"name": "Colemans Mill",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235783",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10235880",
+"speciesId": "mineral-quartz",
+"lat": 34.50842,
+"lng": -93.5685,
+"name": "Fisher Mountain Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235880",
+"perm": "USFS"
+},
+{
+"id": "mrds-10256883",
+"speciesId": "mineral-soapstone",
+"lat": 34.63372,
+"lng": -92.56047,
+"name": "Arkansas Talc Co. Mine",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10256883",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10257180",
+"speciesId": "mineral-quartz",
+"lat": 34.65682,
+"lng": -93.10018,
+"name": "Blocker Lead Quartz",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10257180",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259719",
+"speciesId": "mineral-quartz",
+"lat": 34.70012,
+"lng": -93.06298,
+"name": "Quartz Processing Corp. Quarry",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259719",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259725",
+"speciesId": "mineral-silica",
+"lat": 34.73542,
+"lng": -92.98048,
+"name": "Hamilton Hill",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259725",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259799",
+"speciesId": "mineral-soapstone",
+"lat": 34.59652,
+"lng": -92.49736,
+"name": "Bryant Mill",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259799",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259812",
+"speciesId": "mineral-slate",
+"lat": 34.77092,
+"lng": -92.62847,
+"name": "No Name",
+"county": "Pulaski",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259812",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259868",
+"speciesId": "mineral-clay",
+"lat": 34.05843,
+"lng": -92.62627,
+"name": "Unk",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259868",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259978",
+"speciesId": "mineral-silica",
+"lat": 34.75902,
+"lng": -93.04078,
+"name": "O J Blackman",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259978",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10259996",
+"speciesId": "mineral-clay",
+"lat": 34.33683,
+"lng": -92.78157,
+"name": "Unk",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259996",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260037",
+"speciesId": "mineral-clay",
+"lat": 33.99933,
+"lng": -92.79437,
+"name": "Manning Pit",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260037",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260051",
+"speciesId": "mineral-clay",
+"lat": 34.37322,
+"lng": -92.84487,
+"name": "Unk",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260051",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260166",
+"speciesId": "mineral-silica",
+"lat": 34.73092,
+"lng": -92.77267,
+"name": "Harold Prospect",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260166",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260180",
+"speciesId": "mineral-clay",
+"lat": 35.07321,
+"lng": -92.41826,
+"name": "Unk",
+"county": "Faulkner",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260180",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260194",
+"speciesId": "mineral-clay",
+"lat": 35.03591,
+"lng": -93.45079,
+"name": "Unk",
+"county": "Yell",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260194",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260238",
+"speciesId": "mineral-slate",
+"lat": 34.32682,
+"lng": -93.30299,
+"name": "Glenwood #2",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260238",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260239",
+"speciesId": "mineral-silica",
+"lat": 34.62952,
+"lng": -93.32209,
+"name": "Cruse Anderson Area",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260239",
+"perm": "USFS"
+},
+{
+"id": "mrds-10260264",
+"speciesId": "mineral-quartz",
+"lat": 34.81681,
+"lng": -92.94018,
+"name": "Crystal Mountain Mine",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260264",
+"perm": "USFS"
+},
+{
+"id": "mrds-10260316",
+"speciesId": "mineral-clay",
+"lat": 33.92573,
+"lng": -93.8224,
+"name": "No Name",
+"county": "Hempstead",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260316",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10260387",
+"speciesId": "mineral-silica",
+"lat": 34.49452,
+"lng": -93.07548,
+"name": "Mc Earl Mine",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260387",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284424",
+"speciesId": "mineral-slate",
+"lat": 34.57042,
+"lng": -93.10908,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284424",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284482",
+"speciesId": "mineral-clay",
+"lat": 34.76072,
+"lng": -93.06128,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284482",
+"perm": "USFS"
+},
+{
+"id": "mrds-10280530",
+"speciesId": "mineral-clay",
+"lat": 35.02321,
+"lng": -93.13708,
+"name": "Unk",
+"county": "Yell",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10280530",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10280582",
+"speciesId": "mineral-silica",
+"lat": 34.75622,
+"lng": -93.06128,
+"name": "Dierks Quartz Area No 5",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10280582",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10280810",
+"speciesId": "mineral-clay",
+"lat": 34.10843,
+"lng": -92.76827,
+"name": "Unk",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10280810",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10283983",
+"speciesId": "mineral-clay",
+"lat": 34.35652,
+"lng": -92.77657,
+"name": "Perla Plant",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283983",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10283988",
+"speciesId": "mineral-soapstone",
+"lat": 34.73122,
+"lng": -92.56437,
+"name": "Duke-Warner Pit",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283988",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284005",
+"speciesId": "mineral-silica",
+"lat": 34.55842,
+"lng": -92.49186,
+"name": "Alcoa Arkansas Operations",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284005",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284042",
+"speciesId": "mineral-silica",
+"lat": 34.34092,
+"lng": -93.841,
+"name": "Langley",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284042",
+"perm": "USFS"
+},
+{
+"id": "mrds-10284197",
+"speciesId": "mineral-clay",
+"lat": 34.36092,
+"lng": -92.81517,
+"name": "Malvern Pit & Plant",
+"county": "Hot Spring",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284197",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284202",
+"speciesId": "mineral-silica",
+"lat": 34.57842,
+"lng": -92.48266,
+"name": "Quapaw Bauxite Mine",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284202",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284233",
+"speciesId": "mineral-silica",
+"lat": 34.69572,
+"lng": -93.08848,
+"name": "No Name",
+"county": "Garland",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284233",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284288",
+"speciesId": "mineral-slate",
+"lat": 34.42432,
+"lng": -93.8844,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284288",
+"perm": "USFS"
+},
+{
+"id": "mrds-10284290",
+"speciesId": "mineral-clay",
+"lat": 34.23343,
+"lng": -93.8124,
+"name": "Unknown Shale Pit",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284290",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284373",
+"speciesId": "mineral-silica",
+"lat": 34.83401,
+"lng": -92.85487,
+"name": "Lake Sylvia Prospect",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284373",
+"perm": "USFS"
+},
+{
+"id": "mrds-10284633",
+"speciesId": "mineral-clay",
+"lat": 35.05371,
+"lng": -94.25582,
+"name": "Sebastian County Pit",
+"county": "Sebastian",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284633",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284676",
+"speciesId": "mineral-silica",
+"lat": 34.11683,
+"lng": -92.50686,
+"name": "Unk",
+"county": "Dallas",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284676",
+"perm": "Private / other"
+},
+{
+"id": "mrds-10284703",
+"speciesId": "mineral-quartz",
+"lat": 34.65012,
+"lng": -93.5569,
+"name": "Oden Mine",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284703",
+"perm": "USFS"
+},
+{
+"id": "mrds-10284736",
+"speciesId": "mineral-silica",
+"lat": 34.35702,
+"lng": -93.7821,
+"name": "Unknown",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284736",
+"perm": "USFS"
+},
+{
+"id": "mrds-10400455",
+"speciesId": "mineral-clay",
+"lat": 34.39619,
+"lng": -93.39244,
+"name": "Hendrickson Clay Deposit",
+"county": "Montgomery",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10400455",
+"perm": "USFS"
+}
+]

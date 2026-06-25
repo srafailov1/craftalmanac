@@ -66,6 +66,18 @@ License: as a work of the U.S. National Park Service (a federal agency), the und
 
 Source: https://www.nps.gov/subjects/culturallandscapes/historic-orchards-in-national-parks.htm
 
+## USGS Mineral Resources Data System (Minerals map)
+
+The Minerals map's locality points (`data/minerals-arkansas.json`) are derived from the USGS Mineral Resources Data System (MRDS), 2022 release. The national MRDS extract was filtered to the Ouachita / Hot Springs region of Arkansas and to craft-relevant commodities (quartz, soapstone/steatite, clay, slate, gemstone/diamond, and silica), then cached as a small point set. MRDS is an economic-mining inventory: it has **no commodity code for novaculite or chert**, so the Arkansas whetstone is mostly recorded under "Silica" and is recovered only by free-text vetting — treat positions and material categories as a **curated seed, not authoritative**, and note that positional accuracy varies (MRDS grades A–E) and the data is frozen at ~2011/2022.
+
+License: MRDS is produced by the U.S. Geological Survey (a federal agency) and is a U.S. Government work in the public domain under 17 U.S.C. § 105 (the MRDS metadata states Use/Access Constraints "none"). Point cards cite the dataset as "USGS MRDS · Public domain (U.S. Gov)" and link to each record's `show-mrds.php` page.
+
+Each record carries a land-manager classification (`perm`) used to show rock-collecting rules. This classification is derived at build time from the **USDA Forest Service** Ouachita National Forest administrative boundary (a U.S. Government work, public domain) plus a factual Crater of Diamonds State Park (Prairie Creek) locality assignment. No National Park Service points occur in this window, and **no ODbL/OpenStreetMap geometry is used or shipped** in the site data. The build script is `scripts/build_minerals_data.py`.
+
+**Occurrence is never collecting permission.** Rock and mineral collecting is governed differently from foraging — the 36 CFR 2.1 personal-use exception for fruits/nuts/berries does **not** cover rocks or minerals. The per-record rule text is summarized from primary sources: BLM/USFS rock collecting policy (36 CFR 228 / Forest Service Manual 2840), the National Park Service prohibition (36 CFR 2.1), and Arkansas State Parks' Crater of Diamonds dig-and-keep policy. These are access-rule summaries, not a harvest-permission layer.
+
+Sources: https://mrdata.usgs.gov/mrds/ · https://www.fs.usda.gov/managing-land/minerals-geology/rockhounding · https://www.ecfr.gov/current/title-36/section-2.1 · https://www.arkansasstateparks.com/parks/crater-diamonds-state-park
+
 ## Mapbox (basemap and geocoding)
 
 The map renders Mapbox GL JS basemap tiles and uses the Mapbox Geocoding API for the address/place search box (public token in `config.js`, URL-scoped in the Mapbox account). Required Mapbox and OpenStreetMap attribution is displayed on the map itself via the Mapbox attribution control (`attributionControl: true`). Use is governed by the Mapbox Terms of Service; this is a rendering/geocoding service, not a craft data source.

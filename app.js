@@ -92,6 +92,17 @@ const MEDICINE_CATEGORY_COLORS = {
   digestive: "#b7792f",
   lymphatic: "#9a5f9f"
 };
+// Minerals map: each craft-material type is its own category/color (1:1 with the
+// mineralSpeciesCatalog), the way ink colors map to dye materials.
+const MINERAL_CATEGORY_COLORS = {
+  quartz: "#3f86c4",
+  novaculite: "#c4623f",
+  soapstone: "#3f8d76",
+  clay: "#a8682f",
+  slate: "#5c677d",
+  gemstone: "#a8497e",
+  silica: "#8a93a0"
+};
 let CATEGORY_COLORS = FOOD_CATEGORY_COLORS;
 const ACCESS_RULE_SOURCES = {
   alaskaParks: "https://www.law.cornell.edu/regulations/alaska/11-AAC-12.170",
@@ -2177,7 +2188,8 @@ const ACCESS_STATUS_TOKEN = {
 const LICENSE_BY_SOURCE = {
   inaturalist: "CC BY-NC",
   fallingfruit: "CC BY-NC-SA 4.0",
-  "nps-orchard": "Public domain (U.S. Gov)"
+  "nps-orchard": "Public domain (U.S. Gov)",
+  mineral: "Public domain (U.S. Gov)"
 };
 const MARKER_ICON_SIZE = 26;
 const MARKER_ICON_PIXEL_RATIO = 3;
@@ -3576,6 +3588,76 @@ const medicineSpeciesCatalog = [
   }
 ];
 
+// Minerals map: each "species" is a craft-material type (no iNaturalist taxon —
+// localities come from cached USGS MRDS points, not live observations). months
+// spans the full year because stone is not seasonal; the season scrubber simply
+// never filters minerals out. Each material is its own category/color.
+const mineralSpeciesCatalog = [
+  {
+    id: "mineral-quartz",
+    commonName: "Quartz crystal",
+    scientificName: "Quartz · SiO₂",
+    category: "quartz",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Lapidary, cabochons, faceting, wire-wrap; display crystal specimens.",
+    notes: "West-central Arkansas (Mount Ida / Montgomery Co.) is a famous quartz-crystal district; many sites are pay-to-dig private mines."
+  },
+  {
+    id: "mineral-novaculite",
+    commonName: "Novaculite / whetstone",
+    scientificName: "Novaculite (microcrystalline quartz)",
+    category: "novaculite",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Sharpening stones (whetstones/oilstones), knapping, carving.",
+    notes: "The classic Arkansas whetstone. MRDS has no novaculite commodity code, so most of it is recorded under \"Silica\" — these points need hand-verification."
+  },
+  {
+    id: "mineral-silica",
+    commonName: "Silica (chert / flint)",
+    scientificName: "Silica · SiO₂ (chert, flint, novaculite)",
+    category: "silica",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Knapping (flint/chert), abrasives, refractory and glass craft.",
+    notes: "Catch-all silica bucket; includes most unlabeled Arkansas novaculite. Confirm the host formation before treating a point as knappable toolstone."
+  },
+  {
+    id: "mineral-soapstone",
+    commonName: "Soapstone",
+    scientificName: "Steatite (talc-rich rock)",
+    category: "soapstone",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Carving bowls, beads, pipes, figurines; cookware; molds.",
+    notes: "Soft, heat-stable carving stone. Some soapstone is asbestos-bearing — test supply and cut/grind wet with respiratory protection."
+  },
+  {
+    id: "mineral-clay",
+    commonName: "Clay (pottery)",
+    scientificName: "Clay minerals (kaolinite group)",
+    category: "clay",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Hand-built and wheel-thrown pottery, tiles, pipes, figurines.",
+    notes: "Earthenware/ball clays widespread across the region. Dry-clay dust is a silicosis hazard — process wet."
+  },
+  {
+    id: "mineral-slate",
+    commonName: "Slate / dimension stone",
+    scientificName: "Slate (metamorphic rock)",
+    category: "slate",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Inlay, coasters, engraving; roofing and flagstone craft.",
+    notes: "Splits into flat sheets for engraving and inlay. Mostly former quarry sites."
+  },
+  {
+    id: "mineral-gemstone",
+    commonName: "Gemstone / diamond",
+    scientificName: "Diamond & gemstone (various)",
+    category: "gemstone",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    usedParts: "Faceting, cabochons, beads; collector specimens.",
+    notes: "Includes the Prairie Creek diatreme — Crater of Diamonds State Park is the rare public site where visitors may dig and keep diamonds for a fee."
+  }
+];
+
 const MAP_MODE_CONFIG = {
   food: {
     id: "food",
@@ -3633,6 +3715,31 @@ const MAP_MODE_CONFIG = {
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: false,
     loadNpsOrchards: false
+  },
+  minerals: {
+    id: "minerals",
+    speciesHeading: "Materials & Craft Stone",
+    lede: `Locate stone and mineral craft materials — quartz crystal, novaculite whetstone, soapstone, pottery clay, and more — across the Ouachita and Hot Springs region of Arkansas. Each point is a recorded mineral locality, not a collecting permission: stone-collecting rules differ sharply by land manager.`,
+    categories: [
+      { id: "quartz", label: "Quartz crystal" },
+      { id: "novaculite", label: "Novaculite / whetstone" },
+      { id: "silica", label: "Silica (chert / flint)" },
+      { id: "soapstone", label: "Soapstone" },
+      { id: "clay", label: "Clay (pottery)" },
+      { id: "slate", label: "Slate / dimension" },
+      { id: "gemstone", label: "Gemstone / diamond" }
+    ],
+    categoryColors: MINERAL_CATEGORY_COLORS,
+    catalog: mineralSpeciesCatalog,
+    sourceNames: ["USGS MRDS"],
+    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), with land-manager context from the USDA Forest Service and USGS PAD-US. Occurrence is never collecting permission — rock and mineral collecting is generally allowed on national-forest land, prohibited in national parks, and needs landowner permission on private land. Geographically limited to the Ouachita / Hot Springs region of Arkansas for now.`,
+    rulesLabel: "Rock & mineral collecting rules",
+    loadFallingFruit: false,
+    loadNpsOrchards: false,
+    loadMinerals: true,
+    // Center the Ouachita craft-stone core; zoom stays at/above the point-render
+    // threshold (FALLING_FRUIT_MIN_LOAD_ZOOM = 8) so the markers actually draw.
+    initialView: { center: [-93.45, 34.45], zoom: 8.1 }
   }
 };
 
@@ -3680,6 +3787,8 @@ const state = {
   fallingFruitRecords: null,
   npsOrchardData: null,
   npsOrchardRecords: null,
+  mineralData: null,
+  mineralRecords: null,
   publicLandFeatures: [],
   publicLandCoverage: null,
   stateBoundaries: null,
@@ -4956,6 +5065,7 @@ function getMonthRangeText(months) {
   // min–max "Feb-Dec" that implies summer availability.
   const sortedMonths = [...new Set(months)].filter((m) => m >= 1 && m <= 12).sort((a, b) => a - b);
   if (!sortedMonths.length) return "Unknown";
+  if (sortedMonths.length === 12) return "Year-round";
   const runs = [];
   let start = sortedMonths[0];
   let prev = sortedMonths[0];
@@ -4979,7 +5089,8 @@ function sourceLabel(source) {
   return {
     inaturalist: "iNaturalist",
     fallingfruit: "Falling Fruit",
-    "nps-orchard": "National Park Service"
+    "nps-orchard": "National Park Service",
+    mineral: "USGS MRDS"
   }[source] || source;
 }
 
@@ -5208,7 +5319,7 @@ function renderMapLegend() {
     return `<button type="button" class="leg-chip${cls}" data-leg-category="${escapeHTML(category.id)}" aria-pressed="${String(selection !== "none")}"><span class="swatch" style="color: ${escapeHTML(color)}"></span>${escapeHTML(category.label)}</button>`;
   }).join("");
 
-  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
+  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
   const catHeading = config.speciesHeading.replace(/\s*&\s*(Species|Materials)/i, "").toUpperCase();
   const selected = getSelectedAccessStatuses();
   const onlyAllowedActive = selected.size === 1 && selected.has("allowed");
@@ -5277,7 +5388,8 @@ function initMapLegend() {
 const MODE_SHEET_INFO = {
   food: { label: "Food", color: "#6b7f2e", blurb: "Berries · fruit · mushrooms · nuts" },
   ink: { label: "Ink/Dye", color: "#3a3f3d", blurb: "Inks & dyes by color, oak gall to rabbitbrush" },
-  medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" }
+  medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" },
+  minerals: { label: "Minerals", color: "#5c677d", blurb: "Craft stone & minerals — quartz, novaculite, soapstone, clay" }
 };
 // Project recipes: foraged-ink "Projects" replacing the launch placeholders.
 // Each opens a drilled-in recipe card (ingredient list with required vs
@@ -11337,6 +11449,12 @@ function setMapMode(mode) {
   renderFilterControls();
   updateLayerHandoff();
   render();
+  // Modes whose data is geographically limited (Minerals → Arkansas) fly the map
+  // to where their points actually are, so the layer isn't an empty national view.
+  const initialView = MAP_MODE_CONFIG[mode].initialView;
+  if (initialView && state.mapReady) {
+    map.flyTo({ center: initialView.center, zoom: initialView.zoom, duration: 900 });
+  }
   loadPhenology(mode).then(() => { if (state.activeMap === mode) renderHistogram(); });
 }
 
@@ -11965,7 +12083,7 @@ function renderHistogram() {
   }).join("");
 
   // Header reflects the active map; the category swatch legend sits below.
-  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
+  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
   if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY`;
   renderSeasonCats();
 }
@@ -13439,10 +13557,11 @@ async function loadMapData() {
   const hadRecords = state.records.length > 0;
   if (!hadRecords) setDataStatus("Loading current map data...");
 
-  const [inatResult, fallingFruitResult, npsOrchardResult] = await Promise.allSettled([
-    loadINaturalist(),
+  const [inatResult, fallingFruitResult, npsOrchardResult, mineralResult] = await Promise.allSettled([
+    config.loadMinerals ? Promise.resolve([]) : loadINaturalist(),
     config.loadFallingFruit ? loadFallingFruit() : Promise.resolve([]),
-    config.loadNpsOrchards ? loadNpsOrchards() : Promise.resolve([])
+    config.loadNpsOrchards ? loadNpsOrchards() : Promise.resolve([]),
+    config.loadMinerals ? loadMinerals() : Promise.resolve([])
   ]);
 
   if (requestId !== state.activeRequest) return;
@@ -13459,7 +13578,10 @@ async function loadMapData() {
   const npsOrchardRecords = npsOrchardResult.status === "fulfilled"
     ? npsOrchardResult.value
     : state.npsOrchardRecords || [];
-  const nextRecords = [...state.inatRecords, ...fallingFruitRecords, ...npsOrchardRecords];
+  const mineralRecords = mineralResult.status === "fulfilled"
+    ? mineralResult.value
+    : state.mineralRecords || [];
+  const nextRecords = [...state.inatRecords, ...fallingFruitRecords, ...npsOrchardRecords, ...mineralRecords];
 
   state.records = nextRecords;
   renderMarkers();
@@ -13485,7 +13607,8 @@ async function loadMapData() {
   const failedSources = [
     inatResult.status === "rejected" ? "iNaturalist" : "",
     config.loadFallingFruit && fallingFruitResult.status === "rejected" ? "Falling Fruit" : "",
-    config.loadNpsOrchards && npsOrchardResult.status === "rejected" ? "NPS orchards" : ""
+    config.loadNpsOrchards && npsOrchardResult.status === "rejected" ? "NPS orchards" : "",
+    config.loadMinerals && mineralResult.status === "rejected" ? "USGS MRDS" : ""
   ].filter(Boolean);
   setDataStatus(failedSources.length
     ? `${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`
@@ -13880,6 +14003,21 @@ async function loadNpsOrchards() {
   return state.npsOrchardRecords;
 }
 
+async function loadMinerals() {
+  // Static, viewport-independent set (a curated regional subset), loaded once and
+  // cached — the analogue of loadNpsOrchards for the Minerals mode. Localities are
+  // USGS MRDS points; rules are baked per-record (see computeRecordAccessRule).
+  if (!state.mineralData) {
+    const response = await fetch("./data/minerals-arkansas.json");
+    if (!response.ok) throw new Error(`Minerals returned ${response.status}`);
+    state.mineralData = await response.json();
+  }
+  state.mineralRecords = state.mineralData
+    .map(mapMineralRecord)
+    .filter(Boolean);
+  return state.mineralRecords;
+}
+
 function schedulePublicLandLoad() {
   window.clearTimeout(state.publicLoadTimer);
   if (map.getZoom() < PUBLIC_LANDS_MIN_RENDER_ZOOM) {
@@ -14105,6 +14243,34 @@ function mapNpsOrchardRecord(record) {
   };
 }
 
+function mapMineralRecord(record) {
+  const species = speciesCatalogById.get(record.speciesId);
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const place = record.county ? `${record.name} · ${record.county} Co.` : record.name;
+  return {
+    id: record.id,
+    speciesId: species.id,
+    name: place,
+    observedName: record.name,
+    observedScientificName: species.scientificName,
+    lat,
+    lng,
+    source: "mineral",
+    note: "USGS Mineral Resources Data System (MRDS) locality.",
+    confidence: "MRDS record",
+    sourceUrl: record.url || "https://mrdata.usgs.gov/mrds/",
+    idDate: "",
+    // perm drives the baked land-manager rule in getMineralAccessRule.
+    perm: record.perm || "Private / other",
+    access: record.perm || "",
+    accessClass: "unknown",
+    publicLand: record.perm === "USFS" || record.perm === "State park",
+    accessNote: ""
+  };
+}
+
 function getRecordAccessRule(record, species) {
   // Cached per record; cleared whenever public-land features or the map mode change.
   const cached = state.accessRuleCache.get(record.id);
@@ -14114,7 +14280,61 @@ function getRecordAccessRule(record, species) {
   return rule;
 }
 
+// Rock & mineral collecting rules, keyed by the land manager baked into each
+// MRDS record (data/minerals-arkansas.json). Stone collecting is governed
+// differently from foraging — the 36 CFR 2.1 food exception does not cover it.
+const MINERAL_ACCESS_RULES = {
+  USFS: {
+    status: "allowed",
+    area: "National forest (USDA Forest Service)",
+    limit: "Rockhounding of reasonable amounts for personal, noncommercial use is generally allowed on most national-forest land under free use — but not in wilderness, special-interest, or research areas, and not where it conflicts with a mining claim or lease. Confirm with the local ranger district.",
+    note: "A forest-wide policy, not a guarantee for this exact parcel. Occurrence is not permission.",
+    sourceLabel: "USFS rock collecting (36 CFR 228 / FSM 2840)",
+    sourceUrl: "https://www.fs.usda.gov/managing-land/minerals-geology/rockhounding"
+  },
+  NPS: {
+    status: "prohibited",
+    area: "National Park System unit",
+    limit: "Collecting rocks, minerals, or paleontological specimens is prohibited throughout the National Park System (36 CFR 2.1). The personal-use exception for fruits, nuts, and berries does NOT extend to rocks or minerals.",
+    note: "National parks are off-limits for mineral collecting; this point is shown for reference only.",
+    sourceLabel: "36 CFR 2.1",
+    sourceUrl: "https://www.ecfr.gov/current/title-36/section-2.1"
+  },
+  "State park": {
+    status: "allowed",
+    area: "Crater of Diamonds State Park (Arkansas)",
+    limit: "An exceptional case: this state park lets visitors dig and keep gems and minerals for a paid admission (finders-keepers). State parks otherwise generally prohibit collecting — never assume another state park allows it.",
+    note: "Pay the park admission and follow posted rules; this exception does not generalize to other state parks.",
+    sourceLabel: "Arkansas State Parks — Crater of Diamonds",
+    sourceUrl: "https://www.arkansasstateparks.com/parks/crater-diamonds-state-park"
+  },
+  "Private / other": {
+    status: "private",
+    area: "Private, leased, or claimed ground",
+    limit: "No public collecting right at this point. Most recorded localities sit on private, leased, or actively claimed land — secure written landowner permission, and check for active mining claims, before collecting.",
+    note: "Land status is not publicly sourced for this exact point; treat it as private unless you can verify otherwise.",
+    sourceLabel: "Land status not sourced",
+    sourceUrl: ""
+  }
+};
+
+function getMineralAccessRule(record) {
+  const base = MINERAL_ACCESS_RULES[record.perm] || MINERAL_ACCESS_RULES["Private / other"];
+  return {
+    status: base.status,
+    label: ACCESS_MARKER_STYLES[base.status]?.label || "Unknown",
+    area: base.area,
+    limit: base.limit,
+    note: base.note,
+    sourceLabel: base.sourceLabel,
+    sourceUrl: base.sourceUrl
+  };
+}
+
 function computeRecordAccessRule(record, species) {
+  if (record.source === "mineral") {
+    return getMineralAccessRule(record);
+  }
   if (record.source === "nps-orchard") {
     return {
       status: "permit-required",
