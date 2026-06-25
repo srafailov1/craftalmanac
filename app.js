@@ -2236,7 +2236,36 @@ const SAFETY_TAGS_BY_SPECIES = {
   "prickly-pear": ["spines/glochids", "ripe fruit only", "lookalikes", "eat in moderation"],
   "pinyon-pine-nut": ["lookalikes", "over-harvest concern"],
   "mesquite-bean": ["mold/aflatoxin risk", "lookalikes"],
-  chinquapin: ["spines", "lookalikes", "conservation concern"]
+  chinquapin: ["spines", "lookalikes", "conservation concern"],
+  // ---- 2026-06 ink/dye expansion ----
+  "ink-himalayan-blackberry": ["fugitive color", "invasive"],
+  "ink-prickly-pear": ["glochids/spines", "fugitive color"],
+  "ink-rouge-plant": ["toxic berries — do not ingest", "stains skin"],
+  "ink-bee-plant": ["dye/paint only — do not ingest"],
+  "ink-brazilian-pepper": ["urushiol — contact dermatitis", "never burn", "wear gloves"],
+  "ink-oregon-grape": ["berberine — do not ingest dye", "berries not roots"],
+  "dye-artemisia": ["aromatic — do not ingest", "not white sage (Salvia)"],
+  "dye-mormon-tea": ["alkaloids — dye only"],
+  "dye-camphor": ["camphor volatiles — ventilate", "toxic if ingested"],
+  "dye-canaigre": ["high tannin/oxalate — do not ingest"],
+  "dye-st-johns-wort": ["photosensitivity — wear gloves", "do not ingest"],
+  "dye-curly-dock": ["oxalic acid in leaves — use root"],
+  "dye-eucalyptus": ["leaves/oil toxic if ingested", "ventilate"],
+  "dye-honey-mesquite": ["thorns", "tannin stains skin"],
+  "dye-manzanita": ["shed/fallen only — some species rare"],
+  "dye-one-seed-juniper": ["dye only — do not ingest", "not savin juniper"],
+  "dye-madrone": ["shed bark only"],
+  "dye-rabbitbrush": ["possible contact sensitivity", "dye only"],
+  "dye-scotch-broom": ["alkaloids — do not ingest"],
+  "dye-spanish-moss": ["rinse — may harbor chiggers/mites"],
+  "dye-toyon": ["cyanide fumes — simmer outdoors", "do not ingest"],
+  "dye-wild-fennel": ["poison-hemlock lookalike — confirm ID", "do not ingest"],
+  "dye-dyers-woad": ["caustic vat (lye)", "removal only — bag seed heads"],
+  "dye-mountain-mahogany": ["cyanogenic foliage — do not ingest", "pruned/fallen bark only"],
+  "ink-carolina-redroot": ["toxic — do not ingest", "observe only"],
+  "ink-tanoak": ["dead/felled wood only", "mind SOD quarantine"],
+  "ink-western-redcedar": ["culturally sacred — observe only"],
+  "ink-wolf-lichen": ["toxic (vulpinic acid)", "slow-growing — observe only"]
 };
 // Safety-first (CLAUDE.md): a park's "edible fungi" allowance applies only to
 // species on this whitelist. Any other mushroom stays prohibited, so a future
@@ -2316,7 +2345,43 @@ const HARVEST_ETHIC_BY_SPECIES = {
   "prickly-pear": "light harvest",
   "pinyon-pine-nut": "light harvest",
   "mesquite-bean": "light harvest",
-  chinquapin: "fallen material preferred"
+  chinquapin: "fallen material preferred",
+  // ---- 2026-06 ink/dye expansion ----
+  "ink-himalayan-blackberry": "invasive removal",
+  "ink-prickly-pear": "light harvest",
+  "ink-rouge-plant": "light harvest",
+  "ink-bee-plant": "light harvest",
+  "ink-brazilian-pepper": "invasive removal",
+  "ink-oregon-grape": "light harvest",
+  "dye-artemisia": "light harvest",
+  "dye-mormon-tea": "light harvest",
+  "dye-camphor": "invasive removal",
+  "dye-canaigre": "light harvest",
+  "dye-cliffrose": "light harvest",
+  "dye-st-johns-wort": "invasive removal",
+  "dye-coyote-brush": "light harvest",
+  "dye-curly-dock": "invasive removal",
+  "dye-douglas-fir": "fallen material preferred",
+  "dye-eucalyptus": "invasive removal",
+  "dye-greenthread": "light harvest",
+  "dye-honey-mesquite": "light harvest",
+  "dye-manzanita": "fallen material preferred",
+  "dye-one-seed-juniper": "fallen material preferred",
+  "dye-madrone": "fallen material preferred",
+  "dye-plains-coreopsis": "light harvest",
+  "dye-alder": "fallen material preferred",
+  "dye-rabbitbrush": "light harvest",
+  "dye-scotch-broom": "invasive removal",
+  "dye-wax-myrtle": "light harvest",
+  "dye-spanish-moss": "fallen material preferred",
+  "dye-toyon": "light harvest",
+  "dye-wild-fennel": "invasive removal",
+  "dye-dyers-woad": "invasive removal",
+  "dye-mountain-mahogany": "light harvest",
+  "ink-carolina-redroot": "observe only",
+  "ink-tanoak": "observe only",
+  "ink-western-redcedar": "observe only",
+  "ink-wolf-lichen": "observe only"
 };
 
 const foodSpeciesCatalog = [
@@ -2955,6 +3020,400 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [54802],
     shenandoahAllowed: false,
     notes: "Ripe blue-black drupes make a dusky grape-purple ink; the fruit is edible but very sour. Leave plenty — important fall food for birds."
+  },
+  // ---- 2026-06 ink/dye expansion beyond the temperate East (candidates pass).
+  // Inks (berry/fruit/pigment) ----
+  {
+    id: "ink-himalayan-blackberry",
+    commonName: "Himalayan blackberry",
+    scientificName: "Rubus armeniacus",
+    category: "purple",
+    months: [7, 8, 9],
+    inatTaxonIds: [61317],
+    shenandoahAllowed: false,
+    usedParts: "Ripe black berries.",
+    notes: "Crushed ripe berries give a quick purple ink — but it is fugitive (fades toward gray), so treat it as casual/ephemeral. This Pacific-Northwest shrub invasive is good to remove."
+  },
+  {
+    id: "ink-prickly-pear",
+    commonName: "Prickly pear",
+    scientificName: "Opuntia polyacantha, O. engelmannii",
+    category: "red",
+    months: [8, 9, 10],
+    inatTaxonIds: [78269, 78264],
+    shenandoahAllowed: false,
+    usedParts: "Ripe fruit (tunas).",
+    notes: "Ripe tunas yield a vivid magenta betalain ink; handle glochid spines with tongs and gloves. The color is fugitive, and it is the plant's own pigment — not cochineal."
+  },
+  {
+    id: "ink-rouge-plant",
+    commonName: "Rouge plant (pigeonberry)",
+    scientificName: "Rivina humilis",
+    category: "red",
+    months: [8, 9, 10, 11],
+    inatTaxonIds: [133291],
+    shenandoahAllowed: false,
+    usedParts: "Ripe red berries.",
+    notes: "Ripe berries make a fugitive rouge-red ink. The berries are toxic if eaten — do not ingest, and expect stained hands."
+  },
+  {
+    id: "ink-bee-plant",
+    commonName: "Rocky Mountain bee plant",
+    scientificName: "Cleomella serrulata",
+    category: "black",
+    months: [6, 7, 8],
+    inatTaxonIds: [1415100],
+    shenandoahAllowed: false,
+    usedParts: "Whole flowering plant, boiled to a resin.",
+    notes: "Boiled down to a black resin, this self-seeding annual is the ancestral Puebloan pottery-paint black (and a Navajo yellow-green dye). Cutting plants is low-impact; pungent — paint/dye use only."
+  },
+  {
+    id: "ink-brazilian-pepper",
+    commonName: "Brazilian pepper",
+    scientificName: "Schinus terebinthifolia",
+    category: "red",
+    months: [11, 12, 1],
+    inatTaxonIds: [130872],
+    shenandoahAllowed: false,
+    usedParts: "Ripe red berries.",
+    notes: "A Florida-prohibited invasive worth removing — its berries give a red stain, but it is a poison-ivy relative: urushiol causes contact dermatitis, and the smoke is hazardous. Gloves; never burn."
+  },
+  {
+    id: "ink-oregon-grape",
+    commonName: "Oregon grape & barberry",
+    scientificName: "Berberis aquifolium, B. repens, B. fremontii, B. trifoliolata",
+    category: "blue",
+    months: [7, 8, 9],
+    inatTaxonIds: [126887, 133104, 75752, 273862],
+    shenandoahAllowed: false,
+    usedParts: "Ripe dusky-blue berries (not the roots).",
+    notes: "Ripe dusky-blue berries make a pH-shifting blue-purple ink. The bright berberine yellow lives in the roots and bark, but digging kills these slow-growing shrubs — use berries, not roots."
+  },
+  // ---- Dyes (foliage / bark / whole-plant) ----
+  {
+    id: "dye-artemisia",
+    commonName: "Sagebrush & mugwort",
+    scientificName: "Artemisia tridentata, A. californica, A. douglasiana",
+    category: "yellow",
+    months: [5, 6, 7, 8, 9, 10],
+    inatTaxonIds: [75598, 53357, 52854],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and soft stems.",
+    notes: "Sagebrush and mugwort foliage give yellow-to-olive dye (greener with iron); light tip-harvest is negligible. This is Artemisia, NOT white sage (Salvia) — don't confuse the two."
+  },
+  {
+    id: "dye-mormon-tea",
+    commonName: "Mormon tea (Ephedra)",
+    scientificName: "Ephedra viridis",
+    category: "brown",
+    months: [4, 5, 6, 7, 8, 9],
+    inatTaxonIds: [57891],
+    shenandoahAllowed: false,
+    usedParts: "Green jointed twigs.",
+    notes: "Green Ephedra twigs give a soft desert tan; clip from the abundant stem mass and leave the plant rooted. Dye-only — some Ephedra carry alkaloids, so do not ingest."
+  },
+  {
+    id: "dye-camphor",
+    commonName: "Camphor tree",
+    scientificName: "Cinnamomum camphora",
+    category: "brown",
+    months: [4, 5, 6, 7, 8, 9, 10],
+    inatTaxonIds: [1591063],
+    shenandoahAllowed: false,
+    usedParts: "Mature/old leaves and leaf litter.",
+    notes: "Old leaves of this Florida Category-I invasive give a dark brown; removal supports control. Strong camphor volatiles — ventilate; toxic if ingested."
+  },
+  {
+    id: "dye-canaigre",
+    commonName: "Canaigre (tanner's dock)",
+    scientificName: "Rumex hymenosepalus",
+    category: "brown",
+    months: [9, 10, 11],
+    inatTaxonIds: [58291],
+    shenandoahAllowed: false,
+    usedParts: "Tannin-rich tuberous roots.",
+    notes: "Tannin-rich tubers give a warm brown and act as their own mordant; a partial dig leaves the colony intact. High in tannin and oxalate — do not ingest."
+  },
+  {
+    id: "dye-cliffrose",
+    commonName: "Cliffrose",
+    scientificName: "Purshia stansburyana",
+    category: "yellow",
+    months: [5, 6, 7, 8],
+    inatTaxonIds: [78787],
+    shenandoahAllowed: false,
+    usedParts: "Leafy twig tips.",
+    notes: "Leafy twig tips give a Navajo gold. Abundant, but also valuable wildlife browse and erosion control — clip tips lightly."
+  },
+  {
+    id: "dye-st-johns-wort",
+    commonName: "St. John's wort (Klamath weed)",
+    scientificName: "Hypericum perforatum",
+    category: "yellow",
+    months: [6, 7, 8],
+    inatTaxonIds: [56077],
+    shenandoahAllowed: false,
+    usedParts: "Flowering tops; crushed dark glands for red.",
+    notes: "Flowering tops give yellow; the dark petal glands a surprising red. This invasive 'Klamath weed' is good to remove — but hypericin causes photosensitivity, so wear gloves."
+  },
+  {
+    id: "dye-coyote-brush",
+    commonName: "Coyote brush",
+    scientificName: "Baccharis pilularis",
+    category: "yellow",
+    months: [8, 9, 10, 11],
+    inatTaxonIds: [53359],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and young branch tips.",
+    notes: "Leaves and young tips of this ubiquitous coastal-scrub shrub give yellow-to-khaki dye; it resprouts vigorously and shrugs off light harvest."
+  },
+  {
+    id: "dye-curly-dock",
+    commonName: "Curly dock",
+    scientificName: "Rumex crispus",
+    category: "brown",
+    months: [9, 10, 11],
+    inatTaxonIds: [53197],
+    shenandoahAllowed: false,
+    usedParts: "Yellow forking taproot.",
+    notes: "The yellow taproot of this weedy naturalized dock gives a brown dye — and digging it out doubles as removal. Leaves are high in oxalic acid; use the root."
+  },
+  {
+    id: "dye-douglas-fir",
+    commonName: "Douglas-fir",
+    scientificName: "Pseudotsuga menziesii",
+    category: "brown",
+    months: [9, 10, 11, 12],
+    inatTaxonIds: [48256],
+    shenandoahAllowed: false,
+    usedParts: "Fallen cones, bark, and mill waste.",
+    notes: "Fallen cones and bark give peach-to-tan dye with zero impact on living trees — a pure waste-stream pigment from the forest floor and lumber yards."
+  },
+  {
+    id: "dye-eucalyptus",
+    commonName: "Eucalyptus",
+    scientificName: "Eucalyptus",
+    category: "brown",
+    months: [5, 6, 7, 8, 9, 10],
+    inatTaxonIds: [51815],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and shed bark.",
+    notes: "Leaf and shed-bark litter from this naturalized tree give rare true rusts and reds. Leaves and oil are toxic if ingested; ventilate when simmering."
+  },
+  {
+    id: "dye-greenthread",
+    commonName: "Greenthread (Navajo tea)",
+    scientificName: "Thelesperma megapotamicum",
+    category: "yellow",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [79345],
+    shenandoahAllowed: false,
+    usedParts: "Whole flowering plant.",
+    notes: "The whole flowering plant gives yellow-to-orange; it reseeds, so cut a few inches above the soil. A long-standing Pueblo/Navajo dye and tea plant."
+  },
+  {
+    id: "dye-honey-mesquite",
+    commonName: "Honey mesquite",
+    scientificName: "Neltuma glandulosa (Prosopis glandulosa)",
+    category: "brown",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [1493134],
+    shenandoahAllowed: false,
+    usedParts: "Shed bark, fallen wood, exuded gum.",
+    notes: "Shed bark and dark exuded gum give brown-to-black; use fallen wood and gum, not wounds to living trees. Sharp thorns; tannin sap stains skin."
+  },
+  {
+    id: "dye-manzanita",
+    commonName: "Manzanita",
+    scientificName: "Arctostaphylos",
+    category: "brown",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [47179],
+    shenandoahAllowed: false,
+    usedParts: "Shed bark and fallen leaves.",
+    notes: "Shed red bark and fallen leaves give rosy-browns. Listed at genus level — use shed and fallen material of common species only; never dig or cut whole plants (some are rare)."
+  },
+  {
+    id: "dye-one-seed-juniper",
+    commonName: "One-seed juniper",
+    scientificName: "Juniperus monosperma",
+    category: "brown",
+    months: [9, 10, 11],
+    inatTaxonIds: [120145],
+    shenandoahAllowed: false,
+    usedParts: "Shed bark, twigs, berries; green-needle ash as mordant.",
+    notes: "Shed bark, twigs, and berries give tan and brown; the green-needle ash is a traditional Navajo alkaline mordant. Dye-only — not for ingestion; not savin juniper (J. sabina)."
+  },
+  {
+    id: "dye-madrone",
+    commonName: "Pacific madrone",
+    scientificName: "Arbutus menziesii",
+    category: "brown",
+    months: [7, 8, 9],
+    inatTaxonIds: [51046],
+    shenandoahAllowed: false,
+    usedParts: "Naturally shed bark sheets.",
+    notes: "Madrone sheds its cinnamon bark in thin sheets each summer — collect the sloughed sheets off the ground for a pink-brown dye. Don't strip living bark (it is root-rot sensitive)."
+  },
+  {
+    id: "dye-plains-coreopsis",
+    commonName: "Plains coreopsis",
+    scientificName: "Coreopsis tinctoria",
+    category: "yellow",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [76445],
+    shenandoahAllowed: false,
+    usedParts: "Flower heads in bloom.",
+    notes: "'Tinctoria' means 'used for dyeing' — the flowers give reliable gold-to-orange. A heavy self-seeder, so flower harvest and garden patches are low-impact. (Use this, not the rare giant coreopsis.)"
+  },
+  {
+    id: "dye-alder",
+    commonName: "Alder",
+    scientificName: "Alnus rubra, A. incana",
+    category: "brown",
+    months: [4, 5, 6, 7, 8, 9],
+    inatTaxonIds: [56034, 75377],
+    shenandoahAllowed: false,
+    usedParts: "Inner bark of fallen limbs and prunings.",
+    notes: "Bark from fallen alder limbs and coppice prunings gives orange-red-brown; both red and mountain alder coppice vigorously, so take fallen material, not live trunks."
+  },
+  {
+    id: "dye-rabbitbrush",
+    commonName: "Rabbitbrush",
+    scientificName: "Ericameria nauseosa, Chrysothamnus viscidiflorus",
+    category: "yellow",
+    months: [8, 9, 10],
+    inatTaxonIds: [57934, 76329],
+    shenandoahAllowed: false,
+    usedParts: "Flowering tops.",
+    notes: "Flowering tops give the Southwest's most sustainable bright yellow; snip tops and leave the shrub intact. A well-documented Hopi/Navajo dye; dye-only."
+  },
+  {
+    id: "dye-scotch-broom",
+    commonName: "Scotch broom",
+    scientificName: "Cytisus scoparius",
+    category: "yellow",
+    months: [4, 5, 6],
+    inatTaxonIds: [48538],
+    shenandoahAllowed: false,
+    usedParts: "Flowers and flowering tips.",
+    notes: "Blossoms give a buttery yellow, and cutting this top-priority noxious weed supports control. Seeds and foliage carry toxic alkaloids — do not ingest."
+  },
+  {
+    id: "dye-wax-myrtle",
+    commonName: "Southern wax myrtle",
+    scientificName: "Morella cerifera",
+    category: "yellow",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [119956],
+    shenandoahAllowed: false,
+    usedParts: "Leaves.",
+    notes: "Leaves give a pale gold that shifts gray-green with iron; this fast-resprouting Gulf evergreen shrugs off light leaf harvest. (The waxy berries are for candle wax.)"
+  },
+  {
+    id: "dye-spanish-moss",
+    commonName: "Spanish moss",
+    scientificName: "Tillandsia usneoides",
+    category: "brown",
+    months: [3, 4, 5, 6, 7, 8, 9, 10, 11],
+    inatTaxonIds: [49569],
+    shenandoahAllowed: false,
+    usedParts: "Storm-fallen strands, off the ground.",
+    notes: "Storm-fallen strands gathered off the ground give tan-to-brown with minimal impact. Rinse and inspect — wild moss can harbor chiggers and mites."
+  },
+  {
+    id: "dye-toyon",
+    commonName: "Toyon (California holly)",
+    scientificName: "Heteromeles arbutifolia",
+    category: "brown",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [53405],
+    shenandoahAllowed: false,
+    usedParts: "Leaves and bark.",
+    notes: "Leaves and bark give red-brown — but as a Rosaceae the heated bath releases cyanide fumes, so simmer OUTDOORS only. Abundant and resprouting; do not ingest."
+  },
+  {
+    id: "dye-wild-fennel",
+    commonName: "Wild fennel",
+    scientificName: "Foeniculum vulgare",
+    category: "yellow",
+    months: [6, 7, 8, 9, 10],
+    inatTaxonIds: [53052],
+    shenandoahAllowed: false,
+    usedParts: "Fronds, flowers, seed heads.",
+    notes: "Fronds and seed heads of this Cal-IPC invasive give a luteolin yellow; removal helps native habitat. Confirm ID — it resembles toxic poison hemlock (fennel smells of licorice)."
+  },
+  {
+    id: "dye-dyers-woad",
+    commonName: "Dyer's woad",
+    scientificName: "Isatis tinctoria",
+    category: "blue",
+    months: [4, 5, 6],
+    inatTaxonIds: [77509],
+    shenandoahAllowed: false,
+    usedParts: "Leaves (eradication harvest only).",
+    notes: "Leaves give an indigo-type blue — but this is an aggressive noxious weed: harvest only to eradicate existing stands and bag the seed heads. The vat uses caustic lye; dye-only."
+  },
+  {
+    id: "dye-mountain-mahogany",
+    commonName: "Mountain mahogany",
+    scientificName: "Cercocarpus montanus",
+    category: "brown",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [52378],
+    shenandoahAllowed: false,
+    usedParts: "Bark from pruned or fallen branches.",
+    notes: "Bark from pruned or fallen branches gives a deep reddish-brown; do not dig the taproot (it kills the slow shrub). An important Navajo/Pueblo dye — handle respectfully; foliage is cyanogenic."
+  },
+  // ---- Educational-only / observe-only (cultural, regional, or conservation
+  // knowledge required; published with an explicit stamp, not as harvest targets) ----
+  {
+    id: "ink-carolina-redroot",
+    commonName: "Carolina redroot",
+    scientificName: "Lachnanthes caroliniana",
+    category: "red",
+    months: [6, 7, 8, 9],
+    inatTaxonIds: [164401],
+    shenandoahAllowed: false,
+    educationalOnly: true,
+    usedParts: "Rhizome/root — observe only; do not dig wild.",
+    notes: "Educational only. A documented Indigenous red dye, but the color is in the root of a wetland perennial — digging destroys the plant and its bog habitat, and the plant is toxic. Observe; do not harvest wild."
+  },
+  {
+    id: "ink-tanoak",
+    commonName: "Tanoak",
+    scientificName: "Notholithocarpus densiflorus",
+    category: "brown",
+    months: [6, 7, 8, 9, 10],
+    inatTaxonIds: [69823],
+    shenandoahAllowed: false,
+    educationalOnly: true,
+    usedParts: "Bark from already-dead/felled wood only.",
+    notes: "Educational only. Bark gives brown to iron-black, but the tree is in steep decline from Sudden Oak Death and is a cultural acorn staple — use only already-dead or felled wood, and mind SOD quarantine rules."
+  },
+  {
+    id: "ink-western-redcedar",
+    commonName: "Western redcedar",
+    scientificName: "Thuja plicata",
+    category: "brown",
+    months: [5, 6, 7, 8, 9],
+    inatTaxonIds: [48252],
+    shenandoahAllowed: false,
+    educationalOnly: true,
+    usedParts: "Bark — observe only; off-limits for casual harvest.",
+    notes: "Educational only. A sacred 'tree of life' to PNW Coast Salish nations; bark harvest can kill these climate-stressed trees. Listed to honor it — seek permission and local knowledge, not a how-to."
+  },
+  {
+    id: "ink-wolf-lichen",
+    commonName: "Wolf lichen",
+    scientificName: "Letharia vulpina",
+    category: "yellow",
+    months: [4, 5, 6, 7, 8, 9, 10],
+    inatTaxonIds: [54613],
+    shenandoahAllowed: false,
+    educationalOnly: true,
+    usedParts: "Wind-fallen branches only — observe only.",
+    notes: "Educational only. A vivid chartreuse-yellow lichen that grows ~4 mm a year and is toxic (vulpinic acid); over-collection has wiped out local stands. Observe only — use onion skins for yellow instead."
   }
 ];
 
@@ -3136,8 +3595,8 @@ const MAP_MODE_CONFIG = {
   },
   ink: {
     id: "ink",
-    speciesHeading: "Ink Colors & Materials",
-    lede: `Discover plants, trees, and fruits that can produce natural inks across ${REGION_STATES} by season and habitat. The list favors abundant native species that can be harvested lightly, as well as invasive plants whose careful removal can support surrounding ecosystems.`,
+    speciesHeading: "Ink & Dye Colors & Materials",
+    lede: `Discover plants, trees, and fruits that can produce natural inks and dyes across ${REGION_STATES} by season and habitat. The list favors abundant native species that can be harvested lightly, as well as invasive plants whose careful removal can support surrounding ecosystems.`,
     categories: [
       { id: "black", label: "Black / gray" },
       { id: "blue", label: "Blue / green" },
@@ -3149,7 +3608,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: INK_CATEGORY_COLORS,
     catalog: inkSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit"],
-    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, relevant chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink materials still require permission to collect.`,
+    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, relevant chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink and dye materials still require permission to collect.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: false
@@ -4815,7 +5274,7 @@ function initMapLegend() {
 // ---------------------------------------------------------------------------
 const MODE_SHEET_INFO = {
   food: { label: "Food", color: "#6b7f2e", blurb: "Berries · fruit · mushrooms · nuts" },
-  ink: { label: "Ink", color: "#3a3f3d", blurb: "Pigments by color, oak gall to goldenrod" },
+  ink: { label: "Ink/Dye", color: "#3a3f3d", blurb: "Inks & dyes by color, oak gall to rabbitbrush" },
   medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" }
 };
 // Project recipes: foraged-ink "Projects" replacing the launch placeholders.
@@ -6180,7 +6639,7 @@ const PROJECT_RECIPES = [
     },
     timeline: {
       active: "egg ~5-10 min; casein ~30-40 min",
-      passive: "egg usable in ~10 min; casein ~1 hr (or gel overnight)"
+      passive: "10 min"
     },
     ingredients: [
       {
@@ -6338,6 +6797,4289 @@ const PROJECT_RECIPES = [
       { title: "PMC — Clove Essential Oil and Eugenol as Natural Antifungal Agents", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12525269/" },
       { title: "Abbey/CoOL — The Effects of Thymol on Paper, Pigments, and Media", url: "https://cool.culturalheritage.org/byorg/abbey/an/an21/an21-3/an21-308.html" }
     ]
+  },
+  {
+    id: "ink-himalayan-blackberry",
+    plantId: "ink-himalayan-blackberry",
+    kind: "ink",
+    name: "Himalayan blackberry ink",
+    category: "purple",
+    swatch: "#5b3a6b",
+    color: "Fugitive purple",
+    difficulty: "Beginner",
+    teaser: "Purple from an invasive berry",
+    toxic: false,
+    educationalOnly: false,
+    hook: "No shrub has rewritten the Pacific Northwest's lowland west of the Cascades quite like Himalayan blackberry — a single Luther Burbank cultivar gone feral that now buries riparian banks, fence lines, and vacant lots under impenetrable thorny thickets, drowning native willow and rose and choking salmon streams. The compensation, if there is one, is that every August those canes drip with glossy black fruit packed with anthocyanins, the same pH-sensitive pigments that color red cabbage and grape skins. Crush a handful and you get an immediate wash of violet-to-lavender ink with no cooking required. It is a beautiful, generous, and thoroughly fugitive color — a pigment that writes like a bruise and fades like one too.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Be honest: this is a fugitive color. Anthocyanin berry inks are beautiful but notoriously short-lived — they fade and shift toward gray-brown within weeks to months in daylight, and even an alum mordant or iron post-treatment only slows, never stops, the loss. Excellent for sketchbooks, casual lettering, ephemeral cards, and demonstrations; never for archival, sale, or anything meant to last. Keep finished work in a closed book or out of direct light to buy a little time."
+    },
+    timeline: {
+      active: "30-45 min",
+      passive: "A few weeks"
+    },
+    ingredients: [
+      {
+        item: "Ripe Himalayan blackberries (Rubus armeniacus)",
+        amount: "2 cups (about 1 lb) fully ripe, dull-black fruit",
+        required: true,
+        note: "Pick only deep, soft, matte-black berries — red or shiny ones are underripe and yield thinner color. The bumpy multi-bead aggregate shape confirms a true blackberry; do not confuse foraged fruit with smooth-skinned toxic lookalikes (pokeweed, nightshade, Virginia creeper). A heaping bowl reduces to a small jar of ink."
+      },
+      {
+        item: "White vinegar",
+        amount: "1-2 tsp",
+        required: false,
+        note: "Acts as a mild preservative and shifts the anthocyanins redder/warmer. Add water only if needed to free the pulp; vinegar is preferable so you don't dilute the color."
+      },
+      {
+        item: "Salt (non-iodized)",
+        amount: "1/4 - 1/2 tsp",
+        required: false,
+        note: "A traditional berry-ink preservative that slows mold. Does not improve lightfastness."
+      },
+      {
+        item: "Gum arabic",
+        amount: "1/4 - 1/2 tsp dissolved, to taste",
+        required: false,
+        note: "Binder/thickener that keeps pigment in suspension and helps the ink sit on the page rather than soaking in. See [[tech-gum-arabic|gum arabic binder]]. Aim for a consistency between whole milk and light cream."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "a few drops, optional",
+        required: false,
+        note: "Saddens the purple toward gray-violet/slate and is one of the few ways to nudge anthocyanins toward (slightly) better permanence. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Clove or wintergreen essential oil",
+        amount: "1-2 drops",
+        required: false,
+        note: "Optional anti-mold addition for slightly longer fridge life. See [[tech-preserving|preserving inks]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated (non-food) stainless or enamel pot or bowl — once used for ink, retire it from kitchen use",
+      "Nitrile or rubber gloves (anthocyanins stain skin and nails for days)",
+      "Fine strainer, muslin, or nut-milk bag for separating juice from pulp and seeds",
+      "Glass jar or bottle with a tight lid for storage",
+      "Old clothes or apron — the juice stains fabric permanently even though it fades on paper"
+    ],
+    toolsOptional: [
+      "Potato masher or wooden spoon for crushing",
+      "Small dedicated saucepan if you choose to simmer/reduce",
+      "pH test strips to track acid/alkali color shifts",
+      "Dropper bottles for iron water and oils",
+      "Wide-mouth funnel for bottling"
+    ],
+    steps: [
+      "Harvest only where collection is permitted — occurrence on a map is never harvest permission, and even an aggressively invasive plant can sit on protected, private, or restricted land. Himalayan blackberry is a high-priority invasive west of the Cascades, so cutting fruiting canes and stripping berries is genuinely ecologically positive removal: bag and bin the berries you don't use rather than scattering seed, and consider pulling or cutting canes (with permission) while you're there. Wear gloves and long sleeves against the formidable thorns.",
+      "Sort and rinse the berries, discarding leaves, unripe red fruit, and any moldy ones. Put the ripe fruit in your dedicated pot or bowl.",
+      "Crush the berries thoroughly with a masher or spoon until they collapse into a dark slurry. For a quick cold ink you can stop here; for slightly deeper, marginally more stable color, simmer the mash gently for 15-30 minutes, adding a splash of vinegar (not water) if it needs liquid. Keep heat low — boiling hard dulls anthocyanins.",
+      "Strain the pulp through muslin or a nut-milk bag, squeezing (gloved) to extract every drop of juice. Compost or bin the seedy pulp — do not return seeds to the landscape.",
+      "Stir in salt and vinegar as preservatives, then dissolve in gum arabic a little at a time until the ink flows but isn't watery. Test on your actual paper as you go.",
+      "Optional color play: a few drops of iron water shift the purple toward slate-gray; acids (vinegar, lemon) push it warmer/redder, while a pinch of alkali (baking soda or soda ash) swings it bluer or grayer and can drop pigment out of solution. See modifiers below.",
+      "Bottle in a clean glass jar, label it clearly as craft ink — NOT food, even though the berries are edible — and refrigerate. Test your writing on scrap and expect the wet color to be far brighter than the dried, aged result."
+    ],
+    modifiers: "Himalayan blackberry juice is almost pure anthocyanin, so it behaves like a living pH indicator. Acids shift it warmer and redder — stir in vinegar or lemon and watch violet swing toward magenta-red ([[tech-acid-base|acid & base shifters]]). Alkali does the opposite: a pinch of baking soda or a little soda ash pushes it blue-gray to gray-green, and strong alkali will crash the pigment out and mute it ([[tech-acid-base|acid & base shifters]]). Iron is the most useful permanence lever, such as it is: a few drops of iron water dulls the purple to a slate gray-violet and slightly slows fading ([[tech-iron-acetate|iron water]]). None of these turn it archival — they shift the hue, not the fundamentally fugitive chemistry.",
+    preservation: "Fresh and unpreserved, the juice spoils and grows mold in days. Salt and vinegar slow that down, a drop of clove or wintergreen oil helps more, and refrigeration in a tightly capped jar is essential — expect a realistic working life of a few days to a couple of weeks, occasionally longer if it's well-acidified and cold. Make small batches; the berries are abundant enough to mix fresh whenever you need it. Watch for surface mold or a sour, fermented smell and discard at the first sign. Note that even sealed and chilled, the pigment itself keeps drifting toward gray over time, so a \"preserved\" jar is preserved against rot, not against fading.",
+    yield: "Generous on the front end, modest on the back end: about 2 cups of ripe berries yields roughly 1/2 to 3/4 cup of strained ink once pulp and seeds are removed, less if you simmer and reduce for depth. Because the plant fruits so heavily, raw material is rarely the constraint — your bottleneck is shelf life, so scale the batch to what you'll actually use in a week or two rather than what you can pick.",
+    beyondInk: "The same juice works as a quick watercolor-style wash or a pH \"magic paint\" for teaching anthocyanin chemistry (paint with the purple, then brush vinegar or baking-soda water over it to shift the color). As a textile dye it's a classic example of what NOT to rely on — it will stain cloth vividly but is not colorfast and washes and fades out, so treat any fabric use as deliberately temporary or as a chemistry demonstration. The plain juice is also edible as a berry colorant, but any ink batch that has touched iron, retired non-food tools, or essential oils is strictly craft-only and must never be eaten.",
+    safety: [
+      "Craft material, not food: once you've added iron water, mixed it in retired non-food tools, or dosed it with essential oils, the ink is no longer edible — label the jar clearly and keep it away from kitchen and children.",
+      "Use dedicated non-food pots, strainers, and jars for ink work; iron and other modifiers should never touch cookware you eat from.",
+      "Wear nitrile or rubber gloves — anthocyanins stain skin, nails, grout, and clothing deeply, and the stains on fabric are far more permanent than the ink is on paper.",
+      "Mind the thorns: Himalayan blackberry canes are heavily armed with stout recurved spines. Wear long sleeves, sturdy gloves, and eye protection when reaching into thickets.",
+      "Harvest only where permitted. A plant being invasive does not override land access rules — get permission, and never trespass to forage or cut canes.",
+      "Dispose of seeds and pulp responsibly (bag and bin, don't scatter) so you don't spread this aggressive invasive further.",
+      "Keep iron water and essential oils labeled and out of reach of children and pets; if you ever push the color with a stronger alkali, treat soda ash and any wood-ash lye as caustic — use eye protection and gloves and add them only in small, dilute amounts."
+    ],
+    sources: [
+      {
+        title: "Cal-IPC — Rubus armeniacus (Himalayan blackberry) profile (invasive status, ecological impact)",
+        url: "https://www.cal-ipc.org/plants/profile/rubus-armeniacus-profile/"
+      },
+      {
+        title: "Wearing Woad — Fugitive Colour: plants to never use for natural dyes (berries)",
+        url: "https://www.wearingwoad.com/fugitive-colour-top-five-plants-to-never-use-for-natural-dyes/"
+      },
+      {
+        title: "Making Berry Inks (crush/simmer/strain, vinegar, gum arabic, fading) — The Druid's Garden",
+        url: "https://thedruidsgarden.com/2012/08/29/making-berry-inks-huckleberry-raspberry-blackberry-pokeberry-etc/"
+      }
+    ]
+  },
+  {
+    id: "ink-prickly-pear",
+    plantId: "ink-prickly-pear",
+    kind: "ink",
+    name: "Prickly pear fruit ink",
+    category: "red",
+    swatch: "#a3306a",
+    color: "Vivid magenta",
+    difficulty: "Intermediate",
+    teaser: "Bright fugitive desert magenta",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Split a ripe tuna off a plains or Engelmann prickly pear and the juice runs an electric magenta — the same betalain pigments (betanin and indicaxanthin) that color beets and amaranth, not the insect-derived crimson of cochineal that famously also lives on these pads. The color is dazzling and almost effortless to extract: no mordant, barely any heat, just crush and strain. But that brilliance is borrowed against time — betalains are among the most light- and heat-fragile of all plant pigments, so this is an ink for the joy of the color now, not for the archive. The real work is the harvest: every fruit is studded with glochids, the near-invisible barbed hairs that are this cactus's true defense.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Strongly fugitive. Betalains are sensitive to light, heat, oxygen, and pH, and shift/fade quickly — bright magenta drifts toward dull brown-orange within weeks to a few months of light exposure. They are most stable in the pH 4–7 window; outside it the color degrades faster. No home process makes this archival. Keep finished work in the dark or under UV-filtering glass and expect it to age, not endure."
+    },
+    timeline: {
+      active: "30–45 min",
+      passive: "30 min – 1 hr"
+    },
+    ingredients: [
+      {
+        item: "Ripe prickly pear tunas (deep magenta/red, soft to gentle pressure)",
+        amount: "8–12 fruits (~2–3 cups pulp)",
+        required: true,
+        note: "fully ripe fruit gives the deepest color; under-ripe tunas run pale green-pink. Both Opuntia polyacantha (plains) and O. engelmannii (Engelmann/Texas) work."
+      },
+      {
+        item: "Water",
+        amount: "splash, only if needed to loosen the pulp",
+        required: false,
+        note: "the fruit is already juicy — add as little as possible to keep the ink concentrated"
+      },
+      {
+        item: "White vinegar or lemon juice",
+        amount: "~1 tsp per ½ cup juice",
+        required: false,
+        note: "nudges the ink into the stable pH 4–7 range, keeps it brighter and a touch more red, and mildly discourages mold"
+      },
+      {
+        item: "Gum arabic",
+        amount: "~¼ tsp per ¼ cup ink",
+        required: false,
+        note: "adds flow and body for pen and brush work — see [[tech-gum-arabic|gum arabic binder]]"
+      },
+      {
+        item: "Whole cloves or a pinch of ascorbic acid (vitamin C)",
+        amount: "2–3 cloves, or a small pinch",
+        required: false,
+        note: "a clove or vitamin C helps slow spoilage; refrigeration matters more than any additive"
+      },
+      {
+        item: "Iron water (steel wool in vinegar)",
+        amount: "a few drops on a test swatch only",
+        required: false,
+        note: "experimental — betalains lack the tannin that drives the iron reaction, so expect dulling/browning rather than a clean shift; see [[tech-iron-acetate|iron water]]"
+      }
+    ],
+    toolsRequired: [
+      "Heavy leather or dedicated cactus-handling gloves (thin nitrile/kitchen gloves do NOT stop glochids)",
+      "Long-handled tongs for picking and holding fruit",
+      "Knife reserved for craft use",
+      "Bowl or wide-mouth jar reserved for craft use",
+      "Strainer lined with coffee filter, fine muslin, or cheesecloth",
+      "Craft-only spoon, masher, or fork to crush",
+      "Lidded jar or bottle for storage"
+    ],
+    toolsOptional: [
+      "Gas burner or torch to singe glochids off whole fruit (outdoors only — burning glochids become airborne)",
+      "Funnel",
+      "Dropper for testing modifiers",
+      "pH strips",
+      "Test paper and a pen/brush",
+      "Apron and surface covering (the juice stains permanently)"
+    ],
+    steps: [
+      "Harvest only where permitted — a sighting or an occurrence point is never harvest permission, and some Opuntia species and populations are protected (several national parks fully protect prickly pear). Take ripe tunas only from common, abundant stands, leaving most fruit on the plant for wildlife and reseeding; this light fruit harvest does not damage the cactus.",
+      "GLOCHIDS FIRST: never touch the fruit bare-handed. Wear heavy leather/cactus gloves and twist each ripe tuna free with long-handled tongs, grasping close to where it joins the pad. Glochids are tiny barbed hairs that embed in skin for days and are miserable to remove — treat every fruit as covered in them.",
+      "De-spine the fruit before anything else. Either scrape/brush the glochids off with a craft knife, or (outdoors only, with the fruit held in tongs) hold each tuna over a gas flame to singe them away — burning glochids drift into the air, so stand upwind, keep your face back, and never do this indoors. Then scrub the fruit vigorously under running water for a couple of minutes. Do this before cutting — don't rinse glochids into your sink unbrushed.",
+      "Halve the cleaned fruit and scoop the magenta pulp into your craft bowl, leaving the tough skin behind. Crush and mash the pulp to release the juice. Keep this a COLD process — heat browns betalains fast, so do not simmer or boil if you want the vivid magenta.",
+      "Strain the juice through a coffee filter or muslin into a clean jar to remove the hard seeds and pulp; press gently, then strain a second time for a smoother ink. Discard spent seeds and skin in the trash.",
+      "Optional: stir in ~1 tsp vinegar or lemon per ½ cup juice to hold the color in its stable pH 4–7 range and keep it bright; add a clove or a pinch of vitamin C to slow spoilage.",
+      "For pen or brush work, stir in a little gum arabic for flow and body; keep it thin for transparent washes. Test on the exact paper you'll use — the magenta looks brilliant wet and softens as it dries.",
+      "Bottle, label 'INK — NOT FOOD' (this is a craft prep made with dedicated, non-food tools), and refrigerate away from light. Use within days for the truest color and keep finished art out of direct sun."
+    ],
+    modifiers: "Prickly pear color is betalain (betanin red plus yellow indicaxanthin), the same pigment class as beet and amaranth — and chemically a world apart from the insect-derived red of cochineal, which also lives on these pads but is not what you're extracting here. Unlike anthocyanin berry juices, betalains do NOT perform the dramatic acid-to-base rainbow: a touch of [[tech-acid-base|acid (vinegar or lemon)]] mainly keeps the color in its stable pH 4–7 band, brighter and slightly redder, while alkali (baking soda or [[tech-wood-ash-lye|wood-ash lye]]) pushes it out of that band and dulls and browns it — so avoid alkali. Because there is little tannin, [[tech-iron-acetate|iron water]] doesn't give the clean grey/black iron-tannate shift it gives tannin inks; expect muddying rather than a useful color, so test on a swatch only. The pigment's real modifiers are light, heat, and oxygen — and all of them work against you.",
+    preservation: "Perishable and fugitive — there is no home method to make prickly pear ink permanent. To stretch its short life: keep it acidic (pH 4–7) with a little vinegar or lemon, add a pinch of vitamin C (a documented betalain stabilizer) and a clove, and refrigerate in a sealed, light-blocking bottle. Even then expect noticeable color loss within days to a couple of weeks, and visible browning of finished work over weeks to months. Watch for mold on the sugary juice; discard if it smells off.",
+    yield: "Roughly ⅓–¾ cup of ink from 8–12 fruits, depending on how juicy and ripe they are and how little water you add. Best color is in the first few days; usable about 1–2 weeks refrigerated before it dulls. Treat it as a temporary, expressive ink — the magenta is the reward of the moment, not an archival pigment.",
+    beyondInk: "Beyond ink, prickly pear betalains are a well-studied natural food and textile colorant — the juice and dried fruit/peel powder tint everything from limewash and watercolor washes to wool and silk, though on fiber the color is fugitive and usually wants an alum mordant and an acidic bath to grab at all (and still fades). It makes a lovely, short-lived watercolor or wash pigment, a natural limewash/paint tint, and a quick magenta stain for paper and small craft work. For anything that needs to last, pair the experience of this color with a genuinely lightfast red rather than relying on the betalain alone.",
+    safety: [
+      "Glochids are the main hazard: the fine barbed hairs covering the fruit detach instantly and lodge in skin, eyes, lips, and mucous membranes, causing days of itching and irritation. Always handle fruit with heavy leather or dedicated cactus gloves and long-handled tongs — thin nitrile or kitchen gloves do not stop them.",
+      "Never rub your eyes or face while handling the fruit, and de-spine and scrub the fruit before cutting so you don't drive glochids into your hands or rinse them loose into the sink.",
+      "If you singe glochids off over a flame, the burning hairs become airborne — work outdoors only, never indoors, stand upwind with your face back, hold the fruit in tongs, and keep nothing flammable nearby. Anyone with asthma or respiratory sensitivity should brush/scrape the glochids off instead of burning them.",
+      "This is ink, not food. Although prickly pear fruit is edible in food contexts, this batch is made with dedicated, non-food tools and may contain craft additives — reserve the knife, bowl, spoon, and jars for craft only and don't taste or drink it.",
+      "The juice stains skin, clothing, and surfaces permanently — cover your work area and wear an apron.",
+      "Harvest ethics are a safety-of-the-resource issue: occurrence data is not permission, and some Opuntia are protected. Collect only ripe fruit, only from common abundant stands, only where harvest is allowed, and leave the bulk for wildlife.",
+      "If iron water is used as an experimental modifier, it is corrosive and an eye/skin irritant — keep it labeled, away from kids and pets, and rinse splashes at once."
+    ],
+    sources: [
+      {
+        title: "Eco-friendly and protective natural dye from red prickly pear (Opuntia ficus-indica) — Journal of King Saud University (ScienceDirect)",
+        url: "https://www.sciencedirect.com/science/article/pii/S1319610310001171"
+      },
+      {
+        title: "Eating Cactus: Prickly Pear for Food (handling glochids & dethorning) — University of Nevada, Reno Extension",
+        url: "https://extension.unr.edu/publication.aspx?PubID=2157"
+      },
+      {
+        title: "Great Plains Prickly Pear (Opuntia polyacantha) — USDA Forest Service, Plant of the Week",
+        url: "https://www.fs.usda.gov/wildflowers/plant-of-the-week/opuntia_polyacantha.shtml"
+      }
+    ]
+  },
+  {
+    id: "ink-rouge-plant",
+    plantId: "ink-rouge-plant",
+    kind: "ink",
+    name: "Rouge plant (pigeonberry) ink",
+    category: "red",
+    swatch: "#b02a55",
+    color: "Toxic-berry rouge",
+    difficulty: "Intermediate",
+    teaser: "Rouge-red from a toxic berry",
+    toxic: true,
+    educationalOnly: false,
+    hook: "unused",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Frankly fugitive. Betalains like rivianin are notoriously sensitive to light, heat, oxygen, and pH, and pigment studies on this very juice show heavy degradation within weeks at room temperature even in the dark. Expect the rouge-magenta to dull toward brown-grey within weeks to a couple of months of light exposure. Keep finished work in a closed book or dark drawer, scan anything you want to keep, and treat it as expressive rather than archival."
+    },
+    timeline: {
+      active: "25–40 min",
+      passive: "30–60 min"
+    },
+    ingredients: [
+      {
+        item: "Ripe rouge-plant berries (translucent, fully red)",
+        amount: "~1.5–2 cups",
+        required: true,
+        note: "Pick only fully ripe red berries; green/unripe fruit gives weak color. Berries are small, so harvest a generous handful — but lightly, leaving plenty for the many birds that depend on them."
+      },
+      {
+        item: "White vinegar or lemon juice",
+        amount: "~1 tsp per ½ cup juice",
+        required: false,
+        note: "Mild acid keeps the red brighter, slightly preserves, and helps the ink flow; betalains are most stable around pH 3–7."
+      },
+      {
+        item: "Crushed vitamin-C tablet (ascorbic acid)",
+        amount: "a small pinch per ½ cup",
+        required: false,
+        note: "A documented betalain stabilizer that slows bleaching (especially against trace metals); refrigeration helps even more."
+      },
+      {
+        item: "Whole cloves",
+        amount: "2–3 per jar",
+        required: false,
+        note: "Traditional anti-mold for a water-based ink."
+      },
+      {
+        item: "Gum arabic",
+        amount: "¼–½ tsp per ½ cup",
+        required: false,
+        note: "Optional body and slight gloss for brushwork — see [[tech-gum-arabic|gum arabic]]; skip for a thin wash."
+      },
+      {
+        item: "Iron water (steel wool steeped in vinegar)",
+        amount: "a few drops to taste",
+        required: false,
+        note: "A saddening modifier — see [[tech-iron-acetate|iron water]]; dulls the rouge toward muted brown-violet."
+      }
+    ],
+    toolsRequired: [
+      "Waterproof gloves (nitrile or latex)",
+      "A craft-only bowl or wide-mouth jar",
+      "A fork, masher, or muddler to crush the berries",
+      "A fine strainer lined with a coffee filter or cheesecloth",
+      "A lidded jar or bottle for storage, reserved for craft use",
+      "Newspaper or a tray to protect surfaces from staining"
+    ],
+    toolsOptional: [
+      "Funnel",
+      "Dropper or pipette for testing color",
+      "Craft-only mortar and pestle",
+      "Pen, nib, or brush for testing",
+      "Apron or old clothes"
+    ],
+    steps: [
+      "Set up first: this is a craft ink, not food. Spread newspaper or a tray (the juice stains skin, fabric, wood, and grout), put gloves on, and keep children and pets away. Reserve every tool you use for craft only, never for food.",
+      "Harvest lightly and only where collecting is permitted — seeing the plant on a map or in the wild is not permission to harvest it. Check the land's rules first. Rouge plant is a common native that regrows quickly across Florida, the Gulf, and South Texas, so take only a generous handful of fully ripe red berries and leave the rest for birds; this is a light tip-harvest, not a strip.",
+      "Rinse and drain the berries, discarding any green ones, leaves, and stems — the ripe red fruit is what you want, and nothing here is for eating. The leaves are reported toxic too, so don't let them carry through.",
+      "Crush the berries cold with a fork, masher, or muddler until they give up their juice. Work cold and do NOT simmer: heat rapidly degrades betalain pigments and turns the rouge brown (one study found ~95% pigment loss in minutes at 90°C). This is the opposite of a tannin or hull ink, where you simmer.",
+      "Strain through a coffee filter or cheesecloth into a clean jar, pressing gently; strain a second time for a pen-smooth ink. Bag the spent pulp and seeds in the regular trash rather than handling them casually, since the fruit is reported toxic.",
+      "Optional: stir in about 1 tsp vinegar or lemon per ½ cup of juice to brighten and mildly preserve, plus a pinch of vitamin C to slow fading. For brushwork, mix in ¼–½ tsp gum arabic per ½ cup.",
+      "Test on the actual paper you'll use and let it dry — expect a cool rouge-red to magenta. If it's thin, let it stand uncovered in a cool, dark spot to concentrate, or crush more berries; don't reduce it with heat.",
+      "Bottle, drop in a clove or two, and label clearly TOXIC — NOT FOOD. Refrigerate away from food, children, and pets, use within days to a couple of weeks for the best color, and keep finished art out of direct light."
+    ],
+    modifiers: "Rouge-plant color is a betalain (rivianin), the same pigment family as beet and pokeberry — so, unlike anthocyanin berry inks, it does NOT do the dramatic acid-to-base color rainbow. A little acid ([[tech-acid-base|acid & base shifters]]) — vinegar or lemon — keeps it brighter, redder, and more stable, which is where you want to live (pH ~3–7). Strong alkali such as wood-ash lye ([[tech-wood-ash-lye|wood-ash alkali]]) or baking soda is the enemy: betalains break down quickly in alkaline conditions, dulling and browning the ink, so avoid it. A few drops of iron water ([[tech-iron-acetate|iron water]]) sadden the rouge toward a muted brown-violet rather than producing a true black. The real levers on this ink are not color shifters but stabilizers — cold, dark, slight acidity, and a pinch of vitamin C — to slow an inevitable fade.",
+    preservation: "Perishable and fugitive — there is no home method that makes rouge-plant ink truly permanent. To stretch its life, add vinegar or lemon plus a pinch of vitamin C (a documented betalain stabilizer), drop in a clove or two against mold, bottle in a sterilized, light-blocking jar, and refrigerate. Cold matters most: pigment-stability work on this very juice found only ~15% loss over 90 days at refrigerator temperature versus near-total loss at room temperature. Even refrigerated, expect the jar to dull within a couple of weeks and finished writing to shift toward brown-grey over weeks to months. See [[tech-preserving|preserving plant inks]] for the general approach; treat this color as temporary by nature.",
+    yield: "Roughly ⅓–½ cup of rouge-red ink from 1.5–2 cups of berries, since the small fruit is mostly seed and skin (total betalain content is only around a third of a percent of fresh weight). Best color in the first few days; usable about 1–2 weeks refrigerated before it noticeably dulls. The applied color is fugitive and will fade and brown over weeks to months in light regardless of how well the jar keeps — plan to scan or rework anything you want to last.",
+    beyondInk: "Beyond ink, the same juice has a long history as a fugitive watercolor or paint (bind it with gum arabic for body, or with egg/casein for a slightly tougher film — see [[tech-egg-casein|egg & casein binders]]) and lends the plant its \"rouge\" name. Important: because the berries are reported toxic, treat that cosmetic history as historical only — do not apply this ink to lips or skin as a literal makeup. As a textile dye it is unreliable and short-lived: betalains don't bond well into washed cellulose, so even on alum-mordanted wool or silk the pink-red rinses and fades, making it a stain rather than a dependable dye. Its color is also studied as a natural food colorant in food-science research abroad, but that is a separate, food-grade laboratory context — this craft preparation, made with shared kitchen care and dedicated tools, is not food.",
+    safety: [
+      "Toxic if ingested — do not eat the berries, leaves, or ink. Reputable native-plant authorities (e.g., the Lady Bird Johnson Wildflower Center) warn that the fruit and leaves of Rivina humilis are toxic if eaten, with reported effects including nausea, vomiting, and diarrhea. (Toxicology is not fully settled — one rat study reported the berry juice safe — but treat it as do-not-ingest.) Never taste, swallow, or use this ink on lips or skin as a literal cosmetic, despite the 'rouge plant' name.",
+      "If anyone swallows the berries or ink, contact Poison Control (US: 1-800-222-1222) or emergency services. Keep berries, juice, and finished ink away from children and pets, who may mistake the bright red for a treat — label the bottle clearly.",
+      "This is a craft ink, not food. Reserve the bowl, crushing tool, strainer, and storage jar as craft-only; do not return them to kitchen use.",
+      "Wear waterproof gloves — the juice deeply stains skin, nails, fabric, wood, counters, and grout, and you don't want toxic berry pulp on your hands. Protect all work surfaces.",
+      "Bag spent pulp, seeds, leaves, and stems in the regular trash rather than nibbling or composting casually around food gardens; wash hands and tools well when finished.",
+      "Keep the process cold — there is no benefit to heating, heat destroys the color, and hot toxic pulp is just messier and riskier to strain."
+    ],
+    sources: [
+      {
+        title: "Rivina humilis (pigeonberry / rougeplant) — Lady Bird Johnson Wildflower Center, Native Plant Database (toxicity caution; native range; rouge/cosmetic history)",
+        url: "https://www.wildflower.org/plants/result.php?id_plant=rihu2"
+      },
+      {
+        title: "Rivina humilis — Wikipedia (berry juice historically used as dye and ink; rivianin/humilixanthin betalain pigments)",
+        url: "https://en.wikipedia.org/wiki/Rivina_humilis"
+      },
+      {
+        title: "Khan & Giridhar (2014), 'Enhanced chemical stability, chromatic properties and regeneration of betalains in Rivina humilis L. berry juice', LWT — Food Science and Technology 58:649–657 (pigment stability vs heat, storage temperature, and ascorbic acid)",
+        url: "https://www.sciencedirect.com/science/article/pii/S0023643814001777"
+      },
+      {
+        title: "Rivina humilis (rougeplant) — USDA PLANTS Database profile (native status and distribution)",
+        url: "https://plants.sc.egov.usda.gov/plant-profile/RIHU"
+      }
+    ]
+  },
+  {
+    id: "ink-bee-plant",
+    plantId: "ink-bee-plant",
+    kind: "ink",
+    name: "Rocky Mountain bee plant black",
+    category: "black",
+    swatch: "#22242c",
+    color: "Pottery-paint black",
+    difficulty: "Intermediate",
+    teaser: "Boiled-down ancestral pottery black",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Across the Colorado Plateau, the pungent purple spires of Rocky Mountain bee plant (Cleomella serrulata, formerly Cleome / Peritoma serrulata) have fed pottery kilns as much as kitchen pots. Pueblo potters boil the whole flowering plant down to a thick, tarry black resin, dry it into storable cakes, and re-soak it into the brush-ready paint that drew the black-on-white designs of Ancestral Puebloan ceramics as far back as 900-1300 CE — a \"carbon paint\" whose blackness develops in the fire, not the jar. The same plant, boiled younger with alum, gives Navajo weavers a soft yellow-green wool dye. This is a living Indigenous craft tradition: present it with credit, not as novelty.",
+    lightfastness: {
+      rating: "moderate",
+      note: "On unfired clay this is a carbon/organic paint: the black is essentially soot and reduced iron that fixes permanently when the pot is fired, so a finished fired pot is very durable — far more lightfast than the wet paint suggests. As an unfired ink or paint on paper, however, the boiled resin behaves like other plant-carbon blacks: reasonably stable in the dark but liable to fade or warm toward brown in strong, sustained sunlight. The Navajo wool dye made from the young plant is frankly fugitive-to-moderate and shifts without an alum mordant. Do not oversell jar-to-paper permanence."
+    },
+    timeline: {
+      active: "2-4 hr",
+      passive: "2-7 days"
+    },
+    ingredients: [
+      {
+        item: "Whole flowering Rocky Mountain bee plant (Cleomella serrulata), fresh",
+        amount: "1 large grocery-bag full (several plants; ~1-2 lb / 0.5-1 kg of chopped stems, leaves, flowers)",
+        required: true,
+        note: "Harvest in early-to-mid summer when foliage is lush and iron content is reportedly highest; the plant is strongly pungent ('skunkweed') — that is normal."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover the chopped plant (roughly 1-2 gallons / 4-8 L), added in stages as it reduces",
+        required: true,
+        note: "Use the minimum that keeps the mass from scorching; the goal is to drive water off, not dilute."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "About 8% of dry fiber weight, for the wool-dye variant only",
+        required: false,
+        note: "Only needed if you are dyeing wool yellow-green (the Navajo method). Not used for pottery paint or ink. Mordant the wool before dyeing; see [[tech-iron-acetate|iron water]] family of metal-salt notes for how salts shift plant color."
+      },
+      {
+        item: "Gum arabic",
+        amount: "A few percent by volume, to taste",
+        required: false,
+        note: "Optional binder if you want a smoother, more brushable ink on paper rather than the traditional pottery paint — see [[tech-gum-arabic|gum arabic binder]]. Authentic pottery paint relies on the resin's own stickiness."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stockpot (this pigment work permanently scents and stains a pot — never return it to the kitchen)",
+      "Dedicated non-food stirring spoon or paddle",
+      "Heat source / stove with good ventilation",
+      "Nitrile or rubber gloves",
+      "Knife or shears and cutting surface for chopping the plant",
+      "Fine strainer or cloth for separating spent plant matter"
+    ],
+    toolsOptional: [
+      "Shallow tray or smooth stone/tile for drying the resin into cakes",
+      "Small jars for storing dried cakes",
+      "Yucca-fiber or fine soft brush for traditional pottery application",
+      "Thermometer or just a watchful eye to avoid scorching late in the reduction"
+    ],
+    steps: [
+      "Harvest only where collection is permitted and you have the right to be there — occurrence on a map is not harvest permission, and on public, tribal, or private land the rules differ. Where gathering is allowed, this is a light-harvest plant: it is an abundant native annual that self-seeds heavily, so cutting whole flowering stems has minimal impact when you leave plenty standing to set and drop seed. Never collect from cultural or archaeological sites.",
+      "Wear gloves and work with good ventilation — the foliage is famously skunky (the smell comes from mustard-oil / sulfur compounds released as it cooks) and the long simmer fills a room with it; outdoors or under a strong hood is ideal. Coarsely chop the whole flowering plant (stems, leaves, flowers) into your dedicated non-food pot.",
+      "Cover with water and bring to a steady simmer. Cook for a long stretch, topping up with small amounts of water only to prevent scorching, until the liquid pulls a deep tea-brown to near-black. Strain out and compost the spent plant matter.",
+      "Return the dark liquid to the pot and reduce it slowly, stirring more and more often as it thickens. It will pass through syrup and finally to a thick, sticky black resin or paste. Watch it closely near the end — concentrated plant sugars scorch fast and the bottom can burn.",
+      "Use the resin in one of two ways. (Pottery paint, traditional) thin a little resin with hot water to a brushable paint, apply designs to unfired, slip-coated pottery, and let the black develop during firing. (Ink/paint on paper) stir in a little gum arabic for body and brush directly. To store, spread the resin into a thin slab on a tray or smooth stone and air-dry it into hard cakes over several days; re-soak a cake in hot water to revive working consistency.",
+      "For the Navajo-style wool dye instead: simmer the younger plant (not fully reduced), pre-mordant the wool with alum, and dye to a soft yellow-green. Keep dye, paint, and ink tools dedicated to craft — none of this concentrated craft material is food. (The plant's young shoots and seed do have a separate history as an Indigenous food eaten in moderation, but the boiled-down pigment, the dye bath, and the tools used for them are emphatically not, and the plant is toxic in large amounts.)"
+    ],
+    modifiers: "Iron deepens and cools the color toward true black: traditional pottery paint already leans on the plant's own iron content (harvested when foliage is iron-rich) and on reducing-firing chemistry, and a touch of [[tech-iron-acetate|iron water]] will sadden and darken an unfired ink the same way. Alum (an aluminum salt) is the classic mordant for the wool route and brightens the dye toward clear yellow-green rather than dulling it. Acid and alkali shift the warm plant pigments: a more alkaline bath (try [[tech-wood-ash-lye|wood-ash lye]]) tends to push toward greener-brown, while acids ([[tech-acid-base|acid & base shifters]]) warm and lighten it. Remember the dramatic black of a finished pot comes from the firing, not from a chemical added in the jar.",
+    preservation: "Dried into hard cakes, the boiled resin keeps for a long time — months to years — which is exactly why Pueblo potters stored it this way and re-soaked pieces as needed; keep cakes dry and they resist spoilage. As a wet liquid ink or paint it is a sugary plant brew and will grow mold within days to a couple of weeks at room temperature, so make small batches, refrigerate, and watch for fuzz or sour smell. A pinch of clove oil or other mild preservative helps a working ink last longer (see [[tech-preserving|preserving]]). The smell mellows once dried but never fully disappears.",
+    yield: "A grocery-bag of fresh plant cooks down dramatically — expect only a few tablespoons of thick resin, or one to a few small cakes, from a large gathering, because you are reducing gallons of dilute extract to a paste. That small amount goes a long way as a paint: a little resin thinned with hot water decorates many pots. If your goal is bottled ink rather than pottery paint, plan on modest volumes and concentrate accordingly.",
+    beyondInk: "Beyond ink and pottery paint, the same boiled concentrate paints basketry designs, and the younger plant boiled with an alum mordant is the source of the Navajo yellow-green wool dye used in rugs and blankets. The pottery use is the headline: this is the carbon-based black paint behind Ancestral and modern Pueblo black-on-white ceramics. (The plant also has long-standing food and medicine uses in Indigenous cultures — young shoots and ground seed, eaten in moderation, since the plant can accumulate nitrates and is toxic in quantity — but that is a separate tradition, outside this craft card and outside this not-for-ingestion process.)",
+    safety: [
+      "This is a CRAFT material, not food. Rocky Mountain bee plant does have a separate Indigenous food tradition (young shoots and seed eaten in moderation), but the boiled-down pigment, the dye bath, and any tools used for them are for craft only — never ingest them and never reuse the equipment for cooking. The plant itself is also reported to be toxic if eaten in large amounts (it can accumulate nitrates), so the concentrated craft resin is doubly not for eating.",
+      "Use a DEDICATED non-food pot, spoon, and brushes. The reduction permanently stains and scents cookware and you do not want concentrated plant resin or mordants migrating into food.",
+      "Ventilate well. The plant is intensely pungent ('skunkweed' / 'stinking clover') from sulfurous mustard-oil compounds, and the long simmer makes a small space unpleasant; work outdoors or under a strong hood. The smell is irritating rather than acutely dangerous, but it is strong enough to clear a room.",
+      "Wear gloves. The hot resin is sticky and staining, and prolonged skin contact with concentrated plant brews can irritate.",
+      "Hot-liquid and scorch hazard: the final reduction is thick, sputtering, and burns the pan bottom easily — stir attentively and keep the heat moderate to avoid burns and smoke.",
+      "If you make the wool dye, handle alum as a chemical mordant: keep it away from food and children, and avoid breathing the dust.",
+      "Occurrence is not permission: confirm you may legally and ethically harvest before cutting any plant, and never collect from cultural, archaeological, or protected sites.",
+      "Treat the cultural source with respect — this is a living Pueblo and Navajo tradition, not a curiosity; credit it and do not misrepresent finished work as authentically Indigenous unless it is."
+    ],
+    sources: [
+      {
+        title: "USDA Forest Service — Rocky Mountain Bee Plant (Cleome serrulata), Plant of the Week",
+        url: "https://www.fs.usda.gov/wildflowers/plant-of-the-week/cleome_serrulata.shtml"
+      },
+      {
+        title: "Adams, K.R. & Stewart, J.D. — Pottery Paint and Other Uses of Rocky Mountain Beeweed (Cleome serrulata) in the Southwestern United States (KIVA 67:4)",
+        url: "https://www.tandfonline.com/doi/abs/10.1080/00231940.2002.11758462"
+      },
+      {
+        title: "Cleomella serrulata — Wikipedia (synonymy, range, ethnobotanical dye and pottery-paint uses)",
+        url: "https://en.wikipedia.org/wiki/Cleomella_serrulata"
+      }
+    ]
+  },
+  {
+    id: "ink-brazilian-pepper",
+    plantId: "ink-brazilian-pepper",
+    kind: "ink",
+    name: "Brazilian pepper berry ink",
+    category: "red",
+    swatch: "#9c2f3f",
+    color: "Invasive red",
+    difficulty: "Advanced",
+    teaser: "Invasive red — urushiol caution",
+    toxic: true,
+    educationalOnly: false,
+    hook: "In the pinelands and disturbed hammocks of central and south Florida, Brazilian peppertree (Schinus terebinthifolia) hangs in dense December clusters of hundreds of glossy red drupes — the reason one of its old names is \"Florida holly.\" Crushed, those resin-rich berries bleed a clear rose-to-wine stain, and steeping them yields a warm invasive red worth reclaiming from a tree that is otherwise choking native communities. But this is no friendly berry ink: peppertree is a cashew-family (Anacardiaceae) cousin of poison ivy, and its sap, fruit, and foliage carry the alkenyl phenols cardol, cardanol, and anacardic acid — co-occurring with the urushiols that make poison ivy notorious — which raise blistering rashes in people who cross-react and can turn smoke into a respiratory hazard. Make it as ecological removal done right, gloved and ventilated, never as a casual forage.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Like nearly all anthocyanin- and oleoresin-based berry stains, raw Brazilian pepper ink is fugitive: expect the bright rose to shift toward dull brown and fade markedly within weeks to months of light exposure, especially in direct sun. A pinch of iron or a tannin pre-treatment darkens it and buys a little durability, but no plant-berry ink here is archival. Treat finished work as ephemeral, keep originals out of light, and scan or photograph anything you want to keep."
+    },
+    timeline: {
+      active: "1.5–3 hr",
+      passive: "1–3 days"
+    },
+    ingredients: [
+      {
+        item: "Ripe Brazilian peppertree berries (Schinus terebinthifolia)",
+        amount: "2–3 cups (roughly 250–400 g) red, fully ripe drupes",
+        required: true,
+        note: "Harvest ONLY from plants you have permission or a legal mandate to remove — occurrence on a map is not permission. In Florida this is a prohibited Category I invasive and a listed noxious weed, so careful removal is ecologically positive; elsewhere, confirm before cutting. Wear nitrile gloves: the fruit itself irritates skin."
+      },
+      {
+        item: "Water",
+        amount: "3–4 cups, enough to cover the berries",
+        required: true,
+        note: "Distilled or rain water gives a cleaner, more predictable color than hard tap water."
+      },
+      {
+        item: "Pinch of salt",
+        amount: "1/4 teaspoon (optional)",
+        required: false,
+        note: "A little salt can help set color slightly; effect on this fugitive stain is modest."
+      },
+      {
+        item: "Gum arabic",
+        amount: "1/2–1 teaspoon dissolved, per 1/4 cup ink",
+        required: false,
+        note: "Adds body, gloss, and slows separation for pen-and-brush work — see [[tech-gum-arabic|gum arabic binder]]."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A few drops to taste",
+        required: false,
+        note: "Saddens the rose toward grey-violet and plum and slightly improves durability — see [[tech-iron-acetate|iron water]]. Add by the drop; it shifts fast."
+      },
+      {
+        item: "Vinegar or other mild acid",
+        amount: "A few drops to taste",
+        required: false,
+        note: "Brightens and pinkens the anthocyanin fraction — see [[tech-acid-base|acid & base shifters]]."
+      },
+      {
+        item: "Wood-ash lye or baking soda (alkali)",
+        amount: "A pinch in solution, to taste",
+        required: false,
+        note: "Pushes color toward blue-grey or muddy violet — see [[tech-acid-base|acid & base shifters]]. Use sparingly."
+      },
+      {
+        item: "Whole clove or a few drops of clove oil",
+        amount: "1–2 cloves per jar",
+        required: false,
+        note: "A traditional mold inhibitor for plant inks — see [[tech-preserving|preserving inks]]."
+      }
+    ],
+    toolsRequired: [
+      "Nitrile or chemical-resistant gloves (the headline tool — sap, fruit, and foliage are skin irritants)",
+      "Dedicated non-food stainless or enamel pot reserved for craft use only",
+      "Dedicated stirring spoon and strainer kept out of the kitchen",
+      "Fine strainer, cheesecloth, or coffee filter",
+      "Glass jars or bottles with lids for storage",
+      "Good ventilation — work outdoors or with windows open"
+    ],
+    toolsOptional: [
+      "Eye protection (splashes of crushed-fruit liquor can irritate)",
+      "Long sleeves and a dust mask or respirator when cutting or handling foliage",
+      "Small dropper bottles for iron water and acid",
+      "Mortar/pestle or potato masher (dedicated) to crush berries before simmering",
+      "pH strips for tracking modifier shifts",
+      "Labels and a dated logbook for the fugitive swatch"
+    ],
+    steps: [
+      "Harvest only where removal is permitted or legally mandated — occurrence is not permission. Brazilian pepper is a prohibited Category I invasive in Florida, so cutting and clearing it is ecologically positive removal, not foraging; elsewhere, get permission first. Snip ripe red berry clusters (they ripen roughly November–January) wearing nitrile gloves and long sleeves; this plant is a poison-ivy relative and the fruit and sap irritate skin.",
+      "Set aside any wood, leaves, and trimmings for proper disposal — bag them or follow local invasive-disposal rules so seed isn't spread. NEVER burn Brazilian peppertree wood, foliage, or berries: the smoke carries airborne irritants that can severely affect skin, eyes, and lungs, including in bystanders downwind.",
+      "Working gloved and in good ventilation (ideally outdoors), strip ripe berries from the stems into your dedicated craft pot. Optionally crush them lightly with a dedicated masher to release more pigment. Add just enough water to cover.",
+      "Simmer gently (do not hard-boil) for 45–60 minutes, until the water is deeply colored rose to wine-red. Keep the pot ventilated and avoid leaning over the rising steam, which can carry irritant resins.",
+      "Let the liquor cool, then strain through cheesecloth or a coffee filter into a jar, pressing gently with a gloved hand or spoon. Bag the spent berry pulp as invasive material for disposal — do not compost where it could sprout or add it to a food-waste stream.",
+      "For a stronger ink, return the strained liquid to the dedicated pot and reduce slowly to concentrate the color; for writing or brushwork, stir in dissolved gum arabic a little at a time until the body feels right.",
+      "Test on your actual paper or fabric and split the batch to explore modifiers: a few drops of vinegar to brighten and pinken, a few drops of iron water to deepen toward plum-grey, or a pinch of alkali to push gray-violet. Add modifiers by the drop — the color turns quickly.",
+      "Bottle the finished ink in a labeled jar with a clove or a drop of clove oil to discourage mold. Date it, note that it is fugitive and craft-only, and store cool and dark. Clean all dedicated tools well and keep them strictly out of the kitchen."
+    ],
+    modifiers: "Brazilian pepper ink carries a mix of pink anthocyanins and warmer oleoresin reds, so it responds to chemistry in two registers. Acid brightens and pinkens it — a few drops of vinegar lift the rose; see [[tech-acid-base|acid & base shifters]]. Alkali (a pinch of baking soda or wood-ash lye) drags it toward muddy blue-grey and violet. A few drops of \"iron water\" — ferrous acetate, see [[tech-iron-acetate|iron water]] — saddens the color toward grey-plum and is the single most reliable way to deepen it and nudge durability upward. A tannin pre-mordant (oak gall, sumac) on fiber or a tannin-sized paper helps the color grip and shifts it browner. None of these makes the ink archival; they steer hue and buy modest fastness.",
+    preservation: "Plan for a short, watched life. Unpreserved, the strained liquor will ferment, cloud, and grow mold within days at room temperature; refrigeration in a sealed dedicated jar extends that to a couple of weeks, and a clove or a drop of clove oil helps suppress mold — see [[tech-preserving|preserving inks]]. A small splash of a preservative or storing concentrated and cold buys more time. Even well-kept, the written color is fugitive and drifts toward brown over weeks to months, faster in light. Keep finished inkwork out of direct sun, store the bottle cool and dark, and digitize anything you want to outlast the pigment. Label every jar as craft-only and dated.",
+    yield: "Highly variable and pigment-light: 2–3 cups of berries yield roughly 1–1.5 cups of usable thin ink before reduction, or a few tablespoons of a concentrated, gum-bound writing ink. Because the stain is dilute and fugitive, treat a batch as enough for a sketchbook session or a sampler of swatches rather than a permanent body of work. Larger removals give more berries, but the color does not get dramatically more lightfast with volume — concentrate and modify rather than expecting saturation from raw quantity.",
+    beyondInk: "The same liquor works as a watercolor-style wash and as a stain for paper, raw wood, or basketry, and on protein fibers (wool, silk) pre-mordanted with alum it gives soft rose-to-tan dye shades — iron-modified, it shifts to grey-plum. As with the ink, every textile or paint use is fugitive and best treated as expressive rather than heirloom; sun-fading is rapid. The most compelling \"craft\" framing is ecological: turning a mandated invasive removal into pigment closes a loop, putting an aggressive Category I weed to brief, honest use instead of the landfill — provided you handle and dispose of the woody material safely and never burn it.",
+    safety: [
+      "URUSHIOL-RELATIVE HAZARD (headline): Brazilian peppertree is in the cashew family (Anacardiaceae) alongside poison ivy. Its sap, fruit, and foliage contain the alkenyl phenols cardol, cardanol, and anacardic acid — which co-occur with urushiols and trigger allergic contact dermatitis (redness, blistering, intense itching) in people who cross-react. Wear nitrile gloves throughout and keep it off bare skin; people allergic to poison ivy are especially likely to react, and cardol and anacardic acid are more irritating than cardanol.",
+      "NEVER burn the wood, trimmings, leaves, or berries. Smoke from burning Brazilian peppertree carries airborne irritants that can severely affect skin, eyes, and the respiratory tract, including bystanders downwind — the same hazard public-health agencies warn of for burning poison ivy and sumac. Bag and dispose of woody material as invasive waste instead.",
+      "Respiratory caution: crushed fruit, flowering plants, and the simmering pot can release irritant resins into the air; some people report headaches, eye irritation, and flu-like or chest symptoms near peppertree. Work outdoors or with strong ventilation, and avoid leaning into the steam.",
+      "Craft, not food: although the dried drupes are sold elsewhere as 'pink peppercorns,' this ink is a craft material, not food. Schinus berries can cause irritation, the ink is not for consumption, and dedicated non-food tools must be used.",
+      "Use dedicated non-food tools: keep the pot, spoon, strainer, and jars strictly for craft use and out of the kitchen. Do not return them to cooking service.",
+      "Protect others: keep children and pets away from the berries, the pot, and the wet ink; wash gloved hands and any exposed skin with soap after handling, and launder clothing that contacted sap separately.",
+      "If a rash, swelling, or breathing irritation develops, wash the area, stop work, and seek medical care for significant reactions — treatment mirrors poison-ivy management. Call a poison control center if you are unsure about an exposure.",
+      "Harvest ethics and legality: collect only where removal is permitted or legally required. Occurrence on a map is never harvest permission; in Florida sale, propagation, and transport are restricted, so handle and dispose of material per local invasive-species rules and do not move seed-bearing material."
+    ],
+    sources: [
+      {
+        title: "Brazilian Peppertree: Watch Out for This Lesser-Known Relative of Poison Ivy (Cutis, MDedge/Dermatology) — cardol, cardanol, anacardic acid; urushiol cross-reactivity; treatment parallels poison ivy",
+        url: "https://www.mdedge.com/dermatology/article/269987/contact-dermatitis/brazilian-peppertree-watch-out-lesser-known-relative"
+      },
+      {
+        title: "Brazilian pepper tree (Schinus terebinthifolius) — Queensland Poisons Information Centre (skin/eye/respiratory irritation, allergic dermatitis, handling cautions)",
+        url: "https://www.poisonsinfo.health.qld.gov.au/plants-and-mushrooms/brazilian-pepper-tree-schinus-terebinthifolius"
+      },
+      {
+        title: "Schinus terebinthifolia — UF/IFAS Plant Directory (Florida Category I / Noxious Weed status, drupes, cardanol/poison-ivy relationship, control)",
+        url: "https://plant-directory.ifas.ufl.edu/plant-directory/schinus-terebinthifolia/"
+      },
+      {
+        title: "Brazilian Peppertree — UF/IFAS Gardening Solutions (identification, legal status, management, skin/sap irritation)",
+        url: "https://gardeningsolutions.ifas.ufl.edu/care/weeds-and-invasive-plants/brazilian-peppertree/"
+      }
+    ]
+  },
+  {
+    id: "ink-oregon-grape",
+    plantId: "ink-oregon-grape",
+    kind: "ink",
+    name: "Oregon grape & barberry berry ink",
+    category: "blue",
+    swatch: "#3b4a72",
+    color: "Dusky berry blue-purple",
+    difficulty: "Intermediate",
+    teaser: "pH-shifting berry blue-purple",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Western Mahonia and Berberis shrubs — tall and creeping Oregon grape, Fremont's mahonia, and Texas agarita — are famous in craft circles for the electric-yellow berberine locked in their roots and inner bark. But that color costs the plant its life, so this card chases the gentler harvest instead: the clusters of dusky, grape-bloomed berries that ripen blue-black in late summer. Crush them and you get a moody, wine-dark juice loaded with anthocyanins — the same pH-sensitive pigments in blackberries and red cabbage — that swings from cool blue-purple toward magenta-pink with a splash of vinegar, or deep violet-slate with a pinch of wood ash. It is a beautiful, living, and frankly fleeting color: more a seasonal experiment than an archival ink, and all the more worth catching while the berries hang.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Anthocyanin berry inks are among the least permanent colors you can make. Natural dyers are blunt about this: berry juice behaves more as a stain than a fast dye, and anthocyanins fade in light — typically mellowing and browning over weeks to months, faster in direct sun, even with acid or other stabilizers. Expect noticeable shift and fading on paper kept in the light; store finished work in the dark and treat the color as a record of a season, not an heirloom. (Note: the berberine YELLOW from root and bark is also a classic fugitive natural dye and fades readily too — so the destructive harvest does not even buy you permanence.)"
+    },
+    timeline: {
+      active: "45-75 min",
+      passive: "A few weeks"
+    },
+    ingredients: [
+      {
+        item: "Ripe Oregon grape / barberry berries (Berberis aquifolium, B. repens, B. fremontii, B. trifoliolata)",
+        amount: "1-2 cups, fully ripe and dusky blue-black",
+        required: true,
+        note: "Pick only where harvest is permitted and only a light share of any shrub's crop — these berries are food for birds and wildlife, and seeing the plant is never permission to pick it. Leave the majority on the bush."
+      },
+      {
+        item: "Water",
+        amount: "Just enough to barely cover the crushed berries (about 1/2 to 1 cup)",
+        required: true,
+        note: "Less water = more saturated ink. Rainwater or distilled gives a more neutral starting pH than hard tap water."
+      },
+      {
+        item: "White vinegar or lemon juice (acid shifter)",
+        amount: "A few drops to 1 tsp per test portion",
+        required: false,
+        note: "Pushes the color warmer toward pink/magenta and slightly helps short-term stability. See [[tech-acid-base|acid & base shifters]]."
+      },
+      {
+        item: "Pinch of baking soda or a little [[tech-wood-ash-lye|wood-ash alkali]]",
+        amount: "A small pinch per test portion",
+        required: false,
+        note: "Shifts cool toward blue/blue-green; too much dulls toward gray-green and can degrade the pigment fast. Add drop by drop."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A few drops per test portion",
+        required: false,
+        note: "Saddens and deepens toward gray-violet/slate and can modestly improve hold. Make your own per [[tech-iron-acetate|iron water]]; it is staining and not for food use."
+      },
+      {
+        item: "Gum arabic",
+        amount: "About 1/4 to 1/2 tsp per 2 tbsp finished ink",
+        required: false,
+        note: "Binder for flow, slight sheen, and better adhesion on paper. See [[tech-gum-arabic|gum arabic]]."
+      },
+      {
+        item: "Whole cloves, a few drops of wintergreen oil, or a splash of high-proof alcohol (preservative)",
+        amount: "A few cloves or ~5-10% alcohol by volume",
+        required: false,
+        note: "Slows mold. Even so this ink is short-lived; see [[tech-preserving|preserving]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel pot (kept only for dye/ink, never returned to cooking)",
+      "Nitrile or rubber gloves",
+      "Fine strainer or cheesecloth (dedicated)",
+      "Glass jars or small bottles for ink and pH-test portions",
+      "Dedicated stirring spoon or stick"
+    ],
+    toolsOptional: [
+      "Masher or muddler for crushing berries",
+      "pH strips to log how each shifter moves the color",
+      "Small brushes and watercolor paper for swatch tests",
+      "Funnel and dropper bottles",
+      "Labels for dating jars (this ink spoils quickly)"
+    ],
+    steps: [
+      "Harvest only where it is legal and permitted, and only with a light touch: take a modest share of ripe, dusky-blue berries from abundant shrubs and leave most for birds and reseeding. Seeing the plant in the wild or on a map is NOT permission to pick — confirm the land's rules first. Do NOT dig roots or strip bark for the bright yellow berberine: it kills these slow-growing native shrubs and overlaps with living Indigenous and medicinal traditions. If you want a little yellow, use only bark from stems already pruned or removed for other reasons.",
+      "Rinse the berries and pick out leaves, stems, and unripe green fruit. Put on gloves — the juice stains skin, nails, and porous surfaces readily.",
+      "Crush the berries thoroughly in your dedicated pot with a masher, then add just enough water to barely cover them. Keeping water low gives a stronger, more saturated ink.",
+      "Warm gently — a low simmer for 15-20 minutes, not a hard boil. Heat helps release the anthocyanins; overcooking dulls and browns them. Mash again as they soften.",
+      "Strain the pulp through cheesecloth or a fine strainer into a clean jar, pressing to extract the juice. This raw, neutral-ish juice is your base ink; note its starting color before modifying.",
+      "Split the base into a few small test portions and explore the pH shift: add acid (vinegar/lemon) to one for warmer pink/magenta, a pinch of alkali (baking soda or [[tech-wood-ash-lye|wood-ash alkali]]) to another for cooler blue, and a few drops of iron water to a third for gray-violet/slate. Add shifters drop by drop and brush a swatch after each — the changes are quick and dramatic.",
+      "For better flow and adhesion on paper, stir a little gum arabic into your chosen portion ([[tech-gum-arabic|gum arabic]]). Add a preservative (a few cloves, a drop of wintergreen oil, or a splash of high-proof alcohol) if you want a few extra days of shelf life.",
+      "Bottle, label with the date, and store cold and dark. This is craft ink, NOT a beverage or food coloring: it is made with non-food tools and may carry iron water, alkali, and preservatives. Keep it clearly labeled and out of reach, and never taste or ingest it. (The fresh berries themselves are tart and edible to people after frost, but the finished ink is not — and concentrated berberine from root/bark should never be taken internally, especially in pregnancy.) Test on scrap paper and expect the color to keep evolving and fading over time."
+    ],
+    modifiers: "Anthocyanin berry inks are natural pH indicators, so the color is yours to steer. Acid ([[tech-acid-base|acid & base shifters]] — vinegar or lemon) warms the ink toward pink and magenta and slightly steadies it; alkali (a pinch of baking soda or [[tech-wood-ash-lye|wood-ash alkali]]) cools it toward blue and blue-green, but overshooting drifts to a dull gray-green and degrades the pigment quickly. A few drops of iron water ([[tech-iron-acetate|iron water]]) sadden and deepen the color toward gray-violet and slate while modestly improving its hold. Tannin (a splash of strong black tea or oak-gall solution) can darken and slightly anchor the color on paper. None of these make the ink truly lightfast — they shift the hue and buy a little time, not permanence.",
+    preservation: "Plan to use this ink fresh. As a sugary fruit extract it ferments and grows mold within days at room temperature; refrigeration buys roughly one to two weeks, and a preservative (cloves, wintergreen oil, or ~5-10% alcohol) or a small dose of acid extends that modestly. See [[tech-preserving|preserving]] for options. Freezing the strained juice in small portions is the most reliable way to bank a batch for later. Even well-kept, the dried color on paper is fugitive and will drift and fade — store finished work flat, in the dark, away from sunlight, and consider it a seasonal color rather than an archival one.",
+    yield: "A modest, honest yield: 1-2 cups of berries with low added water gives roughly 1/2 to 1 cup of strained ink, plenty for sketching, lettering, and a generous set of pH-shift swatches. Because so much of the color is sacrificed to fading, treat the batch as enough for present-day work and tests, not a long-term stockpile. The exact volume varies with berry ripeness and how hard you press the pulp.",
+    beyondInk: "Beyond pen-and-brush ink, the berry juice works as a fugitive watercolor wash and as a playful natural pH-indicator for science demos — paint a stripe and breathe acid or alkali across it to watch the color move. On fiber it will tint wool, silk, and paper in soft purples and pinks, but as an anthocyanin \"stain\" rather than a fast dye, so expect heavy fading and wash-out without much permanence even with a mordant. The destructive root/bark route is the historic source of a genuine yellow textile and basketry dye — used by many western Indigenous peoples, including the Nlaka'pamux and Sinixt, who prized its bright yellow for basketry — but that tradition belongs to the plant's roots and inner bark, and this card deliberately keeps you on the berries. Honor that history; do not casually replicate it by killing wild shrubs.",
+    safety: [
+      "This is CRAFT ink, NOT food or drink. Do not taste, ingest, or use it as food coloring: it is made with non-food tools and may carry iron water, alkali, and preservatives. (The ripe berries themselves are tart and edible to people after frost, but the finished ink is not — and concentrated berberine from the root and inner bark is bitter and bioactive and should never be taken internally, especially during pregnancy or breastfeeding.)",
+      "Use dedicated non-food tools: a pot, spoon, and strainer kept only for dye/ink work and never returned to the kitchen.",
+      "Wear gloves — the juice stains skin, nails, fabric, grout, and wood quickly and persistently. Protect your work surface.",
+      "Occurrence is not permission. A plant on a map or in the wild does not grant the right to harvest; confirm you are allowed to pick on the land in question and follow all local rules.",
+      "Harvest lightly and leave the majority of berries for wildlife and reseeding; favor abundant shrubs and never strip a plant.",
+      "Do NOT dig roots or peel bark from living shrubs for the yellow berberine — it kills these slow-growing natives and intrudes on living cultural and medicinal use. Take bark only from stems already pruned or removed for other reasons.",
+      "If you simmer indoors, ventilate; keep the bitter extract clearly labeled and away from children, pets, and anyone who might mistake it for a drink.",
+      "Add alkali and iron a drop at a time — strong alkali degrades the pigment fast, and iron water is staining and not food-safe."
+    ],
+    sources: [
+      {
+        title: "Rebecca Desnos — Dyeing with berries (anthocyanins as pH-sensitive natural dyes; fading/permanence notes)",
+        url: "https://rebeccadesnos.com/blogs/journal/dyeing-with-berries/"
+      },
+      {
+        title: "NPS — Oregon Grape (berberine yellow dye from roots & inner bark; Nlaka'pamux basketry; berry vs. root/bark distinction)",
+        url: "https://www.nps.gov/articles/000/oregon-grape.htm"
+      },
+      {
+        title: "Stravaigin Yarn Co. — Oregon Grape, a traditional Sinixt dye (yellow root/bark dye in the Sinixt basketry palette)",
+        url: "https://www.stravaiginyarnco.com/journal/2018/4/20/traditional-sinixt-dye-oregon-grape"
+      },
+      {
+        title: "Wildcraft Dyeing — Dull Oregon Grape (Mahonia nervosa root/stem dye trial; muted yellow-tan-green on wool with alum and iron)",
+        url: "https://wildcraftdyeing.com/blog/dull-oregon-grape"
+      }
+    ]
+  },
+  {
+    id: "dye-artemisia",
+    plantId: "dye-artemisia",
+    kind: "dye",
+    name: "Sagebrush & mugwort dye",
+    category: "yellow",
+    swatch: "#9aa14e",
+    color: "Olive-gold",
+    difficulty: "Beginner",
+    teaser: "Olive-gold from desert foliage",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Three wild Artemisias carry this color: big sagebrush (Artemisia tridentata), the silver-blue shrub that defines the Great Basin and stays harvestable green year-round; California sagebrush (A. californica), the feathery backbone of coastal-sage-scrub; and California mugwort (A. douglasiana), which lines nearly every creek in the state and runs by rhizome. Their flavonoid-rich leaves — quercetin and kin — give clear yellows that slide to olive and soft green with iron, a palette Diné (Navajo) weavers have long drawn from sagebrush for churro wool. One crucial point first: these are true sagebrush and mugwort, NOT white sage (Salvia apiana), the overharvested and culturally appropriated smudge plant — reach for these resilient Artemisias and leave wild Salvia alone.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Flavonoid yellows from Artemisia are only modestly lightfast — better than berry stains, well short of a true mordant-dye like weld or osage. On alum-mordanted wool the yellow holds reasonably in normal wear but will soften and cool in months of direct sun; the iron-shifted olives and greens are a little more stable but still drift. Treat any piece as light-sensitive: display out of strong sun, and expect the desert-fresh brightness to mellow over time. Don't oversell it as permanent."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "Overnight"
+    },
+    ingredients: [
+      {
+        item: "Fresh sagebrush or mugwort leaves & soft stems (Artemisia tridentata, A. californica, or A. douglasiana)",
+        amount: "Roughly equal weight to your dry fiber, up to 2x for stronger color (e.g., 100-200 g foliage per 100 g wool)",
+        required: true,
+        note: "Strip leaves and tender tips; chop. Strongly aromatic. Fresh is fine; foliage can be dried and stored for later baths."
+      },
+      {
+        item: "Scoured protein fiber (wool or silk yarn/cloth)",
+        amount: "Your project weight; weigh dry to set mordant and dye ratios",
+        required: true,
+        note: "Wool and silk take this dye far better than cotton/linen. Wash (scour) first so the dye takes evenly."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) for pre-mordant",
+        amount: "~10-15% of dry fiber weight (about 10-15 g per 100 g wool); a pinch of cream of tartar helps on wool",
+        required: true,
+        note: "The mordant that makes plant yellows bond and last. Without it the color rinses out. Wear gloves; don't reuse food pots."
+      },
+      {
+        item: "Iron water (ferrous acetate) as a color modifier",
+        amount: "A small splash in the bath or a brief afterbath dip",
+        required: false,
+        note: "Shifts yellow toward olive and green. A little goes a long way and can dull/over-grey if overused; see [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Soda ash or wood-ash lye (alkali modifier)",
+        amount: "Small amounts to nudge pH up",
+        required: false,
+        note: "Raising pH can swing the bath sharply toward green; see [[tech-acid-base|acid & base shifters]]. Caustic — gloves and eye protection."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover fiber freely (several liters)",
+        required: true,
+        note: "Soft water gives cleaner yellows; very hard or iron-rich water will pre-shift the color."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel; never return to kitchen use)",
+      "Dedicated stirring spoon/tongs (non-food)",
+      "Rubber/nitrile gloves",
+      "Strainer or muslin/cheesecloth for removing plant matter",
+      "Heat source (stovetop or outdoor burner)",
+      "Kitchen scale for weighing fiber, foliage, and mordant"
+    ],
+    toolsOptional: [
+      "Separate dedicated pot or jar for the iron-water afterbath",
+      "pH strips for tracking alkali shifts",
+      "Thermometer to keep the bath below a hard boil",
+      "Dust mask when handling powdered alum",
+      "Drying rack out of direct sun"
+    ],
+    steps: [
+      "Harvest only where it's allowed — a sighting is not permission. On public land confirm collecting is permitted, and never harvest from tribal, private, or protected ground without consent. Take a light tip-prune: snip leafy growing tips and a few soft stems from scattered, vigorous plants, never stripping or cutting a whole shrub. Big sagebrush can be cut year-round; mugwort and California sagebrush are best in the green growing season. Confirm you have true Artemisia (deeply aromatic, lobed grey-green foliage) and NOT white sage (Salvia apiana) — leave wild Salvia for Indigenous communities.",
+      "Scour your wool or silk: wash in warm water with a little pH-neutral soap to remove oils and finishes so the dye takes evenly, then rinse.",
+      "Pre-mordant the fiber: dissolve alum (~10-15% of fiber weight, plus a pinch of cream of tartar for wool) in warm water in your dedicated pot, add the wet fiber, bring to a gentle simmer (do not hard-boil wool) for about an hour, then let it cool in the bath. This is the step that makes the color last.",
+      "Build the dye bath: chop the foliage and cover with water in the dedicated pot. For best yield, soak overnight, then simmer gently 1-2 hours — short extraction (~30 min) leans yellow, a long or overnight extraction develops olive and green. Keep the lid handy; the smell is strong, so good ventilation or an outdoor burner is pleasant.",
+      "Strain out all the plant matter through muslin so leaf bits don't speckle the fiber.",
+      "Dye: add the wet, mordanted fiber to the strained bath, bring to a low simmer (well under a rolling boil for wool), and hold 30-60 minutes, stirring gently. For deeper color, turn off the heat and let the fiber steep in the bath as it cools, ideally overnight.",
+      "Shift the color if you want green: dip the rinsed fiber briefly in a separate iron-water afterbath, or add a small splash of iron to the exhaust bath, until it moves toward olive/green — go slowly, iron acts fast and can dull or grey the color. Alternatively nudge pH up with a little soda ash or wood-ash lye for a greener bath (wear gloves and eye protection; alkali is caustic).",
+      "Rinse the fiber in cool water until it runs clear, gently squeeze (don't wring wool), and dry flat away from direct sun to slow fading. Compost the spent foliage."
+    ],
+    modifiers: "Alum is the workhorse pre-mordant here: it locks the flavonoid yellow into wool and silk and gives the clearest, most lasting gold. From that yellow base, iron is the big lever — a splash of [[tech-iron-acetate|iron water]] in the bath or a quick afterbath dip \"saddens\" the color straight into olive and soft green (the classic sagebrush-to-green move), but it acts fast and overdoes easily into grey, so add it a little at a time. Raising pH with a pinch of soda ash or wood-ash lye also pushes the bath toward green; dropping it acidic keeps things on the warm yellow side — see [[tech-acid-base|acid & base shifters]] for both directions. These flavonoid dyes carry their own light tannin, so an extra tannin step isn't needed on protein fiber — it mainly matters if you're trying (with limited success) to coax color onto cotton or linen.",
+    preservation: "As a wet dye bath, the strained liquor keeps only a few days refrigerated in a sealed, labeled non-food jar before it sours, molds, or shifts color — dye while it's fresh. The most reliable way to store this color is to dry harvested foliage and brew baths as needed; dried Artemisia leaves keep their dye potential for a year or more in a cool, dark, dry place. Once your fiber is dyed, rinsed, and dried, the color is \"preserved\" only as well as its lightfastness allows: store and display finished pieces out of strong, direct sunlight to slow the inevitable softening of these plant yellows.",
+    yield: "Honest expectations: a roughly 1:1 to 2:1 foliage-to-fiber bath gives soft to medium yellows on alum-mordanted wool, not saturated jewel tones — Artemisia is a gentle dye, and the gold reads pale unless you push the foliage ratio and steep long. Iron will visibly green and darken whatever yellow you've achieved. One bath of fresh tips will color a skein or a small scarf's worth of wool; the bath can be re-used as a weaker \"exhaust\" for paler, often greener, second shades.",
+    beyondInk: "This is a craft dye, not a food or remedy — do not ingest any of it, and keep all tools dedicated to the dye pot. On wool and silk it's a pleasant low-impact textile dye for yarn, scarves, and small cloth, especially valued for its easy slide from gold to olive and green with iron; Diné (Navajo) weavers have long used sagebrush this way on churro wool, a tradition worth naming with respect and credit rather than borrowing as novelty. Mugwort in particular is a culturally significant medicinal across many traditions — treat its dye use thoughtfully and don't market it as a casual \"magic herb.\" Cotton and linen take Artemisia poorly even with a tannin-and-alum pre-treat, so expect pale, less reliable results on cellulose; for fiber color, stick to protein. The same strained, well-bound dye also makes a soft botanical watercolor or wash for paper, where its fugitive nature matters less.",
+    safety: [
+      "This is a CRAFT dye, not food or medicine — do not eat, drink, or otherwise ingest any part of the dye, bath, or fiber. Mugwort especially is a significant medicinal (and a uterine stimulant — avoid internal use in pregnancy entirely); its presence here is for color only.",
+      "Use dedicated non-food equipment: a separate dye pot, spoon, strainer, and jars that never return to cooking. Mordants and iron should never touch food surfaces.",
+      "Wear rubber/nitrile gloves throughout. Alum and iron water can irritate skin, and the strong Artemisia oils can cause contact sensitivity or rash in some people — wash exposed skin if it itches.",
+      "Artemisias are aromatic and their pollen/oils can trigger allergies or asthma; work with good ventilation and consider a dust mask when handling powdered alum or dried foliage.",
+      "If you use a wood-ash lye or soda-ash alkali modifier, treat it as caustic: gloves and eye protection, add slowly, and keep it away from skin and eyes.",
+      "Keep wool below a hard boil and handle hot baths carefully — splashes and steam can scald.",
+      "Occurrence is not permission: confirm harvesting is allowed at your spot, take only a light tip-prune from abundant plants, and leave protected, private, and tribal lands alone. Do not collect or substitute white sage (Salvia apiana)."
+    ],
+    sources: [
+      {
+        title: "Botanical Inks — Mugwort (Artemisia) dye monograph",
+        url: "https://www.botanicalinks.com/mugwort-monograph"
+      },
+      {
+        title: "USDA Forest Service — Sagebrush (Artemisia tridentata) plant profile",
+        url: "https://www.fs.usda.gov/wildflowers/plant-of-the-week/artemisia_tridentata.shtml"
+      },
+      {
+        title: "United Plant Savers — What is going on with White Sage? (Salvia apiana conservation & appropriation)",
+        url: "https://unitedplantsavers.org/what-is-going-on-with-white-sage/"
+      }
+    ]
+  },
+  {
+    id: "dye-mormon-tea",
+    plantId: "dye-mormon-tea",
+    kind: "dye",
+    name: "Mormon tea (Ephedra) dye",
+    category: "brown",
+    swatch: "#b3895a",
+    color: "Soft desert tan",
+    difficulty: "Intermediate",
+    teaser: "Soft tan from desert twigs",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Across the slickrock and sandy washes of the Colorado Plateau, the leafless green broom of Ephedra viridis photosynthesizes through its jointed twigs alone — a survivor of the dry country from Nevada and southern Utah down through Arizona, New Mexico, and west Texas. Navajo, Paiute, and other Southwestern dyers gathered and crushed the mature stems and simmered them with alum to draw soft, earthy color onto handspun churro wool; depending on the species and how much older bark and woody stem you include, the bath leans from a yellowish-green toward a warm tan and buff. The color comes largely from the plant's very high tannin load, which makes it a dependable, low-impact neutral and a natural partner for iron. One honest caution that shapes this whole recipe: unlike Asian ma huang, North American ephedras lack ephedrine and are low in (or free of) related alkaloids — the reports are mixed on trace pseudoephedrine — but they are very high in tannins, and this card keeps the plant strictly in the dyepot, never the teacup.",
+    lightfastness: {
+      rating: "moderate",
+      note: "On wool with an alum mordant the tan is reasonably durable for a plant brown, helped by the plant's high tannin content; an iron after-dip improves the grey-brown's fastness further. Still expect some softening over years of strong sun, and as a paper wash or unmordanted stain it is distinctly fugitive. Honest verdict: dependable on mordanted protein fiber, fragile on paper."
+    },
+    timeline: {
+      active: "1.5-2 hr",
+      passive: "1-3 days"
+    },
+    ingredients: [
+      {
+        item: "Green Ephedra twigs (Ephedra viridis or other SW species)",
+        amount: "Roughly equal weight to your fiber, or up to 2x weight-of-fiber for a stronger tan (e.g. 100-200 g fresh twigs per 100 g wool)",
+        required: true,
+        note: "Clip green jointed stems only; older woody stems and bark add warmth and push the color toward brown. Chop into short pieces to expose more surface."
+      },
+      {
+        item: "Wool or other protein fiber (yarn/fleece/cloth)",
+        amount: "100 g (scale the rest to this)",
+        required: true,
+        note: "Protein fibers take this tannin/alum color best. Cellulose (cotton/linen) gives paler, less reliable results and benefits from a tannin + alum-acetate prep."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) for mordant",
+        amount: "10-15 g per 100 g fiber (about 10-15% WOF)",
+        required: true,
+        note: "The documented traditional mordant for this dye; Navajo dyers historically used native alum or juniper ash. Pre-mordant the fiber before dyeing for an even, more lightfast result."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an after-dip, to taste",
+        required: false,
+        note: "Saddens the tan toward grey-brown and taupe; the plant's high tannin makes iron especially effective. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "About 6 g per 100 g fiber",
+        required: false,
+        note: "Optional with the alum mordant to brighten the tone and keep wool soft."
+      },
+      {
+        item: "Clear water (soft/rain water if available)",
+        amount: "Enough to cover fiber freely",
+        required: true,
+        note: "Hard, mineral-rich water can shift and dull the shade; it is not harmful, just less predictable."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel; never aluminum/copper unless you want their mordant effect)",
+      "Nitrile or rubber gloves",
+      "Dedicated stirring stick or stainless spoon (non-food)",
+      "Strainer or mesh bag to remove twigs",
+      "Heat source / stove (stovetop or outdoor burner)",
+      "Thermometer or attention to keep the bath at a gentle simmer, not a boil"
+    ],
+    toolsOptional: [
+      "Kitchen scale for weighing fiber and twigs (dedicate to craft)",
+      "Second pot for the alum mordant bath",
+      "Pruning snips for clipping twigs",
+      "Jar for storing iron water",
+      "pH strips to track any acid/alkali shifts",
+      "Dust mask when handling powdered alum"
+    ],
+    steps: [
+      "Harvest only where collecting is permitted — a sighting or public-land occurrence is not harvest permission, and Ephedra grows on tribal, federal, and state lands with differing and sometimes restrictive rules. Practice light tip-harvest: clip a share of green jointed twigs from across the abundant stem mass of several plants, leaving each shrub firmly rooted and most of its growth intact. These are slow desert plants on poor soils; take modestly.",
+      "Back home, rinse the twigs and chop them into short segments. For a deeper bath, cover them with water and let them steep cold for 12-24 hours before heating.",
+      "Pre-mordant your fiber: dissolve alum (10-15% WOF, optionally with cream of tartar) in warm water in a dedicated pot, add the wetted-out wool, bring to a low simmer (about 85 C, never a rolling boil), hold 45-60 minutes, then let it cool — ideally overnight. Wearing gloves, lift out and lightly rinse.",
+      "Build the dye bath: simmer the chopped twigs in the dedicated stainless pot for 45-90 minutes until the liquid is a clear amber-tan. Strain out the plant material (a mesh bag makes this easy) and return the colored liquor to the pot.",
+      "Enter the damp, mordanted fiber into the warm (not boiling) dye bath, making sure it moves freely. Hold at a gentle simmer 45-60 minutes, stirring occasionally and gently to avoid felting wool.",
+      "Turn off the heat and let the fiber cool in the bath; leaving it overnight yields a fuller, warmer tan.",
+      "Lift out with gloves, rinse in cool water until it runs clear, and dry away from direct sun. To shift the color, dip part of the goods in [[tech-iron-acetate|iron water]] for a grey-brown/taupe, then rinse again.",
+      "Clean all tools and the pot and keep them dedicated to craft use only — never return them to the kitchen."
+    ],
+    modifiers: "Ephedra is a tannin dye, so it responds strongly to metal salts. Alum is the classic mordant and sets the warm tan/buff. A dip in [[tech-iron-acetate|iron water]] (literal iron water) saddens the color toward grey-brown, taupe, and soft charcoal — the high tannin makes this shift dramatic and improves its fastness. Adding more bark and older woody stems warms the result toward true brown. Acid and alkali nudge the hue only modestly: a mild acid keeps it clean and slightly warmer while a wood-ash alkali tends to dull or deepen it; see [[tech-acid-base|acid & base shifters]] and [[tech-wood-ash-lye|wood-ash alkali]]. An extra tannin source layered with iron will push further toward grey.",
+    preservation: "Use the dye bath fresh for the strongest color; it can be refrigerated in a labeled non-food jar for several days but will grow mold and sour within a week or so at room temperature, especially in warm weather (discard if it smells off or develops a film). Chopped twigs dry and store well for months in a paper bag and can be rehydrated later, which is the most reliable way to \"keep\" the dye. Dyed and well-rinsed fiber is stable once dry; store it out of strong light to slow fading.",
+    yield: "Honest yield is modest. Roughly an equal weight of twigs to fiber gives a light, soft tan; doubling the twigs (and adding bark/older wood) deepens it toward buff-brown but rarely to a saturated dark. A liter or two of finished dye bath comfortably colors about 100 g of wool. Expect a gentle neutral, not a bold shade — its value is as a dependable, earthy background tone and as a base for iron modification.",
+    beyondInk: "Primarily a textile dye for protein fibers — wool yarn, fleece, and cloth, in the Navajo and Paiute weaving tradition where Ephedra dyeing yields earthy tans and yellow-greens and, with iron, muted greys for rugs. The strained, concentrated liquor can also serve as a soft tan watercolor wash or stain on paper and raw wood, though it is fugitive there; bind it with [[tech-gum-arabic|gum arabic]] for paint use and accept that the color will lighten over time. It also works as an iron-modifiable tannin base in eco-printing and bundle dyeing.",
+    safety: [
+      "This is a CRAFT dye, not food or drink. Do NOT brew or ingest any part of this plant for this project, and do not treat this card as endorsing Mormon tea as a beverage. North American Ephedra lacks the ephedrine of Asian ma huang and is low in or free of related alkaloids — reports differ on whether trace pseudoephedrine is present — but it carries very high tannins, and documented toxic symptoms in the literature track that tannin load rather than alkaloids. Keep the whole process dye-only and out of the kitchen.",
+      "Occurrence is not permission. Confirm legal harvest rights before clipping — Ephedra grows on tribal, BLM, national park/forest, and state lands with different and sometimes restrictive rules, and a recorded sighting never grants the right to cut.",
+      "Harvest lightly and leave plants rooted: take only a share of green twigs across several abundant shrubs so each plant keeps most of its growth in this slow-growing desert habitat.",
+      "Use a dedicated non-food pot, spoon, strainer, and storage jars; never reuse them for cooking. Tannin- and alum-laced equipment should stay out of the kitchen permanently.",
+      "Wear gloves when handling the twigs, the hot bath, alum, and especially iron water; alum is a skin/eye irritant and a dust-inhalation hazard, so avoid breathing the powder, and iron water stains skin and surfaces and irritates eyes.",
+      "Keep the bath at a gentle simmer, not a boil — boiling wool felts it and a rolling tannin bath spits hot, staining liquid. Ventilate the work area.",
+      "Label and store the dye bath clearly so no one, especially a child, mistakes the warm tan liquid for tea; keep alum and iron water sealed and out of reach.",
+      "If you also identify and harvest in the field, be sure of your plant, and never let dye material, tools, or the spent bath cross back into food preparation."
+    ],
+    sources: [
+      {
+        title: "USDA NRCS Plant Guide: Green Ephedra (Ephedra viridis)",
+        url: "https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_epvi.pdf"
+      },
+      {
+        title: "Native Memory Project — Green Ephedra (dye use by Navajo, Paiute and other tribes)",
+        url: "https://nativememoryproject.org/plant/green-ephedra/"
+      },
+      {
+        title: "Ephedra viridis — Wikipedia (ethnobotanical dye use, alkaloid/tannin chemistry, range)",
+        url: "https://en.wikipedia.org/wiki/Ephedra_viridis"
+      }
+    ]
+  },
+  {
+    id: "dye-camphor",
+    plantId: "dye-camphor",
+    kind: "dye",
+    name: "Camphor tree leaf dye",
+    category: "brown",
+    swatch: "#6b5a3a",
+    color: "Aged-leaf brown",
+    difficulty: "Intermediate",
+    teaser: "Brown from an invasive leaf",
+    toxic: true,
+    educationalOnly: false,
+    hook: "Snap a camphor leaf and the whole grove announces itself — that sharp, mothball-medicinal scent is the volatile camphor that made this East Asian tree a 19th-century cash crop and, since its 1870s introduction, a Category-I invasive choking Florida's hardwood hammocks and riverbanks. The leaves carry tannins as well as oils, and they shift with age: young growth simmers down greenish, while the old, leathery leaves and the brown litter raked from beneath the canopy give the strongest aged-leaf brown — deepening to grey-brown over iron. Because the tree resprouts hard after cutting and its allelopathic litter poisons riparian life, stripping foliage for the dyepot is one small way to turn a control problem into pigment. This is a craft dye, not food: every part of the plant is laced with camphor, which is genuinely poisonous to swallow and can also be absorbed through skin and fumes.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Honest middle ground for a leaf dye: the tannin-based browns hold up far better than any flower or berry color, and an alum mordant plus an iron afterbath improves both light- and washfastness — iron-saddened tannin greys are among the more durable plant colors. Still, expect gradual lightening and a warm/grey drift over years of strong sun; this is a reliable earthy brown, not a guaranteed-permanent one. The greener tones from young leaves are the most fugitive part and fade first."
+    },
+    timeline: {
+      active: "60–90 min",
+      passive: "4–8 hr"
+    },
+    ingredients: [
+      {
+        item: "Old/mature camphor leaves and fallen brown leaf litter (Cinnamomum camphora / Camphora officinarum)",
+        amount: "Roughly equal dry weight to the fiber, or more for depth — e.g. 200–400 g leaves per 100 g wool",
+        required: true,
+        note: "old leathery leaves and litter give the strongest brown; young red-green leaves run greener and weaker"
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover the leaves generously, ~4–6× their volume",
+        required: true,
+        note: "soft or rain water keeps the color cleaner"
+      },
+      {
+        item: "Protein fiber (wool, mohair) or pre-tannined cellulose (cotton, linen)",
+        amount: "100 g per batch is a manageable test",
+        required: true,
+        note: "wool/silk take it best; cotton needs scouring + a tannin pre-treat"
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "~10–12% of dry fiber weight (10–12 g per 100 g)",
+        required: false,
+        note: "deepens and fixes the brown and improves lightfastness; the leaf tannin gives some color even unmordanted"
+      },
+      {
+        item: "Iron water (homemade from rusty nails/steel wool in vinegar)",
+        amount: "A splash as an afterbath, to taste",
+        required: false,
+        note: "shifts the brown toward grey-brown, taupe, and charcoal via the iron-tannate reaction"
+      },
+      {
+        item: "Cream of tartar",
+        amount: "~6% of fiber weight",
+        required: false,
+        note: "softens wool and brightens the alum mordant slightly"
+      }
+    ],
+    toolsRequired: [
+      "Dedicated (non-food) dye pot — stainless or enamel, never returned to cooking",
+      "Heatproof gloves and chemical-resistant gloves",
+      "Craft-only stirring stick or tongs",
+      "Strainer/colander + fine cloth or coffee filters",
+      "A way to ventilate strongly — outdoor burner, or window plus fan (camphor fumes)",
+      "Dust mask or respirator for handling/simmering aromatic leaves"
+    ],
+    toolsOptional: [
+      "Separate non-food pot for the alum mordant bath",
+      "Small jar for brewing iron water (1–2 days ahead)",
+      "Kitchen scale for weighing fiber and leaves",
+      "pH strips",
+      "Apron and eye protection",
+      "Loppers/pruning saw for cutting invasive stems where removal is permitted"
+    ],
+    steps: [
+      "Gather camphor leaves only where harvesting or invasive removal is permitted — occurrence on a map is not permission, and camphor is a regulated invasive that should be controlled, not spread. On land where you may work, cutting back stems and stripping foliage supports control (the tree resprouts, so it tolerates heavy cutting); otherwise collect fallen brown leaf litter from beneath the canopy. Bag and dispose of any seed-bearing or woody material responsibly — never compost it where it could root or seed.",
+      "Work outdoors or with strong cross-ventilation and a mask: crushed and simmering camphor leaves release potent volatiles. Wear gloves while handling the resinous leaves — camphor can be absorbed through skin as well as inhaled. Tear or roughly chop the old leaves and litter into your dedicated dye pot and cover generously with water.",
+      "Bring to a gentle simmer (not a rolling boil) and hold 1–2 hours, then let it steep as it cools — several more hours or overnight pulls more tannin and a darker bath. Keep ventilating the whole time; the kitchen is not the place for this.",
+      "Strain out all leaf matter through a colander and then a cloth or coffee filter, returning the clear brown liquor to the clean dye pot. Compost or bin the spent leaves (not where camphor could re-root).",
+      "Meanwhile, mordant the fiber: dissolve alum (about 10–12% of dry fiber weight) in warm water in a separate non-food pot, add wetted-out fiber, hold near a simmer ~1 hour, and let it cool in the bath (overnight is fine). For cotton/linen, scour first and add a tannin pre-treat before alum. Skip mordanting only if you accept a paler, less lightfast result.",
+      "Add the damp mordanted fiber to the warm dye bath, bring back to a low simmer, and hold ~45–60 minutes, moving the fiber gently for even color. Then let it cool in the bath — longer soaks (even overnight) build deeper brown.",
+      "Optional — shift the color with iron: lift the fiber out, stir a splash of iron water into the bath (or a separate jar), and dip the fiber briefly until it saddens toward grey-brown or charcoal. Iron + tannin is the same iron-tannate chemistry as iron-gall ink; go gradually and rinse well, since excess iron embrittles wool. See [[tech-iron-acetate|iron water]] and [[tech-acid-base|acid & base shifters]].",
+      "Rinse in cool water until it runs clear, wash gently with a pH-neutral soap, and dry out of direct sun. Label any leftover liquor clearly as toxic, non-food craft material and store the dye tools away from the kitchen."
+    ],
+    modifiers: "The chemistry is tannin-driven, so iron is the dramatic modifier: an iron afterbath or a splash of [[tech-iron-acetate|iron water]] reacts with the leaf tannins (iron-tannate, the iron-gall reaction) to \"sadden\" the warm brown toward grey-brown, taupe, and near-charcoal — generally improving lightfastness too. Acid and alkali shift it more subtly than they would a berry color: a little vinegar warms and clarifies the brown, while wood-ash alkali ([[tech-wood-ash-lye|wood-ash lye]]) dulls and slightly greens it — see [[tech-acid-base|acid & base shifters]]. Adding extra tannin (oak gall, acorn cap) deepens the brown and helps cellulose fibers grab the color; alum keeps the hue truer and richer without graying it. Leaf age is itself a \"modifier\": old leaves and litter run warm brown, young leaves run greener and lighter.",
+    preservation: "Use the dye bath fresh — tannin liquors mold within days at room temperature. If you must hold it, refrigerate in a sealed, clearly-labeled non-food jar for a few days, or freeze it; discard if it grows a fuzzy film or smells sour. Dried, mordanted, dyed fiber is stable indefinitely once rinsed and aired; the main long-term change is slow fading and a grey-warm drift under light rather than spoilage. Spent leaves should be binned or composted only where camphor cannot re-root or seed.",
+    yield: "A generous pot of old leaves and litter (a few hundred grams) comfortably dyes ~100 g of wool a soft-to-medium aged-leaf brown, deeper with overnight soaking or a second exhaust bath, greyer with iron. Browns are forgiving — the bath can be re-used for paler \"exhaust\" shades after the first fiber comes out. Don't expect saturated darks from a single light bath: concentration and a long cool soak, not a hard boil, build the color.",
+    beyondInk: "Primarily a textile dye: research on Cinnamomum camphora leaf extract has dyed merino wool a range of eco-friendly browns and tans with natural mordants, and it behaves like other tannin-leaf dyes on protein fiber. It also lends itself to bundle-dyeing and eco-printing — steaming old leaves directly against damp, mordanted cloth (with an iron blanket or iron-water spritz) prints leaf-shaped greys and browns. Reduced down and bound with [[tech-gum-arabic|gum arabic]] the same liquor can serve as a brown wash ink or paint, though it reads softer and less permanent than walnut or iron-gall. For another invasive-adjacent earthy palette, compare [[dye-one-seed-juniper|one-seed juniper]].",
+    safety: [
+      "Camphor is genuinely poisonous — this is a craft dye, never food or medicine. Every part of the tree is laced with camphor; swallowing it (even small amounts — as little as a teaspoon of concentrated camphor can be life-threatening to a child) can cause burning, vomiting, and sudden seizures, and there is no antidote, only supportive care. It is especially dangerous to children and pets. Keep all leaves, baths, and tools well away from kids, animals, and anything food-related.",
+      "Camphor is absorbed through skin and lungs, not only by swallowing. Work outdoors or with strong cross-ventilation and a mask: the volatile camphor released by crushing and simmering the leaves irritates eyes, nose, and throat and can cause headache and dizziness. Wear gloves when handling the resinous leaves and the warm bath, and never reduce or simmer it in a closed kitchen.",
+      "Use dedicated non-food equipment — pot, spoon, strainer, jars — and never return them to cooking. Label leftover liquor as toxic, non-food craft material.",
+      "Iron water and alum are skin and eye irritants and are harmful if swallowed: wear chemical-resistant gloves, avoid splashes, and keep them labeled and out of reach.",
+      "Hot dye and mordant baths burn — use heatproof gloves and tongs, and don't crowd a hot stovetop.",
+      "Treat camphor as an invasive: control it, don't spread it. Don't transport live cuttings or seed-bearing material, and bin or compost spent leaves only where the plant can't re-root or reseed.",
+      "If camphor is swallowed, or someone has a seizure or trouble breathing after exposure, call Poison Control / emergency services immediately — there is no antidote, only supportive care."
+    ],
+    sources: [
+      {
+        title: "UF/IFAS Plant Directory — Cinnamomum camphora (Camphortree), FISC Category I invasive: impacts and control",
+        url: "https://plant-directory.ifas.ufl.edu/plant-directory/cinnamomum-camphora/"
+      },
+      {
+        title: "Gong et al. (2020), Natural dyeing of merino wool fibers with Cinnamomum camphora leaves extract and mordants of biological origin — Journal of the Textile Institute 111(7)",
+        url: "https://www.tandfonline.com/doi/full/10.1080/00405000.2019.1698228"
+      },
+      {
+        title: "Natural Dye Store — Mordants and tannins, assists and modifiers (iron + tannin browns/greys, lightfastness)",
+        url: "https://naturaldyestore.com/blogs/blog/mordants-and-tannins-assists-and-modifiers"
+      }
+    ]
+  },
+  {
+    id: "dye-canaigre",
+    plantId: "dye-canaigre",
+    kind: "dye",
+    name: "Canaigre (tanner dock) dye",
+    category: "brown",
+    swatch: "#8a5a34",
+    color: "Self-mordanting tannin brown",
+    difficulty: "Beginner",
+    teaser: "Brown that mordants itself",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Canaigre is the desert Southwest's homegrown tannery: a wild dock whose sweet-potato-shaped tubers run roughly 35 to 60 percent tannin when dried, so much that growers once farmed it across Arizona and New Mexico to tan leather. Navajo (Diné) dyers know it as chaąd'iniih and have long boiled the split, sun-dried roots to dye handspun wool a warm medium brown — no separate mordant needed, because the root's own tannic acid binds the color to the fiber. That self-mordanting chemistry is the whole appeal: one humble desert root delivers both the dye and the fixative in a single pot. The leaves carry oxalic acid and the roots are kept here as a craft material, not food — used for the color in its cells rather than anything on the plate.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Better than most plant browns thanks to the high tannin load, which itself improves light- and washfastness on wool — but honest expectations matter: tannin browns soften and warm over years of strong sun rather than holding dead-on. An iron-water dip toward gray-brown tends to be the most stable shift. Keep finished textiles out of constant direct light to hold the tone."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "1-3 weeks"
+    },
+    ingredients: [
+      {
+        item: "Canaigre tubers (Rumex hymenosepalus root), chopped or split",
+        amount: "100-150% of dry fiber weight for medium brown (roughly equal weight of root to wool); use the larger, older outer tubers",
+        required: true,
+        note: "Wild and older roots carry more tannin than young or cultivated ones. Split and sun-dry first to concentrate tannin, or use fresh. Roots are kept as a craft material here, NOT food — high tannin, and the foliage carries oxalic acid."
+      },
+      {
+        item: "Wool or other protein fiber (yarn or fleece), scoured",
+        amount: "any amount; recipe scales to fiber weight",
+        required: true,
+        note: "Wool and silk take this dye most readily and need no pre-mordant — the root tannin self-mordants. Cotton/linen will take a paler, less fast tan."
+      },
+      {
+        item: "Soft or rain water",
+        amount: "enough to cover fiber freely (several liters)",
+        required: true,
+        note: "Hard water can dull and gray the brown; rainwater or distilled keeps it cleaner if your tap is very hard."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "a few tbsp of liquor, added to a tiny fraction of the bath",
+        required: false,
+        note: "Saddens the brown toward gray-brown and charcoal and boosts lightfastness. See [[tech-iron-acetate|iron water]]. Use a dedicated jar; a little goes a long way."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "8-12% of fiber weight, as an optional pre-mordant",
+        required: false,
+        note: "Not needed for brown, but shifts canaigre toward a yellow-orange / mustard, as documented in Navajo practice."
+      },
+      {
+        item: "Wood-ash lye or other alkali",
+        amount: "small amounts to taste",
+        required: false,
+        note: "Raising pH deepens and warms tannin shades. See [[tech-wood-ash-lye|wood-ash alkali]] and [[tech-acid-base|acid & base shifters]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless or enamel), never returned to kitchen use",
+      "Heat-resistant gloves and waterproof gloves",
+      "Dedicated stirring stick or stainless spoon",
+      "Strainer or mesh bag for removing root solids",
+      "Sharp knife or hatchet for splitting tubers",
+      "Digging fork or hori-hori for partial root harvest"
+    ],
+    toolsOptional: [
+      "Thermometer (to hold a steady, gentle dye temperature and keep wool off a hard boil)",
+      "Drying screen for sun-drying split roots",
+      "Separate jar for iron water",
+      "pH strips",
+      "Apron and eye protection"
+    ],
+    steps: [
+      "Harvest only where you have permission — occurrence on a map or a plant in the wild is never harvest permission, and much of canaigre's range is tribal, state, or federal land with its own rules. Practice light harvest: canaigre grows from a CLUSTER of tubers, so lift one plant, take only part of the cluster, and replant the crown and remaining tubers so the colony regrows. Favor older, larger plants and leave young stands alone.",
+      "Wash the roots well and wear gloves — handle the root, not the oxalic-acid-bearing leaves. For the traditional, higher-tannin result, split the tubers lengthwise and sun-dry them for one to several weeks; otherwise chop fresh roots small.",
+      "Soak the chopped or dried root in soft water overnight, then extract with heat. Tannin and brown pull best hot: bring the bath up to a gentle simmer (about 85-90 C / 185-195 F) and hold it there for an hour or more, mashing the softened root to liberate more color. Strain out all root solids into the mesh bag.",
+      "Enter clean, thoroughly wetted-out fiber into the strained dye bath. No pre-mordant is required: the root's own tannin fixes the color. Hold the bath hot but just below a rolling boil for 1-2 hours, moving the fiber gently and evenly so it doesn't blotch — and avoid hard boiling or sudden temperature swings, which felt wool.",
+      "For the deepest, most even brown, turn off the heat and let the fiber steep in the cooling bath overnight or up to a day. Then lift, and rinse in water of the same temperature to avoid felting wool.",
+      "Optional shift: dip the rinsed fiber briefly in dilute iron water to move the brown toward gray-brown or charcoal (this also raises lightfastness), or use an alum pre-mordant instead for a yellow-orange. Rinse again after any modifier.",
+      "Dry out of direct sun. Clean all dedicated tools and store them apart from kitchenware; tannin and oxalate residues mean nothing here goes back to food use."
+    ],
+    modifiers: "Canaigre is a condensed (catechol-type) tannin dye, so it responds strongly to the classic shifters. Iron is the big one: a dip in [[tech-iron-acetate|iron water]] pulls the warm brown toward gray-brown and charcoal and locks in lightfastness, the same kind of iron-tannate darkening that condensed tannins give. Raising pH with [[tech-wood-ash-lye|wood-ash alkali]] deepens and warms the shade, while acids lean it lighter and more golden (see [[tech-acid-base|acid & base shifters]]). An alum pre-mordant, rather than relying on the self-mordant, pushes the color away from brown toward a yellow-orange to mustard, the route Navajo dyers use for that hue. Because the dye is already tannin-rich, an extra tannin step adds little color but reinforces fastness.",
+    preservation: "Use the dye bath fresh for best color; like most tannin liquors it will keep a few days refrigerated in a dedicated, labeled jar but grows cloudy and can mold or ferment after that, especially with leftover starch — discard once it smells sour. Split, sun-dried tubers are the real storage form: kept dry and airy they hold their tannin for a year or more, which is exactly why this was a traded, stockpiled tanning material. Dyed and well-rinsed wool is colorfast in normal use; the main enemy is strong, constant sunlight over years rather than washing.",
+    yield: "Roughly equal weights of root to fiber give a solid medium brown; more root or a longer cool steep pushes it darker, less gives tan. A single mature plant's tuber cluster — of which you should take only part — can yield enough root to dye several hundred grams of wool. Color is honest and earthy rather than saturated: expect warm browns and tans, not a deep chocolate, unless you sadden with iron.",
+    beyondInk: "Primarily a textile dye, and a historically important one — canaigre's defining use is dyeing handspun wool warm brown to yellow-orange in Navajo and broader Southwestern weaving, where its self-mordanting tannin made it a staple alongside other native dyes. The same tannin-rich extract is a genuine vegetable-tanning agent for leather and hides, the use that put it into commercial cultivation. As a tannin source it can also pre-treat cellulose fiber to help other dyes bind, and the iron-tannate reaction can be pushed toward grays for ink-like washes, though it is not a traditional writing ink. Pairs naturally on the warm-earth palette with [[dye-one-seed-juniper|one-seed juniper]].",
+    safety: [
+      "Craft material, not food: canaigre roots are high in tannin and the plant carries oxalic acid — do not ingest the dye, the bath, or raw root, and keep the whole process out of the kitchen.",
+      "Handle the ROOT, not the leaves: the foliage contains oxalic acid that can irritate skin, lips, and tongue and is hard on people prone to kidney stones, gout, or rheumatism. Wear gloves when digging, splitting, and dyeing.",
+      "Use dedicated non-food pots, tools, and jars and never return them to cooking use; tannin and oxalate residues persist.",
+      "High tannin can stain skin, nails, sinks, and counters — protect surfaces and wear waterproof gloves.",
+      "The dye bath runs hot (a gentle simmer, about 85-90 C); use heat-resistant gloves, keep the pot stable, and avoid splashing a staining liquor. Provide ventilation. Hold the fiber just below a hard boil so wool does not felt.",
+      "If you use iron water or wood-ash lye as modifiers, treat them as caustic/irritant: gloves and eye protection, add slowly, and store labeled and away from food and children.",
+      "Harvest is not the same as permission: confirm you may legally and ethically dig on the land you are on (much of the range is tribal or public land), and harvest only part of each tuber cluster so the colony survives.",
+      "Indigenous knowledge note: canaigre dyeing is a living Navajo (Diné) and Southwestern tradition (chaąd'iniih). Use it with respect and credit, not as a novelty."
+    ],
+    sources: [
+      {
+        title: "Navajo Dye Chart — Shaped by the Loom (Bard Graduate Center)",
+        url: "https://exhibitions.bgc.bard.edu/shapedbytheloom/interactive/navajo-dye-chart/"
+      },
+      {
+        title: "USDA Forest Service — Native Plant Dyes (Ethnobotany)",
+        url: "https://www.fs.usda.gov/wildflowers/ethnobotany/dyes.shtml"
+      },
+      {
+        title: "Rumex hymenosepalus (Canaigre) — Plants For A Future database",
+        url: "https://pfaf.org/user/Plant.aspx?LatinName=Rumex+hymenosepalus"
+      }
+    ]
+  },
+  {
+    id: "dye-cliffrose",
+    plantId: "dye-cliffrose",
+    kind: "dye",
+    name: "Cliffrose dye",
+    category: "yellow",
+    swatch: "#c2a13a",
+    color: "Navajo gold",
+    difficulty: "Beginner",
+    teaser: "Gold from twig tips",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Cliffrose (Purshia stansburyana, called awééts'áál in Diné) is a gnarled, shaggy-barked shrub that holds the dry rims and mesas of the Colorado Plateau from 2,500 to 8,500 feet — abundant enough to perfume whole hillsides with cream-colored rose blooms each spring. In the Navajo dye tradition recorded by the Diné dyer Nonabah G. Bryan with Stella Young, its leafy twigs are simmered with raw alum (and often pounded juniper) to throw a warm yellow-brown — a quiet, earthy gold rather than a screaming chrome yellow. The same shrub that gives this color is the principal winter browse for mule deer and bighorn on plateaus like the Kaibab and a deep-rooted erosion anchor on bare rock — and it is slow-growing and easily set back by fire — so the craft asks for a light hand: a few tip clippings, never a stripped branch. These are dye instructions, not food: cliffrose foliage is bitter (it is nicknamed \"quininebush\") and is not prepared here for eating.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Cliffrose yellow is a flavonoid dye and, like most plant yellows, is not bombproof. Mordanted on wool with alum (or the traditional native-alum / juniper-ash alkali) it holds noticeably better than fugitive flower yellows, shifting toward a softer tan as it ages rather than vanishing outright — but it will still fade. Expect gradual lightening in strong sun over months; keep finished pieces out of direct, prolonged daylight and the fade will be slow rather than sudden. Don't expect colorfastness on the order of a synthetic dye."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "Overnight"
+    },
+    ingredients: [
+      {
+        item: "Cliffrose leafy twig tips",
+        amount: "Roughly equal weight to your dry fiber, up to 2x for a deeper shade (e.g. 100-200 g fresh tips per 100 g wool)",
+        required: true,
+        note: "Clip only the soft green tip growth — leaves and slender twig ends. Avoid woody branches and never strip a plant bare: this is critical winter wildlife browse, a deep-rooted erosion anchor, and slow to recover once cut back."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "About 10-15% of fiber weight (10-15 g per 100 g wool)",
+        required: true,
+        note: "The standard low-toxicity mordant; gives the cleanest, most stable gold. The traditional Navajo recipe used a gathered native (raw) alum to the same effect. Dissolve fully in warm water before use."
+      },
+      {
+        item: "Protein fiber — wool or wool yarn",
+        amount: "As needed",
+        required: true,
+        note: "Wool takes this dye best, as it traditionally did on Navajo handspun. Silk also works. Cotton/linen need a different (tannin + alum) mordant routine and give weaker color."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover the fiber freely (about 4 L per 100 g)",
+        required: true,
+        note: "Soft water is kindest to plant yellows; very hard water can dull or shift the shade."
+      },
+      {
+        item: "Pounded juniper twigs or juniper ash",
+        amount: "A few twigs simmered alongside, or 1 cup ash steeped in 2 cups boiling water and strained",
+        required: false,
+        note: "The traditional Navajo pairing — cliffrose with pounded juniper deepens the result toward a richer yellow-brown. Juniper ash also acts as a [[tech-wood-ash-lye|wood-ash alkali]] mordant. See [[dye-one-seed-juniper|one-seed juniper dye]]."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an afterbath",
+        required: false,
+        note: "Optional [[tech-iron-acetate|iron water]] to sadden the gold toward olive/khaki. Use sparingly — iron embrittles wool."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel or enamel, reserved for craft only)",
+      "Rubber or nitrile gloves",
+      "Pruning shears or scissors for tip clipping",
+      "Strainer or mesh to remove plant material",
+      "Long-handled spoon or stir stick (non-food)",
+      "Kitchen scale for weighing fiber and mordant"
+    ],
+    toolsOptional: [
+      "Cotton mesh or muslin bag for the plant matter",
+      "Second pot for a separate alum mordant bath",
+      "pH strips to check bath alkalinity if using juniper ash",
+      "Thermometer"
+    ],
+    steps: [
+      "Harvest only where you have permission — a sighting on a map or trail is not permission to cut, and cliffrose often grows in parks and on Tribal and public land with their own rules. Where allowed, clip only soft leafy twig TIPS, a few from each shrub and never a whole branch: this plant is principal mule deer and bighorn winter browse, a deep-rooted soil binder on bare rock, and slow-growing and fire-sensitive, so a light tip-harvest leaves it unharmed while heavy cutting is slow to recover.",
+      "Weigh your dry fiber. Pre-mordant the wool: dissolve alum (10-15% of fiber weight) in warm water, add the wetted fiber, and hold at a gentle simmer (do not boil hard) for about an hour, then let it cool in the bath. This is what makes the gold both brighter and more lightfast.",
+      "Coarsely chop the cliffrose tips and place them in the dedicated dye pot (a bag makes straining easier). If using the traditional juniper pairing, add pounded juniper twigs now, or prepare juniper-ash water separately.",
+      "Cover with water and bring to a low simmer for about an hour, until the bath runs a clear yellow-brown. Keep it below a rolling boil — overheating dulls plant yellows. Strain out all plant material.",
+      "Add the wetted, alum-mordanted fiber to the strained bath. Hold at a gentle simmer 1-2 hours, stirring occasionally; longer and hotter gives a deeper, browner gold.",
+      "Turn off the heat and leave the fiber to steep in the cooling bath, ideally overnight — this deepens and sets the color far more than a quick dip.",
+      "Lift the fiber out (gloves on), rinse in cool water until it runs clear, and dry in shade away from direct sun. For an olive or khaki variant, dip briefly in iron water before the final rinse, then rinse thoroughly.",
+      "Clean the dedicated pot and tools and store them apart from kitchenware."
+    ],
+    modifiers: "Cliffrose yellow is a flavonoid color and responds to the usual shifters. A splash of [[tech-iron-acetate|iron water]] saddens the gold toward olive, khaki, and gray-brown — a small amount goes a long way, and too much will embrittle wool. Pairing the bath with pounded juniper, or using a juniper-ash [[tech-wood-ash-lye|wood-ash alkali]] in place of (or alongside) alum, pushes the result toward the deeper yellow-brown of the traditional Navajo recipe. Acid and alkali ([[tech-acid-base|acid & base shifters]]) nudge the hue only modestly here — mild alkalinity tends to warm and enrich the gold, strong acid brightens it slightly — so the mordant and any iron afterbath do most of the color steering.",
+    preservation: "The dried fiber, once well rinsed and mordanted, keeps indefinitely; store finished pieces out of prolonged direct sunlight to slow the natural fading of plant yellows. A leftover liquid dyebath is short-lived: refrigerated in a sealed jar it will hold a few days to a week before it sours, molds, or weakens, so plan to dye in the same session you brew. You can dry surplus chopped cliffrose tips and store them airtight for a future bath; dried material gives a somewhat lighter color than fresh.",
+    yield: "A pot of equal-weight tips to fiber dyes a soft, warm gold; doubling the plant material (up to 2x fiber weight) gives a fuller yellow-brown — the same roughly 2:1 plant-to-yarn ratio recorded in the traditional Navajo recipe. Roughly 100-200 g of fresh tips will color 100 g of wool — enough for a small skein or a sample card. Because the dye is moderately, not strongly, saturating, expect an earthy gold rather than a vivid one; for stronger color, increase plant matter and steep overnight rather than boiling harder.",
+    beyondInk: "Cliffrose gold is first and foremost a textile dye — traditionally and most successfully on wool, where it has long colored Navajo handspun yarn for weaving. The same strained bath can be brushed onto paper or used as a soft watercolor-style wash, though without a binder it stays fugitive on paper; thicken with gum arabic ([[tech-gum-arabic|gum arabic]]) for a workable paint or ink. It also suits basketry-fiber dyeing and pairs naturally with other Southwestern plant colors (rabbitbrush yellow, juniper) for an earthy palette.",
+    safety: [
+      "These are CRAFT instructions, not food. Cliffrose foliage is bitter (it is nicknamed 'quininebush') and is not prepared here for eating — don't taste-test it; keep all dye work entirely separate from cooking.",
+      "Use a DEDICATED non-food pot, spoon, strainer, and shears reserved only for dyeing — never return them to kitchen use, even though the plant material here is low-toxicity.",
+      "Hot dyebaths are a scald hazard: simmering, near-boiling liquid and a heavy wet pot can burn. Lift and pour carefully, keep the pot stable, and keep children and pets away from the stove.",
+      "Wear gloves; hot dyebaths stain skin and nails, and alum and especially iron water are irritants you don't want on bare hands.",
+      "Dissolve and handle alum carefully: it's a low-hazard mordant but is harmful if swallowed and irritating to eyes — keep it labeled and away from children, pets, and food.",
+      "Iron water (ferrous acetate) is a stronger irritant and weakens wool — use sparingly, rinse well, and store labeled.",
+      "If using juniper-ash alkali, treat it like any lye-adjacent solution: it is caustic, so wear eye protection and gloves, add ash to water (never water to a dry caustic), and don't combine it carelessly with other additives.",
+      "Simmer in a ventilated space; the plant steam is not toxic but can be irritating in a closed room.",
+      "Harvest ethically and lawfully — occurrence is not permission. Cliffrose is vital winter wildlife browse and an erosion-control species that is slow to recover, so take only light tip clippings where harvesting is actually allowed.",
+      "Present this dye with respect for its Diné origins: it is a documented Navajo dye tradition formulated by Diné dyers, not a novelty — credit the source and the practice."
+    ],
+    sources: [
+      {
+        title: "Bryan & Young, Navajo Native Dyes: Their Preparation and Use (full text PDF, U. Arizona)",
+        url: "https://www2.cs.arizona.edu/patterns/weaving/monographs/bys_dyes.pdf"
+      },
+      {
+        title: "Navajo Dye Chart — cliffrose gold recipe (Bard Graduate Center, 'Shaped by the Loom')",
+        url: "https://exhibitions.bgc.bard.edu/shapedbytheloom/interactive/navajo-dye-chart/"
+      },
+      {
+        title: "Purshia stansburyana — Stansbury cliffrose (Lady Bird Johnson Wildflower Center)",
+        url: "https://www.wildflower.org/plants/result.php?id_plant=pust"
+      },
+      {
+        title: "Cliffrose (awééts'áál) — browse value & Diné name (NMSU, Selected Plants of Navajo Rangelands)",
+        url: "https://navajorange.nmsu.edu/detail.php?id=31"
+      }
+    ]
+  },
+  {
+    id: "dye-st-johns-wort",
+    plantId: "dye-st-johns-wort",
+    kind: "dye",
+    name: "St. John's wort (Klamath weed) dye",
+    category: "yellow",
+    swatch: "#c6a52a",
+    color: "Yellow + a hidden red",
+    difficulty: "Intermediate",
+    teaser: "Yellow flower, secret red gland",
+    toxic: true,
+    educationalOnly: false,
+    hook: "A European import named for its bloom on St. John's Day (June 24), Hypericum perforatum became \"Klamath weed\" after it swept across more than two million acres of Western rangeland by the 1940s — then became one of North America's most celebrated biocontrol victories when the Klamath weed beetle (Chrysolina) knocked most low-elevation stands back below the noticeable line. Hold a flower to the light and the petal margins read as ordinary yellow; pinch the tiny black glandular dots and your fingertips stain wine-red, the signature of hypericin and pseudohypericin bleeding out. That single plant gives a dyer two colors from one harvest: a clean golden yellow from alum-mordanted baths, and a fugitive red-violet teased out of the dark glands with alcohol and acid. The catch is that hypericin is a potent photosensitizer — the same chemistry that makes the red also makes the plant a skin-and-sun hazard worth respecting.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Honest answer: both colors are fugitive. The hypericin red is notoriously unstable — dyers report it washing from wine-red to silvery grey in the rinse, returning only with an acid dip, and there is no published colorfastness data suggesting it survives sustained sunlight. The alum yellow holds better than the red but is still a soft flavonoid yellow that will shift and fade with light and washing like most fresh-flower yellows. Treat finished pieces as light-sensitive: keep them out of direct sun, and expect both hues to soften over time rather than stay true."
+    },
+    timeline: {
+      active: "1.5–2.5 hr",
+      passive: "24 hr"
+    },
+    ingredients: [
+      {
+        item: "Fresh St. John's wort flowering tops (Hypericum perforatum)",
+        amount: "Roughly equal weight to dry fiber (1:1), e.g. ~30 g tops per 30 g wool/silk; more for stronger yellow",
+        required: true,
+        note: "Pick the yellow buds, open flowers, and uppermost leaves — the parts richest in the black glandular dots. Crush a few flowers between gloved fingers; if they stain red, they're prime."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "About 10–15% of fiber weight for mordanting wool/silk",
+        required: true,
+        note: "The standard mordant for the golden yellow. Mordant the fiber before dyeing for the cleanest, most durable yellow."
+      },
+      {
+        item: "Protein fiber — wool or silk",
+        amount: "To suit your project",
+        required: true,
+        note: "Wool and silk take this dye far better than cotton/linen. The red-violet shows best on silk."
+      },
+      {
+        item: "Isopropyl or grain alcohol (for the red)",
+        amount: "Enough to cover crushed flower tops in a jar",
+        required: false,
+        note: "Hypericin is alcohol-soluble; an alcohol soak of crushed glands pulls a red-violet tincture that a water bath alone won't. Use a dedicated craft jar, label it, keep it off food shelves. Flammable — keep away from heat and flame."
+      },
+      {
+        item: "White vinegar or other mild acid",
+        amount: "A glug in the rinse / final dip",
+        required: false,
+        note: "The red collapses to grey on its own and returns with acid. An acidic rinse or dip revives and sets the red-violet on silk — see [[tech-acid-base|acid & base shifters]]."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an after-bath",
+        required: false,
+        note: "Saddens the yellow toward olive/khaki — see [[tech-iron-acetate|iron water]]. Add sparingly; iron dulls and can weaken wool."
+      },
+      {
+        item: "Soda ash or wood-ash lye (alkali)",
+        amount: "Pinch, to raise pH",
+        required: false,
+        note: "Raising the bath toward pH 9 shifts the flavonoid yellow brighter/greener but pushes the red toward grey — see [[tech-wood-ash-lye|wood-ash alkali]]. Opposes the acid that brings the red back. Caustic — wear gloves and eye protection when handling lye or soda ash."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless or enamel) — never reused for cooking",
+      "Nitrile or rubber gloves (mandatory — hypericin is a photosensitizer)",
+      "Dedicated stirring spoon/tongs",
+      "Strainer or muslin for removing plant matter",
+      "Heat source (stovetop or crock pot kept for craft use only)"
+    ],
+    toolsOptional: [
+      "Glass jar for the alcohol red soak (labeled, craft-only)",
+      "Long sleeves and a hat for harvesting in sun",
+      "pH strips to track acid/alkali shifts",
+      "Small jar for iron-water after-bath"
+    ],
+    steps: [
+      "Harvest only where removal is permitted. Occurrence on a map is not permission — never gather on private land or in protected areas without the landowner's or manager's OK. Where it IS allowed, Klamath weed is invasive across Western rangeland and roadsides, so careful removal of the flowering tops is ecologically positive; pull or snip stems and bag the seed-bearing tops rather than scattering them, so you don't spread the plant while removing it. Wear gloves: hypericin photosensitizes skin, and you'll be crushing the glands that carry it.",
+      "Mordant your wool or silk with alum (about 10–15% of fiber weight) in a dedicated pot and let it cool; this is what locks in the golden yellow. Set the fiber aside damp.",
+      "For the YELLOW bath: roughly chop the flowering tops (about 1:1 with fiber weight) into your dedicated dye pot, cover with water, and simmer gently for about an hour. Don't hard-boil — keep it under a rolling boil to protect the color. Strain out the plant matter.",
+      "Add the damp, alum-mordanted fiber to the strained bath and hold at a low simmer. Most of the yellow strikes in the first 20–30 minutes; after that little more is gained, so don't overcook. Lift, cool, and rinse for a clean golden-to-mustard yellow.",
+      "For the HIDDEN RED (optional): separately crush a handful of flowering tops to rupture the black glands and cover them with alcohol in a labeled craft jar. Soak overnight to a day — the liquid turns red-violet as hypericin dissolves. Keep the jar away from heat and flame (alcohol is flammable), and never heat the alcohol on an open burner. Strain.",
+      "Dye silk in the strained red tincture, then rinse with an acid dip (a vinegar rinse). Expect drama: the red can wash to silvery grey on its own and snap back to red-violet with acid. This color is fugitive — enjoy it as an ephemeral result, not a permanent one.",
+      "To shade the yellow, use an after-bath: a small splash of [[tech-iron-acetate|iron water]] saddens it toward olive/khaki; a pinch of alkali brightens it greener. Add modifiers a little at a time and rinse between.",
+      "Rinse thoroughly, dry finished fiber away from direct sun, and store the pieces out of strong light to slow the inevitable fading. Wash dedicated tools and gloves; keep them out of the kitchen."
+    ],
+    modifiers: "St. John's wort is responsive but unstable, which makes the modifiers half the fun. Alum gives the cleanest golden-to-mustard yellow. A splash of [[tech-iron-acetate|iron water]] (ferrous acetate) saddens the yellow toward olive, khaki, and grey-green. Alkali from soda ash or [[tech-wood-ash-lye|wood-ash alkali]] (toward pH 9) brightens and greens the flavonoid yellow — but pushes the red toward grey. Acid does the opposite and is the key to the red: the hypericin red-violet collapses to silvery grey on its own and returns with a vinegar dip, so the [[tech-acid-base|acid & base shifters]] page is essential reading before you chase the red. None of these modifiers make the red lightfast — they shift hue, not permanence.",
+    preservation: "Use fresh tops the day you pick them for the strongest color; the glands' red potential fades fast once cut, and water extracts are best dyed the same day. The alcohol red tincture keeps longer in a sealed, labeled craft jar but stays prone to color drift. Any water-based dye bath will mold within days at room temperature — don't store it as if it were stable; dye it out or discard it. On the fiber itself, neither color is permanent: store finished pieces away from sunlight and expect gradual fading, and avoid harsh detergents that strip the soft yellow and the already-fragile red.",
+    yield: "A 1:1 ratio of fresh flowering tops to fiber gives a soft-to-medium golden yellow on a small skein (roughly 30 g tops to 30 g wool or silk); push the ratio higher for deeper yellow, since fresh-flower yellows are gentle. The red is a bonus, not a bulk color — a handful of crushed glands soaked in alcohol dyes a small silk sample or accent, not yardage, and much of it is lost in the rinse. Plan modest, sample-scale projects rather than dyeing large lots, and treat the red especially as a small experimental result.",
+    beyondInk: "These are CRAFT colors, not food or medicine — never eat the plant or take it internally as part of this work. As a textile dye it gives golden yellows on alum-mordanted wool and silk and a fleeting red-violet on silk; on cotton/linen it performs poorly. The alcohol-extracted red tincture can be brushed as a fugitive watercolor-style stain or used for small ephemeral paper and fabric experiments where impermanence is acceptable. Because both colors fade, it's best suited to teaching demos, dye-sampling, and short-lived decorative pieces rather than heirloom work.",
+    safety: [
+      "PHOTOSENSITIVITY — the headline hazard: hypericin is a potent photosensitizer. Crushing the glands releases it onto your skin, where it can react with sunlight to redden, irritate, or burn skin (worse for fair skin and with prolonged sun). Wear gloves whenever handling, especially when crushing flowers, and wash skin promptly; cover up and limit sun exposure during and after harvesting.",
+      "TOXIC / DO NOT INGEST: This is a craft recipe, not food or medicine. St. John's wort and its extracts are well documented to cause serious drug interactions — the plant induces liver enzymes (notably via hyperforin) and can dangerously reduce the effectiveness of many prescription medications, including some birth control, antidepressants, blood thinners, and transplant and HIV drugs. Do not take it internally. Keep all plant material, baths, and the alcohol tincture out of the kitchen and away from children and pets.",
+      "Use DEDICATED non-food tools only: a craft-only pot, spoon, jar, and strainer that never return to cooking use. Label the alcohol tincture jar clearly as a non-food craft material.",
+      "The alcohol soak is flammable — keep it away from flame and heat, and never simmer or heat alcohol on an open burner.",
+      "Soda ash and wood-ash lye are caustic and can burn skin and eyes; wear gloves and eye protection when handling alkali or acid modifiers, and add them slowly to avoid splashing.",
+      "Occurrence is not permission: harvest only where removal is allowed. A sighting or a map pin does not grant the right to gather.",
+      "Klamath weed is toxic to grazing livestock — the same hypericin causes photosensitization in light-colored animals that eat it. If you're removing it from rangeland, bag and dispose of pulled plants responsibly rather than leaving piles where cattle or sheep may graze them.",
+      "Keep dye baths well-ventilated and avoid breathing steam; discard spent baths responsibly and don't store them (they mold quickly)."
+    ],
+    sources: [
+      {
+        title: "Cal-IPC Plant Profile: Hypericum perforatum (Klamath weed)",
+        url: "https://www.cal-ipc.org/plants/profile/hypericum-perforatum-profile/"
+      },
+      {
+        title: "USDA Forest Service FEIS — Hypericum perforatum (invasion and biological control)",
+        url: "https://www.fs.usda.gov/database/feis/plants/forb/hypper/all.html"
+      },
+      {
+        title: "Natural Dyeing with Hypericum perforatum — Evelyn Oldroyd (process, mordants, red-from-glands, acid/alkali shifts)",
+        url: "https://evelynoldroyd.wordpress.com/2010/07/09/natural-dyeing-with-hypericum-perforatum/"
+      },
+      {
+        title: "UC IPM — Klamathweed Beetle (biological control of St. Johnswort)",
+        url: "https://ipm.ucanr.edu/PMG/GARDEN/PLANTS/INVERT/klamath.html"
+      }
+    ]
+  },
+  {
+    id: "dye-coyote-brush",
+    plantId: "dye-coyote-brush",
+    kind: "dye",
+    name: "Coyote brush dye",
+    category: "yellow",
+    swatch: "#aaa648",
+    color: "Scrub yellow-khaki",
+    difficulty: "Beginner",
+    teaser: "Yellow-khaki from a weedy shrub",
+    toxic: false,
+    educationalOnly: false,
+    hook: "placeholder",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Like nearly all flavonoid plant yellows (this is a quercetin-type pigment, among the least lightfast of the yellows), unmordanted coyote brush dye fades noticeably with sun exposure — expect shifting and lightening over months of bright light. Alum mordanting and an iron after-bath both meaningfully improve fastness, nudging it toward moderate; the khaki/olive iron tones generally hold up better than the pure yellow. Don't oversell it as permanent — keep finished pieces out of strong, direct sun."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "1-3 days"
+    },
+    ingredients: [
+      {
+        item: "Coyote brush leaves & young flowering branch tips (Baccharis pilularis)",
+        amount: "Roughly equal weight to your fiber, or up to 2x for a stronger bath (e.g. 100-200 g fresh per 100 g fiber)",
+        required: true,
+        note: "Fresh green tips and the small resinous leaves give the cleanest yellow; older woody stems dilute the color. Gather only where harvesting is permitted."
+      },
+      {
+        item: "Protein or cellulose fiber (wool, silk, or alum-treated cotton/linen)",
+        amount: "To suit your project",
+        required: true,
+        note: "Wool and silk take this flavonoid yellow most readily. Pre-mordant for any real staying power."
+      },
+      {
+        item: "Alum mordant (potassium aluminum sulfate)",
+        amount: "About 10-15% of dry fiber weight (with ~6-8% cream of tartar for wool)",
+        required: false,
+        note: "Strongly recommended. Flavonoid yellows are weakly substantive; alum deepens the color and improves wash- and lightfastness. Wear gloves; alum is a non-food chemical."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash, to taste, in a separate after-bath",
+        required: false,
+        note: "Shifts the yellow toward khaki, olive, and gray-tan. See [[tech-iron-acetate|iron water]]. Use sparingly — excess iron dulls and can weaken fibers."
+      },
+      {
+        item: "Soft or rainwater",
+        amount: "Enough to cover fiber freely",
+        required: false,
+        note: "Very hard water can mute or shift the yellow; a pinch of clear ammonia or wood-ash water brightens it slightly. See [[tech-acid-base|acid & base shifters]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dyepot (never reused for food)",
+      "Heat source (stovetop or outdoor burner)",
+      "Rubber or nitrile gloves",
+      "Strainer or mesh bag for spent plant material",
+      "Long-handled spoon or stir stick kept for dyeing only",
+      "Thermometer (to hold a gentle simmer, not a boil)"
+    ],
+    toolsOptional: [
+      "Kitchen scale for weighing fiber and material",
+      "Separate small jar/pot for the iron after-bath",
+      "pH strips",
+      "Pruning snips for clean tip-harvest"
+    ],
+    steps: [
+      "Harvest only where it is permitted — occurrence on a map or a plant growing roadside is never permission to cut, and public-land, park, and preserve rules apply. Coyote brush is abundant and resprouts vigorously, so take a light tip-harvest: snip leafy growing tips and young flowering branches from several plants rather than stripping one, leaving most of each shrub intact. Where land managers are actively cutting back encroaching coyote brush, asking to take the clippings turns a chore into dye.",
+      "Pre-mordant your fiber first (ideally the day before). For wool/silk, simmer it gently in water with ~10-15% alum (plus cream of tartar for wool) for about an hour, then let it cool in the bath. Wear gloves and keep all mordant tools separate from cookware.",
+      "Chop the leaves and tips coarsely and soak them overnight in your dedicated pot, covered with soft water. This pre-soak pulls more color out of the resinous foliage.",
+      "Heat the bath slowly to a gentle simmer (roughly 80-90 C / 180-190 F) and hold it there for 45-60 minutes — do not hard-boil, which dulls the yellow. Let it cool, ideally steeping several hours or overnight for a deeper bath.",
+      "Strain out all plant material through a mesh bag or sieve so it won't spot the fiber. Compost the spent clippings.",
+      "Add your wetted, pre-mordanted fiber to the strained dyebath. Bring back to a gentle simmer for about an hour, moving the fiber occasionally for even color, then let it cool in the bath. Longer steeping yields stronger yellow.",
+      "To shift toward khaki, lift the fiber, rinse lightly, then dip it briefly in a separate iron-water after-bath until the color saddens to olive-tan; rinse again. Add iron a little at a time — it works fast and too much harshens both color and fiber.",
+      "Rinse until the water runs clear, then dry out of direct sun. Wash dyed pieces gently and separately for the first few washes."
+    ],
+    modifiers: "Coyote brush sits squarely in the flavonoid-yellow family, so it responds to the usual shifters. Alum mordant gives the brightest, most saturated yellow and is the single biggest improvement you can make. A touch of alkali — clear ammonia or [[tech-wood-ash-lye|wood-ash alkali]] — pushes the yellow warmer and slightly greener; mild acid (a splash of vinegar, see [[tech-acid-base|acid & base shifters]]) keeps it on the cooler, paler side. The dramatic move is iron: even a brief dip in [[tech-iron-acetate|iron water]] knocks the yellow down to khaki, olive, and grayed tan — the signature \"scrub\" color — but use it sparingly, as excess iron muddies the hue and can embrittle wool and silk. Copper modifiers (where you have them) nudge toward a deeper greenish gold.",
+    preservation: "Use the dyebath fresh for the best, brightest yellow; flavonoid baths lose strength within a few days and will grow mold or sour as the plant sugars ferment. If you must hold it, refrigerate in a labeled non-food jar for up to a few days, or freeze the strained liquid. Dried coyote brush clippings store well in a paper bag for months and can be rehydrated, though fresh tips give a cleaner color. On the fiber, the dye is reasonably wash-durable once alum-mordanted but, like all plant yellows, will gradually fade with light exposure — store and display finished pieces away from strong sun.",
+    yield: "Honest expectations: a roughly equal weight of fresh clippings to fiber gives a clear but soft to medium yellow on wool or silk, not a deep saturated gold — push toward 1.5-2x plant material, longer steeping, and a second bath for stronger color. Coyote brush is so common and fast-growing along the California coast that gathering a generous batch from a light, multi-plant tip-harvest is easy and leaves the shrubs essentially untouched. Cellulose fibers (cotton, linen) take it more weakly than protein fibers even with alum, so plan paler results there.",
+    beyondInk: "Primarily a textile dye for wool, silk, and (more weakly) alum-treated cotton and linen — a regional California-coast yellow well suited to overdyeing for greens (over indigo) or saddening to scrub khaki with iron. The strained, concentrated bath can also be brushed onto paper or used as a wash in botanical-color work, though its fugitive nature makes it better for craft and study pieces than for archival paint or lightfast art meant to last. It pairs naturally with other chaparral and coastal dyes such as [[dye-one-seed-juniper|one-seed juniper]] in a place-based palette.",
+    safety: [
+      "This is a CRAFT dye, not food. Coyote brush is not a culinary plant — do not eat it, and never brew or drink the dyebath as a tea. Baccharis pilularis itself is low in toxicity and low in palatability (livestock generally avoid it), but several relatives in the genus are seriously toxic if eaten, so treat the whole plant and the dyebath as non-food and keep them out of reach of children and pets.",
+      "Use dedicated non-food equipment only. Pot, spoon, strainer, and jars used for dyeing should never go back to kitchen use, even with a mordant as mild as alum.",
+      "Wear gloves throughout. Alum and iron water are non-food chemicals; iron water in particular stains skin, clothing, and surfaces and should be handled and stored carefully, clearly labeled, away from food.",
+      "Simmer with ventilation. The resinous foliage gives off a strong scrub-sage smell when heated; work near an open window or outdoors and avoid leaning over the steam if you're sensitive.",
+      "Occurrence is not permission. A coyote brush sighting — on this map or anywhere — does not grant the right to cut it. Follow the rules of the land you're on (parks, preserves, and private property all restrict or forbid harvest), and never harvest in protected or restoration areas.",
+      "Harvest lightly and ethically. Although coyote brush is abundant and resprouts readily, take growing tips from several plants rather than stripping one, and leave wildlife habitat intact — its flowers feed many native pollinators and insects.",
+      "Handle iron and alum mordants per their own safety guidance — see [[tech-iron-acetate|iron water]]. Rinse splashes promptly, and dispose of spent mordant and dye baths responsibly: keep iron, alum, and copper solutions out of waterways, gardens, and storm drains."
+    ],
+    sources: [
+      {
+        title: "Fibershed — Designs and Dye Plants (coyote brush clippings boiled into skein dye)",
+        url: "https://fibershed.org/2010/03/31/designs-and-dye-plants/"
+      },
+      {
+        title: "Rebecca Burgess, Harvesting Color: How to Find Plants and Make Natural Dyes (book listing; profiles coyote brush as a yellow dye)",
+        url: "https://books.google.com/books/about/Harvesting_Color.html?id=8CwxW75P_dsC"
+      },
+      {
+        title: "Baccharis pilularis (coyote brush) — Calscape, California Native Plant Society",
+        url: "https://calscape.org/Baccharis-pilularis-(Coyote-Brush)"
+      }
+    ]
+  },
+  {
+    id: "dye-curly-dock",
+    plantId: "dye-curly-dock",
+    kind: "dye",
+    name: "Curly dock root dye",
+    category: "brown",
+    swatch: "#8c6a3a",
+    color: "Weedy-root brown",
+    difficulty: "Beginner",
+    teaser: "Brown from a weed you dig out",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Slice open the forking taproot of curly dock and it bleeds a startling chrome-yellow — anthraquinone pigments (chrysophanol, emodin, physcion and their kin, the same pigment family that tints rhubarb and madder's relatives) packed into the root's core. Boiled down, that yellow deepens into warm tea-browns, and with an iron afterbath it shifts toward the slate-to-black that European dyers long pulled from iron-saddened dock for homespun wool. The plant is a Eurasian transplant gone everywhere: counted among the five most widely distributed plants on Earth, weedy across Pacific Northwest roadsides, pastures, beaches, and disturbed ground, and a listed problem weed in the PNW Pest Management Handbook. Here the dye pot and the weed bucket are the same job — you dig the taproot out to set the plant back, and the color is the reward.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Be honest: this is a plant brown, not a synthetic, and fresh dock color is restless — dyers report wool visibly shifting and darkening within hours on a sunny line before it settles. The pale yellows from a weak bath are frankly fugitive, and any color on unmordanted or cellulose fiber fades noticeably in sustained sun. The browns hold up better than the yellows: alum-mordanted root browns on wool are reasonably stable and tend to mellow gently rather than vanish, and an iron afterbath improves wash- and lightfastness further (iron-dock browns and blacks were valued historically for exactly this added durability). Expect quiet mellowing over years of display, not bright permanence — keep finished pieces out of direct, all-day light."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "Overnight"
+    },
+    ingredients: [
+      {
+        item: "Curly dock taproots (Rumex crispus)",
+        amount: "Roughly equal weight of fresh root to dry fiber, or more for deeper browns (e.g. 100-200 g root per 100 g wool)",
+        required: true,
+        note: "Use the ROOT only — the bright-yellow forking taproot is the dye source. Dig the whole root to remove the plant; scrub off soil and slice or chop to expose the yellow core."
+      },
+      {
+        item: "Protein fiber (wool, silk) or yarn",
+        amount: "Any amount; weigh dry first to scale mordant",
+        required: true,
+        note: "Wool takes dock browns best. Cellulose (cotton, linen) needs a tannin + aluminum-acetate mordant sequence and still gives weaker, less stable color."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover roots, then enough to move the fiber freely",
+        required: true,
+        note: "Soft water is fine; very hard or iron-rich water will shift the brown darker on its own."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "~10-15% of dry fiber weight (e.g. 10-15 g per 100 g wool)",
+        required: false,
+        note: "Root dye colors without a mordant, but alum saturates and brightens the brown and improves fastness. Recommended for any piece you want to keep. Aluminum acetate substitutes for cotton/linen."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an afterbath, to taste",
+        required: false,
+        note: "Saddens the brown toward grey, slate, and near-black — the classic iron-dock route. Add sparingly; iron embrittles wool if overused. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "~6% of dry fiber weight",
+        required: false,
+        note: "Optional with the alum mordant to keep wool soft and even the uptake."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel; never reused for cooking)",
+      "Dedicated long spoon or tongs for stirring",
+      "Rubber or nitrile gloves",
+      "Digging fork or hori-hori (to lever out the full taproot)",
+      "Strainer or mesh bag for spent roots",
+      "Knife and cutting board kept for craft use only"
+    ],
+    toolsOptional: [
+      "Dedicated second pot for mordanting",
+      "Kitchen scale (for weighing fiber and mordant)",
+      "Stiff brush for scrubbing roots",
+      "Thermometer",
+      "Jar for mixing/storing iron water",
+      "Bag or bucket for collecting seed heads"
+    ],
+    steps: [
+      "Harvest only where digging is permitted — occurrence is not permission, and many parks and preserves forbid root removal even of weeds. On land where you may, treat this as invasive removal: before digging, snap or clip off any rusty seed stalks and bag them so you don't scatter dock's long-lived seed while you work, then lever out the entire forking taproot of curly dock with a fork or hori-hori (taking the root sets the plant back hard) and backfill the hole. Confirm the plant by its wavy-edged lance leaves, rusty seed stalks, and the vivid yellow that shows when you cut the root.",
+      "Knock off soil, scrub the roots clean, and chop or slice them to expose the yellow inner wood. Discard the leaves and seed heads responsibly (bagged for the trash where seed could spread, or hot-composted) — every part of this plant is high in oxalic acid and oxalates; this is a craft dye, not food, and nothing here is for eating.",
+      "Mordant the fiber first (recommended): dissolve alum (with optional cream of tartar) in warm water, enter the wetted-out fiber, hold near a simmer about an hour, then let it cool — overnight is fine. Handle wet wool gently to avoid felting.",
+      "Make the dye bath: put the chopped roots in the dedicated pot, cover with water, bring to a gentle simmer, and hold 1-2 hours until the liquor is a deep reddish-brown. For more color, let the roots steep off the heat overnight, then return to a simmer.",
+      "Strain out the spent roots so they don't abrade or spot the fiber, and set them aside for disposal where animals can't reach them (see safety).",
+      "Enter the damp, mordanted fiber into the warm (not boiling) dye bath. Hold below a simmer for about an hour, moving it occasionally for even uptake; for richer brown, let it cool in the bath overnight.",
+      "Optional color shift: lift the fiber, add a small splash of iron water to the bath (or a separate jar), and dip briefly to sadden the brown toward grey/slate/black. Add iron sparingly and rinse promptly — too much weakens wool.",
+      "Rinse in cool water until it runs clear, wash gently with a pH-neutral soap, and dry out of direct sun. Wear gloves throughout — the dye stains skin and tools."
+    ],
+    modifiers: "Curly dock root gives warm tan-to-tea brown on alum. Iron (an afterbath of [[tech-iron-acetate|iron water]]) is the big lever: it dulls and darkens the brown toward grey, slate, and the historic iron-dock black — add it gradually. Alkali shifts the anthraquinone pigments warmer and redder; a wood-ash lye or soda-ash dip pushes toward rust-brown (see [[tech-wood-ash-lye|wood-ash alkali]]), while acid (a vinegar rinse) brightens and slightly yellows the tone — see [[tech-acid-base|acid & base shifters]]. Extra tannin (e.g. a tea or oak-gall pre-soak) deepens and helps fix the brown, especially on stubborn cellulose fibers.",
+    preservation: "As a liquid, a strong dock-root bath keeps only a few days at room temperature and a week or two refrigerated before it sours and grows mold; the smell tells you when it has turned. Keep any stored bath labeled non-food and out of reach of children and pets — it is oxalate-rich and not a drink. For longer storage, dry the cleaned, sliced roots fully and keep them in a paper bag or jar away from damp — dried dock root holds its dye potential for many months and is easy to re-extract. Finished, well-rinsed and dried fiber is stable; store it out of strong, constant light to slow the inevitable mellowing of any plant brown.",
+    yield: "A handful of mature taproots (a few hundred grams fresh) easily dyes 100 g of wool to a solid tan-brown, and roots are abundant enough that you can dig more for a deeper bath without ecological worry — this is invasive removal, not a scarce resource. Color depth varies a lot with root maturity, season, and how finely you chop: late-season roots and finely sliced cores give the strongest liquor. Expect honest browns and tans, not vivid saturation, from a single bath; exhaust baths (reusing the same roots) give progressively paler, pleasant fawns.",
+    beyondInk: "The same root liquor makes a serviceable warm-brown ink or wash — thicken it with a little gum arabic for pen and brush work (see [[tech-gum-arabic|gum arabic]]), though, like the textile color, treat it as moderately lightfast at best and keep finished pages out of sun. Concentrated and iron-shifted, it edges toward a sepia/blackish drawing ink in the old iron-dock tradition. Beyond dyeing wool and silk yarn, dyers use dock root for basketry materials, paper, and as a low-cost background brown to layer under or over other natural dyes.",
+    safety: [
+      "This is a CRAFT dye, not food. Use dedicated non-food pots, spoons, and a knife/board reserved for craft work — never return them to the kitchen.",
+      "Do not eat any part of the plant as part of this process. The whole plant — leaves, seeds, and root — is high in oxalic acid and soluble oxalates; in quantity these can irritate the gut and urinary tract, drive calcium-oxalate kidney injury, and at large doses cause serious, even fatal, poisoning (documented in both people and livestock). The root is for dyeing only.",
+      "Protect animals from the plant material. Dock has fatally poisoned grazing sheep and is dangerous to cattle, horses, poultry, and pets. Do not compost or dump spent roots, leaves, or dye bath where livestock graze or where dogs or cats could eat them; bag oxalate-rich waste for the trash if you can't keep animals away from a compost pile.",
+      "Wear rubber or nitrile gloves throughout — the dye stains skin and nails, and mordants and iron water are skin and eye irritants.",
+      "Alum and iron (ferrous) compounds are harmful if swallowed and irritating to eyes and lungs; keep them labeled, sealed, and out of reach of children and pets, and avoid breathing the powders.",
+      "Use iron water sparingly: over-ironing embrittles and weakens wool, and the bath should be handled and disposed of as a metal-salt solution, not poured where it will harm plants or aquatic life.",
+      "Ventilate while simmering; dispose of spent dye baths and mordant by following local guidance for metal-salt wastewater rather than dumping into waterways.",
+      "Harvest ethic and law: occurrence is not permission. Digging roots is prohibited in many parks and protected areas even for weeds — confirm you may dig before you do. On land where removal is allowed, taking the whole taproot is genuinely beneficial — but bag the seed heads first so the work doesn't scatter this aggressive non-native's long-lived seed."
+    ],
+    sources: [
+      {
+        title: "Pacific Northwest Pest Management Handbooks — Dock, curly (Rumex crispus) and broadleaf (Rumex obtusifolius)",
+        url: "https://pnwhandbooks.org/weed/problem-weeds/dock-curly-rumex-crispus-broadleaf-rumex-obtusifolius"
+      },
+      {
+        title: "Plants For A Future — Rumex crispus (Curled Dock): dye uses and oxalic-acid cautions",
+        url: "https://pfaf.org/user/plant.aspx?LatinName=Rumex+crispus"
+      },
+      {
+        title: "The Knitting Shed — Dyeing with Dock (process and colorfastness notes)",
+        url: "https://theknittingshed.com/dyeing-with-dock/"
+      },
+      {
+        title: "Colorado State University Guide to Poisonous Plants — Curly dock (Rumex crispus): oxalate toxicity",
+        url: "https://poisonousplants.cvmbs.colostate.edu/plant/83"
+      }
+    ]
+  },
+  {
+    id: "dye-douglas-fir",
+    plantId: "dye-douglas-fir",
+    kind: "dye",
+    name: "Douglas-fir cone & bark dye",
+    category: "brown",
+    swatch: "#9a6b4a",
+    color: "Peach-to-tan",
+    difficulty: "Beginner",
+    teaser: "Soft tan from fallen cones",
+    toxic: false,
+    educationalOnly: false,
+    hook: "placeholder",
+    lightfastness: {
+      rating: "moderate",
+      note: "Conifer tannins are among the more dependable plant colors — better than any berry juice — and an alum mordant plus an iron or tannin shift improves both light- and washfastness. Still, expect the bright peach tones to soften and warm toward tan over months in direct sun. Treat the muted browns and iron-greys as the durable end of the range and the lively apricots as the fugitive end."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "2-3 days"
+    },
+    ingredients: [
+      {
+        item: "Fallen Douglas-fir cones and/or bark (Pseudotsuga menziesii)",
+        amount: "Equal weight to your fiber for a medium shade; up to 2x for deep tan (e.g. 100 g dyestuff per 100 g wool)",
+        required: true,
+        note: "Use only fallen cones, shed bark, and mill/trimming waste — never strip bark from living trees, which wounds and can kill them. Cones gathered Aug-Oct; the longer they have weathered in sun, the more they push toward rust-brown."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover dyestuff generously, then to submerge fiber freely",
+        required: true,
+        note: "Soft water or rainwater keeps peach tones clear; hard, iron-rich water will dull and grey the color on its own."
+      },
+      {
+        item: "Fiber to dye (wool or silk takes color best; cotton/linen lighter)",
+        amount: "Scoured and pre-wetted",
+        required: true,
+        note: "Protein fibers (wool, silk) grab conifer tannin readily; cellulose (cotton, linen) needs a tannin + alum routine and still dyes paler."
+      },
+      {
+        item: "Alum mordant (potassium aluminum sulfate)",
+        amount: "10-15% of fiber weight (e.g. 10-15 g per 100 g wool)",
+        required: false,
+        note: "Not strictly required since the dyestuff is itself tannin-rich, but alum brightens the peach/gold and dramatically improves fastness. Optional cream of tartar (~6% WOF) softens wool and clears the tone."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash, added gradually at the end",
+        required: false,
+        note: "\"Saddens\" the bath toward olive, chartreuse, and grey-brown. See [[tech-iron-acetate|iron water]]; add sparingly — iron is easy to overdo and weakens wool."
+      },
+      {
+        item: "Wood-ash lye or other mild alkali (optional)",
+        amount: "A pinch, to taste",
+        required: false,
+        note: "Mild alkali nudges the tannin browns warmer/redder; an acidic dip shifts them back the other way — see [[tech-acid-base|acid & base shifters]] for both directions."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never reused for cooking)",
+      "Heat source / stove or burner",
+      "Heat-resistant gloves and waterproof gloves",
+      "Strainer or mesh bag to remove cone/bark debris",
+      "Stirring stick or spoon kept for dyeing only",
+      "Kitchen scale for weighing fiber and dyestuff"
+    ],
+    toolsOptional: [
+      "Hatchet, loppers, or hammer to break down woody cones and bark",
+      "Separate jar/pot for iron water",
+      "pH strips to track acid/alkali shifts",
+      "Heatproof jars for storing concentrated dyebath",
+      "Dust mask when chopping dry, dusty bark"
+    ],
+    steps: [
+      "Gather only fallen cones, shed bark, and mill or trimming waste, and only where collecting is permitted — a sighting or a public trail is not harvest permission, and many parks and preserves forbid removing any material. Because Douglas-fir litter is so abundant, take what has already dropped and leave living bark untouched; stripping bark from a standing tree can girdle and kill it.",
+      "Break the cones and bark into small pieces with a hatchet, loppers, or hammer (wear a dust mask if the bark is dry and dusty), then soak them in water overnight — or for several days for bark — to begin pulling out the tannins.",
+      "Mordant your scoured, pre-wetted fiber: dissolve alum at 10-15% of fiber weight in warm water, add the fiber, hold near a simmer for about an hour, and let it cool in the bath. For cotton or linen, pre-treat with a tannin step first so the color holds.",
+      "In your dedicated dye pot, simmer the soaked dyestuff (gently, below a hard boil to protect the peach tones) for 1-2 hours, then let it steep and cool, ideally overnight, for the fullest extract.",
+      "Strain out all cone and bark debris through a mesh bag or sieve so it won't mat into the fiber.",
+      "Add the wet, mordanted fiber to the strained, warm dyebath and hold at a low simmer for about an hour, then let it cool in the bath — longer steeping deepens the shade toward tan and rust.",
+      "To shift the color, work in small increments: add a splash of iron water for olive/chartreuse and grey-brown, a pinch of wood-ash alkali for warmer red-browns, or an acid dip the other way. Pull a test strand before committing the whole batch.",
+      "Rinse the fiber in cool water until it runs clear, then dry it out of direct sunlight to slow the inevitable softening of the brightest tones."
+    ],
+    modifiers: "Douglas-fir's color is pure condensed tannin, so it responds strongly to metal and pH. A splash of [[tech-iron-acetate|iron water]] is the big lever: it crashes the warm peach toward olive, chartreuse, and grey-brown as the iron complexes with the tannin (the same reaction behind iron-gall ink). Alum keeps the color in the bright peach-to-gold range and locks it in. Mild alkali such as a pinch of wood-ash lye warms the browns toward red, while a vinegar or acid dip cools them back — see [[tech-acid-base|acid & base shifters]] for working both directions. Letting cones weather longer in the sun before dyeing also pushes the natural color from peach toward rust.",
+    preservation: "A strained, concentrated dyebath keeps a week or so refrigerated and can be frozen in jars for months; at room temperature it will ferment and grow a surface mold within days, so seal and chill it. A pinch of clove or a splash of vinegar slows spoilage — see [[tech-preserving|preserving plant inks & dyes]]. The real keeper is the dyed-and-dried fiber itself: rinsed thoroughly and stored away from light, it holds its muted browns well for years, though the brightest peaches continue to mellow.",
+    yield: "Roughly equal weights of dyestuff to fiber give a medium shade; doubling the dyestuff deepens it toward tan and rust. A grocery bag of fallen cones (a few hundred grams) comfortably dyes a skein or two of wool to a soft, even color — yield is generous precisely because the material litters the ground for free. Exhaust baths (a second dip in the used bath) give progressively paler, very pretty pastel tans, so don't pour the spent bath out after one use.",
+    beyondInk: "Primarily a textile dye for wool, silk, and (more faintly) cotton and linen, giving regional peach-to-tan-to-chartreuse ranges. The same tannin-rich extract works as a tannin base coat under other dyes and as a gentle leather tan. Thickened and bound with [[tech-gum-arabic|gum arabic]], the concentrated bath can be brushed as a soft watercolor wash or wood stain; it also dyes basketry materials, paper, and raw plant fibers a warm brown.",
+    safety: [
+      "This is a craft dye, not food. Use a dedicated non-food pot, spoon, and strainer kept only for dyeing — never return them to the kitchen.",
+      "Wear waterproof gloves to avoid staining hands and heat-resistant gloves around the hot bath; hot dyebath and steam can scald.",
+      "Wear a dust mask when chopping dry, dusty bark or cones to avoid inhaling fine particulate and mold spores.",
+      "Alum is a low-toxicity mordant but is still a skin/eye irritant and must not be ingested; keep it and all mordants away from children, pets, and food surfaces. Label and store separately.",
+      "Use iron water sparingly: iron weakens (tenders) wool and silk and over-darkens fast. See [[tech-iron-acetate|iron water]].",
+      "Harvest fallen material only and only where permitted — occurrence is not permission. Never strip bark from a living Douglas-fir; it can wound or kill the tree.",
+      "Some people develop contact dermatitis from conifer resins and dusts; if your skin reacts, stop and cover up."
+    ],
+    sources: [
+      {
+        title: "Douglas Fir — Natural Dyeing (Honey Folk Clothing)",
+        url: "https://www.honeyfolkclothing.com/findings-foraging/douglas-fir-cones-bark-natural-dyeing"
+      },
+      {
+        title: "Mordants & Tannins (Maiwa)",
+        url: "https://maiwa.com/collections/mordants"
+      },
+      {
+        title: "Pseudotsuga menziesii (Douglas-fir) — USDA PLANTS Database",
+        url: "https://plants.usda.gov/plant-profile/PSME"
+      }
+    ]
+  },
+  {
+    id: "dye-eucalyptus",
+    plantId: "dye-eucalyptus",
+    kind: "dye",
+    name: "Eucalyptus leaf & bark dye",
+    category: "brown",
+    swatch: "#b5532e",
+    color: "Rare natural rust-red",
+    difficulty: "Intermediate",
+    teaser: "A true natural rust-red",
+    toxic: true,
+    educationalOnly: false,
+    hook: "Most plants give you yellows, tans, and browns — getting a genuine warm red out of a backyard leaf is almost unheard of, which is exactly what makes eucalyptus a treasure to natural dyers. The redder species, especially red ironbark (E. sideroxylon) and silver-dollar gum (E. cinerea), can throw rust, brick, terracotta, and even coral-red onto wool and silk with nothing but heat and water, because the leaves are loaded with tannins and oil-soluble pigments that bond to protein fiber on their own — no mordant required. In coastal California these Australian gums are naturalized escapees — Cal-IPC flags them for fire risk and the deep mats of shed bark and leaf litter they pile up beneath them — so a dye made from fallen litter and removal cuttings is about as guilt-free as natural color gets. The catch is the color is unpredictable: species, season, soil, and even which tree you stand under all swing the result, which is half the frustration and half the magic.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Honest assessment: eucalyptus is one of the more durable plant dyes because so much of the color comes from tannins, which behave like a built-in mordant and resist fading better than most flavonoid yellows. Fastness testing on wool and silk generally lands in the fair-to-good range — the rust and brown tones hold up reasonably to washing and light, while the brighter coral-reds and the yellow component are the most fugitive and will dull toward tan over months of strong sun. It is good for plant color, but it is not vat-indigo or madder permanent — expect some softening, keep dyed textiles out of direct windows, and treat full reds as the least stable part of the range."
+    },
+    timeline: {
+      active: "2-4 hr",
+      passive: "1-3 days"
+    },
+    ingredients: [
+      {
+        item: "Eucalyptus leaves and shed bark (E. sideroxylon, E. cinerea, or E. polyanthemos for the reddest results)",
+        amount: "Equal weight to fiber at minimum; 2-3x the weight of fiber for strong color (e.g. 200-300 g litter per 100 g wool)",
+        required: true,
+        note: "Fallen leaves and shed bark from removal or litter work — the litter pile under a tree is ideal and abundant. Older, sun-aged red-species leaves often give richer reds than fresh green ones."
+      },
+      {
+        item: "Water (soft or rainwater preferred)",
+        amount: "Enough to cover fiber and plant material freely, roughly 4-8 L per 100 g fiber",
+        required: true,
+        note: "Hard, alkaline water shifts results; rainwater or a splash of vinegar keeps reds and oranges cleaner."
+      },
+      {
+        item: "Protein fiber to dye (wool, silk, alpaca)",
+        amount: "By project; weigh it dry to calculate plant ratios",
+        required: true,
+        note: "Eucalyptus bonds far better to protein than to cotton/linen. Cellulose fiber needs a tannin + alum-acetate routine and still gives muddier color."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "~10-15% of fiber weight (10-15 g per 100 g fiber)",
+        required: false,
+        note: "Optional. Counter-intuitively, alum is NOT what makes eucalyptus red — the reds come from the leaves' own tannins, and the most vivid rust-reds on wool actually appear with no mordant at all. Alum mainly helps the yellow flavonols attach and improves wash- and lightfastness; it tends to push the result yellower/oranger rather than redder. Use it for durability on items that will be worn and washed, not as a route to red. Pre-mordant the wet fiber before dyeing."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an after-bath dip, to taste",
+        required: false,
+        note: "A modifier, not a mordant here. Iron 'saddens' eucalyptus toward khaki, olive, grey-brown, and near-black. Use sparingly — iron embrittles wool and silk and a little goes a long way. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Acid (white vinegar) or alkali (wood-ash lye / soda ash)",
+        amount: "A few tablespoons of vinegar, or a pinch of alkali, as a color shifter",
+        required: false,
+        note: "Acid pushes toward warmer reds/oranges; alkali pushes toward browner, duller tones. See [[tech-acid-base|acid & base shifters]] and [[tech-wood-ash-lye|wood-ash alkali]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never used for food again)",
+      "Dedicated stir stick / tongs",
+      "Heat-resistant gloves and waterproof gloves",
+      "Strainer or mesh bag for plant material",
+      "Outdoor burner or a very well-ventilated space (eucalyptus oils are strong when simmered)"
+    ],
+    toolsOptional: [
+      "Kitchen scale for weighing fiber and plant material (dedicate to craft use)",
+      "pH strips to track acid/alkali shifts",
+      "Separate small jar for iron-water dipping",
+      "Thermometer to hold a steady sub-boil"
+    ],
+    steps: [
+      "Gather only where collection is permitted — occurrence is not permission. On public land, parks, and preserves, leaf and bark litter is often still protected; get the landowner's or manager's OK first. Because naturalized eucalyptus is an invasive concern in coastal California, prioritize fallen leaves and shed bark from the litter pile, or cuttings from sanctioned removal work — this is a removal/fallen-material dye, not a reason to strip a living tree.",
+      "Sort and roughly chop or tear the leaves and bark so more surface is exposed. Aim for at least equal weight of plant material to fiber, ideally 2-3x for strong reds. Red ironbark and silver-dollar gum litter give the warmest results; aged, fallen red-species leaves often beat fresh ones.",
+      "(Optional) Pre-mordant the scoured, wet protein fiber in alum at about 10-15% of fiber weight: dissolve the alum in warm water, add the fiber, hold near 180°F / 80°C for about an hour, then let it cool in the bath. Note that alum is for durability, not for red — eucalyptus self-mordants on tannin, and the brightest rust-reds actually come from un-mordanted protein fiber; alum tends to favor the yellow-orange end. Mordant if you want better wash- and lightfastness, and skip it if you are chasing the reddest possible color.",
+      "Build the dyebath OUTDOORS or under strong ventilation — simmering eucalyptus releases potent essential oils that are irritating to breathe. Put the chopped litter in your dedicated pot, cover well with soft water or rainwater, and bring to a gentle sub-boil (around 180-200°F / 80-93°C). Hold it there, never a hard rolling boil, for 1-3 hours; longer, slower extraction generally pulls more red.",
+      "Let the bath steep and cool, ideally overnight. For the deepest reds, many dyers let the strained liquor rest a few days to two weeks. Strain out the plant material (mesh bag makes this easy) and compost it.",
+      "Add the wetted-out fiber to the strained, warm dyebath. Return to a gentle sub-boil and hold 1-2 hours, then turn off the heat and let the fiber steep in the cooling bath — overnight gives the richest, most even color. Stir gently and infrequently to avoid felting wool.",
+      "(Optional) Shift the color with modifiers in small test batches first. A vinegar splash warms toward red/orange; a pinch of wood-ash lye or soda ash dulls toward brown. For grey, olive, and near-black, dip the rinsed fiber briefly in iron water and watch it change in seconds — pull it before it over-darkens or the metal weakens the fiber.",
+      "Rinse the fiber in cool water until it runs clear, with a final rinse matched to your last modifier (a touch of vinegar after an acid bath helps set warm tones). Dry out of direct sun. Wear gloves throughout — keep all of this strictly separate from food and cookware."
+    ],
+    modifiers: "Eucalyptus is unusually responsive to modifiers, which is how one litter pile yields rust to grey. The reds and rusts are the work of the leaves' own tannins, not of any mordant — in fact the most vivid reds often come from un-mordanted protein fiber, and alum tends to favor the yellow-orange end while improving fastness. Acid (vinegar) warms and brightens toward red and coral; alkali — [[tech-wood-ash-lye|wood-ash lye]] or soda ash — pushes the color browner, duller, and flatter (see [[tech-acid-base|acid & base shifters]]). Iron water saddens everything toward khaki, olive, grey-brown, and near-black; it is the route to muted and dark tones, but use it sparingly because iron embrittles wool and silk (see [[tech-iron-acetate|iron water]]). The base tannins also mean eucalyptus can self-mordant and even pre-tannin cellulose fiber for other dyes.",
+    preservation: "A strained eucalyptus dye liquor keeps for a week or two in a cool, dark place and often deepens as it ages, which is welcome for reds; beyond that it will start to ferment and grow surface mold and smell sour. You can freeze concentrated liquor in a labeled, non-food container for longer storage, or dry spent-but-still-colorful leaves to re-extract later. If a stored bath molds, it can usually still be strained and reheated for muted color, but discard anything truly foul. Dyed and fully dried fiber is the most stable form of all — store finished yarn or cloth away from direct light to slow the inevitable softening of the brightest reds.",
+    yield: "Honest expectations: a 2-3x plant-to-fiber bath comfortably dyes its weight of wool or silk to medium-strong color, and the exhausted bath usually has a second, paler run left in it. The single biggest variable is the tree, not your technique — species, season, soil, and individual genetics swing results from pale tan to deep rust, and the same recipe under two different gums can give two different colors. Plan to test-dye a small skein before committing a whole project, and don't expect to exactly reproduce a batch from a different tree or a different month. Reds are the hardest to hit reliably; tan, gold, and chocolate-brown come easily.",
+    beyondInk: "Beyond skein-dyeing wool and silk, eucalyptus is a star of eco-printing and bundle-dyeing: leaves laid directly on damp cloth or paper and steamed leave crisp red, orange, and rust leaf-prints that are among the most prized in botanical printing — and on protein fiber these often print reddest with no mordant at all. The strained liquor can be thickened (for example with [[tech-gum-arabic|gum arabic]]) into a warm-toned watercolor or paint for paper, and concentrated baths work for dyeing basketry materials, raffia, and other craft fibers. It also makes a fine companion dye — its heavy tannin load can pre-treat cellulose fiber to help other natural dyes bond.",
+    safety: [
+      "TOXIC IF EATEN: eucalyptus leaves, bark, and especially the essential oil are poisonous to ingest — eucalyptus oil can cause serious poisoning in even small amounts, particularly to children and pets. This is a CRAFT dye, never food, and nothing from this process should go near anything edible.",
+      "Simmering eucalyptus releases strong, volatile essential oils — work OUTDOORS or with powerful ventilation, and keep your face out of the steam; the vapor can irritate eyes, airways, and trigger headaches or asthma.",
+      "Use a DEDICATED non-food pot, utensils, and containers reserved permanently for dyeing — do not reuse any of it for cooking, and store it separately.",
+      "Wear waterproof and heat-resistant gloves throughout; hot dyebaths scald and tannins stain skin and nails.",
+      "Iron water and its modified baths embrittle wool and silk and stain permanently — handle with gloves, dip briefly, and keep iron-modified equipment separate.",
+      "If you use wood-ash lye or soda ash as an alkali shifter, treat it as caustic: wear eye protection and gloves and add it slowly to water, never water to it.",
+      "Occurrence is not permission — confirm you are allowed to collect leaf and bark litter before gathering, even from naturalized or 'weedy' trees, and favor fallen and removal material over harming living trees.",
+      "Keep raw plant material, dyebaths, and modifiers out of reach of children and pets."
+    ],
+    sources: [
+      {
+        title: "Eucalyptus globulus Profile — California Invasive Plant Council (Cal-IPC)",
+        url: "https://www.cal-ipc.org/plants/profile/eucalyptus-globulus-profile/"
+      },
+      {
+        title: "Eucalyptus Dye Database — Sally Blake (leaf & bark dyes across eucalypt species, ANBG)",
+        url: "https://www.sallyblake.com/new-page-15"
+      },
+      {
+        title: "Natural Dyeing with Eucalyptus — Kathryn Davey",
+        url: "https://kathryndavey.com/natural-dyeing-with-eucalyptus/"
+      }
+    ]
+  },
+  {
+    id: "dye-greenthread",
+    plantId: "dye-greenthread",
+    kind: "dye",
+    name: "Greenthread (Navajo tea) dye",
+    category: "yellow",
+    swatch: "#cf8a2a",
+    color: "Yellow-to-orange",
+    difficulty: "Beginner",
+    teaser: "Whole-plant yellow to orange",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Greenthread is the wiry, almost-leafless plant that paints the dry plains and roadside shoulders of New Mexico, Arizona, west Texas, and the southern Colorado Plateau with thumbnail-sized yellow-orange daisies. The same golden, faintly smoky brew that Diné (Navajo), Hopi, and Pueblo peoples have steeped as Navajo/Hopi tea for generations also gives the dyepot its color: dried whole plant yields warm yellows that swing to bright orange under an alkaline dip, and toward olive when iron is introduced. Because the plant is mostly stem and very little leaf, you need a generous armful to build strong color — but it reseeds eagerly, and cutting a few inches above the soil (the traditional tea-harvest method) lets the perennial crown regrow. Treat this as a craft dye and a beverage with a long, living Indigenous history, not a novelty.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Greenthread is reported to give fairly good color for a plant yellow — sources describe its hues as comparatively durable, and proper alum mordanting helps. But it is still a flavonoid-type natural dye, not a permanent one: expect gradual softening and some shift with sustained sun exposure. The brighter alkaline oranges are a pH effect and are the most fugitive variant; iron-modified olive/rust tones tend to hold somewhat better. Treat all of these as light-sensitive and keep finished pieces out of constant direct sunlight."
+    },
+    timeline: {
+      active: "1.5-2 hr",
+      passive: "1-7 days"
+    },
+    ingredients: [
+      {
+        item: "Dried greenthread (whole above-ground flowering plant)",
+        amount: "About 40 g dried plant per 1 gallon (4 L) water, per ~100 g of fiber; use more for deeper color",
+        required: true,
+        note: "Whole dried plant gives a reddish-yellow to medium yellow; flowers alone lean lighter yellow. Fresh plant works but dried is more concentrated. Navajo/Hopi tea bundles sold for brewing are the same species and work well."
+      },
+      {
+        item: "Protein fiber (wool, mohair) or pre-treated cotton",
+        amount: "~100 g per gallon of bath",
+        required: true,
+        note: "Wool and other animal fibers take this dye best. Cotton and other cellulose fibers need a tannin + alum cellulose mordant routine to hold meaningful color."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "~10 g per 100 g fiber",
+        required: true,
+        note: "Mordant. Brightens and helps fix the yellow. Standard, low-hazard natural-dye mordant for protein fiber."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "~7 g per 100 g fiber",
+        required: false,
+        note: "Mordant assistant used with alum on wool; softens the hand and evens uptake. Optional but traditional in the documented recipe."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash to taste, added at the end",
+        required: false,
+        note: "\"Saddens\" the color toward olive-green and deeper rust. A little goes a long way; too much dulls and can weaken wool. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Washing soda or wood-ash lye (alkali)",
+        amount: "Small amount to raise pH to ~9-10",
+        required: false,
+        note: "Shifts the bath toward bright orange. See [[tech-acid-base|acid & base shifters]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless or enamel), never returned to kitchen use",
+      "Dedicated stir stick or tongs",
+      "Nitrile or rubber gloves",
+      "Strainer or mesh bag to remove plant matter",
+      "Kitchen scale for weighing fiber, dyestuff, and mordant"
+    ],
+    toolsOptional: [
+      "pH strips (to dial in alkaline orange shifts)",
+      "Separate small jar for iron water",
+      "Thermometer",
+      "Drying screen or paper for the harvested plant"
+    ],
+    steps: [
+      "Harvest only where it is legal and you have permission — an occurrence on the map is not harvest permission. Greenthread is abundant and reseeds readily, so this is a light tip-harvest: snip a modest amount of flowering stems a few inches above the soil so the perennial crown regrows, leave plenty of seed heads standing, and skip protected, posted, or tribal land unless expressly permitted.",
+      "Spread the cut plant in a single layer out of direct sun and air-dry until crisp (1-7 days), or use already-dried Navajo/Hopi tea bundles. Crumble or roughly chop to roughly 40 g per gallon of intended bath.",
+      "Mordant the fiber first: dissolve ~10 g alum (and ~7 g cream of tartar, if using) per 100 g fiber in warm water in the dedicated pot, add the wetted fiber, hold near a simmer (do not boil wool hard) for about an hour, then let it cool. Wear gloves.",
+      "Make the dyebath: cover the dried plant with water in the dedicated pot, bring to a gentle simmer, and hold 45-60 minutes until the liquid is a strong golden-orange. Strain out all plant matter through the mesh bag.",
+      "Add the mordanted, still-damp fiber to the strained, warm bath. Hold at a low simmer (not a rolling boil) for about an hour, stirring gently and turning the fiber for even color. For deeper, more even shades, turn off the heat and let it steep as it cools, even overnight.",
+      "Optional color shifts, done in small test amounts first: stir in a little alkali to push the bath toward bright orange, or add a splash of iron water at the very end to sadden it toward olive-green and rust. Add slowly and watch the color change.",
+      "Lift the fiber out, let it drain, and rinse in cool water with a drop of pH-neutral soap until the water runs clear. Dry away from direct sunlight to slow fading."
+    ],
+    modifiers: "Greenthread is responsive to the pot chemistry. Plain alum-mordanted fiber gives warm yellow to reddish-yellow. Pushing the bath alkaline with washing soda or wood-ash lye shifts it toward bright orange; mild acid keeps it on the clearer-yellow side (see [[tech-acid-base|acid & base shifters]]). A small amount of iron water (ferrous acetate, see [[tech-iron-acetate|iron water]]) saddens the color into olive-greens and deeper rust-browns — add sparingly, since excess iron dulls the hue and can embrittle wool. Combining greenthread with other dye plants or a cochineal afterbath is the traditional route to coral and gold tones.",
+    preservation: "Use the dyebath fresh for the best, brightest color. A strained bath can be refrigerated in a labeled, non-food container for a few days, but it will mold and sour at room temperature within a day or two, especially in warm weather — discard if it smells off or grows a film. Dried greenthread itself keeps for a year or more in a sealed jar away from light and humidity, so it is easier to store the plant than the liquor. See [[tech-preserving|preserving dye material]].",
+    yield: "Because greenthread is nearly all stem with sparse foliage, it is not a high-yield dyestuff — expect to gather a substantial loose armful of fresh plant to dry down to the ~40 g needed for a single gallon bath and ~100 g of fiber. That bath gives a clear but not saturated yellow-orange; deeper shades require a stronger plant-to-water ratio or repeated dips. One gallon comfortably handles a 100 g skein of wool.",
+    beyondInk: "Primarily a textile dye for wool, mohair, and other protein fibers, and historically used on cotton and even to color baskets in Southwestern weaving and basketry traditions. The strained, concentrated bath can also be used as a warm yellow-orange watercolor-style wash or stain on paper, though it is more fugitive on paper than on properly mordanted fiber; binding it with [[tech-gum-arabic|gum arabic]] helps for craft paints. Pair with [[dye-one-seed-juniper|one-seed juniper]] and other regional dyes for a Southwestern palette.",
+    safety: [
+      "This is a craft-dye recipe, not a cooking recipe — even though greenthread is also a traditional tea, mordant chemicals make the dyebath unsafe to drink.",
+      "Use dedicated non-food pots, utensils, and a scale reserved for dyeing; never return them to kitchen use.",
+      "Alum is a low-hazard mordant but is a mild irritant — wear gloves, avoid breathing the powder, and keep it away from children and pets.",
+      "If you use wood-ash lye or washing soda as an alkali shifter, it is caustic: wear gloves and eye protection, add it slowly, and never mix it with acids in a closed container.",
+      "Iron water can stain skin, clothing, and surfaces and weakens wool in excess — handle with gloves and add sparingly.",
+      "Work in a ventilated space and avoid boiling the bath hard, which can scorch the dye and felt wool.",
+      "Harvest ethic: this is a light tip-harvest of an abundant, free-reseeding native. Cut a few inches above the soil so the crown regrows, leave ample seed heads, and harvest only where it is legal and permitted — a map sighting is never harvest permission, and tribal and protected lands require explicit consent.",
+      "Greenthread is a culturally significant Indigenous plant (Diné/Navajo, Hopi, Pueblo, Apache). Approach it with respect and accurate attribution, not as a novelty."
+    ],
+    sources: [
+      {
+        title: "A Wandering Botanist — Plant Story: Hopi Tea Greenthread, Thelesperma megapotamicum (dye colors, cultural use, range)",
+        url: "http://khkeeler.blogspot.com/2021/08/plant-story-hopi-tea-greenthread.html"
+      },
+      {
+        title: "Grand Prismatic Seed — Navajo Tea: Growing, Drinking, Dyeing & Seed Saving (process, amounts, mordant, harvest method)",
+        url: "https://www.grandprismaticseed.com/blog/2018/1/20/navajo-tea"
+      },
+      {
+        title: "Southwest Desert Flora — Thelesperma megapotamicum, Hopi Tea Greenthread (botany, habitat, ethnobotanical dye use)",
+        url: "http://southwestdesertflora.com/WebsiteFolders/All_Species/Asteraceae/Thelesperma%20megapotamicum,%20Hopi%20Tea%20Greenthread.html"
+      }
+    ]
+  },
+  {
+    id: "dye-honey-mesquite",
+    plantId: "dye-honey-mesquite",
+    kind: "dye",
+    name: "Honey mesquite bark & gum dye",
+    category: "brown",
+    swatch: "#4a392a",
+    color: "Brown-to-black",
+    difficulty: "Beginner",
+    teaser: "Brown-black from bark & gum",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Honey mesquite throws a wide net of dark color from a tree most of South Texas treats as a thorny nuisance: its bark runs roughly 3.5% tannin, and the near-black gum it weeps from old wounds is rich enough that native desert dwellers of the Sonoran borderlands worked it into a black hair dye, while pitch-coated bark, boiled and strained, made the paint that decorated Maricopa pottery. Simmered, the fallen bark and gum give warm tan-to-brown on wool; meet that tannin with a little iron water and it strikes a deep grey-black, the same iron-tannate chemistry behind iron-gall ink. Best of all, you never have to wound a living tree — the shed bark, fallen limbs, and naturally exuded gum lying under any mesquite are dye enough.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Tannin browns are among the more honest naturals: mesquite is substantive on wool and holds up well to washing, and the iron-modified greys/blacks lean on stable iron-tannate rather than a fugitive pigment, so they keep their color better than most plant dyes. Lightfastness, though, is only moderate — expect some softening and warming under strong UV over the years, so keep finished textiles out of constant direct sun. As with all iron work, go light: excess iron is acidic and can weaken fiber and paper over decades (most dyers stay at or below ~4% iron weight-of-fiber)."
+    },
+    timeline: {
+      active: "45–75 min",
+      passive: "4–12 hr"
+    },
+    ingredients: [
+      {
+        item: "Fallen honey mesquite bark and small fallen wood (Neltuma glandulosa / Prosopis glandulosa)",
+        amount: "~8–12 oz (225–340 g) dry, broken small",
+        required: true,
+        note: "shed bark and twigs off the ground; chop or crush for better extraction"
+      },
+      {
+        item: "Naturally exuded dark mesquite gum/sap",
+        amount: "a few hardened lumps, ~1–3 Tbsp, if you find it",
+        required: false,
+        note: "the darkest color is in the near-black gum; dissolve in warm water — never cut a tree to get it"
+      },
+      {
+        item: "Water (soft/distilled best; hard water dulls tannin)",
+        amount: "enough to cover the bark, ~2–3 qt",
+        required: true,
+        note: ""
+      },
+      {
+        item: "Scoured wool or silk yarn/cloth",
+        amount: "up to ~3–4 oz fiber per batch",
+        required: true,
+        note: "protein fibers take tannin substantively; cotton/linen need a tannin-plus-alum pre-treat and read paler"
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "~10–15% weight-of-fiber, dissolved",
+        required: false,
+        note: "optional pre-mordant; deepens the brown and improves lightfastness, though tannin needs no mordant to bond"
+      },
+      {
+        item: "Iron water (homemade: rusty iron or steel wool steeped in vinegar)",
+        amount: "a small splash at a time, to taste",
+        required: false,
+        note: "shifts tan/brown toward grey then near-black; brew 1–2 days ahead and use sparingly"
+      },
+      {
+        item: "Gum arabic",
+        amount: "¼–½ tsp per cup, only if making ink",
+        required: false,
+        note: "for a reduced bark/gum writing ink — improves pen and brush flow"
+      }
+    ],
+    toolsRequired: [
+      "Dedicated (non-food) dye pot — tannin and iron stain permanently",
+      "Heavy gloves (mesquite thorns puncture; tannin sap stains skin)",
+      "Craft-only stir stick or tongs",
+      "Strainer/colander plus cloth or coffee filters",
+      "Glass jars for dye liquor and iron water"
+    ],
+    toolsOptional: [
+      "Outdoor burner (keeps tannin steam and stains out of the kitchen)",
+      "Loppers or a small saw for fallen limbs",
+      "Hammer or mallet to crack bark and wood",
+      "Small jar for brewing iron water",
+      "Kitchen scale (repeatable alum/iron dosing)",
+      "Apron and eye protection"
+    ],
+    steps: [
+      "Gather only where harvesting is permitted — occurrence is not permission, and even an encroaching mesquite may sit on land where collecting is restricted. Take shed bark, fallen limbs, and naturally exuded gum off the ground; do not strip, girdle, or wound a living tree to force sap. Watch for the long, sharp thorns and wear heavy gloves.",
+      "Break or crack the dry bark and wood small and put it in your dedicated pot with enough water to cover (~2–3 qt). If you found hardened dark gum, drop it in too — it carries the deepest color. Soak a few hours or overnight to soften.",
+      "Bring to a gentle simmer (not a hard boil) and hold 1–3 hours, topping up water as needed; longer and lower pulls more tannin. The liquor should darken to strong-tea or coffee color. Ventilate well or simmer outdoors.",
+      "Strain off the bark and wood, then strain again through cloth or a coffee filter into a clean pot to remove grit. This tannin liquor is your dye bath (or, reduced hard, the base for an ink).",
+      "Optional pre-mordant for richer, more lightfast color: in a separate non-food pot, dissolve alum at ~10–15% weight-of-fiber, enter clean wetted-out wool or silk, hold near a simmer ~45 min, and let it cool in the bath. Tannin will bond without it, but alum deepens the result.",
+      "Enter wetted fiber into the warm dye bath and hold below a boil 45–60 min (longer for darker), stirring gently. Let it cool in the bath for the deepest take. Rinse until the water runs clear and dry out of direct sun.",
+      "Optional — strike toward black: lift the fiber, stir a small splash of iron water into the bath (or into a separate after-bath), return the fiber briefly, and watch it 'sadden' from brown to grey-black. Add iron a little at a time — too much dulls the color and weakens the fiber. Rinse well afterward. (Brew iron water 1–2 days ahead.)",
+      "For a writing ink instead: skip the fiber, reduce the strained liquor by half to a third until it looks like strong coffee, stir in a pinch of gum arabic for flow and a touch of iron water for darkness, strain once more, and bottle. Label every jar clearly as non-food craft dye/ink."
+    ],
+    modifiers: "Mesquite is a tannin dye, so no mordant is strictly required on wool and silk — the tannin bonds on its own to give tan-to-brown. Iron is the headline modifier: [[tech-iron-acetate|iron water]] reacts with the tannins to form dark iron-tannate, shifting the color from brown through grey to near-black (the iron-gall reaction). Alum pre-mordant deepens and warms the brown and improves lightfastness; a mild acid ([[tech-acid-base|acid & base shifters]]) keeps it on the warm/golden side, while wood-ash alkali ([[tech-wood-ash-lye|wood-ash alkali]]) can push tannins browner and duller. More bark, harder reduction, and the dark gum all simply concentrate the color.",
+    preservation: "A dye bath is best used fresh; held in a capped jar in a cool dark place it keeps for days to a couple of weeks before it sours or grows mold — re-strain and use promptly, or freeze portions. A reduced bark-and-gum ink keeps far longer: cap it tight, store cool and dark, and add a couple of whole cloves or a splash of isopropyl alcohol against mold; re-strain if a film forms. The iron addition itself helps suppress mold. Dyed and well-rinsed fiber, dried out of the sun, is stable — the color is in the fiber, not a surface coat.",
+    yield: "From 8–12 oz of fallen bark and wood you get roughly 2–3 quarts of working dye bath — enough to give 3–4 oz of wool a warm tan-to-medium-brown, or a deeper grey-black with an iron after-bath. Exhaust baths give progressively paler tans, so plan light-to-dark batches. Reduced to ink, the same liquor yields only a small bottle (perhaps ¼–½ cup) of usable writing ink. Cotton and linen take far less color than wool and will read pale even with a tannin-plus-alum pre-treat.",
+    beyondInk: "Beyond textile dye, the same tannin liquor reduces into a brown-to-black writing and drawing ink (add gum arabic for flow, iron water for darkness), and pitch-coated mesquite bark, boiled down and strained, was the source of the paint that decorated Maricopa pottery. The dark exuded gum long served native desert dwellers of the borderlands as a black hair dye (the boiled tar worked into the hair with river clay or mud and washed out the next morning) and as a natural glue, and any tannin-rich bark like mesquite's is, by the same chemistry that dyes wool, a vegetable-tanning material for hides. Present these uses with respect for their Sonoran and South-Texas Indigenous origins — they are living cultural knowledge, not novelty. Related dark tannin work: [[dye-one-seed-juniper|one-seed juniper bark dye]].",
+    safety: [
+      "Craft dye and ink, not food — never taste it, keep it from children and pets, and label every jar clearly as non-food. Use a dedicated pot, spoon, and jars and do not return them to kitchen use; tannin and iron stain cookware permanently.",
+      "Sharp thorns: mesquite's stiff spines easily puncture skin and can cause stubborn, sometimes infected wounds — wear heavy gloves and eye protection when gathering and breaking up wood.",
+      "Tannin-rich sap and the dark gum stain skin and clothing; wear gloves throughout and protect work surfaces.",
+      "If you add iron, the iron-vinegar solution is acidic — wear eye protection, add it sparingly, and rinse fiber well. Iron-tannate is mildly acidic and over decades can weaken paper and fiber, so go light (stay at or below ~4% iron weight-of-fiber).",
+      "Simmering bark releases tannin-laden steam; ventilate well or work outdoors, and avoid breathing the vapor.",
+      "Occurrence is not permission — confirm you may collect at your spot before gathering, take only fallen/shed material, and never wound a living tree for gum or bark."
+    ],
+    sources: [
+      {
+        title: "Ethnobotany of Mesquite Trees — U.S. National Park Service",
+        url: "https://www.nps.gov/articles/000/ethnobotany-of-mesquite-trees.htm"
+      },
+      {
+        title: "Honey Mesquite (Prosopis glandulosa) — USDA NRCS PLANTS Database",
+        url: "https://plants.usda.gov/plant-profile/PRGL2"
+      },
+      {
+        title: "Dyes & Tannins (tannin dyes give tan, brown, grey and black) — Naturaldyes.ca",
+        url: "https://naturaldyes.ca/dyes-tannins"
+      }
+    ]
+  },
+  {
+    id: "dye-manzanita",
+    plantId: "dye-manzanita",
+    kind: "dye",
+    name: "Manzanita bark & leaf dye",
+    category: "brown",
+    swatch: "#9a5a4a",
+    color: "Rosy-brown",
+    difficulty: "Beginner",
+    teaser: "Rosy-brown from shed bark",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Run your hand down a manzanita's crooked limbs and the cool, muscular bark peels away in thin mahogany curls — the chaparral's signature red, shed freely each summer as the plant grows. Those curls and the leathery fallen leaves are loaded with tannin (the same astringent chemistry behind manzanita's traditional leaf teas), which binds straight onto wool and cotton without a mordant to give warm tans, fawns, and rosy browns. This is a substantive dye: the color is honest, earthy, and forgiving, drawn entirely from material the shrub has already let go. Treat the genus as a gift to glean, never to cut — many manzanitas are common chaparral workhorses, but a good number are narrow endemics found on a single ridgeline.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Tannin browns from manzanita are on the more durable end of plant colors — they bind substantively and resist fading better than fugitive flower or berry dyes, and an alum or (especially) iron mordant improves fastness further. Even so, the bare tannin brown is only moderately lightfast: expect noticeable softening and mellowing with prolonged direct sun over the years. This is a respectable everyday brown, not a guaranteed-permanent pigment. Don't oversell it."
+    },
+    timeline: {
+      active: "1.5-2 hr",
+      passive: "Overnight"
+    },
+    ingredients: [
+      {
+        item: "Shed manzanita bark (Arctostaphylos spp.)",
+        amount: "100-200 g dry, roughly equal weight to your fiber (1:1 ratio of dyestuff to fiber, or more for deeper shades)",
+        required: true,
+        note: "Gather ONLY naturally shed bark curls from the ground or peeling loosely from common species. Never strip, cut, or wound a living plant."
+      },
+      {
+        item: "Fallen manzanita leaves",
+        amount: "A few large handfuls, alone or combined with the bark",
+        required: true,
+        note: "Leathery fallen leaves are tannin-rich and can be used with the bark or on their own for a slightly greener-brown. Fallen berries add a touch more warmth if available."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover material generously, then enough to submerge fiber in the strained bath",
+        required: true,
+        note: "Soft or rainwater keeps tones clear; hard water shifts shades slightly."
+      },
+      {
+        item: "Fiber to dye (wool, silk, or cotton)",
+        amount: "100-200 g",
+        required: true,
+        note: "Protein fibers (wool, silk) take tannin browns most readily; cotton/linen take them too thanks to the high tannin. Scour clean first."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "8-12% of fiber weight, dissolved for premordanting",
+        required: false,
+        note: "Optional. Manzanita is substantive and needs no mordant, but an alum premordant brightens and warms the brown and improves wash-fastness."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an after-bath",
+        required: false,
+        note: "See [[tech-iron-acetate|iron water]]. Saddens rosy-brown toward gray-brown and taupe; use sparingly — iron can embrittle wool and silk."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never used for cooking afterward)",
+      "Dedicated stirring spoon or stick",
+      "Nitrile or rubber gloves",
+      "Strainer or mesh bag for removing plant material",
+      "Heat source (stove or outdoor burner)"
+    ],
+    toolsOptional: [
+      "Kitchen scale for weighing fiber and dyestuff",
+      "Separate jar/bucket for an iron after-bath",
+      "pH strips to track acid/alkali shifts",
+      "Tarp or sheet for collecting shed bark",
+      "Mortar or hammer to crush dried bark for faster extraction"
+    ],
+    steps: [
+      "Glean only where harvesting is permitted — occurrence on a map is not permission, and rules differ on public, tribal, and private land. Collect ONLY naturally shed bark curls and fallen leaves (and fallen berries) from COMMON manzanita species. Recommend at the genus level but never dig, cut, or strip a living plant: many Arctostaphylos are narrow endemics, and even common species are slow-growing chaparral anchors.",
+      "Dry your gleaned bark and leaves if storing, or use fresh. Tear bark into small pieces and crumble or chop the leaves to expose more surface area; crushing dried bark speeds tannin extraction.",
+      "(Optional) Premordant your scoured fiber in alum at 8-12% of fiber weight: dissolve in warm water, add the wetted fiber, hold near a simmer about an hour, then cool. This is optional — manzanita binds without it — but it brightens and fixes the brown.",
+      "Place bark and leaves in your DEDICATED dye pot, cover generously with water, and soak overnight if you can for a stronger bath.",
+      "Simmer the plant material 1-2 hours (do not hard-boil tannin baths — a gentle simmer keeps tones clear). Let it steep and cool; longer steeping, even a day or two, deepens the brown.",
+      "Strain out all bark and leaves through a mesh bag or strainer so they don't mottle the fiber, returning the colored liquor to the pot.",
+      "Add your wetted fiber, bring to a low simmer, and hold 45-60 minutes, stirring gently for even uptake. Then let it cool in the bath — even soak overnight — for the deepest, most lightfast color.",
+      "(Optional modifier) Lift the fiber, then dip briefly in a separate iron after-bath to shift the rosy-brown toward gray-brown and taupe; rinse well afterward and use iron sparingly on wool/silk.",
+      "Rinse in cool water until it runs clear, wash gently with pH-neutral soap, and dry out of direct sun. Wear gloves throughout — tannin baths stain skin and tools."
+    ],
+    modifiers: "Manzanita is fundamentally a tannin brown, so it responds strongly to metal and pH shifters. An alum premordant warms and brightens it toward a clearer rosy-fawn. [[tech-iron-acetate|Iron water]] is the big lever: even a brief after-dip turns the rosy-brown to muted gray-brown, taupe, and near-charcoal as the iron reacts with the tannin (the same iron-tannin chemistry behind old inks). [[tech-acid-base|Acid & base shifters]] nudge the hue — a splash of vinegar can pull tones slightly warmer and pinker, while a base (a pinch of soda ash, or a caustic wood-ash lye used with care) pushes toward deeper, duller browns. Because the dyestuff is already tannin-rich, you rarely need to add extra tannin; if anything, manzanita itself can serve as the tannin step for other dyes. For a related shed-material brown in the same chaparral palette, see [[dye-one-seed-juniper|one-seed juniper]].",
+    preservation: "The dried bark and leaves keep for years in a paper bag or jar somewhere dry — tannin is a natural preservative, so well-dried material rarely spoils. The liquid dye bath is best used within a few days: like any plant decoction it will eventually grow mold and turn sour, so refrigerate it in a sealed (non-food) jar if you must hold it, and discard if it smells off or develops fuzz. You can also concentrate a strong batch and freeze it. On the fiber itself the color is reasonably stable once washed and dried; an alum mordant improves its wash-fastness.",
+    yield: "Expect soft tans through warm rosy-browns rather than saturated color — this is a quiet, earthy dye. A 1:1 ratio of dry dyestuff to fiber gives a medium fawn-brown; pushing toward 2:1 plus an overnight soak gives the deepest rosy-browns. One pot of bath comfortably dyes 100-200 g of fiber, and you can often re-use the strained bath for a second, paler \"exhaust\" batch. Bark tends toward warmer rosy tones, leaves toward greener-browns, so blend to taste.",
+    beyondInk: "Beyond textiles, manzanita's tannin liquor makes a warm wash for paper, basketry fibers, and wood, and is closely related to leather tanning — Arctostaphylos leaves and bark have a documented history as a vegetable-tanning material, and Indigenous Californian peoples including the Pomo, Wintu, and Miwok long used manzanita's tannin-rich leaves both to tan hides and, brewed as an astringent leaf tea, as medicine. Concentrated and bound with [[tech-gum-arabic|gum arabic]], the bath can serve as a watercolor-style wash, and reacting it with iron yields a brownish-black iron-tannin ink in the same family as oak-gall inks. As a high-tannin material it also doubles as the tannin mordant step for dyeing cotton and linen with other plants.",
+    safety: [
+      "This is a CRAFT dye, not food. Even though manzanita is non-toxic and has edible berries, dye baths are concentrated and processed with non-food tools — never taste, drink, or cook with the dye or its equipment.",
+      "Use a DEDICATED dye pot, spoon, strainer, and jars kept separate from kitchenware; tannin stains and metal mordants make them unsafe for food afterward.",
+      "Wear gloves: strong tannin baths stain skin and nails brown for days, and any iron after-bath is an irritant.",
+      "Simmer in a ventilated space and avoid inhaling steam from long-boiling plant baths.",
+      "If you use iron water, alum, soda ash, or a wood-ash lye, store and label them clearly out of reach of children and pets; soda ash and lye are caustic, and all of these are skin and eye irritants — handle them accordingly.",
+      "Harvest ethic is a safety-and-stewardship rule, not a suggestion: glean only shed bark and fallen leaves from common species, never cut or strip living plants, and never assume a sighting grants permission to harvest — confirm land rules first. Several Arctostaphylos are rare endemics, so when in doubt, observe only."
+    ],
+    sources: [
+      {
+        title: "SkillCult — Vegetable Tanning Materials (Arctostaphylos / manzanita & uva-ursi as tannin sources)",
+        url: "https://skillcult.com/blog/tanningmaterials"
+      },
+      {
+        title: "US Forest Service — Celebrating Wildflowers: Native Plant Dyes (substantive/tannic-acid dyes and Indigenous dye knowledge)",
+        url: "https://www.fs.usda.gov/wildflowers/ethnobotany/dyes.shtml"
+      },
+      {
+        title: "Botanical Colors — 10 Natural Dye Extracts You Can Also Use as a Mordant (substantive tannin dyeing)",
+        url: "https://botanicalcolors.com/10-natural-dye-extracts-you-can-also-use-as-a-mordant/"
+      },
+      {
+        title: "Wikipedia — Arctostaphylos (genus overview, common vs. narrow-endemic species)",
+        url: "https://en.wikipedia.org/wiki/Arctostaphylos"
+      }
+    ]
+  },
+  {
+    id: "dye-one-seed-juniper",
+    plantId: "dye-one-seed-juniper",
+    kind: "dye",
+    name: "One-seed juniper dye & ash mordant",
+    category: "brown",
+    swatch: "#7a6a4a",
+    color: "Tan/brown + an ash mordant",
+    difficulty: "Beginner",
+    teaser: "Tan/brown plus a built-in mordant",
+    toxic: false,
+    educationalOnly: false,
+    hook: "One-seed juniper is the gnarled, blue-berried tree that carpets the pinyon-juniper woodlands of the Colorado Plateau and the desert Southwest — one of the most abundant trees in Arizona, New Mexico, Utah, and west Texas. Its shed bark, fallen twigs, and ripe cones are rich in tannins that simmer into warm tans and tea-browns on wool, with little or no separate mordant needed. The plant carries a second gift Diné (Navajo) dyers have used for generations: the pale ash of burned green juniper needles, steeped in water, makes an alkaline mordant that stands in for alum and deepens and sets many native dye colors. It is a self-contained dye-and-mordant kit growing wild across the high desert — and a craft dye only, never a food.",
+    lightfastness: {
+      rating: "moderate",
+      note: "The bark and twig browns come from tannins, which bond reasonably well to wool and resist fading better than most flower colors, but they are not bombproof — expect tan/brown to soften and dull over years in strong sun. The juniper-ash mordant and a follow-up iron dip both improve wash- and lightfastness; berry-derived colors are the most fugitive of the three. Test a sample in a sunny window before committing a finished piece."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "1-3 days"
+    },
+    ingredients: [
+      {
+        item: "Shed juniper bark and fallen twigs (one-seed juniper, Juniperus monosperma)",
+        amount: "Roughly equal dry weight to the fiber you plan to dye (1:1) for a solid tan; up to 2:1 for deeper brown",
+        required: true,
+        note: "Use stringy bark that has already sloughed off and twigs from the ground — see step 1 on ethic and permission. Chop or tear into small pieces so the tannins extract."
+      },
+      {
+        item: "Ripe juniper 'berries' (the soft blue female cones)",
+        amount: "1-2 handfuls, optional, crushed",
+        required: false,
+        note: "Add to the bark bath to nudge the brown warmer. Craft use only — do not eat dye material, and never confuse one-seed juniper with toxic savin juniper (J. sabina). Edible juniper as a spice is a separate, food-catalog use."
+      },
+      {
+        item: "Wool yarn or fleece (or another protein fiber)",
+        amount: "Any amount; weigh it dry to set your plant ratio",
+        required: true,
+        note: "Wool takes juniper tannins best. Cotton and linen will dye paler and benefit most from the ash mordant. Scour (wash) the fiber first so it wets out evenly."
+      },
+      {
+        item: "Green juniper needles, burned to ash, for the traditional Diné (Navajo) alkali mordant",
+        amount: "1 cup of hot green-needle ash to 2 cups boiling water",
+        required: false,
+        note: "Burn fresh green foliage to a clean pale ash, then steep in boiling water; the strained ash-water is the mordant. This is a low-grade lye — caustic and alkaline; see step 5 and the safety list for the full method. Soda ash is a store-bought stand-in."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an after-bath",
+        required: false,
+        note: "Dipping juniper-dyed wool in iron water saddens the tan toward gray-brown and improves lightfastness. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "Per standard wool mordanting, ~10-15% of fiber weight",
+        required: false,
+        note: "A conventional mordant if you are not using juniper ash; brightens and helps set the color."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never reused for cooking)",
+      "Heat source / stove or outdoor burner",
+      "Dedicated stirring stick or spoon",
+      "Fine-mesh strainer or cheesecloth",
+      "Rubber or nitrile gloves",
+      "Kitchen scale for weighing fiber and plant material"
+    ],
+    toolsOptional: [
+      "Heat-proof bucket or second pot for steeping ash-water mordant",
+      "Safety goggles and apron (essential if making the lye-like ash mordant)",
+      "pH strips to check ash-water alkalinity",
+      "Metal tongs for lifting hot fiber",
+      "Old jar for storing iron water"
+    ],
+    steps: [
+      "Harvest only where collecting is permitted — occurrence on the map is not harvest permission, and much of the pinyon-juniper range is tribal land, national forest, or BLM ground with its own rules. Favor fallen material: gather stringy shed bark, dropped twigs, and naturally fallen cones from the ground rather than stripping or cutting living trees. One-seed juniper is abundant and slow-growing in harsh country, so take a modest share and leave bark on standing trees intact.",
+      "Confirm your tree. One-seed juniper has scale-like foliage and single-seeded blue cones; never substitute ornamental savin juniper (J. sabina), which is toxic. Brush off dirt and let damp bark dry. This is a craft dye — keep all material and tools out of the kitchen.",
+      "Pre-soak the chopped bark and twigs in water for 1-3 days to soften them and start releasing tannins. Use your dedicated dye pot and roughly equal dry weight of plant to fiber.",
+      "Simmer the soaked plant material (do not hard-boil) for about an hour, then let it cool — ideally overnight — for deeper extraction. Strain out the solids through mesh or cheesecloth, reserving the amber-brown liquid as your dyebath.",
+      "If using the juniper-ash mordant, prepare it separately and safely: burn fresh green needles to a pale ash, steep 1 cup hot ash in 2 cups boiling water, let settle, and decant the clear liquid. Add the ash to the water (never water to ash), work outdoors or with good ventilation, and wear gloves and goggles — this ash-water is a low-grade lye that can burn skin and eyes. Simmer scoured wool in the diluted ash-water (or in alum) before dyeing, or add a measured amount to the dyebath.",
+      "Add the wetted-out, mordanted fiber to the warm dyebath and simmer gently for at least 30-60 minutes, stirring occasionally; longer steeping and overnight cooling in the bath give richer browns. Keep the temperature below a rolling boil so wool does not felt.",
+      "Lift the fiber with gloves, rinse in cool water until it runs clear, and dry out of direct sun. Optional: for a grayer, more lightfast brown, dip the rinsed fiber briefly in iron water, then rinse again.",
+      "Neutralize and dispose of any leftover ash-water lye responsibly — dilute heavily and pour down a drain or toilet, not onto soil or plants. Clean your dedicated tools and keep them separate from food use."
+    ],
+    modifiers: "Juniper's color is tannin-based, so it responds strongly to metal and pH shifts. [[tech-iron-acetate|Iron water]] is the big lever: a brief after-bath dip turns warm tan into cooler gray-brown to near-charcoal and noticeably improves fastness. Alkali — the juniper-ash mordant or another wood-ash lye — deepens and warms the browns and helps set the dye on wool and (especially) cellulose; a strongly [[tech-acid-base|acid rinse]] tends to lighten and brighten toward yellow-tan. Alum mordanting gives a cleaner, slightly brighter tan than no mordant at all. Because juniper is already tannin-rich, it can also serve as the tannin step under other dyes rather than needing added tannin.",
+    preservation: "The strained dyebath is best used fresh; held in a sealed jar in a cool place it will keep for a few days but soon grows mold and sours, and exhausted tannin baths lose strength quickly. Dried shed bark and twigs store almost indefinitely in a paper bag or box kept dry, so it is easy to stockpile fallen material across seasons. The ash-water mordant should be made as needed and not stored long — it is caustic, and dissolved alkali weakens over time; keep any reserved portion clearly labeled away from food and children. Dyed and fully rinsed wool is stable in storage; protect it from moths and strong sun like any natural-dyed textile.",
+    yield: "A 1:1 ratio of plant to fiber gives a soft, even tan on a skein of wool; pushing to 2:1 and re-dipping builds toward a deeper tea-brown but rarely a truly dark or saturated color without an iron after-bath. Expect muted, earthy results rather than vivid ones — juniper is a quiet, dependable woodland brown, not a showy dye. A grocery-bag's worth of dry bark and twigs (a few hundred grams) is enough to dye one to two 100 g skeins. One batch of green-needle ash (a packed cup) makes enough mordant for a skein or two and is meant to be used up, not banked.",
+    beyondInk: "Beyond wool, juniper tannin dyes silk and other protein fibers well and will tint cotton and linen to softer tans, especially with the ash or alum mordant. The browns work for skein dyeing, fiber for spinning, and overdyeing — laid under indigo or over a yellow it shifts toward olive and khaki. The tannin-rich bath also doubles as a pre-mordant tannin bath for cellulose fibers headed toward other dyes. Diné and other Southwestern weavers have long used juniper both as a dye and as the ash mordant behind a whole palette of native plant colors; present and credit that tradition with respect rather than as a novelty. As a brown earth-tone it suits basketry materials, paper, and rustic textile work; it is not a reliable artist's lightfast pigment.",
+    safety: [
+      "Craft dye only — never food. Do not eat any dye material or drink the dyebath, and keep all juniper dye work separate from cooking.",
+      "Use a DEDICATED non-food pot, spoon, and strainer reserved for dyeing; never return them to kitchen use.",
+      "Not savin juniper: never substitute or contaminate your harvest with ornamental savin juniper (Juniperus sabina) or cade (J. oxycedrus), which are toxic. Positively identify one-seed juniper before harvesting.",
+      "The green-needle ash mordant is a low-grade lye — strongly alkaline and caustic. Wear gloves and eye protection, mix and steep it outdoors or with ventilation, add ash to water (not water to ash), and keep it off skin, eyes, and clothing.",
+      "Burning needles produces smoke and embers — burn green foliage safely outdoors, away from dry brush and fire restrictions, and never during a burn ban in fire-prone country.",
+      "Wear gloves throughout; tannin and iron stain skin and surfaces, and hot dyebaths can scald.",
+      "Neutralize and dilute leftover ash-water before disposal; pour down a drain, not onto soil or plants.",
+      "Occurrence is not permission: confirm you may legally collect at the site. Much of the pinyon-juniper range is tribal, federal, or state land with specific rules — honor them and Indigenous collecting rights.",
+      "Distinct from the food catalog's juniper-berry spice entry — this bark-and-ash use is for dyeing, not seasoning."
+    ],
+    sources: [
+      {
+        title: "Navajo Native Dyes: Their Preparation and Use (Bryan & Young) — Indian Arts and Crafts Board / Univ. of Arizona weaving archive",
+        url: "https://www2.cs.arizona.edu/patterns/weaving/monographs/bys_dyes.pdf"
+      },
+      {
+        title: "Griffin Dyeworks — Understanding Mordants: Juniper Ash",
+        url: "http://griffindyeworks.com/understanding-mordants/juniper.html"
+      },
+      {
+        title: "USDA PLANTS Database — Juniperus monosperma (one-seed juniper)",
+        url: "https://plants.usda.gov/plant-profile/JUMO"
+      }
+    ]
+  },
+  {
+    id: "dye-madrone",
+    plantId: "dye-madrone",
+    kind: "dye",
+    name: "Pacific madrone bark dye",
+    category: "brown",
+    swatch: "#a5604a",
+    color: "Pink-brown",
+    difficulty: "Beginner",
+    teaser: "Pink-brown from peeling bark",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Every summer the Pacific madrone does something almost no other tree does: it sheds its own skin. Sheets of thin, cinnamon-red bark curl and peel away to reveal the cool greenish satin beneath, littering the forest floor with ready-made dyestuff from July until the autumn rains. That shed bark is loaded with tannin, the same astringent chemistry that tans leather and bites into protein fibers, and it gives up soft peach-to-pink-brown tones in the dye pot. Because madrone is famously touchy about disturbance and prone to root rot, this is a dye you gather entirely from the ground — the tree does the harvesting for you.",
+    lightfastness: {
+      rating: "moderate",
+      note: "As a tannin-based dye, madrone bark is more durable than many fugitive plant pinks, but the warm peach/pink-brown still softens and browns with prolonged light exposure. An alum mordant noticeably improves lightfastness; an iron modifier also tends to lock in a steadier (grayer) tone. Expect a gentle shift over time rather than full permanence — don't oversell it for heavily sun-exposed pieces."
+    },
+    timeline: {
+      active: "2 hr",
+      passive: "1-3 days"
+    },
+    ingredients: [
+      {
+        item: "Naturally shed Pacific madrone bark",
+        amount: "Roughly equal dry weight to your fiber (~50-100% weight-of-fiber); more bark gives deeper, redder browns",
+        required: true,
+        note: "Use only thin, dry sheets fallen on the ground. Crumble or snap into small pieces so the tannins extract fully."
+      },
+      {
+        item: "Soft water",
+        amount: "Enough to cover bark and move the fiber freely (~4-8x fiber weight)",
+        required: true,
+        note: "Rainwater or filtered water keeps the pinks clean; very hard, iron-rich water will dull and brown the color on its own."
+      },
+      {
+        item: "Protein fiber (wool, silk) or cellulose (cotton, linen)",
+        amount: "Your project weight, pre-washed (scoured)",
+        required: true,
+        note: "Tannin dyes bond well to wool and silk; cotton/linen take it too but read cooler. Madrone is a substantive tannin dye and will stain fiber even without a mordant."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "8-10% weight-of-fiber",
+        required: false,
+        note: "Not strictly needed — madrone grips fiber on its own — but an alum mordant brightens the tone and meaningfully improves lightfastness."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash, added gradually",
+        required: false,
+        note: "Saddens the pink-brown toward gray-taupe and deep brown. See [[tech-iron-acetate|iron water]]. A little goes a long way and can dull the color to mud if overdone."
+      },
+      {
+        item: "Wood-ash lye or soda ash (alkali)",
+        amount: "Pinch, optional",
+        required: false,
+        note: "Shifts tannin tones warmer/redder. See [[tech-acid-base|acid & base shifters]] and [[tech-wood-ash-lye|wood-ash alkali]]. Caustic — handle with gloves and eye protection."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel, large enough for fiber to move freely)",
+      "Rubber or nitrile gloves",
+      "Long-handled spoon or stir stick (non-food)",
+      "Strainer or muslin/cheesecloth for removing bark",
+      "Heat source (stove or outdoor burner)"
+    ],
+    toolsOptional: [
+      "Second dedicated pot for a separate alum mordant bath",
+      "Kitchen scale for weighing bark and fiber",
+      "Jar of iron water for modifying",
+      "pH strips to track acid/alkali shifts",
+      "Thermometer to hold the bath just below a simmer"
+    ],
+    steps: [
+      "Harvest only where collecting is permitted — occurrence is not permission, and many parks and preserves prohibit removing any plant material. Gather ONLY bark sheets that have already fallen to the ground (peak shed is roughly July through the early-autumn rains). Never strip, cut, or peel bark from a living madrone: the species is sensitive to disturbance and prone to root rot, and wounding it invites disease. Take a modest share and leave plenty as habitat and leaf litter.",
+      "Break the dry shed bark into small pieces and cover with soft water in your dedicated dye pot. Soak overnight to begin loosening the tannins.",
+      "Bring the bark and water to a low simmer (do not hard-boil) and hold it gently for about an hour, then turn off the heat and let the bath steep overnight to pull the deepest color. The liquid should turn a tea-like red-brown.",
+      "Strain out all the bark through muslin so no grit remains, returning the clear dye liquor to the pot.",
+      "Optional but recommended for durability: pre-mordant your scoured, wetted-out fiber in a separate bath of alum at 8-10% weight-of-fiber — bring to ~180F/82C for an hour, then let it cool in the bath overnight before dyeing.",
+      "Add your thoroughly pre-wetted fiber to the strained dye bath. Heat slowly to just below a simmer and hold for about an hour, moving the fiber gently and evenly so it dyes without blotches.",
+      "Turn off the heat and let the fiber cool in the bath — ideally overnight — to take up the most color. Madrone deepens noticeably as it sits.",
+      "To modify: lift the fiber out, then dip it into a weak iron-water bath to push the color toward gray-brown and taupe, or add a pinch of alkali to warm it toward red — wear gloves and eye protection for both. Rinse in cool water until it runs clear and dry out of direct sun.",
+      "Always work with dedicated non-food pots, utensils, and gloves — this is a craft dye, not food, and dye equipment should never return to the kitchen."
+    ],
+    modifiers: "Madrone bark is a tannin dye, so it responds strongly to iron. A splash of [[tech-iron-acetate|iron water]] (ferrous acetate) reacts with the tannins and saddens the warm pink-brown toward gray-taupe, olive-brown, and finally near-charcoal if you keep adding — go slowly, because too much turns it muddy. Alkali (a pinch of soda ash or [[tech-wood-ash-lye|wood-ash lye]]) warms the bath toward redder browns, while acid pulls it back toward paler peach; see [[tech-acid-base|acid & base shifters]]. An alum mordant doesn't dramatically change the hue but brightens and clarifies it and improves wash- and lightfastness. The leaves are a separate dyestuff that yield soft yellows rather than the bark's pink-brown.",
+    preservation: "Use the strained dye bath fresh for the best, clearest color. If you must hold it, refrigerate it in a labeled, dedicated non-food jar and use within a few days to a week — like most plant-tannin liquors it will eventually cloud, ferment, or grow mold, and a sour smell or surface fuzz means compost it. Dyed and fully dried fiber is stable and keeps indefinitely; store finished pieces out of direct sun to slow the inevitable fading. Spent bark can simply be composted.",
+    yield: "Highly variable and on the gentle side: a pot of shed bark roughly equal to your fiber weight typically dyes a comparable weight of wool or silk to a soft peach or pink-brown in a single bath. Cellulose fibers (cotton, linen) read cooler and lighter for the same bath. The first ('exhaust') bath is strongest; you can usually pull a second, paler bath of warm tan from the same bark before the tannins are spent. Because shed bark varies in age and thickness, run a small test skein before committing a large project.",
+    beyondInk: "Beyond dyeing yarn and cloth, madrone's tannin makes it useful as a natural mordant/tannin pre-treatment for cellulose fibers, helping later dyes bind. The same bark liquor can be brushed onto paper or wood as a warm, translucent stain, and concentrated tannin extracts have a long history in leather tanning. The soft pink-browns suit hand-dyed wool for weaving and felting, embroidery silks, and basketry materials. Madrone is a deeply important tree to many Coast Salish and other Pacific Northwest peoples, who have long gathered its berries for food and used its bark and leaves medicinally; approach the tree with that context and respect, and treat this craft-dye use as your own — not as a representation of any specific Indigenous tradition. For a related warm earth tone from another Western tree, see [[dye-one-seed-juniper|one-seed juniper]].",
+    safety: [
+      "This is a CRAFT dye, not food. Although madrone berries, bark, and leaves are non-toxic and have a documented history of food and medicinal use, this card is for craft dyeing only — keep all dye materials, pots, and utensils dedicated and out of the kitchen, and do not treat it as a foraging or medicine guide.",
+      "Use dedicated non-food equipment and wear gloves: tannin liquor and iron stain skin and surfaces, and iron and alum baths should never touch cookware you eat from.",
+      "Occurrence is not permission. A madrone on a map or in a park does not grant the right to collect from it — confirm collecting is allowed at your specific site before gathering anything.",
+      "Never strip, cut, or peel bark from a living madrone. The species is sensitive to disturbance and prone to fungal root rot; wounding it can kill the tree. Gather only naturally shed sheets from the ground.",
+      "Handle iron water and any wood-ash lye/alkali with care: alkalis are caustic and can irritate or burn skin and eyes. Wear gloves and eye protection, add them slowly, and keep them clearly labeled away from food.",
+      "Simmer gently and ventilate the space; avoid boiling tannin baths dry. Let hot baths cool before handling, and keep dye materials away from children and pets."
+    ],
+    sources: [
+      {
+        title: "Honey Folk Clothing — Pacific Madrone Bark (Strawberry Tree) Natural Dyeing",
+        url: "https://www.honeyfolkclothing.com/findings-foraging/pacific-madrone-barkstrawberry-tree-natural-dyeing"
+      },
+      {
+        title: "USDA NRCS Plant Guide — Pacific Madrone (Arbutus menziesii)",
+        url: "https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_arme.pdf"
+      },
+      {
+        title: "Permies Dyeing Forum — West Coast Madrone (Arbutus menziesii) for dyeing",
+        url: "https://permies.com/t/239493/dyeing/West-Coast-Madrone-dyeing-Arbutus"
+      }
+    ]
+  },
+  {
+    id: "dye-plains-coreopsis",
+    plantId: "dye-plains-coreopsis",
+    kind: "dye",
+    name: "Plains coreopsis (dyer's tickseed) dye",
+    category: "yellow",
+    swatch: "#d98a1f",
+    color: "Gold-to-orange",
+    difficulty: "Beginner",
+    teaser: "Reliable gold to orange",
+    toxic: false,
+    educationalOnly: false,
+    hook: "The Latin name says it outright — tinctoria, \"used for dyeing\" — and few wildflowers earn it so honestly. The maroon-eyed yellow blooms are loaded with flavonoids and chalcones — luteolin and quercetin for clear yellow, and marein, okanin, and a touch of the orange dyestuff morin for warmth — so a bath of them gives some of the most reliable, saturated gold-to-orange a beginner can pull from a plant, deepening to rust and bronze on wool and silk, or to a warm red-brown when iron is added. It is also a documented dye plant of several Indigenous nations, including the Zuni, Cherokee, and White Mountain Apache, who used the blossoms (worked differently than the alum-yellow here) for rich reds. A heavy-reseeding annual that thrives in disturbed ground and cultivated patches, it is the responsible stand-in for the range-restricted giant coreopsis (sea dahlia), a plant best left wild and unpicked.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Coreopsis is one of the better flower dyes for permanence, but it is still a flavonoid yellow, not an archival pigment — sources rate it anywhere from poor to good depending on fiber, mordant, and depth of shade. In documented lightfast tests it outlasts fugitive berry and many flower dyes, holding well on alum-mordanted wool, silk, and linen, while paler shades and cotton fade faster. Treat finished pieces as you would any natural dye: keep them out of prolonged direct sun, and don't oversell the orange as permanent."
+    },
+    timeline: {
+      active: "~1 hr",
+      passive: "1-2 days (mordant + soak)"
+    },
+    ingredients: [
+      {
+        item: "Coreopsis tinctoria flower heads in bloom (fresh, or dried)",
+        amount: "roughly equal weight of flowers to fiber (100% WOF) for orange tones; less for paler yellow",
+        required: true,
+        note: "fresh flowers are bulky — pack them; dried flowers store well and dye just as strongly by weight"
+      },
+      {
+        item: "Water (tap or rain)",
+        amount: "enough to cover the flowers and move the fiber freely",
+        required: true,
+        note: ""
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) for mordant",
+        amount: "about 10-12% of the dry weight of the fiber",
+        required: false,
+        note: "strongly recommended on plant (cellulose) fibers and for wash/lightfastness; protein fibers take some color even unmordanted, but alum brightens and fixes it"
+      },
+      {
+        item: "Soda ash (washing soda) — for cotton/linen only",
+        amount: "about 2% of fiber weight, added to the alum mordant bath",
+        required: false,
+        note: "helps the alum bond to cellulose fibers; skip for wool and silk"
+      },
+      {
+        item: "Iron water (iron acetate — rusty objects or steel wool steeped in vinegar + water)",
+        amount: "a small splash as an after-bath dip, to taste",
+        required: false,
+        note: "shifts gold/orange toward olive, bronze, and red-brown; a little goes a long way and over-iron dulls and can weaken fiber"
+      }
+    ],
+    toolsRequired: [
+      "A non-food pot reserved for craft dyeing",
+      "Heat source",
+      "Craft-only spoon or stirring stick",
+      "Strainer or sieve, plus a cloth/coffee filter for fine straining",
+      "Gloves (mordants and dye stain and irritate skin)",
+      "A separate non-food container for the alum mordant bath"
+    ],
+    toolsOptional: [
+      "Kitchen scale to weigh flowers and fiber",
+      "Mesh bag or muslin to hold flowers in the bath",
+      "Separate small jar for making and storing iron water",
+      "pH strips (small pH shifts change the hue)",
+      "Apron and a covered work surface",
+      "Thermometer"
+    ],
+    steps: [
+      "Harvest open flower heads only where collecting is permitted — a sighting or map dot is not harvest permission; on public or protected land confirm the rules first. This is a light tip-harvest: snip blooms from a heavy-reseeding patch (ideally cultivated or weedy ground) and leave plenty to set seed. Use plains coreopsis, not the rare giant coreopsis / sea dahlia, which should be observed and left wild.",
+      "Pre-mordant your clean, wetted fiber for best and most lightfast color: dissolve alum at about 10-12% of the fiber's dry weight in warm water (for cotton or linen, also add ~2% soda ash), add the damp fiber, hold near 180F / 80C for about an hour, then let it cool in the bath. Wool and silk will take color without this, but mordanting brightens and fixes it.",
+      "Put on gloves. Place the flowers in your dedicated craft pot, cover with water, and either soak them several hours to overnight or heat straight away — soaking pulls more color out before you cook.",
+      "Heat the flowers gently to a low simmer (do not hard-boil; high heat can dull yellows toward brown) and hold 45-60 minutes until the bath is a deep red-orange. Strain out the spent flowers through a sieve and cloth so petals don't speckle the fiber.",
+      "Add your mordanted, wetted fiber to the strained dye bath. Warm gently and hold below a simmer for about an hour, turning for even color; for the deepest orange, let it cool and steep in the bath overnight.",
+      "Lift out, rinse in cool water until it runs clear, and dry away from direct sun. Expect bright yellow from a weak bath through to pumpkin orange and rust at high flower-to-fiber ratios.",
+      "Optional color shift: for olive, bronze, and warm red-brown, briefly dip the rinsed fiber in dilute iron water (iron acetate), then rinse again — add iron sparingly, as excess dulls the color and can weaken fibers. A small acid or alkali adjustment to the bath also nudges the hue (see modifiers).",
+      "Clean up: keep all mordant and dye tools separate from kitchenware. Cooled, dilute spent dye can generally go down the drain with plenty of water; dispose of alum and especially iron baths per your local rules rather than onto garden beds."
+    ],
+    modifiers: "Coreopsis is unusually responsive to chemistry. Mordant choice sets the base: alum gives clear, bright yellow-to-orange, while an iron mordant (or an after-dip in [[tech-iron-acetate|iron water]]) saddens it toward olive, bronze, and rich red-brown — the most useful shift for this plant. The bath is also pH-sensitive ([[tech-acid-base|acid & base shifters]]): a touch of acid (vinegar) tends to hold or warm the yellow, while alkali (a pinch of washing soda or [[tech-wood-ash-lye|wood-ash alkali]]) pushes toward deeper orange-red but should be used cautiously on wool. Higher flower-to-fiber ratios and longer steeping move the color from pale yellow all the way to saturated orange.",
+    preservation: "This card is about dyeing fiber rather than bottling a liquid, but a leftover dye bath can be saved short-term: refrigerate it and use within a few days, or it will ferment and mold. Concentrated extract can be frozen, or the flowers themselves dried and stored airtight for a year or more — dried coreopsis dyes essentially as well as fresh, by weight. Always label any stored bath clearly as non-food craft material.",
+    yield: "A roughly equal weight of flowers to fiber (about 100% WOF) yields solid orange tones; halve that for clear yellow, and push higher for deep rust. As a rough field figure, a packed gallon of fresh blooms will strongly dye several ounces of wool or silk. Color is honestly variable with flower freshness, fiber, mordant, and pH — test a sample skein before committing a large piece. Like most flower yellows, the result is decent but not bulletproof: see lightfastness.",
+    beyondInk: "Primarily a textile dye, coreopsis shines on protein fibers (wool, silk, alpaca) and works on cotton and linen with an alum/tannin pre-treat, giving everything from buttery yellow to pumpkin orange and, with iron, bronze and red-brown. The strained, reduced bath can also be used as a watercolor-style wash or made into ink with a gum-arabic binder ([[tech-gum-arabic|gum arabic]]), and the dried flowers are popular for bundle/eco-printing, where steamed blooms print their own orange directly onto cloth or paper. As with all natural color, fix and finish thoughtfully rather than expecting paint-grade permanence.",
+    safety: [
+      "This is a craft dye, not food. Don't taste the bath or extract, and keep dye, mordants, and tools away from children and pets — even though the flowers themselves are non-toxic, the alum and iron additives are not for ingestion.",
+      "Use dedicated non-food pots, spoons, and containers for both the mordant and the dye; mordant residues should never go back into cookware.",
+      "Wear gloves: hot dye and mordant baths stain skin and can irritate it, and alum is a mild irritant that shouldn't be inhaled as a powder — add it to water carefully and avoid breathing the dust.",
+      "Handle and store iron water (iron acetate) carefully: label it, keep the lid loose, store it away from children and pets, and add it sparingly, since excess iron dulls color and can weaken and embrittle fibers.",
+      "Heat gently and ventilate; avoid hard boiling, which both dulls the yellow and risks splashing hot dye.",
+      "Occurrence is not permission — confirm you're allowed to collect before harvesting, and take a light share so the patch reseeds. Choose plains coreopsis and leave the rare giant coreopsis (sea dahlia) wild.",
+      "Treat this plant's documented Indigenous dye traditions (e.g., Zuni, Cherokee, and White Mountain Apache) with respect and credit rather than as a novelty; learn from those communities' knowledge rather than appropriating it.",
+      "Dispose of spent mordant and especially iron baths according to local guidance; don't pour them onto garden soil or into streams."
+    ],
+    sources: [
+      {
+        title: "Natural Dye Cultivation Series: Dyer's Coreopsis — Farm & Folk",
+        url: "https://www.farmandfolk.com/blog/2024/1/7/natural-dye-cultivation-series-dyers-coreopsis"
+      },
+      {
+        title: "Naturally Dyeing with Dyer's Coreopsis (Coreopsis tinctoria) — Elka Textiles",
+        url: "https://www.elkatextiles.co.uk/blogs/all-blog-posts/naturally-dyeing-with-dyer-s-coreopsis-coreopsis-tinctoria"
+      },
+      {
+        title: "Coreopsis tinctoria — USDA PLANTS Database",
+        url: "https://plants.sc.egov.usda.gov/plant-profile/COTI3"
+      }
+    ]
+  },
+  {
+    id: "dye-alder",
+    plantId: "dye-alder",
+    kind: "dye",
+    name: "Alder bark dye",
+    category: "brown",
+    swatch: "#a85a3a",
+    color: "Orange-red-brown",
+    difficulty: "Beginner",
+    teaser: "Orange-red-brown from fallen bark",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Cut into a red alder limb and the cream-pale inner bark flushes rusty orange within minutes as the air oxidizes its phenols — the same reaction that lets the bark stain wool, basketry, and hide every shade from gold through orange-red to deep red-brown. Coast Salish peoples and many other Northwest nations worked red alder (Alnus rubra) bark into dyes for fishnets, cedar bark, paddles, and regalia, while in the Rockies and Sierra thinleaf/mountain alder (A. incana ssp. tenuifolia) gave a brown-to-orange-red used to darken hides; that knowledge is theirs, and this card draws on it with credit, not as novelty. Red alder is one of the fastest pioneer trees on the West Coast — a nitrogen-fixing colonizer of road-cuts, slides, and clearings that coppices hard when cut — so a forager working fallen limbs and prunings is taking from a tree built to regrow. The color is tannin-rich and pleasant, but be honest about it: like most bark dyes it is moderate at best on the lightfastness scale, brightest the day you dye it.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Tannin gives alder better staying power than many flower or berry dyes, especially the iron-modified browns and blacks on cellulose, which are the most durable outcomes. But be realistic: bark dyes are at best moderately lightfast, and the bright golds and oranges fade fastest — expect noticeable softening over time. Keep finished work out of prolonged direct sun, and treat any bright result as something that will mellow rather than hold."
+    },
+    timeline: {
+      active: "3-5 hr",
+      passive: "1-4 weeks"
+    },
+    ingredients: [
+      {
+        item: "Inner bark of red alder or thinleaf/mountain alder",
+        amount: "Roughly equal weight to dry fiber for a medium shade; 1.5-2x for deep red-brown (e.g. ~200-400 g bark per 200 g wool)",
+        required: true,
+        note: "Take from fallen limbs, storm-down, or coppice/trim prunings — never girdle a living trunk. The orange-staining inner bark and cambium hold the color; the gray outer bark adds tannin and browns."
+      },
+      {
+        item: "Water (soft/rainwater preferred)",
+        amount: "Enough to cover bark generously, ~6-8x its volume",
+        required: true,
+        note: "Hard water dulls and browns the color; rain or distilled keeps it brighter."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "~10-12% of dry fiber weight, with ~6% cream of tartar for wool",
+        required: false,
+        note: "Pre-mordant protein fibers (wool/silk) for clearer, more saturated and slightly more durable color. Alder's own tannin already helps bind to cotton/linen, so cellulose can be dyed with little or no metal mordant."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an afterbath, to taste",
+        required: false,
+        note: "Saddens and deepens orange-brown toward gray-brown, olive, and near-black. Add sparingly — iron is easy to overdo and can harshen wool. Not food-safe; keep it on dedicated craft tools."
+      },
+      {
+        item: "Wood-ash lye / alkaline ferment",
+        amount: "Enough to bring the soak to about pH 9-10",
+        required: false,
+        note: "An alkaline ferment/soak shifts and warms the bath toward golden-yellow and helps extraction. Wear eye protection and gloves; lye is caustic. See the acid & base shifters technique [[tech-acid-base|acid & base shifters]] for handling pH safely."
+      },
+      {
+        item: "Vinegar or other mild acid",
+        amount: "A few tablespoons, to taste",
+        required: false,
+        note: "Nudges the bath back toward warmer orange/red tones; see [[tech-acid-base|acid & base shifters]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never reused for cooking)",
+      "Nitrile or rubber gloves (alder tannin stains skin orange-brown and persists)",
+      "Dedicated stirring stick or stainless spoon",
+      "Strainer or mesh bag for removing bark",
+      "Knife or drawknife for stripping inner bark"
+    ],
+    toolsOptional: [
+      "Eye protection and a second dedicated pot if using wood-ash lye",
+      "pH strips for managing an alkaline ferment",
+      "Scale for weighing bark and fiber",
+      "Buckets for cold-soaking/fermenting bark",
+      "Thermometer"
+    ],
+    steps: [
+      "Harvest only where you have permission — occurrence is not permission, and public-land foraging rules vary by unit. Favor fallen limbs, storm-down wood, and coppice or trim prunings; both red and thinleaf alder resprout vigorously when cut, but never girdle a living trunk for bark. Take modestly and spread your harvest across the abundant pioneer stands rather than stripping one tree.",
+      "Strip the inner bark while the wood is fresh: scrape off any loose gray outer bark, then peel or shave the orange-staining inner bark and cambium into a dedicated bucket or pot. Working fresh limbs is easiest; the inner bark will redden as it oxidizes in air.",
+      "Extract the color. Cover the bark with soft water and cold-soak it for at least several days to a few weeks (a longer soak markedly improves yield), then simmer in your dedicated pot for 2-4 hours and let it steep, ideally overnight or a couple of days. Do not boil hard or long — overcooking pushes the color toward flat brown. Optional: for warmer golds, soak/ferment the bark with wood-ash lye at about pH 9-10 first (eye protection and gloves on; lye is caustic).",
+      "Strain out the bark through a mesh bag or sieve, returning the colored liquor to the pot. Compost the spent bark.",
+      "Prepare the fiber. Wash it well; pre-mordant wool or silk with alum and cream of tartar for clearer, more durable color. Cotton and linen can often go straight in, since alder tannin helps it bind, though an alum or alum-tannin mordant deepens the result. Wet the fiber thoroughly before it enters the bath so the color takes evenly.",
+      "Dye. Add the wetted fiber and hold the bath around 80 C / 180 F (just below a simmer) for an hour or more, or steep cool over a day or two for a gentler take-up. Move the fiber occasionally for even color. Expect gold and tan from a weak bath, orange-red-brown from a strong one.",
+      "Optionally modify the color in a separate vessel: a splash of iron water saddens orange-brown toward gray, olive, and near-black; a little vinegar warms it back toward orange-red; wood-ash alkali pushes toward yellow. Add modifiers gradually and watch the shift.",
+      "Rinse the fiber in cool water until it runs clear and dry it out of direct sun. Because the color is only moderately lightfast, finished pieces last best kept out of strong, prolonged sunlight."
+    ],
+    modifiers: "Alder bark is a tannin dye, so it responds strongly to metal and pH shifts. Iron is the big lever: a small afterbath of iron water (ferrous acetate) saddens the warm orange-brown through gray-brown and olive to a near-black — the classic tannin-plus-iron reaction, easy to overshoot, so add it a little at a time. Alkali from wood-ash lye warms and yellows the bath and aids extraction; a mild acid such as vinegar (see [[tech-acid-base|acid & base shifters]]) nudges it back toward orange and red. Alum pre-mordant on wool and silk gives cleaner, more saturated color, while extra tannin or a longer, stronger bath drives the browns deeper.",
+    preservation: "The strained dye liquor keeps a few days at room temperature and a week or two refrigerated in a labeled, dedicated (non-food) jar, but tannin baths grow mold and go off readily — discard if it smells sour or grows a skin or fuzz. For longer storage, dry the stripped inner bark thoroughly and keep it in a paper bag away from damp; dried bark holds its dye potential for a year or more, and many dyers find a long cold-soak of cured bark actually extracts better than fresh. An alkaline ferment bath can be maintained and reused over days while it stays active. Dyed fiber itself is stable to handling; its main vulnerability is light, not spoilage.",
+    yield: "Honest expectations: roughly equal weights of bark and dry fiber give a medium tan-to-orange-brown on alum-mordanted wool; pushing to 1.5-2x bark and a strong, well-soaked bath yields the deeper red-browns. The bark is so abundant on fallen and coppiced material that color strength is usually limited by your patience with extraction, not by supply — undersoaked, single-simmer baths come out disappointingly pale (a noted pitfall), so plan for the long soak. A single bath will often give a second, paler exhaust dip. Lightfastness is the real limit on yield-of-value: count on moderate-to-fugitive permanence rather than archival color.",
+    beyondInk: "Beyond textile dyeing, alder bark's color has long been used to stain wood, basketry materials, hide and leather, quills, feathers, fishnets, and cordage — Northwest Coast peoples famously dyed cedar bark and netting with it, and mountain-alder bark darkened hides. Its high tannin content also makes it a useful tannin pre-mordant or \\\"base\\\" coat on cotton and linen before other plant dyes, and the bark (and the little woody cones/catkins) doubles as a tanning and ink-darkening tannin source. As with all bark colors, treat anything you make as a craft material, not food.",
+    safety: [
+      "Craft, not food: this is a dye recipe. Use a dedicated dye pot, spoon, strainer, and buckets reserved for craft use only, never returned to the kitchen.",
+      "Wear gloves. Alder tannin stains skin a stubborn orange-brown and the bath can irritate; tannin-rich liquids are drying and can sensitize skin over time.",
+      "If you use wood-ash lye or any alkali, it is caustic: wear eye protection and gloves, add it to water (not water to it), work in a ventilated space, and keep an acid like vinegar nearby to neutralize splashes.",
+      "Iron (ferrous) modifiers and mordants are not food-safe and can harm aquatic life — keep them off skin, out of the kitchen, and dispose of spent iron baths responsibly rather than down a storm drain or into a creek.",
+      "Do not ingest the dye, the bark decoction, or alum/iron solutions. Alder bark has traditional medicinal uses, but that is outside this craft recipe and is not advice here.",
+      "Simmer with ventilation; avoid prolonged hard boiling, which is both wasteful of color and produces more steam and odor.",
+      "Harvest ethically and legally: occurrence is not permission. Take from fallen limbs, downed wood, and coppice prunings; never girdle a live tree, and follow the rules of the land you are on."
+    ],
+    sources: [
+      {
+        title: "USDA Forest Service — Native Plant Dyes (Celebrating Wildflowers ethnobotany)",
+        url: "https://www.fs.usda.gov/wildflowers/ethnobotany/dyes.shtml"
+      },
+      {
+        title: "Riihivilla — Dyeing with Natural Dyes: Alder Bark Experiments (process, ratios, iron and lye results)",
+        url: "https://riihivilla.blogspot.com/2009/07/alder-bark-experiments.html"
+      },
+      {
+        title: "Washington Native Plant Society — Alnus rubra (red alder ecology and traditional bark dye uses)",
+        url: "https://www.wnps.org/native-plant-directory/23:alnus-rubra"
+      }
+    ]
+  },
+  {
+    id: "dye-rabbitbrush",
+    plantId: "dye-rabbitbrush",
+    kind: "dye",
+    name: "Rabbitbrush dye",
+    category: "yellow",
+    swatch: "#d6a82a",
+    color: "Bright Southwest yellow",
+    difficulty: "Beginner",
+    teaser: "The Southwest's most sustainable yellow",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Come late summer, rabbitbrush sets the high-desert roadsides of Arizona, New Mexico, Nevada, and Utah ablaze in gold — and that same flavonoid-rich bloom is one of the best-documented dye plants of the Southwest. For Diné (Navajo) and Hopi dyers it has long given a clear lemon-to-gold yellow for handspun wool, with the twigs and a switch of mordant pushing the bath toward deep gold and even olive green. Because you snip only the flowering tops and leave the whole shrub standing — and because the plant is staggeringly abundant — it's arguably the most low-impact yellow a dyer can gather in arid North America.",
+    lightfastness: {
+      rating: "moderate",
+      note: "The yellow comes from flavonoid pigments, which on an alum mordant hold up far better than a fugitive berry juice but still soften over time, especially in strong Southwest sun. Expect a gentle fade toward a paler, warmer gold over years of light exposure rather than the fast collapse of an anthocyanin ink. Alum-mordanted wool keeps its color best; unmordanted or iron-shifted shades are less stable. Honest framing: this is a reliable, lasting craft yellow, not a guaranteed-permanent one — keep finished pieces out of direct, all-day sun."
+    },
+    timeline: {
+      active: "1.5 hr",
+      passive: "2 hr"
+    },
+    ingredients: [
+      {
+        item: "Fresh rabbitbrush flowering tops",
+        amount: "Roughly equal weight to your dry fiber, up to twice the fiber weight for a deep gold (e.g. 100-200 g tops per 100 g wool)",
+        required: true,
+        note: "Snip the blooming yellow tops with a little twig; the more flower, the brighter the yellow. Use fresh, or dry on screens for later baths."
+      },
+      {
+        item: "Protein fiber (wool, mohair, silk) or yarn",
+        amount: "Any amount; scale plant and mordant to its dry weight",
+        required: true,
+        note: "Animal fibers take this dye best, as in the traditional handspun-wool tradition. Cotton/linen give weaker, less stable color."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover the tops, then enough to move the fiber freely (several quarts to a few gallons by batch size)",
+        required: true,
+        note: "Soft water is kind to the color; very hard or iron-rich water will dull and shift it."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "About 10-15% of the dry fiber weight (10-15 g alum per 100 g wool)",
+        required: true,
+        note: "The standard mordant for this dye and the one Diné and Hopi dyers traditionally pair with rabbitbrush; it brightens the yellow and anchors it to the fiber. Pre-mordant the fiber, or add to the bath in the traditional one-pot method."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "About 6% of fiber weight (optional)",
+        required: false,
+        note: "Added with alum on wool, it keeps the fiber soft and the yellow clear."
+      },
+      {
+        item: "Iron water",
+        amount: "A small splash, to taste",
+        required: false,
+        note: "\"Saddens\" the bright yellow toward olive and brassy green. See [[tech-iron-acetate|iron water]]; go slowly, iron is potent and harsh on fiber."
+      },
+      {
+        item: "Rabbitbrush bark/inner twigs",
+        amount: "A separate handful, for green experiments",
+        required: false,
+        note: "The bark and woody material lean the color toward green rather than clear yellow — a traditional second shade from the same shrub."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless or enamel, never used for food)",
+      "Dedicated stainless or wooden stirring spoon/stick",
+      "Strainer or mesh bag to remove plant material",
+      "Heat-resistant gloves and a dust mask for handling powdered alum",
+      "Heat source (stovetop or outdoor burner)"
+    ],
+    toolsOptional: [
+      "Second pot for pre-mordanting",
+      "Kitchen scale for weighing fiber, plant, and alum",
+      "Drying screens for storing tops",
+      "pH strips to track modifier shifts",
+      "Old towels for the wet fiber"
+    ],
+    steps: [
+      "Harvest only where collecting is permitted — a sighting or an iNaturalist pin is never harvest permission, and many public lands prohibit or restrict plant collection. Where it is allowed, light-harvest: snip just the blooming yellow tops (with a little twig) from scattered plants in a stand, taking only a fraction from any one shrub and leaving it intact to flower and seed. Rabbitbrush is hugely abundant, so this is among the most sustainable yellows you can gather; still spread your take.",
+      "Weigh your dry fiber, then pre-mordant: dissolve alum (10-15% of fiber weight, plus optional cream of tartar) in warm water in a dedicated pot, add the wetted-out fiber, and hold near a simmer for about an hour. Let it cool, then leave the fiber damp. Wear gloves and a mask when handling the alum powder.",
+      "Coarsely chop or tear the flowering tops, cover them with water in your dedicated dye pot, and simmer gently for 1 to 2 hours to pull the yellow into the bath. A longer, hotter extraction (traditionally several hours) yields a deeper lemon-gold. Work in a ventilated space — the simmering bath is pungent and resinous.",
+      "Strain out all the plant material — squeeze the spent tops and compost them — and top up with water so the fiber can move freely.",
+      "Add the damp, mordanted fiber to the warm (not boiling) bath, hold at a low simmer, and steep 1 to 3 hours, stirring gently, until the color reads a shade darker than you want (it lightens when dry). For the deepest gold, turn off the heat and let the fiber cool in the bath overnight.",
+      "To shift the color, branch off here: add a small splash of [[tech-iron-acetate|iron water]] to saturate toward olive-green, or run a separate bark/twig bath for green. Make modifier changes in a small test jar first.",
+      "Lift out the fiber, rinse in cool water until it runs clear, and dry in the shade — direct desert sun on wet, fresh dye accelerates fading. Keep the pot, spoon, and strainer dedicated to dye work only."
+    ],
+    modifiers: "Alum is the workhorse here: it brightens the flavonoid yellow and is the traditional pairing for clear lemon-to-gold shades. [[tech-iron-acetate|Iron water]] \"saddens\" the color, pulling bright yellow toward olive, brass, and muted green — a classic second shade from the same plant. Switching the source matters as much as the mordant: clear yellow comes from the flowers, while the bark and woody twigs lean green. Strongly alkaline or acidic baths can mute or shift flavonoid yellows, so to brighten or deepen, lean on alum and plant quantity rather than [[tech-acid-base|acid & base shifters]]; very hard, iron-rich water will dull the color on its own. A tannin pre-treatment helps the dye grab on cotton or linen, but animal fibers need none.",
+    preservation: "The bright yellow is most reliable when it lives in the fiber, not in a jar. A used dye bath can be reheated for a second, paler \"exhaust\" batch within a day or two, but it spoils like any plant brew — it will sour, cloud, and grow mold within days at room temperature, so use it promptly or refrigerate briefly. Dried flowering tops, on the other hand, keep their dye potential for a year or more if dried fully on screens and stored in paper bags somewhere dark and dry, free of damp and mold. For finished work, the fiber itself is the archive: an alum-mordanted, well-rinsed skein stored out of strong, constant sunlight will hold its gold for years.",
+    yield: "Honest expectation: a generous batch — flower tops at or above the fiber's own weight, on a good alum mordant — gives a clear, saturated lemon-to-gold yellow that more than justifies the effort, which is exactly why this plant anchored a living weaving tradition. Lighter ratios or a single quick extraction give softer butter-yellows. A rough working figure is 100 to 200 g of fresh tops to meaningfully dye 100 g of wool; the exhaust bath after that yields a noticeably paler second shade. Bark and twig baths give greens but are slower and weaker than the flower yellow.",
+    beyondInk: "Rabbitbrush is first and foremost a textile dye — the basis of a documented Diné (Navajo) and Hopi tradition of dyeing handspun wool for weaving, and historically used on leather and basketry fibers as well. The same strained, concentrated bath can be thickened with [[tech-gum-arabic|gum arabic]] into a soft yellow paint or wash for paper, though it reads more muted on a page than it does saturating wool. Treat it throughout as a craft material, not a food or beverage: this card is for color work only.",
+    safety: [
+      "Craft, not food: this is a dye recipe only. Despite the species name nauseosa (which refers to the smell, not edibility), do not brew this as tea or ingest the dye bath — keep it out of the kitchen workflow entirely.",
+      "Use dedicated, non-food pots, spoons, and strainers reserved for dye work; never return them to cooking use.",
+      "Rabbitbrush is in the daisy family (Asteraceae/Compositae) and is resinous and strongly aromatic. Its foliage and flowers contain sesquiterpene lactones, a known cause of allergic contact dermatitis — handling large amounts can trigger skin irritation or a delayed (1-3 day) rash, especially in people already sensitive to other Compositae plants like ragweed, chamomile, or chrysanthemum. Wear gloves, and stop if your skin reacts.",
+      "Work in a ventilated space: the resinous bath is pungent, and breathing concentrated steam from the simmering tops can irritate the airways.",
+      "Wear gloves and a dust mask when handling powdered alum, and avoid breathing the dust; rinse splashes from skin and eyes.",
+      "Iron water is a harsh modifier — keep it off skin, add it sparingly, and label any iron-shift jar clearly.",
+      "Let hot baths cool before handling; protect surfaces, as the dye stains.",
+      "Occurrence is not permission: confirm that collection is legal where you stand before harvesting, and respect the Indigenous origins of this dye tradition with accurate credit rather than treating it as a novelty."
+    ],
+    sources: [
+      {
+        title: "Navajo Dye Chart — Bard Graduate Center, Shaped by the Loom",
+        url: "https://exhibitions.bgc.bard.edu/shapedbytheloom/interactive/navajo-dye-chart/"
+      },
+      {
+        title: "USDA NRCS Plant Guide: Yellow Rabbitbrush (Chrysothamnus viscidiflorus)",
+        url: "https://www.nrcs.usda.gov/plantmaterials/idpmcpg11104.pdf"
+      },
+      {
+        title: "Santa Fe Botanical Garden — Rubber Rabbitbrush / Chamisa (Ericameria nauseosa)",
+        url: "https://santafebotanicalgarden.gardenexplorer.org/taxon-743.aspx"
+      },
+      {
+        title: "DermNet — Compositae allergy (sesquiterpene lactone contact allergy)",
+        url: "https://dermnetnz.org/topics/compositae-allergy"
+      }
+    ]
+  },
+  {
+    id: "dye-scotch-broom",
+    plantId: "dye-scotch-broom",
+    kind: "dye",
+    name: "Scotch broom dye",
+    category: "yellow",
+    swatch: "#d4b82a",
+    color: "Buttery yellow",
+    difficulty: "Intermediate",
+    teaser: "Buttery yellow from a noxious weed",
+    toxic: true,
+    educationalOnly: false,
+    hook: "Every May the clearcuts and roadsides from British Columbia to the northern California coast turn acid-yellow as Scotch broom (Cytisus scoparius) explodes into bloom — a Cal-IPC \"High\"-impact invasive whose hard-coated seeds stay viable in soil for years (and far longer in dry storage), and whose single shrubs can throw off many thousands of seeds a season. Cutting it for the dyepot is genuinely useful work: you draw down the seedbank while the pea-shaped blossoms give up a soft, buttery flavonoid yellow, and tossing in the green flowering tips pulls the bath toward olive. It is not the legendary luteolin yellow of true dyer's broom (Genista tinctoria) — the color is gentler and less permanent — but it is honest, abundant, and free for the cutting. Just remember the same plant defends itself with quinolizidine alkaloids that sit in the flowers as well as the seeds: a beautiful dye that is emphatically not food.",
+    lightfastness: {
+      rating: "moderate",
+      note: "The yellow comes from flavonoids (genistein-type compounds), not the highly stable luteolin of true dyer's broom, so expect moderate-to-fugitive performance: alum-mordanted wool holds a soft yellow reasonably well in indoor light but will soften and grey with sustained sun. Iron-saddened olives and khakis are noticeably more stable than the bright yellows. Treat any clear yellow as a color that wants shade, not a south-facing window."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "2 days"
+    },
+    ingredients: [
+      {
+        item: "Scotch broom flowers (fresh, just-opened blossoms)",
+        amount: "At least 5-10x the dry weight of your fiber (WOF) — e.g. 100-200 g fresh flowers per 25 g fiber; more is better",
+        required: true,
+        note: "Pick blossoms at peak bloom for the cleanest yellow. Flowers alone give buttery yellow; add green flowering tips to push toward olive. Note: the flowers themselves carry alkaloids — wear gloves and keep them away from mouths."
+      },
+      {
+        item: "Green flowering tips / tender stems (optional, for green-olive)",
+        amount: "A few handfuls, cut into ~2-inch lengths",
+        required: false,
+        note: "Including the green stalk parts shifts the bath from yellow toward olive/sage. Omit for the purest yellow."
+      },
+      {
+        item: "Fiber to dye (wool or other protein fiber)",
+        amount: "25-100 g; protein fibers (wool, silk) take this dye far better than cellulose",
+        required: true,
+        note: "Cotton and linen will read paler and need a tannin + alum-acetate mordant sequence rather than simple alum."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "10-15% WOF (about 2.5-4 g per 25 g wool), with optional cream of tartar at ~6% WOF",
+        required: true,
+        note: "Pre-mordant fiber before dyeing. Alum is the standard mordant for clear yellows here and is essential for any reasonable fastness."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A splash to a few teaspoons, to taste, as an afterbath",
+        required: false,
+        note: "Shifts yellow to sage, olive, khaki and soft brown. See [[tech-iron-acetate|iron water]]. Use sparingly — iron dulls and can weaken fiber."
+      },
+      {
+        item: "Acid (citric acid / vinegar) or alkali (soda ash / wood-ash lye)",
+        amount: "Small amounts as modifiers, to taste",
+        required: false,
+        note: "Gentle pH shifters to nudge the hue; see [[tech-acid-base|acid & base shifters]] for safe handling of both acid and alkali (including wood-ash lye)."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel or enamel), never returned to kitchen use",
+      "Dedicated stirring utensil and strainer/sieve",
+      "Waterproof gloves (nitrile or rubber)",
+      "Heat source / stove",
+      "Kitchen scale for weighing fiber and mordant",
+      "Pruners or shears for cutting broom"
+    ],
+    toolsOptional: [
+      "Mesh bag or muslin to hold plant matter for easy straining",
+      "Separate jars for iron water and pH modifiers",
+      "Thermometer",
+      "Sealed bag or bin to contain seedpods and clippings during harvest"
+    ],
+    steps: [
+      "Harvest only where cutting is permitted — occurrence is not permission. Scotch broom is a Cal-IPC High-impact invasive and a Washington Class B noxious weed under state quarantine (sale, transport, and distribution are prohibited), so careful removal is ecologically positive — but confirm you have the landowner's or land manager's approval before cutting on public or private ground. Cut and collect flowers at peak bloom; bag and dispose of any seedpods or clippings carefully so you do not spread the prolific, long-lived seedbank.",
+      "Strip the blossoms (and, for olive tones, the green flowering tips cut into ~2-inch lengths) into your dedicated pot. Wear gloves — the flowers carry alkaloids. Aim for at least 5-10x the weight of your fiber in fresh flowers; this dye is not concentrated, so generosity pays off.",
+      "Pre-mordant your fiber separately: dissolve alum (10-15% WOF, optionally with cream of tartar) in warm water, enter pre-wetted fiber, hold near a simmer ~1 hour, then let it cool. Wear gloves; keep all of this in dedicated equipment.",
+      "Cover the flowers with water and bring to a gentle simmer (do not hard-boil) for about 1 hour. Turn off the heat and let the bath cool — ideally overnight — to draw out the most color.",
+      "Strain out all plant material thoroughly. Enter the pre-soaked, alum-mordanted fiber into the cooled bath, then slowly bring back up to a low simmer (around 180°F/82°C) and hold ~45 minutes, moving the fiber gently for even color.",
+      "Let the fiber cool in the bath for deeper uptake, then lift out, rinse in cool water until it runs clear, and dry away from direct sun.",
+      "To modify: dip the dyed, rinsed fiber in an iron afterbath for sage/olive/khaki, or use a gentle acid or alkali rinse to nudge the hue (see modifiers). Rinse again after modifying.",
+      "Wash all dedicated tools and dispose of the spent bath and plant matter responsibly. Never reuse this equipment for food."
+    ],
+    modifiers: "Alum is the baseline and gives the cleanest buttery yellow. [[tech-iron-acetate|iron water]] is the big lever here: even a small iron afterbath saddens the yellow into sage, olive drab, khaki and soft brown — and these iron tones are usefully more lightfast than the bright yellows, so iron is both a color shift and a fastness boost. Adding the green flowering tips to the bath itself biases toward olive before any iron is used. pH shifters are subtle on this flavonoid yellow: a touch of alkali (wood-ash lye or soda ash) tends to warm and deepen it, while acid keeps it brighter and cooler — see [[tech-acid-base|acid & base shifters]] for safe handling of both. Copper, where you have it, pushes toward a greener gold. For a comparable invasive-removal yellow with its own modifier behavior, see [[dye-one-seed-juniper|one-seed juniper]].",
+    preservation: "A liquid broom dyebath is short-lived: it is sugary plant matter and will sour, ferment, and grow mold within a few days at room temperature, faster in warm weather. Use it fresh — ideally the day after simmering — or refrigerate in a dedicated sealed container for a few days at most; discard if it smells off or shows mold. There is no reliable way to bottle this as a stable long-term stock; for repeat use you are better off freezing harvested flowers in season and brewing fresh baths. Keep any stored bath clearly labeled as a toxic, non-food liquid and out of reach of children and pets. See [[tech-preserving|preserving]] for general botanical-extract storage. The dyed fiber itself, once rinsed and dried, is stable to store; its main vulnerability is light, not spoilage.",
+    yield: "Honestly, broom is a \"lots of plant, gentle color\" dye. A large grocery bag of fresh blossoms (several hundred grams) will meaningfully dye perhaps 50-100 g of wool to a soft buttery yellow — flowers-only baths read closer to a clear pale-to-medium yellow than to a saturated gold, and many dyers find Scotch broom paler than true dyer's broom. Expect a single small skein (25 g) from a couple of good handfuls of flowers if you keep your WOF high. The bath largely exhausts in one good dyeing; a second, lighter \"exhaust\" bath may give a pale tint but little more.",
+    beyondInk: "As a textile dye this is its main home: protein fibers (wool, silk) take the soft yellow and iron-modified olives best, while cellulose (cotton, linen) needs a tannin-plus-alum sequence and still reads paler. The concentrated, strained bath can be brushed onto paper or thickened with [[tech-gum-arabic|gum arabic]] for a fugitive watercolor-style yellow wash, though its poor lightfastness makes it better for sketchbooks and ephemera than for archival work. It is also a satisfying dye for basketry materials and natural-fiber cordage harvested alongside your broom-removal work. Across all uses, treat the color as a soft, sun-sensitive yellow rather than a permanent one — and as a toxic, non-food pigment.",
+    safety: [
+      "TOXIC PLANT — NEVER INGEST: all parts of Scotch broom contain quinolizidine alkaloids (cytisine and N-methylcytisine in the flowers; sparteine and lupanine concentrated in seeds and foliage) that act on the heart and nervous system. The flowers you harvest for this dye are not toxin-free. This is a craft dye only — keep all plant matter, baths, and dyed-but-unrinsed fiber away from mouths, food, children, and pets. Ingesting broom or broom tea can cause vomiting, irregular heartbeat, and, in serious cases, collapse.",
+      "Pregnancy caution: broom alkaloids (notably sparteine) have a documented oxytocic/abortifacient history and have caused fetal harm in livestock feeding trials. Anyone pregnant or who may become pregnant should be especially careful to avoid ingestion, and should handle the plant and baths with gloves.",
+      "Craft, not food: never use kitchen pots, spoons, strainers, or jars for this dye. Keep a dedicated set of non-food equipment and label it clearly.",
+      "Wear waterproof gloves throughout harvesting, mordanting, and dyeing; wash hands after handling plant material or baths.",
+      "Mordant safety: alum is a low-toxicity mordant but should still be handled with gloves, kept off skin and out of eyes, and stored away from food and children. Dissolve and dye in a ventilated space.",
+      "Iron and pH modifiers: iron water stains and can irritate; soda ash and wood-ash lye are caustic — wear gloves and eye protection and add them slowly. See the linked technique pages before using.",
+      "Do not boil the bath dry, and work with ventilation over long simmers; the alkaloids are heat-stable and stay in the plant matter and bath, so never taste or test the liquid.",
+      "Invasive-spread caution: bag and dispose of seedpods and clippings so harvesting for dye does not scatter seed and worsen the infestation. Do not compost in a way that spreads viable seed.",
+      "Dispose of spent baths and plant matter responsibly down a utility sink or in green waste per local rules, not where pets or livestock can access concentrated plant material."
+    ],
+    sources: [
+      {
+        title: "Cytisus scoparius Profile — California Invasive Plant Council (Cal-IPC)",
+        url: "https://www.cal-ipc.org/plants/profile/cytisus-scoparius-profile/"
+      },
+      {
+        title: "Scotch Broom — Washington State Noxious Weed Control Board",
+        url: "https://www.nwcb.wa.gov/weeds/scotch-broom"
+      },
+      {
+        title: "A Lesson About Dye Plants: Broom — Catharine Ellis, Natural Dye: Experiments and Results",
+        url: "https://blog.ellistextiles.com/2015/05/14/a-lesson-about-dye-plants-broom/"
+      },
+      {
+        title: "Scotch Broom — do two varieties dye differently? — Wildcraft Dyeing",
+        url: "https://wildcraftdyeing.com/blog/scotch-broom-do-two-varieties-dye-differently"
+      }
+    ]
+  },
+  {
+    id: "dye-wax-myrtle",
+    plantId: "dye-wax-myrtle",
+    kind: "dye",
+    name: "Southern wax myrtle leaf dye",
+    category: "yellow",
+    swatch: "#a9a64a",
+    color: "Pale gold / gray-green",
+    difficulty: "Beginner",
+    teaser: "Pale gold, gray-green with iron",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Crush a wax myrtle leaf along any Gulf or Florida hammock edge and it answers with that warm, resinous bay scent — the same fragrant resin that, rendered from its powder-blue berries, gave colonists their bayberry candles. Save the berries for wax; the dye lives in the leaves, where tannins and chlorophyll yield a soft, lemony gold on alum-mordanted wool. Drop that bath into iron water and the gold saddens in seconds to a quiet, sage-toned gray-green. It is an honest, low-drama Southeast yellow from one of the region's toughest, fastest-resprouting native shrubs.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Like most plant-leaf yellows, wax myrtle is on the fugitive end — it will soften and gray with sun and washing over time. Proper alum mordanting and an iron afterbath improve both light- and washfastness noticeably (iron-saddened gray-greens hold better than the bright gold), but don't expect archival permanence. Keep finished pieces out of direct, prolonged sun."
+    },
+    timeline: {
+      active: "1.5–2.5 hr",
+      passive: "12–24 hr"
+    },
+    ingredients: [
+      {
+        item: "Fresh wax myrtle leaves (Morella cerifera)",
+        amount: "100–200% weight of fiber (roughly equal to or double the dry weight of yarn/cloth)",
+        required: true,
+        note: "Light tip-harvest only, and only where collecting is permitted. A sighting is never permission. Fresh leaves give the cleanest yellow; the waxy berries are for candle wax, not this dye."
+      },
+      {
+        item: "Scoured fiber (wool, or cotton/linen)",
+        amount: "Whatever you are dyeing",
+        required: true,
+        note: "Protein fibers (wool, silk) take the leaf yellow best. Cellulose fibers (cotton, linen) need a tannin step plus alum to hold much color."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "About 10–15% weight of fiber for wool/silk",
+        required: true,
+        note: "The mordant is what makes plant yellows usefully lightfast. See [[tech-acid-base|acid & base shifters]] for how pH nudges the final hue."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A splash to a few hundred mL of brewed iron water, to taste",
+        required: false,
+        note: "Optional modifier. Shifts pale gold toward gray-green / olive. Make it via [[tech-iron-acetate|iron water]]; use sparingly — too much dulls and can weaken fiber."
+      },
+      {
+        item: "Tannin source (for cotton/linen only)",
+        amount: "Per your tannin recipe",
+        required: false,
+        note: "Cellulose fibers hold the dye far better with a tannin pre-treatment before alum. The leaves carry some tannin themselves, but a dedicated tannin step is more reliable."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "About 6% weight of fiber",
+        required: false,
+        note: "Optional with the alum bath for wool; brightens the yellow and helps keep wool soft."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel; never used for food again)",
+      "Dedicated stainless or stick stirring spoon/rod",
+      "Heat source / stovetop",
+      "Strainer or mesh bag for leaves",
+      "Nitrile or rubber gloves",
+      "Kitchen scale for weighing fiber, leaves, and mordant"
+    ],
+    toolsOptional: [
+      "Separate dedicated pot or jar for the iron afterbath",
+      "pH strips",
+      "Thermometer",
+      "Pillowcase or muslin to bag leaves for easy straining",
+      "Mortar/secateurs for chopping leaves to expose more surface"
+    ],
+    steps: [
+      "Harvest by light tip-pruning only, and only where collection is legal and permitted — occurrence on a map or in the wild is not harvest permission. Wax myrtle resprouts vigorously, so taking a modest amount of leafy tips from established shrubs is low-impact; leave plenty for wildlife and the plant's vigor, and never strip a plant.",
+      "Mordant your fiber first: dissolve alum (about 10–15% WOF for wool, with optional cream of tartar) in warm water, enter the wet scoured fiber, hold near a gentle simmer for about an hour, then let it cool in the bath. For cotton or linen, do a tannin treatment before the alum so the yellow will actually hold.",
+      "Chop or tear the fresh leaves to expose more surface, weigh them (aim for at least the dry weight of your fiber, ideally double), and cover with water in your dedicated dye pot.",
+      "Bring to a low boil, then drop to a steady simmer for about 45–60 minutes until the bath is a clear straw-to-amber color. Strain out all leaf matter so it doesn't print or felt into the fiber.",
+      "Enter the wetted, mordanted fiber into the cooled-to-warm strained bath. Heat to a gentle simmer (around 80°C / 175°F) and hold for about an hour, moving the fiber occasionally for even uptake. For a deeper gold, let it cool and soak overnight.",
+      "Lift the fiber and judge the color wet. To shift toward gray-green, dip it briefly in a separate iron-water afterbath, watching closely — the change happens fast. Rinse between dips so you can stop at the shade you want.",
+      "Rinse thoroughly in cool water until it runs clear, then wash gently with a pH-neutral soap and dry out of direct sun. Wear gloves throughout the mordant and iron steps."
+    ],
+    modifiers: "Wax myrtle leaf yellow is responsive to mineral and pH shifters. Iron is the headline move: a brief [[tech-iron-acetate|iron water]] afterbath (literal iron water auto-links) saddens the warm gold into a muted sage or olive gray-green — the signature look for this plant, and the trick its bog-myrtle cousin (Myrica gale) is known for. Alkali nudges the bath warmer and more golden; mild acid keeps it on the cooler, paler yellow side — see [[tech-acid-base|acid & base shifters]], and note that a homemade wood-ash alkali works as a gentle natural shifter too. The leaves carry their own tannin, which deepens iron reactions and helps grip plant fibers; a copper modifier (where you have it) pushes toward a brassier green. For a comparable Southeast/Western leaf-and-needle yellow-green palette, compare notes on [[dye-one-seed-juniper|one-seed juniper]].",
+    preservation: "Use the leaf bath fresh for the brightest color — chlorophyll-driven yellows fade in storage and the bath will go dull and eventually moldy within a few days at room temperature. Refrigerate a strained bath to stretch it to roughly a week, or freeze it for longer; expect some color loss either way. Dried wax myrtle leaves keep for months in an airtight jar and can be rehydrated, though dried leaf gives a softer, grayer yellow than fresh. Discard any bath that smells sour or grows a surface film. Dyed-and-rinsed fiber is stable once fully cured and dried; store it away from sunlight to slow the inevitable fading of a plant yellow.",
+    yield: "Modest. A full pot of fresh leaves at roughly equal-to-double the fiber weight will dye a few skeins of wool a pale-to-medium gold; expect a soft, gentle shade rather than a saturated one, since leaf yellows are inherently light. Doubling the leaf load and an overnight soak meaningfully deepen the color. Because the shrub resprouts so readily, repeat light harvests across a season are realistic and sustainable, but plan on more leaf material than you'd guess for a strong result.",
+    beyondInk: "Primarily a textile dye for wool, silk, and (with tannin + alum) cotton and linen, giving soft golds and, with iron, sage gray-greens well suited to natural-palette weaving, basketry fibers, and yarn. The strained, reduced bath can also be used as a gentle watercolor-style wash or to tint paper, though it is fugitive there too and benefits from a binder like [[tech-gum-arabic|gum arabic]] for paint use. Worth remembering the plant's other craft tradition: its waxy berries, not the leaves, are simmered and skimmed to render fragrant bayberry candle wax — a separate project from this dye.",
+    safety: [
+      "These are CRAFT recipes, not food. The dye bath, mordants, and modifiers are not edible — do not taste, drink, or cook with them.",
+      "Use dedicated, non-food pots, spoons, and containers reserved permanently for dyeing. Once a pot has held alum or iron, never return it to kitchen use.",
+      "Alum is a skin and eye irritant and is harmful if swallowed — wear gloves, avoid breathing the powder, and keep it away from children and pets. Iron water can stain and irritate skin; handle with gloves and rinse splashes promptly.",
+      "Work in a ventilated space and avoid inhaling steam from the simmering bath; the aromatic leaf resins are strong and the hot mordant bath should not be breathed in closely.",
+      "Harvest ethic: light tip-harvest only, and only where collection is legally permitted. Seeing wax myrtle growing somewhere does not grant the right to cut it — occurrence is not permission.",
+      "Keep this craft use entirely separate from any culinary handling. The waxy berries in particular can cause stomach upset, nausea, or diarrhea if eaten, so do not let dye-prep leaves or berries get mixed in with food or eaten by children or pets.",
+      "Dispose of spent mordant and iron baths responsibly per local guidance — don't pour large volumes of iron- or alum-laden water onto garden plants or into storm drains."
+    ],
+    sources: [
+      {
+        title: "Morella cerifera (Wax Myrtle) — Lady Bird Johnson Wildflower Center, Native Plant Database (range, resilience, and bayberry candle-wax tradition)",
+        url: "https://www.wildflower.org/plants/result.php?id_plant=moce2"
+      },
+      {
+        title: "Myrica cerifera / Wax Myrtle — NC State Extension Gardener Plant Toolbox (aromatic resinous leaves, growth habit, wax from fruit)",
+        url: "https://plants.ces.ncsu.edu/plants/myrica-cerifera/"
+      },
+      {
+        title: "How to Mordant — Botanical Colors (alum mordanting, tannin for cellulose, and iron afterbath color-shifting)",
+        url: "https://botanicalcolors.com/how-to-mordant/"
+      }
+    ]
+  },
+  {
+    id: "dye-spanish-moss",
+    plantId: "dye-spanish-moss",
+    kind: "dye",
+    name: "Spanish moss dye",
+    category: "brown",
+    swatch: "#8c7a5a",
+    color: "Tan-to-soft-brown",
+    difficulty: "Beginner",
+    teaser: "Tan-brown from fallen strands",
+    toxic: false,
+    educationalOnly: false,
+    hook: "The gray beards draping live oaks and bald cypress across the Gulf South are not moss at all, and not a parasite — Spanish moss (Tillandsia usneoides) is a rootless epiphytic bromeliad, a cousin of the pineapple that lives on rain, dust, and air. The same strands that once stuffed Model T seats and mattresses carry enough tannin to give wool a quiet, regional tan-to-soft-brown — a color that reads like Lowcountry humidity made visible. Best of all, this is a near-zero-impact dye: every windstorm drops fresh festoons to the ground, so you never have to strip a living tree to fill a dyepot. The catch is in the gathering — fallen strands carry mites, spiders, and woodland debris, so the moss needs a thorough cleaning before it comes anywhere near your fiber.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Spanish moss browns come from tannins and so are more substantive than flower- or berry-based plant colors, holding better than truly fugitive dyes. Still, this is an unsaddened plant tan — expect gentle fading toward a paler, warmer beige over years of strong light. An iron after-bath (which shifts the color grayer) and keeping finished pieces out of direct sun both noticeably extend the life of the color. Do not market a Spanish-moss brown as fully lightfast."
+    },
+    timeline: {
+      active: "1.5–2 hr",
+      passive: "1–7 days"
+    },
+    ingredients: [
+      {
+        item: "Storm-fallen Spanish moss (Tillandsia usneoides), whole strands",
+        amount: "Roughly equal weight to your fiber, or up to 2x for a deeper shade (e.g. 100–200 g per 100 g of fiber)",
+        required: true,
+        note: "Gather only fallen strands off the ground where collection is permitted — never strip living festoons from a tree. Avoid craft-store or florist moss, which is often pre-dyed, bleached, or treated."
+      },
+      {
+        item: "Wool yarn or fleece, or another natural fiber",
+        amount: "100 g (scale moss to match)",
+        required: true,
+        note: "Protein fibers (wool, silk) take this tannin dye most readily. Cotton and linen are possible but give paler results and benefit from a tannin + alum mordant sequence."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover moss and fiber generously (several liters)",
+        required: true,
+        note: "Soft or rainwater gives the cleanest tan; very hard or iron-rich water will dull and gray the color."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) for mordanting",
+        amount: "About 10–12% of fiber weight (~10–12 g per 100 g wool)",
+        required: false,
+        note: "Strongly recommended. Pre-mordanting brightens the tan and improves wash- and lightfastness. Wear gloves and a dust mask when handling alum powder."
+      },
+      {
+        item: "Iron water (ferrous acetate) as a color modifier",
+        amount: "A small splash, to taste",
+        required: false,
+        note: "Saddens the tan toward a cooler gray-brown and slightly improves lightfastness. Use sparingly — excess iron harshens wool fibers. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "~6% of fiber weight (~6 g per 100 g wool)",
+        required: false,
+        note: "Optional with the alum mordant; helps keep wool soft and the shade even."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel; never reused for cooking)",
+      "Nitrile or rubber gloves",
+      "Dedicated stirring stick or stainless spoon (non-food)",
+      "Strainer or mesh bag to remove moss from the bath",
+      "Heat source / stove"
+    ],
+    toolsOptional: [
+      "Dust mask (for handling alum and iron powders)",
+      "Kitchen scale for weighing fiber and moss",
+      "Thermometer",
+      "Bucket for the cold pre-soak",
+      "Tongs for handling hot, just-inspected moss"
+    ],
+    steps: [
+      "Gather only storm-fallen Spanish moss off the ground, and only where collection is allowed — seeing it draped over a tree is not permission to harvest, and public parks, preserves, and private land all have rules. Fallen material is the ethical choice here: it has minimal impact and is constantly replenished by wind, so there is no reason to pull strands from living trees.",
+      "Inspect and clean the moss before it comes near your workspace. Fallen, ground-contact strands collect twigs, dirt, and a range of small arthropods — mites, spiders, ants, springtails, and the like — so wear gloves, shake the strands out vigorously outdoors, and pick out debris. (You'll likely hear that Spanish moss is full of chiggers; entomological surveys have repeatedly failed to find chiggers in it, on trees or on the ground, so treat that as folklore — but clean the moss anyway for the other critters and grit it genuinely carries.)",
+      "Give the moss a hot soak to dislodge any remaining hitchhikers and begin extraction: cover with hot water (a near-simmer) and let it steep. This both cleans the material and starts releasing the tannins. Discard this first rinse if it is very dirty.",
+      "Optional but recommended: pre-mordant your fiber. Dissolve alum (~10–12% of fiber weight, with optional cream of tartar) in warm water, add the wetted fiber, hold near a simmer about an hour, and let it cool in the bath, ideally overnight. Wear gloves and a mask with the powders.",
+      "Build the dyebath: cover the cleaned moss with fresh water and, for the deepest color, let it cold-soak 1–7 days, warming it toward a simmer every couple of days. Then simmer the moss 1–2 hours to pull a tan-brown liquor. Strain out and compost the spent moss.",
+      "Enter the fiber: add the wetted (pre-mordanted) fiber to the strained, warm dyebath, bring up to a gentle simmer, and hold 1–2 hours, stirring occasionally for an even shade. The longer and stronger the bath, the deeper the brown.",
+      "Let the fiber cool in the bath for richer uptake, then lift it out with gloved hands or tongs. To shift the color, dip into iron water for a grayer brown (see [[tech-iron-acetate|iron water]]) — go slowly, as a little iron goes a long way.",
+      "Rinse in cool water until it runs clear, wash gently with a pH-neutral soap, and dry out of direct sun. Cure the dyed fiber a few days before heavy use to let the color set."
+    ],
+    modifiers: "Spanish moss is a tannin-bearing dye, so it responds predictably to the usual shifters. **Iron** (literal iron water / [[tech-iron-acetate|iron water]]) saddens the warm tan toward a cooler, deeper gray-brown and modestly improves lightfastness — the classic tannin-plus-iron reaction — but use it sparingly to avoid harshening wool. An **alum** mordant brightens and warms the tan and improves wash- and lightfastness without changing the basic hue. **Alkali** such as a wood-ash lye or soda soak ([[tech-acid-base|acid & base shifters]]) tends to push the color warmer and slightly redder/darker, while **acid** ([[tech-acid-base|acid & base shifters]]) keeps it on the lighter, cleaner tan side. Adding extra **tannin** (or simply a stronger, longer-soaked bath) deepens toward a fuller brown.",
+    preservation: "The dried moss itself stores almost indefinitely — keep cleaned, fully dried strands in a breathable paper bag or open basket somewhere dry; sealed damp moss will mold and can re-attract pests. The liquid dyebath is far less stable: use it within a few days, as a tannin-rich plant liquor will grow mold and go off, especially in Gulf-coast warmth. If you must hold it, refrigerate in a dedicated non-food container and discard at the first sign of film, sourness, or fuzz. Finished, well-rinsed dyed fiber is stable; store it like any natural-dyed textile, away from direct sun to slow fading.",
+    yield: "Expect a soft, muted result rather than a saturated one: roughly equal weights of moss and fiber give a pale tan, and doubling the moss (plus a long cold soak) pushes toward a fuller soft brown — this is a gentle, low-key color by nature, not a bold one. A grocery-bag-sized gathering of fallen moss comfortably dyes a 100 g skein of wool. Because the color is on the pale side, results vary with your water (soft water = cleaner tan), the freshness of the moss, and soak time; plan a test skein before committing a large batch.",
+    beyondInk: "These are craft colors, not food. Beyond skeins of wool and silk, the same tan-brown liquor works as a soft watercolor-style wash or a wood/paper stain — thicken it with [[tech-gum-arabic|gum arabic]] for a brushable ink or paint. It is well suited to natural, earthy palettes: tan tote bags, garment overdyeing, basketry fiber, and paper. The cleaned, dried strands themselves are also a traditional craft material — historically spun into the tough black inner fiber for cordage, mats, and stuffing — so a single gathering can serve both your dyepot and other fiber work. For a related regional brown-family color, see [[dye-one-seed-juniper|one-seed juniper]].",
+    safety: [
+      "These are craft recipes, not food — nothing here is for eating or drinking, and the dyebath and tools are for craft use only.",
+      "Clean the moss before it comes indoors. Fallen, ground-contact Spanish moss carries woodland debris and a variety of small arthropods (mites, spiders, ants, springtails). Wear gloves, shake and inspect strands outdoors, and give the moss a hot soak before bringing it inside. Note: the popular belief that Spanish moss is full of chiggers ('redbugs') is not supported by entomological surveys, which have failed to find chiggers in moss on trees or on the ground — but cleaning is still warranted for the other organisms and grit it genuinely carries.",
+      "Avoid pre-dyed, bleached, or chemically treated craft-store/florist moss; you can't know what it was treated with, and it defeats the point of a clean natural dye.",
+      "Use dedicated non-food equipment: a separate dye pot, stirring stick, and strainer that never return to the kitchen, even though the moss itself is non-toxic.",
+      "Wear gloves throughout. Alum and iron are skin and eye irritants — add a dust mask when handling the dry powders, and don't breathe the dust.",
+      "Iron water harshens and weakens wool if overused; modify in small increments and rinse well.",
+      "Work in a ventilated space and avoid boiling the bath dry; simmer rather than hard-boil to protect both the fiber and the color.",
+      "Occurrence is not permission: a tree full of Spanish moss is not an invitation to harvest. Confirm you may collect at your location, and take only fallen strands."
+    ],
+    sources: [
+      {
+        title: "USDA NRCS PLANTS Database — Spanish Moss (Tillandsia usneoides), symbol TIUS",
+        url: "https://plants.sc.egov.usda.gov/home/plantProfile?symbol=TIUS"
+      },
+      {
+        title: "UF/IFAS Gardening Solutions — Spanish Moss (Tillandsia usneoides): epiphyte not parasite, does not harm host trees, organisms it shelters",
+        url: "https://gardeningsolutions.ifas.ufl.edu/plants/ornamentals/bromeliads/spanish-moss/"
+      },
+      {
+        title: "Mosher et al., 'Spanish Moss, the Unfinished Chigger Story' — Southeastern Naturalist 9(1): no chiggers found among 3,297 organisms from moss on trees and on the ground",
+        url: "https://bioone.org/journals/southeastern-naturalist/volume-9/issue-1/058.009.0107/Spanish-Moss-the-Unfinished-Chigger-Story/10.1656/058.009.0107.short"
+      }
+    ]
+  },
+  {
+    id: "dye-toyon",
+    plantId: "dye-toyon",
+    kind: "dye",
+    name: "Toyon (California holly) dye",
+    category: "brown",
+    swatch: "#8a4a3a",
+    color: "Red-brown",
+    difficulty: "Advanced",
+    teaser: "Red-brown — simmer OUTDOORS only",
+    toxic: true,
+    educationalOnly: false,
+    hook: "Toyon blazes red along California's coastal hills and chaparral every December — the \"California holly,\" whose berry-laden winter branches inspired the persistent legend that they gave Hollywood its name (historians have since debunked that story, but the plant really did grow thick in the Hollywood Hills). Its leaves, bark, small branches, and fruit yield warm tans and rusty red-browns, and the tannin-rich bark helps the color bite without heavy mordanting. Toyon is also the only California native plant still widely known by its Indigenous (Ohlone) name, and California's first peoples valued it deeply — eating the cooked berries, brewing a mild leaf tea as medicine, and working its hard wood into tools and bows. But toyon is a rose-family plant loaded with cyanogenic glycosides, so heating the dye bath can release cyanide fumes — this is a recipe you brew outdoors, never over a kitchen stove. The shrub itself is abundant and fire-hardy, resprouting vigorously from its burl after burns, which keeps a light tip-and-bark harvest easy on the stand.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Tannin-forward toyon browns on alum-mordanted wool and other protein fibers hold up better than most fugitive plant colors — tannins are among the more reliable natural dyes — but expect some warming and lightening over months of strong sun, with the rustier red tones softening first. Iron-shifted browns and grays are the most stable; cellulose fibers (cotton, linen) take the dye more weakly and fade faster. Like nearly all plant dyes, this is not a permanent color — test a sample in your own light before committing a finished piece."
+    },
+    timeline: {
+      active: "3-4 hr",
+      passive: "1-2 days"
+    },
+    ingredients: [
+      {
+        item: "Toyon leaves, bark, small branches, and fruit (chopped)",
+        amount: "Roughly equal dry weight to your fiber for tan; up to 2x the fiber weight for a deeper red-brown",
+        required: true,
+        note: "Leaves and twigs give yellow-tan to orange-brown; the bark adds tannin and richer red-brown, and the fruit deepens the warm tones. Never chew, taste, or ingest any part — the cyanogenic compounds are toxic."
+      },
+      {
+        item: "Water (soft or rainwater preferred)",
+        amount: "Enough to cover the fiber freely, usually 4-8x the fiber weight",
+        required: true,
+        note: "Hard water can dull and shift the color; rainwater or distilled keeps tones cleaner."
+      },
+      {
+        item: "Protein fiber (wool, silk) or pre-mordanted cellulose",
+        amount: "Your project weight",
+        required: true,
+        note: "Wool and silk take toyon best. Cotton/linen need tannin plus alum pre-treatment and still read paler."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "10-15% of dry fiber weight",
+        required: false,
+        note: "The standard mordant for clearer, more lightfast tans and warm browns. Toyon's own tannin partly self-mordants, but alum improves uptake and fastness."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A splash to a few tablespoons, to taste, as an after-bath",
+        required: false,
+        note: "Saddens and deepens toward gray-brown and olive-brown. Use a separate jar and go slowly — iron also weakens fibers. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Cream of tartar",
+        amount: "About 6% of fiber weight",
+        required: false,
+        note: "Optional with alum on wool to brighten and even the tone and soften the handle."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never reused for cooking)",
+      "Heat source you can run OUTDOORS (camp stove, propane burner, or outdoor hot plate)",
+      "Rubber or nitrile gloves",
+      "Long-handled stirring stick or spoon kept only for dyeing",
+      "Strainer or mesh bag to remove plant matter",
+      "Bucket or basin for mordanting and rinsing"
+    ],
+    toolsOptional: [
+      "N95 or respirator as a backup (working outdoors in moving air is the real control)",
+      "Kitchen scale for weighing fiber and material",
+      "pH strips to track acid/alkali shifts",
+      "Separate jar for iron water",
+      "Thermometer to hold a gentle simmer"
+    ],
+    steps: [
+      "Harvest only where it is allowed — a toyon sighting on a map or trail is not permission to cut. Toyon is the only California native plant still commonly called by its Indigenous (Ohlone) name and remains culturally important; harvest in that spirit. On private land get the owner's okay; in parks and preserves collecting is usually prohibited. Where permitted, take a light tip harvest: a few leafy small branches and a modest amount of bark from several different shrubs, never stripping one plant. Toyon resprouts strongly from its burl, so a restrained harvest heals quickly.",
+      "Chop the leaves, twigs, bark, and any fruit into small pieces and soak them in your dedicated pot overnight to begin releasing color. Keep all of this away from food-prep surfaces and out of reach of kids and pets.",
+      "Set up OUTDOORS in open, moving air — this is the safety-critical step. Heating toyon releases cyanide-bearing fumes, so never simmer it in an enclosed kitchen, garage, tent, or shed. Bring the pot to a low simmer on an outdoor burner and hold it (not a hard boil) for 1-2 hours until the bath runs a deep tea-brown. Stand upwind and do not breathe the steam.",
+      "While the bath cooks, pre-mordant your fiber: dissolve alum (and optional cream of tartar) in warm water, add the wetted fiber, hold at a gentle simmer about 1 hour, then let it cool. Cellulose fibers need a tannin step first, then alum.",
+      "Strain out all plant matter with your dedicated mesh or strainer and bag it or deep-compost it — do not let animals graze the spent material, which still carries cyanogenic compounds. Let the bath cool to a hand-warm temperature.",
+      "Add the damp, mordanted fiber to the strained bath. Return it outdoors to a gentle simmer for 45-60 minutes, moving the fiber for even color, then turn off the heat and let it steep and cool in the bath overnight for the deepest, most even red-brown.",
+      "Lift the fiber out wearing gloves, rinse in cool water until it runs clear, and hang to dry out of direct sun. For a grayer, deeper brown, dip the rinsed fiber briefly in iron water before the final rinse and watch the shift in real time.",
+      "Wash and dry your dedicated pot, stick, and gloves separately from kitchenware, and pour cooled, strained dye exhaust where it won't reach pets, livestock, gardens, or storm drains."
+    ],
+    modifiers: "Toyon is a tannin-and-brown dye, so it responds strongly to metal and pH shifts. Iron is the big lever: a dip in [[tech-iron-acetate|iron water]] saddens the warm red-brown toward gray-brown, olive, and near-charcoal, and gives the most lightfast results — add it sparingly as an after-bath since iron also weakens fiber. Alum keeps the tone clearer and warmer (tan to russet) and improves fastness. Acid and alkali nudge the hue too (see [[tech-acid-base|acid & base shifters]]): a mild acid (vinegar) tends to brighten toward warmer orange-brown, while an alkaline bath (a little [[tech-wood-ash-lye|wood-ash alkali]]) pushes it deeper and browner. Toyon's own bark tannin already partly self-mordants, so adding extra tannin mainly helps cellulose fibers grab and deepens the brown.",
+    preservation: "Use a toyon bath fresh for the strongest, cleanest color — it is a brewed plant extract with no preservative and will grow mold or sour within a few days at room temperature, faster in heat. Refrigerated in a sealed, clearly labeled non-food jar it keeps perhaps a week or two; a surface film, off smell, or fuzzy growth means discard it. Do not reheat leftover bath indoors to revive it — the cyanide-fume caution applies every time it is heated, so any reheating happens outdoors in moving air. Dyed and fully dried fiber is stable once rinsed clear; store finished pieces out of direct sun to slow the inevitable softening of the red tones.",
+    yield: "A pot using roughly equal weights of toyon material and fiber will dye a few ounces of wool or silk to a soft tan; doubling the plant material toward 2x fiber weight pushes it into fuller red-brown. Real-world results vary a lot with bark proportion, water chemistry, and fiber: protein fibers (wool, silk) read warm and saturated, while cotton and linen come out noticeably paler even with proper tannin-and-alum prep. Plan on one good pot dyeing a skein or a scarf-sized piece, and bear in mind that exhaust baths (second dippings) give progressively lighter, more neutral tans you can use for layering.",
+    beyondInk: "Beyond textiles, the tannin-rich extract makes a serviceable brown wash or stain for paper, wood, and basketry materials, and pairs well with a binder like [[tech-gum-arabic|gum arabic]] if you want a brushable paint or ink-like wash. Iron-shifted toyon gives muted grays and olive-browns useful for shading and aging effects. Whatever the craft, the same rule holds: this is a craft material, not food — keep it and its tools out of the kitchen, and do the heating outdoors.",
+    safety: [
+      "TOXIC — RELEASES CYANIDE FUMES WHEN HEATED. Toyon is a rose-family plant with cyanogenic glycosides; simmering the dye bath can release hydrogen cyanide gas. Heat and simmer ONLY outdoors in open, moving air — never in a kitchen, garage, tent, shed, or any enclosed space. Stand upwind and do not breathe the steam.",
+      "Never taste, chew, or ingest any part of the plant or the dye bath. The berries, leaves, and bark all carry cyanogenic compounds (highest in new leaf growth and unripe fruit). Keep material, bath, and exhaust away from children, pets, and livestock — there are documented cyanide poisonings in goats, horses, cattle, and other animals that browsed toyon foliage.",
+      "This is a craft dye, not a food or medicine. Use dedicated equipment only: a non-food pot, stirring stick, strainer, and gloves that never touch cooking or eating again.",
+      "Wear rubber or nitrile gloves throughout — hot dye baths burn, and tannin and iron stain skin and nails. An N95/respirator is a backup, not a substitute for working outdoors in moving air.",
+      "Handle alum and especially iron with care: keep them labeled, out of reach, and never near food; iron also weakens fibers, so dose it lightly.",
+      "Dispose of spent plant matter and cooled dye exhaust responsibly — bag or deep-compost the solids so animals can't graze them, and pour cooled liquid where it won't reach pets, livestock, gardens, or storm drains.",
+      "Occurrence is not permission: confirm you may legally harvest before cutting, take only a light tip-and-bark harvest from abundant plants, and leave each shrub able to resprout."
+    ],
+    sources: [
+      {
+        title: "Mother Nature's Backyard (Constance M. Vadheim, CSU Dominguez Hills) — Plant of the Month: Toyon (Heteromeles arbutifolia)",
+        url: "http://mother-natures-backyard.blogspot.com/2013/12/plant-of-month-december-toyon.html"
+      },
+      {
+        title: "USDA NRCS PLANTS Database — Toyon (Heteromeles arbutifolia, HEAR5)",
+        url: "https://plants.usda.gov/plant-profile/HEAR5"
+      },
+      {
+        title: "Natural History Museum of Los Angeles County — California Holly: How Hollywood Didn't Get Its Name (toyon ethnobotany)",
+        url: "https://nhm.org/stories/california-holly-how-hollywood-didnt-get-its-name"
+      },
+      {
+        title: "Golden Gate National Parks Conservancy — California native plants to dye for (general native-dye technique; does not cover toyon specifically)",
+        url: "https://www.parksconservancy.org/marin-parks-stewardship-newsletter-article/california-native-plants-how-to-dye-fabrics"
+      }
+    ]
+  },
+  {
+    id: "dye-wild-fennel",
+    plantId: "dye-wild-fennel",
+    kind: "dye",
+    name: "Wild fennel dye",
+    category: "yellow",
+    swatch: "#b6b03a",
+    color: "Luteolin yellow",
+    difficulty: "Intermediate",
+    teaser: "Yellow from an invasive — confirm ID",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Fennel's feathery fronds and licorice-scented seed heads blanket coastal California hillsides — a Cal-IPC-listed invasive that crowds out native grassland and coastal scrub, so pulling it for the dyepot does real ecological good. The same flavonoids that flavor the plant, chiefly luteolin, yield a clear, lemon-to-olive yellow on alum-mordanted wool and cotton. Push it toward forest green and dark khaki with a splash of iron. The one non-negotiable: fennel grows shoulder-to-shoulder with deadly poison hemlock, which it closely resembles, so the dye material must be identified by its strong sweet anise smell (hemlock smells musty/mousy) and yellow flowers before anything goes in the pot.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Like most plant yellows from luteolin/flavonoids, fennel is on the fugitive-to-moderate end — it holds up better than many fleeting flower dyes but will gradually fade and shift, especially in sustained sun. A proper alum mordant and a tannin under-layer on cellulose meaningfully improve both wash- and lightfastness, and iron-modified olive/green shades tend to be a bit more durable than the pure yellow. Don't expect archival permanence; treat it as a living, gently-changing color and keep finished pieces out of direct, prolonged sunlight."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "1-24 hr"
+    },
+    ingredients: [
+      {
+        item: "Fresh wild fennel fronds, flower umbels, and/or green seed heads",
+        amount: "Equal weight to dry fiber for a soft yellow, up to 2-3x fiber weight for stronger color",
+        required: true,
+        note: "POSITIVELY identify by strong sweet licorice/anise scent and bright yellow flowers before harvesting — see safety notes. Note that stem ribbing alone is NOT a reliable test, since poison hemlock stems are also ribbed; rely on smell, flower color, and the absence of purple stem blotches. Fronds and yellow flowers give the cleanest yellow; stems add a duller, greener cast."
+      },
+      {
+        item: "Protein or cellulose fiber (wool, silk, cotton, linen)",
+        amount: "Weigh dry; recipe amounts are by weight of fiber (WOF)",
+        required: true,
+        note: "Wool and silk take luteolin yellows most readily and brightly. Cotton and linen need thorough mordanting (and ideally a tannin step) for decent depth."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) for mordant",
+        amount: "10-15% WOF for wool/silk; 15-20% WOF plus a tannin pre-treatment for cellulose",
+        required: true,
+        note: "Essential — without a mordant this dye is weak and washes/fades fast. Alum is the standard, low-toxicity choice."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover plant material loosely and, separately, to move the fiber freely in the dyebath",
+        required: true,
+        note: "Soft or rainwater gives cleaner yellows; hard water can dull or shift the color."
+      },
+      {
+        item: "Iron water (ferrous acetate) for modifying",
+        amount: "A small splash to start (roughly 1-2% WOF of dissolved iron); add gradually",
+        required: false,
+        note: "Saddens the yellow toward olive, khaki, and forest green. A little goes a long way — over-ironing harshens the hand of wool. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Tannin (e.g. oak gall, sumac, or commercial tannic acid) for cellulose",
+        amount: "Per fiber: roughly 8-12% WOF before alum",
+        required: false,
+        note: "Strongly recommended for cotton/linen to help the dye bind and to improve wash- and lightfastness."
+      },
+      {
+        item: "Mild acid (vinegar) or alkali (washing soda / wood-ash lye) for shifting",
+        amount: "Small amounts, added by eye",
+        required: false,
+        note: "Luteolin yellows shift slightly with pH — alkali brightens and warms, acid can mute. See [[tech-acid-base|acid & base shifters]] and [[tech-wood-ash-lye|wood-ash alkali]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless steel or enamel dye pot (never reused for cooking)",
+      "Dedicated stirring utensil reserved for dyeing",
+      "Heat-resistant rubber gloves",
+      "Kitchen scale for weighing fiber and mordant",
+      "Strainer or mesh bag to remove plant material",
+      "Sharp pruners or scissors for harvesting"
+    ],
+    toolsOptional: [
+      "Separate dedicated pot or jar for the iron-water modifier",
+      "Thermometer to hold the bath below a hard boil",
+      "pH strips for tracking acid/alkali shifts",
+      "Dust mask when handling powdered alum or tannin",
+      "Field guide or plant ID reference for confirming fennel vs. hemlock"
+    ],
+    steps: [
+      "Harvest only where removal is permitted — occurrence is not permission. Fennel is a Cal-IPC-listed invasive across much of coastal California, so pulling or cutting it on land where you have the right to remove it actively benefits native habitat; never collect in a park, preserve, or private parcel without authorization. BEFORE cutting, confirm identity by the reliable tests: crush a frond and smell for a strong, sweet licorice/anise scent (poison hemlock smells musty or mousy, never sweet), confirm the flowers are yellow (hemlock's are white), and check that stems carry NO purple blotches. Do not rely on stem ribbing — both plants have ribbed stems. If there is any doubt, if the smell is rank or musty, if flowers are white, or if stems are spotted, walk away: poison hemlock is deadly and grows in exactly the same places.",
+      "Wearing gloves, roughly chop the fronds, flower umbels, and stems and weigh against your dry fiber. Place the plant material in your dedicated dye pot, cover loosely with water, and bring to a gentle simmer (just below boiling) for 45-60 minutes. Work outdoors or with good ventilation; do not taste or ingest the dye material or liquid at any point.",
+      "While the dye extracts, mordant your scoured fiber: dissolve alum in warm water (add a tannin pre-soak first for cotton/linen), introduce the fiber, hold warm for about an hour, then let it sit 1-24 hours. Pre-mordanting is what makes this dye worth doing — skip it and the color is pale and fugitive.",
+      "Strain the spent fennel out of the bath through a mesh bag or strainer (compost it as green waste, never as food scraps). For deeper color, let the strained liquid steep a few more hours or overnight before dyeing.",
+      "Add the wet, mordanted fiber to the strained, slightly-cooled dyebath. Bring back to a low simmer and hold 45-60 minutes, stirring gently and occasionally. For the most even, saturated result, turn off the heat and let the fiber cool in the bath overnight.",
+      "To modify, lift the fiber, rinse, then dip into a separate iron-water bath a little at a time to shift toward olive and forest green, or adjust pH with a touch of alkali (brighter, warmer yellow) or acid. Make these changes in a separate vessel so you can stop at the shade you want.",
+      "Rinse the finished fiber in cool water until it runs clear, wash gently with a pH-neutral soap, and dry out of direct sun. Clean dedicated tools separately from kitchenware."
+    ],
+    modifiers: "Fennel yellow is a classic luteolin/flavonoid color and responds the way other weld-family yellows do. [[tech-iron-acetate|Iron water]] is the big mover: even a small splash saddens the clear yellow into olive, khaki, and, with more iron, a muted forest green — the most useful trick this plant offers. Alkali from washing soda or [[tech-wood-ash-lye|wood-ash lye]] tends to brighten and warm the yellow, while mild acid (vinegar) mutes it slightly; see [[tech-acid-base|acid & base shifters]]. A tannin under-layer on cellulose both deepens the shade and improves fastness. Effects vary with fiber, water hardness, and how much green stem versus yellow flower you used.",
+    preservation: "Use the dyebath fresh for the best, brightest color — flavonoid yellows fade and dull within days. A strained bath keeps a few days refrigerated or in a cool place but will gradually lose strength and can grow mold or ferment (a sour or off smell, surface film, or fizzing means discard it). Label any stored dye or iron-water clearly as non-food and keep it away from the kitchen. Iron-water modifier, by contrast, is stable and improves with age. The dyed fiber itself is stable once rinsed and dried; store finished textiles away from prolonged sunlight to slow the inevitable fading of plant yellows.",
+    yield: "Roughly equal weights of fresh fennel to fiber give a soft, clear yellow; doubling or tripling the plant material deepens it toward a fuller chrome-to-olive yellow. A grocery bag of fronds and seed heads (a few hundred grams fresh) will comfortably dye a skein or two of wool. Yields drop noticeably on cotton and linen unless you mordant heavily and add tannin. Because fennel is so abundant where it's invasive, plant material is rarely the limiting factor — fiber and mordant are.",
+    beyondInk: "Primarily a textile dye for wool, silk, cotton, and linen, where it gives soft yellows and, with iron, olives and greens. The strained, concentrated bath can also be used as a watercolor-style wash or stain on paper — bind it with [[tech-gum-arabic|gum arabic]] for a brushable paint — though on paper its fugitive nature shows even faster, so it suits ephemeral or practice work rather than anything meant to last. It overdyes nicely: lay fennel yellow over an indigo blue to build greens, or under madder/cochineal to warm a red toward orange.",
+    safety: [
+      "CRITICAL — fennel closely resembles deadly poison hemlock (Conium maculatum), which grows in the same coastal and disturbed habitats. Positively identify before harvesting using reliable traits: fennel has a strong SWEET licorice/anise smell, YELLOW flowers, and stems with NO purple blotches; poison hemlock smells musty or mousy, has WHITE flowers, and has hollow stems with purple blotches. Do not rely on stem ribbing — both plants have ribbed stems. If anything is ambiguous, do not harvest.",
+      "Poison hemlock is a contact hazard, not only an ingestion one: its alkaloids (coniine and related compounds) can be absorbed through skin from cut stems and sap, and crushing or burning the plant can release toxic vapors. Wear gloves while cutting and never burn suspected hemlock. If you realize after handling that a plant may have been hemlock, wash skin thoroughly and seek medical advice — this is the headline reason to confirm ID before cutting anything.",
+      "This is a CRAFT dye, not food. Do not taste, drink, or ingest the dye material or the dyebath, even though culinary fennel is edible — wild-harvested material may be misidentified or contaminated, and the bath is for fiber, not consumption.",
+      "Fennel and several Apiaceae lookalikes that share its habitat (wild parsnip, giant hogweed) contain furanocoumarins; fennel sap on skin followed by sun exposure can cause phytophotodermatitis (a burn-like rash) in sensitive people. Wear gloves and long sleeves while harvesting, and rinse any sap off skin before going into sunlight.",
+      "Use only dedicated, non-food pots, utensils, and gloves reserved for dyeing; never return them to kitchen use, and store them separately.",
+      "Wear heat-resistant gloves throughout — hot dyebaths and mordant solutions can scald and stain skin.",
+      "Alum, tannin, and iron are mordant chemicals: keep them out of reach of children and pets, avoid breathing the powders (wear a dust mask), and don't pour concentrated iron or mordant solutions onto garden plants or down storm drains.",
+      "Simmer with good ventilation or outdoors; avoid inhaling steam from the dyebath.",
+      "Occurrence is not permission — confirm you have the legal right to remove or harvest fennel at your location before collecting, even though it is an invasive whose removal benefits native habitat."
+    ],
+    sources: [
+      {
+        title: "Cal-IPC — Foeniculum vulgare (fennel) plant profile, invasive status and impacts",
+        url: "https://www.cal-ipc.org/plants/profile/foeniculum-vulgare-profile/"
+      },
+      {
+        title: "Botanical Colors — natural dye mordanting, flavonoid yellows, and fastness guidance",
+        url: "https://botanicalcolors.com/"
+      },
+      {
+        title: "UC Davis Weed Research & Information Center — natural-areas weed list (E–H), incl. Foeniculum vulgare",
+        url: "https://wric.ucdavis.edu/information/natural%20areas/natural_areas_scientific_E-H.htm"
+      }
+    ]
+  },
+  {
+    id: "dye-dyers-woad",
+    plantId: "dye-dyers-woad",
+    kind: "dye",
+    name: "Dyer's woad (removal-only) blue",
+    category: "blue",
+    swatch: "#2e4a6b",
+    color: "Eradication-only indigo blue",
+    difficulty: "Advanced",
+    teaser: "Indigo blue — eradication harvest only",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Before tropical indigo reached Europe, woad was the continent's blue — the pigment behind medieval Picardy fortunes and, by legend, the war-paint of ancient Britons. The same chemistry that made it precious now makes it a problem: a Brassica that escapes into rangeland and seeds itself into dense yellow-flowered colonies across the Klamath, Cascade, and Modoc country of far-northern California (it's a California B-listed noxious weed, worst in Siskiyou, Modoc, and Shasta). Its leaves hold a colorless precursor that oxidizes in air into indigotin — the very same molecule as true indigo, and one of the few genuinely lightfast blues a plant will give you. Here the craft and the conservation goal point the same way: pull it to kill it, bag every seed head, and let the leaves pay you back in blue.",
+    lightfastness: {
+      rating: "good",
+      note: "Woad blue is chemically identical to indigo (indigotin) and is genuinely lightfast and wash-fast when properly vat-dyed and bonded into the fiber — one of the rare plant colors you can trust to hold. The caveat: lightly-dyed pale shades and surface pigment that wasn't well-reduced can rub or fade, so build color in multiple dips and wash out loose pigment."
+    },
+    timeline: {
+      active: "Varies",
+      passive: "2–3 hr"
+    },
+    ingredients: [
+      {
+        item: "Fresh dyer's woad leaves (first-year rosettes, eradication harvest)",
+        amount: "~1.25 kg (a full grocery-bag) per batch",
+        required: true,
+        note: "First-year basal leaves give the most pigment; harvest before plants bolt to flower. Pull whole plants where removal is permitted and bag any seed heads separately — never propagate or replant."
+      },
+      {
+        item: "Soft or rainwater",
+        amount: "enough to cover leaves (~4–6 L)",
+        required: true,
+        note: "Hard water can interfere; rainwater or distilled is ideal for both extraction and the vat."
+      },
+      {
+        item: "Soda ash (sodium carbonate / washing soda)",
+        amount: "~3 tsp per batch to reach pH ~9",
+        required: true,
+        note: "Raises pH so the precursor oxidizes to pigment; also alkalizes the vat. Caustic — wear gloves and eye protection."
+      },
+      {
+        item: "Reducing agent — sodium hydrosulfite (thiox) or a fructose/lime organic vat",
+        amount: "per your vat recipe",
+        required: true,
+        note: "Strips oxygen so indigotin dissolves. Thiox is fast but releases hydrogen sulfide and sulfur dioxide fumes and reacts with acids — ventilate and store it dry. A fructose or 1-2-3 lime vat is gentler."
+      },
+      {
+        item: "Wood-ash lye (potash) as a traditional alkali base",
+        amount: "as needed for a traditional vat",
+        required: false,
+        note: "A natural alkali alternative to soda ash for the reducing vat. Strongly caustic — handle as you would any lye, with gloves and eye protection."
+      },
+      {
+        item: "Pre-scoured natural fiber (wool, silk, cotton, linen)",
+        amount: "~20 g fiber per 1 g pigment",
+        required: false,
+        note: "Indigo bonds without a mordant, but fiber must be clean and well-wetted before dipping."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stockpot (never used for cooking)",
+      "Heavy chemical-resistant gloves",
+      "Eye protection (goggles)",
+      "Thermometer",
+      "Whisk or immersion blender kept for dyeing only",
+      "Settling jars or buckets",
+      "Strong sealable bags for seed heads and spent plant material"
+    ],
+    toolsOptional: [
+      "pH strips",
+      "Respirator or work in a ventilated/outdoor space",
+      "Fine strainer or cloth for decanting pigment",
+      "Apron and old clothes (indigo stains permanently)"
+    ],
+    steps: [
+      "Harvest only where removal is permitted — occurrence on a map is not permission, and even a noxious weed may sit on land where you have no right to pull it. Treat this as eradication: pull or dig whole woad plants by the taproot, focus on first-year rosettes for leaf pigment, and DO NOT plant, transplant, or propagate woad anywhere. This is a removal recipe, never a reason to keep a patch.",
+      "Bag the threat before you process the leaves: clip and seal every flowering stalk and seed head into strong bags for trash disposal (not compost, not green waste). Woad seeds are the spread vector — a single plant can throw thousands. Strip clean leaves off for dyeing and bag the roots and stems for disposal too.",
+      "Extract the pigment: tear the leaves into a dedicated non-food pot, pour over water heated to about 80°C (just below a simmer), and steep roughly 10 minutes — no longer, or you cook the color out. Strain off the leaves and cool the green-amber liquid quickly (set the pot in cold water) to around 50°C.",
+      "Develop the blue: with gloves and eye protection on, stir in soda ash dissolved in a little hot water until the bath reaches about pH 9. Then aerate vigorously — whisk or blend for ~10 minutes. The froth shifts yellow to green to blue as the colorless precursor oxidizes into indigotin pigment.",
+      "Settle and collect: let the bath stand undisturbed 2–3 hours so the blue pigment sinks. Carefully decant the clear liquid off the top, leaving the dark sediment; this slurry is your woad indigo. Use it now or dry it to a powder to store.",
+      "Build a reducing vat (the caustic step — gloves, goggles, ventilation): combine the pigment with alkali (soda ash or wood-ash lye) and a reducing agent in warm water. If you use sodium hydrosulfite, keep acids away and ventilate — it gives off hydrogen sulfide and sulfur dioxide. Done right the vat turns yellow-green with a coppery 'flower' on top, meaning the indigo is dissolved and ready. This is dye chemistry; nothing here is food-safe.",
+      "Dye by dipping: lower clean, wetted fiber gently into the vat without splashing in air, hold submerged a few minutes, then lift and let it oxidize in the air — it climbs from yellow-green to blue before your eyes. Repeat dips build deeper shades. Rinse, then wash in mild soapy water to remove unbonded pigment.",
+      "Clean up responsibly: neutralize and dispose of spent caustic vat liquid per local rules (never down storm drains or onto soil), wash dedicated tools separately from kitchenware, and double-check that all seed heads and plant debris are bagged for the trash so your harvest doesn't seed a new infestation."
+    ],
+    modifiers: "Indigo blue is set by vat chemistry rather than mordants, but you can shift the final hand and tone. More dips and a stronger vat push toward navy; a single quick dip gives sky blue. Over-dyeing woad blue on top of a yellow (woad over weld, say) yields green, and over a tannin/iron base gives muted teal-grays — [[tech-iron-acetate|iron water]] on an indigo-dyed yarn dulls and greens it. The vat itself depends on alkali: too little wood-ash lye or soda ash and the indigo won't reduce; pushing the bath strongly alkaline keeps it working but is hard on protein fibers like wool and silk. Acid has no place in the vat (it crashes the reduction), though a final mild [[tech-acid-base|acid rinse]] helps neutralize residual alkali on finished goods.",
+    preservation: "Dried woad pigment is essentially stable indefinitely — it's the same indigotin as commercial indigo, so a sealed jar of the powder keeps for years in a cool, dark place. The fresh extracted slurry should be dried or used promptly; left wet it can grow mold and the fine pigment is easy to lose. A reducing vat is the perishable part: organic (fructose/lime) vats can be kept alive and re-fed for weeks if warmed and stirred, while a hydrosulfite vat exhausts faster and oxidizes if left open. Note that fresh leaves themselves don't store — extract within a day of harvest, as the precursor degrades quickly once cut.",
+    yield: "Honest numbers: woad is a low-yield blue. Roughly 1 kilo of fresh leaves gives only about 1–4 grams of dry pigment, and 1 gram of pigment dyes on the order of 20 grams of fiber to a medium shade. So a full grocery-bag of leaves (~1.25 kg) might color a single skein of yarn or a scarf's worth of cloth — which is exactly why historical woad cultivation was so land-hungry and why tropical indigo (far richer in pigment) displaced it. For the dyer this is a feature here: you need a lot of plant material, and eradication harvests supply it for free while clearing the infestation.",
+    beyondInk: "Beyond vat-dyeing textiles, the same pigment makes a lightfast blue artist's color: ground fine and bound, woad indigo works as a watercolor or in [[tech-egg-casein|egg/casein]] tempera and as a tint in [[tech-gum-arabic|gum arabic]] inks and washes (it must be dispersed as a fine pigment, since it won't dissolve in water like a true ink dye). It has a long history in painting and in blue laundry 'bluing.' For all uses, keep it strictly craft — woad has folk-medicinal traditions, but that is outside the scope of this card; here it is a dye and pigment only.",
+    safety: [
+      "This is a CRAFT dye, not food — do not ingest woad, the pigment, or any vat liquid, and keep all tools dedicated to dyeing, never returned to the kitchen.",
+      "Removal-only species: do not plant, transplant, or propagate dyer's woad. Harvest solely to eradicate existing infestations, and bag all seed heads and plant debris for the trash (not compost) to avoid spreading this California B-listed noxious weed.",
+      "Occurrence is not permission — a mapped sighting does not grant the right to harvest; pull only where the landowner or managing agency allows weed removal.",
+      "The reducing vat uses caustic alkali (soda ash or wood-ash lye) plus reducing agents. Wear chemical-resistant gloves and eye protection, work with ventilation, and never let caustic liquid contact skin or eyes.",
+      "Sodium hydrosulfite (thiox/dithionite) is the most hazardous ingredient: in use it releases hydrogen sulfide and sulfur dioxide — irritating, potentially dangerous fumes — so ventilate well (those with asthma especially). It decomposes violently in acid, and can self-heat or ignite if it gets damp, so keep it dry, cool, and away from acids. An organic fructose/lime vat is a gentler alternative.",
+      "Indigo stains permanently — protect clothing, surfaces, and skin; the dye is hard to remove once oxidized.",
+      "Confirm identity before harvest: woad is a Brassica and several look-alikes exist; correct ID matters both for the dye and to avoid pulling native mustards by mistake.",
+      "Neutralize and dispose of spent caustic vat liquid according to local regulations — do not pour strong alkali down storm drains or onto soil."
+    ],
+    sources: [
+      {
+        title: "Cal-IPC — Isatis tinctoria (dyer's woad) profile",
+        url: "https://www.cal-ipc.org/plants/profile/isatis-tinctoria-profile/"
+      },
+      {
+        title: "UC IPM — Dyer's Woad pest note",
+        url: "https://ipm.ucanr.edu/PMG/PESTNOTES/pn74175.html"
+      },
+      {
+        title: "Woad.org.uk — Extraction of woad pigment (Teresinha Roberts)",
+        url: "http://www.woad.org.uk/html/extraction.html"
+      },
+      {
+        title: "Botanical Colors — Indigo vat instructions and chemistry",
+        url: "https://botanicalcolors.com/how-to-indigo-vats/"
+      }
+    ]
+  },
+  {
+    id: "dye-mountain-mahogany",
+    plantId: "dye-mountain-mahogany",
+    kind: "dye",
+    name: "Mountain mahogany dye",
+    category: "brown",
+    swatch: "#7a3a2a",
+    color: "Deep reddish-brown",
+    difficulty: "Intermediate",
+    teaser: "Deep reddish-brown, harvest carefully",
+    toxic: true,
+    educationalOnly: false,
+    hook: "High in the pinyon-juniper foothills of the Southwest, mountain mahogany (Cercocarpus montanus) holds one of the oldest reddish-browns in the region — the color of dyed moccasins, leggings, and Navajo and Pueblo handspun wool. Traditionally the strongest dye comes from the red inner bark of the taproot, dug in fall and simmered with juniper-ash water to pull a deep russet brown; pueblos also boiled or mashed the bark for leather and basketry. But this is a slow shrub that seeds erratically and can sit dormant for years between good crops, so digging the root often kills the plant outright. The respectful path is to take bark only from pruned branches or fresh-cut and fallen material, leaving roots in the ground.",
+    lightfastness: {
+      rating: "moderate",
+      note: "The tannin-and-condensed-pigment browns from bark are among the more durable plant colors — noticeably steadier than berry or flower dyes — and the traditional juniper-ash (alkaline) treatment and an optional iron shift improve wash- and lightfastness further. Still, expect gradual warming and lightening over years of strong sun; treat it as moderate, not permanent, and don't oversell it as colorfast."
+    },
+    timeline: {
+      active: "2-4 hr",
+      passive: "1-2 days"
+    },
+    ingredients: [
+      {
+        item: "Mountain mahogany bark, from pruned branches or fresh-cut/fallen wood (NOT roots)",
+        amount: "Roughly equal dry weight of bark to weight of fiber (100% WOF) for a medium brown; up to 150-200% WOF for deep tones",
+        required: true,
+        note: "The red-toned inner bark carries the most color. Chop or shred so the pieces are small; soak overnight before dyeing to start drawing out the pigment. Strip the bark from cut limbs and discard leaves and twigs — those, not the bark, hold the cyanogenic glycosides. Do not dig the taproot; root harvest commonly kills this slow-growing shrub."
+      },
+      {
+        item: "Water (soft or rainwater preferred)",
+        amount: "Enough to cover bark and fiber freely — about 4-5x the fiber volume",
+        required: true,
+        note: "Hard water can dull and shift the color; rainwater keeps the russet cleaner."
+      },
+      {
+        item: "Protein fiber — wool or other animal fiber, scoured",
+        amount: "By project; recipe scales to weight of fiber (WOF)",
+        required: true,
+        note: "Wool and silk take this dye best. Pre-wet thoroughly so uptake is even. Bark dyes give weaker, paler results on cotton/linen without extra tannin/mordant steps."
+      },
+      {
+        item: "Juniper-ash water (traditional alkaline mordant/modifier)",
+        amount: "Water leached from about 1 cup hardwood/juniper ashes, strained clear",
+        required: false,
+        note: "The traditional Navajo/Pueblo modifier for the deep reddish-brown: simmer ashes in water, let settle, decant the clear lye-water and add to the bath. This is a homemade alkali (potash lye) — caustic, so handle it like lye: gloves, eye protection, ventilation."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "8-12% WOF if pre-mordanting",
+        required: false,
+        note: "A neutral mordant alternative to ash water for brighter, more even uptake on wool. Use one approach or the other, not heaps of both."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an after-dip",
+        required: false,
+        note: "Shifts the brown cooler and darker toward chocolate/grey-brown and boosts fastness. See [[tech-iron-acetate|iron water]]; a little goes a long way and over-iron embrittles wool."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless or enamel), used only for dyeing",
+      "Heat source (stove or outdoor burner)",
+      "Rubber or nitrile gloves",
+      "Strainer or mesh bag for removing bark",
+      "Long-handled spoon or stir stick (dedicated, non-food)",
+      "Pruners or a knife for taking bark from cut branches"
+    ],
+    toolsOptional: [
+      "Second pot or jar for leaching juniper-ash water",
+      "Safety goggles (when handling ash lye)",
+      "Scale for weighing bark and fiber",
+      "pH strips to check the ash-water bath",
+      "Thermometer"
+    ],
+    steps: [
+      "Harvest only where you have permission — occurrence on a map is not harvest permission, and public-land collecting often requires a permit or is prohibited. Take bark only from pruned branches, fresh-cut limbs, or fallen/cut wood; do NOT dig the taproot. This is a slow-growing shrub that seeds erratically, and root harvest frequently kills it, so keep it a genuine light harvest from material that is already cut.",
+      "Strip the bark, favoring the red-toned inner bark, and chop or shred it small. Discard the leaves and twigs — those parts hold the cyanogenic glycosides and are not the dye material. Weigh the bark against your scoured, pre-wetted fiber (start near 100% weight-of-fiber for medium brown). Wear gloves — this is a craft dye, not food; never taste or ingest any part of the plant, and keep all tools dedicated to dyeing.",
+      "Soak the chopped bark overnight in soft or rainwater to begin releasing pigment.",
+      "In the dedicated dye pot, simmer the bark in its soaking water for about 2 hours (do not hard-boil wool baths later). Strain out the bark to leave a clear reddish dyebath; let it steep overnight for a stronger extraction if you have time.",
+      "For the deep reddish-brown, prepare juniper-ash water separately: simmer about 1 cup of clean hardwood/juniper ashes in water, let it settle, and decant only the clear liquid. This is caustic lye — wear gloves and goggles, work in a ventilated space, and keep it off skin. (Alternatively, pre-mordant the fiber in alum at 8-12% WOF and skip the ash water.)",
+      "Stir the strained ash-water into the dyebath and warm gently for about 15 minutes to set the alkaline shade. Check that it is not violently caustic before adding fiber.",
+      "Add the wet fiber, keep the bath at a low simmer (not a rolling boil, which felts wool) for about 1 hour, moving the fiber for even color. Then turn off the heat and leave the fiber in the bath overnight to deepen.",
+      "Rinse thoroughly in cool water until it runs clear. For a cooler, darker brown, give a brief after-dip in iron water now, then rinse again. Dry out of direct sun.",
+      "Clean up: strain spent bark to compost, and neutralize leftover ash-water lye (dilute heavily or cautiously acidify) before disposal. Keep all dye tools separate from kitchen use."
+    ],
+    modifiers: "Mountain mahogany bark is rich in tannins and condensed pigments, so it responds strongly to modifiers. Alkali is the traditional move: juniper-ash water (a homemade potash lye leached from wood ash) warms and deepens the bath into the classic deep reddish-brown. [[tech-iron-acetate|iron water]] saddens the color toward chocolate, grey-brown, or near-black and improves fastness — use sparingly so it doesn't harshen wool. Acid (a vinegar rinse; see [[tech-acid-base|acid & base shifters]]) keeps the tone lighter, redder, and brighter, while the tannin already in the bark helps the dye bond, especially on protein fibers. For a related Southwestern bark/foliage palette, compare [[dye-one-seed-juniper|one-seed juniper]].",
+    preservation: "Use the dyebath fresh for the strongest, cleanest color. Strained bark liquor keeps a few days refrigerated in a labeled, non-food jar but will gradually mold, ferment, and dull — discard it if it smells sour or grows a film. Juniper-ash water can be kept longer as a stored alkali but stays caustic, so label it clearly and keep it away from food, children, and pets. Dyed and fully rinsed fiber is stable once dry; store it out of strong sunlight to slow the inevitable fading.",
+    yield: "A single bark harvest from a few pruned branches yields modest amounts — plan on roughly equal dry weight of bark to fiber for a medium brown, and more for deep tones, so a skein or two of wool per good handful of inner bark. Because the shrub is slow and you are deliberately limiting yourself to cut/fallen material, treat the dye as precious: gather over time from prunings rather than stripping one plant heavily.",
+    beyondInk: "Beyond wool dyeing, this reddish-brown has a long history coloring leather — dyed moccasins and leggings — and basketry materials across several Southwestern pueblos, where the bark was boiled or the root bark mashed. It works on silk and other protein fibers, can tint paper or basket splints, and the iron-shifted darker browns make a serviceable, earthy ink or wash for craft use. Present any work in this color with credit to the Navajo and Pueblo dyers who developed and carried this knowledge — context and attribution, not a novelty framing.",
+    safety: [
+      "Do not ingest any part of this plant: the foliage and twigs (especially wilted leaves) contain cyanogenic glycosides that can release hydrocyanic (prussic) acid and cause poisoning. Use the bark only as a colorant, discard leaves and twigs, and treat this as a craft dye — never food or medicine.",
+      "Use dedicated non-food equipment — pot, spoon, strainer, jars — and keep them separate from all kitchenware; wear gloves throughout.",
+      "Juniper-ash water is caustic lye (potash leached from wood ash): wear gloves and eye protection, work in a ventilated area, avoid skin/eye contact and splashes, and neutralize or heavily dilute it before disposal.",
+      "Do not dig the taproot. Root harvest commonly kills this slow-growing, erratically seeding shrub; take bark only from pruned, fresh-cut, or fallen material as a light harvest.",
+      "Occurrence is not permission — confirm you are legally allowed to collect at your location; many public lands require a permit or forbid bark collection entirely.",
+      "Simmer with adequate ventilation and avoid breathing concentrated steam from the caustic ash bath; keep children and pets away from hot baths and caustic liquids.",
+      "Handle iron water carefully and use it sparingly — over-iron weakens and embrittles wool, and iron solutions stain skin, clothing, and surfaces.",
+      "Honor the cultural source: this is an Indigenous Navajo/Pueblo dye tradition, not a casual dig-it-up novelty; harvest and present it with respect and accurate attribution."
+    ],
+    sources: [
+      {
+        title: "Mountain mahogany — Selected Plants of Navajo Rangelands (NMSU)",
+        url: "https://navajorange.nmsu.edu/detail.php?id=62"
+      },
+      {
+        title: "Navajo Dye Chart — Shaped by the Loom (Bard Graduate Center)",
+        url: "https://exhibitions.bgc.bard.edu/shapedbytheloom/interactive/navajo-dye-chart/"
+      },
+      {
+        title: "Cercocarpus montanus — NC Extension Gardener Plant Toolbox",
+        url: "https://plants.ces.ncsu.edu/plants/cercocarpus-montanus/"
+      }
+    ]
+  },
+  {
+    id: "ink-honeysuckle",
+    plantId: "ink-honeysuckle",
+    kind: "dye",
+    name: "Honeysuckle flower & leaf dye",
+    category: "yellow",
+    swatch: "#c8b84a",
+    color: "Pale yellow-green",
+    difficulty: "Beginner",
+    teaser: "Pale yellow-green from flowers & leaves",
+    toxic: false,
+    educationalOnly: false,
+    hook: "Across the eastern and midwestern US, bush honeysuckles — Amur (Lonicera maackii), Morrow, and tangly Japanese honeysuckle — leaf out before almost anything native, throwing dense early shade that starves the spring woodland floor. Cutting them for the dyepot is removal that does double duty: the white-to-yellow paired flowers (late May into June) give a faint warm yellow, and the tannin-bearing leaves push the bath toward green. It is a modest, low-saturation color from a flavonoid yellow rather than the durable luteolin of weld, so treat it as a gentle souvenir of a brush pile, not a fast color. The honesty of it is part of the appeal: an aggressive invader, cut back, reduced to a quiet yellow-green on a length of wool.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Honestly fugitive. The yellow comes from ordinary flavonoids, not the lightfast luteolin found in weld and goldenrod, so even on an alum mordant expect noticeable fading and a drift toward dull tan-green over weeks to a few months of light exposure. An iron afterbath shifts it greener and somewhat steadier, but nothing here makes it a reliable lasting color — keep finished pieces out of direct sun."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "Overnight"
+    },
+    ingredients: [
+      {
+        item: "Honeysuckle flowers and leaves (Lonicera spp., invasive bush or Japanese honeysuckle preferred)",
+        amount: "Equal weight or more, fresh, vs. dry weight of fiber (100-200% WOF); pack the pot full",
+        required: true,
+        note: "Yield and saturation are modest — more material gives deeper color. Flowers contribute the yellow, leaves the green; including stems pushes toward brown. Use fresh; chop leaves to expose more surface. Leave the berries off — they are mildly toxic and add nothing to the color."
+      },
+      {
+        item: "Protein fiber — wool or silk",
+        amount: "A skein or small length (e.g. 50-100 g)",
+        required: true,
+        note: "This is an adjective (mordant-dependent) dye that takes best on protein fiber. Cotton and linen need a tannin-plus-alum pre-treatment and still read paler."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "10-15% of dry fiber weight (WOF)",
+        required: true,
+        note: "Essential — without a metal mordant the flavonoid color barely bonds and washes straight out. A pinch of cream of tartar with the alum brightens wool and softens the hand."
+      },
+      {
+        item: "Water",
+        amount: "Enough to cover fiber and material freely in each bath",
+        required: true,
+        note: "Soft or rainwater gives a cleaner yellow; hard water can dull it."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A small splash as an afterbath, to taste",
+        required: false,
+        note: "Optional [[tech-iron-acetate|iron water]] afterbath saddens and greens the color and modestly improves its staying power. Add gradually — too much turns it muddy grey-green."
+      },
+      {
+        item: "Washing soda or wood-ash lye (alkali)",
+        amount: "A small pinch, optional",
+        required: false,
+        note: "An alkaline nudge ([[tech-wood-ash-lye|wood-ash alkali]]) can brighten and warm the yellow; acid pulls it paler. See [[tech-acid-base|acid & base shifters]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless steel; never used for food afterward)",
+      "Dedicated stainless or wooden stirring spoon/tongs",
+      "Nitrile or rubber gloves",
+      "Strainer or muslin/cheesecloth to remove plant matter",
+      "Kitchen scale (for weighing fiber and alum)",
+      "Hand pruners or loppers for cutting honeysuckle"
+    ],
+    toolsOptional: [
+      "Second dedicated pot or jar for the iron afterbath",
+      "pH strips to track acid/alkali shifts",
+      "Thermometer to hold a gentle simmer",
+      "Bucket for transporting cut material"
+    ],
+    steps: [
+      "Harvest only where removal is permitted — occurrence on the map is not permission. On land where you have the right to cut, bush and Japanese honeysuckles are aggressive invasives, so taking flowering, leafy branches counts as ecologically positive removal: cut generously in late May to June when flowers are open. Bag or pile the rest of the cut brush for proper disposal (do not compost berried or rooting stems, which can resprout or spread seed).",
+      "Strip flowers and leaves from the branches into your dedicated pot, chopping the leaves to expose more surface. Aim for at least the dry weight of your fiber in fresh material, ideally more — the color is modest, so volume helps. Leave the berries out of the pot.",
+      "Pre-mordant the fiber: dissolve alum (10-15% WOF, plus an optional pinch of cream of tartar) in warm water, add the wetted-out wool or silk, hold just below a simmer about an hour, and let it cool in the bath (overnight is best). Wearing gloves, lift out and gently squeeze — do not wring wool.",
+      "Make the dyebath: cover the flowers and leaves with water in the dedicated pot and bring to a gentle simmer (do not hard-boil, which dulls and browns flavonoid yellows). Hold around 1 hour, then strain out all plant matter through muslin so it won't mat into the fiber.",
+      "Dye the fiber: return the strained liquor to the pot, add the damp mordanted fiber, and hold at a gentle simmer 45-60 minutes, turning occasionally for even uptake. Then cut the heat and let the fiber steep as the bath cools — several hours or overnight deepens a pale color.",
+      "Optional shifts: for a greener, slightly steadier result, lift the fiber and dip it briefly in a separate jar of iron water, adding the iron gradually until you like the shade. A small pinch of washing soda or wood-ash lye in the bath warms the yellow; acid pales it. Wear gloves and avoid splashing — the alkali is mildly caustic. Make these tweaks in a separate vessel so you can stop at the color you want.",
+      "Rinse and cure: squeeze out excess, let the fiber cure dry a day or two to set, then rinse in cool water with a drop of pH-neutral soap until it runs clear. Dry out of direct sun. Label the result as a craft dye, not food, and keep dye tools separate from kitchenware for good."
+    ],
+    modifiers: "Flowers carry the yellow; the leaves' tannin pushes the bath green, and adding stems drags it toward brown — so you can steer the hue just by what you put in the pot. Beyond that: [[tech-iron-acetate|iron water]] (ferrous acetate) saddens and greens the color and modestly firms its lightfastness — the most useful modifier here, since the unmodified yellow is so fugitive. Alkali (washing soda or [[tech-wood-ash-lye|wood-ash alkali]]) tends to brighten and warm the yellow; acid pales and cools it — see [[tech-acid-base|acid & base shifters]]. The base color still depends entirely on the alum mordant; the modifiers only tune a hue that the mordant has already fixed.",
+    preservation: "Use the strained dyebath fresh — within a day or two. Like most leaf-and-flower liquors it has no keeping qualities: left at room temperature it ferments, smells sour, and grows mold within days, and chilling only buys a little time. There is nothing to bottle or shelve here; if you want to bank color, dye the fiber now rather than storing liquid. Dried honeysuckle flowers and leaves keep far better than the bath — store them airtight and dry, away from light, and rehydrate when you are ready to dye. See [[tech-preserving|preserving plant material]] for drying notes.",
+    yield: "Be honest with yourself: this is a low-yield, low-saturation dye. A full pot of fresh flowers and leaves typically gives only a pale, slightly greenish yellow on a small skein of wool — think a soft butter-to-sage tint, not a bold gold. You can deepen it with more material, a longer cool-down steep, or a second dyebath, but it will never read as a saturated weld-style yellow. The honest framing is that the appeal is the source (cutting back an invasive) and the gentle color, not strength or permanence.",
+    beyondInk: "First and foremost a textile dye — soft yellow-greens on alum-mordanted wool and silk, greener with an iron afterbath, paler on cotton and linen even with a tannin pre-treat. The same simmered, strained liquor can be brushed on paper as a fugitive botanical wash or watercolor (bind with [[tech-gum-arabic|gum arabic]] for paint), though expect it to fade like the dye. It also suits eco-printing and bundle-dyeing: lay fresh honeysuckle flowers and leaves directly on damp mordanted cloth, roll, and steam to print soft yellow and green impressions. In every use, treat the color as a craft material and a gentle one — lovely for swatches, scarves, and protected pieces, not for anything that must hold up to sun or hard washing.",
+    safety: [
+      "Craft material, not food. This is a dye, not a culinary preparation — keep it out of the kitchen and off your plate. The bright berries of the invasive bush honeysuckles (and of Japanese honeysuckle) are mildly toxic — saponins, plus cyanogenic glycosides in Japanese honeysuckle — and can cause stomach cramps, vomiting, and diarrhea if eaten, so keep berries out of the dyepot entirely and never let any dye material near food. (Honeysuckle flowers appear in some herbal teas, but that is a separate, species-specific food use — do not treat this dye material as edible.)",
+      "Use dedicated non-food tools: a separate pot, spoon/tongs, and strainer reserved for dyeing only, and never returned to cooking use. Mordant residue and concentrated plant liquor should not contaminate cookware.",
+      "Wear nitrile or rubber gloves throughout. Hot dye liquor stains skin, and alum mordant is a mild irritant to skin and eyes.",
+      "Handle alum carefully: keep it labeled, sealed, and out of reach of children and pets; do not breathe the powder. It is a low-hazard mordant but still a chemical, not a seasoning.",
+      "Washing soda and wood-ash lye are alkaline and mildly caustic — wear gloves, avoid splashing them in your eyes, and keep them labeled and away from children. Add only small pinches.",
+      "Confirm identification and that cutting is permitted before you harvest — occurrence on the map is not permission. Cut invasive bush/Japanese honeysuckle only on land where removal is allowed, and dispose of berried or rooting stems properly rather than composting, since they can resprout or spread seed.",
+      "Simmer in a ventilated space; the plant steam is harmless but the pot is hot — avoid burns and keep the dyebath from boiling over.",
+      "If you use an iron afterbath, keep iron water clearly labeled and away from food and children; over-iron baths can weaken protein fiber over time."
+    ],
+    sources: [
+      {
+        title: "Natural Dyeing with Honeysuckle — Obovate Designs (parts used and colors: leaves green from tannin, flowers yellow, stems brown)",
+        url: "https://obovate.wordpress.com/2015/05/01/natural-dyeing-honeysuckle/"
+      },
+      {
+        title: "Invasive Amur Bush Honeysuckle — University of Illinois Extension (invasive status, phenology, removal methods)",
+        url: "https://extension.illinois.edu/invasives/invasive-amur-bush-honeysuckle"
+      },
+      {
+        title: "Amur Honeysuckle (Lonicera maackii) — Wisconsin DNR (identification, ecological harm, control)",
+        url: "https://dnr.wisconsin.gov/topic/Invasives/fact/AmurHoneysuckle"
+      },
+      {
+        title: "The Effect of pH on Yellow Dyes from the Garden — Catharine Ellis, Natural Dye Experiments (flavonoid yellows and their mordant dependence)",
+        url: "https://blog.ellistextiles.com/2020/06/23/the-effect-of-ph-on-yellow-dyes-from-the-garden/"
+      }
+    ]
+  },
+  {
+    id: "ink-carolina-redroot",
+    plantId: "ink-carolina-redroot",
+    kind: "dye",
+    name: "Carolina redroot (observe-only)",
+    category: "red",
+    swatch: "#8a3a3a",
+    color: "Bog-root red",
+    difficulty: "Intermediate",
+    teaser: "Indigenous bog-root red — observe only",
+    toxic: true,
+    educationalOnly: true,
+    hook: "Push aside the wet peat around a Carolina redroot and you find rhizomes the color of dried blood — a vivid orange-red that gave this coastal-plain perennial its name and made it a documented source of red dye for Native peoples of the Southeast. But that color lives in the root of a wetland obligate, a plant of bogs, wet savannas, and pond shores in the bloodwort family (Haemodoraceae), so taking the dye means killing the plant and tearing open fragile, slow-healing habitat. It is also toxic — its photodynamic root pigments poison livestock and people if eaten, and the root was used as a narcotic, not a casual material — and it is rare enough to be listed for protection across parts of its range. This card is here to teach the plant, not to harvest it: identify it, honor its history, and leave the roots in the ground.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Honestly unknown and best treated as fugitive. The Indigenous red from redroot rhizomes is a documented historical use, but the actual extraction-and-fixing method is recorded as lost, and there is no modern lightfastness testing to lean on — so any color you might see should be assumed to fade. This is one more reason the card stays observe-only: there is no reliable, repeatable, low-impact way to get lasting color from it."
+    },
+    timeline: {
+      active: "Observation only — no processing",
+      passive: "A lifetime of leaving it be"
+    },
+    ingredients: [
+      {
+        item: "Nothing to gather — this is an observe-only identification and history card",
+        amount: "0",
+        required: true,
+        note: "the red is in the rhizome of a toxic wetland perennial; digging it destroys the plant and its bog/wet-savanna habitat, so there is no harvest list here"
+      },
+      {
+        item: "Field guide or plant-ID app, and a camera",
+        amount: "1",
+        required: false,
+        note: "to record sightings as observations, not as harvest — occurrence is never permission"
+      },
+      {
+        item: "Substitute red-brown dye from an abundant, low-impact source",
+        amount: "as needed",
+        required: false,
+        note: "if you want a real earthy red-brown to work with, see [[dye-one-seed-juniper|one-seed juniper]] — gathered from fallen material rather than a destroyed wetland plant"
+      }
+    ],
+    toolsRequired: [
+      "Camera or notebook (this is an observe-and-record card, not an extraction card)",
+      "Respect for the plant, its habitat, and the cultures that knew it"
+    ],
+    toolsOptional: [
+      "Field guide or iNaturalist for confident ID",
+      "Hand lens to see the woolly flowers and red root crown",
+      "Waterproof boots if you are walking wet ground to observe — stay on durable trails and out of the soft peat"
+    ],
+    steps: [
+      "Observe only — do not dig. Even where Carolina redroot is locally common and even where you have legal access, occurrence is not permission, and harvesting the rhizome kills the plant. This card exists for identification, history, and respect, not as a how-to for extracting red from wild roots. If you want color to work with, skip to the substitute in the final step.",
+      "Learn to identify it in the field: a grass-like coastal-plain perennial of bogs, wet flatwoods, marshes, wet savannas, and pond shores from Nova Scotia south to Florida, Cuba, and west to Louisiana. Look for fans of narrow iris-like leaves, a flat-topped cluster of small, woolly, creamy-yellow flowers in summer (roughly June–September), and — the namesake feature — bright orange-red rhizomes and red sap at the soil surface. Photograph and record it as an observation; leave it rooted.",
+      "Understand why casual harvest is wrong here, specifically. The dye is in the rhizome, so there is no non-lethal 'tip harvest' — you cannot take the color without taking the whole plant. It grows only in wet, acidic, peaty habitats that recover slowly and are already shrinking, and the species is rare enough to be listed for protection across parts of its range — in Canada it is a federally assessed species of Special Concern (COSEWIC), known from only a handful of Nova Scotia lakeshores. Digging it both removes a rare plant and churns up fragile bog soil.",
+      "Hold the plant's toxicity and its cultural history together with respect. Carolina redroot is poisonous to humans and livestock if eaten: the rhizome carries photodynamic (light-activated) pigments — the toxin lachnanthocarpone and relatives — and farmers historically reported that light-skinned (white) pigs were poisoned while dark pigs were spared, the classic signature of a photosensitizing plant. The same root was also used medicinally and as a narcotic by some Native peoples, not as a casual material. Its use as a red dye by Indigenous communities of the Southeast is real and documented, but the precise dye method is recorded as lost; treat that gap as a reason for humility and accurate attribution, never as an invitation to 'rediscover' it by experimenting on a rare, toxic, habitat-sensitive plant.",
+      "If, and only if, you have explicit permission, deep local knowledge, and a cultivated or conservation-nursery source (never wild bog plants), any handling still demands a dedicated non-food pot, dedicated tools, and gloves, because the plant is toxic and stains — but for almost everyone, the right and complete answer is to observe, photograph, and move on.",
+      "For actual red-brown color to dye or ink with, choose an abundant, low-impact substitute instead. [[dye-one-seed-juniper|One-seed juniper]] gives earthy reds and browns from gathered fallen material; iron acetate (rust water) and [[tech-acid-base|acid & base shifters]] will then let you tune that color far more safely and sustainably than any wild redroot ever should."
+    ],
+    modifiers: "Modifier behavior here is documented history, not a recipe to run on wild plants. The rhizome pigment is a red-class colorant, so in principle it would respond like other root reds: an acid bath (vinegar, [[tech-acid-base|acid & base shifters]]) would tend to warm and brighten it, a wood-ash alkali would push it duller and browner, and iron water would 'sadden' it toward maroon and grey-brown — the same iron shift seen across plant reds. But because the genuine historical method is lost and the plant is rare and toxic, treat these as notes on what red dyes do in general, not as license to test them on dug wild redroot. Apply the iron, acid, and alkali shifters to your abundant substitute dye instead.",
+    preservation: "There is nothing to bottle from this card — it is observe-only, so the thing to preserve is the plant and its habitat, not a dye liquor. The best preservation practice is leaving the rhizome in the ground, staying out of the soft peat where these plants root, and recording the population as an observation so others can learn the plant without disturbing it. If you ever work with a permitted, cultivated substitute, follow ordinary craft-dye storage (see [[tech-preserving|preserving plant inks & dyes]]) for that material — but the redroot itself stays where it is.",
+    yield: "The honest yield from this card is knowledge, not pigment: confident field identification of a striking native wetland plant, an accurate sense of its Indigenous dye history, and a clear understanding of why it is off-limits to casual harvest. The only sustainable 'product' is a good photograph and a recorded observation. For workable red-brown color in actual quantity, your real yield comes from the abundant substitute — gathered fallen [[dye-one-seed-juniper|one-seed juniper]] material — not from a rare, toxic bog perennial whose color costs the whole plant.",
+    beyondInk: "Historically the rhizome's red was used as a textile and craft dye by Native peoples of the Southeastern coastal plain, and the root also has a documented place in Indigenous and later homeopathic medicine — context that deserves respect and accurate credit, not novelty framing. Today the plant's real 'beyond ink' value is ecological and educational: it feeds pollinators and provides seed for wildlife such as sandhill cranes, and it serves as a teaching plant for wetland identification and for the principle that some colors are simply not ours to take. Reach for an abundant, fallen-material dye when you want pigment to actually use.",
+    safety: [
+      "EDUCATIONAL ONLY — observe, do not harvest. The dye lives in the rhizome of a toxic wetland perennial; taking the color kills the plant and disturbs fragile, slow-recovering bog and wet-savanna habitat. Do not dig wild roots.",
+      "Poisonous: Carolina redroot is toxic to humans and livestock if ingested. The root carries photodynamic (light-activated) pigments — including the toxin lachnanthocarpone — that act as photosensitizers; it was also used historically as a narcotic. Never taste or eat any part of it, and keep it well away from children, pets, and grazing animals.",
+      "This is craft and history, never food or self-medication — its historical medicinal/narcotic use is not a home remedy and must not be imitated.",
+      "Conservation hazard: the species is rare and protected across parts of its range — assessed as Special Concern in Canada (COSEWIC) and tracked as rare or imperiled in other jurisdictions. Occurrence is not permission; a sighting, even on land you may legally access, does not grant any right to dig it.",
+      "If you ever handle a permitted, cultivated (never wild) plant, use a dedicated non-food pot and tools and wear gloves — it is toxic and stains, and those tools must never return to food use.",
+      "Walk lightly when observing: stay on durable trails, keep out of the soft peat, and avoid trampling the wet ground these plants depend on."
+    ],
+    sources: [
+      {
+        title: "Lachnanthes caroliniana (Carolina redroot) — Lady Bird Johnson Wildflower Center, University of Texas at Austin",
+        url: "https://www.wildflower.org/plants/result.php?id_plant=LACA5"
+      },
+      {
+        title: "Carolina redroot — Florida Wildflower Foundation",
+        url: "https://www.flawildflowers.org/flower-friday-lachnanthes-caroliana/"
+      },
+      {
+        title: "COSEWIC Assessment and Status Report on the Redroot (Lachnanthes caroliniana) — Government of Canada Species at Risk Public Registry",
+        url: "https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/redroot-lachnanthes-caroliniana-2009.html"
+      },
+      {
+        title: "Lachnanthes caroliana — Useful Temperate Plants (documents narcotic/medicinal use and red root dye)",
+        url: "https://temperate.theferns.info/plant/Lachnanthes+caroliana"
+      }
+    ]
+  },
+  {
+    id: "ink-tanoak",
+    plantId: "ink-tanoak",
+    kind: "dye",
+    name: "Tanoak bark (observe-only)",
+    category: "brown",
+    swatch: "#6a4a3a",
+    color: "Brown / iron-black",
+    difficulty: "Intermediate",
+    teaser: "SOD-quarantined brown — dead wood only",
+    toxic: false,
+    educationalOnly: true,
+    hook: "Tanoak (Notholithocarpus densiflorus) carries one of the highest bark-tannin loads of any tree in the coastal forests of California and southern Oregon — so high that 19th-century tanneries clear-felled whole hillsides for \"tanbark\" to make heavy saddle and harness leather. Those same tannins steep into a warm, substantive brown on wool and silk, and when met with iron they react exactly as oak galls do, sliding through gray into a deep iron-gall black. But this is not a tree to cut for color: Sudden Oak Death (Phytophthora ramorum) has killed tens of millions of tanoaks — it is the species most susceptible to the pathogen — and the tree has nourished Karuk, Yurok, and other Indigenous nations for millennia as a cultural keystone, its thick-shelled, tannin-rich acorn a stored staple and its stands tended with fire across generations. This card is here to teach the chemistry and the history, not to send anyone up a living trunk with a drawknife.",
+    lightfastness: {
+      rating: "good",
+      note: "Tannin-iron browns and iron-gall blacks are among the more durable plant colors — the iron-tannate complex is the same chemistry behind centuries-old iron-gall manuscript inks, and it resists light far better than fugitive flower or berry dyes. The plain tannin brown (no iron) is closer to moderate and will mellow toward tan with time. The real durability caveat is the fiber, not the hue: conservation studies show iron-tannate's acidity and iron content speed up acid hydrolysis and oxidation, so iron-dyed textiles (wool, silk, and cellulose fibers alike) lose strength and flexibility faster than undyed cloth. A piece may outlast its color's brilliance yet still grow brittle, so go light on iron and neutralize after."
+    },
+    timeline: {
+      active: "2-3 hr",
+      passive: "1-3 days"
+    },
+    ingredients: [
+      {
+        item: "Tanoak bark — DEAD/FELLED WOOD ONLY",
+        amount: "Equal weight bark to fiber (1:1) for a medium brown; up to 2:1 for depth",
+        required: true,
+        note: "Educational reference only. Never strip a living tanoak. Bark may be collected solely from already-dead or felled wood AND only where Sudden Oak Death quarantine rules permit moving host material — within the regulated zone (16 California counties plus the infested part of Curry County, Oregon) transporting tanoak bark, wood, or leaves out of the area can require a permit and may be barred outright. For an ethical, legal substitute, use commercially sold oak bark or oak galls, which carry the same tannin chemistry without touching a declining native or risking the spread of the pathogen."
+      },
+      {
+        item: "Water (soft / rainwater preferred)",
+        amount: "Enough to cover bark generously, then to fill the dye bath",
+        required: true,
+        note: "Hard, iron-rich water will pre-sadden the bath and dull a plain brown; use it deliberately if you want to push toward gray."
+      },
+      {
+        item: "Iron water (ferrous acetate or dilute ferrous sulphate)",
+        amount: "A small splash to start (well under 5% WOF); add gradually",
+        required: false,
+        note: "The shift-maker: tannin plus iron gives the iron-gall gray-to-black. A little goes a long way and over-ironing harms fiber — see [[tech-iron-acetate|iron water]]. Literal iron water auto-links."
+      },
+      {
+        item: "Alum (potassium aluminum sulphate)",
+        amount: "~10-15% weight of fiber, as a pre-mordant",
+        required: false,
+        note: "Tannin is substantive and binds without a mordant, but an alum pre-mordant brightens and warms the brown and improves wash-fastness."
+      },
+      {
+        item: "Oak galls or commercial oak bark (tannin booster / substitute)",
+        amount: "To taste",
+        required: false,
+        note: "Same tannin family; the recommended stand-in so you can practice this exact process without sourcing tanoak at all."
+      },
+      {
+        item: "Gum arabic",
+        amount: "Small amount, if thickening for ink",
+        required: false,
+        note: "Only if making a writing ink rather than a textile bath — see [[tech-gum-arabic|gum arabic]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel pot (never reused for food)",
+      "Dedicated non-food stirring spoon or stick",
+      "Nitrile or rubber gloves",
+      "Strainer or muslin/cheesecloth for filtering bark",
+      "Heat source (stove or outdoor burner)"
+    ],
+    toolsOptional: [
+      "Separate small jar/pot for the iron dip (keep iron tools separate)",
+      "Kitchen scale for weighing bark and fiber",
+      "pH strips to track acid/alkali shifts",
+      "Thermometer"
+    ],
+    steps: [
+      "IDENTIFY AND OBSERVE, DON'T HARVEST. Learn tanoak in the field: leathery, hard-toothed evergreen leaves with a pale fuzzy underside, and its signature acorn cradled in a bristly, mossy-looking cup. Occurrence is never permission — and this species is a special case. Tanoak is in steep regional decline from Sudden Oak Death and is a cultural keystone food tree for Karuk, Yurok, and other Indigenous nations. Treat this card as study, not a cutting list: the default ethic is observe-only.",
+      "UNDERSTAND WHY CASUAL HARVEST IS WRONG HERE. Stripping bark from a living tanoak can kill it, and the historic tanbark trade already clear-felled vast stands. On top of that, moving tanoak material can spread Phytophthora ramorum. If you ever work with real tanoak bark, it must come ONLY from already-dead or felled wood, AND you must check Sudden Oak Death quarantine rules first — within the regulated area (16 infested California counties and the infested part of Oregon's Curry County), transporting host bark, wood, or leaves out of the zone can require a permit from the county agricultural commissioner and may be prohibited outright. When in doubt, contact the county agricultural commissioner's office, and don't move it.",
+      "CHOOSE THE ETHICAL SUBSTITUTE. To actually practice this chemistry, use commercially sold oak bark or oak galls instead of tanoak. They deliver the same tannin and the same iron-gall reaction with no harm to a struggling native and no quarantine risk. The rest of these steps describe the generic tannin-bark process so you understand what tanoak would do.",
+      "EXTRACT THE TANNIN. Working with dedicated non-food tools and gloves, soak the bark overnight, then simmer it gently in a dedicated pot for about 2 hours to pull the tannin into solution. Strain out the bark through muslin to leave a clear tea-brown liquor. Keep the temperature below a hard boil to avoid dulling the color.",
+      "DYE THE FIBER. Wet your fiber (alum-mordanted if you want a brighter, faster brown), add it to the strained bath, and simmer gently about 1 hour, moving it for even uptake. Let it cool and steep in the bath overnight to deepen toward a rich brown.",
+      "SHIFT TO GRAY OR BLACK WITH IRON (optional). For the iron-gall effect, lift the fiber, add a small splash of iron water to the bath OR briefly dip the fiber in a separate dilute iron bath, then return it. The brown turns gray, then near-black as the iron-tannate forms. Add iron sparingly and rinse well — too much iron embrittles wool, silk, and cellulose fibers alike.",
+      "RINSE, NEUTRALIZE, AND DRY. Rinse thoroughly in cool water until it runs clear; a final rinse with a little chalk or wood-ash water can neutralize residual acidity from an iron bath and protect the fiber. Dry out of direct sun. Label and store any leftover bath as a craft material — never near food."
+    ],
+    modifiers: "Tannin-rich tanoak (and its oak-bark substitutes) is highly responsive to after-baths. Plain, it gives warm beige-to-medium brown. Iron is the dramatic shift: tannin plus [[tech-iron-acetate|iron water]] forms an iron-tannate complex that slides from gray to deep iron-gall black — the same reaction as oak-gall ink. Alkali pushes the brown deeper and redder, while acid lightens it toward tan; explore both gently with [[tech-acid-base|acid & base shifters]], or use [[tech-wood-ash-lye|wood-ash alkali]] for a natural high-pH push. Adding more tannin (extra bark or oak galls) saturates and darkens the base brown and gives iron more to grab. A copper after-bath warms the brown toward olive-russet.",
+    preservation: "A strained bark liquor keeps a few days at room temperature and a couple of weeks refrigerated in a labeled, sealed non-food jar, but tannin baths grow mold and ferment — a sour smell or fuzzy surface means discard it. The most stable form is dry: well-dried bark (or commercial oak bark/galls) stores for years in a cool, dark, airtight container, ready to re-extract on demand. An iron-modified bath is more durable against mold because iron is mildly biocidal, but it stains everything and corrodes metal, so store it in glass or plastic. If you build a writing ink, a small amount of gum arabic plus a clove or drop of a preservative slows spoilage — see [[tech-preserving|preserving]].",
+    yield: "Roughly equal weights of bark and fiber (1:1) give a medium brown; pushing to 2:1 deepens it but with diminishing returns. Because tannin is substantive, even a modest amount of bark colors fiber readily — a few hundred grams of dried bark can dye several hundred grams of wool to a usable brown, and a single extraction can often be re-simmered for a paler second bath. Iron multiplies the visual range without needing more bark: the same liquor yields brown, gray, and black depending only on the iron dip. Expect real-world color to read more muted and earthy than a fresh wet swatch suggests.",
+    beyondInk: "Beyond textile dyeing, this tannin-iron chemistry is the historic basis of iron-gall writing and drawing ink — the bark liquor thickened with [[tech-gum-arabic|gum arabic]] and darkened with iron behaves like a traditional manuscript ink (lay it down brown; it darkens as it oxidizes). The plain tannin extract is also a useful mordant/tannin pre-treatment for other natural dyes, and a wood/leather stain that brings out grain. Tanoak's defining historic role, of course, was leather tanning — the original reason its bark was harvested at industrial scale. For pigment-style paint, bind the concentrated extract with [[tech-egg-casein|egg or casein]]. As always: craft uses only, made with dedicated non-food tools.",
+    safety: [
+      "CRAFT, NOT FOOD: this is a dye/ink recipe, not a culinary one. Use a dedicated non-food pot, spoon, and jars that never return to kitchen use, and keep all baths and materials away from food and drink.",
+      "EDUCATIONAL / OBSERVE-ONLY: do not strip bark from living tanoak. The species is in serious regional decline from Sudden Oak Death — it is the tree most susceptible to the pathogen — and is a cultural keystone food tree for Indigenous nations. Treat real tanoak as off-limits and use commercial oak bark or oak galls to practice.",
+      "SOD QUARANTINE IS A LEGAL OBLIGATION: tanoak is a primary host of Phytophthora ramorum. Moving its bark, wood, or leaves out of the regulated zone (16 infested California counties and the infested part of Oregon's Curry County) can spread the pathogen and may require a permit from the county agricultural commissioner — or be prohibited outright. Check current rules with the county agricultural commissioner's office before moving any host material; don't transport infected-zone material.",
+      "Occurrence is not permission: a sighting or a downed log grants no right to collect. Confirm land rules and ownership, and for native/culturally significant species defer to Tribal stewardship and authority.",
+      "Tannins are astringent and can irritate skin, eyes, and airways; wear gloves and work with ventilation. The dye also permanently stains skin, clothing, and surfaces.",
+      "Iron (ferrous sulphate/acetate) is moderately toxic if ingested and irritating to skin and eyes — handle with gloves, keep separate dedicated tools, and store the iron bath clearly labeled away from children and pets.",
+      "Iron-tannate baths are acidic and slowly weaken wool, silk, and cellulose fibers; rinse well and neutralize with a chalk or wood-ash rinse to protect both the fiber and the maker's hands.",
+      "Simmer in a ventilated space; avoid hard boiling, which can scorch and produce acrid fumes. Let baths cool before handling and dispose of spent baths responsibly, not into storm drains."
+    ],
+    sources: [
+      {
+        title: "UC IPM — Sudden Oak Death (Phytophthora ramorum) Pest Notes",
+        url: "https://ipm.ucanr.edu/home-and-landscape/sudden-oak-death/pest-notes/"
+      },
+      {
+        title: "California Oak Mortality Task Force / suddenoakdeath.org — Regulations: pathogen biology, host list, and quarantine guidance",
+        url: "https://www.suddenoakdeath.org/diagnosis-and-management/regulations/"
+      },
+      {
+        title: "USDA Forest Service FEIS — Notholithocarpus densiflorus (tanoak) species review",
+        url: "https://www.fs.usda.gov/database/feis/plants/tree/notden/all.html"
+      },
+      {
+        title: "Jenny Dean's Wild Colour — Focus on Tannin (tannin dyeing and iron saddening chemistry)",
+        url: "https://www.jennydean.co.uk/focus-on-tannin/"
+      }
+    ]
+  },
+  {
+    id: "ink-western-redcedar",
+    plantId: "ink-western-redcedar",
+    kind: "dye",
+    name: "Western redcedar (observe-only)",
+    category: "brown",
+    swatch: "#8a5a4a",
+    color: "Red-brown (sacred)",
+    difficulty: "Beginner",
+    teaser: "Sacred tree of life — observe only",
+    toxic: false,
+    educationalOnly: true,
+    hook: "Western redcedar (Thuja plicata) is the \"tree of life\" of the Pacific Northwest coast — the cornerstone of the Coast Salish nations (including the Squamish) and many other Indigenous peoples, whose fibrous inner bark becomes rope, baskets, regalia, and watertight rain hats, and whose presence marks the cultural boundary of the entire Northwest Coast. Yes, the reddish bark and warm tannins can stain wool a soft red-brown to tan. But this card exists to honor that tree, not to teach you to strip it: redcedar is sacred, bark harvest from a living tree can girdle and kill it, and the species is dying back across its range as Pacific summers grow hotter and drier. Indigenous bark-pullers harvest narrow vertical strips with deep skill and ceremony, leaving trees alive and scarred into \"culturally modified trees\" that stand for centuries — a practice that belongs to those communities, not to casual foragers.",
+    lightfastness: {
+      rating: "fugitive",
+      note: "Like most bark-tannin browns used without a strong mordant, redcedar color is fugitive — it shifts and pales with light and washing. Early colonists noted that the dye colors made by Northwest peoples faded quickly. This card is educational only; we list no recipe to refine, and treat the color as a fact about the tree, not a product to chase."
+    },
+    timeline: {
+      active: "Varies",
+      passive: "Varies"
+    },
+    ingredients: [
+      {
+        item: "Standing, living western redcedar",
+        amount: "0 — observe only; nothing is taken",
+        required: true,
+        note: "This is the whole point: the tree stays whole. Identify it by its drooping sprays of flat, scale-like fronds, fibrous reddish-brown bark in long vertical strips, and a sweet-pungent scent. Admire it; do not cut it."
+      },
+      {
+        item: "Permission and Indigenous knowledge",
+        amount: "Sought before anything else",
+        required: true,
+        note: "Bark harvest from redcedar is governed by Coast Salish and other Northwest Coast protocols and is tied to specific communities, ceremony, and skill. If you are genuinely called to learn, that learning comes through those communities and with consent — not from a website."
+      },
+      {
+        item: "Ethically sourced substitute bark dye",
+        amount: "As needed for your craft",
+        required: false,
+        note: "If you want a real red-brown bark dye to actually use, turn to abundant, non-sacred sources instead — windfall or pruned bark from [[dye-one-seed-juniper|one-seed juniper]], or fallen red-alder bark, which yields red, red-brown, brown, and orange tones. See [[tech-iron-acetate|iron water]] and [[tech-acid-base|acid & base shifters]] to range those substitutes."
+      }
+    ],
+    toolsRequired: [
+      "No harvesting or processing tools — this is an observe-only card",
+      "Field guide or knowledgeable local for confident identification"
+    ],
+    toolsOptional: [
+      "Camera or sketchbook to record the tree without taking from it",
+      "Reading on Coast Salish cedar stewardship and culturally modified trees"
+    ],
+    steps: [
+      "First, understand the rule that overrides everything else here: occurrence is not permission, and for western redcedar the honest answer for a casual forager is simply do not harvest. Seeing a redcedar — even a big, healthy one on public land — grants you no right to its bark. This is an observe-only species: it is listed to honor the tree and the nations who steward it, not to provide a stripping how-to.",
+      "Learn to identify and appreciate it. Western redcedar shows flat, fern-like sprays of scale leaves that droop at the branch tips, fibrous reddish-brown bark that peels in long vertical strands, a buttressed and often fluted trunk, and a strong sweet aroma. Stand with it, photograph it, sketch it — take the experience, not the bark.",
+      "Understand why bark harvest can kill it. The living inner bark (phloem) carries the tree's food; pulling a wide or encircling strip girdles the trunk and can kill the tree outright. Coast Salish bark-pullers avoid this with deep skill — taking only a narrow vertical strip from a carefully chosen tree, never ringing it — leaving a survivable scar that defines a 'culturally modified tree.' That skill, judgment, and the ceremony around it are not something to improvise from a recipe.",
+      "Sit with the cultural weight. Redcedar is the 'tree of life,' regarded as a living, spiritual being and called the cornerstone of Northwest Coast culture; in one Coast Salish account it grew from the grave of a deeply generous person so it could keep giving. Engaging with redcedar bark outside of that living relationship — as a novelty craft material — strips it of exactly the meaning that makes it sacred. Respect means context and credit, and here it also means restraint.",
+      "Factor in the tree's decline. Redcedar is dying back across Washington, Oregon, and Idaho after recent stretches of unusually hot, dry summers, with heavy mortality tied to the 2015–2018 drought years; researchers see it as an early sign of shifting tree ranges under climate change. A climate-stressed, declining, sacred tree is not a forage target.",
+      "Choose the ethical alternative instead. If you are not part of a community with cedar-harvest rights, satisfy a red-brown bark craving with abundant, non-sacred substitutes — fallen red-alder bark or windfall/pruned [[dye-one-seed-juniper|one-seed juniper]] — and use [[tech-iron-acetate|iron water]] and [[tech-wood-ash-lye|wood-ash alkali]] to shift their tones. If you are genuinely drawn to redcedar itself, the right next step is to seek out and listen to local and Indigenous knowledge-holders, with permission — not a dye pot."
+    ],
+    modifiers: "No modifier work is described here, because no dye is being made. For the record, redcedar bark is tannin-rich, so the same chemistry seen in alder and juniper barks would apply to an ethically sourced substitute: [[tech-iron-acetate|iron water]] saddens and darkens a bark brown toward gray-brown and deep taupe by reacting with the tannins; an acid rinse keeps it warmer and redder while [[tech-wood-ash-lye|wood-ash alkali]] pushes it browner and duller (see [[tech-acid-base|acid & base shifters]]). Apply that knowledge to juniper or alder, not to a living redcedar.",
+    preservation: "There is nothing to preserve here, and that is intentional — no extract is brewed, bottled, or stored from this tree. What is worth preserving is the tree itself and the knowledge around it: living redcedars left un-stripped, and the cultural protocols held by the nations who have tended them for thousands of years. If you make a substitute bark dye from juniper or alder, see [[tech-preserving|preserving plant dyes]] for shelf life and mold control on that liquor.",
+    yield: "Zero, by design. This card produces no dye, because nothing is taken from the tree. The only honest 'yield' is understanding: why this species is off-limits to casual harvest, how Indigenous bark-pullers work without killing trees, and where to point a real red-brown craving instead. If you genuinely need redcedar bark for cultural practice, that comes through community and consent, not a how-to.",
+    beyondInk: "Beyond any thought of dye, redcedar's true craft legacy belongs to the Indigenous nations of the Northwest Coast: the soft, shreddable inner bark is twisted and woven into rope, baskets, mats, capes, skirts, and the iconic watertight rain hat, while the rot-resistant wood becomes canoes, longhouses, bentwood boxes, and totem and house poles. These are living traditions, made with consent and skill within those communities. For your own textile or paint work, route a red-brown bark color through an ethical substitute — alder or juniper bark — rather than this tree.",
+    safety: [
+      "These are CRAFT recipes, not food — and this one is observe-only: it is here to honor western redcedar, not to teach harvest. Do not strip bark from a living redcedar.",
+      "Cultural and ethical hazard first: redcedar is a sacred 'tree of life' to the Coast Salish (including the Squamish) and many other Northwest Coast nations. Bark harvest is governed by their protocols and ceremony and is not yours to take. Engaging with it as a casual craft material is appropriation, not craft.",
+      "Occurrence is not permission. Encountering a redcedar — including on public land — grants no harvest right. Many redcedars stand on Indigenous lands, in parks, or in protected stands where bark removal is prohibited regardless of ethics.",
+      "Conservation hazard: redcedar is in documented climate-driven dieback across the Pacific Northwest. Harvesting from a stressed, declining, slow-to-recover species adds harm — leave standing trees alone.",
+      "Tree-killing hazard: pulling a wide or encircling strip of living bark girdles and can kill the tree. Sustainable bark-pulling is a high-skill Indigenous practice, not something to attempt from written steps.",
+      "Health note for any cedar you do handle: redcedar wood dust and foliage are not benign. The wood is highly allergenic — its plicatic acid causes occupational asthma and skin reactions in woodworkers — and the foliage contains thujone, a toxic compound. None of that is a reason to touch a living tree; it is a reason to wear a dust mask and gloves and keep good ventilation if you ever work fallen cedar wood or a substitute.",
+      "If you want a usable red-brown bark dye, use abundant non-sacred substitutes (fallen red-alder bark, windfall/pruned juniper) with dedicated non-food pots, utensils, and gloves kept separate from kitchenware — never reuse dye gear for food."
+    ],
+    sources: [
+      {
+        title: "USDA Forest Service PNW Research — Western Redcedar Dieback",
+        url: "https://research.fs.usda.gov/pnw/understory/western-redcedar-dieback"
+      },
+      {
+        title: "Wikipedia — Thuja plicata (cultural significance, bark use, culturally modified trees)",
+        url: "https://en.wikipedia.org/wiki/Thuja_plicata"
+      },
+      {
+        title: "USDA Forest Service — Native Plant Dyes (bark-based brown/red-brown dyes; Indigenous dyes faded quickly)",
+        url: "https://www.fs.usda.gov/wildflowers/ethnobotany/dyes.shtml"
+      }
+    ]
+  },
+  {
+    id: "ink-wolf-lichen",
+    plantId: "ink-wolf-lichen",
+    kind: "dye",
+    name: "Wolf lichen (observe-only)",
+    category: "yellow",
+    swatch: "#c6c82a",
+    color: "Chartreuse-yellow (toxic)",
+    difficulty: "Advanced",
+    teaser: "Vivid chartreuse — toxic, observe only",
+    toxic: true,
+    educationalOnly: true,
+    hook: "Wolf lichen burns a shocking electric chartreuse across the bark of old conifers in the dry mountain West — a color so saturated it looks synthetic. That glow is vulpinic acid, a poison potent enough that European hunters once packed it into carcasses to kill wolves and foxes, a practice recorded as far back as 1759. The same pigment gave the Tlingit their yellow for Chilkat dancing blankets, and Klamath and other Indigenous weavers soaked porcupine quills in its chartreuse extract for basketry. But this is an old-growth indicator that creeps outward perhaps four millimeters a year and can live for centuries; whole local populations have already been stripped out for the dye pot and the dried-flower trade, which is exactly why this card teaches you to look, not take.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Honest version: this is not a permanent yellow. Wolf lichen's vulpinic acid does take to wool and silk without a mordant — and on protein fiber that bond, plus the acid's mild pesticidal effect, is part of why the Tlingit valued it for Chilkat blankets. But the plain boiling-water yellow most dyers actually get is only moderately lightfast: it holds better than fugitive berry reds, yet on cellulose fibers, in thin washes, and under sustained sun it still shifts and dulls like most botanical yellows. Do not read 'better than fugitive' as a reason to harvest a centuries-old lichen — abundant onion-skin or weld yellows give comparable or better fastness with none of the ecological cost."
+    },
+    timeline: {
+      active: "Reference only",
+      passive: "2–3 weeks"
+    },
+    ingredients: [
+      {
+        item: "Wolf lichen (Letharia vulpina)",
+        amount: "None — do not collect",
+        required: false,
+        note: "Listed only to be explicit: this card does not call for gathering wolf lichen. Use it to identify and admire the species in place. If you genuinely need its chartreuse for research or cultural work, source a small reference quantity from an ethical cultivated or blow-down supplier or a teaching collection, never by stripping trees."
+      },
+      {
+        item: "Yellow onion skins (the recommended substitute)",
+        amount: "Skins from ~10–20 onions (roughly equal weight to fiber)",
+        required: true,
+        note: "A genuinely abundant, free, food-waste source of warm yellow. With an alum mordant and a tweak of iron or alkali it lands close to the lichen's tone with none of the ecological cost. This is what you should actually dye with — see [[dye-one-seed-juniper|juniper]] and weld for other low-impact yellows."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate) mordant",
+        amount: "Approx. 10–15% of dry fiber weight",
+        required: false,
+        note: "For the onion-skin substitute on protein or cellulose fiber. (Wolf lichen famously needs no mordant — but that convenience is not worth the harm.)"
+      },
+      {
+        item: "Clear household ammonia (only if studying a legally sourced sample)",
+        amount: "1 part ammonia to ~2 parts water",
+        required: false,
+        note: "Caustic — see safety. The traditional 'ammonia fermentation' (historically stale urine) extracts and shifts lichen color over weeks and gives off irritating fumes. Not needed for the onion-skin substitute, and not something to improvise on wild-collected lichen."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "A few spoonfuls, to taste",
+        required: false,
+        note: "Saddens and greens a yellow bath. See [[tech-iron-acetate|iron water]]."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food dye pot (stainless or enamel) reserved for craft use only",
+      "Dedicated craft utensils — spoon, tongs, strainer — never returned to the kitchen",
+      "Nitrile or rubber gloves",
+      "Field guide or lichen ID reference for observe-only identification"
+    ],
+    toolsOptional: [
+      "Hand lens (10x) for in-place identification",
+      "Camera or sketchbook to record the lichen instead of collecting it",
+      "Respirator/N95 and chemical-splash goggles (mandatory if anyone runs an ammonia steep)",
+      "pH strips (to track alkali shifts on the substitute bath)",
+      "Glass jar with lid for any ammonia steep"
+    ],
+    steps: [
+      "Harvest only where allowed — and here the ethic is observe only, so the honest answer is: do not harvest. Occurrence is not permission: spotting wolf lichen (or seeing it mapped) grants no right to take it, and on most public land collecting lichen is restricted or prohibited regardless. Treat every wild colony as off-limits.",
+      "Identify it in place instead. Look for the bushy, branching, almost neon yellow-green tufts on the bark and dead wood of conifers in dry, open mountain forests of the West. Wolf lichen is an old-growth indicator — its presence tells you something about the forest's age and health, which is worth far more standing than in a dye pot. Photograph or sketch it; leave it on the tree.",
+      "Learn why casual harvest is wrong here specifically. Wolf lichen grows only ~4 mm per year and individual colonies can persist for centuries; it cannot rebound from collection on any human timescale. Documented populations have been wiped out locally by over-harvest for dye and dried-floral arrangements. Even wind-fallen pieces represent decades of growth and feed forest nutrient cycles — 'just the blow-downs' is still a meaningful take from a slow system.",
+      "Honor the cultural context. The brilliant yellow of Tlingit Chilkat dancing blankets, and the quill- and basket-dyeing of Klamath, Karuk, Yurok and other Indigenous peoples, came from this lichen within specific traditions and relationships to place. If you are not within that tradition, study and credit it — don't reframe a knowledge-bound cultural practice as a novelty craft hack.",
+      "Dye with the substitute, not the lichen. For a comparable warm-to-chartreuse yellow, simmer onion skins in your dedicated pot, mordant fiber with alum, and add the alkali or iron tweaks described in Modifiers. You get the color, keep the centuries-old lichen on the tree, and stay within reach of abundant, renewable material.",
+      "For reference study only — not a wild-harvest step. If, and only if, you are working a small, legally and ethically sourced sample (cultivated/blow-down supplier or teaching collection), the first hazard to plan around is the caustic ammonia steep: it gives off irritating fumes and must be run outdoors or under strong ventilation, in a sealed jar, with gloves, splash goggles, and a respirator, away from food, children, and pets. A gentle plain-water simmer in your dedicated craft pot gives the yellow with far less risk. Never let the caustic liquor near skin, eyes, or your kitchen, and never improvise this on wild-collected lichen."
+    ],
+    modifiers: "Wolf lichen's color is driven by where it sits on the acid–alkali scale. A plain boiling-water bath gives the clear chartreuse-yellow; a long [[tech-acid-base|acid & base shift]] toward alkali via an ammonia steep pushes related lichen acids toward gold and orange-brown (and, in other lichen chemistries entirely, over months toward the famous pink–purple 'orchil' range — wolf lichen itself is a yellow, not a true orchil source). [[tech-iron-acetate|Iron water]] saddens and greens the yellow toward olive; a mild wood-ash alkali (lye-water) warms it. For the onion-skin substitute the same logic applies: alum brightens, iron greens and darkens, and a pinch of alkali warms it toward the lichen's tone.",
+    preservation: "A finished water-extracted yellow bath is best used fresh; held more than a few days it can grow mold or sour, so refrigerate in a sealed, clearly labeled non-food jar and discard if it smells off or develops a skin. Ammonia steeps are self-preserving while caustic but should be kept sealed, labeled poison, and stored away from living spaces; neutralize and dispose of spent caustic liquor responsibly rather than pouring concentrated ammonia down a drain. Dyed wool and silk hold their color reasonably well in storage; keep finished pieces out of prolonged direct sun to slow the inevitable fading. See [[tech-preserving|preserving dyes & inks]].",
+    yield: "Honestly, the intended yield of this card is knowledge, not pigment — it exists to keep wolf lichen on the tree. For the recommended onion-skin substitute, the skins from a couple of mesh bags of onions will dye several hundred grams of fiber a warm yellow. For reference only: even a generous handful of wolf lichen yields just a modest yellow bath, which is precisely the bad trade at the heart of its over-collection — a few grams of dye in exchange for decades, sometimes centuries, of irreplaceable growth.",
+    beyondInk: "Historically the same chartreuse extract dyed wool for Tlingit Chilkat dancing blankets and colored porcupine quills for Klamath, Karuk, Yurok, and other Indigenous basketry across western North America; some Plateau peoples also used the lichen in a topical poultice. The pigment carries a darker craft-adjacent history too — the 'wolf' and 'fox' of its names come from its use as a carnivore poison. On the Craft Almanac, treat all of this as context to understand and respect, not a how-to, and channel any actual textile-dye, paint, or pigment project toward renewable yellows like onion skin, weld, or [[dye-one-seed-juniper|juniper]] rather than wild lichen.",
+    safety: [
+      "TOXIC: wolf lichen contains vulpinic acid, a poison historically used to kill wolves and foxes — it is dangerous to mammals (including pets and people) if ingested. This is craft material, never food, and not a folk medicine to self-administer.",
+      "OBSERVE-ONLY / EDUCATIONAL-ONLY: this card is for identification, history, and ethics, not a wild-harvest how-to. Do not strip living trees, and do not treat even wind-fallen lichen as fair game — both harm a slow, old-growth-dependent species that cannot recover on a human timescale.",
+      "Occurrence is not permission: seeing or mapping wolf lichen confers no right to collect it; lichen gathering is restricted or banned on most public lands.",
+      "Ammonia/'fermentation' extraction is caustic and gives off irritating, potentially harmful fumes — only ever attempt it on a legally sourced reference sample, outdoors or under strong ventilation, with gloves, splash goggles, and a respirator, away from food, children, and pets. Never pour concentrated ammonia down a drain.",
+      "Use dedicated non-food pots and utensils for any dye work and keep them out of the kitchen permanently; both the lichen's vulpinic acid and ammonia residues must never contact food surfaces.",
+      "Wear gloves when handling any lichen, dye liquor, or ammonia; wash hands and exposed skin afterward.",
+      "Cultural respect is a safety-of-knowledge issue: present Indigenous dye traditions (Tlingit, Klamath, Karuk, Yurok and others) with credit and context, never as a novelty or appropriation."
+    ],
+    sources: [
+      {
+        title: "Letharia vulpina — Wikipedia (toxicity, vulpinic acid, Tlingit/Klamath dye uses, wolf-poisoning history dated to 1759)",
+        url: "https://en.wikipedia.org/wiki/Letharia_vulpina"
+      },
+      {
+        title: "Wolf Lichen: Wallpaper of the World's Forests — Montana Natural History Center (slow growth ~4 mm/yr, longevity, local populations lost to over-collection)",
+        url: "https://www.montananaturalist.org/blog-post/wolf-lichen-wallpaper-of-the-worlds-forests/"
+      },
+      {
+        title: "Lichen Love: A Natural History of Lichen — North Cascades Institute (lichen-dye history, ethics, and Karen Diadick Casselman's conservation approach)",
+        url: "https://blog.ncascades.org/graduate-med-program/lichen-love-kelly-sleight-2/"
+      }
+    ]
+  },
+  {
+    id: "dye-cochineal",
+    plantId: null,
+    kind: "dye",
+    name: "Cochineal (educational)",
+    category: "red",
+    swatch: "#9c1f3a",
+    color: "Crimson-carmine",
+    difficulty: "Intermediate",
+    teaser: "Indigenous crimson — an insect dye",
+    toxic: false,
+    educationalOnly: true,
+    hook: "For three thousand years before the Spanish ever saw it, Mixtec, Zapotec, and Nahua dyers of Oaxaca coaxed the most brilliant red the world had known out of a grey, fuzzy scale insect living on nopal cactus — nocheztli, \"blood of the prickly pear.\" A single gram of dried Dactylopius coccus holds 17–24% carminic acid, potent enough to dye wool a deep cherry-crimson at a fraction of its own weight; the Aztecs took it as tribute and the Spanish shipped a quarter-million pounds a year to Europe, where it colored cardinals' robes, Gobelins tapestries, and the Redcoats. This is an EDUCATIONAL card: cochineal is an animal, not a plant, so it has no place on the harvest map — it is here for context, honest ethics, and respect for the Indigenous knowledge that perfected it. Please read it as history and craft literacy, not a foraging how-to.",
+    lightfastness: {
+      rating: "good",
+      note: "Genuinely better than most natural reds — but only under the right conditions. On protein fiber (wool, silk) properly mordanted with alum, cochineal red has good-to-excellent light- and washfastness and is why so much historic textile color survives. Be honest about the caveats: the carmine LAKE pigment (cochineal precipitated onto an alum substrate for paint) is far more fugitive, rating only about 1–2 on the blue-wool scale and fading even under indoor light, and the purple/lilac shades pulled with iron are less stable than the crimsons. Fastness on cellulose (cotton, linen) is weaker unless tannin + aluminium acetate mordanting is done carefully."
+    },
+    timeline: {
+      active: "2–4 hr",
+      passive: "1–3 days"
+    },
+    ingredients: [
+      {
+        item: "Dried cochineal (Dactylopius coccus), whole or ground — ETHICALLY SOURCED ONLY",
+        amount: "2–5% weight-of-fiber (WOF) for bright cherry red on wool; up to 10–20% WOF for deep crimson/burgundy",
+        required: true,
+        note: "Buy cultivated/commercial cochineal from a reputable dye supplier, or use insects collected during sanctioned invasive-control or harvest of cultivated nopal. Do NOT scrape wild native Opuntia — see steps and safety. Whole insects keep best; grind just before use."
+      },
+      {
+        item: "Alum (potassium aluminium sulfate) — mordant",
+        amount: "10–15% WOF for protein fiber; ~8% aluminium acetate for cellulose",
+        required: true,
+        note: "Alum is what makes cochineal red bright and lightfast. Pure carminic acid without a mordant is a dull brownish-purple."
+      },
+      {
+        item: "Cream of tartar — for protein fiber",
+        amount: "~6% WOF",
+        required: false,
+        note: "Brightens and evens the red on wool/silk and helps shift the bath toward a clearer scarlet."
+      },
+      {
+        item: "Tannin (e.g. gallnut, oak, sumac) — for cellulose only",
+        amount: "~8% WOF",
+        required: false,
+        note: "Cotton and linen need a tannin pre-mordant before alum/aluminium acetate or the color washes out."
+      },
+      {
+        item: "Acid shifter — cream of tartar, vinegar, or citric acid",
+        amount: "to taste, added to the dyebath",
+        required: false,
+        note: "Pushes neutral mauve toward warm cherry/scarlet red. See [[tech-acid-base|acid & base shifters]]."
+      },
+      {
+        item: "Iron water (ferrous acetate)",
+        amount: "a small splash as an after-bath",
+        required: false,
+        note: "\"Saddens\" crimson to lilac, plum, and grey-purple. A little goes a long way; too much dulls and can weaken fiber. See [[tech-iron-acetate|iron water]]."
+      },
+      {
+        item: "Wood-ash lye or soda ash — alkaline shifter",
+        amount: "tiny amount, to raise pH",
+        required: false,
+        note: "Alkaline conditions shift cochineal toward purple. Use the smallest effective pinch; strong alkali can weaken protein fiber."
+      },
+      {
+        item: "Gum arabic",
+        amount: "as needed",
+        required: false,
+        note: "Only if making a carmine watercolor/ink rather than dyeing fiber. See [[tech-gum-arabic|gum arabic]] and [[tech-egg-casein|egg & casein binders]]."
+      },
+      {
+        item: "Soft / distilled water",
+        amount: "enough to cover fiber freely",
+        required: false,
+        note: "Hard water and iron-rich tap water shift and dull the red; soft or distilled water gives the cleanest crimson."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless or enamel dye pot (never reused for cooking)",
+      "Mortar and pestle or dedicated coffee/spice grinder for the insects (non-food)",
+      "Nitrile or rubber gloves",
+      "Fine strainer, cheesecloth, or jelly bag to filter the bath",
+      "Dedicated stirring spoon/rod",
+      "Accurate scale for weighing fiber and insects (WOF percentages)"
+    ],
+    toolsOptional: [
+      "pH strips for tuning acid/alkali shifts",
+      "Dust mask when grinding dried insects (the powder is a respiratory allergen)",
+      "Thermometer to hold the bath below a hard boil",
+      "Separate small jars for iron and alkali after-baths"
+    ],
+    steps: [
+      "IDENTIFY AND UNDERSTAND, DON'T HARVEST. Cochineal is a scale insect, not a plant, so it appears on no map here and there is no \"forage\" step. On nopal (Opuntia) you would see it as small white cottony tufts on the pads; crush one and it bleeds deep crimson — that is the carminic acid. The native dye insect, Dactylopius coccus, is essentially a domesticated, cultivated animal of Mesoamerica and is not something to strip from wild cactus.",
+      "RESPECT THE SOURCE AND THE PEOPLE. This is a culturally significant Indigenous dye, refined over millennia by Mixtec, Zapotec, and Nahua communities of Oaxaca and still a living livelihood there. Treat it as inherited knowledge to credit and honor, not a novelty bug. If you use cochineal, the ethical path is to buy cultivated/commercial cochineal — ideally Oaxacan or other producers who keep the tradition — rather than improvising wild collection.",
+      "WHY CASUAL WILD HARVEST IS WRONG HERE. Occurrence is not permission, and that holds doubly for an animal on a host plant. Scraping wild native Opuntia damages cacti that may be slow-growing or legally protected, and the wild cochineal you would find in the US Southwest is typically the lower-yield, often INVASIVE Dactylopius opuntiae (3–5% carminic acid vs. 17–24% in D. coccus) — a pest of prickly pear. The only defensible field source is insects gathered under a sanctioned invasive-control or cultivated-nopal harvest, with landowner permission, never by helping yourself to a wild stand.",
+      "PREPARE THE DYESTUFF. Weigh dried insects against your fiber (start ~5% WOF on wool). Grind to a powder with a dedicated grinder or mortar, wearing a dust mask — the powder is a known inhalant allergen. Soak the ground cochineal in warm water, then simmer gently (do not hard-boil) for ~30–45 minutes to extract the carminic acid. Strain through cheesecloth into your dedicated dye pot.",
+      "MORDANT THE FIBER FIRST. For wool or silk, simmer the clean, wetted fiber in alum (10–15% WOF, optionally with ~6% cream of tartar) for about an hour, then let it cool and steep, ideally overnight. For cotton or linen, pre-treat with tannin, then mordant with alum or aluminium acetate. Skipping the mordant gives only a weak, dull, fugitive color.",
+      "DYE. Add the mordanted, wetted fiber to the strained cochineal bath. Bring to a gentle simmer (around 180°F / 82°C, below a rolling boil) and hold ~45–60 minutes, stirring slowly for even uptake. For the deepest, most durable shade, turn off the heat and let the fiber cool in the bath overnight before rinsing in cool water and drying out of direct sun.",
+      "SHIFT THE COLOR DELIBERATELY (OPTIONAL). Work in small samples. Acid (cream of tartar, vinegar) warms the red toward scarlet/cherry; alkali (a pinch of soda ash or wood-ash lye) pushes it toward purple; an iron after-bath \"saddens\" it to lilac, plum, and grey-violet. See the modifiers note below.",
+      "MAKE A PAINT INSTEAD (OPTIONAL). To make carmine lake for ink or watercolor, precipitate the cochineal extract with alum and an alkali, wash and dry the pigment, then bind with gum arabic. Be honest with yourself: this lake pigment is beautiful but markedly more fugitive than dyed wool."
+    ],
+    modifiers: "Cochineal is one of the most pH- and metal-responsive of all natural colors, which is half its magic. On alum-mordanted fiber the base color is a clean crimson. ACID (cream of tartar, vinegar, citric acid — see [[tech-acid-base|acid & base shifters]]) warms it toward scarlet and cherry red. ALKALI (soda ash, or natural wood-ash lye) shifts it toward magenta and purple. IRON (literally iron water, ferrous acetate — see [[tech-iron-acetate|iron water]]) \"saddens\" the red into lilac, plum, and grey-violet; use it sparingly as an after-bath since excess dulls the hue and can embrittle protein fiber. The mordant metal matters as much as pH: alum gives the brightest, most lightfast reds, while tin can spark a vivid scarlet and iron the purples. For a cool blue-leaning red, pair or layer thoughtfully — and for context on a very different, lightfast-but-muted natural palette, compare the tan-to-purple range of [[dye-one-seed-juniper|one-seed juniper]].",
+    preservation: "Dried whole cochineal insects are remarkably stable: kept dry, cool, and away from light and pests, they hold their dye strength for years (museum and archaeological textiles prove the dye itself can last centuries on fiber). Grind only what you need, since powder loses potency faster and is more prone to clumping and mold if it takes up moisture. A finished liquid dyebath is perishable — it will ferment and grow mold within days at room temperature; refrigerate and use quickly, or freeze. Carmine lake pigment, once washed and fully dried into cakes, stores indefinitely. See [[tech-preserving|preserving extracts]] for keeping liquid extracts and lakes.",
+    yield: "Cochineal is extraordinarily efficient — that potency is the whole historic point. Roughly 70,000 dried insects make about 1 pound (450 g) of dyestuff, but you need very little: at 5% WOF, just 5 g of dried cochineal will dye 100 g of wool a strong red, and 2% WOF still gives a usable cherry shade. Exhausted baths can be re-used for progressively paler pinks and mauves until spent. A small 25–50 g packet of cultivated cochineal is enough for many small projects, which is exactly why ethical purchase — rather than wild scraping — is both the right and the practical choice.",
+    beyondInk: "Cochineal's reach goes far beyond fiber. As a TEXTILE DYE it gives the historic crimsons, scarlets, and purples of Andean and Mesoamerican weaving, European broadcloth, and tapestry. As a PAINT/INK it was precipitated into carmine lake, prized by Renaissance and Baroque painters (and later watercolorists) for its luminous translucent red — bind it with [[tech-gum-arabic|gum arabic]] for watercolor or with [[tech-egg-casein|egg or casein]] for tempera. It is also still a major food and cosmetic colorant (E120 / \"carmine\" / \"cochineal extract\") in lipsticks, blushes, yogurts, and beverages — which is precisely why allergy labeling now exists (see safety). It is not vegan, as it is made from insects.",
+    safety: [
+      "THIS IS A CRAFT DYE, NOT A FOOD PROJECT. Although carmine is a legal food colorant, the home dyeing process here is for craft only — keep dye insects, mordants, and equipment out of the kitchen.",
+      "ALLERGEN — including rare anaphylaxis. Carmine and cochineal extract are documented IgE-mediated allergens. Reactions range from contact dermatitis and hives to occupational asthma and, rarely, systemic anaphylaxis, with sensitive individuals reacting to as little as ~1 mg. The FDA requires carmine/cochineal to be named on food and cosmetic labels for exactly this reason. Anyone with a known carmine allergy should not handle it.",
+      "WEAR A DUST MASK WHEN GRINDING. The airborne insect-protein powder is the main sensitizer and an inhalant respiratory allergen — grind in a ventilated space, masked.",
+      "USE DEDICATED, NON-FOOD TOOLS. A dedicated dye pot, grinder, strainer, and spoon that never return to food use; alum and other mordants are not for cooking pots.",
+      "WEAR GLOVES. Cochineal stains skin and nails deeply (it is literally a pigment), and gloves limit skin contact for those who may be sensitized.",
+      "MORDANT SAFETY. Alum is relatively mild but should not be ingested; cream of tartar and iron should be handled as craft chemicals, not seasonings. Keep iron-water after-baths labeled and away from food. See [[tech-iron-acetate|iron water]].",
+      "HANDLE ALKALI SHIFTERS WITH CARE. Wood-ash lye and soda ash are caustic — they can irritate or burn skin and eyes. Wear gloves and eye protection, add them in tiny amounts, and never store them in unlabeled or food containers.",
+      "DON'T HARD-BOIL. Keep dye and mordant baths to a gentle simmer; a violent boil can dull cochineal and risks splashing hot, staining liquid.",
+      "ETHICS IS A SAFETY ISSUE FOR THE RESOURCE. Do not strip wild native Opuntia — some prickly pears are protected, and occurrence is never harvest permission. Source cultivated/commercial cochineal, or insects from sanctioned invasive-control of Dactylopius opuntiae, with landowner permission.",
+      "NOT VEGAN. Cochineal is an animal (insect) product; disclose this for anyone avoiding animal-derived materials."
+    ],
+    sources: [
+      {
+        title: "Botanical Colors — Cochineal (history, mordanting, and dyeing guidance)",
+        url: "https://botanicalcolors.com/"
+      },
+      {
+        title: "Smarthistory — \"The bug that had the world seeing red\" (Indigenous Mesoamerican history of cochineal)",
+        url: "https://smarthistory.org/cochineal/"
+      },
+      {
+        title: "Smithsonian Magazine — \"The Bug That Had the World Seeing Red\" (cochineal history and Indigenous origins)",
+        url: "https://www.smithsonianmag.com/innovation/bug-had-world-seeing-red-180961590/"
+      },
+      {
+        title: "U.S. FDA — Small Entity Compliance Guide: Declaration by Name on the Label of All Foods and Cosmetic Products that Contain Cochineal Extract and Carmine",
+        url: "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/small-entity-compliance-guide-declaration-name-label-all-foods-and-cosmetic-products-contain"
+      }
+    ]
+  },
+  {
+    id: "tech-wood-ash-lye",
+    plantId: null,
+    kind: "modifier",
+    name: "Wood-ash alkali (juniper & hardwood ash)",
+    category: null,
+    swatch: "#cdbf9a",
+    color: "Modifier — alkaline shifter & mordant",
+    difficulty: "Intermediate",
+    teaser: "Wood-ash alkali shifts & mordants",
+    toxic: true,
+    educationalOnly: false,
+    hook: "Pour hot water over the gray ash of a hardwood fire and let it sit overnight, and the water turns slippery and bitter — the soluble potassium salts have dissolved into the old \"potash\" lye, which is mostly potassium carbonate (with a little caustic hydroxide), reaching a measured pH around 12. (It's a common myth that simple steeped ash is pure potassium hydroxide; that strong a base really only forms when you cook the lye with slaked lime — but at pH 12 the carbonate solution is plenty caustic on its own.) That single liquid does two jobs in the dye studio: as a base it swings pH-sensitive berry inks from red toward blue, purple, and green, and as a traditional alkaline assist it helps plant color bond to wool. Navajo dyers have long made this from the burned green needles of one-seed juniper — a cup of needle ash to two cups of boiling water — using it where other traditions reach for alum. It is the alkaline partner to iron water: where iron saddens and darkens, this lifts and shifts.",
+    timeline: {
+      active: "30-45 min",
+      passive: "8-12 hr"
+    },
+    ingredients: [
+      {
+        item: "Sifted hardwood ash (oak, maple, hickory, beech, fruitwood)",
+        amount: "About 3 kg (6.5 lb), or 1 cup green-juniper needle ash for the traditional small batch",
+        required: true,
+        note: "Hardwood only — pine and other softwoods hold too little potassium to make usable lye. Sift out charcoal lumps; finer ash makes stronger lye."
+      },
+      {
+        item: "Soft water or rainwater",
+        amount: "Enough to cover the ash with a few inches to spare (for the juniper batch, 2 cups boiling water to 1 cup ash)",
+        required: true,
+        note: "Near-boiling water extracts faster. Rainwater or distilled avoids minerals that blunt the alkalinity."
+      },
+      {
+        item: "pH strips or a pH meter (range to 14)",
+        amount: "1 set",
+        required: true,
+        note: "Not optional for safe, repeatable work — you need to know whether you are holding pH 10 or a skin-burning pH 12.5. (Strips read approximately at this strength, but they're enough to tell a mild batch from a caustic one.)"
+      },
+      {
+        item: "White vinegar",
+        amount: "A bottle, kept within reach",
+        required: false,
+        note: "For neutralizing spills and rinsing tools, not for the dye itself. Plain water flushing comes first for skin contact."
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "As your usual mordant dose",
+        required: false,
+        note: "An alternative mordant — the wood-ash assist is the traditional substitute for it, not a partner to it."
+      }
+    ],
+    toolsRequired: [
+      "Dedicated non-food stainless-steel or food-grade HDPE/polypropylene bucket (NEVER aluminum or galvanized metal — strong alkali attacks them and releases flammable hydrogen gas)",
+      "Long chemical-resistant rubber or nitrile gloves",
+      "Wraparound eye protection / splash goggles",
+      "Dedicated long-handled stainless or wooden stir stick",
+      "Fine strainer or sieve plus cotton/muslin cloth for filtering",
+      "Clearly labeled, lidded non-food storage jug (mark NON-FOOD / CAUSTIC LYE)"
+    ],
+    toolsOptional: [
+      "A second clean bucket for decanting/siphoning",
+      "Siphon hose to draw off clear liquid without disturbing the sludge",
+      "Apron and long sleeves",
+      "Heat source for re-concentrating weak lye by boiling down"
+    ],
+    steps: [
+      "Gather ash ethically and legally. Use ash you already make — a woodstove, fireplace, or wood-fired oven (hardwood only). For the juniper tradition, collect only fallen or legally cut one-seed juniper where harvest is permitted (occurrence on a map is not permission), burn the green needles over a wide pan, and save just the needle ash. Never gather ash from painted, treated, glued, or trash-contaminated wood; never burn toxic or unknown plant material to make it.",
+      "Put on gloves and goggles before anything gets wet. Sift the cooled ash through a coarse strainer into your dedicated non-food bucket, discarding charcoal chunks. Work outdoors or with strong ventilation — you are about to make a caustic solution and do not want to lean over the steam.",
+      "Slowly pour near-boiling water over the ash (pouring fast can spatter hot caustic liquid). Stir gently with the dedicated stick to wet all the ash, then stop. For the small juniper batch, stir 1 cup needle ash into 2 cups boiling water.",
+      "Cover loosely and let the ash settle undisturbed for several hours to overnight. The lye is the clear (often amber) liquid that rises above the gray sludge.",
+      "Decant or siphon off only the clear liquid into a clean bucket, leaving the sludge behind, then filter it through muslin to catch fine ash. The same ash can be re-extracted several more times, each batch weaker than the last.",
+      "Test the pH. A first strong batch typically reads around pH 12-12.5; later batches fall to pH 11 down to ~10.5. Label each jug with its pH so you can pick a gentle alkali for delicate fibers or a strong one where you need the swing. Anything at or above ~pH 12 is genuinely caustic — treat it like drain cleaner, even though it's mostly carbonate rather than true hydroxide.",
+      "Use it as a base modifier: add the lye a little at a time to a pH-sensitive plant ink (anthocyanin berry inks, logwood, brazilwood) and watch reds move toward blue, violet, and green. Add slowly and re-check pH; the shift is dramatic and easy to overshoot. See [[tech-acid-base|the acid & base shifters card]].",
+      "Use it as an alkaline assist/mordant on protein fibers (wool, silk): simmer scoured fiber gently in a diluted lye bath before or with the dye, in the Navajo manner with juniper-ash water, to help color bond and brighten. Keep the bath mild, rinse thoroughly, and handle wet fiber with gloves. See [[dye-one-seed-juniper|one-seed juniper]].",
+      "Store the finished lye in a labeled, lidded NON-FOOD container away from children and pets. Neutralize leftover working solution and spills with vinegar before disposal, and rinse all dedicated tools well."
+    ],
+    modifiers: "This card IS an alkaline modifier, the mirror image of acidic and metallic shifters. Steeped wood ash is mostly potassium carbonate — the historical \"potash\" — with a little caustic hydroxide, not the pure potassium hydroxide it's often mistaken for; even so, a fresh batch at pH 12+ behaves as a strong base. As a base it pushes pH-sensitive colors up the spectrum: anthocyanin berry inks and logwood move from red toward blue, purple, and green, and many yellows brighten and clear. An acid (vinegar, citric, cream of tartar) does the opposite, pulling those same colors back toward red and pink — see [[tech-acid-base|acid & base shifters]]. It is the chemical opposite of iron: where this lifts and brightens, iron water dulls and darkens toward gray and brown — see [[tech-iron-acetate|iron water]]. Tannin behaves differently again, building a mordant base and deepening with iron rather than shifting with pH. As a traditional alkaline assist, the wood-ash bath itself helps fix and brighten plant dyes on wool, which is why Navajo dyers use juniper-ash water in place of alum — see [[dye-one-seed-juniper|one-seed juniper]].",
+    preservation: "Decanted, filtered wood-ash lye is stable and keeps for many months to a year or more in a sealed, labeled non-food jug — there is little for mold to live on at this pH. Strength does drift: the alkali slowly reacts with carbon dioxide from the air (any caustic hydroxide reverting to milder carbonate), so a jug that read pH 12 fresh may test a half-point lower after long open storage. Re-test before relying on it, and re-concentrate weak batches by boiling them down (gloves and goggles, ventilated, outdoors). Keep it tightly capped, clearly marked CAUSTIC / NON-FOOD, and well away from children, pets, and anything aluminum.",
+    yield: "Roughly 3 kg of sifted hardwood ash yields several liters of usable lye across repeated extractions of the same ash, with the first one or two pulls strongest (around pH 12) and later pulls progressively weaker. The traditional small juniper batch — 1 cup needle ash to 2 cups water — makes just a couple of cups, enough to assist a small skein of wool. A little goes a long way as a modifier: you typically dose it into a dye or ink drop by drop while watching the pH, so even a single liter modifies many pots. Real yield depends heavily on ash fineness and water quality; expect variation and always test rather than assume.",
+    safety: [
+      "CAUSTIC LYE — this is the headline hazard. Steeped wood ash makes a strongly alkaline solution (the old 'potash,' chiefly potassium carbonate with some caustic hydroxide), reaching pH 12+ — strong enough to burn skin and permanently damage eyes regardless of which salt dominates. Always wear chemical-resistant gloves and wraparound eye protection, and keep your face out of the steam.",
+      "Work outdoors or with strong ventilation; avoid inhaling steam or fine ash dust (ash dust is itself an irritant to lungs and eyes).",
+      "On skin or eye contact, flush immediately with large amounts of cool water for at least 15 minutes; for eyes or any serious burn, seek medical care. Keep vinegar nearby to neutralize spills on surfaces and tools — but flush skin with water first, do not pour vinegar on a fresh burn.",
+      "NEVER use or store lye in aluminum or galvanized containers — strong alkali corrodes them and can release flammable hydrogen gas. Use stainless steel or food-grade HDPE/polypropylene only.",
+      "This is a CRAFT material, not food or medicine. Although lye and ash appear in some food traditions (nixtamal, lutefisk), dye-studio lye is made and stored with non-food tools and must never be ingested or used on food.",
+      "Use dedicated, clearly labeled non-food tools and a NON-FOOD / CAUSTIC container; never reuse kitchenware afterward.",
+      "Store sealed and labeled, far out of reach of children and pets; the liquid looks like water but is severely caustic.",
+      "Make ash only from clean, untreated hardwood — never painted, stained, glued, pressure-treated, or trash-contaminated wood, and never burn toxic plants to produce ash.",
+      "Add lye to dye baths and inks gradually while re-checking pH; overshooting the alkali can dull or destroy a color and makes a stronger caustic bath than you need.",
+      "Harvesting note: gather juniper or other plant material only where it is legal and permitted, taking fallen or sustainably cut wood — a sighting or map occurrence is never permission to harvest."
+    ],
+    sources: [
+      {
+        title: "Ellis Textiles — Wood Ash Lye: Natural Dye Experiments and Results (method, ratios, measured pH 12.45 down to 10.5 across batches)",
+        url: "https://blog.ellistextiles.com/category/indigo/wood-ash-lye/"
+      },
+      {
+        title: "Nonabah G. Bryan & Stella Young — Navajo Native Dyes: Their Preparation and Use (juniper/cedar green-needle ash as an alum-substitute mordant; U.S. Indian Service monograph, 1940)",
+        url: "https://www2.cs.arizona.edu/patterns/weaving/monographs/bys_dyes.pdf"
+      },
+      {
+        title: "Classic Bells / Soapy Stuff — Wood Ash Lye (chemistry: steeped ash is mostly potassium carbonate, not pure hydroxide; causticizing with lime)",
+        url: "https://classicbells.com/soap/woodAshLye.asp"
+      }
+    ]
   }
 ];
 
@@ -6455,28 +11197,37 @@ function linkifyRecipes(text, selfId, state) {
 function projectCardHTML(recipe) {
   const color = getProjectSpineColor(recipe);
   const meta = [recipe.color, recipe.difficulty].filter(Boolean).join(" · ");
+  const eduTag = recipe.educationalOnly ? `<div class="pc-edu">EDUCATIONAL ONLY</div>` : "";
   return `
-    <div class="mini-card project-card" data-recipe="${escapeHTML(recipe.id)}" role="button" tabindex="0">
+    <div class="mini-card project-card${recipe.educationalOnly ? " is-edu" : ""}" data-recipe="${escapeHTML(recipe.id)}" role="button" tabindex="0">
       <div class="spine" style="background: ${escapeHTML(color)}"></div>
       <h3 class="serif">${escapeHTML(recipe.name)}</h3>
       <div class="m">${escapeHTML(meta.toUpperCase())}</div>
+      ${eduTag}
       <div class="uses">${escapeHTML(recipe.teaser || "")}<span class="pc-arrow" aria-hidden="true">→</span></div>
     </div>`;
 }
 
 function sheetProjectsHTML() {
+  // Four buckets per the owner's split: inks, dyes, modifiers, binders.
+  // Preserving is a method, grouped with the modifiers.
   const inks = PROJECT_RECIPES.filter((r) => r.kind === "ink");
-  const techs = PROJECT_RECIPES.filter((r) => r.kind !== "ink");
-  const inkCards = inks.map(projectCardHTML).join("");
-  const techCards = techs.map(projectCardHTML).join("");
+  const dyes = PROJECT_RECIPES.filter((r) => r.kind === "dye");
+  const modifiers = PROJECT_RECIPES.filter((r) => r.kind === "modifier" || r.kind === "preservative");
+  const binders = PROJECT_RECIPES.filter((r) => r.kind === "binder");
+  const group = (label, list) => list.length
+    ? `<div class="card-grid-label">${label}</div>${list.map(projectCardHTML).join("")}`
+    : "";
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE PRESS · ${PROJECT_RECIPES.length} PROJECTS</div>
     <h2 class="serif">Projects</h2>
     <p>Make ink, dye, and pigment from the plants on the map. Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Every recipe is craft, not food; harvest only where it is permitted.</p>
     <div class="card-grid">
-      ${inks.length ? `<div class="card-grid-label">PLANT INKS</div>${inkCards}` : ""}
-      ${techs.length ? `<div class="card-grid-label">MODIFIERS · BINDERS · PRESERVING</div>${techCards}` : ""}
+      ${group("PLANT INKS", inks)}
+      ${group("PLANT DYES", dyes)}
+      ${group("MODIFIERS · PRESERVING", modifiers)}
+      ${group("BINDERS", binders)}
     </div>
   `;
 }
@@ -6494,7 +11245,7 @@ function recipeDetailHTML(recipe) {
 
   // Four tags only, in order: color · lightfastness · skill · time.
   const chips = [];
-  if (recipe.kind === "ink" && recipe.color) {
+  if ((recipe.kind === "ink" || recipe.kind === "dye") && recipe.color) {
     chips.push(`<span class="chip chip-color" style="background:${escapeHTML(inkColor)};color:${textColor}">${escapeHTML(recipe.color)}</span>`);
   }
   if (recipe.lightfastness) chips.push(`<span class="chip lf-${escapeHTML(recipe.lightfastness.rating)}">lightfastness: ${escapeHTML(recipe.lightfastness.rating)}</span>`);
@@ -6528,6 +11279,8 @@ function recipeDetailHTML(recipe) {
       <h2 class="serif">${escapeHTML(recipe.name)}</h2>
       ${recipe.hook ? `<p class="recipe-hook">${escapeHTML(recipe.hook)}</p>` : ""}
       <div class="recipe-meta">${chips.join("")}</div>
+
+      ${recipe.educationalOnly ? `<div class="edu-stamp recipe-edu">EDUCATIONAL ONLY — NOT A HARVEST RECOMMENDATION. This material is culturally sacred, conservation-sensitive, or requires regional/Indigenous knowledge to source ethically. Seek permission and local knowledge first; do not harvest casually.</div>` : ""}
 
       ${recipe.toxic ? `<div class="safety-box"><h3>Safety first</h3><ul>${safetyHTML}</ul></div>` : ""}
 
@@ -7381,6 +12134,7 @@ function renderMarkers() {
         usedParts: species.usedParts || "",
         safetyTags: getSpeciesSafetyTags(species).join("|"),
         harvestEthic: getSpeciesHarvestEthicLabel(species),
+        educationalOnly: !!species.educationalOnly,
         accessNote: accessRule.note,
         accessStatus: accessRule.status,
         accessStatusLabel: accessRule.label,
@@ -8608,6 +13362,12 @@ function getMarkerPopupHTML(properties) {
   const medNote = state.activeMap === "medicine" && medSafetyNote
     ? `<div class="med-note">${escapeHTML(medSafetyNote)}</div>`
     : "";
+  // Some ink/dye materials are published for reference only — culturally sacred,
+  // conservation-sensitive, or requiring regional/Indigenous knowledge to harvest
+  // ethically. They carry an explicit educational-only stamp, never a how-to.
+  const eduStamp = properties.educationalOnly
+    ? `<div class="edu-stamp">EDUCATIONAL ONLY — NOT A HARVEST RECOMMENDATION. Seek permission or local/cultural knowledge first.</div>`
+    : "";
   const saved = isSavedLocation(properties.id);
 
   return `
@@ -8617,6 +13377,7 @@ function getMarkerPopupHTML(properties) {
       <div class="pad">
         <h2>${escapeHTML(properties.speciesName)}</h2>
         <div class="sci">${sci}</div>
+        ${eduStamp}
         <div class="row access"><span class="lab">ACCESS</span><span class="val" style="color:${statusColor}"><span class="ring"></span>${accessLabel}</span></div>
         <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}</span></div>
         ${safetyRow}

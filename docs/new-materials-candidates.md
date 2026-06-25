@@ -180,6 +180,48 @@ Discovery sweep across the Desert SW, California, Pacific NW, Rocky Mtn/Great Ba
 
 **Read the FLAGGED tables first.** Per the project's ethics, overharvested/slow-growing/protected/culturally-appropriated/seriously-toxic species are separated out and should not be added as casual recommendations.
 
+## ✅ Integration status — INK/DYE pass shipped 2026-06-25
+
+The owner reviewed these candidates and asked for the qualifying ones to be
+encoded under three criteria: (a) harvest is explicitly permitted somewhere, OR
+non-damaging, OR invasive/weed removal; (b) plants that are merely poisonous to
+themselves or use caustic processing are fine **if** there is no *wider*
+community hazard and it can be labeled — those cards are marked **Intermediate**
+or **Advanced**; (c) plants failing the harvest ethic because they need specific
+regional/historical/cultural knowledge are published with an explicit
+**"educational only"** stamp.
+
+**Added to `inkSpeciesCatalog` (35 species)** with taxon IDs, seasonality,
+`SAFETY_TAGS_BY_SPECIES`, and `HARVEST_ETHIC_BY_SPECIES`, plus full **project
+cards** in `PROJECT_RECIPES` (now split into Inks / Dyes / Modifiers / Binders).
+The map mode is renamed **Ink/Dye**. From the *candidates-for-review (37)* all
+qualifying rows were added (regional duplicates merged into genus-level entries:
+sagebrush+mugwort, rabbitbrush, alder, prickly pear, Oregon grape & barberry).
+
+**From the FLAGGED table** — added with the stated safeguards:
+- **Brazilian pepper** (Advanced; urushiol "never burn / gloves" warning) — owner
+  approved as the one borderline-hazard invasive to include.
+- **Dyer's woad** (Advanced; eradication-only, caustic lye vat) — invasive removal.
+- **Oregon grape / Fremont's mahonia / agarita** — folded into one berry-focused
+  entry; UI steers to berries, never casual root/bark digging.
+- **Mountain mahogany** — pruned/fallen bark only, respectful cultural note.
+
+**Published as EDUCATIONAL-ONLY / observe-only** (stamp, no harvest how-to):
+Carolina redroot, tanoak (SOD quarantine), western redcedar (culturally sacred),
+wolf lichen (slow-growing + toxic), and a context-only **cochineal** card (an
+insect, sourced ethically — no map species).
+
+**Deliberately EXCLUDED this pass (owner-confirmed) — reasons:**
+- **Tansy ragwort** — pyrrolizidine alkaloids are cumulatively hepatotoxic to
+  people *and* livestock (disposal/compost/livestock = a wider hazard); abundant
+  safe yellows already added (rabbitbrush, coreopsis, etc.).
+- **Chinaberry** — all parts (esp. berries) poisonous and the dye is weakly
+  documented / poor color; thin craft justification for a home poisoning risk.
+- **Giant coreopsis (sea dahlia)** — range-restricted CFP endemic; the catalog now
+  carries the broadly-grown plains coreopsis as the substitute. Leave it wild.
+
+The tables below are kept as the source-of-truth research.
+
 ## Ink / dye materials
 
 ### Ink/dye — candidates for review (37)

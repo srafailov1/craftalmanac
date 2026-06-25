@@ -1542,6 +1542,22 @@ body[data-register="night"] {
   line-height: 1.45;
 }
 
+/* Educational-only stamp for ink/dye reference materials that are culturally
+   sacred, conservation-sensitive, or require regional/Indigenous knowledge to
+   harvest ethically. Reads as a hard stamp near the top of the card. */
+.pt-card .edu-stamp {
+  margin: 8px 0 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--reg-st-prohibited);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--reg-st-prohibited) 12%, transparent);
+  color: var(--reg-st-prohibited);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
 .pt-card.compact {
   width: min(270px, 80vw);
 }
@@ -1612,6 +1628,19 @@ body[data-register="night"] {
   margin-top: 7px;
   font-family: var(--font-mono);
   line-height: 1.5;
+}
+
+/* Educational-only badge on a project tile (matches the .dnote treatment). */
+.project-card .pc-edu {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 2px 6px;
+  border: 1px solid var(--reg-st-prohibited);
+  border-radius: 4px;
+  color: var(--reg-st-prohibited);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
 }
 
 .mode-card.on {
@@ -1745,6 +1774,20 @@ body[data-register="night"] {
   color: var(--reg-accent);
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* Educational-only banner inside an opened recipe card. */
+.recipe-detail .edu-stamp {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--reg-st-prohibited);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--reg-st-prohibited) 10%, transparent);
+  color: var(--reg-st-prohibited);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
 }
 
 .safety-box {
