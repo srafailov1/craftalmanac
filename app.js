@@ -2277,7 +2277,14 @@ const SAFETY_TAGS_BY_SPECIES = {
   "ink-carolina-redroot": ["toxic — do not ingest", "observe only"],
   "ink-tanoak": ["dead/felled wood only", "mind SOD quarantine"],
   "ink-western-redcedar": ["culturally sacred — observe only"],
-  "ink-wolf-lichen": ["toxic (vulpinic acid)", "slow-growing — observe only"]
+  "ink-wolf-lichen": ["toxic (vulpinic acid)", "slow-growing — observe only"],
+  // ---- 2026-06 fungal dyes (dye use only; see docs/mushroom-inks-research.md) ----
+  "ink-dyers-polypore": ["dye use only — do not eat", "seasonal fruiting — pin is not a standing harvest", "advanced process — iron modifier is caustic"],
+  "ink-turkey-tail": ["dye use only — do not eat", "identify carefully — non-toxic lookalikes"],
+  "ink-artists-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
+  "ink-red-belted-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
+  "ink-tinder-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
+  "ink-chicken-of-the-woods": ["dye use only — do not eat here", "identify carefully — toxic lookalike (jack-o'-lantern)", "seasonal fruiting — pin is not a standing harvest"]
 };
 // Safety-first (CLAUDE.md): a park's "edible fungi" allowance applies only to
 // species on this whitelist. Any other mushroom stays prohibited, so a future
@@ -2392,7 +2399,14 @@ const HARVEST_ETHIC_BY_SPECIES = {
   "ink-carolina-redroot": "observe only",
   "ink-tanoak": "observe only",
   "ink-western-redcedar": "observe only",
-  "ink-wolf-lichen": "observe only"
+  "ink-wolf-lichen": "observe only",
+  // ---- 2026-06 fungal dyes: abundant wood-decay brackets, low-impact ----
+  "ink-dyers-polypore": "light harvest",
+  "ink-turkey-tail": "light harvest",
+  "ink-artists-conk": "light harvest",
+  "ink-red-belted-conk": "light harvest",
+  "ink-tinder-conk": "light harvest",
+  "ink-chicken-of-the-woods": "light harvest"
 };
 
 const foodSpeciesCatalog = [
@@ -3428,6 +3442,75 @@ const inkSpeciesCatalog = [
     educationalOnly: true,
     usedParts: "Wind-fallen branches only — observe only.",
     notes: "Educational only. A vivid chartreuse-yellow lichen that grows ~4 mm a year and is toxic (vulpinic acid); over-collection has wiped out local stands. Observe only — use onion skins for yellow instead."
+  },
+  // ---- 2026-06 fungal dyes (Tier-A wood polypores; see docs/mushroom-inks-research.md).
+  // Persistent/annual wood-decay brackets, non-toxic, muted yellow/gold/brown palette
+  // (iron shifts toward green/grey). Framed strictly for DYE USE — never as food. ----
+  {
+    id: "ink-dyers-polypore",
+    commonName: "Dyer's polypore",
+    scientificName: "Phaeolus schweinitzii",
+    category: "yellow",
+    months: [7, 8, 9, 10, 11],
+    inatTaxonIds: [118084],
+    shenandoahAllowed: false,
+    usedParts: "Fresh or dried fruiting bodies, simmered for pigment on alum-mordanted wool.",
+    notes: "Dye use only — do not eat. The classic dye polypore: reliable yellows and golds on alum, and its signature green comes only from an iron modifier (a caustic, staining step). A velvety rust-brown annual bracket at the base of living or dead conifers; no deadly lookalike, but old specimens resemble other brown brackets (Inonotus, Fomitopsis) — none for eating either. Annual fruiting, so a pin marks a past fruiting, not a standing harvest."
+  },
+  {
+    id: "ink-turkey-tail",
+    commonName: "Turkey tail",
+    scientificName: "Trametes versicolor",
+    category: "yellow",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    inatTaxonIds: [54134],
+    shenandoahAllowed: false,
+    usedParts: "Fresh brackets, simmered for pigment on alum-mordanted wool (iron pushes toward greenish/rust).",
+    notes: "Dye use only — do not eat. The easiest dyer to find — thin, banded, year-round brackets on dead hardwood. Color is modest (tans and golds; greenish with iron). Non-toxic lookalikes include false turkey tail (Stereum ostrea) and Trichaptum; none are food. Identify carefully before harvesting."
+  },
+  {
+    id: "ink-artists-conk",
+    commonName: "Artist's conk",
+    scientificName: "Ganoderma applanatum",
+    category: "brown",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    inatTaxonIds: [48473],
+    shenandoahAllowed: false,
+    usedParts: "Fresh or dried perennial conk, simmered for pigment on alum-mordanted wool (iron deepens toward grey-brown).",
+    notes: "Dye use only — do not eat (it is woody and inedible regardless). A large perennial shelf polypore on dead or dying hardwood, visible year-round, so genuinely mappable. Gives warm browns. Similar conks (other Ganoderma, Fomitopsis) are likewise dye or medicinal, not casual food — identify carefully."
+  },
+  {
+    id: "ink-red-belted-conk",
+    commonName: "Red-belted conk",
+    scientificName: "Fomitopsis mounceae complex",
+    category: "yellow",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    inatTaxonIds: [877361, 495903, 877362],
+    shenandoahAllowed: false,
+    usedParts: "Fresh or dried perennial conk, simmered for pigment on alum-mordanted wool (iron shifts toward grey/olive).",
+    notes: "Dye use only — do not eat (woody). This maps the North American complex — F. mounceae, F. ochracea, and F. schrenkii — not the European \"Fomitopsis pinicola,\" which barely occurs here. A perennial banded conk with a red-orange margin on conifer and hardwood, visible year-round. Yellow/tan/brown palette; no deadly lookalike, but identify carefully."
+  },
+  {
+    id: "ink-tinder-conk",
+    commonName: "Tinder conk",
+    scientificName: "Fomes fomentarius",
+    category: "yellow",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    inatTaxonIds: [127510],
+    shenandoahAllowed: false,
+    usedParts: "Fresh or dried perennial conk (and its inner trama), simmered for pigment on alum-mordanted wool.",
+    notes: "Dye use only — do not eat (woody; also the traditional amadou / tinder fungus). A hoof-shaped perennial conk on hardwood, especially birch and beech, visible year-round. Yellows, golds, and browns; browner or greyer with iron. No deadly lookalike, but identify carefully before harvesting."
+  },
+  {
+    id: "ink-chicken-of-the-woods",
+    commonName: "Chicken of the woods",
+    scientificName: "Laetiporus sulphureus / cincinnatus",
+    category: "yellow",
+    months: [6, 7, 8, 9, 10, 11],
+    inatTaxonIds: [53713, 487301],
+    shenandoahAllowed: false,
+    usedParts: "Fresh brackets, simmered for pigment on alum-mordanted wool (iron dulls toward olive/brown).",
+    notes: "Listed here for DYE USE — its bright oranges, yellows, and golds — not as an eat-me signal. It is a popular edible when expertly identified and thoroughly cooked, but reactions are common, especially from brackets grown on conifer, eucalyptus, yew, or cedar. Toxic lookalike: the jack-o'-lantern (Omphalotus illudens) is gilled, clusters at tree bases, and causes serious GI illness — Laetiporus is pored (no gills), so check the underside. Annual fruiting; a pin marks a past fruiting, not a standing harvest."
   }
 ];
 
@@ -3599,17 +3682,17 @@ const mineralSpeciesCatalog = [
     scientificName: "Quartz · SiO₂",
     category: "quartz",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Lapidary, cabochons, faceting, wire-wrap; display crystal specimens.",
-    notes: "West-central Arkansas (Mount Ida / Montgomery Co.) is a famous quartz-crystal district; many sites are pay-to-dig private mines."
+    usedParts: "Lapidary — cabochons, faceting, carving, and bead/wire-wrap work.",
+    notes: "West-central Arkansas (Mount Ida / Montgomery Co.) is a famous quartz-crystal district. Most named \"mines\" here are commercial pay-to-dig operations on private or claimed ground, not free-collecting sites — check the collecting-rule note on each point."
   },
   {
     id: "mineral-novaculite",
-    commonName: "Novaculite / whetstone",
+    commonName: "Novaculite whetstone",
     scientificName: "Novaculite (microcrystalline quartz)",
     category: "novaculite",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Sharpening stones (whetstones/oilstones), knapping, carving.",
-    notes: "The classic Arkansas whetstone. MRDS has no novaculite commodity code, so most of it is recorded under \"Silica\" — these points need hand-verification."
+    usedParts: "Sharpening stones — whetstones and oilstones — plus knapping and fine carving/inlay.",
+    notes: "The classic Arkansas whetstone, from the Devonian–Mississippian Arkansas Novaculite along the Novaculite Uplift (Hot Springs / Garland–Montgomery–Polk Cos.). Graded by density: Washita (coarse, fast-cutting) → Soft Arkansas (general honing) → Hard Arkansas (fine, keen edge) → Black/Translucent Arkansas (extra-fine finishing). MRDS has no novaculite commodity code, so many points are recovered from \"Silica\" by host-formation vetting — treat positions as a curated seed."
   },
   {
     id: "mineral-silica",
@@ -3617,17 +3700,17 @@ const mineralSpeciesCatalog = [
     scientificName: "Silica · SiO₂ (chert, flint, novaculite)",
     category: "silica",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Knapping (flint/chert), abrasives, refractory and glass craft.",
-    notes: "Catch-all silica bucket; includes most unlabeled Arkansas novaculite. Confirm the host formation before treating a point as knappable toolstone."
+    usedParts: "Knapping toolstone (flint / chert); also the holding bucket for unlabeled novaculite.",
+    notes: "Knappable chert and flint, plus MRDS \"Silica\" points not yet confirmed as novaculite — confirm the host formation before treating a point as toolstone. Note: toolstone outcrops are frequently archaeological sites. This map shows raw geologic occurrences only; collecting artifacts is illegal (ARPA / NHPA) and erases the archaeological record."
   },
   {
     id: "mineral-soapstone",
-    commonName: "Soapstone",
+    commonName: "Soapstone (steatite)",
     scientificName: "Steatite (talc-rich rock)",
     category: "soapstone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Carving bowls, beads, pipes, figurines; cookware; molds.",
-    notes: "Soft, heat-stable carving stone. Some soapstone is asbestos-bearing — test supply and cut/grind wet with respiratory protection."
+    usedParts: "Carving — bowls, pipes, beads, figurines, molds, and cookware.",
+    notes: "Soft, heat-stable carving stone from the Saline County talc–steatite belt. Grades run from pure high-talc soapstone (softest, for bowls and pipes) to harder tremolitic/chloritic steatite that holds finer detail. Safety: some Ouachita steatite is tremolite/actinolite-bearing (asbestiform) — test the supply and cut/grind wet with respiratory protection."
   },
   {
     id: "mineral-clay",
@@ -3635,17 +3718,17 @@ const mineralSpeciesCatalog = [
     scientificName: "Clay minerals (kaolinite group)",
     category: "clay",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Hand-built and wheel-thrown pottery, tiles, pipes, figurines.",
-    notes: "Earthenware/ball clays widespread across the region. Dry-clay dust is a silicosis hazard — process wet."
+    usedParts: "Hand-built and wheel-thrown pottery, tile, and tobacco-pipe clay.",
+    notes: "A range of regional clays: plastic ball clay (throwing bodies), white low-plasticity kaolin (porcelain/whiteware and glaze), iron-bearing stoneware/earthenware (the widespread red-buff hand-building clays), and high-alumina fire clay (kiln furniture, high-fire bodies). Dry-clay dust is a silicosis hazard — process wet."
   },
   {
     id: "mineral-slate",
-    commonName: "Slate / dimension stone",
+    commonName: "Slate (engraving & inlay)",
     scientificName: "Slate (metamorphic rock)",
     category: "slate",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Inlay, coasters, engraving; roofing and flagstone craft.",
-    notes: "Splits into flat sheets for engraving and inlay. Mostly former quarry sites."
+    usedParts: "Engraving, inlay, coasters, and flagstone craft.",
+    notes: "Splits into flat sheets for engraving and inlay — a legitimate minor craft stone. Mostly former quarry sites."
   },
   {
     id: "mineral-gemstone",
@@ -3653,8 +3736,8 @@ const mineralSpeciesCatalog = [
     scientificName: "Diamond & gemstone (various)",
     category: "gemstone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Faceting, cabochons, beads; collector specimens.",
-    notes: "Includes the Prairie Creek diatreme — Crater of Diamonds State Park is the rare public site where visitors may dig and keep diamonds for a fee."
+    usedParts: "Faceting, cabochons, and bead/setting work.",
+    notes: "Includes the Prairie Creek diatreme — Crater of Diamonds State Park is the rare public site where visitors may dig and keep diamonds (to cut and set) for a fee."
   }
 ];
 
@@ -3722,11 +3805,11 @@ const MAP_MODE_CONFIG = {
     lede: `Locate stone and mineral craft materials — quartz crystal, novaculite whetstone, soapstone, pottery clay, and more — across the Ouachita and Hot Springs region of Arkansas. Each point is a recorded mineral locality, not a collecting permission: stone-collecting rules differ sharply by land manager.`,
     categories: [
       { id: "quartz", label: "Quartz crystal" },
-      { id: "novaculite", label: "Novaculite / whetstone" },
+      { id: "novaculite", label: "Novaculite whetstone" },
       { id: "silica", label: "Silica (chert / flint)" },
-      { id: "soapstone", label: "Soapstone" },
+      { id: "soapstone", label: "Soapstone (steatite)" },
       { id: "clay", label: "Clay (pottery)" },
-      { id: "slate", label: "Slate / dimension" },
+      { id: "slate", label: "Slate (engraving)" },
       { id: "gemstone", label: "Gemstone / diamond" }
     ],
     categoryColors: MINERAL_CATEGORY_COLORS,
@@ -14287,10 +14370,10 @@ const MINERAL_ACCESS_RULES = {
   USFS: {
     status: "allowed",
     area: "National forest (USDA Forest Service)",
-    limit: "Rockhounding of reasonable amounts for personal, noncommercial use is generally allowed on most national-forest land under free use — but not in wilderness, special-interest, or research areas, and not where it conflicts with a mining claim or lease. Confirm with the local ranger district.",
+    limit: "Rockhounding of reasonable amounts for personal, noncommercial use is generally allowed on most national-forest land under free use — but not in wilderness, special-interest, or research areas, and not where it conflicts with a mining claim or lease. Much of the Mount Ida / Montgomery County quartz district in particular is under active mining claims or is patented private pay-to-dig ground, where free use does NOT apply. Confirm claim status and check with the local ranger district before collecting.",
     note: "A forest-wide policy, not a guarantee for this exact parcel. Occurrence is not permission.",
-    sourceLabel: "USFS rock collecting (36 CFR 228 / FSM 2840)",
-    sourceUrl: "https://www.fs.usda.gov/managing-land/minerals-geology/rockhounding"
+    sourceLabel: "USFS Rockhounding Guide (36 CFR 228 Subpart C)",
+    sourceUrl: "https://www.fs.usda.gov/sites/default/files/rockhounding-guide-fseprd768373.pdf"
   },
   NPS: {
     status: "prohibited",
@@ -14306,7 +14389,15 @@ const MINERAL_ACCESS_RULES = {
     limit: "An exceptional case: this state park lets visitors dig and keep gems and minerals for a paid admission (finders-keepers). State parks otherwise generally prohibit collecting — never assume another state park allows it.",
     note: "Pay the park admission and follow posted rules; this exception does not generalize to other state parks.",
     sourceLabel: "Arkansas State Parks — Crater of Diamonds",
-    sourceUrl: "https://www.arkansasstateparks.com/parks/crater-diamonds-state-park"
+    sourceUrl: "https://www.arkansas.com/state-parks/explore/parks/crater-of-diamonds-state-park"
+  },
+  "Claimed / fee-dig": {
+    status: "private",
+    area: "Commercial pay-to-dig mine or active mining claim",
+    limit: "This named locality is a commercial fee-dig operation or sits on active/patented mining claims — common across the Mount Ida quartz district. There is no free-use collecting right here; arrange access (and any fee) with the operator, and verify claim status before digging.",
+    note: "Downgraded from the forest-wide rule because the point is a named mine on claimed or private ground. Occurrence is not permission.",
+    sourceLabel: "BLM mining claims (43 CFR 8365.1-5)",
+    sourceUrl: "https://www.ecfr.gov/current/title-43/section-8365.1-5"
   },
   "Private / other": {
     status: "private",
@@ -14319,7 +14410,15 @@ const MINERAL_ACCESS_RULES = {
 };
 
 function getMineralAccessRule(record) {
-  const base = MINERAL_ACCESS_RULES[record.perm] || MINERAL_ACCESS_RULES["Private / other"];
+  let perm = record.perm;
+  // The Crater of Diamonds finders-keepers exception only covers gems/diamonds dug in
+  // the park's search field — never a clay or other locality that merely sits near it.
+  // Downgrade any non-gemstone "State park" point to the conservative private rule so it
+  // can never inherit dig-and-keep permission (belt-and-suspenders for the baked data).
+  if (perm === "State park" && record.speciesId !== "mineral-gemstone") {
+    perm = "Private / other";
+  }
+  const base = MINERAL_ACCESS_RULES[perm] || MINERAL_ACCESS_RULES["Private / other"];
   return {
     status: base.status,
     label: ACCESS_MARKER_STYLES[base.status]?.label || "Unknown",

@@ -42,6 +42,15 @@ METALS = ("vanadium", "titanium", "manganese", "lead", "zinc", "iron",
 # Crater of Diamonds State Park / Prairie Creek kimberlite, Murfreesboro AR (a
 # documented public locality). Points within ~2.5 km are the state-park diatreme.
 COD = (-93.6716, 34.0335)
+# Novaculite Uplift + Hot Springs craft-stone counties. MRDS has no commodity code
+# for novaculite (the Arkansas whetstone), so it files it under "Silica"; regional
+# silica here is treated as novaculite. Elsewhere silica stays generic chert/flint.
+UPLIFT_COUNTIES = {"Garland", "Hot Spring", "Montgomery", "Polk", "Pike", "Saline"}
+# Named commercial quartz pay-to-dig operators (Mount Ida district). Matching points
+# are downgraded from the forest-wide USFS rule to "Claimed / fee-dig" (conservative;
+# occurrence is never permission, and these sit on private/claimed ground).
+FEE_DIG = ("wegner", "coleman", "starfire", "fiddler", "crystal mountain",
+           "crystal pyramid", "sweet surrender", "board camp", "twin creek", "avant")
 
 
 def fetch(url, dest, binary=False):
@@ -72,16 +81,25 @@ def categorize(r):
     coms = " ".join(filter(None, [r["commod1"], r["commod2"], r["commod3"]])).lower()
     free = " ".join(filter(None, [r["site_name"], r["names"], r["dep_type"],
                                   r["ore"], r["gangue"], r["other_matl"]])).lower()
+    if "wavellite" in coms or "wavellite" in free:
+        return None  # collector/display mineral, no craft use
     is_metal = any(m in coms for m in METALS)
     if (not is_metal) and any(t in (coms + " " + free)
-                              for t in ["novaculite", "whetstone", "oilstone", " hone", "abrasive"]):
+                              for t in ["novaculite", "whetstone", "oilstone", " hone",
+                                        "honestone", "arkansas stone", "washita", "abrasive"]):
         return "Novaculite / whetstone"
     if "diamond" in coms or "gemstone" in coms: return "Gemstone / diamond"
     if "quartz" in coms:                        return "Quartz crystal"
-    if "soapstone" in coms or "steatite" in coms: return "Soapstone (carving)"
-    if "clay" in coms:                          return "Clay (pottery)"
+    if ("talc" in coms or "soapstone" in coms or "steatite" in coms
+            or "pyrophyllite" in coms):         return "Soapstone (carving)"
+    if "clay" in coms or "kaolin" in coms:      return "Clay (pottery)"
     if "slate" in coms:                         return "Slate / dimension"
-    if "silica" in coms:                        return "Silica (other)"
+    if "silica" in coms:
+        # MRDS files the Arkansas Novaculite under "Silica"; treat regional silica in
+        # the Novaculite Uplift counties as novaculite, generic chert/flint elsewhere.
+        if (not is_metal) and r["county"] in UPLIFT_COUNTIES:
+            return "Novaculite / whetstone"
+        return "Silica (other)"
     return None
 
 
@@ -131,13 +149,22 @@ def main():
             if key in seen:
                 continue
             seen.add(key)
-            # land-manager classification (public-domain boundaries / factual locality)
-            if abs(lon - COD[0]) < 0.03 and abs(lat - COD[1]) < 0.023:
+            # land-manager classification (public-domain boundaries / factual locality).
+            # The Crater of Diamonds finders-keepers exception applies ONLY to gems/
+            # diamonds dug in the park's diatreme — require the gemstone category so a
+            # nearby clay or other pit can never inherit dig-and-keep (the Twin Knobs bug).
+            if (c == "Gemstone / diamond"
+                    and abs(lon - COD[0]) < 0.03 and abs(lat - COD[1]) < 0.023):
                 perm = "State park"
             elif in_poly((lon, lat), usfs):
                 perm = "USFS"
             else:
                 perm = "Private / other"
+            # Named commercial pay-to-dig mines / claimed ground (esp. the Mount Ida
+            # quartz district) are not free-use collecting on NF land — downgrade.
+            name_text = ((r["site_name"] or "") + " " + (r["names"] or "")).lower()
+            if perm == "USFS" and any(op in name_text for op in FEE_DIG):
+                perm = "Claimed / fee-dig"
             recs.append({
                 "id": f"mrds-{r['dep_id']}",
                 "speciesId": SPECIES[c],

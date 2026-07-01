@@ -11,7 +11,7 @@ const OUTPUT_DIR = path.join(ROOT, "data", "phenology");
 
 const INATURALIST_HISTOGRAM_URL = "https://api.inaturalist.org/v1/observations/histogram";
 const INATURALIST_PLACE_ID = "1";
-const REQUEST_DELAY_MS = 250;
+const REQUEST_DELAY_MS = 1100;
 const MODES = ["food", "ink", "medicine"];
 const MODE_CONSTS = {
   food: "foodSpeciesCatalog",
@@ -27,6 +27,18 @@ const ANNOTATIONS = {
 const FLOWER_MATERIAL_SPECIES = new Set([
   "ink-honeysuckle",
   "ink-goldenrod"
+]);
+
+// Fungal dye species carry no plant flowering/fruiting phenology annotations, so
+// they use the general research-grade observation histogram — i.e. when the
+// fruiting body is actually seen, which is the persistence/visibility signal.
+const FUNGAL_INK_SPECIES = new Set([
+  "ink-dyers-polypore",
+  "ink-turkey-tail",
+  "ink-artists-conk",
+  "ink-red-belted-conk",
+  "ink-tinder-conk",
+  "ink-chicken-of-the-woods"
 ]);
 
 const args = new Set(process.argv.slice(2));
@@ -117,6 +129,7 @@ function getAnnotationForSpecies(mode, species) {
   if (mode === "food" && species.category !== "mushroom") return ANNOTATIONS.fruits;
   if (mode === "ink") {
     if (FLOWER_MATERIAL_SPECIES.has(species.id)) return ANNOTATIONS.flowers;
+    if (FUNGAL_INK_SPECIES.has(species.id)) return null;
     return ANNOTATIONS.fruits;
   }
   return null;
@@ -139,12 +152,25 @@ function getHistogramUrl(species, annotation) {
 }
 
 async function fetchHistogram(species, annotation) {
-  const response = await fetch(getHistogramUrl(species, annotation));
-  if (!response.ok) throw new Error(`iNaturalist returned ${response.status} for ${species.id}`);
-  const data = await response.json();
-  if (data.error) throw new Error(`iNaturalist error for ${species.id}: ${data.error}`);
-  const months = data.results?.month_of_year || {};
-  return Array.from({ length: 12 }, (_, index) => Number(months[String(index + 1)] || 0));
+  const url = getHistogramUrl(species, annotation);
+  let lastError;
+  // iNaturalist rate-limits (429) and occasionally 5xxs on bursts; back off and retry.
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const response = await fetch(url);
+    if (response.status === 429 || response.status >= 500) {
+      const wait = 2000 * (attempt + 1);
+      console.log(`  ${species.id}: HTTP ${response.status}, backing off ${wait}ms (attempt ${attempt + 1}/5)`);
+      await sleep(wait);
+      lastError = new Error(`iNaturalist returned ${response.status} for ${species.id}`);
+      continue;
+    }
+    if (!response.ok) throw new Error(`iNaturalist returned ${response.status} for ${species.id}`);
+    const data = await response.json();
+    if (data.error) throw new Error(`iNaturalist error for ${species.id}: ${data.error}`);
+    const months = data.results?.month_of_year || {};
+    return Array.from({ length: 12 }, (_, index) => Number(months[String(index + 1)] || 0));
+  }
+  throw lastError || new Error(`iNaturalist failed for ${species.id}`);
 }
 
 function relativeArray(counts) {

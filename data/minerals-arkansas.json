@@ -20,6 +20,16 @@
 "perm": "Private / other"
 },
 {
+"id": "mrds-10068413",
+"speciesId": "mineral-clay",
+"lat": 34.50012,
+"lng": -92.50016,
+"name": "Arkansas Bauxite Region",
+"county": "Saline",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10068413",
+"perm": "Private / other"
+},
+{
 "id": "mrds-10113957",
 "speciesId": "mineral-quartz",
 "lat": 34.66572,
@@ -77,7 +87,7 @@
 "name": "Fiddler's Ridge Crystal Mine",
 "county": "Montgomery",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114048",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10114159",
@@ -87,7 +97,7 @@
 "name": "Starfire Mine",
 "county": "Montgomery",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114159",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10114198",
@@ -111,7 +121,7 @@
 },
 {
 "id": "mrds-10114224",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.53652,
 "lng": -93.38159,
 "name": "No Name",
@@ -121,7 +131,7 @@
 },
 {
 "id": "mrds-10114339",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.66232,
 "lng": -93.21629,
 "name": "Phillips Claim",
@@ -181,7 +191,7 @@
 },
 {
 "id": "mrds-10114688",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.74182,
 "lng": -93.10408,
 "name": "J W Ellison Tract",
@@ -281,7 +291,7 @@
 },
 {
 "id": "mrds-10138205",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.35292,
 "lng": -93.93081,
 "name": "Unknown",
@@ -307,7 +317,7 @@
 "name": "Wegner Quartz Crystals",
 "county": "Montgomery",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138253",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10138270",
@@ -341,7 +351,7 @@
 },
 {
 "id": "mrds-10138506",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.73182,
 "lng": -92.96488,
 "name": "Hogan Green Area",
@@ -387,17 +397,17 @@
 "name": "Crystal Pyramid Mine",
 "county": "Montgomery",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138595",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10138721",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.65762,
 "lng": -93.32659,
 "name": "A C Avant Area",
 "county": "Garland",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138721",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10138750",
@@ -427,7 +437,7 @@
 "name": "Avant & Heath",
 "county": "Polk",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10138807",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10138809",
@@ -501,7 +511,7 @@
 },
 {
 "id": "mrds-10162421",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.66682,
 "lng": -93.10598,
 "name": "No Name",
@@ -541,7 +551,7 @@
 },
 {
 "id": "mrds-10162641",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.70042,
 "lng": -93.06128,
 "name": "Miller Mountain Quarry",
@@ -551,7 +561,7 @@
 },
 {
 "id": "mrds-10162657",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.39792,
 "lng": -93.5874,
 "name": "Unknown",
@@ -561,7 +571,7 @@
 },
 {
 "id": "mrds-10162710",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.40262,
 "lng": -93.7385,
 "name": "Unknown",
@@ -581,7 +591,7 @@
 },
 {
 "id": "mrds-10162827",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.27122,
 "lng": -94.35852,
 "name": "Little Missouri",
@@ -601,7 +611,7 @@
 },
 {
 "id": "mrds-10162913",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.78622,
 "lng": -92.82127,
 "name": "Fairchild #1 Claim",
@@ -641,7 +651,7 @@
 },
 {
 "id": "mrds-10163170",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.66702,
 "lng": -93.06018,
 "name": "W T Coleman Tract",
@@ -661,7 +671,7 @@
 },
 {
 "id": "mrds-10187065",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.35702,
 "lng": -93.92941,
 "name": "Little Missouri",
@@ -691,7 +701,7 @@
 },
 {
 "id": "mrds-10184303",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.46092,
 "lng": -93.44489,
 "name": "Unknown",
@@ -711,7 +721,7 @@
 },
 {
 "id": "mrds-10186867",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.74152,
 "lng": -92.76347,
 "name": "Pritchard Prospect",
@@ -731,7 +741,7 @@
 },
 {
 "id": "mrds-10186978",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.80042,
 "lng": -92.80127,
 "name": "J.T.Willis",
@@ -741,7 +751,7 @@
 },
 {
 "id": "mrds-10186993",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.66152,
 "lng": -93.10268,
 "name": "Dierks Quartz Area No.4",
@@ -751,7 +761,7 @@
 },
 {
 "id": "mrds-10187026",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.77512,
 "lng": -92.80207,
 "name": "Ouachita National Forest",
@@ -781,7 +791,7 @@
 },
 {
 "id": "mrds-10187173",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.54872,
 "lng": -92.94238,
 "name": "Hot Springs Pit",
@@ -791,7 +801,7 @@
 },
 {
 "id": "mrds-10187214",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.33593,
 "lng": -92.73907,
 "name": "Unk",
@@ -801,7 +811,7 @@
 },
 {
 "id": "mrds-10187272",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.67232,
 "lng": -93.06128,
 "name": "Dierks Tract No 3",
@@ -828,6 +838,16 @@
 "county": "Pike",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187384",
 "perm": "State park"
+},
+{
+"id": "mrds-10187472",
+"speciesId": "mineral-clay",
+"lat": 34.04123,
+"lng": -93.6246,
+"name": "Unknown",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10187472",
+"perm": "Private / other"
 },
 {
 "id": "mrds-10187491",
@@ -871,7 +891,7 @@
 },
 {
 "id": "mrds-10207711",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.66762,
 "lng": -93.20768,
 "name": "No Name",
@@ -921,7 +941,7 @@
 },
 {
 "id": "mrds-10210966",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.40982,
 "lng": -93.7374,
 "name": "Unknown",
@@ -1011,7 +1031,7 @@
 },
 {
 "id": "mrds-10211366",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.36902,
 "lng": -92.74347,
 "name": "Unk",
@@ -1141,7 +1161,7 @@
 },
 {
 "id": "mrds-10235142",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.82451,
 "lng": -93.21349,
 "name": "Beard Area",
@@ -1151,7 +1171,7 @@
 },
 {
 "id": "mrds-10235153",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.80791,
 "lng": -92.81407,
 "name": "Monro Johnson",
@@ -1191,7 +1211,7 @@
 },
 {
 "id": "mrds-10235306",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.79872,
 "lng": -92.81237,
 "name": "Hester Prospect",
@@ -1250,16 +1270,6 @@
 "perm": "USFS"
 },
 {
-"id": "mrds-10235552",
-"speciesId": "mineral-gemstone",
-"lat": 34.67012,
-"lng": -93.33019,
-"name": "Delinde Wavellite Mine",
-"county": "Garland",
-"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235552",
-"perm": "USFS"
-},
-{
 "id": "mrds-10235567",
 "speciesId": "mineral-quartz",
 "lat": 34.50842,
@@ -1277,7 +1287,7 @@
 "name": "Twin Knobs Claypit",
 "county": "Pike",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10235579",
-"perm": "State park"
+"perm": "Private / other"
 },
 {
 "id": "mrds-10235580",
@@ -1291,7 +1301,7 @@
 },
 {
 "id": "mrds-10235616",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.49452,
 "lng": -93.06438,
 "name": "Hot Springs Mill",
@@ -1341,7 +1351,7 @@
 },
 {
 "id": "mrds-10235783",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.69762,
 "lng": -93.06688,
 "name": "Colemans Mill",
@@ -1391,7 +1401,7 @@
 },
 {
 "id": "mrds-10259725",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.73542,
 "lng": -92.98048,
 "name": "Hamilton Hill",
@@ -1431,7 +1441,7 @@
 },
 {
 "id": "mrds-10259978",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.75902,
 "lng": -93.04078,
 "name": "O J Blackman",
@@ -1471,7 +1481,7 @@
 },
 {
 "id": "mrds-10260166",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.73092,
 "lng": -92.77267,
 "name": "Harold Prospect",
@@ -1511,7 +1521,7 @@
 },
 {
 "id": "mrds-10260239",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.62952,
 "lng": -93.32209,
 "name": "Cruse Anderson Area",
@@ -1527,7 +1537,7 @@
 "name": "Crystal Mountain Mine",
 "county": "Saline",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260264",
-"perm": "USFS"
+"perm": "Claimed / fee-dig"
 },
 {
 "id": "mrds-10260316",
@@ -1541,7 +1551,7 @@
 },
 {
 "id": "mrds-10260387",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.49452,
 "lng": -93.07548,
 "name": "Mc Earl Mine",
@@ -1581,7 +1591,7 @@
 },
 {
 "id": "mrds-10280582",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.75622,
 "lng": -93.06128,
 "name": "Dierks Quartz Area No 5",
@@ -1631,7 +1641,7 @@
 },
 {
 "id": "mrds-10284042",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.34092,
 "lng": -93.841,
 "name": "Langley",
@@ -1661,7 +1671,7 @@
 },
 {
 "id": "mrds-10284233",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.69572,
 "lng": -93.08848,
 "name": "No Name",
@@ -1691,7 +1701,7 @@
 },
 {
 "id": "mrds-10284373",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.83401,
 "lng": -92.85487,
 "name": "Lake Sylvia Prospect",
@@ -1731,12 +1741,22 @@
 },
 {
 "id": "mrds-10284736",
-"speciesId": "mineral-silica",
+"speciesId": "mineral-novaculite",
 "lat": 34.35702,
 "lng": -93.7821,
 "name": "Unknown",
 "county": "Montgomery",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284736",
+"perm": "USFS"
+},
+{
+"id": "mrds-10400454",
+"speciesId": "mineral-clay",
+"lat": 34.36712,
+"lng": -93.95083,
+"name": "Pike County Clays",
+"county": "Pike",
+"url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10400454",
 "perm": "USFS"
 },
 {
