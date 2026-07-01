@@ -3709,6 +3709,7 @@ const mineralSpeciesCatalog = [
     scientificName: "Steatite (talc-rich rock)",
     category: "soapstone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["asbestos risk — cut/grind wet", "use respiratory protection"],
     usedParts: "Carving — bowls, pipes, beads, figurines, molds, and cookware.",
     notes: "Soft, heat-stable carving stone from the Saline County talc–steatite belt. Grades run from pure high-talc soapstone (softest, for bowls and pipes) to harder tremolitic/chloritic steatite that holds finer detail. Safety: some Ouachita steatite is tremolite/actinolite-bearing (asbestiform) — test the supply and cut/grind wet with respiratory protection."
   },
@@ -3718,6 +3719,7 @@ const mineralSpeciesCatalog = [
     scientificName: "Clay minerals (kaolinite group)",
     category: "clay",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["silica dust — process wet"],
     usedParts: "Hand-built and wheel-thrown pottery, tile, and tobacco-pipe clay.",
     notes: "A range of regional clays: plastic ball clay (throwing bodies), white low-plasticity kaolin (porcelain/whiteware and glaze), iron-bearing stoneware/earthenware (the widespread red-buff hand-building clays), and high-alumina fire clay (kiln furniture, high-fire bodies). Dry-clay dust is a silicosis hazard — process wet."
   },
@@ -7231,7 +7233,7 @@ const PROJECT_RECIPES = [
     teaser: "Rouge-red from a toxic berry",
     toxic: true,
     educationalOnly: false,
-    hook: "unused",
+    hook: "The plant wears its craft in its names — rouge plant, bloodberry, baie-rouge. Its translucent red berries were long crushed for a fugitive cosmetic rouge and a food and cloth colorant across the Caribbean and Latin America — the same betalain pigment (rivianin) that stains your fingers now. It makes a vivid rouge-magenta ink that is beautiful and frankly temporary, so treat it as expressive rather than archival, and never let the toxic berries near your mouth.",
     lightfastness: {
       rating: "fugitive",
       note: "Frankly fugitive. Betalains like rivianin are notoriously sensitive to light, heat, oxygen, and pH, and pigment studies on this very juice show heavy degradation within weeks at room temperature even in the dark. Expect the rouge-magenta to dull toward brown-grey within weeks to a couple of months of light exposure. Keep finished work in a closed book or dark drawer, scan anything you want to keep, and treat it as expressive rather than archival."
@@ -11203,15 +11205,20 @@ function sheetMapsHTML() {
 
 function sheetPlantsHTML() {
   const config = getActiveMapConfig();
+  // Stone isn't seasonal, so the minerals "shelf" shows the material category
+  // instead of a (misleading) Jan-Dec month range next to the scientific name.
+  const isMineral = config.loadMinerals;
   const cards = speciesCatalogByName.map((species) => {
     const color = CATEGORY_COLORS[species.category] || "#777";
-    const season = getMonthRangeText(species.months);
+    const meta = isMineral
+      ? `${species.scientificName} · ${getCategoryLabel(species.category)}`
+      : `${species.scientificName} · ${getMonthRangeText(species.months)}`;
     const uses = species.usedParts || getCategoryLabel(species.category);
     return `
       <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(color)}"></div>
         <h3 class="serif">${escapeHTML(species.commonName)}</h3>
-        <div class="m">${escapeHTML(species.scientificName)} · ${escapeHTML(season)}</div>
+        <div class="m">${escapeHTML(meta)}</div>
         <div class="uses">${escapeHTML(uses)}</div>
       </div>`;
   }).join("");
@@ -11297,19 +11304,29 @@ function sheetProjectsHTML() {
   const dyes = PROJECT_RECIPES.filter((r) => r.kind === "dye");
   const modifiers = PROJECT_RECIPES.filter((r) => r.kind === "modifier" || r.kind === "preservative");
   const binders = PROJECT_RECIPES.filter((r) => r.kind === "binder");
-  const group = (label, list) => list.length
-    ? `<div class="card-grid-label">${label}</div>${list.map(projectCardHTML).join("")}`
+  // Each category collapses to a single horizontally-scrollable row; the toggle
+  // expands it into a wrapped grid to show the whole category at once.
+  const shelf = (label, list) => list.length
+    ? `<section class="proj-shelf">
+         <div class="shelf-head">
+           <span class="card-grid-label">${label} · ${list.length}</span>
+           ${list.length > 3
+             ? `<button class="shelf-toggle" type="button" data-shelf-toggle aria-expanded="false">Expand</button>`
+             : ""}
+         </div>
+         <div class="shelf-row">${list.map(projectCardHTML).join("")}</div>
+       </section>`
     : "";
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE PRESS · ${PROJECT_RECIPES.length} PROJECTS</div>
     <h2 class="serif">Projects</h2>
-    <p>Make ink, dye, and pigment from the plants on the map. Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Every recipe is craft, not food; harvest only where it is permitted.</p>
-    <div class="card-grid">
-      ${group("PLANT INKS", inks)}
-      ${group("PLANT DYES", dyes)}
-      ${group("MODIFIERS · PRESERVING", modifiers)}
-      ${group("BINDERS", binders)}
+    <p>Make ink, dye, and pigment from the plants on the map. Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Scroll a row sideways, or Expand a category to see all of it. Every recipe is craft, not food; harvest only where it is permitted.</p>
+    <div class="proj-shelves">
+      ${shelf("PLANT INKS", inks)}
+      ${shelf("PLANT DYES", dyes)}
+      ${shelf("MODIFIERS · PRESERVING", modifiers)}
+      ${shelf("BINDERS", binders)}
     </div>
   `;
 }
@@ -11464,6 +11481,16 @@ function initSheets() {
     const speciesCard = event.target.closest("[data-species]");
     if (speciesCard) { selectOnlySpecies(speciesCard.dataset.species); closeSheet(); return; }
     if (event.target.closest("[data-recipe-back]")) { showProjectsGrid(); return; }
+    const shelfToggle = event.target.closest("[data-shelf-toggle]");
+    if (shelfToggle) {
+      const row = shelfToggle.closest(".proj-shelf")?.querySelector(".shelf-row");
+      if (row) {
+        const expanded = row.classList.toggle("expanded");
+        shelfToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+        shelfToggle.textContent = expanded ? "Collapse" : "Expand";
+      }
+      return;
+    }
     const recipeCard = event.target.closest("[data-recipe]");
     if (recipeCard) { openRecipeDetail(recipeCard.dataset.recipe); }
   });
@@ -12233,6 +12260,9 @@ function renderMarkers() {
         rulesLabel: getActiveMapConfig().rulesLabel,
         season: getMonthRangeText(species.months),
         months: Array.isArray(species.months) ? species.months.join(",") : "",
+        // Stone isn't seasonal; carry the catalog detail (type range, grades,
+        // safety) instead so it can surface on the mineral point card.
+        notes: record.source === "mineral" ? (species.notes || "") : "",
         confidence: record.confidence || "community",
         harvestStatus: record.harvestStatus || "",
         harvestNote: record.accessNote || "Confirm site rules before harvesting."
@@ -13411,15 +13441,22 @@ function getMarkerPopupHTML(properties) {
   const compact = typeof window !== "undefined" && typeof window.matchMedia === "function"
     && window.matchMedia("(max-width: 720px)").matches;
 
+  // Stone is not seasonal or "harvested" like a plant, so the mineral card drops
+  // the season sparkline + harvest-ethic and instead surfaces the catalog detail
+  // (material type range, grades, and safety) that has no other home in the UI.
+  const isMineral = properties.source === "mineral";
   const usedPartsRow = (!compact && properties.usedParts)
     ? `<div class="row"><span class="lab">USE</span><span class="val">${escapeHTML(properties.usedParts)}</span></div>`
+    : "";
+  const detailRow = (!compact && isMineral && properties.notes)
+    ? `<div class="row"><span class="lab">DETAIL</span><span class="val">${escapeHTML(properties.notes)}</span></div>`
     : "";
   const safetyTags = String(properties.safetyTags || "").split("|").filter(Boolean);
   const safetyRow = safetyTags.length
     ? `<div class="row safety"><span class="lab">SAFETY</span><span class="val">${safetyTags.map(escapeHTML).join(" · ")}</span></div>`
     : "";
   // Ethic reads as a soft trailing paragraph, not a labeled row (prototype).
-  const ethicNote = (!compact && properties.harvestEthic)
+  const ethicNote = (!compact && !isMineral && properties.harvestEthic)
     ? `<div class="ethic">${escapeHTML(properties.harvestEthic)}</div>`
     : "";
 
@@ -13429,7 +13466,7 @@ function getMarkerPopupHTML(properties) {
   const seasonSpark = monthSet.size
     ? sparkline(monthsArr, properties.categoryColor || "var(--reg-accent)")
     : "";
-  const seasonLine = compact
+  const seasonLine = (compact || isMineral)
     ? ""
     : `<div class="season-line">${seasonSpark}<span class="t">SEASON · ${escapeHTML(properties.season)}</span></div>`;
 
@@ -13470,6 +13507,7 @@ function getMarkerPopupHTML(properties) {
         <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}</span></div>
         ${safetyRow}
         ${usedPartsRow}
+        ${detailRow}
         <div class="row"><span class="lab">PLACE</span><span class="val">${escapeHTML(properties.name)}</span></div>
         <div class="row"><span class="lab">SOURCE</span><span class="val">${sourceVal}</span></div>
         ${seasonLine}

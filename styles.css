@@ -1673,6 +1673,52 @@ body[data-register="night"] {
 }
 .card-grid-label:first-child { margin-top: 0; }
 
+/* ---- project shelves: each recipe category collapses to one horizontally
+   scrollable row; the Expand toggle switches it to a full wrapped grid ---- */
+.proj-shelves { margin-top: 14px; }
+.proj-shelf { margin-top: 16px; }
+.proj-shelf:first-child { margin-top: 0; }
+.shelf-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.shelf-head .card-grid-label { margin: 0; }
+.shelf-toggle {
+  flex: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--reg-accent);
+}
+.shelf-toggle:hover { text-decoration: underline; }
+.shelf-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.shelf-row > .mini-card {
+  flex: 0 0 210px;
+  scroll-snap-align: start;
+}
+.shelf-row.expanded {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  overflow-x: visible;
+  scroll-snap-type: none;
+}
+.shelf-row.expanded > .mini-card { flex: initial; }
+
 /* ---- recipe detail (drilled-in "recipe card" inside the sheet) ---- */
 
 .recipe-detail .proj-back {
