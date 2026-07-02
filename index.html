@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=minerals-map-3">
+    <link rel="stylesheet" href="./styles.css?v=minerals-map-4">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -62,6 +62,7 @@
           <div class="season-track">
             <input class="day-slider" id="daySlider" type="range" min="1" max="365" value="140" aria-label="Choose day of year">
             <div class="season-seasons" aria-hidden="true"><span>WINTER</span><span>SPRING</span><span>SUMMER</span><span>FALL</span></div>
+            <div class="work-scale" aria-hidden="true"><span>SOFT</span><span>MEDIUM</span><span>HARD</span></div>
           </div>
           <div class="season-meta">
             <span class="season-readout"><strong id="seasonDateLabel">May 20</strong> <span id="seasonName">Spring</span></span>
@@ -101,6 +102,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=minerals-map-3"></script>
+    <script src="./app.js?v=minerals-map-4"></script>
   </body>
 </html>

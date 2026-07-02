@@ -103,6 +103,18 @@ const MINERAL_CATEGORY_COLORS = {
   gemstone: "#a8497e",
   silica: "#8a93a0"
 };
+// Workability scale (replaces the meaningless season slider in mineral mode):
+// 0 = softest (carve / throw) → 100 = hardest (sharpen / knap / facet). Roughly
+// tracks Mohs hardness and the craft it fits.
+const MINERAL_WORKABILITY = {
+  clay: 6, soapstone: 14, slate: 40, silica: 72, quartz: 74, novaculite: 78, gemstone: 96
+};
+const MINERAL_WORKABILITY_BAND = 22; // slider shows materials within ± this of its value
+function mineralWorkBand(value) {
+  if (value < 28) return { label: "Soft — carving & pottery", examples: "clay · soapstone" };
+  if (value < 56) return { label: "Medium — splitting & engraving", examples: "slate" };
+  return { label: "Hard — sharpening, knapping & lapidary", examples: "novaculite · quartz · chert · gemstone" };
+}
 let CATEGORY_COLORS = FOOD_CATEGORY_COLORS;
 const ACCESS_RULE_SOURCES = {
   alaskaParks: "https://www.law.cornell.edu/regulations/alaska/11-AAC-12.170",
@@ -3683,7 +3695,7 @@ const mineralSpeciesCatalog = [
     category: "quartz",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Lapidary — cabochons, faceting, carving, and bead/wire-wrap work.",
-    notes: "West-central Arkansas (Mount Ida / Montgomery Co.) is a famous quartz-crystal district. Most named \"mines\" here are commercial pay-to-dig operations on private or claimed ground, not free-collecting sites — check the collecting-rule note on each point."
+    notes: "Mount Ida / Montgomery Co. is a famous quartz-crystal district — but most named \"mines\" are commercial pay-to-dig or claimed ground, not free collecting."
   },
   {
     id: "mineral-novaculite",
@@ -3692,7 +3704,7 @@ const mineralSpeciesCatalog = [
     category: "novaculite",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Sharpening stones — whetstones and oilstones — plus knapping and fine carving/inlay.",
-    notes: "The classic Arkansas whetstone, from the Devonian–Mississippian Arkansas Novaculite along the Novaculite Uplift (Hot Springs / Garland–Montgomery–Polk Cos.). Graded by density: Washita (coarse, fast-cutting) → Soft Arkansas (general honing) → Hard Arkansas (fine, keen edge) → Black/Translucent Arkansas (extra-fine finishing). MRDS has no novaculite commodity code, so many points are recovered from \"Silica\" by host-formation vetting — treat positions as a curated seed."
+    notes: "The classic Arkansas whetstone (Novaculite Uplift), graded by density: Washita (coarse) → Soft → Hard → Black/Translucent Arkansas (extra-fine). MRDS files most under \"Silica,\" so treat positions as a curated seed."
   },
   {
     id: "mineral-silica",
@@ -3701,7 +3713,7 @@ const mineralSpeciesCatalog = [
     category: "silica",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Knapping toolstone (flint / chert); also the holding bucket for unlabeled novaculite.",
-    notes: "Knappable chert and flint, plus MRDS \"Silica\" points not yet confirmed as novaculite — confirm the host formation before treating a point as toolstone. Note: toolstone outcrops are frequently archaeological sites. This map shows raw geologic occurrences only; collecting artifacts is illegal (ARPA / NHPA) and erases the archaeological record."
+    notes: "Knappable chert/flint (and unconfirmed novaculite). Toolstone outcrops are often archaeological sites — this maps raw geology only; collecting artifacts is illegal (ARPA)."
   },
   {
     id: "mineral-soapstone",
@@ -3711,7 +3723,7 @@ const mineralSpeciesCatalog = [
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     safetyTags: ["asbestos risk — cut/grind wet", "use respiratory protection"],
     usedParts: "Carving — bowls, pipes, beads, figurines, molds, and cookware.",
-    notes: "Soft, heat-stable carving stone from the Saline County talc–steatite belt. Grades run from pure high-talc soapstone (softest, for bowls and pipes) to harder tremolitic/chloritic steatite that holds finer detail. Safety: some Ouachita steatite is tremolite/actinolite-bearing (asbestiform) — test the supply and cut/grind wet with respiratory protection."
+    notes: "Soft, heat-stable carving stone from the Saline County talc–steatite belt — from pure high-talc soapstone (softest) to harder steatite that holds finer detail."
   },
   {
     id: "mineral-clay",
@@ -3721,7 +3733,7 @@ const mineralSpeciesCatalog = [
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     safetyTags: ["silica dust — process wet"],
     usedParts: "Hand-built and wheel-thrown pottery, tile, and tobacco-pipe clay.",
-    notes: "A range of regional clays: plastic ball clay (throwing bodies), white low-plasticity kaolin (porcelain/whiteware and glaze), iron-bearing stoneware/earthenware (the widespread red-buff hand-building clays), and high-alumina fire clay (kiln furniture, high-fire bodies). Dry-clay dust is a silicosis hazard — process wet."
+    notes: "Regional clays: plastic ball clay (throwing), white kaolin (porcelain/glaze), iron-bearing stoneware/earthenware (hand-building), and high-alumina fire clay (kiln furniture)."
   },
   {
     id: "mineral-slate",
@@ -3739,7 +3751,7 @@ const mineralSpeciesCatalog = [
     category: "gemstone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Faceting, cabochons, and bead/setting work.",
-    notes: "Includes the Prairie Creek diatreme — Crater of Diamonds State Park is the rare public site where visitors may dig and keep diamonds (to cut and set) for a fee."
+    notes: "The Prairie Creek diatreme — Crater of Diamonds State Park, the rare public site where visitors may dig and keep diamonds (to cut and set) for a fee."
   }
 ];
 
@@ -3845,6 +3857,7 @@ const state = {
   activeMap: "ink",
   selectedDay: getDayOfYear(new Date()),
   allSeasons: false,
+  mineralWorkability: 50, // 0-100 workability slider position (minerals mode only)
   records: [],
   inatRecords: [],
   inatRecordCache: new Map(),
@@ -5276,6 +5289,19 @@ function renderModeChrome() {
   // #mode-disclaimer) — shown only in the medicine/herbalism map.
   const disclaimer = document.getElementById("mode-disclaimer");
   if (disclaimer) disclaimer.hidden = state.activeMap !== "medicine";
+  // Minerals mode: the nav "Plants" tab reads "Minerals", and the bottom rail
+  // switches from the season scrubber to the workability slider.
+  const isMineral = !!config.loadMinerals;
+  const plantsNav = document.querySelector('#mastLinks [data-sheet="plants"]');
+  if (plantsNav) plantsNav.textContent = isMineral ? "Minerals" : "Plants";
+  if (seasonBar) seasonBar.classList.toggle("mode-minerals", isMineral);
+  if (daySlider) {
+    if (isMineral) { daySlider.min = "0"; daySlider.max = "100"; }
+    else { daySlider.min = "1"; daySlider.max = String(getDaysInYear(ACTIVE_YEAR)); }
+  }
+  if (allSeasonsButton) allSeasonsButton.textContent = isMineral ? "All materials" : "All seasons";
+  if (whenToggle) whenToggle.textContent = isMineral ? "Workability" : "Set date";
+  applyMarkerZoomRangeForMode();
   renderMapLegend();
 }
 
@@ -6821,37 +6847,31 @@ const PROJECT_RECIPES = [
     ]
   },
   {
-    id: "tech-egg-casein",
+    id: "tech-egg-tempera",
     plantId: null,
     kind: "binder",
-    name: "Egg & milk-casein binders",
+    name: "Egg tempera binder",
     category: null,
     swatch: null,
-    color: "Pantry binders",
+    color: "Pantry binder",
     difficulty: "Beginner",
-    teaser: "Egg tempera & milk paint",
+    teaser: "Luminous paint from a yolk",
     toxic: false,
-    hook: "Two binders straight from the fridge: egg yolk thinned with water becomes egg tempera, the luminous paint medieval panels have survived on for 600 years, and skim milk curdled with vinegar then loosened with baking soda becomes casein, the matte \"milk paint\" of old furniture. Both turn loose pigment or dried plant color into paint that sticks and shrugs off water once dry.",
+    hook: "Egg yolk thinned with a little water becomes egg tempera — the luminous, fast-drying paint medieval panels have survived on for 600 years. Whisk it into loose pigment or dried plant color and it makes paint that grips paper, board, or panel and shrugs off water once cured.",
     lightfastness: {
       rating: "good",
-      note: "Honest caveat: the binder itself is near-colorless and durable, but lightfastness rides entirely on what you mix in. Bound with earth pigments or lampblack the film lasts indefinitely; bound with a fugitive berry or flower color it will still fade in light over months — the binder makes it stick, not last."
+      note: "The binder itself is near-colorless and durable, but lightfastness rides entirely on what you mix in. Bound with earth pigments or lampblack the film lasts indefinitely; bound with a fugitive berry or flower color it will still fade over months — egg makes color stick, not last."
     },
     timeline: {
-      active: "egg ~5-10 min; casein ~30-40 min",
+      active: "~5-10 min",
       passive: "10 min"
     },
     ingredients: [
       {
-        item: "Fresh whole egg (egg tempera) — yolk only",
+        item: "Fresh whole egg — yolk only",
         amount: "1 yolk per small session",
         required: true,
         note: "duck or other yolks work but are richer; use only the yolk"
-      },
-      {
-        item: "Nonfat (skim) milk (casein)",
-        amount: "4 cups makes a few tablespoons of curd",
-        required: true,
-        note: "skim is best — fat weakens casein; never whole milk, cream, or non-dairy 'milk'. Reconstituted nonfat powder also works"
       },
       {
         item: "Clean water (distilled preferred)",
@@ -6860,78 +6880,47 @@ const PROJECT_RECIPES = [
         note: "thins the yolk to light cream; filtered or cooled boiled tap water is fine"
       },
       {
-        item: "White vinegar or lemon juice (casein) — acid to curdle",
-        amount: "about 1/4-1/2 cup vinegar, or juice of 1-2 lemons",
-        required: true,
-        note: "add gradually and stop the moment the milk separates into curd and whey"
-      },
-      {
-        item: "Baking soda (casein) — alkali to redissolve the curd",
-        amount: "~1/4 tsp per Tbsp of rinsed curd, in tiny pinches",
-        required: true,
-        note: "the safe, accessible default; traditional borax or ammonium carbonate are more water-resistant but hazardous — see safety"
+        item: "White vinegar or a drop of clove oil — preservative",
+        amount: "1 drop per yolk",
+        required: false,
+        note: "not needed, but slows spoilage and mold for the day or two the binder keeps"
       },
       {
         item: "Pigment, dried plant powder, soot/lampblack, or a strong plant extract — your colorant",
         amount: "roughly 1:1 by volume with the binder, then adjust",
         required: false,
         note: "earth pigments and lampblack give the most durable, lightfast results; berry and flower colors are easy but fugitive"
-      },
-      {
-        item: "White vinegar or a drop of clove oil — preservative for egg tempera",
-        amount: "1 drop per yolk",
-        required: false,
-        note: "not needed, but slows spoilage and mold for the day or two the binder keeps"
-      },
-      {
-        item: "A drop of clove oil or thymol — preservative for casein",
-        amount: "1 drop per small jar",
-        required: false,
-        note: "not needed if you refrigerate and use within days, but extends the wet binder"
       }
     ],
     toolsRequired: [
       "Small bowls or jars (one for binder, one for mixing paint)",
       "Spoon or palette knife for mixing",
-      "Paper towel (to dry and de-sac the yolk)",
-      "Pot reserved for craft use (for heating milk)",
-      "Heat source",
-      "Fine strainer lined with a coffee filter, cheesecloth, or clean cotton cloth"
+      "Paper towel (to dry and de-sac the yolk)"
     ],
     toolsOptional: [
-      "Kitchen thermometer (to hit ~140°F for casein)",
       "Glass dropper for vinegar or clove oil",
-      "Small airtight jars for fridge storage",
+      "Small airtight jar for fridge storage",
       "Mortar and pestle or muller to grind gritty pigment smooth",
       "Gloves to keep stains off hands"
     ],
     steps: [
-      "Decide which binder. Egg tempera is faster, simpler, and more water-resistant per effort — best for paint on paper, board, or panel. Casein gives a matte, opaque 'milk paint' look and grips stiff surfaces like board and furniture. Both are non-toxic to make. Work in a craft-use bowl, not your good dishes, and label finished jars 'PAINT — NOT FOOD'.",
-      "Egg tempera — separate the yolk: crack a fresh egg and pass the yolk back and forth between the shell halves, or pour it into your cupped hand and let the white run through your fingers, keeping the yolk intact.",
+      "Work in a craft-use bowl, not your good dishes, and label finished jars 'PAINT — NOT FOOD'. Egg tempera is fast, simple, and water-resistant per effort — best for paint on paper, board, or panel.",
+      "Separate the yolk: crack a fresh egg and pass the yolk back and forth between the shell halves, or pour it into your cupped hand and let the white run through your fingers, keeping the yolk intact.",
       "De-sac the yolk: roll it gently on a paper towel to shed clinging white. Then pinch the thin sac and let only the orange yolk run into your bowl; discard the empty sac. This keeps skins out of your paint.",
       "Thin the yolk: stir in clean water a few drops at a time until the binder is the consistency of light cream — usually 1-3 teaspoons per yolk. Optional: add one drop of vinegar or clove oil to slow spoilage. This is your egg tempera binder.",
       "Make tempera paint: mix your pigment or plant powder to a smooth paste with a little water first, then blend in the yolk binder starting around 1:1 and adjust. More binder is more transparent and glossy; more pigment is more opaque and matte. It should brush like thin cream — use it within this one session.",
-      "Milk casein — warm the milk: pour 4 cups of skim milk into a craft-use pot and heat gently to about 140°F (steaming, never boiling). Overheating or boiling makes a poor curd.",
-      "Curdle it: stir in vinegar or lemon juice a splash at a time until the milk visibly separates into white curds and thin, cloudy whey — usually 1/4 to 1/2 cup vinegar. Stop adding acid once separation is clear, take it off the heat, and let the curds settle a few minutes.",
-      "Strain and rinse: pour through your lined strainer. Discard the whey (just acidic water — compost or drain it). Rinse the curd under cool running water and squeeze gently to wash out the vinegar; leftover acid will fight the alkali next. You now have soft white raw casein.",
-      "Redissolve into binder: put the rinsed curd in a clean jar and sprinkle in baking soda a small pinch at a time (start ~1/4 teaspoon per tablespoon of curd), stirring after each. The curd softens, foams a little, and turns into a smooth, milky, glue-like liquid. Add just enough to get a pourable, lump-free binder, with a few drops of water if it is too thick. For the smoothest result, cover and let it sit overnight, then stir again.",
-      "Make casein paint: mix your pigment or plant powder to a paste with a little water, then stir in the casein binder at about 1:1 and adjust to a brushable cream. Optional: one drop of clove oil per jar slows mold. Test on scrap — casein dries lighter and matte.",
-      "Dry and cure: apply in thin coats and let each dry. Egg tempera is touch-dry in minutes, water-resistant within a few hours, and keeps hardening for weeks to months — handle finished work gently the first day. Casein dries matte and grows water-resistant as it ages over days and weeks. Neither is fully waterproof, so protect finished pieces from soaking.",
-      "Store or discard: both binders are perishable at heart. Egg tempera — use the same session; refrigerate any leftover in a sealed jar no more than about 2 days and discard if it smells off. Casein — refrigerate and use within a few days (a drop of clove oil or thymol extends it). When in doubt, throw it out and mix a fresh small batch; both are quick to make."
+      "Dry and cure: apply in thin coats and let each dry. Egg tempera is touch-dry in minutes, water-resistant within a few hours, and keeps hardening for weeks to months — handle finished work gently the first day. It is not fully waterproof, so protect finished pieces from soaking.",
+      "Store or discard: egg tempera is perishable — use it the same session; refrigerate any leftover in a sealed jar no more than about 2 days and discard if it smells off. When in doubt, throw it out and mix a fresh small batch."
     ],
-    modifiers: "Binders are meant to preserve your color, not change it, but casein's baking-soda alkali can shift pH-sensitive plant colors. Anthocyanin colors (berries, red cabbage, many flowers and leaves) may slide toward blue, green, or gray in casein — mix a test dab first, and use the least baking soda that still dissolves the curd. Egg yolk is roughly neutral and lends only a faint warm cast that slightly warms pale colors. Iron, acid, and heat modifiers belong to the colorant recipe, not the binder: set your final shade first, then bind it.",
-    preservation: "Both binders spoil because they are made from fresh egg and milk, so mix small and fresh. Egg tempera: one drop of vinegar or clove oil per yolk plus refrigeration in a sealed jar keeps it usable about 2 days; discard when it smells sour. Casein: refrigerate in a sealed jar and use within a few days; one drop of clove oil or thymol per small jar slows mold and can stretch it. Never reuse a binder that smells bad, has visible mold, or has gone stringy. The dried, cured paint film does not spoil — only the wet binder does.",
-    yield: "Egg tempera: 1 yolk makes enough binder for one small painting session; the binder keeps about 2 days refrigerated with a preservative, but the paint is best used the same sitting. Casein: 4 cups of skim milk yields roughly 3-5 tablespoons of curd, about a small jar of binder, keeping a few days refrigerated. Dried, cured films last indefinitely — medieval egg tempera survives 600-plus years — provided the colorant itself is lightfast.",
-    beyondInk: "These are the foundational binders that turn other recipes into paint: pair them with earth pigments, lampblack, or any dried plant color to make egg tempera for panel and paper or matte casein 'milk paint' for board and furniture. Casein in particular is a classic furniture and wall paint. There is no separate textile-dye variation — these binders fix color onto hard surfaces rather than dye fiber, and for cloth you would reach for a mordant-and-dyebath method instead.",
+    modifiers: "Egg yolk is roughly neutral and lends only a faint warm cast that slightly warms pale colors — it preserves your color rather than changing it. Iron, acid, and heat modifiers belong to the colorant recipe, not the binder: set your final shade first, then bind it.",
+    preservation: "Egg tempera spoils because it is made from fresh yolk, so mix small and fresh. One drop of vinegar or clove oil per yolk plus refrigeration in a sealed jar keeps it usable about 2 days; discard when it smells sour. Never reuse a binder that smells bad or shows mold. The dried, cured paint film does not spoil — only the wet binder does.",
+    yield: "1 yolk makes enough binder for one small painting session; it keeps about 2 days refrigerated with a preservative, but the paint is best used the same sitting. Dried, cured films last indefinitely — medieval egg tempera survives 600-plus years — provided the colorant itself is lightfast.",
+    beyondInk: "A foundational binder that turns other recipes into paint: pair it with earth pigments, lampblack, or any dried plant color to make egg tempera for panel and paper. Egg white (glair), whisked to a foam and left to settle back to liquid, is a related historic binder for illuminated-manuscript work on paper. There is no textile-dye variation — tempera fixes color onto hard surfaces rather than dyeing fiber.",
     safety: [
-      "These are art binders, not food. Even though the ingredients are groceries, the finished paint is for making marks — do not eat or drink it, keep it away from children and pets, and label jars clearly 'NOT FOOD'.",
-      "Raw egg and raw milk curd can carry bacteria. Wash hands, bowls, and tools after handling, never taste-test paint, and keep it off food-prep surfaces.",
-      "Reserve a non-food pot for heating milk. Once a pot is used for craft binders or pigments, keep it for craft only.",
-      "Default to baking soda as the casein alkali. The traditional borax route is classified toxic to reproduction and harmful if swallowed (as little as ~5 g can harm a child): if you ever choose it, wear gloves, avoid breathing the powder, lock it away from kids and pets, and never use borax casein on toys, dishware, or anything a child might mouth.",
-      "Ammonium carbonate, another traditional alkali, releases ammonia gas. If you choose it, work only with good ventilation, avoid the fumes, and keep it away from your eyes.",
+      "This is an art binder, not food. Even though the ingredients are groceries, the finished paint is for making marks — do not eat or drink it, keep it away from children and pets, and label jars clearly 'NOT FOOD'.",
+      "Raw egg can carry bacteria. Wash hands, bowls, and tools after handling, never taste-test paint, and keep it off food-prep surfaces.",
       "Many plant and berry colorants you bind are themselves toxic (pokeweed, privet, elderberry leaves and stems, Boston ivy). The binder does not make them safe — keep toxic-plant inks out of reach and never ingest them.",
-      "Pigments and fine powders can stain and should not be inhaled. Mix powders gently, consider a dust mask for fine pigment, and protect your work area.",
-      "Rinse any splashes from eyes and skin with water. Skip the traditional lime alkali — it is caustic until dry; baking soda avoids that hazard entirely."
+      "Pigments and fine powders can stain and should not be inhaled. Mix powders gently, consider a dust mask for fine pigment, and protect your work area."
     ],
     sources: [
       {
@@ -6941,10 +6930,107 @@ const PROJECT_RECIPES = [
       {
         title: "Royal Academy of Arts — How to make egg tempera paint",
         url: "https://www.royalacademy.org.uk/article/how-to-make-egg-tempera-paint"
+      }
+    ]
+  },
+  {
+    id: "tech-milk-casein",
+    plantId: null,
+    kind: "binder",
+    name: "Milk (casein) binder",
+    category: null,
+    swatch: null,
+    color: "Pantry binder",
+    difficulty: "Beginner",
+    teaser: "Matte milk paint from the fridge",
+    toxic: false,
+    hook: "Skim milk curdled with vinegar, then loosened with a pinch of baking soda, becomes casein — the matte \"milk paint\" of old furniture and walls. Stir it into loose pigment or dried plant color and it makes an opaque, velvety paint that grips board and furniture and grows water-resistant as it cures.",
+    lightfastness: {
+      rating: "good",
+      note: "The binder itself is near-colorless and durable, but lightfastness rides entirely on what you mix in. Bound with earth pigments or lampblack the film lasts indefinitely; bound with a fugitive berry or flower color it will still fade over months — casein makes color stick, not last."
+    },
+    timeline: {
+      active: "~30-40 min",
+      passive: "10 min (overnight for the smoothest binder)"
+    },
+    ingredients: [
+      {
+        item: "Nonfat (skim) milk",
+        amount: "4 cups makes a few tablespoons of curd",
+        required: true,
+        note: "skim is best — fat weakens casein; never whole milk, cream, or non-dairy 'milk'. Reconstituted nonfat powder also works"
       },
+      {
+        item: "White vinegar or lemon juice — acid to curdle",
+        amount: "about 1/4-1/2 cup vinegar, or juice of 1-2 lemons",
+        required: true,
+        note: "add gradually and stop the moment the milk separates into curd and whey"
+      },
+      {
+        item: "Baking soda — alkali to redissolve the curd",
+        amount: "~1/4 tsp per Tbsp of rinsed curd, in tiny pinches",
+        required: true,
+        note: "the safe, accessible default; traditional borax or ammonium carbonate are more water-resistant but hazardous — see safety"
+      },
+      {
+        item: "A drop of clove oil or thymol — preservative",
+        amount: "1 drop per small jar",
+        required: false,
+        note: "not needed if you refrigerate and use within days, but extends the wet binder"
+      },
+      {
+        item: "Pigment, dried plant powder, soot/lampblack, or a strong plant extract — your colorant",
+        amount: "roughly 1:1 by volume with the binder, then adjust",
+        required: false,
+        note: "earth pigments and lampblack give the most durable, lightfast results; berry and flower colors are easy but fugitive"
+      }
+    ],
+    toolsRequired: [
+      "Small bowls or jars (one for binder, one for mixing paint)",
+      "Spoon or palette knife for mixing",
+      "Pot reserved for craft use (for heating milk)",
+      "Heat source",
+      "Fine strainer lined with a coffee filter, cheesecloth, or clean cotton cloth"
+    ],
+    toolsOptional: [
+      "Kitchen thermometer (to hit ~140°F)",
+      "Glass dropper for vinegar or clove oil",
+      "Small airtight jars for fridge storage",
+      "Mortar and pestle or muller to grind gritty pigment smooth",
+      "Gloves to keep stains off hands"
+    ],
+    steps: [
+      "Work in craft-use vessels, not your good dishes, and label finished jars 'PAINT — NOT FOOD'. Casein gives a matte, opaque 'milk paint' look and grips stiff surfaces like board and furniture.",
+      "Warm the milk: pour 4 cups of skim milk into a craft-use pot and heat gently to about 140°F (steaming, never boiling). Overheating or boiling makes a poor curd.",
+      "Curdle it: stir in vinegar or lemon juice a splash at a time until the milk visibly separates into white curds and thin, cloudy whey — usually 1/4 to 1/2 cup vinegar. Stop adding acid once separation is clear, take it off the heat, and let the curds settle a few minutes.",
+      "Strain and rinse: pour through your lined strainer. Discard the whey (just acidic water — compost or drain it). Rinse the curd under cool running water and squeeze gently to wash out the vinegar; leftover acid will fight the alkali next. You now have soft white raw casein.",
+      "Redissolve into binder: put the rinsed curd in a clean jar and sprinkle in baking soda a small pinch at a time (start ~1/4 teaspoon per tablespoon of curd), stirring after each. The curd softens, foams a little, and turns into a smooth, milky, glue-like liquid. Add just enough to get a pourable, lump-free binder, with a few drops of water if it is too thick. For the smoothest result, cover and let it sit overnight, then stir again.",
+      "Make casein paint: mix your pigment or plant powder to a paste with a little water, then stir in the casein binder at about 1:1 and adjust to a brushable cream. Optional: one drop of clove oil per jar slows mold. Test on scrap — casein dries lighter and matte.",
+      "Dry and cure: apply in thin coats and let each dry. Casein dries matte and grows water-resistant as it ages over days and weeks. It is not fully waterproof, so protect finished pieces from soaking.",
+      "Store or discard: casein is perishable — refrigerate and use within a few days (a drop of clove oil or thymol extends it). When in doubt, throw it out and mix a fresh small batch."
+    ],
+    modifiers: "Casein's baking-soda alkali can shift pH-sensitive plant colors: anthocyanin colors (berries, red cabbage, many flowers and leaves) may slide toward blue, green, or gray — mix a test dab first, and use the least baking soda that still dissolves the curd. Iron, acid, and heat modifiers belong to the colorant recipe, not the binder: set your final shade first, then bind it.",
+    preservation: "Casein spoils because it is made from fresh milk curd, so mix small and fresh. Refrigerate in a sealed jar and use within a few days; one drop of clove oil or thymol per small jar slows mold and can stretch it. Never reuse a binder that smells bad, has visible mold, or has gone stringy. The dried, cured paint film does not spoil — only the wet binder does.",
+    yield: "4 cups of skim milk yields roughly 3-5 tablespoons of curd — about a small jar of binder, keeping a few days refrigerated. Dried, cured films last indefinitely, provided the colorant itself is lightfast.",
+    beyondInk: "A foundational binder that turns other recipes into paint: pair it with earth pigments, lampblack, or any dried plant color to make matte casein 'milk paint' for board, furniture, and walls — a classic furniture and wall paint. There is no textile-dye variation — casein fixes color onto hard surfaces rather than dyeing fiber.",
+    safety: [
+      "This is an art binder, not food. Even though the ingredients are groceries, the finished paint is for making marks — do not eat or drink it, keep it away from children and pets, and label jars clearly 'NOT FOOD'.",
+      "Raw milk curd can carry bacteria. Wash hands, bowls, and tools after handling, never taste-test paint, and keep it off food-prep surfaces.",
+      "Reserve a non-food pot for heating milk. Once a pot is used for craft binders or pigments, keep it for craft only.",
+      "Default to baking soda as the casein alkali. The traditional borax route is classified toxic to reproduction and harmful if swallowed (as little as ~5 g can harm a child): if you ever choose it, wear gloves, avoid breathing the powder, lock it away from kids and pets, and never use borax casein on toys, dishware, or anything a child might mouth.",
+      "Ammonium carbonate, another traditional alkali, releases ammonia gas. If you choose it, work only with good ventilation, avoid the fumes, and keep it away from your eyes.",
+      "Many plant and berry colorants you bind are themselves toxic (pokeweed, privet, elderberry leaves and stems, Boston ivy). The binder does not make them safe — keep toxic-plant inks out of reach and never ingest them.",
+      "Pigments and fine powders can stain and should not be inhaled. Mix powders gently, consider a dust mask for fine pigment, and protect your work area.",
+      "Rinse any splashes from eyes and skin with water. Skip the traditional lime alkali — it is caustic until dry; baking soda avoids that hazard entirely."
+    ],
+    sources: [
       {
         title: "D. B. Clemons — Casein from Milk",
         url: "https://dbclemons.weebly.com/casein-from-milk.html"
+      },
+      {
+        title: "Natural Pigments — How to Prepare Casein or Milk Paint",
+        url: "https://www.naturalpigments.com/artist-materials/casein-milk-paint"
       }
     ]
   },
@@ -11543,6 +11629,8 @@ function toggleFavoriteSpecies(speciesId) {
 function setMapMode(mode) {
   if (!MAP_MODE_CONFIG[mode] || mode === state.activeMap) return;
     state.activeMap = mode;
+    // Minerals open showing all materials; the workability slider filters from there.
+    if (MAP_MODE_CONFIG[mode].loadMinerals) state.allSeasons = true;
     state.records = [];
     state.inatRecords = [];
     state.inatRecordCache.clear();
@@ -11781,6 +11869,12 @@ function initControls() {
   initLocationSearch();
 
   daySlider.addEventListener("input", () => {
+    if (state.activeMap === "minerals") {
+      state.mineralWorkability = Number(daySlider.value);
+      state.allSeasons = false; // engage the workability band filter
+      render();
+      return;
+    }
     state.selectedDay = Number(daySlider.value);
     state.allSeasons = false;
     render();
@@ -11908,6 +12002,15 @@ function renderSpeciesState() {
 }
 
 function isSpeciesAvailableOnSelectedDate(species) {
+  // Minerals aren't seasonal: the bottom slider is a workability filter instead.
+  // "All materials" (allSeasons) shows everything; otherwise show materials within
+  // a band of the slider's soft→hard position.
+  if (state.activeMap === "minerals") {
+    if (state.allSeasons) return true;
+    const w = MINERAL_WORKABILITY[species.category];
+    if (!Number.isFinite(w)) return true;
+    return Math.abs(w - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
+  }
   return state.allSeasons || species.months.includes(getSelectedMonth());
 }
 
@@ -11953,6 +12056,20 @@ function renderAccessFilterNote() {
 }
 
 function renderSeasonControls() {
+  if (state.activeMap === "minerals") {
+    const all = state.allSeasons;
+    const band = mineralWorkBand(state.mineralWorkability);
+    const readout = all ? "All materials" : band.label;
+    daySlider.value = String(state.mineralWorkability);
+    daySlider.disabled = false; // draggable even in "all" mode, so a drag starts filtering
+    daySlider.setAttribute("aria-valuetext", readout);
+    seasonDateLabel.textContent = readout;
+    seasonName.textContent = all ? "" : band.examples;
+    allSeasonsButton.classList.toggle("active", all);
+    allSeasonsButton.setAttribute("aria-pressed", String(all));
+    if (seasonReset) seasonReset.hidden = true;
+    return;
+  }
   const selectedDate = getSelectedDate();
   daySlider.value = String(state.selectedDay);
   dateInput.value = getDateInputValue(selectedDate);
@@ -12148,6 +12265,9 @@ function loadPhenology(mode) {
 }
 
 function renderHistogram() {
+  // Minerals aren't seasonal — the histogram is hidden (CSS .mode-minerals) and
+  // the slider is repurposed as a workability filter, so skip the month chart.
+  if (getActiveMapConfig().loadMinerals) return;
   const speciesForChart = speciesCatalog.filter((species) => (
     state.selectedSpecies.has(species.id)
   ));
@@ -13071,6 +13191,10 @@ function initMapLayers() {
 }
 
 function shouldShowPointLayers() {
+  // Minerals are a small, self-contained (non-aggregate) set loaded once from a
+  // static file, so their clusters/points show at every zoom — no aggregate band
+  // to hand off to. (Needed for the US-wide expansion: zoom out must not blank it.)
+  if (getActiveMapConfig().loadMinerals) return state.mapReady && state.records.length > 0;
   // Once a point-band load has landed we keep the points up through any pan and
   // just refresh the data underneath them; viewport coverage no longer gates
   // visibility, so ordinary panning never blanks the map back to the aggregate
@@ -13080,6 +13204,22 @@ function shouldShowPointLayers() {
   return state.mapReady
     && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM
     && state.pointDataReady;
+}
+
+// Minerals render as clusters/points at every zoom (see shouldShowPointLayers), so
+// drop the marker layers' minzoom in mineral mode; restore the point-band defaults
+// (clusters from the bridge zoom, points from the point band) for the other modes.
+const MINERAL_MARKER_MIN_ZOOM = 2;
+function applyMarkerZoomRangeForMode() {
+  if (!state.mapReady) return;
+  const isMineral = getActiveMapConfig().loadMinerals;
+  const clusterMin = isMineral ? MINERAL_MARKER_MIN_ZOOM : MARKER_CLUSTER_BRIDGE_MIN_ZOOM;
+  const pointMin = isMineral ? MINERAL_MARKER_MIN_ZOOM : FALLING_FRUIT_MIN_LOAD_ZOOM;
+  const setRange = (id, min) => { if (map.getLayer(id)) map.setLayerZoomRange(id, min, 24); };
+  setRange(MARKER_CLUSTERS_LAYER_ID, clusterMin);
+  setRange(MARKER_CLUSTER_COUNT_LAYER_ID, clusterMin);
+  setRange(MARKER_HALO_LAYER_ID, pointMin);
+  setRange(MARKERS_LAYER_ID, pointMin);
 }
 
 function updateLayerHandoff() {
@@ -13334,12 +13474,22 @@ function bindMapInteractions() {
       closeButton: false,
       closeOnClick: true,
       maxWidth: "none",
-      offset: 14
+      offset: 14,
+      anchor: "top" // always open downward, in tandem with the auto-pan below
     })
       .setLngLat(feature.geometry.coordinates)
       .setHTML(getMarkerPopupHTML(feature.properties))
       .addTo(map);
     bindPopupActions(state.activePopup);
+    // Auto-pan so the card fits without the user scrolling the map: raise the
+    // clicked point into the upper third so the (top-anchored) card opens down
+    // into the open space below it.
+    const mapH = map.getContainer().clientHeight || 600;
+    map.easeTo({
+      center: feature.geometry.coordinates,
+      offset: [0, -Math.round(mapH * 0.34)],
+      duration: 450
+    });
   });
 
 }
@@ -13655,7 +13805,9 @@ function getNonzeroAggregateItems(items) {
 }
 
 async function loadMapData() {
-  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+  // Minerals load in full regardless of zoom (static file, no aggregate overview),
+  // so they must skip the below-point-band early-return that food/ink rely on.
+  if (state.mapReady && !getActiveMapConfig().loadMinerals && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     // Overview zooms render entirely from aggregate tiles. Loading viewport
     // records here would overwrite the point-band record set with an
     // iNat-only subset (Falling Fruit declines below the point band), so the
