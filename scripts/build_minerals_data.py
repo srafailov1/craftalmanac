@@ -20,7 +20,8 @@ Sources (all U.S. public domain - keep ATTRIBUTION.md in sync):
 
 Re-run:  python3 scripts/build_minerals_data.py
 """
-import csv, json, os, sys, tempfile, urllib.request, urllib.parse, zipfile
+import csv, json, os, sys, tempfile, time, urllib.request, urllib.parse, zipfile
+import concurrent.futures
 from collections import Counter, defaultdict
 
 CONUS = (-125.0, 24.4, -66.9, 49.5)
@@ -74,6 +75,20 @@ FEE_DIG = ("wegner", "coleman", "starfire", "fiddler", "crystal mountain",
            "crystal pyramid", "sweet surrender", "board camp", "twin creek", "avant")
 DIMENSION_HINTS = ("dimension", "building stone", "ornamental", "freestone",
                    "carv", "statuary", "monument")
+# States covered by the BLM national Surface-Management-Agency layer (public-land
+# West + plains). Only "Private / other" points here are reverse-queried for their
+# managing agency, upgrading BLM land (casual rockhounding allowed) and catching
+# NPS/USFS/tribal ground our boundary polygons missed.
+SMA_STATES = {
+    "Arizona", "California", "Colorado", "Idaho", "Kansas", "Montana", "Nebraska",
+    "Nevada", "New Mexico", "North Dakota", "Oklahoma", "Oregon", "South Dakota",
+    "Utah", "Washington", "Wyoming",
+}
+# BLM SMA ADMIN_AGENCY_CODE -> perm bucket (only codes we can map with confidence;
+# STATE is left as "Private / other" because the layer can't tell trust from park).
+AGENCY_TO_PERM = {"BLM": "BLM", "FS": "USFS", "NPS": "NPS", "BIA": "Tribal"}
+SMA_QUERY = ("https://gis.blm.gov/arcgis/rest/services/lands/"
+             "BLM_Natl_SMA_LimitedScale/MapServer/1/query")
 
 
 def fetch(url, dest, binary=False):
@@ -211,6 +226,56 @@ def in_layer(pt, feats):
     return False
 
 
+def sma_agency(lon, lat):
+    """Reverse point query against the BLM national SMA layer -> ADMIN_AGENCY_CODE."""
+    url = SMA_QUERY + "?" + urllib.parse.urlencode({
+        "geometry": f"{lon},{lat}", "geometryType": "esriGeometryPoint", "inSR": 4326,
+        "spatialRel": "esriSpatialRelIntersects", "outFields": "ADMIN_AGENCY_CODE",
+        "returnGeometry": "false", "f": "json"})
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                d = json.loads(r.read())
+            feats = d.get("features") or []
+            return feats[0]["attributes"].get("ADMIN_AGENCY_CODE") if feats else "NONE"
+        except Exception:
+            time.sleep(1 + attempt)
+    return None  # leave unqueried points as-is on failure
+
+
+def blm_enrich(recs):
+    """Upgrade western 'Private / other' points via the BLM SMA layer (BLM allowed,
+    plus any NPS/USFS/tribal ground the boundary polygons missed). Cached + threaded."""
+    cache_path = os.path.join(CACHE, "sma_agency_cache.json")
+    cache = json.load(open(cache_path)) if os.path.exists(cache_path) else {}
+    targets = [r for r in recs if r["perm"] == "Private / other" and r["state"] in SMA_STATES]
+    todo = [r for r in targets if f"{r['lng']},{r['lat']}" not in cache]
+    print(f"  BLM/SMA enrichment: {len(targets)} western private points, {len(todo)} to query...")
+
+    def work(r):
+        return (f"{r['lng']},{r['lat']}", sma_agency(r["lng"], r["lat"]))
+
+    done = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
+        for k, code in ex.map(work, todo):
+            if code is not None:
+                cache[k] = code
+            done += 1
+            if done % 250 == 0:
+                print(f"    queried {done}/{len(todo)}")
+                json.dump(cache, open(cache_path, "w"))
+    json.dump(cache, open(cache_path, "w"))
+
+    upgraded = Counter()
+    for r in targets:
+        newperm = AGENCY_TO_PERM.get(cache.get(f"{r['lng']},{r['lat']}"))
+        if newperm and newperm != r["perm"]:
+            r["perm"] = newperm
+            upgraded[newperm] += 1
+    print("  SMA upgrades:", dict(upgraded))
+
+
 def main():
     print("Fetching land-manager boundaries...")
     nps = fetch_layer("nps_boundary",  # layer 2 = boundary polygons (layer 0 is centroids)
@@ -278,6 +343,9 @@ def main():
                 "url": r["url"],
                 "perm": perm,
             })
+
+    print("Enriching western land status from the BLM SMA layer...")
+    blm_enrich(recs)
 
     recs.sort(key=lambda x: x["id"])
     with open(OUT, "w") as fh:

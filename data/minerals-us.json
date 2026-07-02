@@ -30,7 +30,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10008298",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10008565",
@@ -118,7 +118,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10009776",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010172",
@@ -162,7 +162,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010292",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010310",
@@ -173,7 +173,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010310",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010328",
@@ -195,7 +195,7 @@
 "county": "Beaver",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010337",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010348",
@@ -272,7 +272,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010573",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010575",
@@ -283,7 +283,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010575",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010577",
@@ -294,7 +294,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010577",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010607",
@@ -305,7 +305,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010607",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010744",
@@ -316,7 +316,7 @@
 "county": "Beaver",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010744",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010761",
@@ -327,7 +327,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010761",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010766",
@@ -481,7 +481,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010984",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10010999",
@@ -492,7 +492,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10010999",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011006",
@@ -547,7 +547,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10011122",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011155",
@@ -558,7 +558,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10011155",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011206",
@@ -569,7 +569,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10011206",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011249",
@@ -580,7 +580,7 @@
 "county": "Beaver",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10011249",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011276",
@@ -613,7 +613,7 @@
 "county": "Beaver",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10011340",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011352",
@@ -723,7 +723,7 @@
 "county": "Sierra",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10011898",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10011903",
@@ -767,7 +767,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012080",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012136",
@@ -789,7 +789,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012156",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012162",
@@ -800,7 +800,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012162",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012217",
@@ -822,7 +822,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012263",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012285",
@@ -932,7 +932,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012632",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012645",
@@ -943,7 +943,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012645",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012733",
@@ -954,7 +954,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012733",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012835",
@@ -976,7 +976,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012857",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10012864",
@@ -1009,7 +1009,7 @@
 "county": "Dona Ana",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10012966",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013017",
@@ -1075,7 +1075,7 @@
 "county": "Grant",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10013295",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013432",
@@ -1119,7 +1119,7 @@
 "county": "Grant",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10013499",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013503",
@@ -1141,7 +1141,7 @@
 "county": "Dona Ana",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10013575",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013578",
@@ -1339,7 +1339,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10013889",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013890",
@@ -1394,7 +1394,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10013896",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013897",
@@ -1416,7 +1416,7 @@
 "county": "Luna",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10013932",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10013994",
@@ -1526,7 +1526,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014363",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014419",
@@ -1548,7 +1548,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014441",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014444",
@@ -1570,7 +1570,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014561",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014567",
@@ -1581,7 +1581,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014567",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014573",
@@ -1592,7 +1592,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014573",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014608",
@@ -1658,7 +1658,7 @@
 "county": "Hinsdale",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014741",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014808",
@@ -1680,7 +1680,7 @@
 "county": "Cochise",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10014837",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10014865",
@@ -1779,7 +1779,7 @@
 "county": "Uintah",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015159",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015166",
@@ -1801,7 +1801,7 @@
 "county": "Piute",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015234",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015312",
@@ -1812,7 +1812,7 @@
 "county": "Wayne",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015312",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015314",
@@ -1823,7 +1823,7 @@
 "county": "Wayne",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015314",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015326",
@@ -1856,7 +1856,7 @@
 "county": "Garfield",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015369",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015467",
@@ -1900,7 +1900,7 @@
 "county": "Sanpete",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015517",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015568",
@@ -1911,7 +1911,7 @@
 "county": "Wayne",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015568",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015578",
@@ -1933,7 +1933,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015584",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015639",
@@ -1944,7 +1944,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015639",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015652",
@@ -1955,7 +1955,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015652",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015653",
@@ -1966,7 +1966,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015653",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015662",
@@ -1988,7 +1988,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015663",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015689",
@@ -1999,7 +1999,7 @@
 "county": "Kane",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10015689",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10015743",
@@ -2142,7 +2142,7 @@
 "county": "Saguache",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10016260",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10016271",
@@ -2450,7 +2450,7 @@
 "county": "Rio Blanco",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10016989",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10017008",
@@ -2461,7 +2461,7 @@
 "county": "Chaffee",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10017008",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10017016",
@@ -2549,7 +2549,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10017545",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10017550",
@@ -2571,7 +2571,7 @@
 "county": "Montrose",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10017667",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10017689",
@@ -2615,7 +2615,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10017753",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10017760",
@@ -2670,7 +2670,7 @@
 "county": "Garfield",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10017801",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10017845",
@@ -2725,7 +2725,7 @@
 "county": "Garfield",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10017955",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10018165",
@@ -2813,7 +2813,7 @@
 "county": "Sanders",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019033",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10019062",
@@ -2901,7 +2901,7 @@
 "county": "Lewis and Clark",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019356",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10019423",
@@ -3033,7 +3033,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019823",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10019838",
@@ -3088,7 +3088,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019909",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10019910",
@@ -3099,7 +3099,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019910",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10019946",
@@ -3143,7 +3143,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019978",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10019987",
@@ -3154,7 +3154,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10019987",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020130",
@@ -3176,7 +3176,7 @@
 "county": "Grand",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020167",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020288",
@@ -3198,7 +3198,7 @@
 "county": "Grand",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020393",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020396",
@@ -3209,7 +3209,7 @@
 "county": "Grand",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020396",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020421",
@@ -3220,7 +3220,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020421",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020427",
@@ -3231,7 +3231,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020427",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10020447",
@@ -3242,7 +3242,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020447",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020449",
@@ -3253,7 +3253,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020449",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020450",
@@ -3264,7 +3264,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020450",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020461",
@@ -3286,7 +3286,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020476",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020481",
@@ -3297,7 +3297,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10020481",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10020515",
@@ -3352,7 +3352,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10021095",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10021112",
@@ -3363,7 +3363,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10021112",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10021113",
@@ -3374,7 +3374,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10021113",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10021197",
@@ -3396,7 +3396,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10021223",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10021327",
@@ -3561,7 +3561,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023265",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023295",
@@ -3583,7 +3583,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023424",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023615",
@@ -3638,7 +3638,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023620",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023622",
@@ -3649,7 +3649,7 @@
 "county": "Coconino",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023622",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10023623",
@@ -3693,7 +3693,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023668",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023670",
@@ -3704,7 +3704,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023670",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023676",
@@ -3726,7 +3726,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023680",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023682",
@@ -3737,7 +3737,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023682",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023684",
@@ -3759,7 +3759,7 @@
 "county": "Navajo",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023686",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10023688",
@@ -3770,7 +3770,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023688",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023689",
@@ -3792,7 +3792,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10023691",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10023693",
@@ -4628,7 +4628,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10026738",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10026768",
@@ -4650,7 +4650,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10026844",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10026845",
@@ -4661,7 +4661,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10026845",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10026980",
@@ -4694,7 +4694,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027084",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10027134",
@@ -4738,7 +4738,7 @@
 "county": "Yuma",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027234",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10027237",
@@ -4749,7 +4749,7 @@
 "county": "Yuma",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027237",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10027240",
@@ -4760,7 +4760,7 @@
 "county": "Yuma",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027240",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10027287",
@@ -4771,7 +4771,7 @@
 "county": "Coconino",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027287",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10027306",
@@ -4848,7 +4848,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027378",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10027401",
@@ -4859,7 +4859,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027401",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10027410",
@@ -4870,7 +4870,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027410",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10027453",
@@ -4892,7 +4892,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027510",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10027567",
@@ -4914,7 +4914,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027571",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10027655",
@@ -4925,7 +4925,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027655",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10027775",
@@ -4936,7 +4936,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10027775",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10028075",
@@ -5200,7 +5200,7 @@
 "county": "Calaveras",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10029314",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10029395",
@@ -5398,7 +5398,7 @@
 "county": "Lassen",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10030766",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10030780",
@@ -5464,7 +5464,7 @@
 "county": "Mariposa",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10031002",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10031053",
@@ -5563,7 +5563,7 @@
 "county": "Mono",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10031488",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10031492",
@@ -5574,7 +5574,7 @@
 "county": "Mariposa",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10031492",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10031494",
@@ -5640,7 +5640,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10032120",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10032324",
@@ -5651,7 +5651,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10032324",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10032616",
@@ -5662,7 +5662,7 @@
 "county": "Baker",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10032616",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10032854",
@@ -5706,7 +5706,7 @@
 "county": "Baker",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10033304",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10033346",
@@ -5772,7 +5772,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10033982",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10033991",
@@ -5783,7 +5783,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10033991",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10034664",
@@ -5816,7 +5816,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10036152",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10036272",
@@ -5838,7 +5838,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10036280",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10036290",
@@ -5849,7 +5849,7 @@
 "county": "Crook",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10036290",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10036299",
@@ -5871,7 +5871,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10036306",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10036433",
@@ -5959,7 +5959,7 @@
 "county": "White Pine",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10037296",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10037353",
@@ -5970,7 +5970,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10037353",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10037358",
@@ -5992,7 +5992,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10037394",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10037469",
@@ -6003,7 +6003,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10037469",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10037565",
@@ -6014,7 +6014,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10037565",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10037692",
@@ -6124,7 +6124,7 @@
 "county": "Cochise",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10039389",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10039425",
@@ -6146,7 +6146,7 @@
 "county": "Graham",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10039438",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10039445",
@@ -6157,7 +6157,7 @@
 "county": "Graham",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10039445",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10039550",
@@ -6168,7 +6168,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10039550",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10039581",
@@ -6234,7 +6234,7 @@
 "county": "Graham",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10039721",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040191",
@@ -6278,7 +6278,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040235",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040243",
@@ -6289,7 +6289,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040243",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040247",
@@ -6300,7 +6300,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040247",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040250",
@@ -6311,7 +6311,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040250",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040257",
@@ -6322,7 +6322,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040257",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040262",
@@ -6333,7 +6333,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040262",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040264",
@@ -6344,7 +6344,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040264",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040267",
@@ -6355,7 +6355,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040267",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040291",
@@ -6377,7 +6377,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040301",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040302",
@@ -6388,7 +6388,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040302",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040303",
@@ -6399,7 +6399,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040303",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040307",
@@ -6410,7 +6410,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040307",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040311",
@@ -6421,7 +6421,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040311",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040314",
@@ -6432,7 +6432,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040314",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040323",
@@ -6465,7 +6465,7 @@
 "county": "Owyhee",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040395",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040402",
@@ -6531,7 +6531,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040454",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040455",
@@ -6575,7 +6575,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040502",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040533",
@@ -6586,7 +6586,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040533",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040543",
@@ -6597,7 +6597,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040543",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040545",
@@ -6641,7 +6641,7 @@
 "county": "Lyon",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040597",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040638",
@@ -6685,7 +6685,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040683",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040777",
@@ -6762,7 +6762,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040938",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040939",
@@ -6773,7 +6773,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040939",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10040950",
@@ -6817,7 +6817,7 @@
 "county": "Douglas",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10040975",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10040978",
@@ -6839,7 +6839,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041005",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10041006",
@@ -6894,7 +6894,7 @@
 "county": "Crook",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041053",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10041056",
@@ -6916,7 +6916,7 @@
 "county": "Crook",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041057",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10041071",
@@ -7081,7 +7081,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041706",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10041725",
@@ -7114,7 +7114,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041731",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10041878",
@@ -7136,7 +7136,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041889",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10041953",
@@ -7158,7 +7158,7 @@
 "county": "Utah",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10041967",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10041980",
@@ -7224,7 +7224,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042265",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042271",
@@ -7235,7 +7235,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042271",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042343",
@@ -7301,7 +7301,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042583",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042587",
@@ -7334,7 +7334,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042634",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042639",
@@ -7345,7 +7345,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042639",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042661",
@@ -7378,7 +7378,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042729",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042731",
@@ -7389,7 +7389,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042731",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042774",
@@ -7433,7 +7433,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042854",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042909",
@@ -7444,7 +7444,7 @@
 "county": "Douglas",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042909",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10042924",
@@ -7455,7 +7455,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10042924",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10043079",
@@ -7554,7 +7554,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10043273",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10043278",
@@ -7609,7 +7609,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10043313",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10043424",
@@ -7620,7 +7620,7 @@
 "county": "Stanislaus",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10043424",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10043440",
@@ -7642,7 +7642,7 @@
 "county": "Sonoma",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10043532",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10043646",
@@ -7708,7 +7708,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044097",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044104",
@@ -7730,7 +7730,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044225",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044230",
@@ -7752,7 +7752,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044265",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044266",
@@ -7763,7 +7763,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044266",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044321",
@@ -7840,7 +7840,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044547",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044548",
@@ -7851,7 +7851,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044548",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044675",
@@ -7862,7 +7862,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044675",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044699",
@@ -7873,7 +7873,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044699",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044766",
@@ -7884,7 +7884,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044766",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044814",
@@ -7895,7 +7895,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044814",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044829",
@@ -7906,7 +7906,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044829",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044832",
@@ -7917,7 +7917,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044832",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044833",
@@ -7928,7 +7928,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044833",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044839",
@@ -7939,7 +7939,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044839",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044844",
@@ -7950,7 +7950,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044844",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044857",
@@ -7972,7 +7972,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10044872",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10044903",
@@ -8049,7 +8049,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045060",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045074",
@@ -8060,7 +8060,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045074",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045103",
@@ -8093,7 +8093,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045212",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045305",
@@ -8104,7 +8104,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045305",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045426",
@@ -8115,7 +8115,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045426",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045465",
@@ -8126,7 +8126,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045465",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045636",
@@ -8148,7 +8148,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045658",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045686",
@@ -8159,7 +8159,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045686",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045697",
@@ -8214,7 +8214,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045798",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045864",
@@ -8225,7 +8225,7 @@
 "county": "White Pine",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045864",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045894",
@@ -8236,7 +8236,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045894",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045948",
@@ -8247,7 +8247,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045948",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045990",
@@ -8258,7 +8258,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045990",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045991",
@@ -8269,7 +8269,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045991",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10045993",
@@ -8280,7 +8280,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10045993",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046003",
@@ -8291,7 +8291,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046003",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046009",
@@ -8302,7 +8302,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046009",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046015",
@@ -8313,7 +8313,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046015",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046045",
@@ -8324,7 +8324,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046045",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046065",
@@ -8346,7 +8346,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046076",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046084",
@@ -8357,7 +8357,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046084",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046092",
@@ -8368,7 +8368,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046092",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046093",
@@ -8390,7 +8390,7 @@
 "county": "Churchill",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046107",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046230",
@@ -8423,7 +8423,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046294",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046356",
@@ -8445,7 +8445,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046369",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046573",
@@ -8456,7 +8456,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046573",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046584",
@@ -8478,7 +8478,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046651",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046660",
@@ -8489,7 +8489,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046660",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046669",
@@ -8500,7 +8500,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046669",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046676",
@@ -8511,7 +8511,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046676",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046728",
@@ -8522,7 +8522,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046728",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046757",
@@ -8544,7 +8544,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046763",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046792",
@@ -8555,7 +8555,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046792",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046797",
@@ -8566,7 +8566,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046797",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046813",
@@ -8577,7 +8577,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046813",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046822",
@@ -8588,7 +8588,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046822",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046831",
@@ -8599,7 +8599,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046831",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046850",
@@ -8610,7 +8610,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046850",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046859",
@@ -8621,7 +8621,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046859",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046880",
@@ -8632,7 +8632,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046880",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046885",
@@ -8643,7 +8643,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046885",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046886",
@@ -8654,7 +8654,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046886",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046894",
@@ -8665,7 +8665,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046894",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10046938",
@@ -8676,7 +8676,7 @@
 "county": "White Pine",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10046938",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047009",
@@ -8698,7 +8698,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047165",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047204",
@@ -8720,7 +8720,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047233",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047267",
@@ -8731,7 +8731,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047267",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047314",
@@ -8742,7 +8742,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047314",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047444",
@@ -8753,7 +8753,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047444",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047473",
@@ -8764,7 +8764,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047473",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047507",
@@ -8775,7 +8775,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047507",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047515",
@@ -8786,7 +8786,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047515",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047580",
@@ -8797,7 +8797,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047580",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047581",
@@ -8808,7 +8808,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10047581",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10047742",
@@ -9215,7 +9215,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10051999",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10052441",
@@ -9281,7 +9281,7 @@
 "county": "Crook",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10052614",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10052913",
@@ -9314,7 +9314,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053145",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10053217",
@@ -9325,7 +9325,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053217",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10053287",
@@ -9336,7 +9336,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053287",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10053393",
@@ -9358,7 +9358,7 @@
 "county": "Lake",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053541",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10053761",
@@ -9380,7 +9380,7 @@
 "county": "Lincoln",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053769",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10053906",
@@ -9391,7 +9391,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053906",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10053989",
@@ -9402,7 +9402,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10053989",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054005",
@@ -9413,7 +9413,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054005",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054042",
@@ -9424,7 +9424,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054042",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054044",
@@ -9435,7 +9435,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054044",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054049",
@@ -9446,7 +9446,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054049",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054054",
@@ -9457,7 +9457,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054054",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054055",
@@ -9468,7 +9468,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054055",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054073",
@@ -9479,7 +9479,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054073",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054079",
@@ -9490,7 +9490,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054079",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054080",
@@ -9501,7 +9501,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054080",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054085",
@@ -9512,7 +9512,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054085",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054101",
@@ -9523,7 +9523,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054101",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054105",
@@ -9545,7 +9545,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054106",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054110",
@@ -9644,7 +9644,7 @@
 "county": "Wheeler",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054593",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054594",
@@ -9655,7 +9655,7 @@
 "county": "Wheeler",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054594",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10054710",
@@ -9666,7 +9666,7 @@
 "county": "Grant",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10054710",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10055112",
@@ -9677,7 +9677,7 @@
 "county": "Kane",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10055112",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10055123",
@@ -9688,7 +9688,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10055123",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10055145",
@@ -9710,7 +9710,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10055160",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10055218",
@@ -9919,7 +9919,7 @@
 "county": "Kern",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10055380",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10055592",
@@ -10029,7 +10029,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10056017",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10056437",
@@ -10073,7 +10073,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10056471",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10056472",
@@ -10095,7 +10095,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10056478",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060144",
@@ -10106,7 +10106,7 @@
 "county": "Cochise",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060144",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060146",
@@ -10128,7 +10128,7 @@
 "county": "Coconino",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060150",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060152",
@@ -10161,7 +10161,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060155",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060157",
@@ -10216,7 +10216,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060165",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060167",
@@ -10227,7 +10227,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060167",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060169",
@@ -10249,7 +10249,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060171",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060173",
@@ -10260,7 +10260,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060173",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060175",
@@ -10271,7 +10271,7 @@
 "county": "Navajo",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060175",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060176",
@@ -10282,7 +10282,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060176",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060178",
@@ -10304,7 +10304,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060180",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060181",
@@ -10337,7 +10337,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060187",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060189",
@@ -10392,7 +10392,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060207",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060212",
@@ -10414,7 +10414,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060226",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060239",
@@ -10425,7 +10425,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060239",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060244",
@@ -10458,7 +10458,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060261",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060264",
@@ -10480,7 +10480,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060266",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060269",
@@ -10513,7 +10513,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060295",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060304",
@@ -10524,7 +10524,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060304",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060343",
@@ -10535,7 +10535,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060343",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060345",
@@ -10546,7 +10546,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060345",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060346",
@@ -10557,7 +10557,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060346",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060348",
@@ -10568,7 +10568,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060348",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10060351",
@@ -10590,7 +10590,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060352",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10060353",
@@ -10601,7 +10601,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10060353",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10061150",
@@ -10678,7 +10678,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062107",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10062109",
@@ -10689,7 +10689,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062109",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062113",
@@ -10799,7 +10799,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062168",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062169",
@@ -10832,7 +10832,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062344",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062353",
@@ -10865,7 +10865,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062378",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062385",
@@ -10876,7 +10876,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062385",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062388",
@@ -10887,7 +10887,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062388",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062399",
@@ -10898,7 +10898,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062399",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062449",
@@ -10920,7 +10920,7 @@
 "county": "Hidalgo",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062512",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10062516",
@@ -10975,7 +10975,7 @@
 "county": "Valencia",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062522",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10062523",
@@ -11019,7 +11019,7 @@
 "county": "Luna",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062598",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062600",
@@ -11052,7 +11052,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10062704",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10062714",
@@ -11261,7 +11261,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064170",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064174",
@@ -11272,7 +11272,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064174",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064180",
@@ -11283,7 +11283,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064180",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064184",
@@ -11371,7 +11371,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064417",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064419",
@@ -11415,7 +11415,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064459",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064471",
@@ -11426,7 +11426,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064471",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064486",
@@ -11514,7 +11514,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064565",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10064571",
@@ -11547,7 +11547,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064578",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10064582",
@@ -11569,7 +11569,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10064584",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10064585",
@@ -11624,7 +11624,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065021",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065023",
@@ -11657,7 +11657,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065027",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065029",
@@ -11668,7 +11668,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065029",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10065030",
@@ -11679,7 +11679,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065030",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065032",
@@ -11690,7 +11690,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065032",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065034",
@@ -11723,7 +11723,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065036",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065037",
@@ -11778,7 +11778,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065099",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065108",
@@ -11976,7 +11976,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065787",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065789",
@@ -11987,7 +11987,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065789",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065790",
@@ -12009,7 +12009,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065791",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065793",
@@ -12020,7 +12020,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065793",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065796",
@@ -12031,7 +12031,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10065796",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10065799",
@@ -12647,7 +12647,7 @@
 "county": "Baker",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10069095",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10069139",
@@ -12889,7 +12889,7 @@
 "county": "Luna",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10069413",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10069424",
@@ -12922,7 +12922,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10069784",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10069785",
@@ -12933,7 +12933,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10069785",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10069801",
@@ -13021,7 +13021,7 @@
 "county": "Cassia",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10070355",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10070380",
@@ -13065,7 +13065,7 @@
 "county": "Lemhi",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10070433",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10070448",
@@ -13109,7 +13109,7 @@
 "county": "Lemhi",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10070526",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10070741",
@@ -13120,7 +13120,7 @@
 "county": "Blaine",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10070741",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10070819",
@@ -13373,7 +13373,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10071840",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10071875",
@@ -13395,7 +13395,7 @@
 "county": "Butte",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10071907",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10071912",
@@ -13406,7 +13406,7 @@
 "county": "Butte",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10071912",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10071917",
@@ -13516,7 +13516,7 @@
 "county": "Clearwater",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10072127",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10072128",
@@ -13824,7 +13824,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10073183",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10073246",
@@ -13835,7 +13835,7 @@
 "county": "Ada",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10073246",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10073273",
@@ -13846,7 +13846,7 @@
 "county": "Bingham",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10073273",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10073392",
@@ -14924,7 +14924,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10076662",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10076663",
@@ -14946,7 +14946,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10076665",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10076666",
@@ -14957,7 +14957,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10076666",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10076795",
@@ -15023,7 +15023,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10077108",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10077125",
@@ -15056,7 +15056,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10077141",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10077142",
@@ -15100,7 +15100,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10077233",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10077234",
@@ -15133,7 +15133,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10077282",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10077314",
@@ -15144,7 +15144,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10077314",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10077315",
@@ -15254,7 +15254,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10078208",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10078226",
@@ -15265,7 +15265,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10078226",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10078229",
@@ -15287,7 +15287,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10078231",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10078247",
@@ -15562,7 +15562,7 @@
 "county": "Grand",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10078711",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10078897",
@@ -16123,7 +16123,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10080425",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10080484",
@@ -17927,7 +17927,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087082",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087089",
@@ -17949,7 +17949,7 @@
 "county": "Beaver",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087094",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087096",
@@ -17971,7 +17971,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087142",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087253",
@@ -17982,7 +17982,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087253",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087300",
@@ -18004,7 +18004,7 @@
 "county": "Daggett",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087322",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087459",
@@ -18026,7 +18026,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087496",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087497",
@@ -18092,7 +18092,7 @@
 "county": "Chaffee",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10087834",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10087848",
@@ -18136,7 +18136,7 @@
 "county": "Piute",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088080",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088140",
@@ -18169,7 +18169,7 @@
 "county": "Kane",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088207",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088237",
@@ -18213,7 +18213,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088302",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088306",
@@ -18235,7 +18235,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088367",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088370",
@@ -18246,7 +18246,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088370",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088393",
@@ -18268,7 +18268,7 @@
 "county": "Jackson",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088614",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088616",
@@ -18290,7 +18290,7 @@
 "county": "Tooele",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088643",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088650",
@@ -18334,7 +18334,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088809",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10088849",
@@ -18378,7 +18378,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10088986",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10089016",
@@ -18400,7 +18400,7 @@
 "county": "Cassia",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10089148",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10089149",
@@ -18422,7 +18422,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10089208",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10089214",
@@ -18433,7 +18433,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10089214",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10089215",
@@ -18521,7 +18521,7 @@
 "county": "San Juan",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10089644",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10089646",
@@ -18532,7 +18532,7 @@
 "county": "San Juan",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10089646",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10089782",
@@ -18917,7 +18917,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10090815",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10090870",
@@ -18961,7 +18961,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10091004",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10091006",
@@ -18972,7 +18972,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10091006",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10091049",
@@ -18994,7 +18994,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10091078",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10091084",
@@ -19005,7 +19005,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10091084",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10091102",
@@ -19082,7 +19082,7 @@
 "county": "Eagle",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10091408",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10091660",
@@ -19170,7 +19170,7 @@
 "county": "Mono",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10092374",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10092390",
@@ -19203,7 +19203,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10092568",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10092578",
@@ -19225,7 +19225,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10092637",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10092638",
@@ -19357,7 +19357,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10093733",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10093768",
@@ -19379,7 +19379,7 @@
 "county": "Owyhee",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10093774",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10093778",
@@ -19456,7 +19456,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094336",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094347",
@@ -19467,7 +19467,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094347",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094411",
@@ -19478,7 +19478,7 @@
 "county": "Blaine",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094411",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094546",
@@ -19511,7 +19511,7 @@
 "county": "Sierra",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094623",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094629",
@@ -19544,7 +19544,7 @@
 "county": "Guadalupe",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094710",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094734",
@@ -19566,7 +19566,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094751",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094759",
@@ -19588,7 +19588,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10094818",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10094909",
@@ -19632,7 +19632,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10095384",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10095633",
@@ -19643,7 +19643,7 @@
 "county": "Emery",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10095633",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10095638",
@@ -19654,7 +19654,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10095638",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10095668",
@@ -19687,7 +19687,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10095706",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10095766",
@@ -19764,7 +19764,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10096082",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10096095",
@@ -19808,7 +19808,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10096416",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10096511",
@@ -19929,7 +19929,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10096953",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10097001",
@@ -19962,7 +19962,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10097293",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10097319",
@@ -19984,7 +19984,7 @@
 "county": "Dona Ana",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10097777",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10097782",
@@ -20017,7 +20017,7 @@
 "county": "Sierra",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10097804",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10097862",
@@ -20028,7 +20028,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10097862",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10097929",
@@ -20039,7 +20039,7 @@
 "county": "Cochise",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10097929",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10098057",
@@ -20050,7 +20050,7 @@
 "county": "Jefferson",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10098057",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10098117",
@@ -20061,7 +20061,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10098117",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10098118",
@@ -20149,7 +20149,7 @@
 "county": "Josephine",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10098534",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10098537",
@@ -20171,7 +20171,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10098668",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10098710",
@@ -20193,7 +20193,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10099195",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10099293",
@@ -20215,7 +20215,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10099395",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10099413",
@@ -20424,7 +20424,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10100742",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10100802",
@@ -20611,7 +20611,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10102051",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10102076",
@@ -20644,7 +20644,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10102214",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10102240",
@@ -20710,7 +20710,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10102393",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10102477",
@@ -20721,7 +20721,7 @@
 "county": "Coconino",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10102477",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10102482",
@@ -20765,7 +20765,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103481",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103554",
@@ -20787,7 +20787,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103592",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103604",
@@ -20798,7 +20798,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103604",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103742",
@@ -20831,7 +20831,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103770",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103782",
@@ -20842,7 +20842,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103782",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103788",
@@ -20853,7 +20853,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103788",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103789",
@@ -20864,7 +20864,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103789",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10103802",
@@ -20897,7 +20897,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10103993",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10104113",
@@ -20908,7 +20908,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10104113",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10104120",
@@ -20941,7 +20941,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10105107",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10105244",
@@ -20952,7 +20952,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10105244",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10105265",
@@ -20974,7 +20974,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10105305",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10105335",
@@ -21656,7 +21656,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10108294",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10108296",
@@ -21711,7 +21711,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10108445",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10108446",
@@ -21722,7 +21722,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10108446",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10108513",
@@ -21810,7 +21810,7 @@
 "county": "Mono",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10109259",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10109383",
@@ -21876,7 +21876,7 @@
 "county": "Luna",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10110128",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10110131",
@@ -21898,7 +21898,7 @@
 "county": "Navajo",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10110201",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10110242",
@@ -22041,7 +22041,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10110696",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10110697",
@@ -22052,7 +22052,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10110697",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10110778",
@@ -22096,7 +22096,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10110910",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10110933",
@@ -22206,7 +22206,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10111509",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10111512",
@@ -22338,7 +22338,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10112736",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10113194",
@@ -22371,7 +22371,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10113262",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10113266",
@@ -22426,7 +22426,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10113383",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10113564",
@@ -22437,7 +22437,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10113564",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10113591",
@@ -22635,7 +22635,7 @@
 "county": "Butte",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114404",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10114405",
@@ -22778,7 +22778,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114874",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10114887",
@@ -22800,7 +22800,7 @@
 "county": "Fresno",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10114920",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10114938",
@@ -22866,7 +22866,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115167",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115171",
@@ -22888,7 +22888,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115211",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115240",
@@ -22899,7 +22899,7 @@
 "county": "El Dorado",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115240",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115278",
@@ -22921,7 +22921,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115333",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115362",
@@ -22965,7 +22965,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115465",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115466",
@@ -23031,7 +23031,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115806",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115817",
@@ -23075,7 +23075,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10115951",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10115992",
@@ -23174,7 +23174,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116211",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10116213",
@@ -23185,7 +23185,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116213",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10116251",
@@ -23240,7 +23240,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116346",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10116352",
@@ -23273,7 +23273,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116404",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10116414",
@@ -23350,7 +23350,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116603",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10116623",
@@ -23361,7 +23361,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116623",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10116720",
@@ -23427,7 +23427,7 @@
 "county": "San Luis Obispo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10116985",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10117018",
@@ -23449,7 +23449,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10117093",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10117094",
@@ -23460,7 +23460,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10117094",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10117106",
@@ -23482,7 +23482,7 @@
 "county": "Boulder",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10117140",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10117165",
@@ -23636,7 +23636,7 @@
 "county": "Grand",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10118008",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10118036",
@@ -23691,7 +23691,7 @@
 "county": "Jefferson",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10118562",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10118597",
@@ -23878,7 +23878,7 @@
 "county": "Bingham",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10119519",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10119671",
@@ -23911,7 +23911,7 @@
 "county": "Custer",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10119757",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10119758",
@@ -23922,7 +23922,7 @@
 "county": "Cassia",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10119758",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10119891",
@@ -24054,7 +24054,7 @@
 "county": "Owyhee",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10120588",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10120724",
@@ -24670,7 +24670,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10123570",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10123633",
@@ -24758,7 +24758,7 @@
 "county": "Blaine",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10123999",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10124020",
@@ -24857,7 +24857,7 @@
 "county": "Churchill",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10124298",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10124354",
@@ -24912,7 +24912,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10124583",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10124594",
@@ -25000,7 +25000,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10124899",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10124909",
@@ -25033,7 +25033,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125025",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125143",
@@ -25055,7 +25055,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125154",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125229",
@@ -25066,7 +25066,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125229",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125360",
@@ -25077,7 +25077,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125360",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125404",
@@ -25088,7 +25088,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125404",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125493",
@@ -25099,7 +25099,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125493",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125514",
@@ -25121,7 +25121,7 @@
 "county": "Lyon",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125556",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125582",
@@ -25132,7 +25132,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125582",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125853",
@@ -25154,7 +25154,7 @@
 "county": "Otero",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125858",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10125900",
@@ -25176,7 +25176,7 @@
 "county": "Cibola",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10125901",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10125907",
@@ -25220,7 +25220,7 @@
 "county": "White Pine",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10126285",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10126302",
@@ -25231,7 +25231,7 @@
 "county": "Rio Arriba",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10126302",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10126355",
@@ -25242,7 +25242,7 @@
 "county": "Cibola",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10126355",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10126359",
@@ -25264,7 +25264,7 @@
 "county": "Cibola",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10126453",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10126709",
@@ -25418,7 +25418,7 @@
 "county": "Ottawa",
 "state": "Oklahoma",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10127396",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10127414",
@@ -25924,7 +25924,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10129956",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10129958",
@@ -26023,7 +26023,7 @@
 "county": "Kane",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10130501",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10130528",
@@ -26276,7 +26276,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10131330",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10131366",
@@ -26309,7 +26309,7 @@
 "county": "Yakima",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10131411",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10131436",
@@ -26518,7 +26518,7 @@
 "county": "Stevens",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10132094",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10132200",
@@ -26529,7 +26529,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10132200",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10132268",
@@ -26562,7 +26562,7 @@
 "county": "Carbon",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10132393",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10132483",
@@ -26584,7 +26584,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10132508",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10132569",
@@ -26617,7 +26617,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10132740",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10132768",
@@ -26650,7 +26650,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10132921",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10132952",
@@ -26694,7 +26694,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133138",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10133151",
@@ -26705,7 +26705,7 @@
 "county": "Natrona",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133151",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10133199",
@@ -26716,7 +26716,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133199",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10133243",
@@ -26727,7 +26727,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133243",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10133260",
@@ -26760,7 +26760,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133313",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10133358",
@@ -26771,7 +26771,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133358",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10133574",
@@ -26782,7 +26782,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10133574",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10134546",
@@ -26914,7 +26914,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10135026",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10135056",
@@ -26925,7 +26925,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10135056",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10135109",
@@ -26980,7 +26980,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10135446",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10135580",
@@ -27079,7 +27079,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10136846",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10136881",
@@ -27112,7 +27112,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10137358",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10137414",
@@ -27134,7 +27134,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10137439",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10137617",
@@ -27145,7 +27145,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10137617",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10137654",
@@ -27178,7 +27178,7 @@
 "county": "Pima",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10137832",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10137930",
@@ -27530,7 +27530,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10139022",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10139035",
@@ -27552,7 +27552,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10139077",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10139085",
@@ -27629,7 +27629,7 @@
 "county": "Kern",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10139356",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10139386",
@@ -27662,7 +27662,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10139464",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10139494",
@@ -27695,7 +27695,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10139546",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10139563",
@@ -27849,7 +27849,7 @@
 "county": "San Benito",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10140307",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10140377",
@@ -27915,7 +27915,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10140589",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10140611",
@@ -27948,7 +27948,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10140703",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10140704",
@@ -27992,7 +27992,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10140848",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10140880",
@@ -28014,7 +28014,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10140899",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10140960",
@@ -28025,7 +28025,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10140960",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10140976",
@@ -28091,7 +28091,7 @@
 "county": "Siskiyou",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10141418",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10141426",
@@ -28212,7 +28212,7 @@
 "county": "Mesa",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10142065",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10142109",
@@ -28223,7 +28223,7 @@
 "county": "Garfield",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10142109",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10142128",
@@ -28234,7 +28234,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10142128",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10142423",
@@ -28355,7 +28355,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10143264",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10143340",
@@ -28542,7 +28542,7 @@
 "county": "Owyhee",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10144678",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10144690",
@@ -29290,7 +29290,7 @@
 "county": "Phillips",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10148394",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10148432",
@@ -29356,7 +29356,7 @@
 "county": "Fergus",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10148813",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10148856",
@@ -29378,7 +29378,7 @@
 "county": "Powell",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10148874",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10148876",
@@ -29400,7 +29400,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10148963",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149078",
@@ -29444,7 +29444,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149202",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149228",
@@ -29455,7 +29455,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149228",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149285",
@@ -29466,7 +29466,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149285",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149295",
@@ -29477,7 +29477,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149295",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149402",
@@ -29499,7 +29499,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149547",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149567",
@@ -29510,7 +29510,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149567",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149597",
@@ -29532,7 +29532,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149642",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149703",
@@ -29554,7 +29554,7 @@
 "county": "Churchill",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149714",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149779",
@@ -29565,7 +29565,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149779",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149808",
@@ -29576,7 +29576,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149808",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149859",
@@ -29587,7 +29587,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10149859",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10149911",
@@ -30016,7 +30016,7 @@
 "county": "Lake",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10153016",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10153116",
@@ -30071,7 +30071,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10153569",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10153680",
@@ -30445,7 +30445,7 @@
 "county": "Sevier",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10155232",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10155413",
@@ -30533,7 +30533,7 @@
 "county": "Grant",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10155819",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10155851",
@@ -30610,7 +30610,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10156119",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10156141",
@@ -30808,7 +30808,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157244",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10157263",
@@ -30830,7 +30830,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157296",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10157345",
@@ -30874,7 +30874,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157424",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10157472",
@@ -30885,7 +30885,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157472",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10157482",
@@ -30918,7 +30918,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157573",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10157607",
@@ -30929,7 +30929,7 @@
 "county": "Johnson",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157607",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10157638",
@@ -30973,7 +30973,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157761",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10157774",
@@ -30984,7 +30984,7 @@
 "county": "Washakie",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10157774",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10157778",
@@ -31017,7 +31017,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10158974",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10158981",
@@ -31050,7 +31050,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10159000",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10159341",
@@ -31259,7 +31259,7 @@
 "county": "Apache",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10161327",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10161337",
@@ -31314,7 +31314,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10161712",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10161717",
@@ -31347,7 +31347,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162048",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10162135",
@@ -31468,7 +31468,7 @@
 "county": "Calaveras",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162552",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10162554",
@@ -31567,7 +31567,7 @@
 "county": "El Dorado",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10162874",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10162888",
@@ -31721,7 +31721,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163249",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10163267",
@@ -31787,7 +31787,7 @@
 "county": "Fresno",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163407",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10163477",
@@ -31798,7 +31798,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163477",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10163478",
@@ -31831,7 +31831,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163564",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10163580",
@@ -31875,7 +31875,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163729",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10163766",
@@ -31897,7 +31897,7 @@
 "county": "Mariposa",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10163773",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10163847",
@@ -31974,7 +31974,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164168",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10164261",
@@ -31996,7 +31996,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164273",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10164295",
@@ -32040,7 +32040,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164477",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10164478",
@@ -32095,7 +32095,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164561",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10164566",
@@ -32161,7 +32161,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164764",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10164822",
@@ -32183,7 +32183,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164839",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10164855",
@@ -32205,7 +32205,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164857",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10164949",
@@ -32216,7 +32216,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10164949",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10165014",
@@ -32238,7 +32238,7 @@
 "county": "Santa Barbara",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10165028",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10165091",
@@ -32524,7 +32524,7 @@
 "county": "Hinsdale",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10166398",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10166406",
@@ -32568,7 +32568,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10166768",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10166828",
@@ -32623,7 +32623,7 @@
 "county": "Mesa",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10167064",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10167153",
@@ -32755,7 +32755,7 @@
 "county": "Blaine",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10168436",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10168493",
@@ -32832,7 +32832,7 @@
 "county": "Gooding",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10168761",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10168829",
@@ -32887,7 +32887,7 @@
 "county": "Lewis",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10169048",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10169057",
@@ -33415,7 +33415,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10172060",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10172081",
@@ -33437,7 +33437,7 @@
 "county": "Blaine",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10172102",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10172194",
@@ -33514,7 +33514,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10172605",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10172646",
@@ -33591,7 +33591,7 @@
 "county": "Jefferson",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10172789",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10172790",
@@ -33679,7 +33679,7 @@
 "county": "Fergus",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173075",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173161",
@@ -33745,7 +33745,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173469",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173558",
@@ -33756,7 +33756,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173558",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173563",
@@ -33778,7 +33778,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173582",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173726",
@@ -33789,7 +33789,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173726",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173834",
@@ -33844,7 +33844,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173951",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173955",
@@ -33855,7 +33855,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173955",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10173988",
@@ -33866,7 +33866,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10173988",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174040",
@@ -33877,7 +33877,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174040",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174118",
@@ -33888,7 +33888,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174118",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174128",
@@ -33910,7 +33910,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174157",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174173",
@@ -33932,7 +33932,7 @@
 "county": "Lincoln",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174271",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174447",
@@ -33976,7 +33976,7 @@
 "county": "Cibola",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174563",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174593",
@@ -34009,7 +34009,7 @@
 "county": "Cibola",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174616",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10174902",
@@ -34020,7 +34020,7 @@
 "county": "White Pine",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10174902",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10174962",
@@ -34207,7 +34207,7 @@
 "county": "Valencia",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10175759",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10175866",
@@ -34350,7 +34350,7 @@
 "county": "Lake",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10177313",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10177564",
@@ -34669,7 +34669,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10179151",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10179203",
@@ -34702,7 +34702,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10179306",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10179314",
@@ -34724,7 +34724,7 @@
 "county": "Kane",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10179363",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10179425",
@@ -34801,7 +34801,7 @@
 "county": "Sanpete",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10179666",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10179802",
@@ -35043,7 +35043,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10181366",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10181367",
@@ -35109,7 +35109,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10181674",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10181733",
@@ -35120,7 +35120,7 @@
 "county": "Natrona",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10181733",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10181781",
@@ -35131,7 +35131,7 @@
 "county": "Albany",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10181781",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10181801",
@@ -35197,7 +35197,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10181966",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10182003",
@@ -35450,7 +35450,7 @@
 "county": "Pueblo",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10184311",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10184358",
@@ -35626,7 +35626,7 @@
 "county": "Coconino",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10185762",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10186068",
@@ -35703,7 +35703,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10186446",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10186460",
@@ -36110,7 +36110,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188292",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10188323",
@@ -36220,7 +36220,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188564",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10188567",
@@ -36286,7 +36286,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188693",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10188752",
@@ -36308,7 +36308,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188849",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10188856",
@@ -36319,7 +36319,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188856",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10188874",
@@ -36330,7 +36330,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188874",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10188898",
@@ -36341,7 +36341,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10188898",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189008",
@@ -36352,7 +36352,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189008",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189029",
@@ -36374,7 +36374,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189058",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189167",
@@ -36396,7 +36396,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189171",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189187",
@@ -36429,7 +36429,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189303",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189318",
@@ -36462,7 +36462,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189382",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189469",
@@ -36506,7 +36506,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189577",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189616",
@@ -36517,7 +36517,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189616",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189628",
@@ -36528,7 +36528,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10189628",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10189715",
@@ -36814,7 +36814,7 @@
 "county": "Saguache",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10191578",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10191680",
@@ -36891,7 +36891,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10192316",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10192325",
@@ -36924,7 +36924,7 @@
 "county": "Lemhi",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10192895",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10192907",
@@ -36935,7 +36935,7 @@
 "county": "Custer",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10192907",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10193036",
@@ -36957,7 +36957,7 @@
 "county": "Owyhee",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10193091",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10193101",
@@ -37100,7 +37100,7 @@
 "county": "Washington",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10193920",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10194026",
@@ -37584,7 +37584,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10197011",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10197036",
@@ -37727,7 +37727,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10197485",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10197527",
@@ -37771,7 +37771,7 @@
 "county": "Phillips",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10197729",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10197837",
@@ -37826,7 +37826,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10197992",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10197997",
@@ -37859,7 +37859,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198132",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198172",
@@ -37870,7 +37870,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198172",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198228",
@@ -37881,7 +37881,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198228",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198346",
@@ -37903,7 +37903,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198371",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198373",
@@ -37914,7 +37914,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198373",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198446",
@@ -37936,7 +37936,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198486",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198609",
@@ -37947,7 +37947,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198609",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198656",
@@ -37958,7 +37958,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198656",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10198813",
@@ -37969,7 +37969,7 @@
 "county": "Bernalillo",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10198813",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10198957",
@@ -38024,7 +38024,7 @@
 "county": "Luna",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10199415",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10199511",
@@ -38343,7 +38343,7 @@
 "county": "Lawrence",
 "state": "South Dakota",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10201902",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10201933",
@@ -38519,7 +38519,7 @@
 "county": "Sevier",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10203194",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10203259",
@@ -39058,7 +39058,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10205517",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10205542",
@@ -39113,7 +39113,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10205959",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10205961",
@@ -39135,7 +39135,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10206155",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10206194",
@@ -39168,7 +39168,7 @@
 "county": "Park",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10206402",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10207374",
@@ -39377,7 +39377,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10209410",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10209618",
@@ -39388,7 +39388,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10209618",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10209671",
@@ -39487,7 +39487,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210373",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10210510",
@@ -39498,7 +39498,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210510",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10210536",
@@ -39509,7 +39509,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210536",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10210545",
@@ -39542,7 +39542,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210885",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10210902",
@@ -39564,7 +39564,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10210948",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10210970",
@@ -39850,7 +39850,7 @@
 "county": "Kern",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211814",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10211857",
@@ -39861,7 +39861,7 @@
 "county": "Kern",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211857",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10211869",
@@ -39894,7 +39894,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10211982",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10212113",
@@ -39905,7 +39905,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10212113",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10212168",
@@ -39993,7 +39993,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10212397",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10212431",
@@ -40048,7 +40048,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10212592",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10212610",
@@ -40125,7 +40125,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10212737",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10212741",
@@ -40202,7 +40202,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10212954",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10213116",
@@ -40213,7 +40213,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10213116",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10213151",
@@ -40257,7 +40257,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10213174",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10213249",
@@ -40279,7 +40279,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10213335",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10213387",
@@ -40334,7 +40334,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10213767",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10213782",
@@ -40510,7 +40510,7 @@
 "county": "Sonoma",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10214570",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10214582",
@@ -40532,7 +40532,7 @@
 "county": "Conejos",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10214642",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10214700",
@@ -40565,7 +40565,7 @@
 "county": "Montrose",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10215080",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10215214",
@@ -40642,7 +40642,7 @@
 "county": "Eagle",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10215639",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10215766",
@@ -40686,7 +40686,7 @@
 "county": "San Juan",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10215920",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10216061",
@@ -40818,7 +40818,7 @@
 "county": "Lemhi",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10216754",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10216807",
@@ -40873,7 +40873,7 @@
 "county": "Caribou",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10217129",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10217157",
@@ -40884,7 +40884,7 @@
 "county": "Bannock",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10217157",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10217322",
@@ -41390,7 +41390,7 @@
 "county": "Big Horn",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10220859",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10221005",
@@ -41456,7 +41456,7 @@
 "county": "Yellowstone",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221380",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10221382",
@@ -41467,7 +41467,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221382",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10221409",
@@ -41500,7 +41500,7 @@
 "county": "Douglas",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221617",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10221653",
@@ -41533,7 +41533,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221779",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10221781",
@@ -41544,7 +41544,7 @@
 "county": "Churchill",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221781",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10221856",
@@ -41588,7 +41588,7 @@
 "county": "Meagher",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221919",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10221931",
@@ -41610,7 +41610,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10221932",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222137",
@@ -41632,7 +41632,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222191",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222319",
@@ -41643,7 +41643,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222319",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222389",
@@ -41654,7 +41654,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222389",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222425",
@@ -41676,7 +41676,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222580",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222627",
@@ -41687,7 +41687,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222627",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222712",
@@ -41698,7 +41698,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222712",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222739",
@@ -41709,7 +41709,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222739",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10222898",
@@ -41720,7 +41720,7 @@
 "county": "Sandoval",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10222898",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10222903",
@@ -41819,7 +41819,7 @@
 "county": "Bernalillo",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10223484",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10223619",
@@ -42050,7 +42050,7 @@
 "county": "Lake",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10225299",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10225385",
@@ -42083,7 +42083,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10225672",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10225746",
@@ -42336,7 +42336,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10227237",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10227278",
@@ -42710,7 +42710,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10229507",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10229535",
@@ -42721,7 +42721,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10229535",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10229637",
@@ -42765,7 +42765,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10229890",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10230004",
@@ -42787,7 +42787,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10230188",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10230270",
@@ -42831,7 +42831,7 @@
 "county": "Natrona",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10230356",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10230361",
@@ -43018,7 +43018,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10232569",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10232591",
@@ -43073,7 +43073,7 @@
 "county": "Coconino",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10233900",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10234307",
@@ -43106,7 +43106,7 @@
 "county": "Graham",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10234407",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10234472",
@@ -43117,7 +43117,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10234472",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10234484",
@@ -43139,7 +43139,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10234563",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10234656",
@@ -43150,7 +43150,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10234656",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10234707",
@@ -43480,7 +43480,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10236240",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10236341",
@@ -43491,7 +43491,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10236341",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10236374",
@@ -43590,7 +43590,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10236998",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237075",
@@ -43601,7 +43601,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237075",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237129",
@@ -43656,7 +43656,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237512",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237542",
@@ -43667,7 +43667,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237542",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237554",
@@ -43689,7 +43689,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237597",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237670",
@@ -43700,7 +43700,7 @@
 "county": "San Diego",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237670",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10237697",
@@ -43711,7 +43711,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237697",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237698",
@@ -43722,7 +43722,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237698",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237735",
@@ -43744,7 +43744,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10237824",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10237846",
@@ -43799,7 +43799,7 @@
 "county": "Tulare",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10238350",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10238428",
@@ -44052,7 +44052,7 @@
 "county": "Gunnison",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10239780",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10239942",
@@ -44085,7 +44085,7 @@
 "county": "Montrose",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10240083",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10240090",
@@ -44129,7 +44129,7 @@
 "county": "San Juan",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10240381",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10240476",
@@ -44206,7 +44206,7 @@
 "county": "Caribou",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10240959",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10241040",
@@ -44844,7 +44844,7 @@
 "county": "Park",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10245505",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10245512",
@@ -44899,7 +44899,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10245698",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10245748",
@@ -45031,7 +45031,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246249",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246308",
@@ -45042,7 +45042,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246308",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246312",
@@ -45053,7 +45053,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246312",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246405",
@@ -45075,7 +45075,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246482",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246495",
@@ -45086,7 +45086,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246495",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246528",
@@ -45097,7 +45097,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246528",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246604",
@@ -45108,7 +45108,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246604",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246621",
@@ -45119,7 +45119,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246621",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246673",
@@ -45141,7 +45141,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246720",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246766",
@@ -45152,7 +45152,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246766",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246779",
@@ -45185,7 +45185,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246891",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246928",
@@ -45196,7 +45196,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246928",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10246930",
@@ -45207,7 +45207,7 @@
 "county": "Esmeralda",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10246930",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10247035",
@@ -45218,7 +45218,7 @@
 "county": "Cibola",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10247035",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10247059",
@@ -45273,7 +45273,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10247233",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10247347",
@@ -45284,7 +45284,7 @@
 "county": "Pershing",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10247347",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10247437",
@@ -45581,7 +45581,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10250648",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10250721",
@@ -45801,7 +45801,7 @@
 "county": "Box Elder",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10251353",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10251437",
@@ -45955,7 +45955,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10252388",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10252393",
@@ -46373,7 +46373,7 @@
 "county": "Natrona",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10254621",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10254691",
@@ -46395,7 +46395,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10254788",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10254891",
@@ -46461,7 +46461,7 @@
 "county": "Phillips",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10256448",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10256606",
@@ -46494,7 +46494,7 @@
 "county": "Trinity",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10256669",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10256709",
@@ -46560,7 +46560,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10256899",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10257042",
@@ -46681,7 +46681,7 @@
 "county": "Yavapai",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10258878",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10258884",
@@ -46725,7 +46725,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10258928",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10259356",
@@ -46747,7 +46747,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259365",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10259449",
@@ -46758,7 +46758,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259449",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10259578",
@@ -46769,7 +46769,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259578",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10259580",
@@ -46901,7 +46901,7 @@
 "county": "Calaveras",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10259976",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10259978",
@@ -47011,7 +47011,7 @@
 "county": "El Dorado",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260243",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10260264",
@@ -47055,7 +47055,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260561",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10260607",
@@ -47066,7 +47066,7 @@
 "county": "Kern",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260607",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10260622",
@@ -47132,7 +47132,7 @@
 "county": "Imperial",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260947",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10260972",
@@ -47143,7 +47143,7 @@
 "county": "Fresno",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10260972",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10261037",
@@ -47165,7 +47165,7 @@
 "county": "El Dorado",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10261088",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10261101",
@@ -47462,7 +47462,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10262397",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10262449",
@@ -47737,7 +47737,7 @@
 "county": "Grand",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10263613",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10263638",
@@ -47759,7 +47759,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10263645",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10263723",
@@ -47935,7 +47935,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10265013",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10265057",
@@ -48067,7 +48067,7 @@
 "county": "Owyhee",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10266349",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10266382",
@@ -48452,7 +48452,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10269977",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10270037",
@@ -48617,7 +48617,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10270963",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10270994",
@@ -48650,7 +48650,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10271195",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10271314",
@@ -48661,7 +48661,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10271314",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10271402",
@@ -48738,7 +48738,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10272060",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10272072",
@@ -48815,7 +48815,7 @@
 "county": "Rio Arriba",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10272758",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10272853",
@@ -48859,7 +48859,7 @@
 "county": "Osage",
 "state": "Oklahoma",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10273156",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10273232",
@@ -48958,7 +48958,7 @@
 "county": "Lake",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10274133",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10274234",
@@ -48969,7 +48969,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10274234",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10274283",
@@ -48980,7 +48980,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10274283",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10274427",
@@ -49145,7 +49145,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10275651",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10275771",
@@ -49233,7 +49233,7 @@
 "county": "Millard",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10276224",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10276230",
@@ -49321,7 +49321,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10277087",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10277109",
@@ -49442,7 +49442,7 @@
 "county": "Stevens",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10277991",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10278050",
@@ -49574,7 +49574,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10278851",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10278875",
@@ -49585,7 +49585,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10278875",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10278899",
@@ -49673,7 +49673,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10279206",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10279243",
@@ -49717,7 +49717,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10279376",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10280212",
@@ -49838,7 +49838,7 @@
 "county": "Gila",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10282487",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10282726",
@@ -49860,7 +49860,7 @@
 "county": "Navajo",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10282954",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10283035",
@@ -49882,7 +49882,7 @@
 "county": "Cochise",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283043",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10283142",
@@ -49948,7 +49948,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283347",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10283507",
@@ -49959,7 +49959,7 @@
 "county": "Navajo",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283507",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10283543",
@@ -49981,7 +49981,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283591",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10283655",
@@ -50003,7 +50003,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10283657",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10283856",
@@ -50300,7 +50300,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10284977",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10285055",
@@ -50322,7 +50322,7 @@
 "county": "Mariposa",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10285136",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10285375",
@@ -50344,7 +50344,7 @@
 "county": "Lassen",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10285402",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10285419",
@@ -50377,7 +50377,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10285429",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10285490",
@@ -50476,7 +50476,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10286268",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10286313",
@@ -50487,7 +50487,7 @@
 "county": "Riverside",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10286313",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10286331",
@@ -50564,7 +50564,7 @@
 "county": "San Bernardino",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10286562",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10286646",
@@ -50762,7 +50762,7 @@
 "county": "Boulder",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10287842",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10287911",
@@ -50861,7 +50861,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10288546",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10288588",
@@ -50960,7 +50960,7 @@
 "county": "Cassia",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10289585",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10289643",
@@ -51048,7 +51048,7 @@
 "county": "Clark",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10290225",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10290236",
@@ -51059,7 +51059,7 @@
 "county": "Bannock",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10290236",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10290491",
@@ -51488,7 +51488,7 @@
 "county": "Beaverhead",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10293821",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10293977",
@@ -51521,7 +51521,7 @@
 "county": "Big Horn",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10294124",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10294152",
@@ -51543,7 +51543,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10294288",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10294306",
@@ -51554,7 +51554,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10294306",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10294392",
@@ -51620,7 +51620,7 @@
 "county": "Phillips",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10294479",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10294522",
@@ -51653,7 +51653,7 @@
 "county": "Clark",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10294617",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10294640",
@@ -51664,7 +51664,7 @@
 "county": "Elko",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10294640",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10294698",
@@ -51741,7 +51741,7 @@
 "county": "Madison",
 "state": "Montana",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295001",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295242",
@@ -51752,7 +51752,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295242",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295292",
@@ -51774,7 +51774,7 @@
 "county": "Lincoln",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295340",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295370",
@@ -51785,7 +51785,7 @@
 "county": "Lander",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295370",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295411",
@@ -51796,7 +51796,7 @@
 "county": "Mineral",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295411",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295536",
@@ -51807,7 +51807,7 @@
 "county": "Humboldt",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295536",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295570",
@@ -51851,7 +51851,7 @@
 "county": "Dona Ana",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295780",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295865",
@@ -51873,7 +51873,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10295921",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10295923",
@@ -51917,7 +51917,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10296018",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10296196",
@@ -51950,7 +51950,7 @@
 "county": "Washoe",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10296343",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10296482",
@@ -52082,7 +52082,7 @@
 "county": "San Juan",
 "state": "New Mexico",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10297320",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10297335",
@@ -52203,7 +52203,7 @@
 "county": "Malheur",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10298434",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10298548",
@@ -52247,7 +52247,7 @@
 "county": "Harney",
 "state": "Oregon",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10298765",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10298998",
@@ -52412,7 +52412,7 @@
 "county": "Iron",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10299875",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10299889",
@@ -52533,7 +52533,7 @@
 "county": "Juab",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10300516",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10300642",
@@ -52720,7 +52720,7 @@
 "county": "Washington",
 "state": "Utah",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10301108",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10301119",
@@ -52830,7 +52830,7 @@
 "county": "Okanogan",
 "state": "Washington",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10301565",
-"perm": "Private / other"
+"perm": "Tribal"
 },
 {
 "id": "mrds-10301577",
@@ -52984,7 +52984,7 @@
 "county": "Washakie",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10302951",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10303034",
@@ -52995,7 +52995,7 @@
 "county": "Carbon",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10303034",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10303119",
@@ -53006,7 +53006,7 @@
 "county": "Fremont",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10303119",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10303218",
@@ -53017,7 +53017,7 @@
 "county": "Big Horn",
 "state": "Wyoming",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10303218",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10303283",
@@ -53347,7 +53347,7 @@
 "county": "Nye",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10310416",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10310441",
@@ -53391,7 +53391,7 @@
 "county": "Eureka",
 "state": "Nevada",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10310542",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10310602",
@@ -53490,7 +53490,7 @@
 "county": "Inyo",
 "state": "California",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=10400453",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-10400455",
@@ -53523,7 +53523,7 @@
 "county": "Pinal",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60000190",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60000306",
@@ -53534,7 +53534,7 @@
 "county": "Fremont",
 "state": "Colorado",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60000306",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60000316",
@@ -53600,7 +53600,7 @@
 "county": "Butte",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001021",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001466",
@@ -53611,7 +53611,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001466",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001467",
@@ -53622,7 +53622,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001467",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001468",
@@ -53633,7 +53633,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001468",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001470",
@@ -53644,7 +53644,7 @@
 "county": "La Paz",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001470",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001471",
@@ -53655,7 +53655,7 @@
 "county": "Maricopa",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001471",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001473",
@@ -53666,7 +53666,7 @@
 "county": "Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001473",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001474",
@@ -53677,7 +53677,7 @@
 "county": "La Paz, Mohave",
 "state": "Arizona",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001474",
-"perm": "Private / other"
+"perm": "BLM"
 },
 {
 "id": "mrds-60001681",
@@ -53688,6 +53688,6 @@
 "county": "Custer",
 "state": "Idaho",
 "url": "https://mrdata.usgs.gov/mrds/show-mrds.php?dep_id=60001681",
-"perm": "Private / other"
+"perm": "BLM"
 }
 ]
