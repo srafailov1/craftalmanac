@@ -2128,8 +2128,8 @@ body[data-register="night"] {
 .work-scale span { text-align: center; }
 .work-scale span:first-child { text-align: left; }
 .work-scale span:last-child { text-align: right; }
-.mode-minerals .season-hist,
 .mode-minerals .season-seasons,
+.mode-minerals .season-months,
 .mode-minerals #seasonReset { display: none; }
 .mode-minerals .work-scale { display: grid; }
 

@@ -7035,6 +7035,360 @@ const PROJECT_RECIPES = [
     ]
   },
   {
+    id: "tech-egg-white-glair",
+    plantId: null,
+    kind: "binder",
+    name: "Egg-white glair binder",
+    category: null,
+    swatch: null,
+    color: "Pantry binder",
+    difficulty: "Beginner",
+    teaser: "The manuscript-illumination binder",
+    toxic: false,
+    hook: "Whisk an egg white to a stiff foam, let it collapse back to a clear liquid overnight, and you have glair — the delicate binder medieval scribes used to lay pigment and gold on illuminated manuscripts. It is the lightest of the pantry binders: best for fine, flat color on paper, and a natural companion to lake pigments.",
+    lightfastness: {
+      rating: "moderate",
+      note: "Glair is a thin, slightly brittle film — durable enough for paper kept in a book or drawer, but less tough than egg tempera or casein. As always, lightfastness follows the colorant: pair with a lake pigment or earth for lasting color, and expect fugitive plant colors to fade."
+    },
+    timeline: {
+      active: "~10 min",
+      passive: "overnight (to clarify)"
+    },
+    ingredients: [
+      {
+        item: "Fresh egg white (glair)",
+        amount: "1 white per small session",
+        required: true,
+        note: "separate cleanly from the yolk; any yolk fat weakens the glair"
+      },
+      {
+        item: "A drop of clove oil or a few grains of salt — preservative",
+        amount: "1 drop per white",
+        required: false,
+        note: "glair spoils fast; a preservative and refrigeration buy a couple of days"
+      },
+      {
+        item: "Pigment, dried plant powder, or a lake pigment — your colorant",
+        amount: "a little at a time to a workable paint",
+        required: false,
+        note: "lake pigments and earths suit glair best; it carries only thin, flat color"
+      }
+    ],
+    toolsRequired: [
+      "Whisk or fork (or a clean natural sponge, the traditional tool)",
+      "Bowl or wide jar",
+      "Small dish for mixing paint"
+    ],
+    toolsOptional: [
+      "Fine strainer or cloth",
+      "Glass dropper",
+      "Gloves"
+    ],
+    steps: [
+      "Work in craft-use vessels and label finished paint 'NOT FOOD'. Separate one egg white cleanly, keeping all yolk out.",
+      "Whisk the white to a stiff, dry foam — whisk well past soft peaks, until it stands in firm points. This breaks down the white so it will settle to a smooth liquid.",
+      "Let it collapse: cover and leave the foam overnight (a few hours minimum). It weeps back into a clear, slightly thickened liquid at the bottom — that liquid is your glair.",
+      "Draw off the clear glair from under any remaining foam. Optional: strain it, and add a drop of clove oil to slow spoilage.",
+      "Make paint: pick up a little glair with a brush and grind in your pigment or lake-pigment powder to a thin, flowing paint. Build color in thin layers rather than one thick coat.",
+      "Dry: glair paint dries quickly to a delicate matte film. Keep finished work flat and protected — it is best for paper kept in a book, folio, or frame.",
+      "Store or discard: glair is very perishable — use it within a day or two, refrigerated with a preservative, and discard if it smells off."
+    ],
+    modifiers: "Glair is nearly neutral and adds almost no color of its own — it lays pigment thin and flat. It is weaker and more brittle than egg tempera or casein, so reach for it for fine paper work, not for objects that will be handled. Set your colorant's final shade first, then bind it.",
+    preservation: "Glair spoils quickly because it is raw egg white — make only what you will use in a session. A drop of clove oil (or a few grains of salt) plus refrigeration in a sealed jar keeps it a couple of days; discard when it smells sour. The dried film does not spoil.",
+    yield: "1 egg white makes enough glair for a small illumination or several fine details; the wet binder keeps only a day or two refrigerated.",
+    beyondInk: "The classic historic binder for illuminated manuscripts and gilding size on paper. Pair it with lake pigments (see the lake-pigment recipe) for period-accurate, lightfast manuscript color. It is a paper binder, not a textile dye.",
+    safety: [
+      "This is an art binder, not food. Do not eat or drink it; keep it from children and pets and label jars 'NOT FOOD'.",
+      "Raw egg white can carry bacteria. Wash hands and tools, never taste-test, and keep it off food surfaces.",
+      "Many plant colorants you bind are themselves toxic — the binder does not make them safe.",
+      "Fine pigment powders should not be inhaled — mix gently and consider a dust mask."
+    ],
+    sources: [
+      {
+        title: "Natural Earth Paint — natural binders (egg white / glair)",
+        url: "https://naturalearthpaint.com/blogs/blog/natural-binders-for-natural-pigments-top-9-mediums-for-eco-friendly-painting"
+      }
+    ]
+  },
+  {
+    id: "tech-lake-pigment",
+    plantId: null,
+    kind: "pigment",
+    name: "Lake pigment (dye → solid pigment)",
+    category: null,
+    swatch: null,
+    color: "Turns a dye into pigment",
+    difficulty: "Intermediate",
+    teaser: "Make solid pigment from a plant dye",
+    toxic: false,
+    hook: "This is the bridge recipe. It turns a soluble plant dye into an insoluble solid pigment you can grind, store for years, and bind into watercolor, gouache, pigment sticks, or oil paint — the same \"laking\" that gave medieval painters their yellows and reds. You precipitate the dye onto a mineral carrier (alum plus soda ash or chalk), filter, and dry. Best with the map's lightfast dyers — weld, goldenrod, coreopsis, marigold, madder-types, and dyer's polypore; skip fugitive berry and other anthocyanin colors, which lake to a dull, short-lived gray.",
+    lightfastness: {
+      rating: "varies",
+      note: "The pigment is only as lightfast as the dye it is made from. Laked from tannin/flavonoid dyers (weld, goldenrod, coreopsis, madder, dyer's polypore) it is reasonably durable; laked from anthocyanin berries and red-cabbage-type colors it fades fast and grays — those are not worth laking. Laking generally improves a dye's lightfastness versus using it as a wash, but does not make a fugitive dye permanent."
+    },
+    timeline: {
+      active: "~45-60 min",
+      passive: "overnight to settle, then several days to dry"
+    },
+    ingredients: [
+      {
+        item: "Dye plant material (a strong dyebath) — a lightfast dyer",
+        amount: "enough for ~1 quart / liter of strong dye",
+        required: true,
+        note: "weld, goldenrod, coreopsis, marigold, madder root, or dyer's polypore work well; avoid berry/anthocyanin colors"
+      },
+      {
+        item: "Alum (potassium aluminum sulfate)",
+        amount: "~20 g per liter of dye (about 4 tsp)",
+        required: true,
+        note: "the mordant/carrier the dye precipitates onto; dissolve in a little hot water first"
+      },
+      {
+        item: "Soda ash (washing soda) OR calcium carbonate (chalk / whiting)",
+        amount: "~10 g soda ash, or ~8 g chalk, per liter",
+        required: true,
+        note: "raises pH to drop the pigment out. Chalk is gentler and dries faster/more opaque; soda ash gives a more translucent pigment"
+      },
+      {
+        item: "Clean water",
+        amount: "for the dyebath and for rinsing",
+        required: true,
+        note: "distilled avoids minerals that dull the color"
+      }
+    ],
+    toolsRequired: [
+      "Nonreactive pot (stainless or enamel) reserved for craft use",
+      "Heat source",
+      "Strainer + coffee filters or fine cloth",
+      "Jars for settling",
+      "Spoon for stirring"
+    ],
+    toolsOptional: [
+      "pH strips (to watch the precipitation)",
+      "Mortar and pestle or muller (to grind the dried pigment)",
+      "Dust mask (for grinding dry pigment)",
+      "Gloves"
+    ],
+    steps: [
+      "Extract the dye: simmer your plant material in water 30-60 min (hot, not hard-boiling), then strain out the solids. You want a strong, deeply colored bath.",
+      "Add alum: while the dye is warm, stir in the dissolved alum until fully mixed (about 20 g per liter).",
+      "Precipitate: dissolve the soda ash (or chalk) in a little warm water and add it to the dyebath slowly — it will fizz and the liquid will cloud as the pigment drops out. Add until the reaction stops and the liquid above the sludge runs pale.",
+      "Settle: let it stand several hours or overnight; the pigment settles as a colored sludge under a clearer liquid.",
+      "Filter and rinse: pour off the clear liquid, then pour the sludge through a coffee filter or fine cloth. Rinse it two or three times with fresh water to wash out excess salts (filtering is slow — give it time).",
+      "Dry: spread the filter of wet pigment out flat, out of direct sun, for several days until bone dry.",
+      "Grind and store: scrape up the dry pigment and grind it smooth in a mortar (wear a dust mask). Store in a sealed, dark jar — dry pigment keeps indefinitely.",
+      "Use it: bind the pigment into watercolor pans, gouache, pigment sticks, egg tempera, glair, or oil paint (see those recipes)."
+    ],
+    modifiers: "Chalk (calcium carbonate) yields a more opaque, faster-drying, pastel-leaning pigment; soda ash yields a more translucent, saturated one — pick by the paint you want. The dye's own iron/pH modifiers should be set in the dyebath before you lake it. Anthocyanin dyes shift gray through the alkaline step — don't lake them.",
+    preservation: "The finished dry pigment is a stable powder that keeps indefinitely in a sealed jar away from light and damp. Only the wet dyebath spoils — lake it fresh.",
+    yield: "A strong liter of dye yields roughly a small jar (a few teaspoons to a couple of tablespoons) of dry pigment, depending on the dye's strength.",
+    beyondInk: "This is the gateway to solid color: one jar of lake pigment can become watercolor pans, gouache, soft pastels / pigment sticks, egg tempera, glair, or (with drying oil) oil paint. It is the plant-color counterpart to the earth pigments in Heidi Gustafson's Book of Earth.",
+    safety: [
+      "These are art materials, not food — label everything 'NOT FOOD' and keep from children and pets.",
+      "Wear a fitted dust mask when grinding or handling dry pigment powder; do not inhale it.",
+      "Alum and soda ash are only mildly irritating but should not be ingested and should be kept off eyes and broken skin; rinse splashes with water.",
+      "A toxic dye plant makes a pigment that is still from a toxic plant — keep toxic-plant pigments out of reach and never ingest.",
+      "Reserve a non-food pot and tools for craft use once used for pigment."
+    ],
+    sources: [
+      {
+        title: "Ecology of Color — How to Make a Lake Pigment",
+        url: "https://www.ecologyofcolor.com/post/how-to-make-a-lake-pigment"
+      },
+      {
+        title: "Botanical Colors — Easy How-To Make a Lake Pigment",
+        url: "https://botanicalcolors.com/easy-how-to-make-a-lake-pigment/"
+      },
+      {
+        title: "Rebecca Desnos — Making lake pigments",
+        url: "https://rebeccadesnos.com/blogs/journal/making-lake-pigments/"
+      }
+    ]
+  },
+  {
+    id: "tech-watercolor-pans",
+    plantId: null,
+    kind: "pigment",
+    name: "Watercolor pans",
+    category: null,
+    swatch: null,
+    color: "Refillable paint pans",
+    difficulty: "Intermediate",
+    teaser: "Portable pans from your pigment",
+    toxic: false,
+    hook: "Bind a lake pigment (or any dry pigment) with a gum-arabic medium sweetened with honey and glycerine, pack it into pans, and let it dry — portable, re-wettable watercolor you made from the map. The honey and glycerine keep the dried pan from cracking and let it lift again under a wet brush months later.",
+    lightfastness: {
+      rating: "varies",
+      note: "Follows the pigment: lake pigments from lightfast dyers and earth pigments hold well; fugitive plant colors still fade even bound in gum. The gum-arabic film itself is stable."
+    },
+    timeline: {
+      active: "~30-45 min",
+      passive: "5-7 days to cure in the pans"
+    },
+    ingredients: [
+      {
+        item: "Dry pigment — a lake pigment or earth pigment",
+        amount: "~1 part by volume",
+        required: true,
+        note: "see the lake-pigment recipe to make your own from a plant dye"
+      },
+      {
+        item: "Gum arabic solution",
+        amount: "~1 part (2 parts gum powder dissolved in 4 parts warm water)",
+        required: true,
+        note: "the binder; let the solution hydrate a day before use — see the gum-arabic recipe"
+      },
+      {
+        item: "Honey",
+        amount: "a few drops per pan",
+        required: true,
+        note: "humectant/plasticizer — keeps the pan re-wettable and stops cracking"
+      },
+      {
+        item: "Vegetable glycerine",
+        amount: "a few drops per pan",
+        required: true,
+        note: "plasticizer; from the pharmacy"
+      },
+      {
+        item: "Clove oil",
+        amount: "1 drop per batch",
+        required: false,
+        note: "preservative against mold in the honey/gum"
+      },
+      {
+        item: "Empty watercolor pans or a small lidded tin/mold",
+        amount: "as needed",
+        required: true,
+        note: "half-pans, bottle caps, or a small mold all work"
+      }
+    ],
+    toolsRequired: [
+      "Glass plate or tile + palette knife (to mull the paint)",
+      "Small bowl for the medium",
+      "Spoon or dropper"
+    ],
+    toolsOptional: [
+      "Glass muller (for the smoothest paint)",
+      "Mortar and pestle",
+      "Gloves"
+    ],
+    steps: [
+      "Make the medium: stir together roughly 6 parts gum-arabic solution, 1 part honey, 1 part glycerine, and a drop of clove oil. It should be a thin, sticky syrup.",
+      "Mull the pigment: on a glass plate, work your dry pigment into a smooth paste with a little water first (this wets and disperses it).",
+      "Combine: blend the pigment paste with the medium, starting around 1:1, and work it with the knife to a thick, creamy, lump-free paint. Add pigment for stronger, more opaque color; add medium for smoother flow.",
+      "Fill the pans: spoon the paint into pans in thin layers, letting each layer dry before adding the next — watercolor shrinks a lot as it dries, so top off half-way through.",
+      "Cure: let the pans dry uncovered 5-7 days in a dust-free spot until firm and dry to the touch.",
+      "Use: lift color with a wet brush. If a pan cracks, it needed more honey/glycerine; if it stays tacky, it had too much — adjust next batch."
+    ],
+    modifiers: "More honey/glycerine keeps a pan softer and easier to re-wet but slower to dry; less makes a harder, drier pan. Gouache is the same recipe made opaque — add a little chalk (calcium carbonate) or white pigment to the paint. The pigment's shade is set before binding.",
+    preservation: "Cured pans keep for a very long time if stored dry; the clove oil guards the wet paint against mold. Re-wettable indefinitely — just protect from damp and direct sun (which fades fugitive colors).",
+    yield: "One teaspoon of pigment plus medium fills roughly one full pan; scale up per color.",
+    beyondInk: "Turns your lake pigments into a travel palette. The same paint, made opaque with chalk or white, is gouache; thinned, it is a watercolor wash. Pairs with the lake-pigment and gum-arabic recipes.",
+    safety: [
+      "Art materials, not food — label 'NOT FOOD', keep from children and pets.",
+      "Wear a dust mask when handling dry pigment; do not inhale powders.",
+      "Pigments from toxic dye plants remain toxic — never ingest paint or rinse water near food.",
+      "Honey/gum can mold — the clove oil and thorough drying prevent it; discard anything that grows fuzz."
+    ],
+    sources: [
+      {
+        title: "Natural Earth Paint — Recipe: Professional-Grade Natural Watercolors",
+        url: "https://naturalearthpaint.com/blogs/blog/recipe-professional-grade-natural-watercolors"
+      },
+      {
+        title: "Jackson's Art — Making Handmade Watercolours with Dry Pigment",
+        url: "https://www.jacksonsart.com/blog/2020/09/25/making-handmade-watercolours-with-jacksons-artist-pigments/"
+      }
+    ]
+  },
+  {
+    id: "tech-pigment-sticks",
+    plantId: null,
+    kind: "pigment",
+    name: "Pigment sticks & soft pastels",
+    category: null,
+    swatch: null,
+    color: "Draw with your pigment",
+    difficulty: "Intermediate",
+    teaser: "Roll pigment into drawing sticks",
+    toxic: false,
+    hook: "Mix pigment with a little gum-tragacanth (or honey) binder and a chalk extender into a stiff dough, roll it into sticks, and dry — soft pastels and pigment sticks you can draw with, straight from your own lake pigments. More binder makes a harder stick; less makes a softer, more velvety one that lays down more color.",
+    lightfastness: {
+      rating: "varies",
+      note: "Follows the pigment — lake pigments from lightfast dyers and earths hold; fugitive plant colors fade. Pastel marks are unvarnished, so keep finished drawings framed or in a folio away from light, and fix if desired."
+    },
+    timeline: {
+      active: "~30 min (plus binder soak)",
+      passive: "48 h to hydrate the binder; 24-48 h to dry the sticks"
+    },
+    ingredients: [
+      {
+        item: "Dry pigment — a lake pigment or earth pigment",
+        amount: "the color base, to taste",
+        required: true,
+        note: "see the lake-pigment recipe"
+      },
+      {
+        item: "Gum tragacanth (powder) OR honey — the binder",
+        amount: "tragacanth: 1 part powder to ~30 parts water; or a 1:5 honey-to-pigment mix",
+        required: true,
+        note: "tragacanth soaked in water 48 h to a gel is the classic pastel binder; honey is the pantry alternative"
+      },
+      {
+        item: "Chalk / whiting (precipitated calcium carbonate) — extender",
+        amount: "blend with pigment to set softness and tint strength",
+        required: false,
+        note: "more chalk = paler, softer, more 'pastel'; less = stronger color"
+      },
+      {
+        item: "Clean water",
+        amount: "as needed to form a dough",
+        required: true,
+        note: "distilled preferred"
+      }
+    ],
+    toolsRequired: [
+      "Glass plate or tile + palette knife",
+      "Small jar for the binder gel",
+      "Paper towels (to dry the rolled sticks on)",
+      "Gloves (pigment stains hands)"
+    ],
+    toolsOptional: [
+      "Mortar and pestle",
+      "Dust mask",
+      "A grooved board or stiff paper to roll even sticks"
+    ],
+    steps: [
+      "Make the binder gel: stir 1 part gum-tragacanth powder into ~30 parts water, then refrigerate 48 h until it swells to a clear gel. (Or skip ahead with honey.)",
+      "Blend the dry color: on the plate, mix your pigment with chalk to the tint and softness you want — more chalk for a paler, softer stick.",
+      "Make a dough: make a well in the powder, add a little binder gel, and work it in with the knife, then gloved hands, adding pigment or a drop of water until you have a stiff, clay-like dough that holds a shape without crumbling or sticking.",
+      "Roll sticks: roll the dough into pencil-thick sticks on a paper towel (a stiff paper or grooved board helps make them even).",
+      "Dry: set the sticks on a fresh paper towel and air-dry 24-48 h, turning once, until hard all the way through.",
+      "Test and adjust: if a stick crumbles in use it needs a bit more binder; if it is too hard to leave a mark, the next batch needs a touch more water or less binder."
+    ],
+    modifiers: "Binder is the main lever: more gum/honey = harder stick and less color release; less = softer, more crumbly, more pigment on the paper. Chalk both softens the stick and lightens/extends the color into tints. Set the pigment's shade before rolling.",
+    preservation: "Dried sticks keep indefinitely if stored dry and unbroken; wrap them or box them so they don't rub. Finished pastel marks are delicate — frame under glass or store flat in a folio, and use a fixative if you want to handle the work.",
+    yield: "A tablespoon or two of pigment plus extender makes several sticks.",
+    beyondInk: "Turns lake pigments into dry drawing media. The same dough pressed into a shallow mold makes pigment cakes; the same pigment bound in oil and wax makes oil-pastel-style sticks (an Advanced variation). Pairs with the lake-pigment recipe.",
+    safety: [
+      "Art materials, not food — label 'NOT FOOD', keep from children and pets.",
+      "Wear a dust mask and gloves — dry pigment and chalk make fine dust that should not be inhaled, and pigment stains skin.",
+      "Sticks made from toxic dye-plant pigments remain toxic — do not let children mouth them; these are not for young kids.",
+      "Work over a wipeable surface; clean up dust with a damp cloth, not by sweeping it into the air."
+    ],
+    sources: [
+      {
+        title: "Art is Fun — How to make your own soft pastels from scratch",
+        url: "https://www.art-is-fun.com/how-to-make-your-own-soft-pastels-from-scratch"
+      },
+      {
+        title: "Natural Earth Paint — Recipe: Natural Earth Pastels",
+        url: "https://naturalearthpaint.com/blogs/blog/recipe-natural-earth-pastels"
+      }
+    ]
+  },
+  {
     id: "tech-preserving",
     plantId: null,
     kind: "preservative",
@@ -11390,6 +11744,7 @@ function sheetProjectsHTML() {
   const dyes = PROJECT_RECIPES.filter((r) => r.kind === "dye");
   const modifiers = PROJECT_RECIPES.filter((r) => r.kind === "modifier" || r.kind === "preservative");
   const binders = PROJECT_RECIPES.filter((r) => r.kind === "binder");
+  const pigments = PROJECT_RECIPES.filter((r) => r.kind === "pigment");
   // Each category collapses to a single horizontally-scrollable row; the toggle
   // expands it into a wrapped grid to show the whole category at once.
   const shelf = (label, list) => list.length
@@ -11411,6 +11766,7 @@ function sheetProjectsHTML() {
     <div class="proj-shelves">
       ${shelf("PLANT INKS", inks)}
       ${shelf("PLANT DYES", dyes)}
+      ${shelf("PIGMENTS & FORMS", pigments)}
       ${shelf("MODIFIERS · PRESERVING", modifiers)}
       ${shelf("BINDERS", binders)}
     </div>
@@ -12265,9 +12621,9 @@ function loadPhenology(mode) {
 }
 
 function renderHistogram() {
-  // Minerals aren't seasonal — the histogram is hidden (CSS .mode-minerals) and
-  // the slider is repurposed as a workability filter, so skip the month chart.
-  if (getActiveMapConfig().loadMinerals) return;
+  // Minerals aren't seasonal — instead of a month chart, show the material
+  // distribution across the workability (soft → hard) axis the slider filters on.
+  if (getActiveMapConfig().loadMinerals) { renderMineralHistogram(); return; }
   const speciesForChart = speciesCatalog.filter((species) => (
     state.selectedSpecies.has(species.id)
   ));
@@ -12315,6 +12671,37 @@ function renderHistogram() {
   // Header reflects the active map; the category swatch legend sits below.
   const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
   if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY`;
+  renderSeasonCats();
+}
+
+// Minerals histogram: one bar per craft material, ordered soft → hard, height by
+// number of localities, colored by category — the distribution the workability
+// slider filters across. Bars inside the active band are highlighted.
+function renderMineralHistogram() {
+  if (!seasonHistogram) return;
+  const config = getActiveMapConfig();
+  const counts = {};
+  state.records.forEach((record) => {
+    if (!state.selectedSpecies.has(record.speciesId)) return;
+    const species = getSpecies(record.speciesId);
+    if (!species) return;
+    counts[species.category] = (counts[species.category] || 0) + 1;
+  });
+  const cats = config.categories
+    .map((category) => category.id)
+    .filter((id) => MINERAL_WORKABILITY[id] != null)
+    .sort((a, b) => MINERAL_WORKABILITY[a] - MINERAL_WORKABILITY[b]);
+  const max = Math.max(1, ...cats.map((id) => counts[id] || 0));
+  const activeBand = !state.allSeasons;
+  seasonHistogram.innerHTML = cats.map((id) => {
+    const n = counts[id] || 0;
+    const height = n > 0 ? Math.max(6, Math.round((n / max) * 104)) : 6;
+    const color = config.categoryColors[id] || "#777";
+    const inBand = activeBand && Math.abs(MINERAL_WORKABILITY[id] - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
+    const label = getCategoryLabel(id);
+    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div></div>`;
+  }).join("");
+  if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;
   renderSeasonCats();
 }
 
@@ -15194,6 +15581,23 @@ function getNpsCompendiumRule(text, area, species) {
   };
 }
 
+// State land whose personal-use gathering exception is edibles-only: craft
+// (dye/fiber) and medicinal plant material are NOT covered, so on the ink and
+// medicine maps it is prohibited without agency permission — rather than falling
+// through to "unknown" and looking like missing data. Mirrors the food-focused
+// NPS handling and keeps permissions consistent across all maps.
+function stateEdibleOnlyNonFoodRule(area, sourceLabel, sourceUrl) {
+  return {
+    status: "prohibited",
+    label: "Prohibited",
+    area,
+    limit: "This land's personal-use gathering exception covers edible fruit, nuts, berries, or fungi only. Collecting plant material for craft (dye/fiber) or medicinal use is not covered and requires written permission from the managing agency.",
+    note: "The edible-consumption exception does not authorize non-food plant collection; treat craft and medicinal harvest here as prohibited unless the agency permits it.",
+    sourceLabel: sourceLabel || "State land plant-protection rule (edibles-only exception)",
+    sourceUrl: sourceUrl || ""
+  };
+}
+
 function getStateSystemRule(stateCode, text, area, species) {
   const foodMode = state.activeMap === "food";
 
@@ -15211,7 +15615,7 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   if (stateCode === "NY") {
     if (text.includes("state forest") || text.includes("forest preserve") || text.includes("environmental conservation")) {
-      if (!foodMode) return null;
+      if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
       return {
         status: "allowed",
         label: "Allowed",
@@ -15237,7 +15641,7 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   if (stateCode === "PA"
     && (text.includes("state forest") || text.includes("state park") || text.includes("conservation and natural resources"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return {
       status: "allowed",
       label: "Allowed",
@@ -15262,7 +15666,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       };
     }
     if (text.includes("state park")) {
-      if (!foodMode) return null;
+      if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
       return {
         status: "allowed",
         label: "Allowed",
@@ -15403,7 +15807,7 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   if (stateCode === "MI"
     && (text.includes("state park") || text.includes("state recreation") || text.includes("state forest") || text.includes("state game") || text.includes("wildlife area"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return {
       status: "allowed",
       label: "Allowed",
@@ -15443,56 +15847,56 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   // --- Allowed: personal-use edibles (mushrooms included) ---
   if (stateCode === "AK" && text.includes("state park")) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Berries, fruits, mushrooms, and similar edibles may be gathered for personal consumption (not for sale); the state-park rule sets no quantity limit.",
       note: "Alaska state parks allow personal-use gathering of edibles under 11 AAC 12.170(b); other plants and natural objects remain protected.",
       sourceLabel: "11 AAC 12.170", sourceUrl: ACCESS_RULE_SOURCES.alaskaParks };
   }
   if (stateCode === "IN" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Berries, fruits, nuts, fallen cones, mushrooms, leaves, and greens may be collected for personal use; flower-picking and other plant collection remain prohibited.",
       note: "Indiana state parks (DNR properties) exempt listed edible items from the plant-collection prohibition under 312 IAC 8-2-10.",
       sourceLabel: "312 IAC 8-2-10", sourceUrl: ACCESS_RULE_SOURCES.indianaDnr };
   }
   if (stateCode === "IA" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Mushrooms and asparagus may be harvested system-wide; fruits, nuts, and berries may be gathered for personal use unless a sign is posted prohibiting it.",
       note: "Iowa lands under Natural Resource Commission jurisdiction allow personal-use foraging under 571 IAC 54.1-54.2; dedicated state preserves are excluded.",
       sourceLabel: "Iowa Admin. Code 571—54", sourceUrl: ACCESS_RULE_SOURCES.iowaDnr };
   }
   if (stateCode === "KS" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Noncommercial gathering of edible wild plants, wild fruits, nuts, or fungi for human consumption is permitted; commercial gathering is prohibited.",
       note: "Kansas excepts personal-use edible foraging from the vegetation-removal prohibition under K.A.R. 115-8-20(a)(4)(F).",
       sourceLabel: "K.A.R. 115-8-20", sourceUrl: ACCESS_RULE_SOURCES.kansasParks };
   }
   if (stateCode === "OH" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Berries, fruit, tree nuts, and mushrooms (plus ground pine cones) may be gathered during daylight hours for personal use, not commercial.",
       note: "Ohio state parks permit personal-use foraging of listed edibles under Ohio Admin. Code 1501:46-3-10, except where a unit posts a restriction.",
       sourceLabel: "Ohio Admin. Code 1501:46-3-10", sourceUrl: ACCESS_RULE_SOURCES.ohioParks };
   }
   if (stateCode === "OK" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Nuts, edible plants, and fungi may be foraged for personal consumption on state-managed public land (certified agricultural crops and protected species excluded).",
       note: "Oklahoma legalized personal-use foraging on state-managed public land in 2025 (61 O.S. § 335, SB 447, effective Nov 1 2025).",
       sourceLabel: "61 O.S. § 335 (SB 447, 2025)", sourceUrl: ACCESS_RULE_SOURCES.oklahomaParks };
   }
   if (stateCode === "VT" && (text.includes("state park") || text.includes("state forest"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Wild berries, fruits, seeds, nuts, and mushrooms may be collected for personal use; uprooting or cutting whole plants requires a written FPR permit.",
       note: "Vermont FPR-administered lands (state parks and forests) allow personal-use edible collection under 12-020-009 Code Vt. R.",
       sourceLabel: "12-020-009 Code Vt. R.", sourceUrl: ACCESS_RULE_SOURCES.vermontParks };
   }
   if (stateCode === "WI" && (text.includes("state park") || text.includes("state forest") || text.includes("state recreation") || text.includes("state trail") || text.includes("state natural area"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Edible fruits, edible nuts, wild mushrooms, wild asparagus, and watercress may be hand-collected for personal consumption.",
       note: "Wisconsin DNR lands except personal-use edibles from the plant-protection rule under NR 45.04(1s)(a)1.",
@@ -15501,7 +15905,7 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   // --- Allowed with a mushroom split (need the species param) ---
   if (stateCode === "MO" && (text.includes("state park") || text.includes("state historic site"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not covered by Missouri's in-park foraging exception; only wild edible fruit, berries, seeds, and nuts may be collected.",
@@ -15514,7 +15918,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       sourceLabel: "10 CSR 90-2.040", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
   }
   if (stateCode === "HI" && (text.includes("state park") || text.includes("state recreation") || text.includes("state historical park") || text.includes("state wayside") || text.includes("state monument"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not named in Hawaii's renewable-natural-products allowance; treat mushroom collection as not permitted without local confirmation.",
@@ -15527,7 +15931,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       sourceLabel: "HAR 13-146-32", sourceUrl: ACCESS_RULE_SOURCES.hawaiiParks };
   }
   if (stateCode === "TN" && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area"))) {
-    if (!foodMode) return null;
+    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not named in Tennessee's renewable-products allowance; treat mushroom collection as not permitted without local confirmation.",
