@@ -95,25 +95,35 @@ const MEDICINE_CATEGORY_COLORS = {
 // Minerals map: each craft-material type is its own category/color (1:1 with the
 // mineralSpeciesCatalog), the way ink colors map to dye materials.
 const MINERAL_CATEGORY_COLORS = {
-  quartz: "#3f86c4",
-  novaculite: "#c4623f",
-  soapstone: "#3f8d76",
   clay: "#a8682f",
+  alabaster: "#d8c3a5",
+  pipestone: "#a23b34",
+  soapstone: "#3f8d76",
+  serpentine: "#7c9048",
+  limestone: "#9a8f6e",
+  marble: "#cfcac2",
   slate: "#5c677d",
-  gemstone: "#a8497e",
-  silica: "#8a93a0"
+  obsidian: "#33323a",
+  silica: "#8a93a0",
+  novaculite: "#c4623f",
+  quartz: "#3f86c4",
+  agate: "#caa060",
+  "petrified-wood": "#6b4a2e",
+  gemstone: "#a8497e"
 };
 // Workability scale (replaces the meaningless season slider in mineral mode):
 // 0 = softest (carve / throw) → 100 = hardest (sharpen / knap / facet). Roughly
 // tracks Mohs hardness and the craft it fits.
 const MINERAL_WORKABILITY = {
-  clay: 6, soapstone: 14, slate: 40, silica: 72, quartz: 74, novaculite: 78, gemstone: 96
+  clay: 6, alabaster: 9, pipestone: 16, soapstone: 14, serpentine: 30,
+  limestone: 34, marble: 36, slate: 40, obsidian: 55, silica: 72,
+  quartz: 74, agate: 73, "petrified-wood": 74, novaculite: 78, gemstone: 96
 };
 const MINERAL_WORKABILITY_BAND = 22; // slider shows materials within ± this of its value
 function mineralWorkBand(value) {
-  if (value < 28) return { label: "Soft — carving & pottery", examples: "clay · soapstone" };
-  if (value < 56) return { label: "Medium — splitting & engraving", examples: "slate" };
-  return { label: "Hard — sharpening, knapping & lapidary", examples: "novaculite · quartz · chert · gemstone" };
+  if (value < 28) return { label: "Soft — carving & pottery", examples: "clay · alabaster · soapstone · pipestone" };
+  if (value < 56) return { label: "Medium — carving & engraving", examples: "serpentine · marble · slate · obsidian" };
+  return { label: "Hard — sharpening, knapping & lapidary", examples: "chert · quartz · agate · novaculite · gemstone" };
 }
 let CATEGORY_COLORS = FOOD_CATEGORY_COLORS;
 const ACCESS_RULE_SOURCES = {
@@ -3723,7 +3733,7 @@ const mineralSpeciesCatalog = [
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     safetyTags: ["asbestos risk — cut/grind wet", "use respiratory protection"],
     usedParts: "Carving — bowls, pipes, beads, figurines, molds, and cookware.",
-    notes: "Soft, heat-stable carving stone from the Saline County talc–steatite belt — from pure high-talc soapstone (softest) to harder steatite that holds finer detail."
+    notes: "Soft, heat-stable carving stone of Appalachia (VA/NC/GA), New England, and the Pacific NW — from pure high-talc soapstone (softest) to harder steatite that holds finer detail. Eastern steatite outcrops are often prehistoric quarry sites (ARPA)."
   },
   {
     id: "mineral-clay",
@@ -3742,7 +3752,7 @@ const mineralSpeciesCatalog = [
     category: "slate",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Engraving, inlay, coasters, and flagstone craft.",
-    notes: "Splits into flat sheets for engraving and inlay — a legitimate minor craft stone. Mostly former quarry sites."
+    notes: "Splits into flat sheets for engraving and inlay — the Slate Valley belt (VT/NY), the PA Slate Belt, Buckingham (VA), and Monson (ME). Mostly private quarry operations; prefer waste-pile slate obtained with the operator's permission."
   },
   {
     id: "mineral-gemstone",
@@ -3752,6 +3762,86 @@ const mineralSpeciesCatalog = [
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Faceting, cabochons, and bead/setting work.",
     notes: "The Prairie Creek diatreme — Crater of Diamonds State Park, the rare public site where visitors may dig and keep diamonds (to cut and set) for a fee."
+  },
+  {
+    id: "mineral-alabaster",
+    commonName: "Alabaster (gypsum)",
+    scientificName: "Gypsum · CaSO₄·2H₂O",
+    category: "alabaster",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["gypsum dust — work wet or masked"],
+    usedParts: "Carving — sculpture, lamps, boxes, and translucent inlay.",
+    notes: "Soft (Mohs ~2), fine-grained massive gypsum that carves with hand tools and takes a soft translucent polish. From the gypsum districts of CO, OK, NM, UT, WY, and TX; collect loose float and quarry-waste blocks, not fresh outcrop. Bulk gypsum is a salable federal mineral — casual specimen collecting only."
+  },
+  {
+    id: "mineral-pipestone",
+    commonName: "Pipestone (catlinite)",
+    scientificName: "Catlinite (indurated red claystone)",
+    category: "pipestone",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["culturally restricted — see the collecting rule", "clay/silica dust — work wet"],
+    usedParts: "Carving — traditionally ceremonial pipe bowls, effigies, and beads.",
+    notes: "Soft red claystone of the Upper Midwest (MN, SD, WI). CRITICAL: quarrying at Pipestone National Monument is reserved by federal law to enrolled members of federally recognized tribes — it is not open public collecting. Treat pipestone as culturally restricted; see the rule on each point."
+  },
+  {
+    id: "mineral-serpentine",
+    commonName: "Serpentine",
+    scientificName: "Serpentinite (antigorite / chrysotile)",
+    category: "serpentine",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["may contain natural asbestos — cut/grind wet", "HEPA respiratory protection"],
+    usedParts: "Carving and lapidary — figurines, bowls, beads, and cabochons.",
+    notes: "Green carving/lapidary stone of the CA Coast Ranges and Sierra foothills and the VT/Appalachian ultramafic belt. Gather float and loose blocks; avoid disturbing serpentine barrens (rare endemic plants). Serpentinite frequently hosts naturally occurring asbestos — a real hazard."
+  },
+  {
+    id: "mineral-limestone",
+    commonName: "Limestone (carving freestone)",
+    scientificName: "Limestone (dimension freestone)",
+    category: "limestone",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["carving dust — mask + eye protection"],
+    usedParts: "Carving and lettering — sculpture, relief, and architectural detail.",
+    notes: "Soft, homogeneous freestone for carving — the classic is Salem (Indiana) limestone (Owen/Monroe/Lawrence Cos.); also TX, KS, MN. Source mill off-cuts and reject blocks rather than outcrop. Note: most MRDS \"limestone\" is aggregate or cement stone, not carving freestone."
+  },
+  {
+    id: "mineral-marble",
+    commonName: "Marble (carving / statuary)",
+    scientificName: "Marble (metamorphic calcite)",
+    category: "marble",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["carving dust + flying chips — mask + eye protection"],
+    usedParts: "Sculpture and relief carving, inlay, and polished accents.",
+    notes: "Fine statuary and craft marble — Danby/Proctor (VT), Tate (GA), Yule (CO), Tennessee marble, Sylacauga (AL). Statuary grades are near-exhausted or tightly held; source quarry scrap/reject by purchase or permission rather than pulling outcrop. Calcite — no silica hazard, but fine dust and chips."
+  },
+  {
+    id: "mineral-obsidian",
+    commonName: "Obsidian",
+    scientificName: "Obsidian (volcanic glass)",
+    category: "obsidian",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["extremely sharp — laceration risk", "silica/glass dust when grinding"],
+    usedParts: "Knapping — pressure-flaked points and blades; some lapidary.",
+    notes: "Premium volcanic-glass knapping toolstone of the West (OR Glass Buttes, CA, ID, NM, NV, AZ, UT, WY). Surface-collect loose float at designated open areas only; obsidian sources are the most heavily studied archaeological toolstone (ARPA) and are prohibited in NPS units such as Yellowstone."
+  },
+  {
+    id: "mineral-agate",
+    commonName: "Agate / chalcedony / jasper",
+    scientificName: "Chalcedony (cryptocrystalline quartz)",
+    category: "agate",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["silica dust — cut/grind wet"],
+    usedParts: "Lapidary — cabbing, tumbling, beads, inlay, and knife scales.",
+    notes: "The workhorse lapidary stone — Lake Superior agate (MN/WI/MI), Montana/moss agate, and jasper across OR, WY, TX, ID. Surface-collect float and gravel-bar material; take reasonable personal amounts and refill holes. Not on active mining claims without consent."
+  },
+  {
+    id: "mineral-petrified-wood",
+    commonName: "Petrified wood",
+    scientificName: "Silicified wood (chalcedony / agate)",
+    category: "petrified-wood",
+    months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    safetyTags: ["silica dust — cut/grind wet"],
+    usedParts: "Lapidary — cabochons, slabs, bookends, and beads.",
+    notes: "Silicified wood that cuts and polishes like agate — AZ, OR, WA, WY, UT, CO, TX, MT. On BLM land, free casual collection is capped at 25 lb/day + 250 lb/yr for personal use; STRICTLY prohibited in NPS units (Petrified Forest NP) — removal there is a federal offense."
   }
 ];
 
@@ -3816,27 +3906,35 @@ const MAP_MODE_CONFIG = {
   minerals: {
     id: "minerals",
     speciesHeading: "Materials & Craft Stone",
-    lede: `Locate stone and mineral craft materials — quartz crystal, novaculite whetstone, soapstone, pottery clay, and more — across the Ouachita and Hot Springs region of Arkansas. Each point is a recorded mineral locality, not a collecting permission: stone-collecting rules differ sharply by land manager.`,
+    lede: `Locate craft stone across the contiguous US — pottery clay, carving stone (soapstone, alabaster, serpentine, marble), whetstones and knapping toolstone (novaculite, chert, obsidian), and lapidary material. Each point is a recorded mineral locality, not a collecting permission: stone-collecting rules differ sharply by land manager, and some materials are culturally restricted.`,
     categories: [
-      { id: "quartz", label: "Quartz crystal" },
-      { id: "novaculite", label: "Novaculite whetstone" },
-      { id: "silica", label: "Silica (chert / flint)" },
-      { id: "soapstone", label: "Soapstone (steatite)" },
       { id: "clay", label: "Clay (pottery)" },
+      { id: "alabaster", label: "Alabaster (gypsum)" },
+      { id: "pipestone", label: "Pipestone (catlinite)" },
+      { id: "soapstone", label: "Soapstone (steatite)" },
+      { id: "serpentine", label: "Serpentine" },
+      { id: "limestone", label: "Limestone (carving)" },
+      { id: "marble", label: "Marble (carving)" },
       { id: "slate", label: "Slate (engraving)" },
+      { id: "obsidian", label: "Obsidian (knapping)" },
+      { id: "silica", label: "Silica (chert / flint)" },
+      { id: "novaculite", label: "Novaculite whetstone" },
+      { id: "quartz", label: "Quartz crystal" },
+      { id: "agate", label: "Agate / jasper" },
+      { id: "petrified-wood", label: "Petrified wood" },
       { id: "gemstone", label: "Gemstone / diamond" }
     ],
     categoryColors: MINERAL_CATEGORY_COLORS,
     catalog: mineralSpeciesCatalog,
     sourceNames: ["USGS MRDS"],
-    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), with land-manager context from the USDA Forest Service and USGS PAD-US. Occurrence is never collecting permission — rock and mineral collecting is generally allowed on national-forest land, prohibited in national parks, and needs landowner permission on private land. Geographically limited to the Ouachita / Hot Springs region of Arkansas for now.`,
+    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), across the contiguous US, with land-manager context from NPS, USDA Forest Service, BLM, and USGS PAD-US boundaries. Occurrence is never collecting permission — rock and mineral collecting is generally allowed on BLM and national-forest land in reasonable amounts, prohibited in all national parks, varies on state land, and needs landowner permission on private land. Pipestone and some toolstone sources are culturally restricted.`,
     rulesLabel: "Rock & mineral collecting rules",
     loadFallingFruit: false,
     loadNpsOrchards: false,
     loadMinerals: true,
-    // Center the Ouachita craft-stone core; zoom stays at/above the point-render
-    // threshold (FALLING_FRUIT_MIN_LOAD_ZOOM = 8) so the markers actually draw.
-    initialView: { center: [-93.45, 34.45], zoom: 8.1 }
+    // National scope: open on the whole contiguous US. Mineral clusters render at
+    // every zoom (see shouldShowPointLayers / applyMarkerZoomRangeForMode).
+    initialView: { center: [-98.5, 39.5], zoom: 3.7 }
   }
 };
 
@@ -14668,7 +14766,7 @@ async function loadMinerals() {
   // cached — the analogue of loadNpsOrchards for the Minerals mode. Localities are
   // USGS MRDS points; rules are baked per-record (see computeRecordAccessRule).
   if (!state.mineralData) {
-    const response = await fetch("./data/minerals-arkansas.json");
+    const response = await fetch("./data/minerals-us.json");
     if (!response.ok) throw new Error(`Minerals returned ${response.status}`);
     state.mineralData = await response.json();
   }
@@ -14926,7 +15024,7 @@ function mapMineralRecord(record) {
     perm: record.perm || "Private / other",
     access: record.perm || "",
     accessClass: "unknown",
-    publicLand: record.perm === "USFS" || record.perm === "State park",
+    publicLand: ["USFS", "BLM", "State park", "State trust", "State park (protected)"].includes(record.perm),
     accessNote: ""
   };
 }
@@ -14941,7 +15039,7 @@ function getRecordAccessRule(record, species) {
 }
 
 // Rock & mineral collecting rules, keyed by the land manager baked into each
-// MRDS record (data/minerals-arkansas.json). Stone collecting is governed
+// MRDS record (data/minerals-us.json). Stone collecting is governed
 // differently from foraging — the 36 CFR 2.1 food exception does not cover it.
 const MINERAL_ACCESS_RULES = {
   USFS: {
@@ -14975,6 +15073,38 @@ const MINERAL_ACCESS_RULES = {
     note: "Downgraded from the forest-wide rule because the point is a named mine on claimed or private ground. Occurrence is not permission.",
     sourceLabel: "BLM mining claims (43 CFR 8365.1-5)",
     sourceUrl: "https://www.ecfr.gov/current/title-43/section-8365.1-5"
+  },
+  BLM: {
+    status: "allowed",
+    area: "BLM public land",
+    limit: "Casual collection of reasonable amounts of rock, mineral specimens, and semiprecious gemstones for personal, noncommercial use is generally allowed on open BLM public land — but NOT at developed recreation sites, on active mining claims, on private mineral estate, or in closed/withdrawn areas. Daily/weight caps are set by the local field office (petrified wood is capped at 25 lb/day + 250 lb/yr).",
+    note: "A general BLM policy, not a guarantee for this exact parcel; check for claims and withdrawals with the local field office. Occurrence is not permission.",
+    sourceLabel: "BLM rockhounding (43 CFR 8365.1-5)",
+    sourceUrl: "https://www.ecfr.gov/current/title-43/section-8365.1-5"
+  },
+  "State trust": {
+    status: "permit-required",
+    area: "State trust / school-trust land",
+    limit: "State trust lands vary by state and usually require a permit or lease to collect (e.g. Utah SITLA allows with a permit, 25 lb/day; Arizona prohibits casual collection without a lease). Check the state land office before collecting.",
+    note: "State trust land is managed for revenue, not recreation; collecting rules differ by state. Verify with the state land office.",
+    sourceLabel: "State trust land rules (varies by state)",
+    sourceUrl: ""
+  },
+  "State park (protected)": {
+    status: "prohibited",
+    area: "State park / state recreation area",
+    limit: "State parks almost universally prohibit collecting rocks, minerals, and plants. Rare named-facility exceptions exist (e.g. Crater of Diamonds), but never assume a state park allows collecting.",
+    note: "The default state-park rule protects all natural features; check the specific park's regulations.",
+    sourceLabel: "State park regulations (varies by state)",
+    sourceUrl: ""
+  },
+  Tribal: {
+    status: "prohibited",
+    area: "Tribal / reservation land",
+    limit: "Collecting on tribal or reservation land requires the tribe's permission and is often prohibited outright; federal antiquities protections also apply. Treat as closed unless a tribal authority grants access.",
+    note: "Tribal land is sovereign; never collect without explicit tribal permission.",
+    sourceLabel: "Tribal land — permission required",
+    sourceUrl: ""
   },
   "Private / other": {
     status: "private",
