@@ -107,29 +107,33 @@ local blank-map flakiness. Cluster-tint visuals deserve one unoccluded look.
 
 ## Phase 4 — Engineering foundations
 
-- [ ] 4.1 Extract PROJECT_RECIPES (~594 KB, 55% of app.js) to
-      `data/project-recipes.json`, lazy-loaded when the Projects sheet opens.
-- [ ] 4.2 Extract rules tables (NPS/SITE/MINERAL) and species catalogs to fetched
-      JSON with a documented schema — this is also the groundwork for Phase 5
-      publication and the offline manifest.
-- [ ] 4.3 `.assetsignore`: stop deploying build caches (37 MB unused), internal
-      docs, scripts. **Must keep ATTRIBUTION.md** (attribution.html fetches it).
-- [ ] 4.4 **OWNER GATE (repo settings):** GitHub Actions workflow running
-      `scripts/check.sh` on push/PR. I write the workflow file; enabling
-      Actions/branch protection is yours.
-- [ ] 4.5 Repo hygiene: `git gc` (packed history is only ~22 MiB; no rewrite
-      needed); parameterize `build_falling_fruit_subset.py` input paths; record the
-      Falling Fruit snapshot date in ATTRIBUTION.md; archive the source CSVs out of
-      ~/Downloads (**OWNER GATE:** where — R2 bucket or external drive).
-- [ ] 4.6 Perf: split render() cheap/expensive paths, rAF-coalesce slider input,
-      drop the unconditional map.resize(); add 429/Retry-After backoff and route
-      iNat point loads through the concurrency helper.
-- [ ] 4.7 Self-updating CLAUDE.md anchors (line counts, mode list) + `docs/adding-a-mode.md`
-      checklist; refresh stale CLAUDE.md numbers now.
-- [ ] 4.8 Headless regression harness for the zoom-handoff state machine, wired into
-      check.sh.
+- [!] 4.1 Extract PROJECT_RECIPES → JSON. **Handed off as a scoped work order:
+      `docs/TODO-content-extraction.md` Phase A** (Codex-shaped; pure format
+      move with a checksum gate).
+- [!] 4.2 Extract rules tables + catalogs → JSON. **Same work order, Phase B** —
+      coordinate its schema with Phase 5.2's provenance fields.
+- [x] 4.3 `.assetsignore` shipped (keeps ATTRIBUTION.md deployed). *Commit c6b01d6.*
+- [~] 4.4 CI workflow shipped (`.github/workflows/check.yml`). **OWNER: enable
+      required-status branch protection.** Note: CI stays red until the
+      pre-existing ink-honeysuckle chunk mismatch lands (parallel session).
+- [~] 4.5 Builder paths parameterized (`--types/--locations`). **OWNER items
+      remaining:** archive the Falling Fruit CSVs out of ~/Downloads and record
+      the snapshot date in ATTRIBUTION.md; run `git gc` when no other agent
+      session holds the repo (it hit a lock from the parallel session — the
+      pack is only 22 MiB, just ~180 orphaned tmp objects to clear).
+- [x] 4.6 Perf: rAF-coalesced slider renders; unconditional map.resize()
+      removed from render(); Retry-After-aware iNat backoff; point-band loads
+      through mapWithConcurrency(4). *Commit c6b01d6.* (getVisibleRecords
+      memoization left as a follow-up if minerals drags still jank on phones.)
+- [x] 4.7 CLAUDE.md anchors refreshed + `docs/adding-a-mode.md` written.
+      *Commit c6b01d6.* (Auto-regenerating the anchors is a nice-to-have for
+      the 5am loop.)
+- [!] 4.8 Zoom-handoff regression harness. **Handed off:
+      `docs/TODO-zoom-handoff-harness.md`** (node-only state-machine tests).
 
-**Checkpoint 4:** app behavior identical, foundations moved. Good merge point to main.
+**Checkpoint 4:** hygiene/CI/perf shipped (commit c6b01d6); the two large
+refactors are scoped work orders ready for Codex or a fresh session. Good
+merge point to main once ink-honeysuckle lands and CI is green.
 
 ## Phase 5 — Strategic builds (the position-changers)
 
