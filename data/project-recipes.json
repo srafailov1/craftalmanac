@@ -6651,83 +6651,6 @@
     ]
   },
   {
-    "id": "food-sumac-ade",
-    "map": "food",
-    "kind": "fresh",
-    "plantId": "sumac",
-    "name": "Cold-Steep Sumac-ade",
-    "category": "beverage-infusion",
-    "swatch": "#c8506a",
-    "color": "Rosy tart infusion",
-    "difficulty": "Beginner",
-    "teaser": "Tart pink lemonade from red cones",
-    "toxic": false,
-    "hook": "The upright crimson cones of staghorn sumac are furred with malic acid, and a rain the night before can wash the tartness away, so pick after a dry spell. Steep the berries in cold water - never hot, which drags out bitter tannins - and in a few hours you have a drink the pink of watermelon rind and just as tart. The rule that keeps you safe is simple: red cones held upright are edible Rhus; drooping white berries are poison sumac, and they grow in swamps, not the dry field edges true sumac loves.",
-    "timeline": {
-      "active": "15 minutes",
-      "passive": "2-4 hour steep"
-    },
-    "yield": "About 8 cups of sumac-ade from 6-12 cones. Wildly abundant along field edges and clearings.",
-    "ingredients": [
-      {
-        "item": "Ripe staghorn or smooth sumac cones (Rhus typhina/glabra)",
-        "amount": "6-12 cones",
-        "required": true,
-        "note": "Deep red, upright, fuzzy. More cones and a longer (overnight) steep give a stronger drink. After confirming red, upright, fuzzy cones, taste one berry - it should be sour. Pick after several dry days."
-      },
-      {
-        "item": "Cold water",
-        "amount": "8 cups",
-        "required": true,
-        "note": "Cold or room temperature only."
-      },
-      {
-        "item": "Honey or sugar",
-        "amount": "to taste",
-        "required": false,
-        "note": "Balances the tartness."
-      }
-    ],
-    "toolsRequired": [
-      "Large jar or pitcher",
-      "Fine cloth or coffee filter"
-    ],
-    "toolsOptional": [
-      "Muddler"
-    ],
-    "steps": [
-      "Confirm identification: RED upright cones with fuzzy stems = edible Rhus. Avoid white, drooping berries in wet ground - that is poison sumac.",
-      "Break the cones apart into a jar and cover with cold water. Gently crush to release the acid.",
-      "Steep 2-4 hours (or overnight for a stronger drink) in the fridge or on the counter, tasting until it is pleasantly tart.",
-      "Strain through a fine cloth or coffee filter - twice if needed - to remove all the fine hairs and seeds.",
-      "Sweeten to taste and serve over ice."
-    ],
-    "modifiers": "Add mint or a strip of ginger to the steep. Reduce a sweetened batch to a tart syrup for sodas, or freeze into a sorbet base. Dry and grind the strained cones into sumac spice - a key ingredient in za'atar blends (sift out the hard seeds after grinding).",
-    "preservation": "Fresh only - refrigerate and drink within 2-3 days. For longer keeping, cook into a sweetened syrup and refrigerate up to two weeks.",
-    "beyondInk": "Dry and grind the strained cones for sumac spice - the same berries season fish, salads, and hummus (sift out the hard seeds first). Sumac is an abundant native, so a light harvest leaves plenty for wildlife.",
-    "safety": [
-      "Identify with certainty - poison sumac (Toxicodendron vernix) has white drooping berries and grows in wetlands; edible Rhus has red upright cones in dry ground.",
-      "Always strain through fine cloth to remove irritating fine hairs and seeds.",
-      "Avoid plants along busy roads or mowed/sprayed rights-of-way - the tart coating you steep cannot be washed before use, so pick from clean field edges.",
-      "Sumac is related to mango and cashew - those with anacardiaceae allergies should be cautious.",
-      "Occurrence on the map is not harvest permission - confirm legal access before collecting."
-    ],
-    "sources": [
-      {
-        "title": "Staghorn Sumac Lemonade (cold-steep method) - Forager Chef",
-        "url": "https://foragerchef.com/staghorn-sumac-lemonade/"
-      },
-      {
-        "title": "Staghorn Sumac: Identification, Uses, and Benefits - Practical Self Reliance",
-        "url": "https://practicalselfreliance.com/staghorn-sumac/"
-      },
-      {
-        "title": "Wild Edibles: Yes, There Is a Sumac Berry You Can Eat - Farmers' Almanac",
-        "url": "https://www.farmersalmanac.com/wild-edibles-sumac-berries"
-      }
-    ]
-  },
-  {
     "id": "food-morel-cream",
     "map": "food",
     "kind": "fresh",
@@ -6900,6 +6823,7 @@
     "beyondInk": "Extra pulp freezes for pawpaw bread or the persimmon-style pudding. Seeds and skin are discarded (skin can irritate; seeds are not eaten).",
     "safety": [
       "Skin and seeds are never eaten - only the ripe pulp. Some people react to the ripe pulp itself with GI upset - try a small amount first if new to pawpaw.",
+      "Pawpaw pulp contains annonacin (a neurotoxic acetogenin), concentrated further in the seeds and skin, and the acetogenin family has been linked to neurodegeneration with heavy, chronic consumption. Eat pawpaw in moderation — not as a daily staple — and use only the ripe pulp, never the seeds or skin.",
       "Use fruit that smells sweet, not boozy or sour - discard pulp that has begun to ferment or turned deep brown/off.",
       "Use fully ripe fruit; hard unripe pawpaw is unpleasant and less digestible.",
       "Standard cooked-custard care: cook gently to 170-180 F, cool promptly, keep cold.",
@@ -7060,6 +6984,7 @@
     "safety": [
       "Safety first - identification: never confuse edible red-coned true Rhus sumac with poison sumac (Toxicodendron vernix), which has drooping white berries and causes severe rashes. When unsure, do not harvest.",
       "Always filter through fine cloth or a coffee filter to remove the tiny irritating hairs on the drupes.",
+      "Avoid plants along busy roads or mowed/sprayed rights-of-way — the tart surface coating you steep can't be washed off before use, so pick from clean field edges.",
       "Steep cold, not hot - hot water extracts bitter compounds (tannins/alkaloids) from the seeds and stems. Sumac is high in tannins, which are astringent and can upset some stomachs; drink in moderation.",
       "Sumac is in the cashew/mango/pistachio family (Anacardiaceae); if you have a known allergy to those, skip it or taste a tiny amount first, as rare cross-reactions are documented.",
       "Occurrence is not permission: a mapped sumac stand isn't harvest consent; sumac spreads readily, so light picking leaves plenty for wildlife."
@@ -9341,87 +9266,6 @@
     ]
   },
   {
-    "id": "food-apple-scrap-vinegar",
-    "map": "food",
-    "kind": "waste",
-    "plantId": "apple",
-    "name": "Apple-Scrap Vinegar",
-    "category": "ferments",
-    "swatch": "#C8862E",
-    "color": "Cloudy amber vinegar",
-    "difficulty": "Beginner",
-    "teaser": "Zero-waste vinegar from cores and peels",
-    "toxic": false,
-    "hook": "The parts you'd toss carry the whole recipe: wild yeasts riding on the peel eat the fruit sugars into alcohol, then Acetobacter breathe that alcohol into acetic acid. A quart jar of cores and peels that were headed for the compost becomes a season's worth of tart, mother-thick vinegar. It's the oldest zero-waste trick in the pantry, and it costs nothing but patience and a scrap of cloth.",
-    "timeline": {
-      "active": "20 minutes over several days",
-      "passive": "3-5 weeks fermenting"
-    },
-    "yield": "About 2-3 cups of vinegar per quart jar of scraps. Expect a real vinegar for dressings, marinades, cleaning, and hair rinses - but a milder, less predictable acidity than store-bought.",
-    "ingredients": [
-      {
-        "item": "Apple (or pear) peels and cores",
-        "amount": "enough to loosely fill a quart jar (~2-3 apples' worth)",
-        "required": true,
-        "note": "Clean, ripe, or slightly bruised - never rotten or moldy. Skip commercial waxed/sprayed peels if you can."
-      },
-      {
-        "item": "Sugar",
-        "amount": "1 Tbsp per cup of water",
-        "required": true,
-        "note": "Feeds the initial fermentation; most is consumed."
-      },
-      {
-        "item": "Non-chlorinated water",
-        "amount": "enough to submerge scraps",
-        "required": true,
-        "note": "Chlorine can stall wild fermentation; let tap water sit out or use filtered."
-      }
-    ],
-    "toolsRequired": [
-      "Wide-mouth quart jar",
-      "Breathable cover (cloth + rubber band)",
-      "Fermentation weight or small clean jar to hold scraps under"
-    ],
-    "toolsOptional": [
-      "pH strips (to sanity-check sourness, not for canning safety)",
-      "Second jar for the aging phase",
-      "Funnel and bottles"
-    ],
-    "steps": [
-      "Fill a clean quart jar loosely with apple peels and cores. Dissolve 1 Tbsp sugar per cup of water and pour over the scraps until submerged.",
-      "Weight the scraps down so nothing floats above the waterline - exposed fruit is where mold starts. Cover with cloth so it breathes but keeps out fruit flies.",
-      "Keep at room temperature out of direct sun. Stir daily for the first week; it will fizz and smell yeasty-alcoholic as wild yeast works (this is the cider stage).",
-      "After 1-2 weeks, strain out the scraps (compost them). Return the cloudy liquid to a clean jar, re-cover with cloth, and let it sit undisturbed.",
-      "Over the next 2-4 weeks the alcohol oxidizes to acetic acid and a gelatinous 'mother' may form on top. Taste weekly with a clean spoon - it's done when it's sharply, cleanly sour.",
-      "If you ever see fuzzy mold (not the flat, gelatinous mother) or it smells rotten rather than sour, discard the whole batch. When it tastes right, bottle, cap, and label."
-    ],
-    "modifiers": "A splash of raw unpasteurized vinegar or a piece of a live mother at the start speeds and steadies the acetic stage. Warmer rooms (70-80 F) ferment faster; cool rooms drag it out and raise mold risk. Pear, quince, or crabapple scraps all work - crabapple gives a tarter, more astringent vinegar.",
-    "preservation": "Once fully soured, apple-scrap vinegar keeps a year-plus capped in a cool, dark cupboard; a harmless mother may re-form and can be reused. IMPORTANT: because its acidity is unmeasured and variable, never use homemade vinegar for pickling, canning, or any recipe where a guaranteed 5% acidity keeps food safe - use commercial 5% vinegar for that.",
-    "beyondInk": "The spent scraps go to the compost or worm bin. The mother can be saved to inoculate the next batch, and diluted finished vinegar makes a fine window and counter cleaner or an acidic hair rinse.",
-    "safety": [
-      "Occurrence is not permission: mapping apple or pear trees is not consent to harvest - many are on private, park, or historic-orchard land with their own rules.",
-      "Keep all scraps submerged and toss any batch with fuzzy mold or a rotten (vs. sour) smell - surface mold means the batch is unsafe.",
-      "Do NOT use homemade vinegar for canning or pickling; its pH is unknown and unreliable, and under-acidified home-canned goods risk botulism. Use commercial 5% vinegar for preserving.",
-      "Apple/pear seeds in cores contain small amounts of cyanogenic compounds but pose no meaningful risk in strained vinegar; don't deliberately crush seeds into the ferment.",
-      "Use clean jars, utensils, and a cloth cover; a breathable cover prevents pressure buildup and keeps flies out."
-    ],
-    "sources": [
-      {
-        "title": "Practical Self Reliance - How to Make Apple Scrap Vinegar",
-        "url": "https://practicalselfreliance.com/how-to-make-apple-scrap-vinegar/"
-      },
-      {
-        "title": "Safety Concern with Vinegar Acidity Level in Home Canning - SDSU Extension",
-        "url": "https://extension.sdstate.edu/safety-concern-vinegar-acidity-level-home-canning"
-      },
-      {
-        "title": "Grow a Good Life - Homemade Apple Scrap Vinegar",
-        "url": "https://growagoodlife.com/apple-scrap-vinegar/"
-      }
-    ]
-  },
-  {
     "id": "food-hickory-shell-syrup",
     "map": "food",
     "kind": "waste",
@@ -9828,6 +9672,10 @@
       {
         "title": "General Information on Pickling (5% acidity requirement) - NCHFP",
         "url": "https://nchfp.uga.edu/how/pickle/general-information-pickling/general-information-on-pickling/"
+      },
+      {
+        "title": "Safety Concern with Vinegar Acidity Levels in Home Canning — SDSU Extension",
+        "url": "https://extension.sdstate.edu/safety-concern-vinegar-acidity-level-home-canning"
       }
     ]
   },
@@ -9913,90 +9761,6 @@
         "url": "https://foodrevolution.org/recipes/dehydrated-juice-pulp-crackers/"
       }
     ]
-  },
-  {
-    "id": "mineral-terra-sigillata-local-clay",
-    "plantId": "mineral-clay",
-    "kind": "clay",
-    "name": "Terra Sigillata from Local Clay",
-    "category": "wild-clay",
-    "swatch": "#C4653D",
-    "color": "Satin-to-glossy burnished surface",
-    "difficulty": "Intermediate",
-    "teaser": "Pour the shine off a jar of settled clay",
-    "toxic": false,
-    "hook": "Roman red-gloss Samian ware got its mirror sheen without a glaze — just the very finest clay particles, floated off the top of a settled slurry and burnished to a shine. That siphoned fraction is terra sigillata, 'sealed earth.' A deflocculant makes the coarse particles sink and the finest ones hang in the upper water, so you can literally pour the shine off the top of a jar.",
-    "timeline": {
-      "active": "1 hour to mix, 30 min to siphon",
-      "passive": "8-24+ hours settling"
-    },
-    "yield": "2 lb of dry clay yields roughly a pint to a quart of usable terra sig depending on how fine the clay is and how tightly you siphon — the finest, glossiest fraction is only a portion of the batch.",
-    "ingredients": [
-      {
-        "item": "Dry local/wild clay (finely ground)",
-        "amount": "2 lb (≈900 g)",
-        "required": true,
-        "note": "Redart-type iron clays give warm reds; light ball/kaolin clays give buff/white."
-      },
-      {
-        "item": "Water (cool)",
-        "amount": "1 quart (≈950 mL) per 2 lb clay",
-        "required": true,
-        "note": "Standard ratio is 1 quart water : 2 lb dry clay."
-      },
-      {
-        "item": "Deflocculant (sodium silicate and/or soda ash)",
-        "amount": "≈0.5% of dry clay weight (e.g., 0.25% soda ash + 0.25% sodium silicate)",
-        "required": true,
-        "note": "Too much flocculates it back — measure precisely."
-      }
-    ],
-    "toolsRequired": [
-      "Tall clear jar or graduated container",
-      "Scale accurate to grams",
-      "Siphon tube or turkey baster",
-      "Soft brush for application",
-      "Smooth stone / plastic sheet / soft cloth for burnishing",
-      "NIOSH-rated N95/P100 respirator when grinding or handling dry clay (wet processing preferred)"
-    ],
-    "toolsOptional": [
-      "Hydrometer to target specific gravity ~1.15",
-      "Ball mill for smoother sig",
-      "pH strips"
-    ],
-    "steps": [
-      "Dissolve the deflocculant (≈0.5% of the dry clay weight) into the measured water — a little in hot water first helps it disperse.",
-      "Stir the ground dry clay into the deflocculated water at ~1 quart per 2 lb of clay. Shake or stir vigorously, or ball-mill briefly.",
-      "Let the jar stand undisturbed and covered for about 20-24 hours; longer settling gives finer separation. The deflocculant drives the coarse particles to the bottom while the finest clay stays suspended in the upper layer.",
-      "Siphon or baster off only the fine, cloudy upper layer — do not disturb the sediment. That upper fraction is your terra sigillata.",
-      "Optionally concentrate it by letting it settle again and pouring off excess clear water; aim for a thin cream (specific gravity around 1.1-1.2).",
-      "Brush 2-4 thin coats onto leather-hard-to-bone-dry ware, letting each lose its wet sheen, then burnish with a soft cloth or smooth stone for gloss.",
-      "Bisque fire low (around cone 06-04); higher firing dulls the sheen as the surface begins to sinter."
-    ],
-    "modifiers": "Iron-rich local clay = classic Roman red; ball clay/kaolin = buff to near-white; blend clays or add a little mason stain to the sig for color. Fire lower for more sheen, higher for durability at the cost of gloss. A smoke/pit firing over terra sig gives rich carbon blushes.",
-    "preservation": "Store the finished sig sealed; it keeps for months (skim any mold, re-shake before use). On ware, a burnished-and-low-fired terra sig is a permanent decorative surface but stays slightly porous. A wax polish adds sheen on decorative pieces only — it does not make the surface food-safe. Keep terra-sig-only ware non-utilitarian.",
-    "beyondInk": "The coarse sediment left at the jar bottom is not waste — dry it and it is a serviceable plastic clay or slip. Colored terra sigs also make excellent brushable engobes and, thinned, a decorating slip for majolica-style low-fire work.",
-    "safety": [
-      "Sodium silicate and soda ash are alkaline — wear gloves and eye protection and avoid getting mixing water in eyes.",
-      "Ground dry clay is respirable silica — grind and handle the dry clay with a NIOSH-rated N95/P100 respirator, and prefer wet processing; make the slurry as soon as possible.",
-      "Burnished terra sig is not a glassy, food-safe glaze; do not treat low-fired sig surfaces as safe for holding food or drink.",
-      "Occurrence is not permission — collect the source clay only with the landowner's consent."
-    ],
-    "sources": [
-      {
-        "title": "Ceramic Arts Network — Terra Sigillata 101: How to Make, Apply & Troubleshoot",
-        "url": "https://ceramicartsnetwork.org/daily/article/Terra-Sigillata-101-How-to-Make-Apply-and-Troubleshoot-Terra-Sig"
-      },
-      {
-        "title": "Digitalfire — Super-Refined Terra Sigillata",
-        "url": "https://digitalfire.com/article/super-refined+terra+sigillata"
-      },
-      {
-        "title": "The Pottery Wheel — How to Make Terra Sigillata",
-        "url": "https://thepotterywheel.com/how-to-make-terra-sigillata/"
-      }
-    ],
-    "map": "minerals"
   },
   {
     "id": "mineral-iron-clay-earthenware-stoneware",
@@ -10151,96 +9915,6 @@
       {
         "title": "Glazy — Major Oxides in Glazes",
         "url": "https://help.glazy.org/concepts/oxides"
-      }
-    ],
-    "map": "minerals"
-  },
-  {
-    "id": "mineral-pit-fire-primitive-body",
-    "plantId": "mineral-clay",
-    "kind": "clay",
-    "name": "Pit-Fire Primitive Body",
-    "category": "wild-clay",
-    "swatch": "#5A4636",
-    "color": "Smoke-blushed black, grey & flame-orange",
-    "difficulty": "Intermediate",
-    "teaser": "Heavily tempered clay where the fire becomes the glaze",
-    "toxic": true,
-    "hook": "The oldest fired pots on Earth came out of open fires and pits, and the bodies that survive that fast, uneven heat are heavily tempered and open. Load a wild clay with 20-30% sand or grog and it drains steam and shrugs off thermal shock; then the fire itself becomes the glaze, painting carbon-black, dove-grey, and flashed-orange blushes where flame, ash, and smoke touch the burnished surface.",
-    "timeline": {
-      "active": "4-6 hours (building + tending the burn)",
-      "passive": "Weeks to fully dry ware; a firing cools overnight"
-    },
-    "yield": "A small pit fires several pieces at once; expect some losses to thermal cracking, especially early on. The reward is one-of-a-kind surfaces no glaze can copy.",
-    "ingredients": [
-      {
-        "item": "Tempered wild-clay body (open, grogged)",
-        "amount": "20-30% aggregate",
-        "required": true,
-        "note": "High temper = steam escape + thermal-shock survival."
-      },
-      {
-        "item": "Clean sand and/or grog (mapped silica/quartz)",
-        "amount": "Included in the 20-30%",
-        "required": true,
-        "note": "Process silica wet/masked."
-      },
-      {
-        "item": "Combustibles for the pit (sawdust, wood, dung, seaweed, banana peels)",
-        "amount": "Fills the pit",
-        "required": true,
-        "note": "These make the color/blush effects, not a glaze."
-      },
-      {
-        "item": "Colorants (copper carbonate, salt)",
-        "amount": "Sprinkled around pots, to taste",
-        "required": false,
-        "note": "Copper carbonate is a toxic powder — handle with gloves and a mask; salt and copper give flashing/halo effects, not fuel."
-      }
-    ],
-    "toolsRequired": [
-      "Fire pit or metal container (legal burn site)",
-      "Sawdust/wood/combustibles",
-      "Burnishing stone",
-      "Metal tongs + heat gloves",
-      "Fire extinguisher/water on hand",
-      "P100 mask for clay processing"
-    ],
-    "toolsOptional": [
-      "Terra sigillata for a pre-burnished surface",
-      "Copper/iron/salt for flashing color",
-      "Metal saggar/foil for controlled effects"
-    ],
-    "steps": [
-      "Build with a well-tempered open body (20-30% sand/grog) so ware can take rapid, uneven heating without cracking.",
-      "Dry pieces very thoroughly — weeks if thick — and optionally coat with terra sigillata and burnish for smoother, shinier blush surfaces.",
-      "Pre-warm ware near the fire or in a low kiln to drive off all moisture; trapped water causes explosive spalling in a fast fire.",
-      "Nest the pots in sawdust in the pit, layer combustibles and colorants (copper for reds/greens, salt, seaweed, dung) around them, then build the fire on top.",
-      "Burn hot and let it fall to embers; the smoky, oxygen-starved smolder drives carbon into the porous body for blacks and greys, while flame contact flashes oranges.",
-      "Let the pit cool completely before unloading; wax or burnish the cooled ware to bring up the smoke colors."
-    ],
-    "modifiers": "More temper = safer firing, coarser look. Copper carbonate gives reds/pinks; iron gives warm browns; table salt and seaweed give fumed halos; a foil saggar concentrates effects. Reduction-heavy smother = blacker; more air = more orange flashing. Terra-sig + burnish before firing yields the classic glossy blackware.",
-    "preservation": "Pit-fired ware is porous and decorative — seal with wax or a post-fire sealant for appearance only — no treatment makes pit-fired ware food-safe or reliably waterproof. Keep out of the dishwasher; the carbon surface is somewhat fragile. Store dry.",
-    "beyondInk": "The technique doubles as the traditional method behind Pueblo blackware and burnished redware. Leftover grog/temper feeds other bodies; the ash and charcoal from the pit can be washed and tested as a wood-ash glaze flux for future high-fire work.",
-    "safety": [
-      "Open/pit firing needs a legal, controlled burn site, clear of overhangs and dry brush, with water/extinguisher on hand and attention to burn bans and air rules. Avoid lining the pit with river rocks or pouring concrete pits — moisture-bearing stone can spall explosively when heated.",
-      "Under-dried ware explodes in a fast fire — dry and pre-warm thoroughly; wear a face shield and stand clear when firing.",
-      "Pit smoke is an inhalation hazard, especially with colorants — stand and work upwind, keep bystanders clear of the plume, and handle copper carbonate with gloves and a mask (toxic if inhaled or ingested).",
-      "Clay processing (sand, grog, dry clay) is a silica hazard — process wet or masked.",
-      "Pit-fired ware is porous and low-fired — not food-safe for holding food or liquids; occurrence is not permission for the clay you dig."
-    ],
-    "sources": [
-      {
-        "title": "Ancient Pottery — Tempering Pottery Clay (open-fire bodies & thermal shock)",
-        "url": "https://ancientpottery.how/tempering-pottery-clay/"
-      },
-      {
-        "title": "Digitalfire — Grog (thermal-shock temper)",
-        "url": "https://digitalfire.com/glossary/grog"
-      },
-      {
-        "title": "Linda Arbuckle — Earthenware Clays (handout)",
-        "url": "https://www.lindaarbuckle.com/handouts/clay-earthenware.pdf"
       }
     ],
     "map": "minerals"
@@ -11234,7 +10908,7 @@
       "Before the last coat fully dries, burnish with a soft cloth, plastic bag, or smooth stone for the sheen.",
       "Bisque-fire low — burnished sig keeps its stone-polished sheen best at ~cone 012-010; unburnished/polished sig survives up to ~cone 02-04, but the higher you fire the duller the shine."
     ],
-    "modifiers": "Firing temperature controls sheen: the lower the fire, the waxier and shinier. Color the sig with 2-10% oxides/stains (more than a glaze needs). Layer different-colored sigs for terra-sigillata painting. Post-fire waxing or a pit/smoke firing deepens the surface. Wild red clay makes a beautifully local terracotta sig.",
+    "modifiers": "Firing temperature controls sheen: the lower the fire, the waxier and shinier. Color the sig with 2-10% oxides/stains (more than a glaze needs). Layer different-colored sigs for terra-sigillata painting. Post-fire waxing or a pit/smoke firing deepens the surface. Wild red clay makes a beautifully local terracotta sig. Deflocculant guide: about 0.5% of the dry clay weight, split as 0.25% soda ash + 0.25% sodium silicate. Yield: roughly 2 lb (900 g) of dry clay makes about a pint to a quart of usable sig; siphon only the middle fraction to a specific gravity near 1.15 (checked with a hydrometer).",
     "preservation": "Store sig in a sealed jar; it keeps for months but re-check consistency (it keeps settling). Fired sheen is permanent but porous — protect food surfaces with a proper liner glaze or keep sig to decorative/exterior areas.",
     "beyondInk": "The discarded coarse settlings return to the reclaim bucket for clay body. Terra sig also makes a fine resist/underglaze medium and a smoke-fire surface for raku and pit firing.",
     "safety": [
