@@ -15,12 +15,24 @@ A map-based site sharing local material availability, ethical harvesting practic
 
 Static site, no build step, no framework, no package manager. Vanilla JS + Mapbox GL JS.
 
-- `index.html` — single page (~150 lines)
-- `app.js` — entire application (~3,900 lines). Constants and species catalogs at top; `MAP_MODE_CONFIG` (line ~762) defines the three modes: **food**, **ink**, **medicine**, each with its own species catalog, categories, and colors; `state` object (~834); DOM refs (~900+); then ~170 functions.
-- `styles.css` — all styling
+- `index.html` — single page (~120 lines)
+- `app.js` — entire application (~17,000 lines). Constants, safety tags, and rule
+  tables at top; species catalogs from ~line 2500; `MAP_MODE_CONFIG` (line ~3890)
+  defines the four modes: **food**, **ink**, **medicine**, **minerals**, each with
+  its own catalog, categories, and colors; `state` object (~3996); the map +
+  register engine follows; DOM refs (~5280+); then ~300 functions. NOTE: ~75% of
+  the file is embedded content data (PROJECT_RECIPES alone is ~55%) — extraction
+  to fetched JSON is planned (see `docs/critique-remediation-plan.md` Phase 4).
+- `styles.css` — all styling (~3,400 lines; `--reg-*` register tokens ~line 1310)
 - `config.js` — Mapbox public token (`window.FORAGE_CONFIG`); committed intentionally, URL-scoped in the Mapbox account
-- `data/` — US boundary GeoJSON (Census-derived), NPS historic orchards, and `falling-fruit/us/` (~94 MB of viewport chunks + manifest; loaded lazily at zoom ≥ 8)
-- `scripts/` — Python generators: `build_falling_fruit_subset.py` (regenerates chunks from Falling Fruit CSV archives), `build_nps_orchards.py`
+- `data/` — US boundary GeoJSON (Census-derived), NPS historic orchards, USGS MRDS
+  minerals (`minerals-us.json`), USFS forest rules, local jurisdictions, phenology
+  curves, tide stations, and `falling-fruit/us/` (~125 MB of viewport chunks +
+  manifest; loaded lazily at zoom ≥ 8)
+- `scripts/` — Python + Node generators and the gate suite (`check.sh`;
+  `build_falling_fruit_subset.py` takes `--types/--locations` archive paths)
+- Adding a 5th mode touches more than `MAP_MODE_CONFIG` — follow
+  `docs/adding-a-mode.md`.
 
 ## Data sources
 

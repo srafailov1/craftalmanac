@@ -12725,12 +12725,12 @@ function initControls() {
     if (state.activeMap === "minerals") {
       state.mineralWorkability = Number(daySlider.value);
       state.allSeasons = false; // engage the workability band filter
-      render();
+      scheduleRender(); // rAF-coalesced: drags fire several inputs per frame
       return;
     }
     state.selectedDay = Number(daySlider.value);
     state.allSeasons = false;
-    render();
+    scheduleRender();
   });
 
   dateInput.addEventListener("change", () => {
@@ -12902,9 +12902,23 @@ function render() {
     scheduleINaturalistAggregateLoad();
     scheduleDataLoad();
     schedulePublicLandLoad();
-    requestAnimationFrame(() => map.resize());
+    // NOTE: render() used to force map.resize() every call — a forced layout
+    // with no relationship to state changes. The window-resize listener and the
+    // season-bar ResizeObserver own resize now.
   }
   updateUrlHash();
+}
+
+// One render per frame, max: input events (slider drags especially) can fire
+// several times per frame, and render() rebuilds markers + histogram + legend.
+let renderQueuedFrame = false;
+function scheduleRender() {
+  if (renderQueuedFrame) return;
+  renderQueuedFrame = true;
+  requestAnimationFrame(() => {
+    renderQueuedFrame = false;
+    render();
+  });
 }
 
 function renderAccessFilterNote() {
@@ -14742,11 +14756,20 @@ function setINaturalistAggregateReady(ready) {
   state.aggregateGateStart = ready ? null : performance.now();
 }
 
+// Backoff for one retryable fetch step: honor Retry-After on 429/5xx (capped),
+// else a jittered default. Retrying a throttling API after a fixed 800ms only
+// doubles the pressure exactly when the API is asking for room.
+function retryDelayMs(error, fallbackMs = 800) {
+  const retryAfter = Number(error?.retryAfterSeconds);
+  if (Number.isFinite(retryAfter) && retryAfter > 0) return Math.min(retryAfter * 1000, 15000);
+  return fallbackMs + Math.floor(Math.random() * 400);
+}
+
 async function fetchINaturalistAggregateTileWithRetry(taxonIds, tile) {
   try {
     return await fetchINaturalistAggregateTile(taxonIds, tile);
-  } catch {
-    await new Promise((resolve) => window.setTimeout(resolve, 800));
+  } catch (error) {
+    await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs(error)));
     return fetchINaturalistAggregateTile(taxonIds, tile);
   }
 }
@@ -14851,7 +14874,10 @@ async function loadINaturalist() {
 
   const bounds = map.getBounds();
   const tiles = getINaturalistRequestBounds(bounds, map.getZoom());
-  const results = await Promise.all(tiles.map((tile) => fetchINaturalistBounds(taxonIds, tile)));
+  // Same politeness as the aggregate path: capped concurrency instead of firing
+  // every viewport tile at once (a classroom of panning students is the
+  // realistic burst case against iNaturalist's published rate guidance).
+  const results = await mapWithConcurrency(tiles, 4, (tile) => fetchINaturalistBounds(taxonIds, tile));
   return dedupeRecords(results.flatMap((data) => data.results || []))
     .map(mapINaturalistObservation)
     .filter(Boolean);
@@ -14874,7 +14900,11 @@ async function fetchINaturalistBounds(taxonIds, bounds) {
   });
 
   const response = await fetchWithTimeout(`https://api.inaturalist.org/v1/observations?${params.toString()}`);
-  if (!response.ok) throw new Error(`iNaturalist returned ${response.status}`);
+  if (!response.ok) {
+    const error = new Error(`iNaturalist returned ${response.status}`);
+    error.retryAfterSeconds = Number(response.headers.get("retry-after"));
+    throw error;
+  }
   return response.json();
 }
 
@@ -14951,7 +14981,11 @@ async function fetchINaturalistAggregateTile(taxonIds, tile) {
   });
 
   const response = await fetchWithTimeout(`https://api.inaturalist.org/v1/grid/${tile.z}/${tile.x}/${tile.y}.grid.json?${params.toString()}`);
-  if (!response.ok) throw new Error(`iNaturalist grid returned ${response.status}`);
+  if (!response.ok) {
+    const error = new Error(`iNaturalist grid returned ${response.status}`);
+    error.retryAfterSeconds = Number(response.headers.get("retry-after"));
+    throw error;
+  }
   const data = await response.json();
   return getINaturalistGridItems(tile, data);
 }

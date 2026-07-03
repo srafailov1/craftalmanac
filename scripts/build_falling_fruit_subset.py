@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import bz2
 import csv
 import json
@@ -7,8 +8,18 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TYPES_PATH = Path("/Users/sasson/Downloads/types.csv.bz2")
-LOCATIONS_PATH = Path("/Users/sasson/Downloads/locations.csv.bz2")
+
+# The Falling Fruit CSV archives are the ONLY input this dataset can be rebuilt
+# from — archive them somewhere durable (not ~/Downloads) and record the
+# snapshot date in ATTRIBUTION.md whenever they are refreshed.
+_parser = argparse.ArgumentParser(description="Rebuild Falling Fruit viewport chunks")
+_parser.add_argument("--types", default="/Users/sasson/Downloads/types.csv.bz2",
+                     help="Path to the Falling Fruit types.csv.bz2 archive")
+_parser.add_argument("--locations", default="/Users/sasson/Downloads/locations.csv.bz2",
+                     help="Path to the Falling Fruit locations.csv.bz2 archive")
+_cli = _parser.parse_args()
+TYPES_PATH = Path(_cli.types)
+LOCATIONS_PATH = Path(_cli.locations)
 OUTPUT_DIR = ROOT / "data" / "falling-fruit" / "us"
 CHUNKS_DIR = OUTPUT_DIR / "chunks"
 MANIFEST_PATH = OUTPUT_DIR / "manifest.json"

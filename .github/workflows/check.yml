@@ -1,0 +1,25 @@
+# Runs the repo's existing gate suite on every push and PR. The gates have
+# caught real shipped regressions (duplicate top-level declarations, phenology
+# drift, rule-table breakage) but previously ran only by local convention while
+# Cloudflare auto-deployed every push. This makes them a visible check.
+#
+# OWNER: enabling branch protection (require this check before merge) is a
+# repo-settings step only you can do: Settings -> Branches -> main -> require
+# status checks -> "check".
+name: check
+
+on:
+  push:
+    branches: [main, minerals-map]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run gate suite
+        run: bash scripts/check.sh

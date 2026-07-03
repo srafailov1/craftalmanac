@@ -1,0 +1,28 @@
+# Cloudflare Workers static assets: exclude internal files from the deployed
+# origin. The app fetches ONLY: index.html, attribution.html, app.js, config.js,
+# styles.css, fonts/, and data/ EXCEPT the two build caches below.
+# ATTRIBUTION.md must stay deployed — attribution.html fetches it at runtime.
+
+# Build-pipeline caches (referenced only by scripts/*.mjs, never by app.js):
+data/falling-fruit/us/cell-containment/
+data/falling-fruit/us/access-cache/
+
+# Internal docs, agent queues, and research (not site content):
+docs/
+scripts/
+prototype/
+outputs/
+KNOWN_ISSUES.md
+AGENTS.md
+CLAUDE.md
+README.md
+
+# Repo/tooling files:
+.git/
+.gitignore
+.claude/
+.github/
+.assetsignore
+wrangler.jsonc
+.DS_Store
+**/.DS_Store
