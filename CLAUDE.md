@@ -40,37 +40,27 @@ Live: iNaturalist API (observations), USGS PAD-US ArcGIS service (public-access 
 
 ## Known issues
 
-`KNOWN_ISSUES.md` is the debug queue owned by the 5am tune-up loop; the 3am
-health check also logs failures here. Check it at the start of debugging
-sessions; update or clear entries as they're resolved.
+`KNOWN_ISSUES.md` is the debug queue. Check it at the start of debugging
+sessions; update or clear entries as they're resolved. `bash scripts/check.sh`
+runs the full gate suite (syntax, dup-lint, data validation, safety-tag
+completeness, rule tests, phenology↔catalog, overview coverage, contrast) and
+must pass before committing; a GitHub Action (`.github/workflows/check.yml`)
+also runs it on push/PR.
 
 ## Collaborators
 
-Three agent tiers — see `docs/work-split.md` for the full split and queues.
-Claude: architecture, design, rule semantics, reviews, and five staggered
-overnight scheduled loops that feed each other's outputs (times have
-load-balancing jitter):
+**As of 2026-07, Claude is the only agent on the project.** Codex and Qwen are
+retired; the multi-tier work-split in `docs/work-split.md` and the Codex/Qwen
+references in `AGENTS.md` are historical. When a task is too large for one
+context, Claude fans out its OWN sub-agents/sessions (in-session) rather than
+handing to external tiers, and writes scoped work orders in `docs/TODO-*.md`
+for those runs. The overnight scheduled Claude loops still apply where the
+owner keeps them running (3am health check → `KNOWN_ISSUES.md`; 4am permissions
+research → rule tables; 5am debug tune-up → `KNOWN_ISSUES.md`; 7am
+attribution/license audit → `ATTRIBUTION.md`).
 
-- **3am — data/source health check** (read-only): probes the iNaturalist and
-  USGS PAD-US APIs, Falling Fruit/GeoJSON integrity, and external source
-  links; logs failures to `KNOWN_ISSUES.md`.
-- **4am — permissions research**: verifies primary sources and encodes rules;
-  owns the rule tables and research docs; routes oversized work to a
-  "Hand-offs" section.
-- **5am — debug tune-up**: owns `KNOWN_ISSUES.md`; fixes bugs and perf, hands
-  off large refactors.
-- **6am — queue grooming** (doc-only): turns the night's hand-offs into scoped
-  work orders for Codex and Qwen, prunes/de-dupes the queues.
-- **7am — attribution/license audit**: confirms every data source has an
-  `ATTRIBUTION.md` entry with correct license terms; flags ambiguous licenses
-  for the owner.
-
-Codex: mid-level engineering from work orders (`docs/TODO-*.md`). Qwen (local,
-via opencode): junior tasks per `AGENTS.md` and the queue in
-`docs/work-split.md`. Stay out of each other's areas; Boundaries sections are
-the contract. The design relaunch is complete and merged into `main`; all work
-(including design changes) now happens on `main` — the `design/relaunch` branch
-is retired.
+The active roadmap is `docs/critique-remediation-plan.md` (phases 1–4 landed;
+phase 5 strategic work and its OWNER GATEs remain).
 
 ## Workflow
 
