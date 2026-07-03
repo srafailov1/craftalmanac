@@ -2218,6 +2218,9 @@ const MARKER_ICON_PIXEL_RATIO = 3;
 const WELCOME_MODAL_STORAGE_KEY = "craftAlmanacWelcomeSeen";
 const FAVORITE_SPECIES_STORAGE_KEY = "craftAlmanacFavoriteSpecies";
 const SAVED_LOCATIONS_STORAGE_KEY = "craftAlmanacSavedLocations";
+const REGISTER_OVERRIDE_STORAGE_KEY = "craftAlmanacRegisterOverride";
+// Valid pinned map-light choices; anything else means "auto" (follow the sun).
+const REGISTER_OVERRIDE_VALUES = new Set(["day", "night"]);
 const HARVEST_ETHIC_LABELS = {
   "fallen material preferred": "Fallen material preferred",
   "light harvest": "Light harvest",
@@ -4051,6 +4054,8 @@ const state = {
   // power/data gate so toggling tabs or battery state can't override intent.
   // Off by default (owner decision); the rail's "Animate wind" toggle opts in.
   fxUserEnabled: false,
+  // Pinned map-light choice ("day"/"night") or null = auto (follow the sun).
+  registerOverride: readRegisterOverride(),
   location: { lat: 39.8, lng: -98.6 }
 };
 
@@ -4163,7 +4168,9 @@ function dialDate() {
 }
 
 function applyRegister() {
-  const reg = computeRegister(simNow(), state.location.lat, state.location.lng);
+  // A pinned override wins over the computed solar register (persisted user
+  // choice, so an evening lesson isn't forced onto a near-black basemap).
+  const reg = state.registerOverride || computeRegister(simNow(), state.location.lat, state.location.lng);
   if (reg === state.register) return;
   state.register = reg;
   document.body.dataset.register = reg;
@@ -4716,8 +4723,14 @@ function renderConditionPanel() {
       <div class="fig">${svgSunDial()}</div>
       <div class="age" id="sun-readout" role="status" aria-live="polite" aria-atomic="true"></div>
       <button class="sun-now" type="button" id="sun-now">BACK TO NOW</button>
+      <div class="reg-lock" role="group" aria-label="Map light">
+        <span class="reg-lock-lab">MAP LIGHT</span>
+        <button type="button" class="reg-opt${!state.registerOverride ? " on" : ""}" data-reg="auto" aria-pressed="${String(!state.registerOverride)}">Auto</button>
+        <button type="button" class="reg-opt${state.registerOverride === "day" ? " on" : ""}" data-reg="day" aria-pressed="${String(state.registerOverride === "day")}">Day</button>
+        <button type="button" class="reg-opt${state.registerOverride === "night" ? " on" : ""}" data-reg="night" aria-pressed="${String(state.registerOverride === "night")}">Night</button>
+      </div>
       <div class="note" id="sun-times-note" style="margin-top:10px">First light ${formatClockTime(st.dawnCivil)} · Rise ${formatClockTime(st.rise)} · Golden ${formatClockTime(st.goldenEve)} · Set ${formatClockTime(st.set)} · Dark ${formatClockTime(st.duskCivil)}.</div>
-      <div class="note" style="margin-top:8px"><b>Drag the sun</b> to preview any hour — the map's light and the register follow. Many parks close gathering at dusk; the register keeps the same clock.</div>`;
+      <div class="note" style="margin-top:8px"><b>Drag the sun</b> to preview any hour, or pin the map light above. Many parks close gathering at dusk; the register keeps the same clock.</div>`;
   } else if (openConditionSeg === "moon") {
     html = `<h3>MOON</h3>
       <div class="fig">${svgMoon(mp)}</div>
@@ -4777,6 +4790,13 @@ function renderConditionPanel() {
         renderConditionPanel();
       });
     }
+    railPad.querySelectorAll(".reg-opt").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setRegisterOverride(btn.dataset.reg === "auto" ? null : btn.dataset.reg);
+        renderConditionsRail();
+        renderConditionPanel();
+      });
+    });
   }
 }
 
@@ -5367,6 +5387,30 @@ function readFavoriteSpecies() {
   } catch {
     return [];
   }
+}
+
+// Pinned map-light choice ("day"/"night"), or null for auto (follow the sun).
+// Lets an evening user read colored data on a light basemap instead of the
+// near-black night register the 60s solar tick would otherwise force.
+function readRegisterOverride() {
+  try {
+    const stored = window.localStorage?.getItem(REGISTER_OVERRIDE_STORAGE_KEY) || "";
+    return REGISTER_OVERRIDE_VALUES.has(stored) ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+function setRegisterOverride(value) {
+  const next = REGISTER_OVERRIDE_VALUES.has(value) ? value : null;
+  state.registerOverride = next;
+  try {
+    if (next) window.localStorage?.setItem(REGISTER_OVERRIDE_STORAGE_KEY, next);
+    else window.localStorage?.removeItem(REGISTER_OVERRIDE_STORAGE_KEY);
+  } catch { /* private mode — keep the in-memory choice */ }
+  // Clearing to auto also ends any sun-dial preview so the live sun resumes.
+  if (!next) state.simMins = null;
+  applyRegister();
 }
 
 function saveFavoriteSpecies() {
@@ -12435,6 +12479,10 @@ function initControls() {
       syncMapControlsOffset();
       return;
     }
+    // Minerals has no date entry — the workability slider (always visible on
+    // desktop) is the control, so the "Workability" button must never open the
+    // calendar form. It is hidden on desktop in minerals mode; guard anyway.
+    if (state.activeMap === "minerals") return;
     whenForm.hidden = !whenForm.hidden;
     whenToggle.classList.toggle("active", !whenForm.hidden);
     whenToggle.setAttribute("aria-expanded", String(!whenForm.hidden));

@@ -675,7 +675,10 @@ h2 {
 
 .map-legend:hover .legend-body,
 .map-legend:focus-within .legend-body {
-  max-height: 240px;
+  /* Tall enough for the 15-chip minerals category column (~290px + heading);
+     scroll rather than clip so no filter toggle is ever unreachable. */
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
   opacity: 1;
 }
 
@@ -1339,6 +1342,13 @@ body[data-register="dawn"] {
   --reg-warn: #a8730a;
 }
 
+/* Dark registers: let native controls (the date input, scrollbars) render dark
+   so they don't flash a light widget inside a dark panel. */
+body[data-register="dusk"],
+body[data-register="night"] {
+  color-scheme: dark;
+}
+
 body[data-register="dusk"] {
   --reg-ground: #453e4a;
   --reg-panel: #544c5a;
@@ -1422,6 +1432,11 @@ body[data-register="night"] {
      content internally, so the auto-pan can always show the whole card. */
   max-height: 80vh;
   overflow-y: auto;
+  /* The card carries exactly what a teaching/research user wants to copy —
+     scientific names, rules, safety notes, sources — so re-enable selection
+     (the .floating/.pt-card shells set user-select:none for drag ergonomics). */
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .pt-card h2 {
@@ -2137,9 +2152,9 @@ body[data-register="night"] {
 #season-bar .day-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 12px;
-  height: 12px;
-  margin-top: -5px;
+  width: 16px;
+  height: 16px;
+  margin-top: -7px;
   border-radius: 50%;
   background: var(--reg-accent);
   box-shadow: 0 0 0 3px var(--reg-panel-a);
@@ -2147,8 +2162,8 @@ body[data-register="night"] {
 }
 
 #season-bar .day-slider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--reg-accent);
   box-shadow: 0 0 0 3px var(--reg-panel-a);
@@ -2221,7 +2236,10 @@ body[data-register="night"] {
 }
 
 #season-bar .text-button {
-  min-height: 0;
+  /* WCAG 2.5.8: 24px minimum target (padding, not font, keeps the compact look). */
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
   background: none;
   border: 1px solid transparent;
   color: var(--reg-accent);
@@ -2249,6 +2267,14 @@ body[data-register="night"] {
   border-color: var(--reg-accent);
   background: none;
   color: var(--reg-ink);
+}
+
+/* Minerals mode: the workability slider is always visible on desktop, so the
+   redundant "Workability" button (which has no date form to open) is hidden.
+   Mobile keeps it — there it opens the slider panel. */
+#season-bar.mode-minerals #whenToggle { display: none; }
+@media (max-width: 720px) {
+  #season-bar.mode-minerals #whenToggle { display: inline-flex; }
 }
 
 .when-form {
@@ -2468,12 +2494,15 @@ body[data-register="night"] {
   display: flex;
   align-items: center;
   gap: 7px;
+  /* WCAG 2.5.8: 24px minimum target for these primary filter controls
+     (the only category filter UI on mobile). Padding keeps the compact look. */
+  min-height: 24px;
   border: none;
   background: none;
   cursor: pointer;
   color: var(--reg-ink);
   font-size: 10.5px;
-  padding: 1px 2px;
+  padding: 3px 6px;
   transition: opacity 0.2s;
   border-radius: 5px;
 }
@@ -2778,6 +2807,42 @@ body[data-register="night"] {
 
 #rail-panel.simulating .sun-now {
   display: inline-block;
+}
+
+/* Persisted map-light override: Auto / Day / Night segmented control. */
+#rail-panel .reg-lock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+#rail-panel .reg-lock-lab {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+  margin-right: 2px;
+}
+
+#rail-panel .reg-opt {
+  min-height: 24px;
+  padding: 3px 11px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 12px;
+  background: none;
+  color: var(--reg-sub);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+#rail-panel .reg-opt.on {
+  border-color: var(--reg-accent);
+  color: var(--reg-ink);
+  background: color-mix(in srgb, var(--reg-accent) 16%, transparent);
 }
 
 .bars {
