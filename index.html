@@ -15,14 +15,13 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=phase3-ux-4">
+    <link rel="stylesheet" href="./styles.css?v=phase4-fixes-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
       <section class="map-area" aria-label="Craft Almanac map">
         <div id="masthead" class="floating">
           <h1 class="wordmark serif">Craft Almanac</h1>
-          <div id="modeSwitch" role="group" aria-label="Active map"></div>
           <nav class="links" id="mastLinks" aria-label="Primary">
             <button type="button" data-sheet="maps">Maps</button>
             <button type="button" data-sheet="plants">Materials</button>
@@ -69,7 +68,6 @@
             <span class="season-readout"><strong id="seasonDateLabel">May 20</strong> <span id="seasonName">Spring</span></span>
             <span class="season-mbtns">
               <button class="text-button mobile-only" id="legendMob" type="button" aria-pressed="false">Legend</button>
-              <button class="text-button" id="inViewBtn" type="button" aria-expanded="false" aria-controls="inViewPanel">In view</button>
               <button class="text-button" id="allSeasonsButton" type="button" aria-pressed="false">All seasons</button>
               <button class="text-button" id="seasonReset" type="button">Back to now</button>
               <button class="text-button" id="whenToggle" type="button" aria-expanded="false" aria-controls="whenForm">Set date</button>
@@ -81,7 +79,6 @@
           </div>
         </div>
         <div id="conditions-rail" class="floating" aria-label="Current conditions"></div>
-        <div id="inViewPanel" class="floating" role="dialog" aria-label="Records in view" hidden></div>
         <div id="rail-panel" class="floating"><div class="spine"></div><div class="pad" id="rail-pad"></div></div>
         <div class="map-legend" id="mapLegend" aria-label="Map legend"></div>
       </section>
@@ -104,6 +101,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=phase3-ux-4"></script>
+    <script src="./app.js?v=phase4-fixes-1"></script>
   </body>
 </html>

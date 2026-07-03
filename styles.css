@@ -2087,17 +2087,6 @@ body[data-register="night"] {
   border-radius: 3px;
 }
 
-/* Per-material locality count above each minerals-histogram bar (the bar is
-   column-reverse, so this DOM-after-segment span renders above the fill). */
-#season-bar .hist-count {
-  font-size: 8.5px;
-  line-height: 1;
-  text-align: center;
-  padding-bottom: 2px;
-  color: var(--reg-sub);
-  font-family: var(--font-mono);
-}
-
 .season-months {
   display: flex;
   gap: 5px;
@@ -2247,10 +2236,10 @@ body[data-register="night"] {
 }
 
 #season-bar .text-button {
-  /* WCAG 2.5.8: 24px minimum target (padding, not font, keeps the compact look). */
+  /* WCAG 2.5.8: 24px minimum target (padding, not font, keeps the compact look).
+     No display override here — it would beat .mobile-only's display:none on
+     specificity and leak the mobile Legend button onto desktop (shipped bug). */
   min-height: 24px;
-  display: inline-flex;
-  align-items: center;
   background: none;
   border: 1px solid transparent;
   color: var(--reg-accent);
@@ -2282,10 +2271,12 @@ body[data-register="night"] {
 
 /* Minerals mode: the workability slider is always visible on desktop, so the
    redundant "Workability" button (which has no date form to open) is hidden.
-   Mobile keeps it — there it opens the slider panel. */
+   Mobile keeps it — there it opens the slider panel. "Back to now" is a
+   date-scrubber reset and is meaningless for the material axis: hidden. */
 #season-bar.mode-minerals #whenToggle { display: none; }
+#season-bar.mode-minerals #seasonReset { display: none; }
 @media (max-width: 720px) {
-  #season-bar.mode-minerals #whenToggle { display: inline-flex; }
+  #season-bar.mode-minerals #whenToggle { display: inline-block; }
 }
 
 .when-form {
@@ -2336,146 +2327,6 @@ body[data-register="night"] {
   gap: 11px;
   border-left: 1px solid var(--reg-hair);
   padding-left: 13px;
-}
-
-/* Masthead mode switcher: the primary pivot, always visible on desktop.
-   Mobile (<=720px) keeps the menu -> Maps sheet route for space. */
-#modeSwitch {
-  display: flex;
-  gap: 4px;
-  border-left: 1px solid var(--reg-hair);
-  padding-left: 13px;
-}
-
-#modeSwitch .mode-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 24px;
-  padding: 3px 10px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background: none;
-  color: var(--reg-sub);
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  font-family: var(--font-mono);
-  cursor: pointer;
-}
-
-#modeSwitch .mode-pill i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex: none;
-}
-
-#modeSwitch .mode-pill.on {
-  border-color: var(--reg-hair);
-  background: color-mix(in srgb, var(--reg-ink) 8%, transparent);
-  color: var(--reg-ink);
-}
-
-@media (hover: hover) {
-  #modeSwitch .mode-pill:hover {
-    color: var(--reg-ink);
-  }
-}
-
-/* "In view" record list: the keyboard route to the map's point cards. */
-#inViewPanel {
-  position: absolute;
-  bottom: 150px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 40;
-  width: min(420px, calc(100vw - 24px));
-  max-height: min(52vh, 480px);
-  display: flex;
-  flex-direction: column;
-  padding: 12px 14px;
-}
-
-#inViewPanel[hidden] { display: none; }
-
-#inViewPanel .iv-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-#inViewPanel .iv-head h2 {
-  margin: 0;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  color: var(--reg-sub);
-  font-family: var(--font-mono);
-  font-weight: 500;
-}
-
-#inViewPanel .iv-close {
-  min-width: 24px;
-  min-height: 24px;
-  border: none;
-  background: none;
-  color: var(--reg-sub);
-  font-size: 17px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-#inViewPanel .iv-body {
-  overflow-y: auto;
-}
-
-#inViewPanel .iv-group h3 {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin: 10px 0 3px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--reg-ink);
-}
-
-#inViewPanel .iv-group h3 i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  flex: none;
-}
-
-#inViewPanel .iv-group ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#inViewPanel .iv-group li button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  min-height: 26px;
-  padding: 4px 8px;
-  border: none;
-  background: none;
-  color: var(--reg-sub);
-  font-size: 12.5px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-#inViewPanel .iv-group li button:hover,
-#inViewPanel .iv-group li button:focus-visible {
-  background: rgba(127, 127, 127, 0.14);
-  color: var(--reg-ink);
-}
-
-#inViewPanel .iv-cap {
-  margin: 4px 0;
-  font-size: 11.5px;
-  color: var(--reg-sub);
 }
 
 /* First-run coach chip: one guided task, dismissible, first visit only. */
@@ -2765,6 +2616,18 @@ body[data-register="night"] {
   touch-action: pan-x;
   overscroll-behavior: contain;
 }
+
+/* Medium widths (tablet / half-screen windows, above the 720px mobile layout):
+   the left masthead and the right conditions rail otherwise collide in the
+   middle. Drop the rail below the masthead so each keeps its full width. */
+@media (min-width: 721px) and (max-width: 1180px) {
+  #conditions-rail {
+    top: 72px;
+    right: 14px;
+    max-width: calc(100% - 28px);
+  }
+}
+
 
 .rail-seg {
   display: flex;
@@ -3094,8 +2957,6 @@ body[data-register="night"] {
 
   #masthead .wordmark { font-size: 18px; }
   #masthead .links { gap: 10px; padding-left: 10px; }
-  /* Mobile keeps the menu -> Maps route; no room for four pills in the bar. */
-  #modeSwitch { display: none; }
   #coachChip { top: 128px; left: 10px; right: 10px; max-width: none; }
 
   /* Search + conditions are hidden until their masthead trigger opens them;

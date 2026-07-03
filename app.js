@@ -5618,20 +5618,10 @@ function renderModeChrome() {
   // #mode-disclaimer) — shown only in the medicine/herbalism map.
   const disclaimer = document.getElementById("mode-disclaimer");
   if (disclaimer) disclaimer.hidden = state.activeMap !== "medicine";
-  // Masthead mode switcher: the app's primary pivot, always visible on desktop
-  // (mobile keeps the menu -> Maps sheet route; the sheet also holds the longer
-  // mode descriptions and the herbalism disclaimer card).
-  const modeSwitch = document.getElementById("modeSwitch");
-  if (modeSwitch) {
-    modeSwitch.innerHTML = Object.keys(MODE_SHEET_INFO).map((mode) => {
-      const info = MODE_SHEET_INFO[mode];
-      const on = state.activeMap === mode;
-      return `<button type="button" class="mode-pill${on ? " on" : ""}" data-mode-pill="${escapeHTML(mode)}" aria-pressed="${String(on)}"><i style="background:${escapeHTML(info.color)}"></i>${escapeHTML(info.label)}</button>`;
-    }).join("");
-    modeSwitch.querySelectorAll("[data-mode-pill]").forEach((btn) => {
-      btn.addEventListener("click", () => setMapMode(btn.dataset.modePill));
-    });
-  }
+  // Mode switching lives in the Maps sheet (masthead pills were tried and
+  // removed 2026-07: four pills + nav + conditions rail overflowed the top bar
+  // at common widths). URL `#map=` state and the legend's ACTIVE MAP line
+  // remain the persistent mode indicators.
   // Minerals mode swaps the bottom rail from the season scrubber to the
   // workability slider. The nav label stays the mode-neutral "Materials"
   // (honest across plants, fungi, and stone), so no per-mode text swap.
@@ -12607,102 +12597,15 @@ function setLocationSearchStatus(message) {
   locationSearchStatus.hidden = !message;
 }
 
-// ---------------------------------------------------------------------------
-// "In view" record list — the keyboard/screen-reader route to map records.
-// Every other path to a point card runs through Mapbox canvas mouse events;
-// this list enumerates the records in the current viewport as real buttons
-// that open the exact same card (buildRecordFeature -> openRecordCard).
-// ---------------------------------------------------------------------------
-const IN_VIEW_LIST_MAX = 200;
-
-function buildInViewList() {
-  const panel = document.getElementById("inViewPanel");
-  if (!panel) return;
-  const bounds = state.mapReady ? map.getBounds() : null;
-  const records = getVisibleRecords().filter((record) => {
-    if (!bounds) return true;
-    const lat = Number(record.lat);
-    const lng = Number(record.lng);
-    return Number.isFinite(lat) && Number.isFinite(lng) && bounds.contains([lng, lat]);
-  });
-  const bySpecies = new Map();
-  records.forEach((record) => {
-    const species = getSpecies(record.speciesId);
-    if (!species) return;
-    if (!bySpecies.has(species.id)) bySpecies.set(species.id, { species, records: [] });
-    bySpecies.get(species.id).records.push(record);
-  });
-  const groups = [...bySpecies.values()].sort((a, b) => a.species.commonName.localeCompare(b.species.commonName));
-  let emitted = 0;
-  const groupHTML = groups.map((group) => {
-    if (emitted >= IN_VIEW_LIST_MAX) return "";
-    const items = group.records.slice(0, IN_VIEW_LIST_MAX - emitted).map((record) => {
-      emitted += 1;
-      return `<li><button type="button" data-in-view-record="${escapeHTML(record.id)}">${escapeHTML(record.name || group.species.commonName)}</button></li>`;
-    }).join("");
-    const color = registerCategoryColor(getActiveMapConfig().categoryColors[group.species.category] || "#777");
-    return `<section class="iv-group">
-      <h3><i style="background:${escapeHTML(color)}"></i>${escapeHTML(group.species.commonName)} · ${group.records.length}</h3>
-      <ul>${items}</ul>
-    </section>`;
-  }).join("");
-  const capNote = records.length > IN_VIEW_LIST_MAX
-    ? `<p class="iv-cap">Showing the first ${IN_VIEW_LIST_MAX} of ${records.length} records — zoom in to narrow the list.</p>`
-    : "";
-  const zoomedOut = state.mapReady && !getActiveMapConfig().loadMinerals && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM;
-  const emptyNote = !records.length
-    ? `<p class="iv-cap">${zoomedOut ? "Zoom in to load individual records (points load at closer zooms)." : "No records in this view for the current filters."}</p>`
-    : "";
-  panel.innerHTML = `
-    <div class="iv-head">
-      <h2>IN THIS VIEW · ${records.length}</h2>
-      <button type="button" class="iv-close" aria-label="Close list">&times;</button>
-    </div>
-    ${emptyNote}${capNote}
-    <div class="iv-body">${groupHTML}</div>
-  `;
-  // Record ids -> records for click resolution without re-scanning.
-  const byId = new Map(records.map((record) => [String(record.id), record]));
-  panel.querySelectorAll("[data-in-view-record]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const record = byId.get(button.dataset.inViewRecord);
-      if (!record) return;
-      const feature = buildRecordFeature(record);
-      if (feature) { closeInViewPanel(); openRecordCard(feature); }
-    });
-  });
-  panel.querySelector(".iv-close")?.addEventListener("click", closeInViewPanel);
-}
-
-function closeInViewPanel() {
-  const panel = document.getElementById("inViewPanel");
-  const trigger = document.getElementById("inViewBtn");
-  if (!panel || panel.hidden) return;
-  panel.hidden = true;
-  trigger?.setAttribute("aria-expanded", "false");
-  trigger?.focus?.();
-}
-
-function initInViewPanel() {
-  const panel = document.getElementById("inViewPanel");
-  const trigger = document.getElementById("inViewBtn");
-  if (!panel || !trigger) return;
-  trigger.addEventListener("click", () => {
-    if (!panel.hidden) { closeInViewPanel(); return; }
-    buildInViewList();
-    panel.hidden = false;
-    trigger.setAttribute("aria-expanded", "true");
-    (panel.querySelector("[data-in-view-record]") || panel.querySelector(".iv-close"))?.focus?.();
-  });
-  panel.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") { event.preventDefault(); closeInViewPanel(); }
-  });
-}
+// NOTE: an "In view" record-list (keyboard route to point cards) shipped
+// briefly and was removed as bar clutter (owner decision, 2026-07). The
+// building blocks it validated — buildRecordFeature(record) ->
+// openRecordCard(feature) — remain the supported programmatic path to a point
+// card; a future keyboard route belongs in the Materials sheet, not the bar.
 
 function initControls() {
   syncActiveCatalog();
   renderModeChrome();
-  initInViewPanel();
   // Deep link: #...&sp=<speciesId> isolates one species (the same action as
   // tapping its Materials card). Applied after the catalog sync so the id is
   // resolvable; silently ignored if it isn't in the active catalog.
@@ -13217,14 +13120,15 @@ function renderMineralHistogram() {
   const activeBand = !state.allSeasons;
   seasonHistogram.innerHTML = cats.map((id) => {
     const n = counts[id] || 0;
-    // Leave headroom for the count label above the tallest bar (104 -> 92).
-    const height = n > 0 ? Math.max(6, Math.round((n / max) * 92)) : 6;
+    const height = n > 0 ? Math.max(6, Math.round((n / max) * 104)) : 6;
     const color = registerCategoryColor(config.categoryColors[id] || "#777");
     const inBand = activeBand && Math.abs(MINERAL_WORKABILITY[id] - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
     const label = getCategoryLabel(id);
-    // Visible per-material count (owner request): how much of each material is
-    // on the map, not just relative bar heights.
-    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="hist-count">${n}</span></div>`;
+    // Relative heights only, matching the other histograms — the MRDS curation
+    // caps several materials at 500 localities, so absolute labels would read
+    // as real-world abundance when they're a cap artifact. Counts stay in the
+    // hover tooltip.
+    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div></div>`;
   }).join("");
   if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;
   renderSeasonCats();
