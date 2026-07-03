@@ -39,6 +39,10 @@ node scripts/build_phenology_histograms.mjs --verify || { echo "FAIL: phenology/
 echo "Verifying safety-tag completeness..."
 node scripts/test_safety_tags.mjs || { echo "FAIL: Safety-tag completeness check failed"; exit 1; }
 
+# Validate the extracted project-recipes.json (structure, ids, per-map kinds)
+echo "Validating project recipes..."
+node scripts/test_project_recipes.mjs || { echo "FAIL: Project recipes validation failed"; exit 1; }
+
 # Run permission rule tests
 echo "Running permission rule tests..."
 node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }
