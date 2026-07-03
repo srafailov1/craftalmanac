@@ -107,15 +107,18 @@ local blank-map flakiness. Cluster-tint visuals deserve one unoccluded look.
 
 ## Phase 4 — Engineering foundations
 
-- [!] 4.1 Extract PROJECT_RECIPES → JSON. **Handed off as a scoped work order:
-      `docs/TODO-content-extraction.md` Phase A** (Codex-shaped; pure format
-      move with a checksum gate).
-- [!] 4.2 Extract rules tables + catalogs → JSON. **Same work order, Phase B** —
-      coordinate its schema with Phase 5.2's provenance fields.
+- [x] 4.1 Extracted PROJECT_RECIPES → `data/project-recipes.json` (app.js
+      ~17k→~10.8k lines); lazy-loaded, per-map shelves, validation gate.
+      *Commit b21e029.* Created the per-map `map`/`kind` seam the food + mineral
+      project cards drop into (in flight — background agents transforming
+      `docs/research/*` into `data/project-recipes.{food,mineral}.json`).
+- [!] 4.2 Extract rules tables + catalogs → JSON. **Still a scoped work order:
+      `docs/TODO-content-extraction.md` Phase B** — lower priority than the
+      cards; coordinate its schema with Phase 5.2 provenance fields.
 - [x] 4.3 `.assetsignore` shipped (keeps ATTRIBUTION.md deployed). *Commit c6b01d6.*
-- [~] 4.4 CI workflow shipped (`.github/workflows/check.yml`). **OWNER: enable
-      required-status branch protection.** Note: CI stays red until the
-      pre-existing ink-honeysuckle chunk mismatch lands (parallel session).
+- [x] 4.4 CI workflow shipped (`.github/workflows/check.yml`); the
+      ink-honeysuckle fix is merged so the suite is now GREEN.
+      **OWNER: enable required-status branch protection** (Settings → Branches).
 - [~] 4.5 Builder paths parameterized (`--types/--locations`). **OWNER items
       remaining:** archive the Falling Fruit CSVs out of ~/Downloads and record
       the snapshot date in ATTRIBUTION.md; run `git gc` when no other agent
@@ -128,12 +131,13 @@ local blank-map flakiness. Cluster-tint visuals deserve one unoccluded look.
 - [x] 4.7 CLAUDE.md anchors refreshed + `docs/adding-a-mode.md` written.
       *Commit c6b01d6.* (Auto-regenerating the anchors is a nice-to-have for
       the 5am loop.)
-- [!] 4.8 Zoom-handoff regression harness. **Handed off:
-      `docs/TODO-zoom-handoff-harness.md`** (node-only state-machine tests).
+- [~] 4.8 Zoom-handoff regression harness. **In flight** — background agent
+      building `scripts/test_zoom_handoff.mjs` per `docs/TODO-zoom-handoff-harness.md`.
 
-**Checkpoint 4:** hygiene/CI/perf shipped (commit c6b01d6); the two large
-refactors are scoped work orders ready for Codex or a fresh session. Good
-merge point to main once ink-honeysuckle lands and CI is green.
+**Checkpoint 4: DONE and MERGED TO MAIN.** ink-honeysuckle fix cherry-picked,
+full suite green, main fast-forwarded to include all Phase 1–4 work (commit
+b21e029). Remaining: 4.2 (rules/catalog extraction, work order) and the three
+in-flight background agents (food cards, mineral cards, handoff harness).
 
 ## Phase 5 — Strategic builds (the position-changers)
 
