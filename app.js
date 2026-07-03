@@ -12607,9 +12607,102 @@ function setLocationSearchStatus(message) {
   locationSearchStatus.hidden = !message;
 }
 
+// ---------------------------------------------------------------------------
+// "In view" record list — the keyboard/screen-reader route to map records.
+// Every other path to a point card runs through Mapbox canvas mouse events;
+// this list enumerates the records in the current viewport as real buttons
+// that open the exact same card (buildRecordFeature -> openRecordCard).
+// ---------------------------------------------------------------------------
+const IN_VIEW_LIST_MAX = 200;
+
+function buildInViewList() {
+  const panel = document.getElementById("inViewPanel");
+  if (!panel) return;
+  const bounds = state.mapReady ? map.getBounds() : null;
+  const records = getVisibleRecords().filter((record) => {
+    if (!bounds) return true;
+    const lat = Number(record.lat);
+    const lng = Number(record.lng);
+    return Number.isFinite(lat) && Number.isFinite(lng) && bounds.contains([lng, lat]);
+  });
+  const bySpecies = new Map();
+  records.forEach((record) => {
+    const species = getSpecies(record.speciesId);
+    if (!species) return;
+    if (!bySpecies.has(species.id)) bySpecies.set(species.id, { species, records: [] });
+    bySpecies.get(species.id).records.push(record);
+  });
+  const groups = [...bySpecies.values()].sort((a, b) => a.species.commonName.localeCompare(b.species.commonName));
+  let emitted = 0;
+  const groupHTML = groups.map((group) => {
+    if (emitted >= IN_VIEW_LIST_MAX) return "";
+    const items = group.records.slice(0, IN_VIEW_LIST_MAX - emitted).map((record) => {
+      emitted += 1;
+      return `<li><button type="button" data-in-view-record="${escapeHTML(record.id)}">${escapeHTML(record.name || group.species.commonName)}</button></li>`;
+    }).join("");
+    const color = registerCategoryColor(getActiveMapConfig().categoryColors[group.species.category] || "#777");
+    return `<section class="iv-group">
+      <h3><i style="background:${escapeHTML(color)}"></i>${escapeHTML(group.species.commonName)} · ${group.records.length}</h3>
+      <ul>${items}</ul>
+    </section>`;
+  }).join("");
+  const capNote = records.length > IN_VIEW_LIST_MAX
+    ? `<p class="iv-cap">Showing the first ${IN_VIEW_LIST_MAX} of ${records.length} records — zoom in to narrow the list.</p>`
+    : "";
+  const zoomedOut = state.mapReady && !getActiveMapConfig().loadMinerals && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM;
+  const emptyNote = !records.length
+    ? `<p class="iv-cap">${zoomedOut ? "Zoom in to load individual records (points load at closer zooms)." : "No records in this view for the current filters."}</p>`
+    : "";
+  panel.innerHTML = `
+    <div class="iv-head">
+      <h2>IN THIS VIEW · ${records.length}</h2>
+      <button type="button" class="iv-close" aria-label="Close list">&times;</button>
+    </div>
+    ${emptyNote}${capNote}
+    <div class="iv-body">${groupHTML}</div>
+  `;
+  // Record ids -> records for click resolution without re-scanning.
+  const byId = new Map(records.map((record) => [String(record.id), record]));
+  panel.querySelectorAll("[data-in-view-record]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const record = byId.get(button.dataset.inViewRecord);
+      if (!record) return;
+      const feature = buildRecordFeature(record);
+      if (feature) { closeInViewPanel(); openRecordCard(feature); }
+    });
+  });
+  panel.querySelector(".iv-close")?.addEventListener("click", closeInViewPanel);
+}
+
+function closeInViewPanel() {
+  const panel = document.getElementById("inViewPanel");
+  const trigger = document.getElementById("inViewBtn");
+  if (!panel || panel.hidden) return;
+  panel.hidden = true;
+  trigger?.setAttribute("aria-expanded", "false");
+  trigger?.focus?.();
+}
+
+function initInViewPanel() {
+  const panel = document.getElementById("inViewPanel");
+  const trigger = document.getElementById("inViewBtn");
+  if (!panel || !trigger) return;
+  trigger.addEventListener("click", () => {
+    if (!panel.hidden) { closeInViewPanel(); return; }
+    buildInViewList();
+    panel.hidden = false;
+    trigger.setAttribute("aria-expanded", "true");
+    (panel.querySelector("[data-in-view-record]") || panel.querySelector(".iv-close"))?.focus?.();
+  });
+  panel.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); closeInViewPanel(); }
+  });
+}
+
 function initControls() {
   syncActiveCatalog();
   renderModeChrome();
+  initInViewPanel();
   // Deep link: #...&sp=<speciesId> isolates one species (the same action as
   // tapping its Materials card). Applied after the catalog sync so the id is
   // resolvable; silently ignored if it isn't in the active catalog.
@@ -13132,69 +13225,74 @@ function renderSeasonCats() {
   }).join("");
 }
 
+// Build the marker GeoJSON feature (geometry + full popup properties) for one
+// record. Shared by renderMarkers and the "In view" record list, so the list's
+// cards are byte-identical to the map's. Returns null for unmappable records.
+function buildRecordFeature(record) {
+  const species = getSpecies(record.speciesId);
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const accessRule = getRecordAccessRule(record, species);
+  const categoryColor = CATEGORY_COLORS[species.category] || Object.values(CATEGORY_COLORS)[0];
+  const markerIcon = getMarkerIconName(species.category, accessRule.status);
+  ensureMarkerIcon(markerIcon, categoryColor, accessRule.status);
+
+  return {
+    type: "Feature",
+    id: record.id,
+    geometry: {
+      type: "Point",
+      coordinates: [lng, lat]
+    },
+    properties: {
+      id: record.id,
+      savedLocation: isSavedLocation(record.id),
+      speciesId: record.speciesId,
+      speciesName: species.commonName,
+      scientificName: species.scientificName,
+      observedName: record.observedName || species.commonName,
+      observedScientificName: record.observedScientificName || species.scientificName,
+      category: species.category,
+      categoryColor,
+      markerIcon,
+      source: record.source,
+      sourceLabel: sourceLabel(record.source),
+      sourceUrl: record.sourceUrl || "",
+      approximate: !!record.approximate,
+      observer: record.observer || "",
+      idDate: record.idDate || "",
+      name: record.name || species.commonName,
+      usedParts: species.usedParts || "",
+      safetyTags: getSpeciesSafetyTags(species).join("|"),
+      harvestEthic: getSpeciesHarvestEthicLabel(species),
+      educationalOnly: !!species.educationalOnly,
+      accessNote: accessRule.note,
+      accessStatus: accessRule.status,
+      accessStatusLabel: accessRule.label,
+      accessArea: accessRule.area,
+      accessLimit: accessRule.limit,
+      accessSourceLabel: accessRule.sourceLabel,
+      accessSourceUrl: accessRule.sourceUrl,
+      rulesLabel: getActiveMapConfig().rulesLabel,
+      season: getMonthRangeText(species.months),
+      months: Array.isArray(species.months) ? species.months.join(",") : "",
+      // Stone isn't seasonal; carry the catalog detail (type range, grades,
+      // safety) instead so it can surface on the mineral point card.
+      notes: record.source === "mineral" ? (species.notes || "") : "",
+      confidence: record.confidence || "community",
+      harvestStatus: record.harvestStatus || "",
+      harvestNote: record.accessNote || "Confirm site rules before harvesting."
+    }
+  };
+}
+
 function renderMarkers() {
   if (!state.mapReady || !map.getSource(MARKERS_SOURCE_ID)) return;
 
-  const features = getVisibleRecords().flatMap((record) => {
-    const species = getSpecies(record.speciesId);
-    const lat = Number(record.lat);
-    const lng = Number(record.lng);
-    if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) {
-      return [];
-    }
-    const accessRule = getRecordAccessRule(record, species);
-    const categoryColor = CATEGORY_COLORS[species.category] || Object.values(CATEGORY_COLORS)[0];
-    const markerIcon = getMarkerIconName(species.category, accessRule.status);
-    ensureMarkerIcon(markerIcon, categoryColor, accessRule.status);
-
-    return [{
-      type: "Feature",
-      id: record.id,
-      geometry: {
-        type: "Point",
-        coordinates: [lng, lat]
-      },
-      properties: {
-        id: record.id,
-        savedLocation: isSavedLocation(record.id),
-        speciesId: record.speciesId,
-        speciesName: species.commonName,
-        scientificName: species.scientificName,
-        observedName: record.observedName || species.commonName,
-        observedScientificName: record.observedScientificName || species.scientificName,
-        category: species.category,
-        categoryColor,
-        markerIcon,
-        source: record.source,
-        sourceLabel: sourceLabel(record.source),
-        sourceUrl: record.sourceUrl || "",
-        approximate: !!record.approximate,
-        observer: record.observer || "",
-        idDate: record.idDate || "",
-        name: record.name || species.commonName,
-        usedParts: species.usedParts || "",
-        safetyTags: getSpeciesSafetyTags(species).join("|"),
-        harvestEthic: getSpeciesHarvestEthicLabel(species),
-        educationalOnly: !!species.educationalOnly,
-        accessNote: accessRule.note,
-        accessStatus: accessRule.status,
-        accessStatusLabel: accessRule.label,
-        accessArea: accessRule.area,
-        accessLimit: accessRule.limit,
-        accessSourceLabel: accessRule.sourceLabel,
-        accessSourceUrl: accessRule.sourceUrl,
-        rulesLabel: getActiveMapConfig().rulesLabel,
-        season: getMonthRangeText(species.months),
-        months: Array.isArray(species.months) ? species.months.join(",") : "",
-        // Stone isn't seasonal; carry the catalog detail (type range, grades,
-        // safety) instead so it can surface on the mineral point card.
-        notes: record.source === "mineral" ? (species.notes || "") : "",
-        confidence: record.confidence || "community",
-        harvestStatus: record.harvestStatus || "",
-        harvestNote: record.accessNote || "Confirm site rules before harvesting."
-      }
-    }];
-  });
+  const features = getVisibleRecords()
+    .map(buildRecordFeature)
+    .filter(Boolean);
 
   map.getSource(MARKERS_SOURCE_ID).setData({
     type: "FeatureCollection",
@@ -14289,32 +14387,39 @@ function bindMapInteractions() {
   map.on("click", MARKERS_LAYER_ID, (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
-    state.hoverPopup?.remove();
-    state.hoverPopup = null;
-    state.activePopup?.remove();
-    state.activePopup = new mapboxgl.Popup({
-      className: "forage-popup pt-popup",
-      closeButton: false,
-      closeOnClick: true,
-      maxWidth: "none",
-      offset: 14,
-      anchor: "top" // always open downward, in tandem with the auto-pan below
-    })
-      .setLngLat(feature.geometry.coordinates)
-      .setHTML(getMarkerPopupHTML(feature.properties))
-      .addTo(map);
-    bindPopupActions(state.activePopup);
-    // Auto-pan so the card fits without the user scrolling the map: raise the
-    // clicked point into the upper third so the (top-anchored) card opens down
-    // into the open space below it.
-    const mapH = map.getContainer().clientHeight || 600;
-    map.easeTo({
-      center: feature.geometry.coordinates,
-      offset: [0, -Math.round(mapH * 0.34)],
-      duration: 450
-    });
+    openRecordCard(feature);
   });
 
+}
+
+// Open the point card for a marker feature (from a map click OR the "In view"
+// record list — the keyboard route to the same dialog).
+function openRecordCard(feature) {
+  if (!feature?.geometry?.coordinates) return;
+  state.hoverPopup?.remove();
+  state.hoverPopup = null;
+  state.activePopup?.remove();
+  state.activePopup = new mapboxgl.Popup({
+    className: "forage-popup pt-popup",
+    closeButton: false,
+    closeOnClick: true,
+    maxWidth: "none",
+    offset: 14,
+    anchor: "top" // always open downward, in tandem with the auto-pan below
+  })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(getMarkerPopupHTML(feature.properties))
+    .addTo(map);
+  bindPopupActions(state.activePopup);
+  // Auto-pan so the card fits without the user scrolling the map: raise the
+  // clicked point into the upper third so the (top-anchored) card opens down
+  // into the open space below it.
+  const mapH = map.getContainer().clientHeight || 600;
+  map.easeTo({
+    center: feature.geometry.coordinates,
+    offset: [0, -Math.round(mapH * 0.34)],
+    duration: 450
+  });
 }
 
 function bindPopupActions(popup) {
