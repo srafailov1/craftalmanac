@@ -4251,6 +4251,10 @@ function applyRegister() {
     renderMapLegend();
     renderHistogram();
     updateClusterTint();
+    // The overview aggregate's dominant-category tint is baked with the
+    // register's lightened hues, so re-tint it on a register change too
+    // (self-guards to the low-zoom overview band).
+    updateFallingFruitAggregates();
   }
 }
 
@@ -5023,6 +5027,42 @@ function mixHex(a, b, t) {
 // overview answers "what is here", not just "how many". First >=max branch
 // wins ties; clusters with no counted members fall back to the base cream.
 const CLUSTER_BASE_FILL = "#eef4e9";
+const AGGREGATE_BASE_FILL = "#f7f2df";
+
+// Per-category record counts for one aggregate cell, keyed by active-mode
+// category. Returns null for iNaturalist-collapsed overview cells (which carry
+// a single opaque taxon count with no species breakdown) and for cells with no
+// selected-species records — those stay the base cream at full zoom-out.
+function getAggregateItemCategoryCounts(item, selectedSpeciesIds) {
+  const counts = item.countsBySpeciesId;
+  if (!counts || counts[INATURALIST_AGGREGATE_SPECIES_ID] != null) return null;
+  const out = {};
+  let any = false;
+  for (const [sourceSpeciesId, n] of Object.entries(counts)) {
+    const importedSpeciesId = getImportedSpeciesId(sourceSpeciesId);
+    if (!selectedSpeciesIds.has(importedSpeciesId)) continue;
+    const species = getSpecies(importedSpeciesId);
+    if (!species) continue;
+    out[species.category] = (out[species.category] || 0) + Number(n || 0);
+    any = true;
+  }
+  return any ? out : null;
+}
+
+// Dominant-category fill for an aggregate cell from its per-category counts
+// (70% register-aware category hue / 30% base cream, matching the cluster tint).
+// Null when there's no category data, so the paint falls back to the cream.
+function dominantAggregateCategoryColor(catCounts) {
+  if (!catCounts) return null;
+  const config = getActiveMapConfig();
+  let bestCat = null;
+  let bestCount = 0;
+  for (const [cat, n] of Object.entries(catCounts)) {
+    if (n > bestCount) { bestCount = n; bestCat = cat; }
+  }
+  if (!bestCat || !bestCount) return null;
+  return mixHex(registerCategoryColor(config.categoryColors[bestCat] || "#777777"), AGGREGATE_BASE_FILL, 0.3);
+}
 
 function clusterColorExpression() {
   const config = getActiveMapConfig();
@@ -7322,11 +7362,16 @@ function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, m
       label: "",
       count: 0,
       weightedLng: 0,
-      weightedLat: 0
+      weightedLat: 0,
+      catCounts: {}
     };
     group.count += count;
     group.weightedLng += center[0] * count;
     group.weightedLat += center[1] * count;
+    const itemCats = getAggregateItemCategoryCounts(item, selectedSpeciesIds);
+    if (itemCats) {
+      for (const [cat, n] of Object.entries(itemCats)) group.catCounts[cat] = (group.catCounts[cat] || 0) + n;
+    }
     groups.set(key, group);
   });
 
@@ -7338,7 +7383,8 @@ function getGridAggregateFeatures(items, selectedSpeciesIds, gridSize, bounds, m
       group.weightedLng / group.count,
       group.weightedLat / group.count
     ],
-    count: group.count
+    count: group.count,
+    catCounts: Object.keys(group.catCounts).length ? group.catCounts : null
   }));
   return mergeOverlappingAggregateFeatures(features, mode === "geo" ? 8 : 6);
 }
@@ -7408,6 +7454,7 @@ function mergeOverlappingAggregateFeatures(features, padding = 6) {
       count: Number(feature.properties.count || 0),
       weightedLng: feature.geometry.coordinates[0] * Number(feature.properties.count || 0),
       weightedLat: feature.geometry.coordinates[1] * Number(feature.properties.count || 0),
+      catCounts: { ...(feature.properties.catCounts || {}) },
       x: point.x,
       y: point.y,
       radius: getAggregateScreenRadius(feature.properties.count)
@@ -7440,7 +7487,8 @@ function mergeOverlappingAggregateFeatures(features, padding = 6) {
       node.weightedLng / node.count,
       node.weightedLat / node.count
     ],
-    count: node.count
+    count: node.count,
+    catCounts: node.catCounts && Object.keys(node.catCounts).length ? node.catCounts : null
   }));
 }
 
@@ -7452,6 +7500,8 @@ function mergeAggregateNodes(a, b, scale) {
     x: lngToTileX(lng, scale),
     y: latToTileY(lat, scale)
   };
+  const catCounts = { ...(a.catCounts || {}) };
+  for (const [cat, n] of Object.entries(b.catCounts || {})) catCounts[cat] = (catCounts[cat] || 0) + n;
   return {
     ids: [...a.ids, ...b.ids],
     levels: new Set([...a.levels, ...b.levels]),
@@ -7459,6 +7509,7 @@ function mergeAggregateNodes(a, b, scale) {
     count,
     weightedLng: a.weightedLng + b.weightedLng,
     weightedLat: a.weightedLat + b.weightedLat,
+    catCounts,
     x: point.x,
     y: point.y,
     radius: getAggregateScreenRadius(count)
@@ -7631,7 +7682,22 @@ async function loadStatusRaster() {
   return state.statusRasterPromise;
 }
 
-function getAggregateFeature({ id, level, label, center, count }) {
+function getAggregateFeature({ id, level, label, center, count, catCounts }) {
+  const properties = {
+    id,
+    level,
+    label,
+    count,
+    countLabel: formatAggregateCount(count)
+  };
+  // catCounts (per-category record counts) is carried on the in-memory feature
+  // so mergeOverlappingAggregateFeatures can combine it; the resolved dominant
+  // color is what the paint reads. Both are harmless if serialized.
+  if (catCounts) {
+    properties.catCounts = catCounts;
+    const catColor = dominantAggregateCategoryColor(catCounts);
+    if (catColor) properties.catColor = catColor;
+  }
   return {
     type: "Feature",
     id,
@@ -7639,13 +7705,7 @@ function getAggregateFeature({ id, level, label, center, count }) {
       type: "Point",
       coordinates: center
     },
-    properties: {
-      id,
-      level,
-      label,
-      count,
-      countLabel: formatAggregateCount(count)
-    }
+    properties
   };
 }
 
@@ -7809,7 +7869,9 @@ function initMapLayers() {
       source: FALLING_FRUIT_AGGREGATE_SOURCE_ID,
       slot: "top",
       paint: {
-        "circle-color": "#f7f2df",
+        // Dominant-category tint where the cell has per-species (Falling Fruit)
+        // counts; falls back to cream for iNaturalist-collapsed overview cells.
+        "circle-color": ["coalesce", ["get", "catColor"], "#f7f2df"],
         "circle-opacity": 0.86,
         "circle-radius": [
           "interpolate",
@@ -7851,6 +7913,9 @@ function initMapLayers() {
       },
       paint: {
         "text-color": "#243a2a",
+        // Halo so counts stay legible on the tinted circles.
+        "text-halo-color": "rgba(255,255,255,0.85)",
+        "text-halo-width": 1,
         "text-emissive-strength": 1
       }
     });
