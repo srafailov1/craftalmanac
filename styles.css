@@ -1503,6 +1503,29 @@ body[data-register="night"] {
   font-family: var(--font-mono);
 }
 
+/* Obscured-location badge: the point is an area hint, not a precise spot. */
+.pt-card .approx-note {
+  margin-top: 9px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+}
+
+/* Rule provenance caption under the RULES value: distinguishes a
+   primary-source-verified rule from a generic inferred default. */
+.pt-card .rule-note {
+  margin-top: 5px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--reg-sub);
+}
+
+.pt-card .rule-note.verified {
+  color: var(--reg-st-allowed);
+}
+
 .pt-card .flush {
   margin-top: 6px;
   font-size: 10.5px;
@@ -1532,6 +1555,20 @@ body[data-register="night"] {
   color: var(--reg-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* Minerals-mode abandoned-mine hazard + MRDS data-age caveat. */
+.pt-card .mine-hazard {
+  margin-top: 10px;
+  padding: 8px 11px;
+  border-left: 3px solid var(--reg-warn);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--reg-warn) 10%, transparent);
+  color: var(--reg-ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
 }
 
 /* Medicine-mode educational-use disclaimer — kept prominent (CLAUDE.md). */
@@ -1980,6 +2017,17 @@ body[data-register="night"] {
 
 .season-hh b {
   color: var(--reg-ink);
+}
+
+/* National-average seasonality caveat, second line under the histogram head. */
+.season-caveat {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: var(--reg-sub);
+  opacity: 0.85;
 }
 
 #season-bar .season-histogram {

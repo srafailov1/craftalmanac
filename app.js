@@ -2169,7 +2169,7 @@ const ACCESS_STATUS_OPTIONS = [
   { id: "allowed", label: "Allowed", defaultChecked: true },
   { id: "permit-required", label: "Permit required", defaultChecked: true },
   { id: "private", label: "Private", defaultChecked: true },
-  { id: "private-unsourced", label: "Private / unsourced", defaultChecked: true },
+  { id: "private-unsourced", label: "Private / unchecked", defaultChecked: true },
   { id: "unknown", label: "Unknown", defaultChecked: true },
   { id: "prohibited", label: "Prohibited", defaultChecked: false }
 ];
@@ -2182,7 +2182,7 @@ const ACCESS_MARKER_STYLES = {
   allowed: { label: "Allowed", color: "#2f8f46", dashed: false },
   "permit-required": { label: "Permit required", color: "#a8730a", dashed: false },
   private: { label: "Private", color: "#7e6654", dashed: false },
-  "private-unsourced": { label: "Private / unsourced", color: "#7e6654", dashed: false },
+  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", dashed: false },
   unknown: { label: "Unknown", color: "#8b8f86", dashed: false },
   prohibited: { label: "Prohibited", color: "#c74437", dashed: false }
 };
@@ -2250,6 +2250,9 @@ const SAFETY_TAGS_BY_SPECIES = {
   "medicine-dandelion": ["drug interactions", "root harvest discouraged"],
   "medicine-violet": ["lookalikes"],
   "medicine-cleavers": ["drug interactions"],
+  "medicine-broadleaf-plantain": ["avoid contaminated/sprayed ground", "lookalikes"],
+  "medicine-goldenrod": ["ragweed confusion (pollen allergy)", "avoid rayless/rare Solidago", "drug interactions"],
+  "medicine-garlic-mustard": ["confirm ID before eating", "contains cyanide/oxalates — cook", "invasive — bag pulled plants"],
   // ---- 2026-06 contiguous-US food expansion (safety tags reflect the
   // adversarial safety-review pass; details live in each species' notes) ----
   "red-mulberry": ["ripe fruit only", "toxic parts", "lookalikes", "conservation concern"],
@@ -2306,7 +2309,43 @@ const SAFETY_TAGS_BY_SPECIES = {
   "ink-artists-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
   "ink-red-belted-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
   "ink-tinder-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
-  "ink-chicken-of-the-woods": ["dye use only — do not eat here", "identify carefully — toxic lookalike (jack-o'-lantern)", "seasonal fruiting — pin is not a standing harvest"]
+  "ink-chicken-of-the-woods": ["dye use only — do not eat here", "identify carefully — toxic lookalike (jack-o'-lantern)", "seasonal fruiting — pin is not a standing harvest"],
+  // ---- Explicit "considered" decisions for established species (safety-tag
+  // completeness gate, scripts/test_safety_tags.mjs). [] means reviewed with no
+  // notable ingestion/contact hazard beyond general foraging caution. ----
+  blueberry: [],
+  blackberry: ["thorns"],
+  raspberry: ["thorns"],
+  wineberry: ["thorns", "invasive"],
+  ribes: ["lookalikes"],
+  huckleberry: ["lookalikes"],
+  "cornelian-cherry": ["remove seeds"],
+  serviceberry: ["lookalikes"],
+  persimmon: ["ripe fruit only", "astringent unripe"],
+  pawpaw: ["ripe fruit only", "skin/seeds not for eating"],
+  "black-walnut": ["hard shell", "staining hulls"],
+  hickory: ["hard shell", "lookalikes"],
+  hazelnut: ["lookalikes"],
+  apple: ["seeds not for eating"],
+  pear: [],
+  peach: ["remove pit"],
+  fig: ["latex sap irritant"],
+  "ink-black-walnut": ["stains skin — wear gloves", "dye only"],
+  "ink-oak": ["tannin — dye only"],
+  "ink-hickory": ["stains skin — wear gloves", "dye only"],
+  "ink-sumac": ["lookalikes — avoid poison sumac", "dye only"],
+  "ink-goldenrod": ["dye only"],
+  "ink-osage-orange": ["milky sap irritant", "dye only"],
+  "ink-autumn-olive": ["invasive", "dye only"],
+  "ink-wineberry": ["invasive", "dye only"],
+  "ink-tupelo": ["dye only"],
+  "dye-cliffrose": ["dye only"],
+  "dye-coyote-brush": ["dye only"],
+  "dye-douglas-fir": ["dye only"],
+  "dye-greenthread": ["dye only — traditionally a beverage; treat here as dye"],
+  "dye-plains-coreopsis": ["dye only"],
+  "dye-alder": ["dye only"],
+  "dye-wax-myrtle": ["dye only"]
 };
 // Safety-first (CLAUDE.md): a park's "edible fungi" allowance applies only to
 // species on this whitelist. Any other mushroom stays prohibited, so a future
@@ -3927,7 +3966,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: MINERAL_CATEGORY_COLORS,
     catalog: mineralSpeciesCatalog,
     sourceNames: ["USGS MRDS"],
-    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), across the contiguous US, with land-manager context from NPS, USDA Forest Service, BLM, and USGS PAD-US boundaries. Occurrence is never collecting permission — rock and mineral collecting is generally allowed on BLM and national-forest land in reasonable amounts, prohibited in all national parks, varies on state land, and needs landowner permission on private land. Pipestone and some toolstone sources are culturally restricted.`,
+    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), a historic economic-mining inventory frozen at roughly 2011–2022 with positional grades — many points are old, inactive, or abandoned workings, so treat each as a curated seed rather than a live collecting spot. Never enter shafts, adits, or pits: collect only surface float. Land-manager context comes from NPS, USDA Forest Service, BLM, and USGS PAD-US boundaries. Occurrence is never collecting permission — rock and mineral collecting is generally allowed on BLM and national-forest land in reasonable amounts, prohibited in all national parks, varies on state land, and needs landowner permission on private land. Pipestone and some toolstone sources are culturally restricted.`,
     rulesLabel: "Rock & mineral collecting rules",
     loadFallingFruit: false,
     loadNpsOrchards: false,
@@ -11711,7 +11750,7 @@ function sheetAboutHTML() {
     <div class="k">CRAFT ALMANAC</div>
     <h2 class="serif">A map that keeps the almanac's hours</h2>
     <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. The map is the front door; plant profiles and project recipes live one tap away.</p>
-    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Every point carries its parcel's rule, and unknowns say so.</p>
+    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Every point carries the rule for the land it sits on, and unknowns say so.</p>
     <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice.</p>
     <p><a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes →</a></p>
   `;
@@ -12767,8 +12806,11 @@ function renderHistogram() {
   }).join("");
 
   // Header reflects the active map; the category swatch legend sits below.
+  // The caveat is load-bearing: every species carries one nationwide month
+  // window, so "in season" is a contiguous-US average that can be weeks off for
+  // a given latitude (regional phenology is a later build).
   const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
-  if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY`;
+  if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY<span class="season-caveat">Contiguous-US average — local ripening can differ by weeks.</span>`;
   renderSeasonCats();
 }
 
@@ -12848,6 +12890,7 @@ function renderMarkers() {
         source: record.source,
         sourceLabel: sourceLabel(record.source),
         sourceUrl: record.sourceUrl || "",
+        approximate: !!record.approximate,
         observer: record.observer || "",
         idDate: record.idDate || "",
         name: record.name || species.commonName,
@@ -14068,8 +14111,20 @@ function getMarkerPopupHTML(properties) {
   const safeAccessSourceUrl = safeHttpUrl(properties.accessSourceUrl);
   const ruleCite = safeAccessSourceUrl
     ? `<a class="src-link" href="${escapeHTML(safeAccessSourceUrl)}" target="_blank" rel="noreferrer">${escapeHTML(properties.accessSourceLabel || "source")}</a>`
-    : escapeHTML(properties.accessSourceLabel || "Local rules not yet sourced");
+    : escapeHTML(properties.accessSourceLabel || "Local rules not yet researched");
   const ruleLimit = escapeHTML(properties.accessLimit || "Unknown; confirm local rules before harvesting.");
+
+  // Provenance of the rule itself: the access rule tables carry a `note` that
+  // says either how/when it was verified against a primary source ("Verified
+  // against the current compendium, June 2026") or that it is a generic default
+  // ("A forest-wide policy, not a guarantee for this exact parcel"). Surface it
+  // so a reader can tell a primary-source-verified rule from an inferred one —
+  // the single most important trust cue, previously computed but never shown.
+  const accessNoteText = properties.accessNote ? String(properties.accessNote) : "";
+  const ruleVerified = /\bverified\b/i.test(accessNoteText);
+  const ruleNote = accessNoteText
+    ? `<div class="rule-note${ruleVerified ? " verified" : ""}">${ruleVerified ? "✓&nbsp;" : ""}${escapeHTML(accessNoteText)}</div>`
+    : "";
 
   // On phones the card renders compact (prototype parity): drop the optional
   // USE row, seasonality sparkline, flush line, and harvest-ethic note.
@@ -14128,6 +14183,17 @@ function getMarkerPopupHTML(properties) {
   const eduStamp = properties.educationalOnly
     ? `<div class="edu-stamp">EDUCATIONAL ONLY — NOT A HARVEST RECOMMENDATION. Seek permission or local/cultural knowledge first.</div>`
     : "";
+  // MRDS localities are largely historic mine workings, positionally graded and
+  // frozen ~2011–2022 (see ATTRIBUTION.md). Surface both the physical hazard of
+  // old workings and the data-age caveat where the user actually looks.
+  const mineralHazard = isMineral
+    ? `<div class="mine-hazard">HISTORIC MINE RECORD — many MRDS sites are inactive or abandoned workings. Never enter shafts, adits, or pits; collect only surface float, and confirm the site is not on posted or hazardous ground. Locations are a curated seed (USGS MRDS, ~2011–2022), not a guarantee that material is present or reachable today.</div>`
+    : "";
+  // Points whose coordinates iNaturalist obscured for user geoprivacy are shown
+  // as an area hint, never a precise spot (see mapINaturalistObservation).
+  const approxNote = properties.approximate
+    ? `<div class="approx-note">APPROXIMATE — iNaturalist obscured this location for privacy (±~20&nbsp;km). Treat it as an area, not a spot.</div>`
+    : "";
   const saved = isSavedLocation(properties.id);
 
   return `
@@ -14139,17 +14205,19 @@ function getMarkerPopupHTML(properties) {
         <div class="sci">${sci}</div>
         ${eduStamp}
         <div class="row access"><span class="lab">ACCESS</span><span class="val" style="color:${statusColor}"><span class="ring"></span>${accessLabel}</span></div>
-        <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}</span></div>
+        <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}${ruleNote}</span></div>
         ${safetyRow}
         ${usedPartsRow}
         ${detailRow}
         <div class="row"><span class="lab">PLACE</span><span class="val">${escapeHTML(properties.name)}</span></div>
+        ${approxNote}
         <div class="row"><span class="lab">SOURCE</span><span class="val">${sourceVal}</span></div>
         ${seasonLine}
         ${flushLine}
         ${ethicNote}
         ${warning}
-        <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK THE PARCEL RULE</div>
+        <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK WHO MANAGES THIS LAND</div>
+        ${mineralHazard}
         ${medNote}
         <button
           class="save-location-button ${saved ? "is-saved" : ""}"
@@ -14896,6 +14964,23 @@ function mapINaturalistObservation(observation) {
   const species = getSpeciesForObservation(observation);
   if (!species) return null;
 
+  // iNaturalist obscures coordinates in two distinct ways, and we treat them
+  // differently on a harvest map:
+  //  - taxon_geoprivacy "obscured"/"private" is CONSERVATION obscuration applied
+  //    automatically to threatened/sensitive taxa specifically to keep collectors
+  //    away. Re-plotting those points on a foraging map works against the reason
+  //    they were obscured, so we drop them entirely.
+  //  - user geoprivacy (geoprivacy "obscured"/"private", or the derived
+  //    `obscured` flag) randomizes the point within a ~0.2° (~20–30 km) cell. We
+  //    keep those as occurrence hints but flag them approximate so the card never
+  //    presents them as a precise spot.
+  const taxonGeoprivacy = String(observation.taxon_geoprivacy || "").toLowerCase();
+  if (taxonGeoprivacy === "obscured" || taxonGeoprivacy === "private") return null;
+
+  const geoprivacy = String(observation.geoprivacy || "").toLowerCase();
+  const approximate = observation.obscured === true
+    || geoprivacy === "obscured" || geoprivacy === "private";
+
   return {
     id: `inat-${observation.id}`,
     speciesId: species.id,
@@ -14904,6 +14989,7 @@ function mapINaturalistObservation(observation) {
     observedScientificName: observation.taxon?.name || species.scientificName,
     lat: coordinates[1],
     lng: coordinates[0],
+    approximate,
     source: "inaturalist",
     note: `Observed ${observation.observed_on || "date unknown"}; iNaturalist ID ${observation.id}.`,
     confidence: observation.quality_grade || "community",
@@ -15188,7 +15274,7 @@ function computeRecordAccessRule(record, species) {
 
   return {
     status: "private-unsourced",
-    label: "Private / unsourced",
+    label: "Private / unchecked",
     area: "Private or unverified location",
     limit: "Secure permission from the landowner or managing institution before collecting.",
     note: record.accessNote || "We don't have a confirmed public-access rule for this exact spot; treat it as private unless you can verify otherwise.",
@@ -15663,7 +15749,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
     area,
     limit: properties.Pub_Access === "RA"
       ? "PAD-US marks this area as restricted public access; check the managing agency before harvesting."
-      : "PAD-US marks this area as open public access, but harvest rules are not yet sourced.",
+      : "PAD-US marks this area as open public access, but the harvest rule has not yet been researched.",
     note: "Public access does not always include permission to collect plants or fungi.",
     sourceLabel: "USGS PAD-US public access",
     sourceUrl: "https://www.usgs.gov/programs/gap-analysis-project/science/protected-areas"

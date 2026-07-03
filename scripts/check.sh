@@ -34,6 +34,11 @@ node scripts/validate_data.mjs || { echo "FAIL: Data validation failed"; exit 1;
 echo "Verifying phenology<->catalog consistency..."
 node scripts/build_phenology_histograms.mjs --verify || { echo "FAIL: phenology/catalog mismatch"; exit 1; }
 
+# Verify every food/ink/medicine species has a considered safety-tag decision
+# (catches a new catalog entry shipping with an unconsidered safety decision)
+echo "Verifying safety-tag completeness..."
+node scripts/test_safety_tags.mjs || { echo "FAIL: Safety-tag completeness check failed"; exit 1; }
+
 # Run permission rule tests
 echo "Running permission rule tests..."
 node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }
