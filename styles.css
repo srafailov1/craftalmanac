@@ -1876,7 +1876,11 @@ body[data-register="night"] {
 .steps-list li { margin: 0 0 8px; padding-left: 2px; }
 
 .tool-row { margin: 0 0 5px; }
-.tool-row .tool-lab { font-weight: 600; margin-right: 4px; }
+/* Bold the Required/Optional labels so they read as headers, not run together
+   with the tools that follow — matching the bold ingredient / regular quantity
+   style above. (Tools render inside .recipe-sec p, not .tool-row, so this must
+   be unscoped.) */
+.tool-lab { font-weight: 600; margin-right: 4px; }
 
 .recipe-link {
   background: none;
@@ -2086,6 +2090,45 @@ body[data-register="night"] {
   border: 1.5px solid var(--reg-ink);
   border-radius: 3px;
 }
+
+/* Minerals histogram: a short material label under each bar (vertical, reading
+   bottom-to-top so it fits the narrow columns) so the soft→hard distribution
+   reads without a separate legend. Bars are bottom-aligned; the segment sits
+   above its label. Taller container to hold the label row. */
+#season-bar .season-histogram.mineral-hist {
+  height: 168px;
+  align-items: flex-end;
+  overflow: visible;
+}
+#season-bar .season-histogram.mineral-hist .histogram-bar {
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: visible;
+}
+#season-bar .season-histogram.mineral-hist .histogram-segment { flex: none; }
+#season-bar .mbar-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin: 4px auto 0;
+  max-height: 52px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 8.5px;
+  letter-spacing: 0.02em;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+/* Selected-material highlight moves to the label (the full-column border looked
+   wrong on the tall mineral bars). */
+#season-bar .season-histogram.mineral-hist .histogram-bar.active::after { display: none; }
+#season-bar .season-histogram.mineral-hist .histogram-bar.active .mbar-label {
+  color: var(--reg-ink);
+  font-weight: 700;
+}
+/* The category-chip legend row is redundant with per-bar labels in minerals. */
+.mode-minerals .season-cats { display: none; }
 
 .season-months {
   display: flex;

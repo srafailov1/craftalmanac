@@ -5984,7 +5984,11 @@ function sheetPlantsHTML() {
 }
 
 function getProjectSpineColor(recipe) {
+  // Ink cards key off the ink color category; food and mineral cards have their
+  // own categories, so fall back to the recipe's result swatch (the finished
+  // dish/stone color) — every card gets a meaningful spine, matching ink's look.
   if (recipe.category && INK_CATEGORY_COLORS[recipe.category]) return INK_CATEGORY_COLORS[recipe.category];
+  if (typeof recipe.swatch === "string" && /^#?[0-9a-f]{6}$/i.test(recipe.swatch)) return recipe.swatch;
   return "#5a615b"; // technique / neutral
 }
 
@@ -7018,6 +7022,7 @@ function renderHistogram() {
   // Minerals aren't seasonal — instead of a month chart, show the material
   // distribution across the workability (soft → hard) axis the slider filters on.
   if (getActiveMapConfig().loadMinerals) { renderMineralHistogram(); return; }
+  if (seasonHistogram) seasonHistogram.classList.remove("mineral-hist");
   const speciesForChart = speciesCatalog.filter((species) => (
     state.selectedSpecies.has(species.id)
   ));
@@ -7093,17 +7098,19 @@ function renderMineralHistogram() {
     .sort((a, b) => MINERAL_WORKABILITY[a] - MINERAL_WORKABILITY[b]);
   const max = Math.max(1, ...cats.map((id) => counts[id] || 0));
   const activeBand = !state.allSeasons;
+  seasonHistogram.classList.add("mineral-hist");
   seasonHistogram.innerHTML = cats.map((id) => {
     const n = counts[id] || 0;
     const height = n > 0 ? Math.max(6, Math.round((n / max) * 104)) : 6;
     const color = registerCategoryColor(config.categoryColors[id] || "#777");
     const inBand = activeBand && Math.abs(MINERAL_WORKABILITY[id] - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
     const label = getCategoryLabel(id);
-    // Relative heights only, matching the other histograms — the MRDS curation
-    // caps several materials at 500 localities, so absolute labels would read
-    // as real-world abundance when they're a cap artifact. Counts stay in the
-    // hover tooltip.
-    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div></div>`;
+    // Short label (parenthetical stripped) sits under each bar so the material
+    // is readable at a glance; the full label + count stay in the hover title.
+    // Relative heights only — MRDS caps several materials at ~500 localities, so
+    // absolute counts would misread as real-world abundance.
+    const shortLabel = label.replace(/\s*\([^)]*\)\s*/g, "").trim();
+    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="mbar-label">${escapeHTML(shortLabel)}</span></div>`;
   }).join("");
   if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;
   renderSeasonCats();
@@ -8713,6 +8720,13 @@ async function loadMapData() {
 
   state.records = nextRecords;
   renderMarkers();
+  // Re-render the histogram and cluster tint now that records have arrived.
+  // renderMarkers alone updates the point source, but the minerals histogram
+  // counts from state.records (empty at mode-open), so without this it stayed
+  // blank until the slider forced a full render(); the cluster tint likewise
+  // needs a repaint once the freshly-loaded features are in the source.
+  renderHistogram();
+  updateClusterTint();
   // Only a load that STARTED in the point band carries Falling Fruit data; a
   // load kicked off below zoom 8 that finishes after the user crosses up must
   // not end the bridge, or sparse iNaturalist-only clusters flash in.
