@@ -2087,6 +2087,17 @@ body[data-register="night"] {
   border-radius: 3px;
 }
 
+/* Per-material locality count above each minerals-histogram bar (the bar is
+   column-reverse, so this DOM-after-segment span renders above the fill). */
+#season-bar .hist-count {
+  font-size: 8.5px;
+  line-height: 1;
+  text-align: center;
+  padding-bottom: 2px;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
+}
+
 .season-months {
   display: flex;
   gap: 5px;

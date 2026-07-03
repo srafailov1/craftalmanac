@@ -4169,12 +4169,20 @@ function dialDate() {
 
 function applyRegister() {
   // A pinned override wins over the computed solar register (persisted user
-  // choice, so an evening lesson isn't forced onto a near-black basemap).
+  // choice); the default stays auto — night foragers keep the dark basemap.
   const reg = state.registerOverride || computeRegister(simNow(), state.location.lat, state.location.lng);
   if (reg === state.register) return;
   state.register = reg;
   document.body.dataset.register = reg;
-  if (state.mapReady) { syncLightPreset(reg); updateMarkerHalo(); }
+  if (state.mapReady) {
+    syncLightPreset(reg);
+    updateMarkerHalo();
+    // Category swatches/segments are register-tinted (registerCategoryColor),
+    // so crossing into/out of dusk+night must repaint them. mapReady also
+    // guards the boot call, which runs before the DOM refs are declared.
+    renderMapLegend();
+    renderHistogram();
+  }
 }
 
 applyRegister();
@@ -4902,6 +4910,30 @@ function isNightish() {
   return state.register === "night" || state.register === "dusk";
 }
 
+// Category hues on the dark dusk/night registers: very dark colors (ink black
+// #252321, obsidian #33323a) vanish against the dark panels and basemap, so
+// blend them toward white just enough to clear a luminance floor. Same hue
+// family, lightness floor only — mirrors the fixed-semantics --reg-st-* pattern.
+// The auto day/night basemap is a deliberate feature (night foragers shouldn't
+// be blinded); this keeps the data legible on it instead of overriding it.
+function registerCategoryColor(hex) {
+  if (!isNightish()) return hex;
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || ""));
+  if (!m) return hex;
+  const n = parseInt(m[1], 16);
+  let r = (n >> 16) & 255;
+  let g = (n >> 8) & 255;
+  let b = n & 255;
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  const FLOOR = 0.42;
+  if (lum >= FLOOR) return hex;
+  const t = (FLOOR - lum) / (1 - lum); // exact white-blend to reach the floor
+  r = Math.round(r + (255 - r) * t);
+  g = Math.round(g + (255 - g) * t);
+  b = Math.round(b + (255 - b) * t);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+}
+
 function fxResize() {
   if (!fxCanvas) return;
   const host = document.getElementById("map") || fxCanvas.parentElement;
@@ -5606,7 +5638,7 @@ function renderMapLegend() {
 
   const categoryChips = config.categories.map((category) => {
     const selection = getCategorySelectionState(category.id);
-    const color = config.categoryColors[category.id] || "#777";
+    const color = registerCategoryColor(config.categoryColors[category.id] || "#777");
     const cls = selection === "none" ? " off" : selection === "some" ? " partial" : "";
     return `<button type="button" class="leg-chip${cls}" data-leg-category="${escapeHTML(category.id)}" aria-pressed="${String(selection !== "none")}"><span class="swatch" style="color: ${escapeHTML(color)}"></span>${escapeHTML(category.label)}</button>`;
   }).join("");
@@ -11803,7 +11835,8 @@ function sheetAboutHTML() {
     </div>
     <div class="about-block">
       <div class="k">WHO MADE THIS</div>
-      <p>[OWNER — replace this: a sentence or two on who you are, why Craft Almanac exists, and the teaching / research / craft practice it grows out of. Readers are asked to trust hand-encoded harvesting rules, so this is where they learn who encoded them.]</p>
+      <p>Craft Almanac is made by Sasson Rafailov, a designer, sculptor, and educator at the University of Virginia School of Architecture, where his teaching has been recognized with the Class of 1985 Fellowship for Creative Teaching and the School's New Faculty Teaching Award. His research and studio practice pursue craft consciousness — human–material relationships explored through sculpture, tool-making, ceramics, and furniture, in a studio where one material's remnant becomes another's ingredient: stone dust folded into clay bodies, alabaster dust reconstituted into plaster, wood ash becoming glaze.</p>
+      <p>The map grows out of that practice and that classroom: a tool for helping students and makers meet their local landscapes as sources of material — ethically, legally, and in season.</p>
     </div>
     <div class="about-block">
       <div class="k">TERMS &amp; PRIVACY</div>
@@ -12864,7 +12897,10 @@ function renderHistogram() {
       const value = entry.weighted[category];
       if (value <= 0) return "";
       const segmentHeight = Math.max(3, Math.round((value / total) * height));
-      return `<div class="histogram-segment ${category}" style="height: ${segmentHeight}px"></div>`;
+      // Inline register-aware color (not the CSS class hue) so dark categories
+      // like ink "black" stay visible on the night panel.
+      const segColor = registerCategoryColor(getActiveMapConfig().categoryColors[category] || "#777");
+      return `<div class="histogram-segment ${category}" style="height: ${segmentHeight}px; background: ${escapeHTML(segColor)}"></div>`;
     }).join("");
     const title = CATEGORIES
       .filter((category) => entry.counts[category])
@@ -12904,11 +12940,14 @@ function renderMineralHistogram() {
   const activeBand = !state.allSeasons;
   seasonHistogram.innerHTML = cats.map((id) => {
     const n = counts[id] || 0;
-    const height = n > 0 ? Math.max(6, Math.round((n / max) * 104)) : 6;
-    const color = config.categoryColors[id] || "#777";
+    // Leave headroom for the count label above the tallest bar (104 -> 92).
+    const height = n > 0 ? Math.max(6, Math.round((n / max) * 92)) : 6;
+    const color = registerCategoryColor(config.categoryColors[id] || "#777");
     const inBand = activeBand && Math.abs(MINERAL_WORKABILITY[id] - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
     const label = getCategoryLabel(id);
-    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div></div>`;
+    // Visible per-material count (owner request): how much of each material is
+    // on the map, not just relative bar heights.
+    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="hist-count">${n}</span></div>`;
   }).join("");
   if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;
   renderSeasonCats();
@@ -12918,7 +12957,7 @@ function renderSeasonCats() {
   if (!seasonCats) return;
   const config = getActiveMapConfig();
   seasonCats.innerHTML = config.categories.map((category) => {
-    const color = config.categoryColors[category.id] || "#777";
+    const color = registerCategoryColor(config.categoryColors[category.id] || "#777");
     return `<span class="season-cat"><i style="background:${escapeHTML(color)}"></i>${escapeHTML(category.label)}</span>`;
   }).join("");
 }
@@ -13910,7 +13949,10 @@ function updateMarkerPointVisibility() {
 // The marker halo only shows at dusk/night (prototype occ-halo opacity 0.38).
 function updateMarkerHalo() {
   if (!state.mapReady || !map.getLayer(MARKER_HALO_LAYER_ID)) return;
-  map.setPaintProperty(MARKER_HALO_LAYER_ID, "circle-opacity", isNightish() ? 0.38 : 0);
+  // 0.55 (was 0.38): the night basemap stays — auto day/night is deliberate so
+  // night foragers aren't blinded — so the halo does the legibility work,
+  // lifting dark category icons off the dark ground.
+  map.setPaintProperty(MARKER_HALO_LAYER_ID, "circle-opacity", isNightish() ? 0.55 : 0);
 }
 
 async function initRegionBoundaryLayers() {
