@@ -51,6 +51,13 @@ node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit
 echo "Running overview coverage tests..."
 node scripts/test_overview_coverage.mjs || { echo "FAIL: Overview coverage tests failed"; exit 1; }
 
+# Run zoom-handoff state-machine regression (KNOWN_ISSUES item 1): extracts the
+# real aggregate<->points transition functions from app.js and drives scripted
+# zoom/pan/load sequences against stub map/state, asserting no fully-blank state
+# while viewport data exists and that the aggregate bridge always terminates
+echo "Running zoom-handoff state-machine tests..."
+node scripts/test_zoom_handoff.mjs || { echo "FAIL: Zoom-handoff regression tests failed"; exit 1; }
+
 # Verify thin-park apportioning (KNOWN_ISSUES 1b): boundary cells carry
 # per-status area fractions that reduce the allowed over-count in patchwork parks
 echo "Verifying thin-park apportioning..."
