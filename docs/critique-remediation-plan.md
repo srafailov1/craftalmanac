@@ -15,71 +15,83 @@ Status legend: `[ ]` todo · `[x]` done · `[~]` in progress · `[!]` blocked/ga
 The four findings that touch correctness and the project's own "safety first /
 occurrence is not permission" values. All are surgical app.js/scripts edits.
 
-- [ ] 1.1 Render the rule's `accessNote` (incl. "Verified … June 2026" text) in the
+- [x] 1.1 Render the rule's `accessNote` (incl. "Verified … June 2026" text) in the
       point card — the trust signal is computed but currently dropped before render.
-- [ ] 1.2 Handle iNaturalist obscured coordinates: skip taxon-obscured (conservation)
+      *Done: `.rule-note`, verified rows show a green ✓; commit e7bb490.*
+- [x] 1.2 Handle iNaturalist obscured coordinates: skip taxon-obscured (conservation)
       observations entirely; badge observer-obscured points as approximate (±20 km)
-      instead of plotting them as precise harvest spots.
-- [ ] 1.3 Abandoned-mine hazard language in Minerals: lede/dataNotes sentence + a
+      instead of plotting them as precise harvest spots. *Done: `mapINaturalistObservation`
+      drops taxon-obscured, flags `approximate`; `.approx-note` badge.*
+- [x] 1.3 Abandoned-mine hazard language in Minerals: lede/dataNotes sentence + a
       standing note on every MRDS point card (never enter shafts/adits; surface
       float only). Include the MRDS data-age framing ("historic mining inventory,
-      frozen ~2011–2022") from ATTRIBUTION.md.
-- [ ] 1.4 Seasonality honesty caveat: one visible line on the season/histogram panel —
+      frozen ~2011–2022"). *Done: `.mine-hazard` block + dataNotes.*
+- [x] 1.4 Seasonality honesty caveat: one visible line on the season/histogram panel —
       timing is a contiguous-US average; local ripening varies by weeks. (Full
-      regional phenology is Phase 5.)
-- [ ] 1.5 Safety-tag completeness gate in `scripts/check.sh` (every catalog species
-      must have an explicit SAFETY_TAGS_BY_SPECIES and HARVEST_ETHIC_BY_SPECIES
-      decision) + fill the three missing medicine species (broadleaf-plantain,
-      goldenrod, garlic-mustard).
-- [ ] 1.6 De-jargon safety-critical copy: "parcel rule" → plain language;
-      user-facing "unsourced" → "not yet researched"; keep the firm register.
+      regional phenology is Phase 5.) *Done: `.season-caveat`.*
+- [x] 1.5 Safety-tag completeness gate in `scripts/check.sh` + fill the three missing
+      medicine species (broadleaf-plantain, goldenrod, garlic-mustard). *Done:
+      `scripts/test_safety_tags.mjs`; all 113 food/ink/medicine species now explicit.
+      Note: harvest-ethic gate deferred — default "light harvest" is acceptable.*
+- [x] 1.6 De-jargon safety-critical copy: "parcel rule" → "who manages this land";
+      "unsourced" → "unchecked"/"not yet researched". *Done.*
 
-**Checkpoint 1:** review the commits; nothing structural has moved.
+**Checkpoint 1:** review the commits; nothing structural has moved. **DONE (commit e7bb490).**
+
+> ⚠️ Found during Phase 1 (pre-existing, not introduced here, and outside these
+> edits' scope): `scripts/validate_data.mjs` fails with ~86 errors — Falling
+> Fruit chunks still reference `ink-honeysuckle`, a species no longer in the ink
+> catalog, so the chunk access totals don't reconcile. This is a data-regeneration
+> issue for the 5am debug loop (rebuild chunks or restore the species). Flagged
+> for the owner; it blocks a clean `scripts/check.sh` run until fixed.
 
 ## Phase 2 — Say what it is (copy, identity, onboarding)
 
-- [ ] 2.1 Welcome modal restructure: mission + differentiator first ("every point
-      carries the actual harvesting rule for the land under it"), safety block
-      second, all existing warnings preserved.
-- [ ] 2.2 Revive the dead per-mode `lede` copy (wire into the Maps sheet cards) and
-      fix the broken `dataNotes` mount (render into the About sheet).
-- [ ] 2.3 **OWNER GATE (review wording):** authored About — byline, why it exists,
-      teaching/research context, region; plus one privacy sentence (locate button →
-      Open-Meteo; search → Mapbox) and one no-warranty/educational-use sentence.
-      I will draft; you edit before pushing.
-- [ ] 2.4 Nav label fix: "Plants" → mode-neutral label (matches the existing
-      "The Shelf" brand); remove the per-mode text swap hack.
-- [ ] 2.5 Unify herbalism naming (one name everywhere; "Therapeutic Uses" →
-      "Traditional Uses").
-- [ ] 2.6 Scope Projects to its mode: label as ink/dye where it appears in other
-      modes, with an honest "projects for this map are planned" note.
-- [ ] 2.7 README rewrite: describe the real four-mode product and the rules layer.
-- [ ] 2.8 Wordmark presence: larger lockup so the display serif actually displays.
+- [x] 2.1 Welcome modal restructure: mission + differentiator first, safety block
+      second (set off with a rule), all warnings preserved. Button: "Enter the map".
+- [x] 2.2 Revive dead copy: `config.lede` atop the Materials sheet; `config.dataNotes`
+      in a new About "This map's sources" block; removed the dead DOM write.
+- [~] 2.3 **OWNER GATE — needs your words:** About now has a "Who made this" block
+      with a clearly-marked `[OWNER — replace this…]` placeholder, plus a
+      "Terms & privacy" block (no-warranty + Open-Meteo/Mapbox privacy). **Replace
+      the placeholder with your real byline before pushing.**
+- [x] 2.4 Nav label "Plants" → "Materials"; per-mode swap removed.
+- [x] 2.5 "Therapeutic Uses" → "Traditional Uses"; enriched the thin medicine lede.
+- [x] 2.6 Projects eyebrow reads "INK & DYE"; non-ink modes get a scope note.
+- [x] 2.7 README rewritten for the four-mode product + rules layer.
+- [x] 2.8 Wordmark bumped to 21px/600 (18px mobile) so the display serif reads.
 
-**Checkpoint 2:** the product now introduces itself correctly.
+**Checkpoint 2:** the product now introduces itself correctly. **DONE (commit a3704fa).**
+One OWNER action outstanding: replace the About "Who made this" placeholder.
 
 ## Phase 3 — UX repairs (interaction)
 
-- [ ] 3.1 Register override: Day / Auto toggle, persisted in localStorage;
-      `color-scheme: dark` under dusk/night.
+- [x] 3.1 Register override: Auto / Day / Night toggle in the conditions-rail sun
+      panel, persisted in localStorage; `color-scheme: dark` under dusk/night.
+      *Done, commit 3d4c93c.*
 - [ ] 3.2 Category-tinted clusters + aggregate tint (dominant-category hue + count)
       so overview zooms stop being uniform cream dots. Highest-leverage visual fix.
+      **REMAINING — touches Mapbox paint expressions; wants reliable live testing.**
 - [ ] 3.3 Mode switcher promoted to the masthead (persistent segmented control with
-      the four mode colors); "which map am I on" visible at all times.
+      the four mode colors). **REMAINING — masthead layout change, live iteration.**
 - [ ] 3.4 URL hash state (mode, center/zoom, day, species filter) + restore; persist
-      last active map. Shareable classroom links.
-- [ ] 3.5 Minerals chrome: Workability button must not open the date form (live
-      bug); legend max-height clip (15 chips unreachable on desktop); histogram
-      header stops saying "IN SEASON BY MONTH" in minerals.
-- [ ] 3.6 Register-aware category colors (ink-black swatch is invisible at night);
-      lift dawn/dusk accents to ≥4.5:1.
-- [ ] 3.7 Text selection in point cards; ≥24px targets for legend chips / season
-      buttons / slider thumb.
-- [ ] 3.8 One guided first-run task after the welcome modal (dismissible coach chip).
+      last active map. Shareable classroom links. **REMAINING (pairs with 3.3).**
+- [x] 3.5 Minerals chrome: Workability button no longer opens the date form (guarded
+      + hidden on desktop); legend expands to min(70vh,460px)+scroll so all 15
+      chips are reachable. Histogram header already correct at runtime
+      ("MATERIALS BY WORKABILITY"). *Done, commit 3d4c93c.*
+- [ ] 3.6 Register-aware category colors (ink-black swatch invisible at night); lift
+      dawn/dusk accents to ≥4.5:1. **REMAINING — pairs with 3.2's color work.**
+- [x] 3.7 Text selection in point cards; ≥24px targets for legend chips / season
+      buttons; 16px slider thumb. *Done, commit 3d4c93c.*
+- [ ] 3.8 One guided first-run coach chip after the welcome modal. **REMAINING (small).**
 - [ ] 3.9 Keyboard/list route to map records — an "In this view" list that opens the
-      existing point card. Fixes the WCAG 2.1.1 failure; largest Phase-3 item.
+      existing point card. Fixes the WCAG 2.1.1 failure. **REMAINING — largest/
+      transformative Phase-3 item; a new UI surface, wants live testing.**
 
-**Checkpoint 3:** demo pass across all four modes, day + night, desktop + mobile.
+**Checkpoint 3:** part 1 done (3.1, 3.5, 3.7 — commit 3d4c93c). Remaining
+(3.2, 3.3, 3.4, 3.6, 3.8, 3.9) are the map-paint / new-UI items that need
+reliable live-map verification — grouped as "Phase 3b" for the next pass.
 
 ## Phase 4 — Engineering foundations
 
