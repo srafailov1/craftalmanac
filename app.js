@@ -3925,8 +3925,8 @@ const MAP_MODE_CONFIG = {
   },
   medicine: {
     id: "medicine",
-    speciesHeading: "Therapeutic Uses & Species",
-    lede: `Explore therapeutic plants across ${REGION_STATES} by season and habitat.`,
+    speciesHeading: "Traditional Uses & Species",
+    lede: `Explore plants of the traditional materia medica across ${REGION_STATES} by season and habitat. This map is an educational reference to historical and traditional use — not medical advice, and not a harvest recommendation.`,
     safetyNote: "This map is provided for educational purposes. Do not ingest or apply wild plants without guidance from a qualified practitioner or trained herbalist.",
     categories: [
       { id: "digestive", label: "Digestive" },
@@ -5420,17 +5420,17 @@ function syncActiveCatalog() {
 
 function renderModeChrome() {
   const config = getActiveMapConfig();
-  const dataNotesEl = document.querySelector(".attribution-block .section-body p");
-  if (dataNotesEl) dataNotesEl.textContent = config.dataNotes;
+  // Per-mode source notes (config.dataNotes) are surfaced in the About sheet,
+  // which reads the active config when opened; the lede is surfaced in the
+  // Shelf/Materials sheet. No persistent DOM mount is needed here.
   // Persistent on-map herbalism disclaimer (CLAUDE.md non-negotiable; prototype
   // #mode-disclaimer) — shown only in the medicine/herbalism map.
   const disclaimer = document.getElementById("mode-disclaimer");
   if (disclaimer) disclaimer.hidden = state.activeMap !== "medicine";
-  // Minerals mode: the nav "Plants" tab reads "Minerals", and the bottom rail
-  // switches from the season scrubber to the workability slider.
+  // Minerals mode swaps the bottom rail from the season scrubber to the
+  // workability slider. The nav label stays the mode-neutral "Materials"
+  // (honest across plants, fungi, and stone), so no per-mode text swap.
   const isMineral = !!config.loadMinerals;
-  const plantsNav = document.querySelector('#mastLinks [data-sheet="plants"]');
-  if (plantsNav) plantsNav.textContent = isMineral ? "Minerals" : "Plants";
   if (seasonBar) seasonBar.classList.toggle("mode-minerals", isMineral);
   if (daySlider) {
     if (isMineral) { daySlider.min = "0"; daySlider.max = "100"; }
@@ -11745,13 +11745,26 @@ const PROJECT_RECIPES = [
 ];
 
 function sheetAboutHTML() {
+  const config = getActiveMapConfig();
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">CRAFT ALMANAC</div>
     <h2 class="serif">A map that keeps the almanac's hours</h2>
-    <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. The map is the front door; plant profiles and project recipes live one tap away.</p>
-    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Every point carries the rule for the land it sits on, and unknowns say so.</p>
+    <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. It is made for teachers, foragers, and makers sourcing materials responsibly. The map is the front door; material profiles and project recipes live one tap away.</p>
+    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Every point carries the rule for the land it sits on, encoded from primary law, and unknowns say so.</p>
     <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice.</p>
+    <div class="about-block">
+      <div class="k">THIS MAP'S SOURCES</div>
+      <p>${escapeHTML(config.dataNotes)}</p>
+    </div>
+    <div class="about-block">
+      <div class="k">WHO MADE THIS</div>
+      <p>[OWNER — replace this: a sentence or two on who you are, why Craft Almanac exists, and the teaching / research / craft practice it grows out of. Readers are asked to trust hand-encoded harvesting rules, so this is where they learn who encoded them.]</p>
+    </div>
+    <div class="about-block">
+      <div class="k">TERMS &amp; PRIVACY</div>
+      <p>The harvesting rules are a good-faith reading of primary sources, offered without warranty for educational use — always confirm current rules with the land manager before collecting. The locate button sends your coordinates to Open-Meteo (for weather) and Mapbox; place search sends your query to Mapbox. There is no account and no tracking.</p>
+    </div>
     <p><a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes →</a></p>
   `;
 }
@@ -11809,6 +11822,7 @@ function sheetPlantsHTML() {
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE SHELF · ${speciesCatalogByName.length} PROFILES</div>
     <h2 class="serif">${escapeHTML(config.speciesHeading)}</h2>
+    <p class="sheet-lede">${escapeHTML(config.lede)}</p>
     <p>Tap a profile to show just that species on the map.</p>
     ${medNote}
     <div class="card-grid">${cards}</div>
@@ -11895,11 +11909,18 @@ function sheetProjectsHTML() {
          <div class="shelf-row">${list.map(projectCardHTML).join("")}</div>
        </section>`
     : "";
+  // Projects are currently all ink/dye/pigment recipes. Surfaced in every mode's
+  // nav, so when the active map isn't Ink/Dye, say so plainly rather than
+  // dropping a visitor onto unrelated recipes.
+  const scopeNote = state.activeMap !== "ink"
+    ? `<p class="proj-scope">These are ink, dye, and pigment recipes — they pair with the <strong>Ink/Dye</strong> map. Projects for the ${escapeHTML(getActiveMapConfig().id === "minerals" ? "Minerals" : getActiveMapConfig().id === "food" ? "Food" : "Herbalism")} map are planned.</p>`
+    : "";
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
-    <div class="k">THE PRESS · ${PROJECT_RECIPES.length} PROJECTS</div>
+    <div class="k">THE PRESS · ${PROJECT_RECIPES.length} PROJECTS · INK &amp; DYE</div>
     <h2 class="serif">Projects</h2>
     <p>Make ink, dye, and pigment from the plants on the map. Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Scroll a row sideways, or Expand a category to see all of it. Every recipe is craft, not food; harvest only where it is permitted.</p>
+    ${scopeNote}
     <div class="proj-shelves">
       ${shelf("PLANT INKS", inks)}
       ${shelf("PLANT DYES", dyes)}

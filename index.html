@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=phase1-safety-1">
+    <link rel="stylesheet" href="./styles.css?v=phase2-identity-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -24,7 +24,7 @@
           <h1 class="wordmark serif">Craft Almanac</h1>
           <nav class="links" id="mastLinks" aria-label="Primary">
             <button type="button" data-sheet="maps">Maps</button>
-            <button type="button" data-sheet="plants">Plants</button>
+            <button type="button" data-sheet="plants">Materials</button>
             <button type="button" data-sheet="projects">Projects</button>
             <button type="button" data-sheet="about">About</button>
           </nav>
@@ -91,17 +91,16 @@
     <div class="welcome-modal-backdrop" id="welcomeModal" hidden>
       <section class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-describedby="welcomeModalBody">
         <div class="welcome-copy" id="welcomeModalBody">
-          <p class="welcome-opening" id="welcomeModalTitle"><strong>Craft Almanac</strong> maps plants, fungi, and other local materials across the contiguous United States by season, habitat, and access.</p>
-          <p>Before collecting, confirm identification, property boundaries, posted rules, and current harvesting limits. Map points show observations, not permission to collect.</p>
-          <p>Some plants and fungi are toxic, have dangerous lookalikes, or require special preparation. Medicinal plant information is educational only and is not medical advice.</p>
-          <p>Please collect only where allowed, take lightly, and leave enough for continued growth and wildlife.</p>
+          <p class="welcome-opening" id="welcomeModalTitle"><strong>Craft Almanac</strong> maps where food, ink &amp; dye, herbal, and craft-stone materials grow across the contiguous United States — by season, by habitat, and, uniquely, by the actual harvesting rule for the land under each point.</p>
+          <p>Made for teachers, foragers, and makers who want to source materials responsibly. Every point carries its land's rule, encoded from primary law — and where the rule isn't known, the map says so.</p>
+          <p class="welcome-safety"><strong>Before you collect:</strong> occurrence is never permission. Confirm identification, property boundaries, posted rules, and current limits first. Some plants and fungi are toxic or have dangerous lookalikes; herbal content is educational only, not medical advice. Collect only where allowed, take lightly, and leave enough for growth and wildlife.</p>
         </div>
-        <button class="welcome-primary" id="welcomeModalButton" type="button">I understand — enter the map</button>
+        <button class="welcome-primary" id="welcomeModalButton" type="button">Enter the map</button>
       </section>
     </div>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=phase1-safety-1"></script>
+    <script src="./app.js?v=phase2-identity-1"></script>
   </body>
 </html>

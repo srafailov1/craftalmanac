@@ -931,6 +931,16 @@ h2 {
   font-weight: 900;
 }
 
+/* Safety block reads as clearly secondary to the mission copy above it:
+   smaller, set off with a rule, but every warning preserved. */
+.welcome-safety {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--reg-hair);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
 .welcome-primary {
   width: 100%;
   min-height: 44px;
@@ -2278,9 +2288,10 @@ body[data-register="night"] {
 
 #masthead .wordmark {
   margin: 0;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  line-height: 1;
 }
 
 #masthead .links {
@@ -2392,6 +2403,35 @@ body[data-register="night"] {
 
 #sheet p a {
   color: var(--reg-accent);
+}
+
+/* Per-mode mission lede at the top of the Materials sheet (config.lede). */
+#sheet .sheet-lede {
+  color: var(--reg-ink);
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+/* Projects scope note shown when the active map isn't Ink/Dye. */
+#sheet .proj-scope {
+  padding: 8px 11px;
+  border-left: 3px solid var(--reg-accent);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--reg-accent) 9%, transparent);
+  color: var(--reg-ink);
+  font-size: 12.5px;
+}
+
+/* Grouped About sub-sections (sources, authorship, terms & privacy). */
+#sheet .about-block {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--reg-hair);
+}
+
+#sheet .about-block .k {
+  margin-bottom: 6px;
 }
 
 #sheet .closer {
@@ -2808,7 +2848,7 @@ body[data-register="night"] {
     padding: 8px 12px;
   }
 
-  #masthead .wordmark { font-size: 14px; }
+  #masthead .wordmark { font-size: 18px; }
   #masthead .links { gap: 10px; padding-left: 10px; }
 
   /* Search + conditions are hidden until their masthead trigger opens them;

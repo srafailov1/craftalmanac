@@ -1,6 +1,33 @@
-# Craft Almanac Material Maps
+# Craft Almanac — Material Maps
 
-A local-first prototype for mapping edible plants, mushrooms, and craft materials across the contiguous United States.
+A map-based guide to where craft and forage materials grow across the contiguous
+United States — by season, by habitat, and, uniquely, by the actual harvesting
+rule for the land under each point. Made for teachers, foragers, and makers who
+want to source materials responsibly.
+
+**Occurrence is never permission.** Every point carries the rule for the land it
+sits on, encoded from primary law (park compendiums, 36 CFR, state statutes,
+USFS/BLM regulations); where a rule isn't known, the map says so. This
+parcel-level rules layer is the thing Falling Fruit, iNaturalist, and
+rockhounding maps don't have.
+
+## The four maps
+
+One map is active at a time; the legend categories and the season chart follow
+your choice.
+
+- **Food** — edible plants, fruit, nuts, and mushrooms. Backed by iNaturalist,
+  Falling Fruit, NPS historic orchards, and deep NPS/state-park rule tables.
+  Mushrooms follow a hard species-level edible whitelist (safety first).
+- **Ink / Dye** — plants, trees, and fruits that make natural inks and dyes,
+  organized by output color, plus 60 authored project recipes (chemistry,
+  lightfastness, history, and waste-stream ethic).
+- **Herbalism** — plants of the traditional materia medica. Educational
+  reference to historical and traditional use only — not medical advice.
+- **Minerals** — craft stone and minerals (pottery clay, carving stone,
+  whetstone/knapping toolstone, lapidary material) from the USGS Mineral
+  Resources Data System, with land-manager collecting rules. MRDS is a historic
+  mining inventory; many localities are inactive or abandoned workings.
 
 ## Run locally
 
@@ -8,20 +35,8 @@ A local-first prototype for mapping edible plants, mushrooms, and craft material
 python3 -m http.server 4173 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:4173/`.
-
-## Current prototype
-
-- Interactive Mapbox Outdoors basemap with movement constrained to the contiguous United States.
-- Contiguous U.S. boundary outline and exterior opacity mask derived from U.S. Census cartographic boundary data.
-- Location search for cities, addresses, ZIP codes, and other U.S. places.
-- Day-of-year filtering, a "Ripe today" shortcut, and a stacked seasonal availability chart.
-- Category filters for fruit, berries, nuts, and mushrooms.
-- Human-readable food groups in the sidebar, with more specific observed taxa shown in map popups.
-- Automatic iNaturalist observation loading for the current map bounds, the U.S. place scope, and selected species groups.
-- Chunked contiguous-U.S. Falling Fruit import at `data/falling-fruit/us/`.
-- Public access polygons from USGS PAD-US, queried live for the current map bounds.
-- Historic orchard records from the National Park Service cultural landscapes map, marked as permission-required.
+Open `http://127.0.0.1:4173/`. There is no build step, framework, or package
+manager — it is vanilla JS + Mapbox GL JS.
 
 ## Mapbox
 
@@ -33,36 +48,40 @@ window.FORAGE_CONFIG = {
 };
 ```
 
-## Data notes
+The committed token is intentionally URL-scoped in the Mapbox account.
 
-The starter species list is based on Shenandoah National Park's 2026 Superintendent's Compendium section on fruits, nuts, berries, and edible fungi that may be gathered by hand for personal use. The prototype intentionally excludes the broad "other edible fungi" bucket until mushrooms can be handled with a species-level edible whitelist. Park rules are not a general foraging license elsewhere; land ownership, local ordinances, and species-level safety still need to be checked.
+## Data sources
 
-Falling Fruit is not represented with starter records anymore. The browser app loads a contiguous-U.S. manifest and small viewport chunks from `data/falling-fruit/us/`, so nearby records can load without shipping the full national dataset on first page load. Regenerate the chunks from the downloaded Falling Fruit CSV archives with:
+Live: iNaturalist API (research-grade observations), USGS PAD-US public-access
+polygons. Cached/derived: Falling Fruit viewport chunks
+(`data/falling-fruit/us/`, loaded lazily at zoom ≥ 8), USGS MRDS minerals
+(`data/minerals-us.json`), NPS historic orchards, per-species phenology curves,
+and Census-derived US boundaries. Access-rule summaries are hand-encoded from
+primary sources — see `ATTRIBUTION.md` for every source, license, and caveat.
 
-```sh
-python3 scripts/build_falling_fruit_subset.py
-```
-
-The current app bundle filters the full Falling Fruit archive to the app's material groups and the Census-derived lower-48 boundaries stored in `data/contiguous-us-states.json`. The contiguous U.S. boundary used for the map mask is stored in `data/contiguous-us-boundary.json`.
-
-iNaturalist data is useful for occurrence hints, not harvest permission. Some observations have obscured or generalized coordinates, and many taxa need edible-species filtering before they should be shown as forage recommendations.
-
-The public-access overlay comes from USGS PAD-US. It can help screen for likely public access, but it is not a harvesting-rights layer. Access and permissions filters use Falling Fruit access notes, NPS records, and coordinates inside currently loaded PAD-US open/restricted access polygons where available.
-
-The NPS historic orchard subset is generated from the NPS Cultural Landscapes ArcGIS service:
+Regenerate derived data with the Python/Node generators in `scripts/`:
 
 ```sh
-python3 scripts/build_nps_orchards.py
+python3 scripts/build_falling_fruit_subset.py   # Falling Fruit chunks
+python3 scripts/build_nps_orchards.py           # NPS historic orchards
 ```
 
-Those records are intentionally labeled as permission-required because NPS asks visitors not to take fruit or cuttings from documented historic orchards without permission.
+Run the validation and rule-test suite before committing:
 
-See `ATTRIBUTION.md` for source links, license notes, and safety caveats.
+```sh
+bash scripts/check.sh
+```
 
-## Good next steps
+## Safety and ethics
 
-- Add server-side or edge caching for Falling Fruit chunks if national traffic grows.
-- Add a "verified by me" layer for personal notes and harvest history.
-- Build a safer species whitelist for edible fungi before adding more mushroom taxa.
-- Add plant-part metadata: fruit, nut, berry, mushroom, leaf, shoot, flower, root.
-- Consider more regional sources: state wildlife/park/forest data; USFS recreation/open data; municipal open-data tree inventories; and USDA/USFS Forest Inventory and Analysis occurrence data.
+- Occurrence data is never harvest permission; the distinction is kept explicit
+  in the UI, popups, and docs.
+- No new mushroom/fungi taxa without a species-level edible whitelist.
+- Herbalism content carries an educational-use disclaimer; it is preserved
+  everywhere the mode appears.
+- Data licenses (mostly CC BY-NC variants) are respected; every source is listed
+  in `ATTRIBUTION.md`. Permission-required sources (e.g. NPS historic orchards)
+  stay labeled that way.
+
+See `ATTRIBUTION.md` for source links, license notes, and safety caveats, and
+`docs/critique-remediation-plan.md` for the current improvement roadmap.
