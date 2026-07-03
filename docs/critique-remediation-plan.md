@@ -69,29 +69,41 @@ One OWNER action outstanding: replace the About "Who made this" placeholder.
 - [x] 3.1 Register override: Auto / Day / Night toggle in the conditions-rail sun
       panel, persisted in localStorage; `color-scheme: dark` under dusk/night.
       *Done, commit 3d4c93c.*
-- [ ] 3.2 Category-tinted clusters + aggregate tint (dominant-category hue + count)
-      so overview zooms stop being uniform cream dots. Highest-leverage visual fix.
-      **REMAINING — touches Mapbox paint expressions; wants reliable live testing.**
-- [ ] 3.3 Mode switcher promoted to the masthead (persistent segmented control with
-      the four mode colors). **REMAINING — masthead layout change, live iteration.**
-- [ ] 3.4 URL hash state (mode, center/zoom, day, species filter) + restore; persist
-      last active map. Shareable classroom links. **REMAINING (pairs with 3.3).**
+- [x] 3.2 Category-tinted clusters: cluster sources aggregate per-category counts;
+      fill = dominant category of the ACTIVE mode (70% hue / 30% cream),
+      register-aware; count labels get a halo. Expression verified accepted by
+      Mapbox GL live; visual pass on next unoccluded look. *Commit b5398aa.*
+      (Sub-zoom-8 aggregate tint deferred — different data path, no per-category
+      counts baked yet.)
+- [x] 3.3 Masthead mode pills (Food · Ink/Dye · Herbalism · Minerals) with mode
+      colors; desktop always-visible; mobile keeps menu→Maps. *Commit b5398aa.*
+- [x] 3.4 URL hash state (map, center/zoom, day/workability/all-seasons, isolated
+      species) + restore; last map persists. Verified end-to-end in Chrome.
+      *Commit b5398aa.*
 - [x] 3.5 Minerals chrome: Workability button no longer opens the date form (guarded
       + hidden on desktop); legend expands to min(70vh,460px)+scroll so all 15
       chips are reachable. Histogram header already correct at runtime
       ("MATERIALS BY WORKABILITY"). *Done, commit 3d4c93c.*
-- [ ] 3.6 Register-aware category colors (ink-black swatch invisible at night); lift
-      dawn/dusk accents to ≥4.5:1. **REMAINING — pairs with 3.2's color work.**
+- [x] 3.6 Register-aware category colors: registerCategoryColor() lifts dark hues
+      to a luminance floor on dusk/night (legend, histograms, season cats, cluster
+      tint); auto day/night basemap kept deliberately (owner decision — night
+      foragers), marker halo raised to 0.55 to lift dark icons. *Commit 1b9cf23.*
+      (Dawn/dusk accent-contrast audit still open — tracked under 3.6b below.)
 - [x] 3.7 Text selection in point cards; ≥24px targets for legend chips / season
       buttons; 16px slider thumb. *Done, commit 3d4c93c.*
-- [ ] 3.8 One guided first-run coach chip after the welcome modal. **REMAINING (small).**
-- [ ] 3.9 Keyboard/list route to map records — an "In this view" list that opens the
-      existing point card. Fixes the WCAG 2.1.1 failure. **REMAINING — largest/
-      transformative Phase-3 item; a new UI surface, wants live testing.**
+- [x] 3.8 First-run coach chip (search your town → open Materials), dismissible,
+      auto-dismissed by doing either action. *Commit b5398aa.*
+- [x] 3.9 "In view" record list — keyboard route to the same point card
+      (buildRecordFeature → openRecordCard). Verified end-to-end in Chrome.
+      *Commit bb48969.*
+- [ ] 3.6b Small follow-up: lift dawn (#d98a6a) and dusk (#ff9447) accents to
+      ≥4.5:1 against their panels (audit_contrast.mjs candidate).
 
-**Checkpoint 3:** part 1 done (3.1, 3.5, 3.7 — commit 3d4c93c). Remaining
-(3.2, 3.3, 3.4, 3.6, 3.8, 3.9) are the map-paint / new-UI items that need
-reliable live-map verification — grouped as "Phase 3b" for the next pass.
+**Checkpoint 3: DONE** (commits 3d4c93c, 1b9cf23, b5398aa, bb48969) plus the
+owner-directed edits (welcome copy, About profile, histogram counts). Note:
+local Mapbox rendering stalls when the browser window is occluded (Chrome
+throttles rAF; Mapbox load never fires) — this, not the token, caused most
+local blank-map flakiness. Cluster-tint visuals deserve one unoccluded look.
 
 ## Phase 4 — Engineering foundations
 
