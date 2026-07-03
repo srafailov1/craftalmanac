@@ -58,7 +58,6 @@ BOUNDS = {
 
 RULES = [
     ("ink-oak", r"\b(oak|acorn|acorns)\b|\bQuercus\b"),
-    ("ink-honeysuckle", r"\bhoneysuckle\b|\bLonicera\b"),
     ("ink-goldenrod", r"\bgoldenrod\b|\bSolidago\b"),
     ("ink-osage-orange", r"\b(osage orange|osage-orange|hedge apple)\b|\bMaclura pomifera\b"),
     ("ink-pokeweed", r"\b(pokeweed|pokeberry|inkberry)\b|\bPhytolacca americana\b"),

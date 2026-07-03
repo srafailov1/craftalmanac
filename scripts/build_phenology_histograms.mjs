@@ -25,7 +25,6 @@ const ANNOTATIONS = {
 };
 
 const FLOWER_MATERIAL_SPECIES = new Set([
-  "ink-honeysuckle",
   "ink-goldenrod"
 ]);
 

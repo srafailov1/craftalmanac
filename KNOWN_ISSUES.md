@@ -549,6 +549,53 @@ Extra worktrees still registered (`git worktree list`): `CraftAlmanac-permission
 can `git worktree remove` the latter two if they're truly done. No asset-version
 bump (no `app.js`/`styles.css` change this run).
 
+## Tune-up run log — 2026-07-03 (5am debug loop)
+
+Scoped data-regeneration pass to unblock `scripts/check.sh`, which was failing
+its data-validation gate with ~86 errors.
+
+**Fixed and verified this run:**
+1. **`ink-honeysuckle` stale Falling Fruit access tallies** (the reported
+   `validate_data.mjs` check-(e) failure). Commit `3d80b79` (2026-06-25) dropped
+   `ink-honeysuckle` from `inkSpeciesCatalog` per owner decision, but the baked
+   `accessCounts` in `data/falling-fruit/us/manifest.json` still tallied it across
+   85 chunks (183 records), so per-species access totals no longer reconciled
+   against the catalog. Fix: re-ran `scripts/build_access_status.mjs`, which
+   re-derives `accessCounts`/`accessCentroids` from the existing chunk records +
+   PAD-US access-cache and filters by the live catalog — dropping honeysuckle
+   with **zero** collateral change (semantic before/after diff: only the 85
+   honeysuckle chunks changed; `countsBySpeciesId`, `recordCount`, and all other
+   species' tallies identical; spot assertions Shenandoah/Monticello/Manhattan
+   still pass). Did **not** regenerate the raw chunks via
+   `build_falling_fruit_subset.py` — that field isn't produced by the subset
+   builder, and regenerating raw chunks would invalidate the PAD-US access-cache
+   (2905 chunks, live-service rebuild) for no benefit. Also removed the now-dead
+   `ink-honeysuckle` references from the two source generators
+   (`build_falling_fruit_subset.py` RULES, `build_phenology_histograms.mjs`
+   `FLOWER_MATERIAL_SPECIES`) so a future regen won't reintroduce the orphan.
+   `node scripts/validate_data.mjs` now passes all six checks. ~183 honeysuckle
+   records remain in the raw chunks as harmless orphans (render in no mode; map
+   to no catalog entry) and will be purged on the next full subset regen.
+
+**Open blocker — SEPARATE root cause, NOT honeysuckle (flagged, not fixed):**
+- **Ink phenology drift at scale.** After the validation gate passed, `check.sh`
+  now stops at the next gate (`build_phenology_histograms.mjs --verify`) with
+  `ink phenology missing ink-himalayan-blackberry`. This is the same silent-drift
+  class as the 06-23 `ink-tupelo` fix, but far larger: the Western/Southern dye
+  relaunch grew `inkSpeciesCatalog` to **48 species** while
+  `data/phenology/ink.json` still holds only the pre-relaunch **14 curves** — so
+  **34 catalog species have no phenology curve** (dye-alder, dye-toyon,
+  dye-eucalyptus, ink-himalayan-blackberry, ink-oregon-grape, … + the stale
+  `ink-honeysuckle` orphan curve). Unrelated to honeysuckle and pre-existing.
+  **Fix:** run `node scripts/build_phenology_histograms.mjs` (no args) to refetch
+  iNaturalist histograms for the current catalogs and rewrite
+  `data/phenology/{food,ink,medicine}.json`; this also auto-drops the honeysuckle
+  orphan. Left for an explicit pass because it's a live network regen that ships
+  ~34 new ink curves and re-fetches food/medicine (broader churn than this
+  scoped honeysuckle fix).
+
+**No asset-version bump** (no `app.js`/`styles.css` change this run).
+
 ## Hand-offs (for the 6am queue-grooming loop)
 
 1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work
