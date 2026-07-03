@@ -15,13 +15,14 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=phase3-ux-2">
+    <link rel="stylesheet" href="./styles.css?v=phase3-ux-3">
   </head>
   <body data-register="day">
     <main class="app-shell">
       <section class="map-area" aria-label="Craft Almanac map">
         <div id="masthead" class="floating">
           <h1 class="wordmark serif">Craft Almanac</h1>
+          <div id="modeSwitch" role="group" aria-label="Active map"></div>
           <nav class="links" id="mastLinks" aria-label="Primary">
             <button type="button" data-sheet="maps">Maps</button>
             <button type="button" data-sheet="plants">Materials</button>
@@ -101,6 +102,6 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=phase3-ux-2"></script>
+    <script src="./app.js?v=phase3-ux-3"></script>
   </body>
 </html>

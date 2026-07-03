@@ -2338,6 +2338,78 @@ body[data-register="night"] {
   padding-left: 13px;
 }
 
+/* Masthead mode switcher: the primary pivot, always visible on desktop.
+   Mobile (<=720px) keeps the menu -> Maps sheet route for space. */
+#modeSwitch {
+  display: flex;
+  gap: 4px;
+  border-left: 1px solid var(--reg-hair);
+  padding-left: 13px;
+}
+
+#modeSwitch .mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 3px 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: none;
+  color: var(--reg-sub);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+#modeSwitch .mode-pill i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+#modeSwitch .mode-pill.on {
+  border-color: var(--reg-hair);
+  background: color-mix(in srgb, var(--reg-ink) 8%, transparent);
+  color: var(--reg-ink);
+}
+
+@media (hover: hover) {
+  #modeSwitch .mode-pill:hover {
+    color: var(--reg-ink);
+  }
+}
+
+/* First-run coach chip: one guided task, dismissible, first visit only. */
+#coachChip {
+  position: absolute;
+  top: 118px;
+  left: 18px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 320px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--reg-ink);
+}
+
+#coachChip button {
+  flex: none;
+  min-width: 24px;
+  min-height: 24px;
+  border: none;
+  background: none;
+  color: var(--reg-sub);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
 #masthead .links button {
   background: none;
   border: none;
@@ -2926,6 +2998,9 @@ body[data-register="night"] {
 
   #masthead .wordmark { font-size: 18px; }
   #masthead .links { gap: 10px; padding-left: 10px; }
+  /* Mobile keeps the menu -> Maps route; no room for four pills in the bar. */
+  #modeSwitch { display: none; }
+  #coachChip { top: 128px; left: 10px; right: 10px; max-width: none; }
 
   /* Search + conditions are hidden until their masthead trigger opens them;
      both drop down just under the bar (see the .search-open / .cond-open

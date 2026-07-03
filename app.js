@@ -4059,13 +4059,78 @@ const state = {
   location: { lat: 39.8, lng: -98.6 }
 };
 
+// ---------------------------------------------------------------------------
+// Shareable URL state. The hash carries map mode, view, and the day/workability
+// filter so a teacher can bookmark or send "the pipestone view". Read once at
+// boot (hash wins over the last-used-map fallback); written back with
+// replaceState as the user moves — never pushState, so Back still leaves the app.
+// ---------------------------------------------------------------------------
+const ACTIVE_MAP_STORAGE_KEY = "craftAlmanacActiveMap";
+
+function parseUrlBootState() {
+  const boot = { center: null, zoom: null, speciesId: null };
+  let params = null;
+  try {
+    params = new URLSearchParams(window.location.hash.slice(1));
+  } catch {
+    return boot;
+  }
+  const mode = params.get("map");
+  const storedMode = (() => {
+    try { return window.localStorage?.getItem(ACTIVE_MAP_STORAGE_KEY) || ""; } catch { return ""; }
+  })();
+  if (mode && MAP_MODE_CONFIG[mode]) state.activeMap = mode;
+  else if (storedMode && MAP_MODE_CONFIG[storedMode]) state.activeMap = storedMode;
+  const c = (params.get("c") || "").split(",").map(Number);
+  const z = Number(params.get("z"));
+  if (c.length === 2 && c.every(Number.isFinite) && Number.isFinite(z)) {
+    boot.center = [c[0], c[1]];
+    boot.zoom = Math.min(19, Math.max(2.4, z));
+  }
+  if (params.get("season") === "all") state.allSeasons = true;
+  const day = Number(params.get("day"));
+  if (Number.isFinite(day) && day >= 1 && day <= 366) {
+    state.selectedDay = Math.round(day);
+    state.allSeasons = false;
+  }
+  const w = Number(params.get("w"));
+  if (Number.isFinite(w) && w >= 0 && w <= 100 && state.activeMap === "minerals") {
+    state.mineralWorkability = Math.round(w);
+    state.allSeasons = false;
+  }
+  boot.speciesId = params.get("sp") || null;
+  return boot;
+}
+
+const urlBootState = parseUrlBootState();
+
+let urlHashTimer = null;
+function updateUrlHash() {
+  if (!state.mapReady) return;
+  window.clearTimeout(urlHashTimer);
+  urlHashTimer = window.setTimeout(() => {
+    const c = map.getCenter();
+    const params = new URLSearchParams();
+    params.set("map", state.activeMap);
+    params.set("c", `${c.lng.toFixed(4)},${c.lat.toFixed(4)}`);
+    params.set("z", map.getZoom().toFixed(2));
+    if (state.allSeasons) params.set("season", "all");
+    else if (state.activeMap === "minerals") params.set("w", String(state.mineralWorkability));
+    else params.set("day", String(state.selectedDay));
+    if (state.selectedSpecies.size === 1) params.set("sp", [...state.selectedSpecies][0]);
+    try {
+      window.history.replaceState(null, "", `#${params.toString()}`);
+    } catch { /* history API unavailable — non-essential */ }
+  }, 250);
+}
+
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 const map = new mapboxgl.Map({
   container: "map",
   style: MAPBOX_STYLE,
-  center: [-98.6, 39.8],
-  zoom: 3.25,
+  center: urlBootState.center || [-98.6, 39.8],
+  zoom: urlBootState.zoom ?? 3.25,
   minZoom: 2.4,
   maxZoom: 19,
   maxBounds: REGION_MAX_BOUNDS,
@@ -4095,6 +4160,8 @@ geolocateControl.on("geolocate", (position) => {
 });
 map.scrollZoom.setWheelZoomRate?.(1 / 280);
 map.scrollZoom.setZoomRate?.(1 / 60);
+// Keep the shareable hash tracking the view (debounced inside updateUrlHash).
+map.on("moveend", updateUrlHash);
 window.addEventListener("resize", () => {
   map.resize();
 });
@@ -4177,11 +4244,13 @@ function applyRegister() {
   if (state.mapReady) {
     syncLightPreset(reg);
     updateMarkerHalo();
-    // Category swatches/segments are register-tinted (registerCategoryColor),
-    // so crossing into/out of dusk+night must repaint them. mapReady also
-    // guards the boot call, which runs before the DOM refs are declared.
+    // Category swatches/segments/cluster tints are register-aware
+    // (registerCategoryColor), so crossing into/out of dusk+night must repaint
+    // them. mapReady also guards the boot call, which runs before the DOM refs
+    // are declared.
     renderMapLegend();
     renderHistogram();
+    updateClusterTint();
   }
 }
 
@@ -4934,6 +5003,52 @@ function registerCategoryColor(hex) {
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
+// Blend two hex colors (t = share of `b`). Used to soften the dominant-category
+// cluster tint toward the base cream so tinted clusters read as one family.
+function mixHex(a, b, t) {
+  const pa = /^#?([0-9a-f]{6})$/i.exec(String(a || ""));
+  const pb = /^#?([0-9a-f]{6})$/i.exec(String(b || ""));
+  if (!pa || !pb) return a;
+  const na = parseInt(pa[1], 16);
+  const nb = parseInt(pb[1], 16);
+  const ch = (x, y) => Math.round(x + (y - x) * t);
+  const r = ch((na >> 16) & 255, (nb >> 16) & 255);
+  const g = ch((na >> 8) & 255, (nb >> 8) & 255);
+  const bl = ch(na & 255, nb & 255);
+  return `#${((r << 16) | (g << 8) | bl).toString(16).padStart(6, "0")}`;
+}
+
+// Dominant-category cluster fill for the ACTIVE mode: each cluster is tinted by
+// its most common member category (70% category hue / 30% base cream), so the
+// overview answers "what is here", not just "how many". First >=max branch
+// wins ties; clusters with no counted members fall back to the base cream.
+const CLUSTER_BASE_FILL = "#eef4e9";
+
+function clusterColorExpression() {
+  const config = getActiveMapConfig();
+  const counts = config.categories.map((category) => ["coalesce", ["get", `n_${category.id}`], 0]);
+  if (!counts.length) return CLUSTER_BASE_FILL;
+  const maxExpr = ["max", ...counts, 0];
+  const caseExpr = ["case"];
+  config.categories.forEach((category, index) => {
+    caseExpr.push([">=", counts[index], maxExpr]);
+    caseExpr.push(mixHex(registerCategoryColor(config.categoryColors[category.id] || "#777777"), CLUSTER_BASE_FILL, 0.3));
+  });
+  caseExpr.push(CLUSTER_BASE_FILL);
+  // Guard: if every count is 0 (legacy features without a category), stay cream.
+  return ["case", [">", maxExpr, 0], caseExpr, CLUSTER_BASE_FILL];
+}
+
+function updateClusterTint() {
+  if (!state.mapReady || !map.getLayer(MARKER_CLUSTERS_LAYER_ID)) return;
+  map.setPaintProperty(MARKER_CLUSTERS_LAYER_ID, "circle-color", clusterColorExpression());
+  // Count labels sit on arbitrary category hues now, so give them a halo.
+  if (map.getLayer(MARKER_CLUSTER_COUNT_LAYER_ID)) {
+    map.setPaintProperty(MARKER_CLUSTER_COUNT_LAYER_ID, "text-halo-color", "rgba(255,255,255,0.88)");
+    map.setPaintProperty(MARKER_CLUSTER_COUNT_LAYER_ID, "text-halo-width", 1.1);
+  }
+}
+
 function fxResize() {
   if (!fxCanvas) return;
   const host = document.getElementById("map") || fxCanvas.parentElement;
@@ -5503,6 +5618,20 @@ function renderModeChrome() {
   // #mode-disclaimer) — shown only in the medicine/herbalism map.
   const disclaimer = document.getElementById("mode-disclaimer");
   if (disclaimer) disclaimer.hidden = state.activeMap !== "medicine";
+  // Masthead mode switcher: the app's primary pivot, always visible on desktop
+  // (mobile keeps the menu -> Maps sheet route; the sheet also holds the longer
+  // mode descriptions and the herbalism disclaimer card).
+  const modeSwitch = document.getElementById("modeSwitch");
+  if (modeSwitch) {
+    modeSwitch.innerHTML = Object.keys(MODE_SHEET_INFO).map((mode) => {
+      const info = MODE_SHEET_INFO[mode];
+      const on = state.activeMap === mode;
+      return `<button type="button" class="mode-pill${on ? " on" : ""}" data-mode-pill="${escapeHTML(mode)}" aria-pressed="${String(on)}"><i style="background:${escapeHTML(info.color)}"></i>${escapeHTML(info.label)}</button>`;
+    }).join("");
+    modeSwitch.querySelectorAll("[data-mode-pill]").forEach((btn) => {
+      btn.addEventListener("click", () => setMapMode(btn.dataset.modePill));
+    });
+  }
   // Minerals mode swaps the bottom rail from the season scrubber to the
   // workability slider. The nav label stays the mode-neutral "Materials"
   // (honest across plants, fungi, and stone), so no per-mode text swap.
@@ -5515,6 +5644,7 @@ function renderModeChrome() {
   if (allSeasonsButton) allSeasonsButton.textContent = isMineral ? "All materials" : "All seasons";
   if (whenToggle) whenToggle.textContent = isMineral ? "Workability" : "Set date";
   applyMarkerZoomRangeForMode();
+  updateClusterTint();
   renderMapLegend();
 }
 
@@ -5582,6 +5712,34 @@ function isAccessFilterActive(selectedStatuses = getSelectedAccessStatuses()) {
   return selectedStatuses.size !== defaults.length || defaults.some((id) => !selectedStatuses.has(id));
 }
 
+// One guided first task after the welcome modal (first visit only): the two
+// core actions — search a place, open Materials — are otherwise undiscoverable
+// behind a collapsed icon and a nav word. A single dismissible chip, never
+// shown again once dismissed or acted on.
+const COACH_STORAGE_KEY = "craftAlmanacCoachSeen";
+
+function showFirstRunCoach() {
+  try {
+    if (window.localStorage?.getItem(COACH_STORAGE_KEY) === "true") return;
+  } catch { /* private mode: still show once this session */ }
+  const mapArea = document.querySelector(".map-area");
+  if (!mapArea || document.getElementById("coachChip")) return;
+  const chip = document.createElement("div");
+  chip.id = "coachChip";
+  chip.className = "floating";
+  chip.setAttribute("role", "note");
+  chip.innerHTML = `<span><b>Try:</b> search your town, then open <b>Materials</b> and tap a species to see it on the map.</span><button type="button" aria-label="Dismiss tip">&times;</button>`;
+  mapArea.appendChild(chip);
+  const dismiss = () => {
+    try { window.localStorage?.setItem(COACH_STORAGE_KEY, "true"); } catch { /* private mode */ }
+    chip.remove();
+  };
+  chip.querySelector("button").addEventListener("click", dismiss);
+  // Acting on either suggested control also counts as "got it".
+  document.getElementById("locationSearchInput")?.addEventListener("focus", dismiss, { once: true });
+  document.querySelector('#mastLinks [data-sheet="plants"]')?.addEventListener("click", dismiss, { once: true });
+}
+
 function initWelcomeModal() {
   if (!welcomeModal || !welcomeModalButton) return;
   const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
@@ -5603,6 +5761,7 @@ function initWelcomeModal() {
     welcomeModal.hidden = true;
     document.body.classList.remove("modal-open");
     focusAfterClose?.focus?.();
+    showFirstRunCoach();
   };
 
   welcomeModalButton.addEventListener("click", dismissWelcome, { once: true });
@@ -12238,6 +12397,10 @@ function setMapMode(mode) {
   renderFilterControls();
   updateLayerHandoff();
   render();
+  // Returning users come back to the map they last used; the URL always names
+  // the active map so links stay shareable.
+  try { window.localStorage?.setItem(ACTIVE_MAP_STORAGE_KEY, mode); } catch { /* private mode */ }
+  updateUrlHash();
   // Modes whose data is geographically limited (Minerals → Arkansas) fly the map
   // to where their points actually are, so the layer isn't an empty national view.
   const initialView = MAP_MODE_CONFIG[mode].initialView;
@@ -12447,6 +12610,12 @@ function setLocationSearchStatus(message) {
 function initControls() {
   syncActiveCatalog();
   renderModeChrome();
+  // Deep link: #...&sp=<speciesId> isolates one species (the same action as
+  // tapping its Materials card). Applied after the catalog sync so the id is
+  // resolvable; silently ignored if it isn't in the active catalog.
+  if (urlBootState.speciesId && speciesCatalogById.has(urlBootState.speciesId)) {
+    selectOnlySpecies(urlBootState.speciesId);
+  }
   daySlider.max = String(getDaysInYear(ACTIVE_YEAR));
   daySlider.value = String(state.selectedDay);
   dateInput.value = getDateInputValue(getSelectedDate());
@@ -12642,6 +12811,7 @@ function render() {
     schedulePublicLandLoad();
     requestAnimationFrame(() => map.resize());
   }
+  updateUrlHash();
 }
 
 function renderAccessFilterNote() {
@@ -13689,11 +13859,20 @@ function initMapLayers() {
   }
 
   if (!map.getSource(MARKERS_SOURCE_ID)) {
+    // Per-category member counts aggregated into every cluster, for the
+    // dominant-category tint (updateClusterTint). clusterProperties are fixed
+    // at source creation, so this carries the union of all four modes'
+    // category ids (~29, all distinct); only the active mode's are read.
+    const clusterProperties = {};
+    Object.values(MAP_MODE_CONFIG).forEach((cfg) => cfg.categories.forEach((category) => {
+      clusterProperties[`n_${category.id}`] = ["+", ["case", ["==", ["get", "category"], category.id], 1, 0]];
+    }));
     map.addSource(MARKERS_SOURCE_ID, {
       type: "geojson",
       cluster: true,
       clusterMaxZoom: MARKER_CLUSTER_MAX_ZOOM,
       clusterRadius: MARKER_CLUSTER_RADIUS,
+      clusterProperties,
       data: {
         type: "FeatureCollection",
         features: []
@@ -13818,6 +13997,11 @@ function initMapLayers() {
 
   updatePublicLandVisibility();
   bindMapInteractions();
+  // Mode-dependent layer state that no-ops before mapReady: re-apply now that
+  // the layers exist (matters when a URL hash boots straight into a mode).
+  applyMarkerZoomRangeForMode();
+  updateClusterTint();
+  updateMarkerHalo();
   updateLayerHandoff();
 
   map.on("sourcedata", (event) => {
