@@ -38,12 +38,9 @@ occurrence is not permission" values. All are surgical app.js/scripts edits.
 
 **Checkpoint 1:** review the commits; nothing structural has moved. **DONE (commit e7bb490).**
 
-> ⚠️ Found during Phase 1 (pre-existing, not introduced here, and outside these
-> edits' scope): `scripts/validate_data.mjs` fails with ~86 errors — Falling
-> Fruit chunks still reference `ink-honeysuckle`, a species no longer in the ink
-> catalog, so the chunk access totals don't reconcile. This is a data-regeneration
-> issue for the 5am debug loop (rebuild chunks or restore the species). Flagged
-> for the owner; it blocks a clean `scripts/check.sh` run until fixed.
+> ✅ RESOLVED: the pre-existing `ink-honeysuckle` chunk mismatch (~86
+> validate_data failures) was fixed on a parallel branch and cherry-picked into
+> main (commit 1d32504). `scripts/check.sh` is now fully green.
 
 ## Phase 2 — Say what it is (copy, identity, onboarding)
 
@@ -93,9 +90,10 @@ One OWNER action outstanding: replace the About "Who made this" placeholder.
       buttons; 16px slider thumb. *Done, commit 3d4c93c.*
 - [x] 3.8 First-run coach chip (search your town → open Materials), dismissible,
       auto-dismissed by doing either action. *Commit b5398aa.*
-- [x] 3.9 "In view" record list — keyboard route to the same point card
-      (buildRecordFeature → openRecordCard). Verified end-to-end in Chrome.
-      *Commit bb48969.*
+- [~] 3.9 "In view" record list shipped (bb48969) then REMOVED as bar clutter
+      per owner (commit d6fa623). The keyboard-route need is unmet again; the
+      building blocks (buildRecordFeature → openRecordCard) remain, so a future
+      keyboard route belongs in the Materials sheet, not the season bar.
 - [ ] 3.6b Small follow-up: lift dawn (#d98a6a) and dusk (#ff9447) accents to
       ≥4.5:1 against their panels (audit_contrast.mjs candidate).
 
