@@ -2119,9 +2119,11 @@ const state = {
   favoriteSpecies: new Set(readFavoriteSpecies()),
   savedLocations: new Set(readSavedLocations()),
   savedLocationsOnly: false,
-  // Materials sheet "Available" filter: show only species in season on the
-  // selected day (folds the old standalone "Now" view into the shelf).
+  // "Available" filters: show only species / projects whose material is in
+  // season on the selected day (folds the old standalone "Now" view into the
+  // Materials and Projects shelves). Independent per sheet, same selected day.
   materialsAvailableOnly: false,
+  projectsAvailableOnly: false,
   register: "day",
   // The user's explicit wind-animation choice, kept separate from the
   // power/data gate so toggling tabs or battery state can't override intent.
@@ -4271,7 +4273,13 @@ const PROJECT_INTRO = {
 
 function sheetProjectsHTML() {
   const map = state.activeMap;
-  const mapRecipes = PROJECT_RECIPES.filter((r) => (r.map || "ink") === map);
+  const isMineral = getActiveMapConfig().loadMinerals;
+  const allMapRecipes = PROJECT_RECIPES.filter((r) => (r.map || "ink") === map);
+  // "Available" filter — a project shows when its source material is in season
+  // on the selected day. Hidden for minerals (stone keeps no season).
+  const availOnly = !isMineral && state.projectsAvailableOnly;
+  const availCount = isMineral ? 0 : allMapRecipes.filter(isProjectAvailableOnSelectedDay).length;
+  const mapRecipes = availOnly ? allMapRecipes.filter(isProjectAvailableOnSelectedDay) : allMapRecipes;
 
   // Each shelf collapses to a horizontally-scrollable row; the toggle expands
   // it into a wrapped grid to show the whole category at once.
@@ -4298,20 +4306,36 @@ function sheetProjectsHTML() {
   let body;
   if (!projectRecipesLoaded && !PROJECT_RECIPES.length) {
     body = `<p class="proj-scope">Loading projects…</p>`;
-  } else if (!mapRecipes.length) {
+  } else if (!allMapRecipes.length) {
     const other = map === "food" ? "Ink/Dye" : "Ink/Dye and Food";
     body = `<p class="proj-scope">Projects for this map are coming soon. In the meantime, the ${other} maps have full project benches — switch maps from <strong>Maps</strong>.</p>`;
+  } else if (availOnly && !mapRecipes.length) {
+    const selDate = getSelectedDate();
+    body = `<p class="proj-scope">No project's material is in season on ${escapeHTML(FULL_MONTHS[selDate.getMonth()])} ${selDate.getDate()}. Switch to <strong>All</strong>, or move the date slider on the map.</p>`;
   } else {
     body = `<div class="proj-shelves">${shelves.join("")}</div>`;
   }
 
+  // Filter toggle (only once recipes are loaded, seasonal maps only).
+  const selDate = getSelectedDate();
+  const filterRow = (!isMineral && projectRecipesLoaded && allMapRecipes.length) ? `
+    <div class="mat-filter" role="group" aria-label="Filter projects">
+      <button type="button" class="mat-filter-btn${availOnly ? "" : " on"}" data-projects-filter="all" aria-pressed="${String(!availOnly)}">All · ${allMapRecipes.length}</button>
+      <button type="button" class="mat-filter-btn${availOnly ? " on" : ""}" data-projects-filter="available" aria-pressed="${String(availOnly)}">In season ${FULL_MONTHS[selDate.getMonth()]} ${selDate.getDate()} · ${availCount}</button>
+    </div>` : "";
+  const caveat = availOnly
+    ? `<div class="now-foot">"In season" is a contiguous-US average — local timing varies by weeks. Techniques and binders with no seasonal material always show.</div>`
+    : "";
+
   const mapLabel = { ink: "INK & DYE", food: "FOOD", minerals: "MINERALS", medicine: "HERBALISM" }[map] || map.toUpperCase();
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
-    <div class="k">THE PRESS · ${mapRecipes.length} PROJECTS · ${mapLabel}</div>
+    <div class="k">THE PRESS · ${allMapRecipes.length} PROJECTS · ${mapLabel}</div>
     <h2 class="serif">Projects</h2>
     <p>${escapeHTML(PROJECT_INTRO[map] || PROJECT_INTRO.ink)} Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Scroll a row sideways, or Expand a category to see all of it.</p>
+    ${filterRow}
     ${body}
+    ${caveat}
   `;
 }
 
@@ -4432,6 +4456,17 @@ function isSpeciesInSeasonOnSelectedDay(species) {
   return Array.isArray(species.months) && species.months.includes(getSelectedMonth());
 }
 
+// A project is "available" on the selected day when its source material
+// (plantId) is a catalog species in season that day. Recipes with no plantId
+// (techniques, binders, modifiers) or an unresolvable one aren't tied to a
+// seasonal harvest, so they count as always available (never hidden on a hunch).
+function isProjectAvailableOnSelectedDay(recipe) {
+  if (!recipe.plantId) return true;
+  const species = speciesCatalogById.get(recipe.plantId);
+  if (!species) return true;
+  return isSpeciesInSeasonOnSelectedDay(species);
+}
+
 const SHEET_BUILDERS = {
   maps: sheetMapsHTML,
   plants: sheetPlantsHTML,
@@ -4494,6 +4529,12 @@ function initSheets() {
     if (matFilter) {
       state.materialsAvailableOnly = matFilter.dataset.materialsFilter === "available";
       openSheet("plants"); // re-render the shelf in place
+      return;
+    }
+    const projFilter = event.target.closest("[data-projects-filter]");
+    if (projFilter) {
+      state.projectsAvailableOnly = projFilter.dataset.projectsFilter === "available";
+      showProjectsGrid(); // re-render the projects grid in place
       return;
     }
     const modeCard = event.target.closest("[data-mode]");
