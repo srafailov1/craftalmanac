@@ -4384,7 +4384,134 @@ function openRecipeDetail(id) {
   sheetEl.querySelector(".proj-back")?.focus?.();
 }
 
+// ---------------------------------------------------------------------------
+// Phase 5.7 "Now" sheet — the almanac cadence view: "what should I look for
+// right now?" for the active map. Always computed from TODAY's real date
+// (never the season slider). Ranking uses the per-species phenology curves
+// where they exist and falls back to the binary species.months windows, so
+// the sheet degrades gracefully offline / before the lazy curve fetch lands.
+// The curves are a contiguous-US average — the footer carries the same
+// honesty caveat as the season histogram (Phase 1.4).
+// ---------------------------------------------------------------------------
+const NOW_PEAK_FRACTION = 0.66; // in-window month value ≥ this share of the curve max = peaking
+
+const NOW_LEDES = {
+  food: "The edible species at their seasonal peak today — the shortlist worth checking on the map before anything else.",
+  ink: "The ink and dye materials at their seasonal peak today — color is easiest to gather when the plant is abundant.",
+  medicine: "The materia-medica plants in season today — an educational reference to traditional use, not a harvest list."
+};
+
+// Same shell as the Materials cards (spine · common name · scientific name ·
+// category), emitting data-species so the existing sheet click/keyboard
+// delegation isolates the species on the map with zero new wiring.
+function nowSpeciesCardHTML(species, secondary) {
+  const color = registerCategoryColor(CATEGORY_COLORS[species.category] || "#777");
+  const meta = `${species.scientificName} · ${getCategoryLabel(species.category)}`;
+  return `
+    <div class="mini-card${secondary ? " now-soon" : ""}" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
+      <div class="spine" style="background: ${escapeHTML(color)}"></div>
+      <h3 class="serif">${escapeHTML(species.commonName)}</h3>
+      <div class="m">${escapeHTML(meta)}</div>
+    </div>`;
+}
+
+function sheetNowHTML() {
+  const config = getActiveMapConfig();
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString("en-US", { month: "long", day: "numeric" }).toUpperCase();
+  const head = `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="k">THE ALMANAC · ${escapeHTML(dateLabel)}</div>
+    <h2 class="serif">What's ready now</h2>`;
+  // The histogram's honesty caveat travels with every ranked list here, plus
+  // the project's standing line — occurrence is never permission.
+  const foot = `
+    <div class="now-foot">Timing is a contiguous-US average — local timing varies by weeks. Occurrence is never permission — confirm the rule for the land before you collect.</div>`;
+
+  // Minerals: stone keeps no season, so instead of a calendar the sheet lists
+  // what the workability slider currently admits (same band logic as the map).
+  if (config.loadMinerals) {
+    const speciesByCategory = new Map(speciesCatalog.map((species) => [species.category, species]));
+    const bandCards = MINERAL_WORKABILITY_ORDER
+      .filter((id) => state.allSeasons || mineralCategoryInBand(id))
+      .map((id) => speciesByCategory.get(id))
+      .filter(Boolean)
+      .map((species) => nowSpeciesCardHTML(species, false));
+    return `${head}
+      <p class="sheet-lede">Stone keeps no season — craft rock is "ready" whenever collecting it is allowed. Instead of a calendar, here is what fits your current workability band.</p>
+      <p>Tap a material to show just it on the map.</p>
+      <div class="card-grid">
+        <span class="card-grid-label">${state.allSeasons ? "ALL MATERIALS" : "IN YOUR WORKABILITY BAND"} · ${bandCards.length}</span>
+        ${bandCards.join("")}
+      </div>
+      <p>Move the workability slider at the bottom of the map to shift the band from soft carving stone toward hard knapping and lapidary material. Clay bodies, glazes, and carving projects live under <strong>Projects</strong> — The Press.</p>
+      ${foot}`;
+  }
+
+  // Seasonal maps. The hand-curated species.months HARVEST window gates
+  // membership; the phenology curve only ranks (and cuts) within it. The
+  // curves are national observation frequency, so a conspicuous plant scores
+  // high months before its harvest window — black walnut in full leaf peaks
+  // in July while the nuts are Sep–Nov. Curve-only membership would put fall
+  // nuts in a July "ready now" list: being observed is not being ready, the
+  // same way occurrence is not permission. With no curve (offline, failed
+  // fetch, uncurved species) membership degrades to the months window alone.
+  const phenology = phenologyByMode[state.activeMap] || null;
+  const monthIdx = today.getMonth();
+  const month = monthIdx + 1;
+  const nextIdx = (monthIdx + 1) % 12;
+  const peak = [];
+  const coming = [];
+  speciesCatalogByName.forEach((species) => {
+    const raw = phenology ? phenology[species.id] : null;
+    const curve = Array.isArray(raw) && raw.length === 12 && Math.max(...raw) > 0 ? raw : null;
+    const share = (idx) => (curve ? (curve[idx] || 0) / Math.max(...curve) : 0);
+    if (species.months.includes(month) && (!curve || share(monthIdx) >= NOW_PEAK_FRACTION)) {
+      peak.push({ species, value: share(monthIdx) });
+      return;
+    }
+    if (species.months.includes(nextIdx + 1)) {
+      coming.push({ species, value: share(nextIdx) });
+    }
+  });
+  const byValue = (a, b) => (b.value - a.value) || a.species.commonName.localeCompare(b.species.commonName);
+  peak.sort(byValue);
+  coming.sort(byValue);
+
+  let body = "";
+  if (peak.length) {
+    body += `<div class="card-grid"><span class="card-grid-label">PEAK NOW · ${peak.length}</span>${peak.map((entry) => nowSpeciesCardHTML(entry.species, false)).join("")}</div>`;
+  } else {
+    body += `<p>Nothing on this map is at its national peak right now — the species below are coming into season, and the full shelf lives under <strong>Materials</strong>.</p>`;
+  }
+  if (coming.length) {
+    body += `<div class="card-grid"><span class="card-grid-label">COMING INTO SEASON · ${MONTHS[nextIdx].toUpperCase()}</span>${coming.map((entry) => nowSpeciesCardHTML(entry.species, true)).join("")}</div>`;
+  }
+
+  // Food-map conditions note: only when weather + the C3 threshold table are
+  // both present, and never asserting more than flushPanelNote does.
+  let conditionsNote = "";
+  if (state.activeMap === "food" && state.weather) {
+    const flushMin = minFlushThresholdMm();
+    if (flushMin != null && state.weather.past72 >= flushMin) {
+      conditionsNote = `<div class="card-grid-label">CONDITIONS</div><p>Recent rain (${state.weather.past72} mm in the past 72 h) may trigger fungal flushes for whitelisted mushrooms — check the map's flush pulses.</p>`;
+    }
+  }
+
+  const medNote = state.activeMap === "medicine"
+    ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>`
+    : "";
+  return `${head}
+    <p class="sheet-lede">${escapeHTML(NOW_LEDES[state.activeMap] || NOW_LEDES.food)}</p>
+    <p>Tap a species to show just it on the map.</p>
+    ${body}
+    ${conditionsNote}
+    ${medNote}
+    ${foot}`;
+}
+
 const SHEET_BUILDERS = {
+  now: sheetNowHTML,
   maps: sheetMapsHTML,
   plants: sheetPlantsHTML,
   projects: sheetProjectsHTML,
@@ -4405,6 +4532,16 @@ function openSheet(name) {
   // Projects prose is lazy-loaded (data/project-recipes.json); kick the fetch
   // when the sheet opens — loadProjectRecipes re-renders here once it lands.
   if (name === "projects" && !projectRecipesLoaded) loadProjectRecipes();
+  // Same pattern for the Now sheet's phenology curves: if the active map's
+  // curves haven't been fetched yet the sheet renders on months alone, then
+  // re-renders in place when the curves land. A cached null (failed load)
+  // already has its key in phenologyByMode, so offline never re-fetch-loops.
+  if (name === "now" && !getActiveMapConfig().loadMinerals
+      && !Object.prototype.hasOwnProperty.call(phenologyByMode, state.activeMap)) {
+    loadPhenology(state.activeMap).then(() => {
+      if (state.openSheet === "now") openSheet("now");
+    });
+  }
   sheetEl.innerHTML = builder();
   sheetWrap.classList.add("open");
   sheetWrap.setAttribute("aria-hidden", "false");

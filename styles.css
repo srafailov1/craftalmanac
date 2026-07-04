@@ -1750,6 +1750,25 @@ body[data-register="night"] {
 }
 .card-grid-label:first-child { margin-top: 0; }
 
+/* ---- Phase 5.7 "Now" sheet ---- */
+/* Coming-into-season cards are visually secondary to PEAK NOW. */
+.mini-card.now-soon { opacity: 0.72; }
+.mini-card.now-soon:hover,
+.mini-card.now-soon:focus-visible { opacity: 1; }
+.mini-card.now-soon h3 { font-size: 13px; }
+/* Footer caveat: same honesty line as the histogram's .season-caveat, in the
+   sheet's small-mono voice. */
+#sheet .now-foot {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--reg-hair);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  color: var(--reg-sub);
+}
+
 /* ---- project shelves: each recipe category collapses to one horizontally
    scrollable row; the Expand toggle switches it to a full wrapped grid ---- */
 .proj-shelves { margin-top: 14px; }

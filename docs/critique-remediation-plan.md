@@ -201,8 +201,14 @@ Order matters here (license → provenance → publication):
       verified by an independent Reed-Solomon decode). About sheet links to
       materials/, projects/, and cards/. Region-matched-rule print view
       deferred to the app follow-up.
-- [ ] 5.7 Almanac cadence: "What's ready now" location-aware view; digest/RSS later
-      if wanted.
+- [x] 5.7 Almanac cadence DONE: a "Now" nav sheet — today-focused per map.
+      PEAK NOW / COMING INTO SEASON from phenology curves, gated by the
+      hand-curated harvest window so a species' observation-peak can't
+      masquerade as ripeness (fall nuts correctly excluded in July); food
+      rain/flush conditions note; honest non-seasonal framing for minerals;
+      every entry isolates its species on the map; national-average caveat
+      carried. Verified live (JULY 4: 15 berries at peak, nuts excluded).
+      (email/RSS digest = optional future follow-up.)
 
 **Checkpoint 5:** each 5.x is independently shippable; pivot freely.
 
