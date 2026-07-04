@@ -1,0 +1,642 @@
+{
+  "schema": "craft-almanac-rules/1",
+  "table": "nps-gathering-rules",
+  "version": "2026-07-04",
+  "generatedBy": "scripts/extract_rules.mjs",
+  "license": "Underlying legal facts (36 CFR, state codes, compendiums) are public and unrestricted; the prose summaries, notes, and compilation are CC BY-NC-SA 4.0, offered without warranty. See LICENSE-CONTENT.md and docs/rules-schema.md.",
+  "rules": [
+    {
+      "match": "great smoky",
+      "sourceLabel": "Great Smoky Mountains compendium",
+      "sourceUrl": "https://www.nps.gov/grsm/learn/management/compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Listed fruits, berries, and nuts: 1 pound per person per day per species (apples, pears, and peaches excepted); edible soil-growing mushrooms: 1 pound combined, 100+ feet from roads and facilities.",
+      "note": "Great Smoky Mountains designates listed species for hand-gathering 200+ feet from nature trails; ramps may not be collected. Confirm the species appears in the compendium list. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "new river gorge",
+      "sourceLabel": "New River Gorge compendium",
+      "sourceUrl": "https://www.nps.gov/neri/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Listed berries and fruits (including mayapples and sumac berries): 1 gallon per person per day; apples, black walnuts, peaches, pears, persimmons, and plums: 3 gallons; edible mushrooms (morel, oyster, chanterelle, puffball, black trumpet, dryad's saddle, sulphur shelf): 1.5 gallons.",
+      "note": "New River Gorge designates listed fruits, nuts, and mushrooms for personal-use gathering. Ramps were removed from the designation (depleted populations) and ginseng is illegal to harvest on NPS land. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "acadia",
+      "sourceLabel": "Acadia compendium",
+      "sourceUrl": "https://www.nps.gov/acad/learn/management/sc.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Acadia's compendium explicitly prohibits collecting mushrooms (and conifer cones, lichens, and fiddlehead ferns): too little is known about harvest effects on fungi and their role in the ecosystem.",
+      "limit": "Edible fruits and berries (excluding apples): 1 dry half-gallon per person per day; apples: up to 10 dry gallons; unshelled nuts: 1/2 gallon; unoccupied seashells: 1 pint. Gathering must not damage the plant.",
+      "note": "Acadia designates edible fruits, berries, nuts, and unoccupied seashells for hand-gathering; mushroom collection is explicitly prohibited. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "cuyahoga valley",
+      "sourceLabel": "Cuyahoga Valley compendium",
+      "sourceUrl": "https://www.nps.gov/cuva/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Cuyahoga Valley's compendium explicitly prohibits collecting fungi (mushrooms) and bulbs in any quantity; the adjacent Summit and Cleveland Metroparks also prohibit foraging.",
+      "limit": "Reasonable quantities of edible fruit, berries, or nuts for personal use, excluding state or federally listed rare, threatened, or endangered plants. Fungi (mushrooms) and bulbs may not be collected in any quantity.",
+      "note": "Cuyahoga Valley permits hand-collection of edible fruit, berries, and nuts; mushroom and bulb collection is explicitly prohibited. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "olympic national park",
+      "sourceLabel": "Olympic compendium",
+      "sourceUrl": "https://www.nps.gov/olym/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Edible fruits, berries, nuts, and mushroom fruiting bodies: 1 quart per person per day, except within 200 feet of nature trails, special trails, and natural study areas. Cranberries and native blackberries: 3 1/2 gallons once per two-week period. Exotic species (apples, pears, non-native blackberries) are exempt from limits. Unoccupied seashells: a handful per visit.",
+      "note": "Olympic designates edible fruits, berries, nuts, mushrooms, and unoccupied seashells for hand-gathering for personal consumption. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "mount rainier",
+      "sourceLabel": "Mount Rainier compendium",
+      "sourceUrl": "https://www.nps.gov/mora/learn/management/lawsandpolicies.htm",
+      "mushroomsAllowed": true,
+      "limit": "Listed berries (blueberries, highbush cranberries, gooseberries, salmonberries, blackberries, thimbleberries, serviceberries, strawberries) and edible mushrooms: no more than 1 gallon per person per day, gathered by hand.",
+      "note": "Mount Rainier designates listed berries and edible fungi for hand-gathering; stay on trail in the Paradise, Sunrise, Tipsoo Lake, and Ohanapecosh hot springs areas. Checked against the 2025 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "rocky mountain national park",
+      "sourceLabel": "Rocky Mountain compendium",
+      "sourceUrl": "https://www.nps.gov/romo/learn/management/rmnp_compendium.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Rocky Mountain's compendium explicitly states edible mushrooms are not permitted to be gathered or consumed.",
+      "limit": "Listed fruits and berries (blueberries and huckleberries, chokecherries, red elderberries, raspberries, rose hips, strawberries): 1 quart per person per day for personal consumption.",
+      "note": "Rocky Mountain designates listed fruits and berries for hand-gathering; mushroom collection is explicitly prohibited. Checked against the 2025 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "yellowstone",
+      "sourceLabel": "Yellowstone compendium",
+      "sourceUrl": "https://www.nps.gov/yell/learn/management/lawsandpolicies.htm",
+      "mushroomsAllowed": true,
+      "limit": "Edible berries and mushrooms: 1 quart per species per person per day; possession and consumption are restricted to park areas.",
+      "note": "Yellowstone allows limited berry and mushroom gathering consumed inside the park. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "yosemite",
+      "sourceLabel": "Yosemite compendium",
+      "sourceUrl": "https://www.nps.gov/yose/learn/management/upload/yose-compendium.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Listed berries (blackberries, raspberries, elderberries, strawberries, thimbleberries, huckleberries): 1 pint per person per day each, for immediate consumption; invasive Himalayan blackberries: unlimited; edible fungi: 1 pint per day, cut (not pulled); apples and pears may be gathered and transported for non-commercial use.",
+      "note": "Yosemite allows small-quantity berry and fungus gathering for immediate consumption. Checked against the September 2025 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "glacier national park",
+      "sourceLabel": "Glacier compendium",
+      "sourceUrl": "https://www.nps.gov/glac/learn/management/compendium.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Glacier's compendium explicitly prohibits picking, gathering, or harvesting mushrooms; removing fruiting bodies removes the spores that continue the fungus's reproductive cycle.",
+      "limit": "Edible fruits, nuts, and berries: 1 quart per person per day, gathered by hand; bush rakes and other harvesting devices are prohibited. Mushroom gathering is prohibited.",
+      "note": "Glacier designates edible fruits, nuts, and berries for hand-gathering; harvesting tools and mushroom collection are explicitly prohibited. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "crater lake",
+      "sourceLabel": "Crater Lake compendium",
+      "sourceUrl": "https://www.nps.gov/crla/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "Blueberries, huckleberries, Pacific serviceberries, and western thimbleberries: 1 quart per person per day possession limit each; all park areas are open to collection of these berries.",
+      "note": "Crater Lake designates four berry groups for hand-gathering; other gathering (including mushrooms) is not designated. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "grand teton",
+      "sourceLabel": "Grand Teton compendium",
+      "sourceUrl": "https://www.nps.gov/grte/learn/management/compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Edible fruits, berries, nuts, and mushrooms: 1 quart per species per person per day; possession and consumption are restricted to park areas.",
+      "note": "Grand Teton (and the adjacent Rockefeller Parkway) allows gathering of specified vegetation for immediate personal consumption. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "redwood",
+      "sourceLabel": "Redwood compendium",
+      "sourceUrl": "https://www.nps.gov/redw/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "All berry species: 1 gallon per person per day; apples: 5 per day; tanoak acorns: 10 gallons; hazelnuts: 1 gallon; unoccupied seashells: 1 gallon (below the storm-wave limit only).",
+      "note": "Redwood designates berries, listed nuts, apples, and seashells for hand-gathering; mushrooms are not designated. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "capitol reef",
+      "sourceLabel": "Capitol Reef orchards",
+      "sourceUrl": "https://www.nps.gov/care/learn/historyculture/orchards.htm",
+      "mushroomsAllowed": false,
+      "limit": "Fruita historic orchards: harvest only ripe fruit from orchards posted with \"U-Pick Fruit\" signs; fruit taken from the orchards must be paid for at the self-pay station.",
+      "note": "Capitol Reef's historic orchards operate a managed u-pick program rather than wild gathering; never climb the historic trees. Checked against the park's current orchard regulations, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "death valley",
+      "sourceLabel": "Death Valley compendium",
+      "sourceUrl": "https://www.nps.gov/deva/learn/management/rules-and-regulations.htm",
+      "mushroomsAllowed": false,
+      "limit": "Pine nuts, mesquite beans, grapes, and fruit from non-native trees (palms, apples, figs, black walnuts, pomegranates): less than 1 quart per person per day and no more than 5 total quarts per calendar year.",
+      "note": "Death Valley designates several native and non-native foods for hand-gathering in small personal-use amounts. Checked against the current compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "indiana dunes",
+      "sourceLabel": "Indiana Dunes natural-items rules",
+      "sourceUrl": "https://www.nps.gov/indu/learn/management/naturalitems.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Indiana Dunes prohibits picking or removing mushrooms (along with all flowers, leaves, and seeds) under 36 CFR 2.1(a)(1)(ii); only fruits, nuts, and berries are designated for personal-use collection.",
+      "limit": "Fruits, nuts, and berries: up to a handful per person for personal, non-commercial use (36 CFR 2.1(c)(1)); prickly pear cactus is fully protected. A small amount of unoccupied seashells may also be taken.",
+      "note": "Indiana Dunes designates only fruits, nuts, and berries (a handful per person) for personal-use hand-collection; all other plant material, including mushrooms, flowers, leaves, and seeds, is protected. Checked against the park's natural-items rules page, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "sequoia national park",
+      "sourceLabel": "Sequoia & Kings Canyon park rules",
+      "sourceUrl": "https://www.nps.gov/seki/planyourvisit/wherecani.htm",
+      "mushroomsAllowed": true,
+      "limit": "Berries, mushrooms, and a few other plants may be collected for immediate personal consumption only; per-species daily limits are set in the park compendium. Collecting inedible natural objects (wildflowers, cones, rocks, bones) is prohibited.",
+      "note": "Sequoia and Kings Canyon allow gathering of berries, mushrooms, and a few designated plants for immediate consumption within the park; confirm the species and current limit in the superintendent's compendium (https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm). Checked against the park's rules page, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "kings canyon",
+      "sourceLabel": "Sequoia & Kings Canyon park rules",
+      "sourceUrl": "https://www.nps.gov/seki/planyourvisit/wherecani.htm",
+      "mushroomsAllowed": true,
+      "limit": "Berries, mushrooms, and a few other plants may be collected for immediate personal consumption only; per-species daily limits are set in the park compendium. Collecting inedible natural objects (wildflowers, cones, rocks, bones) is prohibited.",
+      "note": "Sequoia and Kings Canyon allow gathering of berries, mushrooms, and a few designated plants for immediate consumption within the park; confirm the species and current limit in the superintendent's compendium (https://www.nps.gov/seki/learn/management/superintendent-s-compendium.htm). Checked against the park's rules page, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "big bend national park",
+      "sourceLabel": "Big Bend compendium",
+      "sourceUrl": "https://www.nps.gov/bibe/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Big Bend's compendium does not designate mushrooms; they remain prohibited under 36 CFR 2.1(a).",
+      "limit": "Fruits, nuts, and berries: gathered by hand for immediate personal consumption on site, edible items only, no more than one handful per person per day; prickly pears excepted at 1 quart per person per day. No collection permit required.",
+      "note": "Big Bend designates wild fruits, nuts, and berries for hand-gathering and immediate on-site consumption; mushrooms are not designated. Checked against the current (2026) compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "biscayne",
+      "sourceLabel": "Biscayne compendium",
+      "sourceUrl": "https://www.nps.gov/bisc/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "Ripe coconuts found on the ground only: collected by hand for personal use; coconuts still on the trees may not be collected or disturbed. No other fruits, berries, or nuts are designated; seashell collection is prohibited.",
+      "note": "Biscayne designates only ground-fallen ripe coconuts for personal-use collection. Checked against the current compendium (approved September 2025), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "black canyon of the gunnison",
+      "sourceLabel": "Black Canyon of the Gunnison compendium",
+      "sourceUrl": "https://www.nps.gov/blca/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Black Canyon of the Gunnison's compendium explicitly prohibits mushroom collection to protect the future reproductive capacity of native species.",
+      "limit": "Fruits, nuts, and berries: gathered by hand for personal use or consumption, limited to one dry pint per person per day (general category; no individual species named).",
+      "note": "Black Canyon of the Gunnison designates fruits, nuts, and berries for hand-gathering; mushroom collection is explicitly prohibited. Checked against the current compendium (updated June 4, 2026), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "carlsbad caverns",
+      "sourceLabel": "Carlsbad Caverns compendium",
+      "sourceUrl": "https://www.nps.gov/cave/learn/management/upload/2026-CAVE-Superintendent-s-Compendium-version-01-29-2026.pdf",
+      "mushroomsAllowed": false,
+      "limit": "Nuts and prickly pear cactus fruits (only within 100 feet of Walnut Canyon Road and the Scenic Loop Drive) and fruit from the historic Rattlesnake Springs orchard trees: gathered by hand, no more than one gallon of fruits/nuts per person per day.",
+      "note": "Carlsbad Caverns designates nuts, prickly pear fruits, and Rattlesnake Springs orchard fruit for hand-gathering; mushrooms are not designated. Checked against the 2026 compendium (version 01-29-2026), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "guadalupe mountains",
+      "sourceLabel": "Guadalupe Mountains compendium",
+      "sourceUrl": "https://www.nps.gov/gumo/learn/management/upload/2026-NPS-GUMO_Superintendents_Compendium_.pdf",
+      "mushroomsAllowed": false,
+      "limit": "Fruits of cactus and fruit trees: 1 quart per person per day; ground-collected nuts (pecans, acorns, piñons): 1 quart per person per day; all edible berries: by hand for immediate on-site consumption, one handful per person.",
+      "note": "Guadalupe Mountains designates cactus/tree fruits, ground nuts, and berries for hand-gathering; mushrooms are not designated. Checked against the 2026 compendium (May 26, 2026), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "grand canyon national park",
+      "sourceLabel": "Grand Canyon compendium",
+      "sourceUrl": "https://www.nps.gov/grca/learn/management/upload/grca-supt-compendium.pdf",
+      "mushroomsAllowed": false,
+      "limit": "Pinyon nuts only: gathered by hand for personal use, up to 25 pounds (in shell) per gatherer per day; not within campgrounds or housing areas. No fruits or berries are designated; sale or commercial use is prohibited.",
+      "note": "Grand Canyon designates only pinyon nuts for hand-gathering. Checked against the 2025 compendium (December 20, 2025), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "saguaro national park",
+      "sourceLabel": "Saguaro compendium",
+      "sourceUrl": "https://www.nps.gov/sagu/learn/management/compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "A reasonable amount of native fruit (saguaro, prickly pear, cholla buds, barrel cactus, and other native species) for personal use and immediate on-site consumption; no numeric quantity stated.",
+      "note": "Saguaro designates native fruit for hand-gathering and on-site consumption; mushrooms are not designated. Tohono O'odham traditional harvest of saguaro fruit and cholla buds is separately authorized. Checked against the compendium effective January 8, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "haleakala",
+      "sourceLabel": "Haleakalā compendium",
+      "sourceUrl": "https://www.nps.gov/hale/learn/management/compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "'Ōhelo berries (Vaccinium sp.), 'ākala berries (Rubus hawaiiensis), and kukui nuts (Aleurites moluccana): 1 quart per person per day each, gathered by hand for personal use. Certain non-native fruits and foliage only with written permission of the superintendent.",
+      "note": "Haleakalā designates three native species for hand-gathering; mushrooms are not designated. Checked against the compendium effective March 3, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "hawaii volcanoes",
+      "sourceLabel": "Hawaiʻi Volcanoes compendium",
+      "sourceUrl": "https://www.nps.gov/havo/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "Eleven designated species (avocado, blackberry, coconut, guava, passion fruit, 'ōhelo berries, pohā, thimbleberry, strawberry guava, white strawberry, yellow raspberry): hand-gathered for personal use; 'ōhelo berries limited to 1 quart per person per month. No commercial collection.",
+      "note": "Hawaiʻi Volcanoes designates eleven fruit species (mostly non-native) for hand-gathering; mushrooms are not designated. Checked against the compendium updated November 14, 2025, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "lassen volcanic",
+      "sourceLabel": "Lassen Volcanic compendium",
+      "sourceUrl": "https://www.nps.gov/lavo/learn/management/compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "Pine nuts, blue elderberry, bush chinquapin, currants and gooseberries, serviceberry, chokecherry, and other listed fruits/nuts/plant materials: gathered by hand for personal use, possession limit one pint per person per day.",
+      "note": "Lassen Volcanic designates listed fruits, nuts, and berries for hand-gathering; mushrooms are not designated. Checked against the compendium approved June 8, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "north cascades",
+      "sourceLabel": "North Cascades compendium",
+      "sourceUrl": "https://www.nps.gov/noca/learn/management/superintendent-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Edible fruits and berries (~21 named species incl. blackberry, blueberry, blue elderberry, chokecherry, cranberry, currant, gooseberry, hazelnut, hawthorn, huckleberry, kinnikinnick): one liter (1 quart) per person per day; apples unlimited for non-commercial use; edible fungi must be cut, not pulled.",
+      "note": "North Cascades designates a broad berry/fruit list plus edible fungi for hand-gathering. Checked against the compendium approved December 3, 2025, June 2026. (Ross Lake and Lake Chelan NRA-specific rules were not separately confirmed.)",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "pinnacles",
+      "sourceLabel": "Pinnacles compendium",
+      "sourceUrl": "https://www.nps.gov/pinn/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Fruit, nuts, berries, and the fruiting bodies of fungi from any edible species: collected for personal consumption while in the park; no numeric quantity limit stated.",
+      "note": "Pinnacles designates fruit, nuts, berries, and edible fungi for hand-gathering and in-park consumption; park biologists determined this does not adversely affect resources. Checked against the compendium dated December 23, 2025, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "mesa verde",
+      "sourceLabel": "Mesa Verde compendium",
+      "sourceUrl": "https://www.nps.gov/meve/learn/management/upload/MEVE_Superintendents_Compendium_01-09-26_508.pdf",
+      "mushroomsAllowed": false,
+      "limit": "Pinyon nuts, chokecherries, juniper berries, and prickly pear fruit: 1 pound per person per day each, gathered by hand within arm's reach in front-country areas open to the public.",
+      "note": "Mesa Verde designates four native species for hand-gathering in front-country areas; mushrooms are not designated. Checked against the 2026 compendium (January 9, 2026), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "great sand dunes",
+      "sourceLabel": "Great Sand Dunes compendium",
+      "sourceUrl": "https://www.nps.gov/grsa/learn/management/superintendent-s-compendium-great-sand-dunes-national-park-2026.htm",
+      "mushroomsAllowed": true,
+      "limit": "Edible nuts (1 gallon), edible berries (1 quart each), and edible mushrooms (2 pounds): per person per calendar year, gathered by hand for personal use (general category; no named species).",
+      "note": "Great Sand Dunes designates edible nuts, berries, and mushrooms for hand-gathering with annual per-person limits. Checked against the 2026 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "great basin national park",
+      "sourceLabel": "Great Basin compendium",
+      "sourceUrl": "https://www.nps.gov/grba/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Pinyon pine nuts/cones (Pinus monophylla): 25 lb of nuts or 3 bags of cones (each ≤ 2 ft × 3 ft) per household per year, fall season; historic Lehman Orchard fruit for personal non-commercial use; other fruits, nuts, mushrooms, and berries: 2 quarts per family per day combined.",
+      "note": "Great Basin designates pinyon pine, Lehman Orchard fruit, and other edible fruits/nuts/mushrooms/berries for hand-gathering. Checked against the compendium updated March 12, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "zion national park",
+      "sourceLabel": "Zion compendium",
+      "sourceUrl": "https://www.nps.gov/zion/learn/management/upload/2025-Superintendent-s-Compendium.pdf",
+      "mushroomsAllowed": false,
+      "limit": "All wild or domestic fruits, berries, and nuts: gathered/possessed/consumed in quantities consumed by a single individual the same day, or 1 pound per individual, and limited to a total of 5 pounds for groups of five or more. Hand-gathering for personal use.",
+      "note": "Zion designates all wild and domestic fruits, berries, and nuts for personal-use hand-gathering; mushrooms are not designated. Checked against the 2025 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "wind cave",
+      "sourceLabel": "Wind Cave compendium",
+      "sourceUrl": "https://www.nps.gov/wica/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Wind Cave's compendium explicitly prohibits the collection of mushrooms and pinecones.",
+      "limit": "Chokecherry (Prunus virginiana) and wild/American plum (Prunus americana) only: 1 quart per person per day, non-commercial use.",
+      "note": "Wind Cave designates chokecherry and wild plum for hand-gathering; mushroom and pinecone collection is explicitly prohibited. Checked against the compendium approved May 25, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "theodore roosevelt national park",
+      "sourceLabel": "Theodore Roosevelt compendium",
+      "sourceUrl": "https://www.nps.gov/thro/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Buffaloberry, chokecherry, currant, juneberry, juniper berry, plum, rose hip, skunkbush sumac berry, wild strawberry, and wild mushroom: up to 1 quart per person per day, gathered by hand for personal use. Commercial use not authorized.",
+      "note": "Theodore Roosevelt designates listed fruits and berries plus wild mushrooms for hand-gathering. Checked against the compendium approved March 21, 2025, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "voyageurs",
+      "sourceLabel": "Voyageurs compendium",
+      "sourceUrl": "https://www.nps.gov/voya/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Strawberries, chokecherries, rose hips, blackberries, raspberries, blueberries, cranberries, mushrooms, wild rice, and acorns: 1 gallon per person per day total, hand-collected for personal use.",
+      "note": "Voyageurs designates listed fruits, berries, mushrooms, wild rice, and acorns for hand-gathering. Checked against the compendium updated June 8, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "isle royale",
+      "sourceLabel": "Isle Royale compendium",
+      "sourceUrl": "https://www.nps.gov/isro/learn/management/upload/ISRO_Web_Accessible_Superintendents_Compendium_2025_Updated.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Apples, beach peas, blueberries, chokecherries, cranberries, currants, elderberries, hazelnuts, juneberries, mushrooms, pin cherries, raspberries, rhubarb, rose hips, strawberries, thimbleberries, wintergreen berries, and other listed items: hand-gathered for personal use, up to 4 quarts per person per day.",
+      "note": "Isle Royale designates a broad list of berries, fruits, nuts, and mushrooms for hand-gathering. Checked against the compendium revised September 16, 2025, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "mammoth cave",
+      "sourceLabel": "Mammoth Cave compendium",
+      "sourceUrl": "https://www.nps.gov/maca/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Blackberries, blueberries, raspberries, mulberries, elderberries, grapes, persimmons, paw-paws, walnuts, hickory nuts, serviceberry, hazelnut, and edible fungi (all species combined, including morels): one gallon per person per day combined. Edible fungi must be carried in a mesh container so spores disperse; inedible fungi may not be collected.",
+      "note": "Mammoth Cave designates a broad fruit/nut list plus edible fungi for hand-gathering under a combined one-gallon daily limit. Checked against the compendium signed January 9, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "hot springs national park",
+      "sourceLabel": "Hot Springs compendium",
+      "sourceUrl": "https://www.nps.gov/hosp/learn/management/superintendents-compendium.htm",
+      "mushroomsAllowed": true,
+      "limit": "Plums, blackberries, hickory nuts, persimmons, grapes, muscadines, blueberries, juneberries, and edible fungi: 1 pint per person per day each; edible fungi must be cut, not pulled or dug.",
+      "note": "Hot Springs designates eight fruit/nut species plus edible fungi for hand-gathering. Checked against the compendium dated December 23, 2025, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "congaree",
+      "sourceLabel": "Congaree compendium",
+      "sourceUrl": "https://www.nps.gov/cong/learn/management/upload/CONG-Supt-Compendium_Updated-1-5-2026_Signed-1.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Blackberries, grapes, blueberries, paw paw fruit, wild plums, walnuts, and edible mushrooms: gathered by hand for personal use, 1 liter per person per day each; possession and consumption restricted to the park.",
+      "note": "Congaree designates six fruit/nut species plus edible mushrooms for hand-gathering. Checked against the compendium revised January 5, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "dry tortugas",
+      "sourceLabel": "Dry Tortugas compendium",
+      "sourceUrl": "https://www.nps.gov/drto/learn/management/superintendent-s-compendium.htm",
+      "mushroomsAllowed": false,
+      "limit": "Sea grapes (Coccoloba uvifera): up to 1 quart per person for immediate personal consumption, from trees in public areas; coconuts (Cocos nucifera): only those already fallen to the ground in public areas. No other items are designated.",
+      "note": "Dry Tortugas (administered with Everglades) designates sea grapes and ground-fallen coconuts for hand-gathering. Checked against the compendium updated January 14, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "gateway arch",
+      "sourceLabel": "Gateway Arch compendium",
+      "sourceUrl": "https://www.nps.gov/jeff/learn/management/superintendent-s-compendium-for-2026.htm",
+      "mushroomsAllowed": false,
+      "limit": "Nuts (such as acorns) collected from the ground only: gathered by hand, 1 quart per person per day. No fruits or berries are designated; commercial use is prohibited.",
+      "note": "Gateway Arch designates only ground-collected nuts for hand-gathering. Checked against the 2026 compendium (effective May 28, 2026), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "virgin islands national park",
+      "sourceLabel": "Virgin Islands compendium",
+      "sourceUrl": "https://www.nps.gov/viis/learn/management/upload/VIIS-Superintendent-Compendium-2022-07-20-508-compliant_signed.pdf",
+      "mushroomsAllowed": false,
+      "limit": "Coconuts, limes, mammey apples, soursop, hog plums, papayas, mangoes, genips, guavas, sweet limes, sugar apples, seagrapes, guavaberries, plant seeds (non-listed species), salt, and hoop/wisp vine: gathered by hand for personal use or consumption; no quantity limit specified.",
+      "note": "Virgin Islands designates listed tropical fruits, seeds, salt, and vines for hand-gathering; mushrooms are not designated. Checked against the 2022 compendium (signed July 2022 — oldest in the set; re-verify if a newer compendium is posted), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "denali national park",
+      "sourceLabel": "Denali compendium",
+      "sourceUrl": "https://www.nps.gov/dena/learn/management/lawsandpolicies.htm",
+      "mushroomsAllowed": true,
+      "limit": "All edible fruits, berries, mushrooms, and nuts within the former Mount McKinley National Park area: gathered by hand for personal use or consumption (no numeric limit). The 1980 ANILCA park additions and the preserve carry separate subsistence rules.",
+      "note": "Denali designates all edible fruits, berries, mushrooms, and nuts in the historic park core for general-visitor hand-gathering (36 CFR 13.35(c)); this is separate from ANILCA Title VIII subsistence. Checked against the April 2025 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "gates of the arctic",
+      "sourceLabel": "Gates of the Arctic compendium",
+      "sourceUrl": "https://www.nps.gov/locations/alaska/upload/2026-GAAR-Superintendent-s-Compendium-508.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Natural plant food items, including fruits, berries, and mushrooms (excluding threatened/endangered species), plus driftwood and unoccupied seashells: gathered by hand for personal use only under 36 CFR 13.35(c); no quantity limit posted.",
+      "note": "Gates of the Arctic allows general-visitor hand-gathering of berries, fruits, and mushrooms under the Alaska-specific 36 CFR 13.35(c); separate from ANILCA subsistence. Checked against the 2026 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "glacier bay",
+      "sourceLabel": "Glacier Bay compendium",
+      "sourceUrl": "https://www.nps.gov/locations/alaska/upload/GLBACompendium-2025_FINAL_11-25_SuptSigOnFile_508.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Natural plant food items, including fruits, berries, and mushrooms (excluding threatened/endangered species), plus driftwood and unoccupied seashells: gathered by hand for personal use only under 36 CFR 13.35(c); no quantity restriction at present.",
+      "note": "Glacier Bay allows general-visitor hand-gathering of berries, fruits, and mushrooms under the Alaska-specific 36 CFR 13.35(c); separate from ANILCA subsistence. Checked against the 2025 compendium (November 2025), June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "katmai",
+      "sourceLabel": "Katmai compendium",
+      "sourceUrl": "https://www.nps.gov/locations/alaska/upload/KATM-Compendium-2026_final_508.pdf",
+      "mushroomsAllowed": false,
+      "mushroomNote": "Katmai's compendium designates fruits, berries, nuts, and seashells but not mushrooms in the former-monument core; mushrooms remain prohibited under 36 CFR 2.1(a).",
+      "limit": "All edible fruits, berries, nuts, and unoccupied seashells within the former Katmai National Monument: gathered by hand for personal use or consumption (by category; no numeric limit). The 1980 ANILCA additions and the preserve carry separate subsistence allowances.",
+      "note": "Katmai designates all edible fruits, berries, nuts, and seashells in the historic monument core for general-visitor hand-gathering. Checked against the January 2026 compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "kobuk valley",
+      "sourceLabel": "Kobuk Valley (Western Arctic) compendium",
+      "sourceUrl": "https://www.nps.gov/locations/alaska/upload/2026-WEAR-Superintendent-s-Compendium-508.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Natural plant food items, including fruits, berries, and mushrooms (excluding threatened/endangered species): gathered by hand for personal, non-commercial use under 36 CFR 13.35(c); no quantity restriction at present.",
+      "note": "Kobuk Valley (Western Arctic Parklands) allows general-visitor hand-gathering of berries, fruits, and mushrooms under the Alaska-specific 36 CFR 13.35(c); separate from ANILCA subsistence. Checked against the 2026 WEAR compendium, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "lake clark",
+      "sourceLabel": "Lake Clark compendium",
+      "sourceUrl": "https://www.nps.gov/locations/alaska/upload/2026-LACL-Compendium-with-Maps-508.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Natural plant food items, including fruits, berries, and mushrooms (excluding threatened/endangered species): gathered by hand for personal, non-commercial use under 36 CFR 13.35(c); no superintendent quantity limit at present.",
+      "note": "Lake Clark allows general-visitor hand-gathering of berries, fruits, and mushrooms under the Alaska-specific 36 CFR 13.35(c); separate from ANILCA subsistence. Checked against the compendium updated January 23, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "kenai fjords",
+      "sourceLabel": "Kenai Fjords collecting & harvesting page",
+      "sourceUrl": "https://www.nps.gov/kefj/planyourvisit/collecting-and-harvesting.htm",
+      "mushroomsAllowed": true,
+      "limit": "Mushrooms, nuts, berries, and similar items: small quantities collected by hand for personal use (no tools); commercial harvesting prohibited. No numeric limit or named species.",
+      "note": "Kenai Fjords allows small-quantity hand-gathering of berries, nuts, and mushrooms for personal use (stated on the park's Collecting & Harvesting page; the 2025 compendium carries no separate 2.1(c) list). Checked June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    {
+      "match": "wrangell",
+      "sourceLabel": "Wrangell–St. Elias compendium",
+      "sourceUrl": "https://www.nps.gov/locations/alaska/upload/WRST-Compendium_with_maps_1-22-2026_508_signed.pdf",
+      "mushroomsAllowed": true,
+      "limit": "Natural plant food items, including fruits, berries, and mushrooms (excluding threatened/endangered species): gathered by hand for personal use only under 36 CFR 13.35(c). Mushrooms are capped at two 5-gallon containers of whole, fresh mushrooms per person per day; no numeric cap on fruits/berries.",
+      "note": "Wrangell–St. Elias allows general-visitor hand-gathering of berries, fruits, and mushrooms under the Alaska-specific 36 CFR 13.35(c); separate from ANILCA subsistence. Checked against the compendium dated January 22, 2026, June 2026.",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    }
+  ]
+}

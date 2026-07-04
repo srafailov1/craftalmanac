@@ -123,11 +123,15 @@ async function buildRuleContext() {
   };
   vm.createContext(context);
 
-  // Constants the rule functions close over.
-  ["ACCESS_RULE_SOURCES", "NPS_GATHERING_RULES"].forEach((name) => {
+  // Constants the rule functions close over. NPS_GATHERING_RULES now lives in
+  // versioned JSON (data/rules/, loaded at boot by loadAccessRuleTables); feed
+  // the vm the same data the app fetches.
+  ["ACCESS_RULE_SOURCES"].forEach((name) => {
     const expression = extractConstExpression(appSource, name);
     vm.runInContext(`var ${name} = ${expression};`, context, { filename: APP_PATH });
   });
+  const npsRules = JSON.parse(await readFile(path.join(ROOT, "data", "rules", "nps-gathering-rules.json"), "utf8")).rules || [];
+  vm.runInContext(`var NPS_GATHERING_RULES = ${JSON.stringify(npsRules)};`, context, { filename: APP_PATH });
 
   // Rule functions plus every helper they call, transitively. Mirrors the
   // extraction list in build_access_status.mjs (minus the aggregate-only

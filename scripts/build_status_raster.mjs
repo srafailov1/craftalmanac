@@ -143,8 +143,6 @@ async function buildRuleContext() {
 
   [
     "ACCESS_RULE_SOURCES",
-    "NPS_GATHERING_RULES",
-    "SITE_ACCESS_RULES",
     "ACCESS_STATUS_OPTIONS",
     "EDIBLE_FUNGUS_WHITELIST",
     "foodSpeciesCatalog",
@@ -154,6 +152,16 @@ async function buildRuleContext() {
     const expression = extractConstExpression(appSource, name);
     vm.runInContext(`var ${name} = ${expression};`, context, { filename: APP_PATH });
   });
+
+  // The rule tables now live in versioned JSON (data/rules/, loaded at boot by
+  // loadAccessRuleTables in app.js); feed the vm the same data the app fetches.
+  for (const [name, file] of [
+    ["NPS_GATHERING_RULES", "nps-gathering-rules.json"],
+    ["SITE_ACCESS_RULES", "site-access-rules.json"]
+  ]) {
+    const rules = JSON.parse(await readFile(path.join(ROOT, "data", "rules", file), "utf8")).rules;
+    vm.runInContext(`var ${name} = ${JSON.stringify(rules)};`, context, { filename: file });
+  }
 
   [
     "getSiteAccessRule",

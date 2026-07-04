@@ -49,6 +49,18 @@ node scripts/test_project_recipes.mjs || { echo "FAIL: Project recipes validatio
 echo "Verifying static pages freshness..."
 node scripts/build_static_pages.mjs --verify || { echo "FAIL: Static pages are stale — run: node scripts/build_static_pages.mjs"; exit 1; }
 
+# Validate the extracted rule tables (data/rules/*.json): envelope, provenance
+# (checked.by/date), reserved-word rule ("Verified" only for owner-checked),
+# baked record counts, and crown-jewel semantic anchors. While app.js still
+# carries the original consts it also deep-compares JSON vs const.
+echo "Validating extracted rule tables..."
+node scripts/test_rules_extraction.mjs || { echo "FAIL: Rule-table extraction equivalence failed"; exit 1; }
+
+# Rule staleness report — informational only, never fails the build; surfaces
+# rules whose checked.date is older than 12 months in the CI log.
+echo "Reporting rule staleness (informational)..."
+node scripts/check_rule_staleness.mjs || true
+
 # Run permission rule tests
 echo "Running permission rule tests..."
 node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }

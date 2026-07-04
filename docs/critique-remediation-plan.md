@@ -173,11 +173,14 @@ Order matters here (license → provenance → publication):
       prose/compilation CC BY-NC-SA + no-warranty educational terms
       (LICENSE-CONTENT.md). Stated in README, ATTRIBUTION, and the in-app
       Terms & Privacy block.
-- [~] 5.2 Rule provenance schema — IN FLIGHT (background agent): tables →
-      data/rules/*.json with `checked: {by, date}`; "Verified" reserved for
-      owner-checked entries (agent-checked render "CHECKED <date>"); equivalence
-      gate + report-only staleness monitor wired into check.sh. Also completes
-      the rules half of work-order 4.2.
+- [x] 5.2 Rule provenance schema DONE: NPS/site/mineral tables → data/rules/*.json
+      (189 rules, envelope schema craft-almanac-rules/1, docs/rules-schema.md);
+      every rule carries `checked: {by:"agent", date}`; UI "✓ VERIFIED" is now
+      reserved for owner-checked rules (agent-checked render a neutral
+      "CHECKED <date>" chip); byte-level equivalence gate + report-only
+      staleness monitor in check.sh; app.js −120KB. Completes the rules half of
+      work-order 4.2. **OWNER path to green ✓s: flip `checked.by` to "owner"
+      rule-by-rule as you personally re-verify each source.**
 - [ ] 5.3 Regionalized phenology: per-state/climate-band iNat histogram pulls
       (pipeline already accepts place_id), region-keyed curves, viewport-based
       window selection. Removes the Phase-1 caveat where data supports it.

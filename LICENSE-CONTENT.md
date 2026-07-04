@@ -28,9 +28,11 @@ share-alike, noncommercial spirit as the data it builds on. Attribute
 
 ## 3. Rules datasets (harvesting / collecting rules)
 
-The access-rule tables (NPS gathering rules, state-system rules, site access
-rules, USFS forest rules, mineral collecting rules — in `app.js` and
-`data/usfs-forest-rules.json`, `data/local-jurisdictions.json`) are built from
+The access-rule tables (NPS gathering rules, site access rules, and mineral
+collecting rules in `data/rules/`; state-system rules in `app.js`; USFS forest
+rules in `data/usfs-forest-rules.json`; local jurisdictions in
+`data/local-jurisdictions.json` — schema documented in
+`docs/rules-schema.md`) are built from
 **public legal facts**: federal regulations (36 CFR), state codes,
 superintendent's compendiums, and agency policy pages. Facts and U.S.
 government works are not subject to copyright, and nothing here claims

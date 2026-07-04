@@ -1,0 +1,117 @@
+{
+  "schema": "craft-almanac-rules/1",
+  "table": "mineral-access-rules",
+  "version": "2026-07-04",
+  "generatedBy": "scripts/extract_rules.mjs",
+  "license": "Underlying legal facts (36 CFR, state codes, compendiums) are public and unrestricted; the prose summaries, notes, and compilation are CC BY-NC-SA 4.0, offered without warranty. See LICENSE-CONTENT.md and docs/rules-schema.md.",
+  "rules": {
+    "USFS": {
+      "status": "allowed",
+      "area": "National forest (USDA Forest Service)",
+      "limit": "Rockhounding of reasonable amounts for personal, noncommercial use is generally allowed on most national-forest land under free use — but not in wilderness, special-interest, or research areas, and not where it conflicts with a mining claim or lease. Much of the Mount Ida / Montgomery County quartz district in particular is under active mining claims or is patented private pay-to-dig ground, where free use does NOT apply. Confirm claim status and check with the local ranger district before collecting.",
+      "note": "A forest-wide policy, not a guarantee for this exact parcel. Occurrence is not permission.",
+      "sourceLabel": "USFS Rockhounding Guide (36 CFR 228 Subpart C)",
+      "sourceUrl": "https://www.fs.usda.gov/sites/default/files/rockhounding-guide-fseprd768373.pdf",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "NPS": {
+      "status": "prohibited",
+      "area": "National Park System unit",
+      "limit": "Collecting rocks, minerals, or paleontological specimens is prohibited throughout the National Park System (36 CFR 2.1). The personal-use exception for fruits, nuts, and berries does NOT extend to rocks or minerals.",
+      "note": "National parks are off-limits for mineral collecting; this point is shown for reference only.",
+      "sourceLabel": "36 CFR 2.1",
+      "sourceUrl": "https://www.ecfr.gov/current/title-36/section-2.1",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "State park": {
+      "status": "allowed",
+      "area": "Crater of Diamonds State Park (Arkansas)",
+      "limit": "An exceptional case: this state park lets visitors dig and keep gems and minerals for a paid admission (finders-keepers). State parks otherwise generally prohibit collecting — never assume another state park allows it.",
+      "note": "Pay the park admission and follow posted rules; this exception does not generalize to other state parks.",
+      "sourceLabel": "Arkansas State Parks — Crater of Diamonds",
+      "sourceUrl": "https://www.arkansas.com/state-parks/explore/parks/crater-of-diamonds-state-park",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "Claimed / fee-dig": {
+      "status": "private",
+      "area": "Commercial pay-to-dig mine or active mining claim",
+      "limit": "This named locality is a commercial fee-dig operation or sits on active/patented mining claims — common across the Mount Ida quartz district. There is no free-use collecting right here; arrange access (and any fee) with the operator, and verify claim status before digging.",
+      "note": "Downgraded from the forest-wide rule because the point is a named mine on claimed or private ground. Occurrence is not permission.",
+      "sourceLabel": "BLM mining claims (43 CFR 8365.1-5)",
+      "sourceUrl": "https://www.ecfr.gov/current/title-43/section-8365.1-5",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "BLM": {
+      "status": "allowed",
+      "area": "BLM public land",
+      "limit": "Casual collection of reasonable amounts of rock, mineral specimens, and semiprecious gemstones for personal, noncommercial use is generally allowed on open BLM public land — but NOT at developed recreation sites, on active mining claims, on private mineral estate, or in closed/withdrawn areas. Daily/weight caps are set by the local field office (petrified wood is capped at 25 lb/day + 250 lb/yr).",
+      "note": "A general BLM policy, not a guarantee for this exact parcel; check for claims and withdrawals with the local field office. Occurrence is not permission.",
+      "sourceLabel": "BLM rockhounding (43 CFR 8365.1-5)",
+      "sourceUrl": "https://www.ecfr.gov/current/title-43/section-8365.1-5",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "State trust": {
+      "status": "permit-required",
+      "area": "State trust / school-trust land",
+      "limit": "State trust lands vary by state and usually require a permit or lease to collect (e.g. Utah SITLA allows with a permit, 25 lb/day; Arizona prohibits casual collection without a lease). Check the state land office before collecting.",
+      "note": "State trust land is managed for revenue, not recreation; collecting rules differ by state. Verify with the state land office.",
+      "sourceLabel": "State trust land rules (varies by state)",
+      "sourceUrl": "",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "State park (protected)": {
+      "status": "prohibited",
+      "area": "State park / state recreation area",
+      "limit": "State parks almost universally prohibit collecting rocks, minerals, and plants. Rare named-facility exceptions exist (e.g. Crater of Diamonds), but never assume a state park allows collecting.",
+      "note": "The default state-park rule protects all natural features; check the specific park's regulations.",
+      "sourceLabel": "State park regulations (varies by state)",
+      "sourceUrl": "",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "Tribal": {
+      "status": "prohibited",
+      "area": "Tribal / reservation land",
+      "limit": "Collecting on tribal or reservation land requires the tribe's permission and is often prohibited outright; federal antiquities protections also apply. Treat as closed unless a tribal authority grants access.",
+      "note": "Tribal land is sovereign; never collect without explicit tribal permission.",
+      "sourceLabel": "Tribal land — permission required",
+      "sourceUrl": "",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    },
+    "Private / other": {
+      "status": "private",
+      "area": "Private, leased, or claimed ground",
+      "limit": "No public collecting right at this point. Most recorded localities sit on private, leased, or actively claimed land — secure written landowner permission, and check for active mining claims, before collecting.",
+      "note": "Land status is not publicly sourced for this exact point; treat it as private unless you can verify otherwise.",
+      "sourceLabel": "Land status not sourced",
+      "sourceUrl": "",
+      "checked": {
+        "by": "agent",
+        "date": "2026-06"
+      }
+    }
+  }
+}

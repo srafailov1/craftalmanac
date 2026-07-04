@@ -449,16 +449,12 @@ function extractConstExpression(source, name) {
 }
 
 async function readRuleLists() {
-  const appSource = await readFile(APP_PATH, "utf8");
-  const context = { console };
-  vm.createContext(context);
-  ["ACCESS_RULE_SOURCES", "NPS_GATHERING_RULES", "SITE_ACCESS_RULES"].forEach((name) => {
-    const expression = extractConstExpression(appSource, name);
-    vm.runInContext(`var ${name} = ${expression};`, context, { filename: APP_PATH });
-  });
+  // The rule tables now live in versioned JSON (data/rules/, loaded at boot by
+  // loadAccessRuleTables in app.js); read the same files the app fetches.
+  const rulesDir = path.join(ROOT, "data", "rules");
   return {
-    npsRules: context.NPS_GATHERING_RULES,
-    siteRules: context.SITE_ACCESS_RULES
+    npsRules: JSON.parse(await readFile(path.join(rulesDir, "nps-gathering-rules.json"), "utf8")).rules || [],
+    siteRules: JSON.parse(await readFile(path.join(rulesDir, "site-access-rules.json"), "utf8")).rules || []
   };
 }
 
