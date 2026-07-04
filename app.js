@@ -2100,6 +2100,7 @@ const state = {
   publicLandFeatures: [],
   publicLandCoverage: null,
   stateBoundaries: null,
+  lastPhenologyRegion: null,
   localJurisdictions: null,
   usfsForestRules: null,
   accessRuleCache: new Map(),
@@ -4153,8 +4154,12 @@ function sheetPlantsHTML() {
   const emptyNote = (availOnly && !list.length)
     ? `<p>Nothing on this map is in season on ${escapeHTML(FULL_MONTHS[selDate.getMonth()])} ${selDate.getDate()}. Switch to <strong>All</strong>, or move the date slider on the map.</p>`
     : "";
+  const matRegionLabel = getActiveRegionCaveatLabel();
+  const matTiming = matRegionLabel
+    ? `Timing is ${escapeHTML(matRegionLabel)} regional — local timing still varies.`
+    : "Timing is a contiguous-US average — local timing varies by weeks.";
   const caveat = availOnly
-    ? `<div class="now-foot">Timing is a contiguous-US average — local timing varies by weeks. Occurrence is never permission.</div>`
+    ? `<div class="now-foot">${matTiming} Occurrence is never permission.</div>`
     : "";
 
   // Herbalism profiles present medicinal use-parts, so the educational-use
@@ -4323,8 +4328,12 @@ function sheetProjectsHTML() {
       <button type="button" class="mat-filter-btn${availOnly ? "" : " on"}" data-projects-filter="all" aria-pressed="${String(!availOnly)}">All · ${allMapRecipes.length}</button>
       <button type="button" class="mat-filter-btn${availOnly ? " on" : ""}" data-projects-filter="available" aria-pressed="${String(availOnly)}">In season ${FULL_MONTHS[selDate.getMonth()]} ${selDate.getDate()} · ${availCount}</button>
     </div>` : "";
+  const projRegionLabel = getActiveRegionCaveatLabel();
+  const projTiming = projRegionLabel
+    ? `"In season" is ${escapeHTML(projRegionLabel)} regional — local timing still varies.`
+    : `"In season" is a contiguous-US average — local timing varies by weeks.`;
   const caveat = availOnly
-    ? `<div class="now-foot">"In season" is a contiguous-US average — local timing varies by weeks. Techniques and binders with no seasonal material always show.</div>`
+    ? `<div class="now-foot">${projTiming} Techniques and binders with no seasonal material always show.</div>`
     : "";
 
   const mapLabel = { ink: "INK & DYE", food: "FOOD", minerals: "MINERALS", medicine: "HERBALISM" }[map] || map.toUpperCase();
@@ -4449,11 +4458,26 @@ function openRecipeDetail(id) {
 // honesty caveat as the season histogram (Phase 1.4).
 // ---------------------------------------------------------------------------
 // Whether a species is in its harvest window on the season slider's selected
-// day, independent of the map's "All seasons" toggle. Powers the Materials
-// sheet's "Available" filter. (Regional phenology, Phase 5.3, will make this
-// region-aware; keep it the single in-season predicate for the filter.)
+// day, independent of the map's "All seasons" toggle. The single in-season
+// predicate behind BOTH the Materials and Projects "Available" filters.
+//
+// Phase 5.3: prefer the phenology curve for the current viewport region (the
+// regional curve where the species has one, else national). A month counts as
+// in-season when its curve value clears a small fraction of the curve's peak
+// (IN_SEASON_CURVE_THRESHOLD · max) — i.e. there's a real observation signal
+// that month, localized by climate. Falls back to the binary species.months
+// window when no curve is loaded/present (offline, sparse cell, or pre-fetch),
+// so the filter never gets stricter than the hand-authored months.
+const IN_SEASON_CURVE_THRESHOLD = 0.15;
 function isSpeciesInSeasonOnSelectedDay(species) {
-  return Array.isArray(species.months) && species.months.includes(getSelectedMonth());
+  const month = getSelectedMonth();
+  const region = getViewportRegion();
+  const { curve } = getPhenologyCurve(state.activeMap, species.id, region);
+  if (Array.isArray(curve)) {
+    const max = Math.max(...curve);
+    if (max > 0) return (curve[month - 1] || 0) >= IN_SEASON_CURVE_THRESHOLD * max;
+  }
+  return Array.isArray(species.months) && species.months.includes(month);
 }
 
 // A project is "available" on the selected day when its source material
@@ -4964,6 +4988,16 @@ function initControls() {
     scheduleINaturalistAggregateLoad();
     scheduleDataLoad();
     schedulePublicLandLoad();
+    // Phase 5.3: re-render the season histogram only when the map center crossed
+    // into a different Köppen region (cheap id compare; most pans stay in-region),
+    // so the regional curves + region-named caveat track the viewport. The
+    // Materials/Projects sheets are modal over the map (the map can't move while
+    // one is open), so the next sheet-open naturally reflects the current region.
+    const region = getViewportRegion();
+    if (region !== state.lastPhenologyRegion) {
+      state.lastPhenologyRegion = region;
+      renderHistogram();
+    }
   });
 }
 
@@ -5256,8 +5290,9 @@ function initMapControlsOffset() {
 }
 
 // C2 phenology: per-species 12-month relative-abundance (0-1) curves, loaded
-// per mode from data/phenology/<mode>.json. Cached; a null entry marks a failed
-// load so the histogram falls back to binary species.months (graceful).
+// per mode from data/phenology/<mode>.json. Region-keyed (Phase 5.3): each
+// species maps to { national:[12], <köppen-group>:[12], ... }. Cached; a null
+// entry marks a failed load so the histogram falls back to binary species.months.
 const phenologyByMode = {};
 function loadPhenology(mode) {
   if (Object.prototype.hasOwnProperty.call(phenologyByMode, mode)) {
@@ -5272,6 +5307,81 @@ function loadPhenology(mode) {
     .catch(() => { phenologyByMode[mode] = null; return null; });
 }
 
+// Köppen-collapsed climate regions (data/phenology-regions.json): the state ->
+// group map + group labels used to pick a species' regional phenology curve for
+// the current viewport. Loaded once at boot; the lookups below no-op gracefully
+// until it lands (falling back to the national curve, then species.months).
+let phenologyRegions = null;
+function loadPhenologyRegions() {
+  if (phenologyRegions) return Promise.resolve(phenologyRegions);
+  return fetch("./data/phenology-regions.json")
+    .then((response) => {
+      if (!response.ok) throw new Error(`phenology-regions: ${response.status}`);
+      return response.json();
+    })
+    .then((data) => { phenologyRegions = data; return data; })
+    .catch(() => { phenologyRegions = null; return null; });
+}
+
+// Which Köppen group contains the map's current center. Reuses the Census state
+// polygons already loaded for record->state attribution: point-in-state on
+// map.getCenter() -> that state's group. Returns null outside CONUS (or before
+// the boundaries / region map load) so lookups fall back to `national`.
+function getViewportRegion() {
+  if (!phenologyRegions || !state.stateBoundaries || !map) return null;
+  let center;
+  try {
+    center = map.getCenter();
+  } catch {
+    return null;
+  }
+  if (!center) return null;
+  const lng = Number(center.lng);
+  const lat = Number(center.lat);
+  if (!Number.isFinite(lng) || !Number.isFinite(lat)) return null;
+  const match = state.stateBoundaries.find((entry) => (
+    lng >= entry.bbox[0] && lng <= entry.bbox[2]
+    && lat >= entry.bbox[1] && lat <= entry.bbox[3]
+    && pointInFeature([lng, lat], entry)
+  ));
+  if (!match) return null;
+  return phenologyRegions.states[match.name] || null;
+}
+
+// Human-readable label for a Köppen group id (for the region-named caveat), e.g.
+// "subtropical" -> "Humid subtropical". Falls back to null when unknown.
+function getRegionLabel(region) {
+  return phenologyRegions?.groups?.[region]?.label || null;
+}
+
+// A species' phenology curve for a viewport region: the regional curve when the
+// species has one for that group, else the national curve. Returns null when the
+// mode's phenology hasn't loaded or the species isn't present (callers then fall
+// back to species.months). Also reports which key was used so captions can name
+// the region only when a real regional curve is in play.
+function getPhenologyCurve(mode, speciesId, region) {
+  const phenology = phenologyByMode[mode];
+  const entry = phenology?.[speciesId];
+  if (!entry) return { curve: null, region: null };
+  if (region && Array.isArray(entry[region])) return { curve: entry[region], region };
+  if (Array.isArray(entry.national)) return { curve: entry.national, region: null };
+  return { curve: null, region: null };
+}
+
+// The Köppen-region label to name in the Materials/Projects "Available" caveat,
+// but only when the active map's loaded phenology actually carries a regional
+// curve for the current viewport region (so the caveat is truthful — else it
+// returns null and callers keep the honest "contiguous-US average" wording).
+function getActiveRegionCaveatLabel() {
+  const region = getViewportRegion();
+  if (!region) return null;
+  const phenology = phenologyByMode[state.activeMap];
+  if (!phenology) return null;
+  const hasRegionalCurve = Object.values(phenology)
+    .some((entry) => entry && Array.isArray(entry[region]));
+  return hasRegionalCurve ? getRegionLabel(region) : null;
+}
+
 function renderHistogram() {
   // Minerals aren't seasonal — instead of a month chart, show the material
   // distribution across the workability (soft → hard) axis the slider filters on.
@@ -5280,13 +5390,23 @@ function renderHistogram() {
   const speciesForChart = speciesCatalog.filter((species) => (
     state.selectedSpecies.has(species.id)
   ));
-  const phenology = phenologyByMode[state.activeMap] || null;
+  const region = getViewportRegion();
+  // Resolve each charted species' curve once (regional where available, else
+  // national). Track whether ANY charted species used a real regional curve so
+  // the caveat can be region-named only when the chart genuinely reflects it.
+  let usedRegionalCurve = false;
+  const curveBySpecies = new Map();
+  speciesForChart.forEach((species) => {
+    const { curve, region: usedRegion } = getPhenologyCurve(state.activeMap, species.id, region);
+    curveBySpecies.set(species.id, curve);
+    if (usedRegion) usedRegionalCurve = true;
+  });
   const monthData = MONTHS.map((_, index) => {
     const month = index + 1;
     const weighted = Object.fromEntries(CATEGORIES.map((category) => [category, 0]));
     const counts = Object.fromEntries(CATEGORIES.map((category) => [category, 0]));
     speciesForChart.forEach((species) => {
-      const curve = phenology?.[species.id];
+      const curve = curveBySpecies.get(species.id);
       const inSeason = species.months.includes(month);
       // Real abundance when a curve exists; otherwise binary in-season presence.
       const intensity = curve ? (curve[index] || 0) : (inSeason ? 1 : 0);
@@ -5325,11 +5445,15 @@ function renderHistogram() {
   }).join("");
 
   // Header reflects the active map; the category swatch legend sits below.
-  // The caveat is load-bearing: every species carries one nationwide month
-  // window, so "in season" is a contiguous-US average that can be weeks off for
-  // a given latitude (regional phenology is a later build).
+  // The caveat is load-bearing: it names the Köppen region when the chart is
+  // drawn from a real regional curve (Phase 5.3), and keeps the honest
+  // contiguous-US-average caveat when falling back to the national curve.
   const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
-  if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY<span class="season-caveat">Contiguous-US average — local ripening can differ by weeks.</span>`;
+  const regionLabel = usedRegionalCurve ? getRegionLabel(region) : null;
+  const caveatText = regionLabel
+    ? `${regionLabel} — regional timing (local ripening still varies).`
+    : "Contiguous-US average — local ripening can differ by weeks.";
+  if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY<span class="season-caveat">${escapeHTML(caveatText)}</span>`;
   renderSeasonCats();
 }
 
@@ -7920,6 +8044,11 @@ async function loadStateBoundaries() {
     state.stateBoundaries = (await response.json()).states || [];
     state.accessRuleCache.clear();
     renderMarkers();
+    // Boundaries just became available, so getViewportRegion() can now resolve
+    // the map center. Seed the tracked region and repaint the histogram once so
+    // the initial view uses its regional curve without needing a pan first.
+    state.lastPhenologyRegion = getViewportRegion();
+    renderHistogram();
   } catch {
     // State-specific rules degrade to generic fallbacks without boundaries.
   }
@@ -9153,6 +9282,10 @@ render();
 // Rule tables load immediately (not gated on the map): they gate record-level
 // access resolution, and resolvers fall back conservatively until they land.
 loadAccessRuleTables();
+// Region map + the active mode's phenology feed the regional curves. Load both,
+// then paint the histogram once (getViewportRegion no-ops until stateBoundaries
+// also land on map "load", at which point moveend re-renders in-region).
+loadPhenologyRegions();
 loadPhenology(state.activeMap).then(() => renderHistogram());
 map.on("load", () => {
   state.mapReady = true;

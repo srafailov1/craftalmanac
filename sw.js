@@ -16,6 +16,15 @@
  *        same-origin file we did not precache (e.g. a data file added later),
  *        caching it on first successful fetch.
  *
+ *      NAVIGATIONS are handled separately (see the fetch router): ONLY the app
+ *      shell ("/" and "/index.html") is served network-first with a precached
+ *      shell fallback. Navigations to standalone content pages (/materials/*,
+ *      /projects/*, /cards/*, /attribution.html) are NOT intercepted at all —
+ *      they go straight to the network so the browser handles Cloudflare's
+ *      ".html" -> extensionless 307 itself. The SW must never hand a redirected
+ *      response back to a navigation (that is a network error in every engine —
+ *      it was the Chrome-only "This site can't be reached" bug).
+ *
  *   2. Mapbox style / tiles / glyphs / sprites / fonts  → NETWORK-FIRST,
  *        falling back to cache. Online users always get fresh tiles; offline
  *        users get whatever was cached from a previous online session; a tile
@@ -37,14 +46,14 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-phase5-avail-2";
+const CACHE_VERSION = "v1-phase5-region-1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
 
 // Cache-busting query strings for the shell scripts/styles. Keep these in sync
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "phase5-avail-2";
+const ASSET_VERSION = "phase5-region-1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly
@@ -86,10 +95,12 @@ const PRECACHE = [
   "/data/usfs-forest-rules.json",
   "/data/local-jurisdictions.json",
 
-  // Phenology (per-mode "in season" curves).
+  // Phenology (per-mode region-keyed "in season" curves) + the Köppen region map
+  // that selects a species' regional curve from the viewport (Phase 5.3).
   "/data/phenology/food.json",
   "/data/phenology/ink.json",
   "/data/phenology/medicine.json",
+  "/data/phenology-regions.json",
 
   // Conditions + boundaries the map draws locally.
   "/data/tide-stations.json",
@@ -138,6 +149,22 @@ function isLiveApi(url) {
   // Mapbox geocoding (search) is live/personal.
   if (url.hostname === "api.mapbox.com" && url.pathname.startsWith("/geocoding/")) return true;
   return false;
+}
+
+// Is this same-origin URL the single-page app shell itself? ONLY "/" and
+// "/index.html" are the SPA — everything else same-origin (/materials/*,
+// /projects/*, /cards/*, /attribution.html, and any future standalone tree) is a
+// genuine server-rendered document that must reach the network, not the shell.
+//
+// This is why it must be an exact allow-list, not a prefix deny-list: the shell
+// fallback is what makes a cold OFFLINE launch boot the map, but it MUST NOT be
+// substituted for a content-page navigation (that both serves the wrong page AND,
+// because those pages 307-normalize ".html" -> extensionless on Cloudflare, risks
+// the SW handing a redirected response to a navigation — which Chrome aborts as
+// net::ERR_FAILED). Keeping the shell scoped to "/" leaves content navigations to
+// the browser's own clean 307 -> 200 path (identical to a no-SW client).
+function isAppShellNavigation(url) {
+  return url.pathname === "/" || url.pathname === "/index.html";
 }
 
 // --- Install: precache the shell + small data --------------------------------
@@ -205,8 +232,33 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 1. Same-origin shell + data: cache-first.
   if (url.origin === self.location.origin) {
+    // 1a. Navigations to STANDALONE content pages (/materials/*, /projects/*,
+    //     /cards/*, /attribution.html, and any future tree): DO NOT intercept.
+    //     Let the browser handle them exactly as a no-SW client would — including
+    //     Cloudflare's ".html" -> extensionless 307. If the SW instead followed
+    //     that redirect and returned the result, the browser would reject the
+    //     whole navigation: a redirected/opaque-redirect response for a
+    //     manual-redirect navigation is a network error in every engine (Chrome
+    //     surfaces it as "This site can't be reached"). Passing through — no
+    //     respondWith — means the SW never touches these navigations, so they can
+    //     never fail at the redirect boundary. Offline, the browser shows its own
+    //     offline page for these; that is acceptable because the off-grid-critical
+    //     surface is the map shell, which stays precached (handled in 1b).
+    if (request.mode === "navigate" && !isAppShellNavigation(url)) {
+      return;
+    }
+
+    // 1b. The SPA shell navigation ("/" or "/index.html"): network-first so an
+    //     online user gets the freshest document, with the precached shell as the
+    //     offline fallback that boots the map on a cold offline launch.
+    if (request.mode === "navigate") {
+      event.respondWith(appShellNavigation(request));
+      return;
+    }
+
+    // 1c. All other same-origin GETs (app.js, styles.css, fonts, data files):
+    //     cache-first.
     event.respondWith(sameOriginCacheFirst(request));
     return;
   }
@@ -214,25 +266,66 @@ self.addEventListener("fetch", (event) => {
   // Anything else cross-origin we do not recognize: leave to the browser.
 });
 
-// Cache-first for same-origin shell/data. Navigation requests fall back to the
-// precached app shell ("/") so a cold offline launch still boots the app.
+// Navigation handler for the app shell ONLY ("/" and "/index.html"). Cache-first
+// with background revalidate (stale-while-revalidate) so a cold launch boots the
+// map INSTANTLY from the precache — critical on the slow/flaky field connections
+// this PWA exists for — and refreshes the document in the background when online.
+// Never resolves a navigation with a redirected response: the precached shell is
+// non-redirected, and the network path (only taken when nothing is cached) rebuilds
+// a clean response if it ever followed a redirect (a redirected response for a
+// navigation is a network error in every engine — the bug this whole change fixes).
+async function appShellNavigation(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached =
+    (await cache.match(request, { ignoreSearch: false })) ||
+    (await cache.match("/index.html")) ||
+    (await cache.match("/"));
+
+  if (cached) {
+    // Return the cached shell immediately; refresh it in the background. The
+    // revalidate is fire-and-forget and can never reject the returned navigation.
+    (async () => {
+      try {
+        const fresh = await fetch(request);
+        if (fresh.ok && fresh.type === "basic" && !fresh.redirected) {
+          await cache.put(request, fresh.clone());
+        }
+      } catch {
+        /* offline — keep the cached shell */
+      }
+    })();
+    return cached;
+  }
+
+  // Nothing cached yet (pre-install or evicted): go to the network, but never
+  // hand a redirected response back to the navigation.
+  try {
+    const response = await fetch(request);
+    if (response.redirected) {
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+      });
+    }
+    if (response.ok && response.type === "basic") {
+      cache.put(request, response.clone()).catch(() => {});
+    }
+    return response;
+  } catch {
+    return Response.error();
+  }
+}
+
+// Cache-first for same-origin, NON-navigation requests (app.js, styles.css,
+// fonts, and the precached + runtime-cached data files). Navigations never reach
+// here — they are routed to appShellNavigation() or passed through to the browser
+// by the fetch handler above.
 async function sameOriginCacheFirst(request) {
   const cache = await caches.open(CACHE_NAME);
 
   const cached = await cache.match(request, { ignoreSearch: false });
   if (cached) return cached;
-
-  // For navigations, any cached app-shell entry is a valid response (the app is
-  // a single page; the URL hash carries state and is not part of the request).
-  if (request.mode === "navigate") {
-    const shell = (await cache.match("/index.html")) || (await cache.match("/"));
-    if (shell) {
-      // Refresh the shell in the background when online (stale-while-revalidate
-      // for the document only), but return the cached copy immediately.
-      fetchAndCache(request, cache).catch(() => {});
-      return shell;
-    }
-  }
 
   try {
     const response = await fetch(request);
@@ -243,22 +336,10 @@ async function sameOriginCacheFirst(request) {
     }
     return response;
   } catch {
-    // Offline and not cached. Last-ditch: hand back the app shell for a
-    // navigation; otherwise a network error is the honest answer.
-    if (request.mode === "navigate") {
-      const shell = (await cache.match("/index.html")) || (await cache.match("/"));
-      if (shell) return shell;
-    }
+    // Offline and not cached: a network error is the honest answer for a
+    // subresource (the app degrades gracefully when a data file is absent).
     return Response.error();
   }
-}
-
-async function fetchAndCache(request, cache) {
-  const response = await fetch(request);
-  if (response.ok && response.type === "basic") {
-    await cache.put(request, response.clone());
-  }
-  return response;
 }
 
 // Network-first for Mapbox map assets: fresh tiles when online, cached tiles
