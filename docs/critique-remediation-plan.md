@@ -48,18 +48,18 @@ occurrence is not permission" values. All are surgical app.js/scripts edits.
       second (set off with a rule), all warnings preserved. Button: "Enter the map".
 - [x] 2.2 Revive dead copy: `config.lede` atop the Materials sheet; `config.dataNotes`
       in a new About "This map's sources" block; removed the dead DOM write.
-- [~] 2.3 **OWNER GATE — needs your words:** About now has a "Who made this" block
-      with a clearly-marked `[OWNER — replace this…]` placeholder, plus a
-      "Terms & privacy" block (no-warranty + Open-Meteo/Mapbox privacy). **Replace
-      the placeholder with your real byline before pushing.**
+- [x] 2.3 About "Who made this": now carries the owner's own bio (craft as a
+      situated, relational practice; landscapes as collaborators — provided
+      2026-07-04, commit e51e17b), plus the "Terms & privacy" block
+      (no-warranty + Open-Meteo/Mapbox privacy). GATE CLOSED.
 - [x] 2.4 Nav label "Plants" → "Materials"; per-mode swap removed.
 - [x] 2.5 "Therapeutic Uses" → "Traditional Uses"; enriched the thin medicine lede.
 - [x] 2.6 Projects eyebrow reads "INK & DYE"; non-ink modes get a scope note.
 - [x] 2.7 README rewritten for the four-mode product + rules layer.
 - [x] 2.8 Wordmark bumped to 21px/600 (18px mobile) so the display serif reads.
 
-**Checkpoint 2:** the product now introduces itself correctly. **DONE (commit a3704fa).**
-One OWNER action outstanding: replace the About "Who made this" placeholder.
+**Checkpoint 2:** the product now introduces itself correctly. **DONE (commit a3704fa;
+byline finalized e51e17b).**
 
 ## Phase 3 — UX repairs (interaction)
 
