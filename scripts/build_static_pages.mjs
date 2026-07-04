@@ -375,6 +375,13 @@ const SHARED_CSS = `
     footer { margin: 26px 0 0; padding-bottom: 56px; }
     footer .fbox { border-top: 2px solid var(--hair); padding-top: 1.3em; font-size: 0.85rem; color: var(--sub); }
     footer p { margin: 0.6em 0; line-height: 1.55; }
+    @media (max-width: 480px) {
+      .topbar, .wrap { padding-left: 14px; padding-right: 14px; }
+      main.sheet { padding: 24px 20px 24px 22px; border-radius: 12px; }
+      h1 { font-size: 2rem; }
+      .lead, .teaser { font-size: 1.08rem; }
+      .meta .label { width: 92px; }
+    }
     /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
        Navigation and the license paragraph drop out; safety content ALWAYS
        prints — nothing below may ever hide a .safety block. */
