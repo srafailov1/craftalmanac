@@ -94,8 +94,12 @@ byline finalized e51e17b).**
       per owner (commit d6fa623). The keyboard-route need is unmet again; the
       building blocks (buildRecordFeature → openRecordCard) remain, so a future
       keyboard route belongs in the Materials sheet, not the season bar.
-- [ ] 3.6b Small follow-up: lift dawn (#d98a6a) and dusk (#ff9447) accents to
-      ≥4.5:1 against their panels (audit_contrast.mjs candidate).
+- [x] 3.6b CLOSED as already adjudicated: audit_contrast.mjs carries a
+      documented owner decision (2026-06-13, APPROVED_BELOW_FLOOR) keeping the
+      dawn accent at its prototype hue; dusk passes the audit's large-element
+      floor (3.74 ≥ 3.0 — accents are audited as bold/large/graphical). If the
+      owner ever reverses: #b2542f (dawn, 4.74:1) and #ffb347 (dusk, 4.61:1)
+      clear 4.5:1 while staying in-family.
 
 **Checkpoint 3: DONE** (commits 3d4c93c, 1b9cf23, b5398aa, bb48969) plus the
 owner-directed edits (welcome copy, About profile, histogram counts). Note:
