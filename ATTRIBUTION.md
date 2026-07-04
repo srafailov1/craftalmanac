@@ -1,6 +1,14 @@
 # Attribution and Data-Use Notes
 
-This prototype combines live and cached public-interest data. It is non-commercial, but attribution and use limits still matter.
+Craft Almanac combines live and cached public-interest data. It is a
+noncommercial project, but attribution and use limits still matter.
+
+**Project licensing** (see `LICENSE.md` and `LICENSE-CONTENT.md`): the code is
+PolyForm Noncommercial 1.0.0; original content and the compiled rule summaries
+are CC BY-NC-SA 4.0. The legal facts underlying the rules are public and
+unrestricted. Every third-party source below keeps its own license — and the
+NonCommercial terms of the occurrence data (iNaturalist, Falling Fruit) are why
+the combined work must stay noncommercial.
 
 ## iNaturalist
 

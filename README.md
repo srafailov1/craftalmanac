@@ -83,5 +83,17 @@ bash scripts/check.sh
   in `ATTRIBUTION.md`. Permission-required sources (e.g. NPS historic orchards)
   stay labeled that way.
 
+## License
+
+- **Code** — [PolyForm Noncommercial 1.0.0](LICENSE.md).
+  Required Notice: Copyright © 2026 Sasson Rafailov (Craft Almanac)
+- **Original content** (recipes, species notes, safety writing, docs) —
+  [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/),
+  matching the inbound data's terms. See [LICENSE-CONTENT.md](LICENSE-CONTENT.md).
+- **Rules datasets** — the underlying legal facts are public and unrestricted;
+  the prose summaries, verification notes, and compilation are CC BY-NC-SA 4.0,
+  offered without warranty for educational use (see LICENSE-CONTENT.md).
+- **Inbound data** — each source keeps its own license; see `ATTRIBUTION.md`.
+
 See `ATTRIBUTION.md` for source links, license notes, and safety caveats, and
 `docs/critique-remediation-plan.md` for the current improvement roadmap.
