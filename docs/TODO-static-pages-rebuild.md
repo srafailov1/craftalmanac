@@ -25,9 +25,23 @@ search visitor sees:
   incl. toxic lookalikes, habitat, craftUse, safetyNote, sources). Orchestrator
   collects → writes `data/material-profiles.json`.
 
+## Status
+
+- **Part A — DONE** (this commit): 128 researched profiles in
+  `data/material-profiles.json`; `scripts/build_static_pages.mjs` redesigned to
+  the app's register day theme (self-hosted Fraunces/Public Sans/IBM Plex Mono,
+  `--reg-*` palette, category color spines, sheet/card look) and enriched with
+  the profile (summary hero, Identification & lookalikes, Habitat & range, craft
+  use, safety, sources) + materials↔projects cross-links; `build_field_cards.mjs`
+  shares the font/palette refresh. All pages regenerated; both `--verify` gates
+  green. Committed separately from the in-flight phenology work.
+- **Part B — PENDING**: app.js fast-follows, still gated on the phenology
+  build's app.js changes committing first (concurrent app.js writers corrupt the
+  tree).
+
 ## To do (orchestrator, after profiles land)
 
-### A. Generator redesign — `scripts/build_static_pages.mjs` (NON-app.js; safe to do while phenology build runs)
+### A. Generator redesign — `scripts/build_static_pages.mjs` (NON-app.js; safe to do while phenology build runs) — DONE
 - Replace the inline CSS with a shared stylesheet matching the APP's day theme:
   self-host the real fonts (link `/fonts/...` woff2, or an inlined @font-face
   block pointing at them), the `--reg-*` day palette, the type ramp (Fraunces

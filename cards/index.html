@@ -6,38 +6,52 @@
     <title>Field cards · Craft Almanac</title>
     <meta name="description" content="Printable QR field cards for the Craft Almanac maps — food, ink and dye, herbalism, and minerals. Cut-out cards with seasons, safety tags, and profile links.">
     <link rel="canonical" href="https://craftalmanac.com/cards/">
-    <meta name="theme-color" content="#20241f">
+    <meta name="theme-color" content="#f1f5ec">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Field cards · Craft Almanac">
     <meta property="og:description" content="Printable QR field cards for the Craft Almanac maps — food, ink and dye, herbalism, and minerals. Cut-out cards with seasons, safety tags, and profile links.">
     <meta property="og:url" content="https://craftalmanac.com/cards/">
+    <meta property="og:site_name" content="Craft Almanac">
     <style>
-    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; }
+    @font-face { font-family:"Fraunces Display"; font-style:normal; font-weight:600; font-display:swap; src:url("/fonts/fraunces/Fraunces-Display.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:400; font-display:swap; src:url("/fonts/public-sans/PublicSans-Regular.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:600; font-display:swap; src:url("/fonts/public-sans/PublicSans-SemiBold.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:700; font-display:swap; src:url("/fonts/public-sans/PublicSans-Bold.woff2") format("woff2"); }
+    @font-face { font-family:"IBM Plex Mono"; font-style:normal; font-weight:400; font-display:swap; src:url("/fonts/ibm-plex-mono/IBMPlexMono-Regular.woff2") format("woff2"); }
+    @font-face { font-family:"IBM Plex Mono"; font-style:normal; font-weight:500; font-display:swap; src:url("/fonts/ibm-plex-mono/IBMPlexMono-Medium.woff2") format("woff2"); }
+    :root {
+      --ink:#1f2421; --ground:#f1f5ec; --sub:#5a615b; --hair:#d5dad2; --accent-dark:#55671f;
+      --font-display:"Fraunces Display", Georgia, serif;
+      --font-ui:"Public Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; padding: 28px 14px 56px; background: var(--paper); color: #111; font-family: Georgia, "Times New Roman", serif; }
-    a { color: var(--green); }
+    body { margin: 0; padding: 28px 14px 56px; background: var(--ground); color: var(--ink); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-dark); }
     .intro { max-width: 720px; margin: 0 auto 22px; line-height: 1.55; }
-    .intro h1 { font-size: 1.5rem; margin: 0 0 0.3em; color: var(--ink); }
-    .intro p { margin: 0.5em 0; font-size: 0.95rem; }
-    .intro .k { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: #6b7256; }
+    .intro h1 { font-family: var(--font-display); font-weight: 600; font-size: 2rem; letter-spacing: -0.01em; margin: 0.15em 0 0.3em; color: var(--ink); }
+    .intro p { margin: 0.5em 0; font-size: 0.97rem; }
+    .intro .k { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--sub); }
     .sheet-list { list-style: none; padding: 0; margin: 1em 0; }
-    .sheet-list li { margin: 0.5em 0; }
-    .sheet-list .count { color: #6b7256; font-size: 0.85em; }
+    .sheet-list li { margin: 0.55em 0; }
+    .sheet-list a { font-weight: 600; text-decoration: none; }
+    .sheet-list a:hover { text-decoration: underline; }
+    .sheet-list .count { color: var(--sub); font-size: 0.85em; }
     .sheet { display: grid; grid-template-columns: repeat(2, 85mm); grid-auto-rows: minmax(54mm, auto); gap: 3mm; justify-content: center; }
     .card { display: flex; flex-direction: column; border: 1px dashed #8b8b8b; background: #fff; padding: 3.2mm 3.5mm 2.4mm; break-inside: avoid; page-break-inside: avoid; }
     .card-top { display: flex; gap: 2.5mm; flex: 1; }
     .card-main { flex: 1; min-width: 0; }
     .card-side { width: 19mm; flex: none; display: flex; flex-direction: column; align-items: center; gap: 0.6mm; }
     .qr { width: 19mm; height: 19mm; display: block; }
-    .qr-cap { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 4.6pt; color: #555; letter-spacing: 0.02em; }
-    .name { font-size: 10.5pt; line-height: 1.12; margin: 0; font-weight: 700; color: #000; }
-    .sci { font-size: 7.5pt; font-style: italic; color: #333; margin: 0.4mm 0 1.3mm; }
+    .qr-cap { font-family: var(--font-mono); font-size: 4.6pt; color: #555; letter-spacing: 0.02em; }
+    .name { font-family: var(--font-display); font-size: 11pt; line-height: 1.08; margin: 0; font-weight: 600; color: #000; }
+    .sci { font-family: var(--font-mono); font-size: 6.9pt; font-style: italic; color: #333; margin: 0.5mm 0 1.3mm; letter-spacing: 0.01em; }
     .row { font-size: 6.8pt; line-height: 1.35; margin: 0.7mm 0; color: #111; }
-    .row b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 5.6pt; text-transform: uppercase; letter-spacing: 0.06em; color: #444; font-weight: 700; }
-    .row.safety b { color: #7a1e10; }
-    .mode-note { font-variant: small-caps; font-size: 6.6pt; letter-spacing: 0.03em; margin: 1mm 0 0; color: #000; }
-    .foot { margin-top: 1.4mm; padding-top: 1mm; border-top: 0.3mm solid #b9b9b9; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 5.4pt; text-transform: uppercase; letter-spacing: 0.04em; color: #333; }
-    footer.page-foot { max-width: 720px; margin: 34px auto 0; border-top: 1px solid var(--rule); padding-top: 1em; font-size: 0.85rem; color: #5a6152; line-height: 1.55; }
+    .row b { font-family: var(--font-mono); font-size: 5.6pt; text-transform: uppercase; letter-spacing: 0.06em; color: #444; font-weight: 500; }
+    .row.safety b { color: #a12817; }
+    .mode-note { font-family: var(--font-mono); font-size: 5.6pt; text-transform: uppercase; letter-spacing: 0.05em; margin: 1mm 0 0; color: #000; }
+    .foot { margin-top: 1.4mm; padding-top: 1mm; border-top: 0.3mm solid #b9b9b9; font-family: var(--font-mono); font-size: 5.4pt; text-transform: uppercase; letter-spacing: 0.04em; color: #333; }
+    footer.page-foot { max-width: 720px; margin: 34px auto 0; border-top: 2px solid var(--hair); padding-top: 1em; font-size: 0.85rem; color: var(--sub); line-height: 1.55; }
     @page { margin: 14mm; }
     @media print {
       body { background: #fff; padding: 0; }

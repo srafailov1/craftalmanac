@@ -32,6 +32,7 @@ const __filename = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(__filename), "..");
 const APP_PATH = path.join(ROOT, "app.js");
 const RECIPES_PATH = path.join(ROOT, "data", "project-recipes.json");
+const PROFILES_PATH = path.join(ROOT, "data", "material-profiles.json");
 
 export const SITE = "https://craftalmanac.com";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -108,7 +109,11 @@ export async function loadAppConstants() {
     "mineralSpeciesCatalog",
     "SAFETY_TAGS_BY_SPECIES",
     "HARVEST_ETHIC_BY_SPECIES",
-    "MINERAL_WORKABILITY"
+    "MINERAL_WORKABILITY",
+    "FOOD_CATEGORY_COLORS",
+    "INK_CATEGORY_COLORS",
+    "MEDICINE_CATEGORY_COLORS",
+    "MINERAL_CATEGORY_COLORS"
   ];
   const context = { MONTHS: [] };
   vm.createContext(context);
@@ -158,6 +163,14 @@ const CATEGORY_LABELS = {
 
 // Recipe .map -> friendly map label (recipes exist for food/ink/minerals only).
 const RECIPE_MAP_LABEL = { food: "Food", ink: "Ink & Dye", minerals: "Minerals" };
+
+// Section heading for the researched craftUse paragraph, per map.
+const CRAFT_USE_HEADING = {
+  food: "In the kitchen",
+  ink: "As ink & dye",
+  medicine: "Traditional &amp; historical use",
+  minerals: "In the workshop"
+};
 
 function categoryLabel(mode, category) {
   return (CATEGORY_LABELS[mode] && CATEGORY_LABELS[mode][category]) || titleCase(category);
@@ -241,85 +254,149 @@ export function monthRangeText(months) {
 }
 
 // ---------------------------------------------------------------------------
-// Page shell + shared inline CSS (matches attribution.html's paper look; no
-// external requests, no JS required to read the page).
+// Page shell + shared inline CSS. Matches the live app's "register" day theme:
+// self-hosted Fraunces Display / Public Sans / IBM Plex Mono (absolute /fonts
+// paths so pages in subdirs resolve them), the --reg-* day palette, category
+// color spines, and the panel/card visual language of the app's point cards.
+// No external requests, no JS required to read the page. The @media print rules
+// keep the teaching-pack one-pager (Phase 5.6) — safety content never hides.
 // ---------------------------------------------------------------------------
 const SHARED_CSS = `
-    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    @font-face { font-family:"Fraunces Display"; font-style:normal; font-weight:600; font-display:swap; src:url("/fonts/fraunces/Fraunces-Display.woff2") format("woff2"); }
+    @font-face { font-family:"Fraunces Display"; font-style:italic; font-weight:600; font-display:swap; src:url("/fonts/fraunces/Fraunces-Display-Italic.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:400; font-display:swap; src:url("/fonts/public-sans/PublicSans-Regular.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:500; font-display:swap; src:url("/fonts/public-sans/PublicSans-Medium.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:600; font-display:swap; src:url("/fonts/public-sans/PublicSans-SemiBold.woff2") format("woff2"); }
+    @font-face { font-family:"Public Sans"; font-style:normal; font-weight:700; font-display:swap; src:url("/fonts/public-sans/PublicSans-Bold.woff2") format("woff2"); }
+    @font-face { font-family:"IBM Plex Mono"; font-style:normal; font-weight:400; font-display:swap; src:url("/fonts/ibm-plex-mono/IBMPlexMono-Regular.woff2") format("woff2"); }
+    @font-face { font-family:"IBM Plex Mono"; font-style:normal; font-weight:500; font-display:swap; src:url("/fonts/ibm-plex-mono/IBMPlexMono-Medium.woff2") format("woff2"); }
+    :root {
+      --ground:#f1f5ec; --panel:#ffffff; --ink:#1f2421; --sub:#5a615b; --hair:#d5dad2;
+      --accent:#6b7f2e; --accent-dark:#55671f; --warn:#a8730a;
+      --st-allowed:#2f8f46; --st-prohibited:#c74437;
+      --glow:0 6px 24px rgba(31,36,33,0.10); --spine:#8b8f86;
+      --font-display:"Fraunces Display", Georgia, "Times New Roman", serif;
+      --font-ui:"Public Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
     * { box-sizing: border-box; }
     body {
-      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
-      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
-      background: var(--paper); line-height: 1.6;
+      margin: 0; background: var(--ground); color: var(--ink);
+      font-family: var(--font-ui); font-size: 16px; line-height: 1.62;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
     }
-    a { color: var(--green); word-break: break-word; }
-    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
-    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
-    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
-    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
-    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
-    .k, .label {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    a { color: var(--accent-dark); }
+    .topbar {
+      max-width: 792px; margin: 0 auto; padding: 22px 20px 0;
+      display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
     }
-    .k { font-size: 0.72rem; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .wordmark { font-family: var(--font-display); font-weight: 600; font-size: 20px; color: var(--ink); text-decoration: none; }
+    .back-link {
+      font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--sub); text-decoration: none; white-space: nowrap;
+    }
+    .back-link:hover { color: var(--accent-dark); }
+    .wrap { max-width: 792px; margin: 0 auto; padding: 16px 20px 8px; }
+    main.sheet {
+      position: relative; background: var(--panel); border: 1px solid var(--hair);
+      border-radius: 14px; box-shadow: var(--glow);
+      padding: 34px 34px 34px 38px; overflow: hidden;
+    }
+    main.sheet::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--spine);
+    }
+    .kicker {
+      font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.13em; color: var(--sub); margin: 0 0 12px;
+      display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;
+    }
+    .kicker .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--spine); }
+    .kicker .sep { color: var(--hair); }
+    h1 { font-family: var(--font-display); font-weight: 600; font-size: 2.5rem; line-height: 1.06; letter-spacing: -0.01em; margin: 0 0 0.12em; }
+    .sci { font-family: var(--font-mono); font-style: italic; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--sub); margin: 0 0 1.1em; }
+    .lead { font-size: 1.2rem; line-height: 1.5; color: #313a30; margin: 0.2em 0 0.4em; }
+    .teaser { font-size: 1.18rem; line-height: 1.5; color: #313a30; margin: 0.2em 0 1.1em; }
+    h2 {
+      font-family: var(--font-mono); font-weight: 500; font-size: 0.74rem;
+      text-transform: uppercase; letter-spacing: 0.14em; color: var(--sub);
+      margin: 2.1em 0 0.55em; padding-bottom: 0.5em; border-bottom: 1px solid var(--hair);
+    }
+    p { margin: 0.7em 0; }
+    .meta { list-style: none; padding: 0; margin: 1.4em 0 0.2em; border-top: 1px solid var(--hair); }
+    .meta li { display: flex; gap: 16px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--hair); }
+    .meta .label { flex: none; width: 116px; font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--sub); }
+    .meta .val { font-size: 0.98rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 1.3em; padding: 0; list-style: none; }
     .chip {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
-      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
-      display: inline-flex; align-items: center; gap: 5px;
+      font-family: var(--font-mono); font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.08em;
+      border: 1px solid var(--hair); border-radius: 999px; padding: 4px 11px; color: var(--sub);
+      background: var(--ground); display: inline-flex; align-items: center; gap: 6px;
     }
-    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
-    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
-    .meta-list li { margin: 0.5em 0; }
-    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
-    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
-    .safety .k { color: #a5321f; }
-    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
-    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
-    .safety.mild .k { color: #916516; }
-    ol, ul { padding-left: 1.3em; }
-    ol li, ul li { margin: 0.35em 0; }
+    .swatch { display: inline-block; width: 0.8em; height: 0.8em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.22); }
+    .safety { border: 1px solid var(--st-prohibited); border-left-width: 4px; background: #fbf0ee; border-radius: 9px; padding: 15px 18px; margin: 1.5em 0; }
+    .safety .k { font-family: var(--font-mono); font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--st-prohibited); margin: 0 0 0.5em; }
+    .safety ul { margin: 0.4em 0 0; padding-left: 1.15em; }
+    .safety p { margin: 0.5em 0 0; }
+    .safety.mild { border-color: var(--warn); background: #f9f2e4; }
+    .safety.mild .k { color: var(--warn); }
+    ol, ul { padding-left: 1.25em; }
+    ol li, ul li { margin: 0.4em 0; }
     .ingredients { list-style: none; padding: 0; }
-    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
-    .opt { color: var(--muted); font-size: 0.85em; }
-    .note { color: #5a6152; }
+    .ingredients li { margin: 0.45em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--sub); font-size: 0.85em; }
+    .note { color: var(--sub); }
+    .xlinks { list-style: none; padding: 0; margin: 0.6em 0 0; display: grid; gap: 9px; }
+    .xlink { display: block; border: 1px solid var(--hair); border-radius: 10px; padding: 12px 15px; text-decoration: none; color: var(--ink); background: var(--ground); transition: border-color .15s, background .15s; }
+    .xlink:hover { border-color: var(--accent); background: #fff; }
+    .xlink .t { font-weight: 600; }
+    .xlink .d { display: block; font-size: 0.85rem; color: var(--sub); margin-top: 2px; }
     .cta {
-      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
-      color: var(--paper); border-radius: 8px; text-decoration: none;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+      display: inline-flex; align-items: center; gap: 8px; margin: 1.7em 0 0.3em;
+      padding: 13px 22px; background: var(--accent); color: #fff; border-radius: 10px;
+      text-decoration: none; font-weight: 600; font-size: 0.98rem;
     }
-    .cta:hover { background: #17482f; }
-    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
-    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .cta:hover { background: var(--accent-dark); }
+    .cta-note { font-size: 0.9rem; color: var(--sub); margin: 0.5em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.5em 0; }
     .tags li {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
-      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+      font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1px solid var(--hair); border-radius: 5px; padding: 3px 9px; background: var(--ground); color: var(--sub); margin: 0;
     }
-    p { margin: 0.6em 0; }
-    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
-    footer p { margin: 0.55em 0; }
-    .index-group { margin-bottom: 1.7em; }
-    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
-    .card-list li { margin: 0.35em 0; }
-    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    .sources { list-style: none; padding: 0; margin: 0.5em 0 0; }
+    .sources li { margin: 0.45em 0; padding-left: 1.1em; text-indent: -1.1em; font-size: 0.95rem; }
+    .sources a { word-break: break-word; }
+    .index-group { margin-bottom: 2em; }
+    .k-sub { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.11em; color: var(--sub); margin: 1.1em 0 0.2em; }
+    .card-list { list-style: none; padding: 0; margin: 0.5em 0; }
+    .card-list li { margin: 0.4em 0; }
+    .card-list a { font-weight: 600; text-decoration: none; }
+    .card-list a:hover { text-decoration: underline; }
+    .card-list .card-sci { font-family: var(--font-mono); font-style: italic; color: var(--sub); font-size: 0.85em; letter-spacing: 0.01em; }
+    footer { margin: 26px 0 0; padding-bottom: 56px; }
+    footer .fbox { border-top: 2px solid var(--hair); padding-top: 1.3em; font-size: 0.85rem; color: var(--sub); }
+    footer p { margin: 0.6em 0; line-height: 1.55; }
     /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
        Navigation and the license paragraph drop out; safety content ALWAYS
        prints — nothing below may ever hide a .safety block. */
     @page { margin: 14mm; }
     @media print {
-      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
-      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      :root { --ground:#fff; --panel:#fff; --ink:#000; --sub:#333; --accent-dark:#000; --hair:#999; }
+      body { background: #fff; color: #000; line-height: 1.45; font-size: 12pt; }
+      .topbar { padding: 0; }
+      .wrap { max-width: none; padding: 0; }
+      .wordmark { color: #000; }
+      main.sheet { border: none; border-radius: 0; box-shadow: none; padding: 0 0 0 10px; }
+      main.sheet::before { background: #000; width: 3px; }
       .back-link, .cta, .cta-note, footer .license { display: none; }
       a { color: #000; text-decoration: none; }
-      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
-      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .sci, .teaser, .lead, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild, .xlink { background: #fff; }
       .safety, .safety.mild { border-color: #000; }
       .safety .k, .safety.mild .k { color: #000; }
-      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      .safety, .ingredients, .meta, ol li, .ingredients li, .xlink { break-inside: avoid; page-break-inside: avoid; }
       h1, h2 { break-after: avoid; page-break-after: avoid; }
-      h2 { border-bottom-color: #000; }
-      footer { border-top-color: #000; color: #000; }
+      h2, .meta, .meta li { border-color: #000; }
+      footer .fbox { border-top-color: #000; color: #000; }
       /* Print the URL of each cited source — only in the Sources list. */
       .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
     }`;
@@ -336,17 +413,25 @@ function pageShell({ title, description, canonicalPath, ogType, body, backHref, 
     <title>${escapeHtml(title)} · Craft Almanac</title>
     <meta name="description" content="${descAttr}">
     <link rel="canonical" href="${canonical}">
-    <meta name="theme-color" content="#20241f">
+    <meta name="theme-color" content="#f1f5ec">
     <meta property="og:type" content="${ogType}">
     <meta property="og:title" content="${titleAttr} · Craft Almanac">
     <meta property="og:description" content="${descAttr}">
     <meta property="og:url" content="${canonical}">
+    <meta property="og:site_name" content="Craft Almanac">
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/fraunces/Fraunces-Display.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/public-sans/PublicSans-Regular.woff2" crossorigin>
     <style>${SHARED_CSS}
     </style>
   </head>
   <body>
-    <a class="back-link" href="${backHref}">&larr; ${escapeHtml(backLabel)}</a>
+    <div class="topbar">
+      <a class="wordmark" href="/">Craft Almanac</a>
+      <a class="back-link" href="${backHref}">&larr; ${escapeHtml(backLabel)}</a>
+    </div>
+    <div class="wrap">
 ${body}
+    </div>
   </body>
 </html>
 `;
@@ -364,7 +449,7 @@ function footerHtml({ educationalOnly = false, mineralMaterial = false } = {}) {
     lines.push(`<p>Many recorded mineral localities are old, inactive, or abandoned workings. Never enter shafts, adits, or pits — collect only surface float, and confirm the ground is neither posted nor hazardous.</p>`);
   }
   lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>`);
-  return `    <footer>\n${lines.map((l) => `      ${l}`).join("\n")}\n    </footer>`;
+  return `    <footer>\n      <div class="fbox">\n${lines.map((l) => `        ${l}`).join("\n")}\n      </div>\n    </footer>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -377,56 +462,104 @@ export function speciesSafetyTags(species, safetyMap) {
 }
 
 function renderSpeciesPage(species, mode, ctx) {
-  const { safetyMap, ethicMap } = ctx;
+  const { safetyMap, ethicMap, profileMap, recipesByPlant, categoryColorsByMode } = ctx;
   const name = species.commonName || species.id;
   const sci = species.scientificName || "";
   const category = categoryLabel(mode.key, species.category);
   const season = monthRangeText(species.months);
   const tags = speciesSafetyTags(species, safetyMap);
   const ethic = ethicMap[species.id];
+  const profile = profileMap.get(species.id) || null;
+  const colors = categoryColorsByMode[mode.key] || {};
+  const spine = colors[species.category] || "#8b8f86";
   const deepLink = `${SITE}/#map=${encodeURIComponent(mode.key)}&sp=${encodeURIComponent(species.id)}`;
-  const description = metaDescription(species.notes, `${name} (${sci}) — ${category} on the ${mode.label} map of Craft Almanac.`);
+  const description = metaDescription(
+    profile && profile.summary ? profile.summary : species.notes,
+    `${name} (${sci}) — ${category} on the ${mode.label} map of Craft Almanac.`
+  );
 
   const parts = [];
-  parts.push(`    <main>`);
-  parts.push(`      <h1>${escapeHtml(name)}</h1>`);
-  if (sci) parts.push(`      <p class="sci">${escapeHtml(sci)}</p>`);
-  parts.push(`      <ul class="chips">`);
-  parts.push(`        <li class="chip">${escapeHtml(mode.label)} map</li>`);
-  parts.push(`        <li class="chip">${escapeHtml(category)}</li>`);
-  parts.push(`      </ul>`);
+  parts.push(`      <main class="sheet" style="--spine:${escapeHtml(spine)}">`);
+  parts.push(`        <p class="kicker"><span class="dot"></span>${escapeHtml(mode.label)} map <span class="sep">/</span> ${escapeHtml(category)}</p>`);
+  parts.push(`        <h1>${escapeHtml(name)}</h1>`);
+  if (sci) parts.push(`        <p class="sci">${escapeHtml(sci)}</p>`);
+  if (profile && profile.summary) parts.push(`        <p class="lead">${escapeHtml(profile.summary)}</p>`);
 
-  parts.push(`      <ul class="meta-list">`);
-  parts.push(`        <li><span class="label">In season</span>${escapeHtml(season)}</li>`);
+  parts.push(`        <ul class="meta">`);
+  parts.push(`          <li><span class="label">In season</span><span class="val">${escapeHtml(season)}</span></li>`);
   if (species.usedParts) {
-    parts.push(`        <li><span class="label">Used parts</span>${escapeHtml(species.usedParts)}</li>`);
+    parts.push(`          <li><span class="label">Used parts</span><span class="val">${escapeHtml(species.usedParts)}</span></li>`);
   }
   if (ethic) {
-    parts.push(`        <li><span class="label">Harvest ethic</span>${escapeHtml(titleCase(ethic))}</li>`);
+    parts.push(`          <li><span class="label">Harvest ethic</span><span class="val">${escapeHtml(titleCase(ethic))}</span></li>`);
   }
   if (species.parkLimit) {
-    parts.push(`        <li><span class="label">Park limit</span>${escapeHtml(species.parkLimit)}</li>`);
+    parts.push(`          <li><span class="label">Park limit</span><span class="val">${escapeHtml(species.parkLimit)}</span></li>`);
   }
-  parts.push(`      </ul>`);
+  parts.push(`        </ul>`);
 
+  // Researched profile sections. Identification carries the toxic-lookalike
+  // warnings, so it leads; habitat and craft use follow.
+  if (profile && profile.identification) {
+    parts.push(`        <h2>Identification &amp; lookalikes</h2>`);
+    parts.push(`        <p>${escapeHtml(profile.identification)}</p>`);
+  }
+  if (profile && profile.habitat) {
+    parts.push(`        <h2>Habitat &amp; range</h2>`);
+    parts.push(`        <p>${escapeHtml(profile.habitat)}</p>`);
+  }
+  if (profile && profile.craftUse) {
+    parts.push(`        <h2>${CRAFT_USE_HEADING[mode.key] || "Craft use"}</h2>`);
+    parts.push(`        <p>${escapeHtml(profile.craftUse)}</p>`);
+  }
+  // Catalog note — the map's own one-line field caption, kept when present.
   if (species.notes) {
-    parts.push(`      <h2>Notes</h2>`);
-    parts.push(`      <p>${escapeHtml(species.notes)}</p>`);
+    parts.push(`        <h2>Field note</h2>`);
+    parts.push(`        <p>${escapeHtml(species.notes)}</p>`);
   }
 
-  if (tags.length) {
-    const isMineral = mode.key === "minerals";
-    parts.push(`      <div class="safety${isMineral ? "" : ""}">`);
-    parts.push(`        <div class="k">Safety notes</div>`);
-    parts.push(`        <ul>`);
-    for (const tag of tags) parts.push(`          <li>${escapeHtml(tag)}</li>`);
+  // Safety: the profile's single most-important point leads, then the encoded
+  // safety tags. Never hidden (also survives @media print).
+  const safetyNote = profile && profile.safetyNote ? profile.safetyNote.trim() : "";
+  if (safetyNote || tags.length) {
+    parts.push(`        <div class="safety">`);
+    parts.push(`          <div class="k">Safety</div>`);
+    if (safetyNote) parts.push(`          <p>${escapeHtml(safetyNote)}</p>`);
+    if (tags.length) {
+      parts.push(`          <ul>`);
+      for (const tag of tags) parts.push(`            <li>${escapeHtml(tag)}</li>`);
+      parts.push(`          </ul>`);
+    }
+    parts.push(`        </div>`);
+  }
+
+  // Cross-link into the projects that use this material.
+  const recipes = recipesByPlant.get(species.id) || [];
+  if (recipes.length) {
+    parts.push(`        <h2>Make with it</h2>`);
+    parts.push(`        <ul class="xlinks">`);
+    for (const r of recipes) {
+      const rname = r.name || r.id;
+      const rdesc = metaDescription(r.teaser || r.hook, "");
+      parts.push(`          <li><a class="xlink" href="/projects/${escapeHtml(r.id)}.html"><span class="t">${escapeHtml(rname)} &rarr;</span>${rdesc ? `<span class="d">${escapeHtml(rdesc)}</span>` : ""}</a></li>`);
+    }
     parts.push(`        </ul>`);
-    parts.push(`      </div>`);
   }
 
-  parts.push(`      <a class="cta" href="${escapeHtml(deepLink)}">Open ${escapeHtml(name)} on the map &rarr;</a>`);
-  parts.push(`      <p class="cta-note">Opens the ${escapeHtml(mode.label)} map focused on this material, with the land-status rules for wherever you look.</p>`);
-  parts.push(`    </main>`);
+  // Sources from the researched profile.
+  const sources = profile && Array.isArray(profile.sources) ? profile.sources.filter((s) => s && s.url) : [];
+  if (sources.length) {
+    parts.push(`        <h2>Sources</h2>`);
+    parts.push(`        <ul class="sources">`);
+    for (const src of sources) {
+      parts.push(`          <li><a href="${escapeHtml(src.url)}" rel="noreferrer">${escapeHtml(src.title || src.url)}</a></li>`);
+    }
+    parts.push(`        </ul>`);
+  }
+
+  parts.push(`        <a class="cta" href="${escapeHtml(deepLink)}">Open ${escapeHtml(name)} on the map &rarr;</a>`);
+  parts.push(`        <p class="cta-note">Opens the ${escapeHtml(mode.label)} map focused on this material, with the land-status rules for wherever you look.</p>`);
+  parts.push(`      </main>`);
   parts.push(footerHtml({
     educationalOnly: mode.key === "medicine",
     mineralMaterial: mode.key === "minerals"
@@ -447,14 +580,25 @@ function renderSpeciesPage(species, mode, ctx) {
 // Recipe (project) page.
 // ---------------------------------------------------------------------------
 function renderRecipePage(recipe, ctx) {
-  const { recipeIds } = ctx;
+  const { recipeIds, speciesIndex, categoryColorsByMode } = ctx;
   const prose = (t) => renderProse(t, recipeIds, "");
   const name = recipe.name || recipe.id;
   const mapLabel = RECIPE_MAP_LABEL[recipe.map] || titleCase(recipe.map);
   const description = metaDescription(recipe.teaser || recipe.hook, `${name} — a ${mapLabel} project recipe on Craft Almanac.`);
 
+  // Spine color: the recipe's own swatch, else its material's category color,
+  // else the olive accent — so every project card carries a meaningful spine.
+  const material = recipe.plantId ? speciesIndex.get(recipe.plantId) : null;
+  let spine = "#6b7f2e";
+  if (/^#[0-9a-fA-F]{3,8}$/.test(recipe.swatch || "")) spine = recipe.swatch;
+  else if (material) {
+    const colors = categoryColorsByMode[material.mode.key] || {};
+    spine = colors[material.species.category] || spine;
+  }
+
   const parts = [];
-  parts.push(`    <main>`);
+  parts.push(`    <main class="sheet" style="--spine:${escapeHtml(spine)}">`);
+  parts.push(`      <p class="kicker"><span class="dot"></span>${escapeHtml(mapLabel)} map${recipe.kind ? ` <span class="sep">/</span> ${escapeHtml(titleCase(recipe.kind))}` : ""}</p>`);
   parts.push(`      <h1>${escapeHtml(name)}</h1>`);
   if (recipe.teaser) parts.push(`      <p class="teaser">${prose(recipe.teaser)}</p>`);
 
@@ -467,7 +611,7 @@ function renderRecipePage(recipe, ctx) {
     const sw = recipe.swatch ? `<span class="swatch" style="background:${escapeHtml(recipe.swatch)}"></span>` : "";
     chips.push(`<li class="chip">${sw}${escapeHtml(recipe.color)}</li>`);
   }
-  if (recipe.toxic) chips.push(`<li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li>`);
+  if (recipe.toxic) chips.push(`<li class="chip" style="border-color:var(--st-prohibited);color:var(--st-prohibited)">Toxic — read safety</li>`);
   parts.push(`      <ul class="chips">${chips.join("")}</ul>`);
 
   // Safety FIRST when toxic (prominent); still shown for non-toxic recipes.
@@ -479,6 +623,17 @@ function renderRecipePage(recipe, ctx) {
     for (const s of safety) parts.push(`          <li>${prose(s)}</li>`);
     parts.push(`        </ul>`);
     parts.push(`      </div>`);
+  }
+
+  // Cross-link back to the foraged material this project uses (after the safety
+  // block so a toxic recipe still leads with its warning).
+  if (material) {
+    const mname = material.species.commonName || material.species.id;
+    const msci = material.species.scientificName ? ` — ${material.species.scientificName}` : "";
+    parts.push(`      <h2>Foraged from</h2>`);
+    parts.push(`      <ul class="xlinks">`);
+    parts.push(`        <li><a class="xlink" href="/materials/${escapeHtml(recipe.plantId)}.html"><span class="t">${escapeHtml(mname)} &rarr;</span><span class="d">${escapeHtml(material.mode.label)} map${escapeHtml(msci)}</span></a></li>`);
+    parts.push(`      </ul>`);
   }
 
   if (recipe.hook) {
@@ -567,7 +722,8 @@ function renderRecipePage(recipe, ctx) {
 // ---------------------------------------------------------------------------
 function renderMaterialsIndex(catalogsByMode) {
   const parts = [];
-  parts.push(`    <main>`);
+  parts.push(`    <main class="sheet" style="--spine:var(--accent)">`);
+  parts.push(`      <p class="kicker"><span class="dot"></span>Craft Almanac <span class="sep">/</span> Reference</p>`);
   parts.push(`      <h1>Materials</h1>`);
   parts.push(`      <p class="teaser">Every material profile across the Craft Almanac maps — grouped by map. Each links into the live map, where every point carries the rule for the land it sits on.</p>`);
   for (const mode of MODES) {
@@ -607,7 +763,8 @@ function renderProjectsIndex(recipes) {
   }
   const mapOrder = ["food", "ink", "minerals"];
   const parts = [];
-  parts.push(`    <main>`);
+  parts.push(`    <main class="sheet" style="--spine:var(--accent)">`);
+  parts.push(`      <p class="kicker"><span class="dot"></span>Craft Almanac <span class="sep">/</span> Reference</p>`);
   parts.push(`      <h1>Projects</h1>`);
   parts.push(`      <p class="teaser">Every project recipe on Craft Almanac — grouped by map and kind. Each lives in the Projects sheet of its map.</p>`);
   const seenMaps = [...mapOrder.filter((m) => byMap.has(m)), ...[...byMap.keys()].filter((m) => !mapOrder.includes(m))];
@@ -616,7 +773,7 @@ function renderProjectsIndex(recipes) {
     parts.push(`      <div class="index-group">`);
     parts.push(`        <h2>${escapeHtml(RECIPE_MAP_LABEL[mapKey] || titleCase(mapKey))} map</h2>`);
     for (const [kind, list] of byKind) {
-      parts.push(`        <div class="k">${escapeHtml(titleCase(kind))}</div>`);
+      parts.push(`        <div class="k-sub">${escapeHtml(titleCase(kind))}</div>`);
       parts.push(`        <ul class="card-list">`);
       for (const r of list) {
         parts.push(`          <li><a href="./${escapeHtml(r.id)}.html">${escapeHtml(r.name || r.id)}</a></li>`);
@@ -668,21 +825,51 @@ async function generateAll() {
   const recipes = Array.isArray(recipesRaw) ? recipesRaw : (recipesRaw.recipes || recipesRaw.projects || []);
   const recipeIds = new Set(recipes.map((r) => r.id));
 
-  const ctx = {
-    safetyMap: app.SAFETY_TAGS_BY_SPECIES,
-    ethicMap: app.HARVEST_ETHIC_BY_SPECIES,
-    recipeIds
+  // Researched descriptive profiles (data/material-profiles.json), keyed by id.
+  const profilesRaw = JSON.parse(await readFile(PROFILES_PATH, "utf8"));
+  const profileList = Array.isArray(profilesRaw) ? profilesRaw : (profilesRaw.profiles || []);
+  const profileMap = new Map(profileList.map((p) => [p.id, p]));
+
+  // material id -> the recipes that forage it (recipe.plantId), for cross-links.
+  const recipesByPlant = new Map();
+  for (const r of recipes) {
+    if (!r.plantId) continue;
+    if (!recipesByPlant.has(r.plantId)) recipesByPlant.set(r.plantId, []);
+    recipesByPlant.get(r.plantId).push(r);
+  }
+
+  const categoryColorsByMode = {
+    food: app.FOOD_CATEGORY_COLORS,
+    ink: app.INK_CATEGORY_COLORS,
+    medicine: app.MEDICINE_CATEGORY_COLORS,
+    minerals: app.MINERAL_CATEGORY_COLORS
   };
 
-  const files = new Map();
+  // material id -> { species, mode }, so a recipe can link back to its material.
+  const speciesIndex = new Map();
   const catalogsByMode = {};
-  const speciesUrls = [];
-
   for (const mode of MODES) {
     const catalog = app[mode.catalog];
     if (!Array.isArray(catalog)) throw new Error(`Catalog ${mode.catalog} did not parse to an array`);
     catalogsByMode[mode.key] = catalog;
-    for (const species of catalog) {
+    for (const species of catalog) speciesIndex.set(species.id, { species, mode });
+  }
+
+  const ctx = {
+    safetyMap: app.SAFETY_TAGS_BY_SPECIES,
+    ethicMap: app.HARVEST_ETHIC_BY_SPECIES,
+    recipeIds,
+    profileMap,
+    recipesByPlant,
+    categoryColorsByMode,
+    speciesIndex
+  };
+
+  const files = new Map();
+  const speciesUrls = [];
+
+  for (const mode of MODES) {
+    for (const species of catalogsByMode[mode.key]) {
       files.set(`materials/${species.id}.html`, renderSpeciesPage(species, mode, ctx));
       speciesUrls.push(`${SITE}/materials/${species.id}.html`);
     }
