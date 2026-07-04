@@ -10,12 +10,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 # The Falling Fruit CSV archives are the ONLY input this dataset can be rebuilt
-# from — archive them somewhere durable (not ~/Downloads) and record the
-# snapshot date in ATTRIBUTION.md whenever they are refreshed.
+# from. Archived snapshots live in ~/Documents/CraftAlmanac-archives/
+# falling-fruit/<snapshot-date>/ — record the date in ATTRIBUTION.md whenever
+# they are refreshed (current snapshot: 2026-05-20).
+_ARCHIVE = "/Users/sasson/Documents/CraftAlmanac-archives/falling-fruit/2026-05-20"
 _parser = argparse.ArgumentParser(description="Rebuild Falling Fruit viewport chunks")
-_parser.add_argument("--types", default="/Users/sasson/Downloads/types.csv.bz2",
+_parser.add_argument("--types", default=f"{_ARCHIVE}/types.csv.bz2",
                      help="Path to the Falling Fruit types.csv.bz2 archive")
-_parser.add_argument("--locations", default="/Users/sasson/Downloads/locations.csv.bz2",
+_parser.add_argument("--locations", default=f"{_ARCHIVE}/locations.csv.bz2",
                      help="Path to the Falling Fruit locations.csv.bz2 archive")
 _cli = _parser.parse_args()
 TYPES_PATH = Path(_cli.types)

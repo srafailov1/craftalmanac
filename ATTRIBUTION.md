@@ -38,6 +38,8 @@ Sources: https://www.mushroomexpert.com/morels/index.html and https://www.thespr
 
 The local Falling Fruit subset was derived from `locations.csv.bz2` and `types.csv.bz2`, then filtered to matching species groups in the contiguous United States. The browser loads this data through a manifest and small viewport chunks rather than one national JSON file. Falling Fruit's data page says its data are licensed as Creative Commons Attribution-NonCommercial-ShareAlike 4.0 unless otherwise specified. Preserve original source/author attribution, keep this use non-commercial unless permission is obtained, and share adapted data under compatible terms.
 
+Snapshot: the CSV archives were downloaded 2026-05-20 and are archived at `~/Documents/CraftAlmanac-archives/falling-fruit/2026-05-20/` — the only input the chunks can be rebuilt from (`scripts/build_falling_fruit_subset.py` defaults to that path). Add a new dated folder there and update this line whenever the snapshot is refreshed.
+
 Source: https://fallingfruit.org/data
 
 The state and national boundaries used to filter and chunk the Falling Fruit subset are derived from U.S. Census Bureau 2023 cartographic boundary files.

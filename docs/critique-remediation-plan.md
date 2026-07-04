@@ -114,14 +114,17 @@ local blank-map flakiness. Cluster-tint visuals deserve one unoccluded look.
       `docs/TODO-content-extraction.md` Phase B** — lower priority than the
       cards; coordinate its schema with Phase 5.2 provenance fields.
 - [x] 4.3 `.assetsignore` shipped (keeps ATTRIBUTION.md deployed). *Commit c6b01d6.*
-- [x] 4.4 CI workflow shipped (`.github/workflows/check.yml`); the
-      ink-honeysuckle fix is merged so the suite is now GREEN.
-      **OWNER: enable required-status branch protection** (Settings → Branches).
-- [~] 4.5 Builder paths parameterized (`--types/--locations`). **OWNER items
-      remaining:** archive the Falling Fruit CSVs out of ~/Downloads and record
-      the snapshot date in ATTRIBUTION.md; run `git gc` when no other agent
-      session holds the repo (it hit a lock from the parallel session — the
-      pack is only 22 MiB, just ~180 orphaned tmp objects to clear).
+- [x] 4.4 CI workflow shipped (`.github/workflows/check.yml`); suite GREEN.
+      Branch protection attempted 2026-07-04: **not available on private repos
+      under GitHub's free plan** (API 403). Options: make the repo public
+      (aligns with the Phase 6 open-dataset direction) or upgrade to Pro.
+      Note: required status checks would also block the owner's direct
+      GitHub-Desktop pushes — if ever enabled, protection should be
+      no-force-push/no-delete only.
+- [~] 4.5 Builder paths parameterized (`--types/--locations`). DONE 2026-07-04: CSVs archived to
+      `~/Documents/CraftAlmanac-archives/falling-fruit/2026-05-20/`, snapshot
+      date recorded in ATTRIBUTION.md, builder defaults updated; `git gc` ran
+      earlier (stale lock cleared, .git 62MB -> 30MB).
 - [x] 4.6 Perf: rAF-coalesced slider renders; unconditional map.resize()
       removed from render(); Retry-After-aware iNat backoff; point-band loads
       through mapWithConcurrency(4). *Commit c6b01d6.* (getVisibleRecords
