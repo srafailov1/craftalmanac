@@ -185,10 +185,12 @@ Order matters here (license → provenance → publication):
       staleness monitor in check.sh; app.js −120KB. Completes the rules half of
       work-order 4.2. **OWNER path to green ✓s: flip `checked.by` to "owner"
       rule-by-rule as you personally re-verify each source.**
-- [!] 5.3 Regionalized phenology — **OWNER DECISION NEEDED** (regional binning:
-      4 climate bands recommended vs per-state vs ecoregions) then a long
-      rate-limited API rebuild. Scoped in `docs/TODO-regional-phenology.md`.
-      The honest interim caveat already ships (Phase 1.4).
+- [~] 5.3 Regionalized phenology — IN FLIGHT. Owner chose **Köppen** climate
+      groups (5 CONUS groups authored in data/phenology-regions.json, every
+      state assigned). Approach: pull iNat histograms per state once, sum into
+      groups, sparse cells fall back to national. Scoped in
+      docs/TODO-regional-phenology.md; ~5,400-request resumable API build +
+      app viewport→state→group lookup. Interim caveat still ships until it lands.
 - [x] 5.4 Static SEO pages DONE (commit 5070d99): 128 material + 131 project
       pages + grouped indexes, sitemap.xml (263 URLs), robots.txt, canonical +
       og:url, --verify staleness gate in check.sh. Deep-links via

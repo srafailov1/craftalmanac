@@ -1,74 +1,83 @@
 # Work order — regionalize the seasonality model (Phase 5.3)
 
-The critique's single biggest CONTENT-CORRECTNESS finding. Every species carries
-one nationwide month window (`species.months` in the catalogs) and one national
-phenology curve (`data/phenology/<mode>.json`, built with iNaturalist
-`place_id=1` = all of the US). So "in season", the day slider, and the histogram
-present a contiguous-US average as local truth — off by 4–8 weeks for users
-outside the mid-latitude band (elderberry ripens weeks apart in New England vs
-the Gulf; morels fruit March in Georgia, May–June in Michigan).
+The critique's biggest CONTENT-CORRECTNESS finding: every species carries one
+nationwide phenology curve (`data/phenology/<mode>.json`, built with iNaturalist
+`place_id=1`), so "in season", the day slider, and the histogram present a
+contiguous-US average as local truth — off by weeks outside mid-latitudes.
 
-The honest interim caveat already ships (the histogram header line "Contiguous-US
-average — local ripening can differ by weeks", commit in Phase 1.4). This work
-order replaces the average with region-aware curves and removes the caveat where
-data supports it.
+**Decision made (owner, 2026-07):** bin by **Köppen climate groups**, because
+Köppen is defined on the seasonal distribution of temperature and rainfall (the
+axis that drives timing) rather than winter-minimum extremes (hardiness zones).
+The region scheme is authored in `data/phenology-regions.json` — 5 collapsed
+CONUS Köppen groups (continental, subtropical, mediterranean, marine, semiarid)
+with every state assigned to one. The honest interim caveat already ships
+(Phase 1.4 / the Now view).
 
-## OWNER DECISION NEEDED FIRST — regional scheme
+## Build — `scripts/build_phenology_histograms.mjs`
 
-Pick the binning before building (affects API volume and per-region sample size):
+Key idea: **pull per-STATE once (iNat's queryable unit), then aggregate states
+into Köppen groups by summing member-state monthly histograms.** This decouples
+what iNat can query (states) from how we bin (groups) — re-binning later needs
+no re-pull.
 
-- **Option A — 4 coarse latitude/climate bands** (recommended default):
-  Northeast/Upper-Midwest (cold), Southeast/Gulf (warm-humid), Mountain-West/
-  Southwest (arid), Pacific (maritime). ~4× the API calls of the national build
-  (~113 species × 4), robust sample sizes, viewport→band is a simple lat/long
-  lookup. Best correctness-per-cost.
-- **Option B — per-state (48)**: most precise, but 48× API volume (rate-limited,
-  ~hours, likely 429s) and many species×state cells too sparse to be reliable.
-  Not recommended.
-- **Option C — iNaturalist place hierarchy** (e.g. EPA Level II ecoregions if
-  iNat has place_ids for them): ecologically correct but requires mapping
-  viewport→place_id and confirming iNat coverage. Higher effort.
+1. Resolve each state name in `data/phenology-regions.json` → iNat place_id
+   (via `GET /v1/places/autocomplete?q=<state>`, filter place_type 8 / admin
+   level state, country US; DC is place_type 8 too). Cache the name→place_id map
+   to `data/phenology/.state-place-ids.json` (committed) so the resolve step
+   isn't repeated.
+2. For each mode × species × state: fetch the month-of-year histogram (reuse the
+   existing annotation logic — fruits/flowers/fungal). Also fetch the `national`
+   (place_id=1) curve per species as the fallback.
+   - **RESUMABLE + POLITE**: ~113 species × 48 states ≈ 5,400 requests. Throttle
+     ≥ 1.3s, honor Retry-After on 429 (the builder already has backoff — extend
+     it). Write partial results to `data/phenology/.partial-<mode>.json` after
+     every species so a mid-run failure resumes instead of restarting. Log a
+     running count.
+3. Aggregate: for each species, sum the raw monthly COUNTS of the states in each
+   group, then relative-normalize the summed counts (0..1 over the 12 months) —
+   normalize AFTER summing, not per-state. Emit region-keyed JSON per mode:
+   `{ "<speciesId>": { "national":[12], "continental":[12], "subtropical":[12], ... } }`.
+   - **Sparse-cell rule**: if a group's summed observation total for a species is
+     below a floor (start at 40), DROP that group key for that species (the app
+     falls back to `national`). Record every dropped cell to a
+     `data/phenology/.sparse-report.json` so the result is auditable, not a
+     black box.
+4. Update the `--verify` gate to the region-keyed shape: every catalog species
+   has at least a `national` 12-length 0..1 curve; any present group curve is
+   12-length 0..1; region keys ⊆ the groups in phenology-regions.json.
 
-Default to A unless the owner says otherwise.
+## App — `app.js`
 
-## Build
-
-1. `scripts/build_phenology_histograms.mjs`: parameterize `INATURALIST_PLACE_ID`
-   → an array of `{ regionKey, placeId, bbox }`. For each mode × species ×
-   region, fetch the month-of-year histogram (keep the existing 1.2s throttle +
-   Retry-After backoff — the whole build is long; make it resumable / cache
-   partial results to a temp file so a 429 mid-run doesn't lose everything).
-   Emit region-keyed JSON: `{ "<speciesId>": { "<regionKey>": [12 floats], ... } }`
-   per mode, plus a `national` fallback key per species (reuse place_id=1) for
-   sparse regions / when the viewport region is unknown.
-   - Sparse-cell rule: if a region has < N total observations for a species
-     (pick a floor, e.g. 30), fall back to that species' `national` curve rather
-     than shipping a noisy curve. Record which cells fell back.
-2. Update the `--verify` gate to the region-keyed shape (every catalog species
-   has at least a `national` curve; region curves are 12-length 0–1).
-
-## App
-
-3. `app.js`: a `getViewportRegion()` from `map.getCenter()` (lat/long → regionKey
-   via the band bboxes). `phenologyByMode` lookups become
-   `curve = phenology[speciesId]?.[region] ?? phenology[speciesId]?.national`.
-   Touch points: the histogram builder (`renderHistogram`), and
-   `isSpeciesAvailableOnSelectedDate` — derive the month window from the regional
-   curve (months above a relative-abundance threshold) instead of the hand-set
-   `species.months`, OR keep `species.months` as the fallback and only tighten
-   with regional data. Re-render phenology on `moveend` when the region changes
-   (debounced; region changes are rare, so cheap).
-4. Remove/relax the national-average caveat once a region's curve is in use;
-   keep it as a fallback-state label ("national average — sparse local data")
-   when a species falls back to `national` for the current region.
+5. Load `data/phenology-regions.json` at boot (small; alongside the existing
+   loaders). `getViewportRegion()`: point-in-state on `map.getCenter()` reusing
+   the existing state polygons (`state.stateBoundaries` / the point-in-feature
+   helpers) → the state's group; return `null`/`national` when outside CONUS.
+6. Phenology lookup becomes
+   `curve = phenology[id]?.[region] ?? phenology[id]?.national`. Touch points:
+   `renderHistogram` (biotic), `isSpeciesAvailableOnSelectedDate`, and the Now
+   view's PEAK/COMING logic. Keep `species.months` as the ultimate fallback when
+   even `national` is missing.
+7. Re-render phenology when the viewport region CHANGES (debounced on moveend;
+   compare last region, cheap — most moves stay in-region).
+8. Caveat handling: when the current species×region uses a real regional curve,
+   the histogram caption can drop the "contiguous-US average" line for a
+   region-named one (e.g. "Humid subtropical — regional timing"); when it falls
+   back to `national`, KEEP the average caveat (and optionally note "national
+   average — sparse local data"). Do not silently drop the caveat on fallback.
+9. Add the region JSON + the new phenology files to the PWA precache list in
+   `sw.js` (they're small, off-grid-relevant) and bump CACHE_VERSION/ASSET
+   version per docs/pwa.md.
 
 ## Gates / acceptance
 - `node scripts/build_phenology_histograms.mjs --verify` green; `bash scripts/check.sh` green.
-- The date slider / histogram visibly shift when the map moves between two bands
-  for a species with real regional variation (e.g. morel, elderberry).
-- Don't silently drop the caveat where data is sparse — show the fallback label.
+- Moving the map between two groups (e.g. a Marine-WA center vs a Subtropical-GA
+  center) visibly shifts the histogram / Now lists for a species with real
+  regional variation (elderberry, morel).
+- Sparse fallbacks show the national-average caveat, never a silent noisy curve.
 
 ## Boundaries
-- Rule semantics, safety tags, catalogs untouched. This is the seasonality axis only.
-- The API build is the slow/fragile part — make it resumable and log every
-  sparse-fallback so the result is auditable, not a black box.
+- Rule semantics, safety tags, catalogs untouched — seasonality axis only.
+- The region assignment lives in `data/phenology-regions.json`; don't hardcode
+  it in app.js or the builder — both read that file.
+- Make the API build auditable: commit the state-place-id cache and the
+  sparse-report so the result can be inspected without re-running.
