@@ -119,7 +119,24 @@ const MINERAL_WORKABILITY = {
   limestone: 34, marble: 36, slate: 40, obsidian: 55, silica: 72,
   quartz: 74, agate: 73, "petrified-wood": 74, novaculite: 78, gemstone: 96
 };
-const MINERAL_WORKABILITY_BAND = 22; // slider shows materials within ± this of its value
+// The histogram draws one equal-width column per material, sorted soft→hard.
+// Band membership works in COLUMN space (not raw workability values, which
+// bunch unevenly — 6..40 spans eight columns, 55..96 spans seven) so the
+// slider thumb's x-position maps proportionally onto the histogram: thumb at
+// 50% highlights the middle columns, at 100% the right edge.
+const MINERAL_WORKABILITY_ORDER = Object.keys(MINERAL_WORKABILITY)
+  .sort((a, b) => MINERAL_WORKABILITY[a] - MINERAL_WORKABILITY[b]);
+const MINERAL_WORKABILITY_BAND_COLS = 3; // ± columns highlighted around the thumb
+
+function mineralSliderColumn() {
+  return (state.mineralWorkability / 100) * (MINERAL_WORKABILITY_ORDER.length - 1);
+}
+
+function mineralCategoryInBand(categoryId) {
+  const index = MINERAL_WORKABILITY_ORDER.indexOf(categoryId);
+  if (index < 0) return true; // unknown material — never silently hidden
+  return Math.abs(index - mineralSliderColumn()) <= MINERAL_WORKABILITY_BAND_COLS;
+}
 function mineralWorkBand(value) {
   if (value < 28) return { label: "Soft — carving & pottery", examples: "clay · alabaster · soapstone · pipestone" };
   if (value < 56) return { label: "Medium — carving & engraving", examples: "serpentine · marble · slate · obsidian" };
@@ -5953,8 +5970,8 @@ function sheetAboutHTML() {
     </div>
     <div class="about-block">
       <div class="k">WHO MADE THIS</div>
-      <p>Craft Almanac is made by Sasson Rafailov, a designer, sculptor, and educator at the University of Virginia School of Architecture, where his teaching has been recognized with the Class of 1985 Fellowship for Creative Teaching and the School's New Faculty Teaching Award. His research and studio practice pursue craft consciousness — human–material relationships explored through sculpture, tool-making, ceramics, and furniture, in a studio where one material's remnant becomes another's ingredient: stone dust folded into clay bodies, alabaster dust reconstituted into plaster, wood ash becoming glaze.</p>
-      <p>The map grows out of that practice and that classroom: a tool for helping students and makers meet their local landscapes as sources of material — ethically, legally, and in season.</p>
+      <p>Craft Almanac is developed and maintained by Sasson Rafailov, a design theorist, craftsperson, and Assistant Professor of Architecture at the University of Virginia. The site supports his theory of craft as a situated, relational practice, one which is enriched when people know where their materials come from and how they exist in the world unto themselves. He is committed to sharing this approach in both his design and teaching practice, where he encourages people to use craft as a vehicle to form ethical, fulfilling, and productive relationships with the material world.</p>
+      <p>The map grows out of that practice and that classroom. It is a tool for helping craftspeople and students around the United States meet their local landscapes as collaborators and active supporters of their creative ambitions. It aspires towards these aims by prioritizing ethical foraging principles, keeping track of seasonal variations in material availability, as well as legal frameworks that allow all people to participate in the natural abundance of their environment.</p>
     </div>
     <div class="about-block">
       <div class="k">TERMS &amp; PRIVACY</div>
@@ -6787,9 +6804,7 @@ function isSpeciesAvailableOnSelectedDate(species) {
   // a band of the slider's soft→hard position.
   if (state.activeMap === "minerals") {
     if (state.allSeasons) return true;
-    const w = MINERAL_WORKABILITY[species.category];
-    if (!Number.isFinite(w)) return true;
-    return Math.abs(w - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
+    return mineralCategoryInBand(species.category);
   }
   return state.allSeasons || species.months.includes(getSelectedMonth());
 }
@@ -7144,7 +7159,7 @@ function renderMineralHistogram() {
     const n = counts[id] || 0;
     const height = n > 0 ? Math.max(6, Math.round((n / max) * 104)) : 6;
     const color = registerCategoryColor(config.categoryColors[id] || "#777");
-    const inBand = activeBand && Math.abs(MINERAL_WORKABILITY[id] - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
+    const inBand = activeBand && mineralCategoryInBand(id);
     const label = getCategoryLabel(id);
     // Short label (parenthetical stripped, long names trimmed to their first
     // word) sits under each bar so the material is readable at a glance; the
