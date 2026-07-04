@@ -1752,10 +1752,34 @@ body[data-register="night"] {
 
 /* ---- Phase 5.7 "Now" sheet ---- */
 /* Coming-into-season cards are visually secondary to PEAK NOW. */
-.mini-card.now-soon { opacity: 0.72; }
-.mini-card.now-soon:hover,
-.mini-card.now-soon:focus-visible { opacity: 1; }
-.mini-card.now-soon h3 { font-size: 13px; }
+/* Materials "Available" filter: an All / Available-<date> segmented toggle at
+   the top of the shelf (folds in the old standalone Now view). */
+.mat-filter {
+  display: inline-flex;
+  gap: 4px;
+  margin: 2px 0 12px;
+  padding: 3px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 12px;
+}
+.mat-filter-btn {
+  min-height: 26px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 9px;
+  background: none;
+  color: var(--reg-sub);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+.mat-filter-btn.on {
+  background: color-mix(in srgb, var(--reg-accent) 18%, transparent);
+  color: var(--reg-ink);
+}
+@media (hover: hover) { .mat-filter-btn:hover { color: var(--reg-ink); } }
+
 /* Footer caveat: same honesty line as the histogram's .season-caveat, in the
    sheet's small-mono voice. */
 #sheet .now-foot {

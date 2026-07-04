@@ -203,7 +203,12 @@ Order matters here (license → provenance → publication):
       verified by an independent Reed-Solomon decode). About sheet links to
       materials/, projects/, and cards/. Region-matched-rule print view
       deferred to the app follow-up.
-- [x] 5.7 Almanac cadence DONE: a "Now" nav sheet — today-focused per map.
+- [x] 5.7 Almanac cadence DONE, then RESHAPED per owner (2026-07): the
+      standalone "Now" nav button was removed (didn't warrant a top-level slot);
+      its "what's available today" function folded into the Materials sheet as
+      an All / Available-<date> filter toggle that shows only species in season
+      on the selected day (hidden for minerals). Same in-season logic; the
+      season slider's day drives the date. Commit below. Original build:
       PEAK NOW / COMING INTO SEASON from phenology curves, gated by the
       hand-curated harvest window so a species' observation-peak can't
       masquerade as ripeness (fall nuts correctly excluded in July); food
