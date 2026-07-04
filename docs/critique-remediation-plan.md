@@ -195,8 +195,12 @@ Order matters here (license → provenance → publication):
       #map=...&sp=... (og:image deferred — needs a designed asset).
 - [ ] 5.5 Offline PWA: manifest + service worker caching shell, rules, safety tags,
       phenology + user-triggered "save this area" (never the full 125 MB).
-- [ ] 5.6 Teaching pack: @media print one-pagers (species/region + matched rule +
-      safety tags) and QR field cards sharing the offline card code path.
+- [x] 5.6 Teaching pack DONE (commit 1984f4b): @media print one-pagers on all
+      static pages (safety never hidden) + cards/ QR field-card sheets (128
+      cards across the four maps, 8/page, vendored MIT qrcodegen, all 128 QRs
+      verified by an independent Reed-Solomon decode). About sheet links to
+      materials/, projects/, and cards/. Region-matched-rule print view
+      deferred to the app follow-up.
 - [ ] 5.7 Almanac cadence: "What's ready now" location-aware view; digest/RSS later
       if wanted.
 

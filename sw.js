@@ -37,14 +37,14 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-phase5-pwa-1";
+const CACHE_VERSION = "v1-phase5-teaching-1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
 
 // Cache-busting query strings for the shell scripts/styles. Keep these in sync
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "phase5-pwa-1";
+const ASSET_VERSION = "phase5-teaching-1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly

@@ -4079,6 +4079,7 @@ function sheetAboutHTML() {
       <p>The harvesting rules are a good-faith reading of primary sources, offered without warranty for educational use — always confirm current rules with the land manager before collecting. The locate button sends your coordinates to Open-Meteo (for weather) and Mapbox; place search sends your query to Mapbox. There is no account and no tracking.</p>
       <p>Craft Almanac is a noncommercial project: the code is licensed under the PolyForm Noncommercial License 1.0.0, and original content — recipes, species notes, and the rule summaries — under CC BY-NC-SA 4.0 (the underlying legal facts in the rules are public and unrestricted). Inbound data sources keep their own licenses.</p>
     </div>
+    <p><a href="./materials/" target="_blank" rel="noreferrer">Material profiles →</a> · <a href="./projects/" target="_blank" rel="noreferrer">Project pages →</a> · <a href="./cards/" target="_blank" rel="noreferrer">Printable field cards →</a></p>
     <p><a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes →</a></p>
   `;
 }
