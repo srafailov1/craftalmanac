@@ -3973,10 +3973,11 @@ const MAP_MODE_CONFIG = {
     rulesLabel: "Rock & mineral collecting rules",
     loadFallingFruit: false,
     loadNpsOrchards: false,
-    loadMinerals: true,
-    // National scope: open on the whole contiguous US. Mineral clusters render at
-    // every zoom (see shouldShowPointLayers / applyMarkerZoomRangeForMode).
-    initialView: { center: [-98.5, 39.5], zoom: 3.7 }
+    loadMinerals: true
+    // National scope: mineral clusters render at every zoom (see
+    // shouldShowPointLayers / applyMarkerZoomRangeForMode). No initialView —
+    // that flyTo was a relic of the Arkansas-only era and made selecting
+    // Minerals yank the view out to national while every other map stays put.
   }
 };
 
@@ -7145,11 +7146,13 @@ function renderMineralHistogram() {
     const color = registerCategoryColor(config.categoryColors[id] || "#777");
     const inBand = activeBand && Math.abs(MINERAL_WORKABILITY[id] - state.mineralWorkability) <= MINERAL_WORKABILITY_BAND;
     const label = getCategoryLabel(id);
-    // Short label (parenthetical stripped) sits under each bar so the material
-    // is readable at a glance; the full label + count stay in the hover title.
-    // Relative heights only — MRDS caps several materials at ~500 localities, so
-    // absolute counts would misread as real-world abundance.
-    const shortLabel = label.replace(/\s*\([^)]*\)\s*/g, "").trim();
+    // Short label (parenthetical stripped, long names trimmed to their first
+    // word) sits under each bar so the material is readable at a glance; the
+    // full label + count stay in the hover title. Relative heights only — MRDS
+    // caps several materials at ~500 localities, so absolute counts would
+    // misread as real-world abundance.
+    let shortLabel = label.replace(/\s*\([^)]*\)\s*/g, "").trim().split(" / ")[0];
+    if (shortLabel.length > 14) shortLabel = shortLabel.split(" ")[0];
     return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="mbar-label">${escapeHTML(shortLabel)}</span></div>`;
   }).join("");
   if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;

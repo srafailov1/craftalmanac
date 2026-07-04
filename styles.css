@@ -2091,12 +2091,13 @@ body[data-register="night"] {
   border-radius: 3px;
 }
 
-/* Minerals histogram: a short material label under each bar (vertical, reading
-   bottom-to-top so it fits the narrow columns) so the soft→hard distribution
-   reads without a separate legend. Bars are bottom-aligned; the segment sits
-   above its label. Taller container to hold the label row. */
+/* Minerals histogram: a short horizontal material label under each bar so the
+   soft→hard distribution reads without a separate legend. Every label lives in
+   a FIXED-height two-row strip (odd bars row 1, even bars row 2, staggered so
+   neighbors fit side by side), which also guarantees every bar's segment
+   bottoms out on the same horizontal baseline. */
 #season-bar .season-histogram.mineral-hist {
-  height: 168px;
+  height: 134px;
   align-items: flex-end;
   overflow: visible;
 }
@@ -2105,20 +2106,28 @@ body[data-register="night"] {
   flex-direction: column;
   justify-content: flex-end;
   overflow: visible;
+  /* nowrap labels would otherwise set min-width:auto per column and push the
+     last bars off the panel edge; columns stay equal, labels overflow visually */
+  min-width: 0;
 }
 #season-bar .season-histogram.mineral-hist .histogram-segment { flex: none; }
 #season-bar .mbar-label {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  margin: 4px auto 0;
-  max-height: 52px;
-  overflow: hidden;
+  flex: none;
+  align-self: stretch;
+  height: 22px;            /* constant strip: two 11px rows -> shared baseline */
+  margin-top: 4px;
+  text-align: center;      /* centered nowrap text spills evenly over neighbors */
   white-space: nowrap;
+  overflow: visible;
   font-size: 8.5px;
+  line-height: 10px;
   letter-spacing: 0.02em;
   color: var(--reg-sub);
   font-family: var(--font-mono);
   pointer-events: none;
+}
+#season-bar .season-histogram.mineral-hist .histogram-bar:nth-child(even) .mbar-label {
+  padding-top: 11px;       /* second row of the stagger */
 }
 /* Selected-material highlight moves to the label (the full-column border looked
    wrong on the tall mineral bars). */
