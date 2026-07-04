@@ -158,28 +158,33 @@ in-flight background agents (food cards, mineral cards, handoff harness).
       Local-only branches (harness-test, permissions-research, keen-elbakyan)
       stay private — only origin/main, origin/minerals-map,
       origin/design/relaunch publish.
-- [ ] **OWNER: flip repo to public**, then Claude enables branch protection
-      (no-force-push / no-delete; NOT required checks, which would block
-      GitHub-Desktop direct pushes).
+- [x] Repo flipped PUBLIC 2026-07-04 (old Mapbox token deleted first); branch
+      protection enabled the same day: force-pushes and deletion blocked on
+      main, direct pushes still allowed (required checks deliberately off —
+      they'd block GitHub-Desktop pushes). Verified via API.
 
 ## Phase 5 — Strategic builds (the position-changers)
 
 Order matters here (license → provenance → publication):
 
-- [ ] 5.1 **OWNER GATE (legal):** choose licenses — code (recommend MIT), original
-      content/recipes (recommend CC BY-NC-SA 4.0 to match inbound data's spirit),
-      rules dataset (recommend CC BY 4.0 or ODbL with no-warranty terms). I draft
-      LICENSE + terms; you confirm.
-- [ ] 5.2 Rule provenance schema: machine-readable `verifiedBy` (agent-draft vs
-      owner-verified) + `verifiedDate` on every rule; "Verified" language in the UI
-      renders only for owner-verified entries; staleness monitor (age + content
-      drift, not just link liveness) added to the 3am/4am loops.
+- [x] 5.1 Licenses landed (commit 29f6a2c, owner's choices): code = PolyForm
+      Noncommercial 1.0.0 (LICENSE.md, Required Notice); original content =
+      CC BY-NC-SA 4.0 matching inbound data; rules datasets = facts free,
+      prose/compilation CC BY-NC-SA + no-warranty educational terms
+      (LICENSE-CONTENT.md). Stated in README, ATTRIBUTION, and the in-app
+      Terms & Privacy block.
+- [~] 5.2 Rule provenance schema — IN FLIGHT (background agent): tables →
+      data/rules/*.json with `checked: {by, date}`; "Verified" reserved for
+      owner-checked entries (agent-checked render "CHECKED <date>"); equivalence
+      gate + report-only staleness monitor wired into check.sh. Also completes
+      the rules half of work-order 4.2.
 - [ ] 5.3 Regionalized phenology: per-state/climate-band iNat histogram pulls
       (pipeline already accepts place_id), region-keyed curves, viewport-based
       window selection. Removes the Phase-1 caveat where data supports it.
-- [ ] 5.4 Static per-species and per-recipe pages generated from the extracted JSON
-      (same scripts/build_* pattern; app itself stays no-build) + sitemap.xml,
-      robots.txt, og:image/og:url. Deep-links into the map via Phase-3 URL state.
+- [~] 5.4 Static per-species + per-recipe pages — IN FLIGHT (background agent):
+      ~128 material + 131 project pages, sitemap.xml, robots.txt, canonical/og
+      tags, --verify staleness gate in check.sh. Deep-links via #map=...&sp=...
+      (og:image deferred — needs a designed asset).
 - [ ] 5.5 Offline PWA: manifest + service worker caching shell, rules, safety tags,
       phenology + user-triggered "save this area" (never the full 125 MB).
 - [ ] 5.6 Teaching pack: @media print one-pagers (species/region + matched rule +
