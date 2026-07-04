@@ -181,10 +181,10 @@ Order matters here (license → provenance → publication):
 - [ ] 5.3 Regionalized phenology: per-state/climate-band iNat histogram pulls
       (pipeline already accepts place_id), region-keyed curves, viewport-based
       window selection. Removes the Phase-1 caveat where data supports it.
-- [~] 5.4 Static per-species + per-recipe pages — IN FLIGHT (background agent):
-      ~128 material + 131 project pages, sitemap.xml, robots.txt, canonical/og
-      tags, --verify staleness gate in check.sh. Deep-links via #map=...&sp=...
-      (og:image deferred — needs a designed asset).
+- [x] 5.4 Static SEO pages DONE (commit 5070d99): 128 material + 131 project
+      pages + grouped indexes, sitemap.xml (263 URLs), robots.txt, canonical +
+      og:url, --verify staleness gate in check.sh. Deep-links via
+      #map=...&sp=... (og:image deferred — needs a designed asset).
 - [ ] 5.5 Offline PWA: manifest + service worker caching shell, rules, safety tags,
       phenology + user-triggered "save this area" (never the full 125 MB).
 - [ ] 5.6 Teaching pack: @media print one-pagers (species/region + matched rule +
