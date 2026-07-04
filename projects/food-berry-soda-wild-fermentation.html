@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wild-Fermented Berry Soda · Craft Almanac</title>
+    <meta name="description" content="Wild-yeast fizzy soda (burp it!)">
+    <link rel="canonical" href="https://craftalmanac.com/projects/food-berry-soda-wild-fermentation.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Wild-Fermented Berry Soda · Craft Almanac">
+    <meta property="og:description" content="Wild-yeast fizzy soda (burp it!)">
+    <meta property="og:url" content="https://craftalmanac.com/projects/food-berry-soda-wild-fermentation.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Wild-Fermented Berry Soda</h1>
+      <p class="teaser">Wild-yeast fizzy soda (burp it!)</p>
+      <ul class="chips"><li class="chip">Food map</li><li class="chip">Preserve</li><li class="chip">Intermediate</li><li class="chip"><span class="swatch" style="background:#9e1f4d"></span>Bright fizzing ruby soda</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>EXPLOSION RISK is real: sugar-yeast bottle conditioning builds high pressure. Use only strong flip-top or plastic bottles, burp daily, refrigerate once fizzy, and store in a box/cooler as a shield.</li>
+          <li>Open cold bottles slowly over a sink, face away - they can gush or spray glass if over-pressured.</li>
+          <li>When using wild grape, distinguish it from toxic Canada moonseed (Menispermum canadense): moonseed has a single crescent/flat seed and lacks tendrils, and untoothed leaves; grapes have 2-4 round/pear seeds and climb by tendrils. Confirm ID before use.</li>
+          <li>Serviceberry (Amelanchier) seeds are mildly cyanogenic; don&#039;t rely on crushed seeds as a flavor driver.</li>
+          <li>This is a live, low-alcohol ferment (a trace to ~1-2% alcohol forms); it&#039;s not for anyone avoiding alcohol and not for children in large amounts.</li>
+          <li>Discard batches that smell of solvent/rot or grow fuzzy mold; a clean ferment smells tangy and yeasty. This recipe uses non-toxic berries - keep it to the safe fruits listed, and never use raw elderberry here. Occurrence is not permission.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Long before bottled soda, fizz came from wild yeast eating fruit sugar and exhaling carbon dioxide. A ginger bug or the yeasts living on a handful of raspberries will happily carbonate a sweet berry juice in a day or two on the counter. It&#039;s the most magical - and most dangerous-to-ignore - of the ferments: sugar-and-yeast bottle-conditioning builds real pressure, and un-burped bottles genuinely explode. The whole craft is balancing lively fizz against a hard, over-pressured bottle.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Berry juice or lightly crushed berries (blackberry, raspberry, serviceberry, wild strawberry) — ~4 cups juice <span class="note">· Wild grape works too; use ripe, clean fruit. If using wild grape, confirm it is not toxic Canada moonseed.</span></li>
+        <li>Sugar — ~1/2-3/4 cup <span class="note">· Food for the yeast and the source of the CO2; don&#039;t overdo it or pressure spikes.</span></li>
+        <li>Ginger bug or active wild starter — ~1/2 cup <span class="opt">(optional)</span> <span class="note">· A ginger bug gives a reliable, safer, faster ferment than relying on wild yeast alone.</span></li>
+        <li>Unchlorinated water — To dilute to taste <span class="opt">(optional)</span> <span class="note">· Chlorine inhibits the culture.</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Jar or jug for primary ferment, Cloth cover + band, Strong flip-top (Grolsch-style) bottles or plastic soda bottles, Funnel, Fridge</p>
+      <p><strong>Optional:</strong> Ginger bug (ginger + sugar + water, fed a few days), Plastic bottle as a &#039;tester&#039; (squeeze to gauge pressure), Box/cooler to contain bottles</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Harvest ripe berries where permitted; favor invasives (wineberry, Himalayan blackberry) for heavy picking. Rinse gently - but the wild yeast lives on the fruit, so don&#039;t scrub it away if relying on wild ferment. If using wild grape, positively identify Vitis and rule out toxic Canada moonseed first.</li>
+        <li>Make a sweet berry base: combine berry juice/crushed berries, sugar, and (optionally) a ginger bug in a jar. Cover with cloth.</li>
+        <li>Ferment on the counter 1-3 days, stirring daily, until it&#039;s actively bubbling and smells lightly tangy and yeasty (not boozy or off).</li>
+        <li>Strain into strong bottles, leaving headspace. Use flip-top glass or sturdy plastic soda bottles - never thin glass.</li>
+        <li>Cap and leave at room temperature 12-72 hours to build carbonation. BURP each bottle at least once a day - crack it briefly to vent pressure. A plastic &#039;tester&#039; bottle: when it&#039;s rock-hard, carbonation is done.</li>
+        <li>As soon as it&#039;s fizzy, refrigerate to slow fermentation. Keep bottles in a box or cooler as a burst shield.</li>
+        <li>Open cold, over a sink, pointed away from your face - it can gush. Drink within a couple weeks and keep burping any bottles you&#039;re holding.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>A ginger bug makes the ferment faster, fizzier, and more predictable than wild-only. Blend berries for balance; serviceberry and wild strawberry add floral sweetness, wild grape adds body. Less sugar and colder storage = gentler, safer fizz. For a non-fizzy option, refrigerate before bottle-conditioning to make a still, tangy &#039;fresh&#039; drink.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>A fresh drink, not a preserve: refrigerate once carbonated and drink within ~1-2 weeks. Cold slows but never fully stops fermentation, so pressure keeps building slowly - keep burping. This is not shelf-stable and should not be sealed and stored warm.</p>
+      <h2>Yield</h2>
+      <p>About 4-5 cups of soda per batch. Expect variability - wild ferments are alive and each batch behaves a little differently.</p>
+      <h2>Beyond the recipe</h2>
+      <p>Over-fermented soda becomes a berry vinegar or shrub base - nothing wasted. The ginger bug is a perpetual starter for future sodas. Strained berry pulp goes into leather or compost.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://ferment.works/blog/2020/3/24/fermentation-over-carbonation-and-explosions-is-real" rel="noreferrer">Fermentation, Over-Carbonation, and Explosions Are Real - FermentWorks</a></li>
+        <li><a href="https://extension.psu.edu/lets-preserve-fermentation-sauerkraut-and-pickles" rel="noreferrer">Let&#039;s Preserve: Fermentation (Sauerkraut and Pickles) - Penn State Extension</a></li>
+        <li><a href="https://www.growforagecookferment.com/fermented-elderberry-soda/" rel="noreferrer">Wild-Fermented Berry Soda - Grow Forage Cook Ferment (note: card&#039;s cook-elderberry guidance supersedes its raw-elderberry claim)</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Food map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elderberry ink · Craft Almanac</title>
+    <meta name="description" content="A living pH-shifting purple">
+    <link rel="canonical" href="https://craftalmanac.com/projects/ink-elderberry.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Elderberry ink · Craft Almanac">
+    <meta property="og:description" content="A living pH-shifting purple">
+    <meta property="og:url" content="https://craftalmanac.com/projects/ink-elderberry.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Elderberry ink</h1>
+      <p class="teaser">A living pH-shifting purple</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Ink</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#5d3a7e"></span>Purple</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>Elderberry is toxic and this ink is not food — do not drink, taste, or use it on lips/food surfaces; keep it from children and pets.</li>
+          <li>Leaves, stems, bark, roots, and unripe (green) berries contain cyanogenic glycosides that release cyanide; never include them. Use only ripe berries, fully de-stemmed.</li>
+          <li>Even ripe berries are mildly toxic raw — always cook them; do not use raw-juice shortcuts.</li>
+          <li>Avoid red elderberry (Sambucus racemosa); it is considered more toxic. Confirm the species before harvesting.</li>
+          <li>Elderberry juice permanently stains skin, clothing, wood, counters, and grout — protect surfaces and consider gloves; keep any iron water and alum labeled and out of reach.</li>
+          <li>Reserve the pot, spoon, strainer, and jar for craft use; wash thoroughly before any return to food use.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Ripe elder berries crush into a wine-dark juice that Romans simmered to darken graying hair and that later hands used for ink, dye, and manuscript color — from a tree so wreathed in lore that folk would ask the &#039;Elder Mother&#039; before cutting it. Because the color is anthocyanin, the juice doubles as a living pH paint: acid pulls it red, a pinch of alkali tips it toward grey-green.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Ripe elderberries (fully dark purple-black), de-stemmed — 2 cups (~250–300 g) <span class="note">· ripe berries only — leaves, stems, and unripe fruit are toxic</span></li>
+        <li>Water — a splash (2–4 Tbsp), only if berries scorch <span class="opt">(optional)</span></li>
+        <li>White vinegar — 1–2 Tbsp <span class="opt">(optional)</span> <span class="note">· mild acid + preservative; also shifts the color redder</span></li>
+        <li>Gum arabic — ½–1 tsp per ½ cup ink <span class="opt">(optional)</span> <span class="note">· a little body and gloss; or skip for a wash</span></li>
+        <li>Whole cloves — 2–3 per small jar <span class="opt">(optional)</span> <span class="note">· preservative against mold</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Stainless saucepan reserved for craft use, Fork or potato masher, Fine sieve or strainer, Coffee filter, cheesecloth, or pantyhose for fine straining, Heatproof bowl, A jar or bottle for storage</p>
+      <p><strong>Optional:</strong> Funnel, Steel wool in vinegar for iron water (modifier), A pinch of alum (modifier), Craft-dedicated gloves, A pen, nib, or brush for testing</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Set up: this ink is not food. Work on a protected surface (elderberry permanently stains wood, fabric, grout, and skin), keep children and pets away, and use a pot, spoon, and jar you keep for craft only. Gloves if you don&#039;t want purple fingers.</li>
+        <li>Use only fully ripe, dark berries from where harvesting is permitted, and strip them off ALL stems. Discard green berries, leaves, and stems — these are toxic and never go in the pot.</li>
+        <li>Put the 2 cups of de-stemmed berries in the saucepan over low-medium heat, adding the vinegar and a splash of water only if needed to prevent scorching.</li>
+        <li>Mash thoroughly as they heat. Simmer gently ~15–20 min until fully broken down into a dark, juicy pulp. (Cooking also reduces the berries&#039; natural toxins — never use a raw-juice method.)</li>
+        <li>Turn off the heat and let the pulp cool until comfortable to handle. Don&#039;t skip cooling — straining hot pulp is messy and risky.</li>
+        <li>Pour through a sieve into the bowl, pressing to squeeze out the colored liquid. Compost the spent pulp.</li>
+        <li>Strain again through a coffee filter, cheesecloth, or pantyhose so the ink flows cleanly in a pen.</li>
+        <li>Optional: stir in ½–1 tsp gum arabic per ½ cup for body. To play with color, touch test swatches with vinegar (redder), baking-soda water (bluer/greener), or iron water (slate-grey), then mix the batch you want.</li>
+        <li>Bottle, drop in 2–3 cloves and/or keep the vinegar in as a preservative, label TOXIC / NOT FOOD, and refrigerate. Expect a few weeks to a couple of months; shake before use.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Elderberry is anthocyanin-based and strongly pH-sensitive. Acid (vinegar, lemon) pushes it red/magenta and slightly stabilizes it; base (baking soda) pushes it blue, blue-grey, then murky green. Iron water saddens it to slate grey-purple and can modestly improve lightfastness; alum brightens and deepens the purple. These shifts are reversible and part of the fun, but none make the ink permanent.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Cooking (already in the recipe) concentrates it and reduces spoilage; keep the vinegar in as a mild acid preservative; add 2–3 cloves per jar; store sealed in the refrigerator and shake before use. Still treat it as perishable — discard if it smells off or grows mold.</p>
+      <h2>Yield</h2>
+      <p>Roughly ⅓–½ cup of ink from 2 cups of berries. Shelf life is short: a few weeks refrigerated, up to a couple of months with vinegar and cloves. The written color is fugitive and will fade/shift toward brown-grey over weeks to months in light regardless of preservation.</p>
+      <h2>Beyond the ink</h2>
+      <p>Also a fugitive textile dye (soft purples on alum-mordanted wool/silk; muted green with an alkaline afterbath) and a historical hair darkener — the Romans simmered the berries to darken graying hair. None of it is washfast; best for swatches and protected pieces.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://theartspaceblog.wordpress.com/2014/09/04/how-to-make-elderberry-ink/" rel="noreferrer">How to make Elderberry Ink — The Art Space</a></li>
+        <li><a href="https://extension.oregonstate.edu/catalog/em-9446-play-it-safe-when-preserving-elderberries" rel="noreferrer">Play it safe when preserving elderberries (toxicity) — OSU Extension EM-9446</a></li>
+        <li><a href="https://scienceinschool.org/article/2015/artistic-introduction-anthocyanin-inks/" rel="noreferrer">An artistic introduction to anthocyanin inks — Science in School</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

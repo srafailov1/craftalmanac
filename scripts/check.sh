@@ -43,6 +43,12 @@ node scripts/test_safety_tags.mjs || { echo "FAIL: Safety-tag completeness check
 echo "Validating project recipes..."
 node scripts/test_project_recipes.mjs || { echo "FAIL: Project recipes validation failed"; exit 1; }
 
+# Verify the committed static SEO pages (materials/, projects/, sitemap.xml,
+# robots.txt) match a fresh regeneration from the catalogs + recipes (catches
+# stale pages when a species or recipe changes without rerunning the generator)
+echo "Verifying static pages freshness..."
+node scripts/build_static_pages.mjs --verify || { echo "FAIL: Static pages are stale — run: node scripts/build_static_pages.mjs"; exit 1; }
+
 # Run permission rule tests
 echo "Running permission rule tests..."
 node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }

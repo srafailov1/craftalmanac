@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cochineal (educational) · Craft Almanac</title>
+    <meta name="description" content="Indigenous crimson — an insect dye">
+    <link rel="canonical" href="https://craftalmanac.com/projects/dye-cochineal.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Cochineal (educational) · Craft Almanac">
+    <meta property="og:description" content="Indigenous crimson — an insect dye">
+    <meta property="og:url" content="https://craftalmanac.com/projects/dye-cochineal.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Cochineal (educational)</h1>
+      <p class="teaser">Indigenous crimson — an insect dye</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Dye</li><li class="chip">Intermediate</li><li class="chip"><span class="swatch" style="background:#9c1f3a"></span>Crimson-carmine</li></ul>
+      <div class="safety mild">
+        <div class="k">Safety</div>
+        <ul>
+          <li>THIS IS A CRAFT DYE, NOT A FOOD PROJECT. Although carmine is a legal food colorant, the home dyeing process here is for craft only — keep dye insects, mordants, and equipment out of the kitchen.</li>
+          <li>ALLERGEN — including rare anaphylaxis. Carmine and cochineal extract are documented IgE-mediated allergens. Reactions range from contact dermatitis and hives to occupational asthma and, rarely, systemic anaphylaxis, with sensitive individuals reacting to as little as ~1 mg. The FDA requires carmine/cochineal to be named on food and cosmetic labels for exactly this reason. Anyone with a known carmine allergy should not handle it.</li>
+          <li>WEAR A DUST MASK WHEN GRINDING. The airborne insect-protein powder is the main sensitizer and an inhalant respiratory allergen — grind in a ventilated space, masked.</li>
+          <li>USE DEDICATED, NON-FOOD TOOLS. A dedicated dye pot, grinder, strainer, and spoon that never return to food use; alum and other mordants are not for cooking pots.</li>
+          <li>WEAR GLOVES. Cochineal stains skin and nails deeply (it is literally a pigment), and gloves limit skin contact for those who may be sensitized.</li>
+          <li>MORDANT SAFETY. Alum is relatively mild but should not be ingested; cream of tartar and iron should be handled as craft chemicals, not seasonings. Keep iron-water after-baths labeled and away from food. See <a href="tech-iron-acetate.html">iron water</a>.</li>
+          <li>HANDLE ALKALI SHIFTERS WITH CARE. Wood-ash lye and soda ash are caustic — they can irritate or burn skin and eyes. Wear gloves and eye protection, add them in tiny amounts, and never store them in unlabeled or food containers.</li>
+          <li>DON&#039;T HARD-BOIL. Keep dye and mordant baths to a gentle simmer; a violent boil can dull cochineal and risks splashing hot, staining liquid.</li>
+          <li>ETHICS IS A SAFETY ISSUE FOR THE RESOURCE. Do not strip wild native Opuntia — some prickly pears are protected, and occurrence is never harvest permission. Source cultivated/commercial cochineal, or insects from sanctioned invasive-control of Dactylopius opuntiae, with landowner permission.</li>
+          <li>NOT VEGAN. Cochineal is an animal (insect) product; disclose this for anyone avoiding animal-derived materials.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>For three thousand years before the Spanish ever saw it, Mixtec, Zapotec, and Nahua dyers of Oaxaca coaxed the most brilliant red the world had known out of a grey, fuzzy scale insect living on nopal cactus — nocheztli, &quot;blood of the prickly pear.&quot; A single gram of dried Dactylopius coccus holds 17–24% carminic acid, potent enough to dye wool a deep cherry-crimson at a fraction of its own weight; the Aztecs took it as tribute and the Spanish shipped a quarter-million pounds a year to Europe, where it colored cardinals&#039; robes, Gobelins tapestries, and the Redcoats. This is an EDUCATIONAL card: cochineal is an animal, not a plant, so it has no place on the harvest map — it is here for context, honest ethics, and respect for the Indigenous knowledge that perfected it. Please read it as history and craft literacy, not a foraging how-to.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Dried cochineal (Dactylopius coccus), whole or ground — ETHICALLY SOURCED ONLY — 2–5% weight-of-fiber (WOF) for bright cherry red on wool; up to 10–20% WOF for deep crimson/burgundy <span class="note">· Buy cultivated/commercial cochineal from a reputable dye supplier, or use insects collected during sanctioned invasive-control or harvest of cultivated nopal. Do NOT scrape wild native Opuntia — see steps and safety. Whole insects keep best; grind just before use.</span></li>
+        <li>Alum (potassium aluminium sulfate) — mordant — 10–15% WOF for protein fiber; ~8% aluminium acetate for cellulose <span class="note">· Alum is what makes cochineal red bright and lightfast. Pure carminic acid without a mordant is a dull brownish-purple.</span></li>
+        <li>Cream of tartar — for protein fiber — ~6% WOF <span class="opt">(optional)</span> <span class="note">· Brightens and evens the red on wool/silk and helps shift the bath toward a clearer scarlet.</span></li>
+        <li>Tannin (e.g. gallnut, oak, sumac) — for cellulose only — ~8% WOF <span class="opt">(optional)</span> <span class="note">· Cotton and linen need a tannin pre-mordant before alum/aluminium acetate or the color washes out.</span></li>
+        <li>Acid shifter — cream of tartar, vinegar, or citric acid — to taste, added to the dyebath <span class="opt">(optional)</span> <span class="note">· Pushes neutral mauve toward warm cherry/scarlet red. See <a href="tech-acid-base.html">acid &amp; base shifters</a>.</span></li>
+        <li>Iron water (ferrous acetate) — a small splash as an after-bath <span class="opt">(optional)</span> <span class="note">· &quot;Saddens&quot; crimson to lilac, plum, and grey-purple. A little goes a long way; too much dulls and can weaken fiber. See <a href="tech-iron-acetate.html">iron water</a>.</span></li>
+        <li>Wood-ash lye or soda ash — alkaline shifter — tiny amount, to raise pH <span class="opt">(optional)</span> <span class="note">· Alkaline conditions shift cochineal toward purple. Use the smallest effective pinch; strong alkali can weaken protein fiber.</span></li>
+        <li>Gum arabic — as needed <span class="opt">(optional)</span> <span class="note">· Only if making a carmine watercolor/ink rather than dyeing fiber. See <a href="tech-gum-arabic.html">gum arabic</a> and egg &amp; casein binders.</span></li>
+        <li>Soft / distilled water — enough to cover fiber freely <span class="opt">(optional)</span> <span class="note">· Hard water and iron-rich tap water shift and dull the red; soft or distilled water gives the cleanest crimson.</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Dedicated non-food stainless or enamel dye pot (never reused for cooking), Mortar and pestle or dedicated coffee/spice grinder for the insects (non-food), Nitrile or rubber gloves, Fine strainer, cheesecloth, or jelly bag to filter the bath, Dedicated stirring spoon/rod, Accurate scale for weighing fiber and insects (WOF percentages)</p>
+      <p><strong>Optional:</strong> pH strips for tuning acid/alkali shifts, Dust mask when grinding dried insects (the powder is a respiratory allergen), Thermometer to hold the bath below a hard boil, Separate small jars for iron and alkali after-baths</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>IDENTIFY AND UNDERSTAND, DON&#039;T HARVEST. Cochineal is a scale insect, not a plant, so it appears on no map here and there is no &quot;forage&quot; step. On nopal (Opuntia) you would see it as small white cottony tufts on the pads; crush one and it bleeds deep crimson — that is the carminic acid. The native dye insect, Dactylopius coccus, is essentially a domesticated, cultivated animal of Mesoamerica and is not something to strip from wild cactus.</li>
+        <li>RESPECT THE SOURCE AND THE PEOPLE. This is a culturally significant Indigenous dye, refined over millennia by Mixtec, Zapotec, and Nahua communities of Oaxaca and still a living livelihood there. Treat it as inherited knowledge to credit and honor, not a novelty bug. If you use cochineal, the ethical path is to buy cultivated/commercial cochineal — ideally Oaxacan or other producers who keep the tradition — rather than improvising wild collection.</li>
+        <li>WHY CASUAL WILD HARVEST IS WRONG HERE. Occurrence is not permission, and that holds doubly for an animal on a host plant. Scraping wild native Opuntia damages cacti that may be slow-growing or legally protected, and the wild cochineal you would find in the US Southwest is typically the lower-yield, often INVASIVE Dactylopius opuntiae (3–5% carminic acid vs. 17–24% in D. coccus) — a pest of prickly pear. The only defensible field source is insects gathered under a sanctioned invasive-control or cultivated-nopal harvest, with landowner permission, never by helping yourself to a wild stand.</li>
+        <li>PREPARE THE DYESTUFF. Weigh dried insects against your fiber (start ~5% WOF on wool). Grind to a powder with a dedicated grinder or mortar, wearing a dust mask — the powder is a known inhalant allergen. Soak the ground cochineal in warm water, then simmer gently (do not hard-boil) for ~30–45 minutes to extract the carminic acid. Strain through cheesecloth into your dedicated dye pot.</li>
+        <li>MORDANT THE FIBER FIRST. For wool or silk, simmer the clean, wetted fiber in alum (10–15% WOF, optionally with ~6% cream of tartar) for about an hour, then let it cool and steep, ideally overnight. For cotton or linen, pre-treat with tannin, then mordant with alum or aluminium acetate. Skipping the mordant gives only a weak, dull, fugitive color.</li>
+        <li>DYE. Add the mordanted, wetted fiber to the strained cochineal bath. Bring to a gentle simmer (around 180°F / 82°C, below a rolling boil) and hold ~45–60 minutes, stirring slowly for even uptake. For the deepest, most durable shade, turn off the heat and let the fiber cool in the bath overnight before rinsing in cool water and drying out of direct sun.</li>
+        <li>SHIFT THE COLOR DELIBERATELY (OPTIONAL). Work in small samples. Acid (cream of tartar, vinegar) warms the red toward scarlet/cherry; alkali (a pinch of soda ash or wood-ash lye) pushes it toward purple; an iron after-bath &quot;saddens&quot; it to lilac, plum, and grey-violet. See the modifiers note below.</li>
+        <li>MAKE A PAINT INSTEAD (OPTIONAL). To make carmine lake for ink or watercolor, precipitate the cochineal extract with alum and an alkali, wash and dry the pigment, then bind with gum arabic. Be honest with yourself: this lake pigment is beautiful but markedly more fugitive than dyed wool.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Cochineal is one of the most pH- and metal-responsive of all natural colors, which is half its magic. On alum-mordanted fiber the base color is a clean crimson. ACID (cream of tartar, vinegar, citric acid — see <a href="tech-acid-base.html">acid &amp; base shifters</a>) warms it toward scarlet and cherry red. ALKALI (soda ash, or natural wood-ash lye) shifts it toward magenta and purple. IRON (literally iron water, ferrous acetate — see <a href="tech-iron-acetate.html">iron water</a>) &quot;saddens&quot; the red into lilac, plum, and grey-violet; use it sparingly as an after-bath since excess dulls the hue and can embrittle protein fiber. The mordant metal matters as much as pH: alum gives the brightest, most lightfast reds, while tin can spark a vivid scarlet and iron the purples. For a cool blue-leaning red, pair or layer thoughtfully — and for context on a very different, lightfast-but-muted natural palette, compare the tan-to-purple range of <a href="dye-one-seed-juniper.html">one-seed juniper</a>.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Dried whole cochineal insects are remarkably stable: kept dry, cool, and away from light and pests, they hold their dye strength for years (museum and archaeological textiles prove the dye itself can last centuries on fiber). Grind only what you need, since powder loses potency faster and is more prone to clumping and mold if it takes up moisture. A finished liquid dyebath is perishable — it will ferment and grow mold within days at room temperature; refrigerate and use quickly, or freeze. Carmine lake pigment, once washed and fully dried into cakes, stores indefinitely. See <a href="tech-preserving.html">preserving extracts</a> for keeping liquid extracts and lakes.</p>
+      <h2>Yield</h2>
+      <p>Cochineal is extraordinarily efficient — that potency is the whole historic point. Roughly 70,000 dried insects make about 1 pound (450 g) of dyestuff, but you need very little: at 5% WOF, just 5 g of dried cochineal will dye 100 g of wool a strong red, and 2% WOF still gives a usable cherry shade. Exhausted baths can be re-used for progressively paler pinks and mauves until spent. A small 25–50 g packet of cultivated cochineal is enough for many small projects, which is exactly why ethical purchase — rather than wild scraping — is both the right and the practical choice.</p>
+      <h2>Beyond the ink</h2>
+      <p>Cochineal&#039;s reach goes far beyond fiber. As a TEXTILE DYE it gives the historic crimsons, scarlets, and purples of Andean and Mesoamerican weaving, European broadcloth, and tapestry. As a PAINT/INK it was precipitated into carmine lake, prized by Renaissance and Baroque painters (and later watercolorists) for its luminous translucent red — bind it with <a href="tech-gum-arabic.html">gum arabic</a> for watercolor or with egg or casein for tempera. It is also still a major food and cosmetic colorant (E120 / &quot;carmine&quot; / &quot;cochineal extract&quot;) in lipsticks, blushes, yogurts, and beverages — which is precisely why allergy labeling now exists (see safety). It is not vegan, as it is made from insects.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://botanicalcolors.com/" rel="noreferrer">Botanical Colors — Cochineal (history, mordanting, and dyeing guidance)</a></li>
+        <li><a href="https://smarthistory.org/cochineal/" rel="noreferrer">Smarthistory — &quot;The bug that had the world seeing red&quot; (Indigenous Mesoamerican history of cochineal)</a></li>
+        <li><a href="https://www.smithsonianmag.com/innovation/bug-had-world-seeing-red-180961590/" rel="noreferrer">Smithsonian Magazine — &quot;The Bug That Had the World Seeing Red&quot; (cochineal history and Indigenous origins)</a></li>
+        <li><a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/small-entity-compliance-guide-declaration-name-label-all-foods-and-cosmetic-products-contain" rel="noreferrer">U.S. FDA — Small Entity Compliance Guide: Declaration by Name on the Label of All Foods and Cosmetic Products that Contain Cochineal Extract and Carmine</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice, and not a harvest recommendation.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

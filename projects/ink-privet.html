@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Privet berry ink · Craft Almanac</title>
+    <meta name="description" content="Invasive berry that shifts green">
+    <link rel="canonical" href="https://craftalmanac.com/projects/ink-privet.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Privet berry ink · Craft Almanac">
+    <meta property="og:description" content="Invasive berry that shifts green">
+    <meta property="og:url" content="https://craftalmanac.com/projects/ink-privet.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Privet berry ink</h1>
+      <p class="teaser">Invasive berry that shifts green</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Ink</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#46577f"></span>Muddy purple</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>Toxic — do not ingest: privet berries and leaves contain terpenoid glycosides; eating them causes mouth irritation, stomach pain, vomiting, and diarrhea. Seek medical advice if anyone swallows berries or ink (contact Poison Control for more than a few berries). This ink must never touch lips or food surfaces.</li>
+          <li>Skin and eye contact: berries and juice can cause dermatitis and eye irritation — wear gloves, avoid touching your face, and wash splashes off promptly.</li>
+          <li>Ventilate while simmering and avoid inhaling the steam.</li>
+          <li>The juice stains skin, fabric, counters, and grout deeply — protect surfaces and wear old clothes.</li>
+          <li>Keep berries, the simmering pot, and finished ink out of reach; privet is also poisonous to dogs, cats, horses, and livestock.</li>
+          <li>Use a non-food pot, spoon, and jar reserved for craft only; label the bottle clearly as poison / not food, and bag spent pulp in the trash rather than handling it bare-handed.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Privet berry juice once colored playing cards: 18th-century French cardmakers in Nimes used it for reds, violets, and blues, tweaking the recipe with lime or even urine to swing the hue. Crush the ripe black berries and you get a moody red-purple ink that lurches toward green the instant you add a pinch of baking soda.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Ripe privet berries (Ligustrum, dark blue-black, ideally after a frost) — about 1 to 1.5 cups per 1 to 1.5 cups water <span class="note">· berries are toxic — there is no safe edible substitute for this blue/purple/green range</span></li>
+        <li>Water — 1 to 1.5 cups, just enough to cover the berries</li>
+        <li>Baking soda — a few pinches, 1/8 tsp at a time <span class="opt">(optional)</span> <span class="note">· the pH modifier that pushes the color toward blue, then teal/green; washing soda is stronger (use even less)</span></li>
+        <li>Gum arabic — about 1/4 tsp dissolved per 1/4 cup finished ink <span class="opt">(optional)</span> <span class="note">· binder for flow; a few drops of glycerin keeps it from cracking</span></li>
+        <li>Whole cloves, or a splash of isopropyl alcohol — 2-3 cloves, or about 1/4 tsp alcohol per jar <span class="opt">(optional)</span> <span class="note">· preservative against mold; or refrigerate and use quickly</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> A dedicated (non-food) pot reserved for craft use — privet is toxic, never return it to the kitchen, Heat source, Coffee filter, fine cloth, or cheesecloth, A craft-only spoon or fork for crushing, Gloves (berries and juice irritate skin), A jar or bottle with a lid; a bowl to strain into</p>
+      <p><strong>Optional:</strong> Small whisk or chopstick for stirring in soda, pH strips to track the color shift, Eyedropper for testing modifiers drop by drop, A dedicated mortar and pestle for crushing, Iron water to test a grey modifier</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Safety first: privet berries and leaves are poisonous (terpenoid glycosides). This ink is not food and must never be tasted, used on skin, or stored in a food container. Work ventilated, wear gloves, keep berries and ink away from children and pets, and use only a dedicated non-food pot. Forage only where harvesting is permitted.</li>
+        <li>Collect ripe, dark blue-black privet berries from invasive Ligustrum where allowed (removing this invasive helps native ecosystems). Pick out stems, leaves, and unripe green berries, and rinse the fruit.</li>
+        <li>Crush the berries in your dedicated pot with a fork or mortar to break the skins and release juice. Expect a reddish-purple stain — wear gloves and protect your surface.</li>
+        <li>Add just enough water to cover the crushed berries (about 1 to 1.5 cups).</li>
+        <li>Simmer low and slow until the berries are soft and the liquid is a deep reddish-purple, about 1 hour. Don&#039;t boil hard — gentle heat protects the color. Ventilate and don&#039;t lean over the steam.</li>
+        <li>Let it cool, then strain through a coffee filter or cloth into a bowl. Discard the spent pulp in the trash (not bare-handed compost). You now have a slightly acidic reddish-purple ink.</li>
+        <li>Adjust the color with pH (the fun part): split into small jars. Leave one as-is, and to another stir in a pinch of baking soda — it fizzes and shifts toward purple-blue, then teal/green with more. Add soda 1/8 tsp at a time and stop when you like it; too much weakens it. (Acid tends to dull the color, so avoid vinegar here.)</li>
+        <li>Optional: dissolve a little gum arabic for smoother writing, and add 2-3 cloves or a splash of isopropyl alcohol to slow mold.</li>
+        <li>Test on scrap, then bottle in a labeled, lidded jar marked poison — not food — keep from children and pets, and refrigerate. This is a fugitive ink — protect finished art from light and expect it to fade over weeks to months.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>pH is the main lever. Raw privet juice is mildly acidic and reads muddy reddish-purple. Adding alkali (baking soda, or stronger washing soda) walks it cool — toward purple, blue, teal, and finally green; historically the juice was modified with lime, Glauber&#039;s salt, and ammonia to dye red, violet, and blue on playing cards, and adding soda to the related buckthorn juice is exactly how old &quot;sap green&quot; was made. Acid tends to dull or strip the color rather than redden it. Iron (a few drops of iron water) saddens it to grey or grey-green. Keep heat gentle — a hard boil degrades the pigment.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Privet ink is water-based and will mold. Add 2-3 whole cloves (traditional anti-mold) or a small splash of isopropyl alcohol or white vinegar per jar; a drop of clove oil works too. Store in a sealed, clearly labeled non-food jar in the refrigerator and use within a few weeks to a couple of months. Alkaline (baking-soda) batches spoil and shift faster, so make those small. Even well-preserved, the color is fugitive and loses vibrancy over time.</p>
+      <h2>Yield</h2>
+      <p>Roughly 1/2 to 1 cup of ink from 1 to 1.5 cups of berries. Refrigerated with a preservative, expect a few weeks to about 2 months before mold or color shift; alkaline-modified batches keep less well. The dried color on paper is fugitive and fades in weeks to months under light.</p>
+      <h2>Beyond the ink</h2>
+      <p>Privet works as a textile dye on protein fiber, but it needs more than the raw ink: scour and alum-mordant the fiber (wool takes it best), simmer the berries about an hour to extract, then raise the pH with washing or baking soda to shift the muddy purple toward green/teal. Frost-ripened berries give better color. As with the ink, every resulting shade is fugitive.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://myramadecolor.com/2019/04/15/natural-dye-privet-berries/" rel="noreferrer">Natural Dye: Privet Berries (simmer ~1 hr, pH shifts to green/teal, iron to grey) — Myra Made Color</a></li>
+        <li><a href="https://www.jennydean.co.uk/some-interesting-dye-sources/" rel="noreferrer">Some Interesting Dye Sources (privet historically dyed playing cards; berry dyes fade) — Jenny Dean&#039;s Wild Colour</a></li>
+        <li><a href="https://www.jacksonsart.com/en-us/color/pigments-powders/pigment-stories/green/sap-green" rel="noreferrer">Sap Green pigment story (alkali + berry juice makes green; very poor lightfastness) — Jackson&#039;s Art</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

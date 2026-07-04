@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Materials · Craft Almanac</title>
+    <meta name="description" content="Every material profile across the Craft Almanac maps — food, ink and dye, herbalism, and minerals — grouped by map.">
+    <link rel="canonical" href="https://craftalmanac.com/materials/">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Materials · Craft Almanac">
+    <meta property="og:description" content="Every material profile across the Craft Almanac maps — food, ink and dye, herbalism, and minerals — grouped by map.">
+    <meta property="og:url" content="https://craftalmanac.com/materials/">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="/">&larr; Back to the map</a>
+    <main>
+      <h1>Materials</h1>
+      <p class="teaser">Every material profile across the Craft Almanac maps — grouped by map. Each links into the live map, where every point carries the rule for the land it sits on.</p>
+      <div class="index-group">
+        <h2>Food</h2>
+        <ul class="card-list">
+          <li><a href="./morel.html">Morel mushrooms</a> <span class="card-sci">Morchella</span></li>
+          <li><a href="./blueberry.html">Blueberries</a> <span class="card-sci">Vaccinium</span></li>
+          <li><a href="./blackberry.html">Blackberries</a> <span class="card-sci">Rubus allegheniensis and related blackberries</span></li>
+          <li><a href="./raspberry.html">Raspberries</a> <span class="card-sci">Rubus occidentalis and Rubus idaeus</span></li>
+          <li><a href="./wineberry.html">Wineberries</a> <span class="card-sci">Rubus phoenicolasius</span></li>
+          <li><a href="./grape.html">Wild grapes</a> <span class="card-sci">Vitis</span></li>
+          <li><a href="./elderberry.html">Elderberries</a> <span class="card-sci">Sambucus</span></li>
+          <li><a href="./ribes.html">Gooseberries and currants</a> <span class="card-sci">Ribes</span></li>
+          <li><a href="./huckleberry.html">Huckleberries</a> <span class="card-sci">Gaylussacia</span></li>
+          <li><a href="./black-cherry.html">Black cherries</a> <span class="card-sci">Prunus serotina</span></li>
+          <li><a href="./sweet-cherry.html">Sweet cherries</a> <span class="card-sci">Prunus avium</span></li>
+          <li><a href="./sour-cherry.html">Sour cherries</a> <span class="card-sci">Prunus cerasus</span></li>
+          <li><a href="./plum.html">Plums</a> <span class="card-sci">Prunus americana and Prunus mexicana</span></li>
+          <li><a href="./cornelian-cherry.html">Cornelian cherries</a> <span class="card-sci">Cornus mas</span></li>
+          <li><a href="./serviceberry.html">Serviceberries</a> <span class="card-sci">Amelanchier</span></li>
+          <li><a href="./wild-strawberry.html">Wild strawberries</a> <span class="card-sci">Fragaria virginiana and Fragaria vesca</span></li>
+          <li><a href="./persimmon.html">Persimmons</a> <span class="card-sci">Diospyros virginiana</span></li>
+          <li><a href="./pawpaw.html">Pawpaws</a> <span class="card-sci">Asimina triloba</span></li>
+          <li><a href="./sumac.html">Sumac berries</a> <span class="card-sci">Rhus</span></li>
+          <li><a href="./black-walnut.html">Black walnuts</a> <span class="card-sci">Juglans nigra</span></li>
+          <li><a href="./hickory.html">Hickory nuts</a> <span class="card-sci">Carya</span></li>
+          <li><a href="./hazelnut.html">Hazelnuts</a> <span class="card-sci">Corylus americana</span></li>
+          <li><a href="./apple.html">Apples</a> <span class="card-sci">Malus domestica</span></li>
+          <li><a href="./pear.html">Pears</a> <span class="card-sci">Pyrus communis</span></li>
+          <li><a href="./peach.html">Peaches</a> <span class="card-sci">Prunus persica</span></li>
+          <li><a href="./fig.html">Figs</a> <span class="card-sci">Ficus carica</span></li>
+          <li><a href="./red-mulberry.html">Red mulberries</a> <span class="card-sci">Morus rubra</span></li>
+          <li><a href="./thimbleberry.html">Thimbleberries</a> <span class="card-sci">Rubus parviflorus</span></li>
+          <li><a href="./salmonberry.html">Salmonberries</a> <span class="card-sci">Rubus spectabilis</span></li>
+          <li><a href="./himalayan-blackberry.html">Himalayan blackberries</a> <span class="card-sci">Rubus armeniacus</span></li>
+          <li><a href="./cranberry.html">Wild cranberries</a> <span class="card-sci">Vaccinium macrocarpon and Vaccinium oxycoccos</span></li>
+          <li><a href="./red-elderberry.html">Red elderberries</a> <span class="card-sci">Sambucus racemosa</span></li>
+          <li><a href="./buffaloberry.html">Buffaloberries</a> <span class="card-sci">Shepherdia argentea</span></li>
+          <li><a href="./juniper-berry.html">Juniper berries</a> <span class="card-sci">Juniperus</span></li>
+          <li><a href="./kinnikinnick.html">Kinnikinnick (bearberry)</a> <span class="card-sci">Arctostaphylos uva-ursi</span></li>
+          <li><a href="./wintergreen.html">Wintergreen berries</a> <span class="card-sci">Gaultheria procumbens</span></li>
+          <li><a href="./chokecherry.html">Chokecherries</a> <span class="card-sci">Prunus virginiana</span></li>
+          <li><a href="./pin-cherry.html">Pin cherries</a> <span class="card-sci">Prunus pensylvanica</span></li>
+          <li><a href="./rose-hips.html">Rose hips</a> <span class="card-sci">Rosa</span></li>
+          <li><a href="./hawthorn.html">Hawthorn haws</a> <span class="card-sci">Crataegus</span></li>
+          <li><a href="./mayapple.html">Mayapple fruit</a> <span class="card-sci">Podophyllum peltatum</span></li>
+          <li><a href="./prickly-pear.html">Prickly pear fruit (tunas)</a> <span class="card-sci">Opuntia</span></li>
+          <li><a href="./pinyon-pine-nut.html">Pinyon pine nuts</a> <span class="card-sci">Pinus edulis and Pinus monophylla</span></li>
+          <li><a href="./mesquite-bean.html">Mesquite pods</a> <span class="card-sci">Prosopis (Neltuma)</span></li>
+          <li><a href="./chinquapin.html">Chinquapin nuts</a> <span class="card-sci">Chrysolepis sempervirens and Castanea pumila</span></li>
+        </ul>
+      </div>
+      <div class="index-group">
+        <h2>Ink &amp; Dye</h2>
+        <ul class="card-list">
+          <li><a href="./ink-black-walnut.html">Black walnut</a> <span class="card-sci">Juglans nigra</span></li>
+          <li><a href="./ink-oak.html">Oak galls and acorn caps</a> <span class="card-sci">Quercus</span></li>
+          <li><a href="./ink-hickory.html">Hickory hulls</a> <span class="card-sci">Carya</span></li>
+          <li><a href="./ink-sumac.html">Sumac</a> <span class="card-sci">Rhus</span></li>
+          <li><a href="./ink-goldenrod.html">Goldenrod</a> <span class="card-sci">Solidago</span></li>
+          <li><a href="./ink-osage-orange.html">Osage orange</a> <span class="card-sci">Maclura pomifera</span></li>
+          <li><a href="./ink-pokeweed.html">Pokeweed</a> <span class="card-sci">Phytolacca americana</span></li>
+          <li><a href="./ink-autumn-olive.html">Autumn olive</a> <span class="card-sci">Elaeagnus umbellata</span></li>
+          <li><a href="./ink-wineberry.html">Wineberry</a> <span class="card-sci">Rubus phoenicolasius</span></li>
+          <li><a href="./ink-elderberry.html">Elderberry</a> <span class="card-sci">Sambucus</span></li>
+          <li><a href="./ink-privet.html">Privet</a> <span class="card-sci">Ligustrum</span></li>
+          <li><a href="./ink-wild-grape.html">Wild grapes and Boston ivy</a> <span class="card-sci">Vitis and Parthenocissus tricuspidata</span></li>
+          <li><a href="./ink-tupelo.html">Black tupelo (black gum)</a> <span class="card-sci">Nyssa sylvatica</span></li>
+          <li><a href="./ink-himalayan-blackberry.html">Himalayan blackberry</a> <span class="card-sci">Rubus armeniacus</span></li>
+          <li><a href="./ink-prickly-pear.html">Prickly pear</a> <span class="card-sci">Opuntia polyacantha, O. engelmannii</span></li>
+          <li><a href="./ink-rouge-plant.html">Rouge plant (pigeonberry)</a> <span class="card-sci">Rivina humilis</span></li>
+          <li><a href="./ink-bee-plant.html">Rocky Mountain bee plant</a> <span class="card-sci">Cleomella serrulata</span></li>
+          <li><a href="./ink-brazilian-pepper.html">Brazilian pepper</a> <span class="card-sci">Schinus terebinthifolia</span></li>
+          <li><a href="./ink-oregon-grape.html">Oregon grape &amp; barberry</a> <span class="card-sci">Berberis aquifolium, B. repens, B. fremontii, B. trifoliolata</span></li>
+          <li><a href="./dye-artemisia.html">Sagebrush &amp; mugwort</a> <span class="card-sci">Artemisia tridentata, A. californica, A. douglasiana</span></li>
+          <li><a href="./dye-mormon-tea.html">Mormon tea (Ephedra)</a> <span class="card-sci">Ephedra viridis</span></li>
+          <li><a href="./dye-camphor.html">Camphor tree</a> <span class="card-sci">Cinnamomum camphora</span></li>
+          <li><a href="./dye-canaigre.html">Canaigre (tanner&#039;s dock)</a> <span class="card-sci">Rumex hymenosepalus</span></li>
+          <li><a href="./dye-cliffrose.html">Cliffrose</a> <span class="card-sci">Purshia stansburyana</span></li>
+          <li><a href="./dye-st-johns-wort.html">St. John&#039;s wort (Klamath weed)</a> <span class="card-sci">Hypericum perforatum</span></li>
+          <li><a href="./dye-coyote-brush.html">Coyote brush</a> <span class="card-sci">Baccharis pilularis</span></li>
+          <li><a href="./dye-curly-dock.html">Curly dock</a> <span class="card-sci">Rumex crispus</span></li>
+          <li><a href="./dye-douglas-fir.html">Douglas-fir</a> <span class="card-sci">Pseudotsuga menziesii</span></li>
+          <li><a href="./dye-eucalyptus.html">Eucalyptus</a> <span class="card-sci">Eucalyptus</span></li>
+          <li><a href="./dye-greenthread.html">Greenthread (Navajo tea)</a> <span class="card-sci">Thelesperma megapotamicum</span></li>
+          <li><a href="./dye-honey-mesquite.html">Honey mesquite</a> <span class="card-sci">Neltuma glandulosa (Prosopis glandulosa)</span></li>
+          <li><a href="./dye-manzanita.html">Manzanita</a> <span class="card-sci">Arctostaphylos</span></li>
+          <li><a href="./dye-one-seed-juniper.html">One-seed juniper</a> <span class="card-sci">Juniperus monosperma</span></li>
+          <li><a href="./dye-madrone.html">Pacific madrone</a> <span class="card-sci">Arbutus menziesii</span></li>
+          <li><a href="./dye-plains-coreopsis.html">Plains coreopsis</a> <span class="card-sci">Coreopsis tinctoria</span></li>
+          <li><a href="./dye-alder.html">Alder</a> <span class="card-sci">Alnus rubra, A. incana</span></li>
+          <li><a href="./dye-rabbitbrush.html">Rabbitbrush</a> <span class="card-sci">Ericameria nauseosa, Chrysothamnus viscidiflorus</span></li>
+          <li><a href="./dye-scotch-broom.html">Scotch broom</a> <span class="card-sci">Cytisus scoparius</span></li>
+          <li><a href="./dye-wax-myrtle.html">Southern wax myrtle</a> <span class="card-sci">Morella cerifera</span></li>
+          <li><a href="./dye-spanish-moss.html">Spanish moss</a> <span class="card-sci">Tillandsia usneoides</span></li>
+          <li><a href="./dye-toyon.html">Toyon (California holly)</a> <span class="card-sci">Heteromeles arbutifolia</span></li>
+          <li><a href="./dye-wild-fennel.html">Wild fennel</a> <span class="card-sci">Foeniculum vulgare</span></li>
+          <li><a href="./dye-dyers-woad.html">Dyer&#039;s woad</a> <span class="card-sci">Isatis tinctoria</span></li>
+          <li><a href="./dye-mountain-mahogany.html">Mountain mahogany</a> <span class="card-sci">Cercocarpus montanus</span></li>
+          <li><a href="./ink-carolina-redroot.html">Carolina redroot</a> <span class="card-sci">Lachnanthes caroliniana</span></li>
+          <li><a href="./ink-tanoak.html">Tanoak</a> <span class="card-sci">Notholithocarpus densiflorus</span></li>
+          <li><a href="./ink-western-redcedar.html">Western redcedar</a> <span class="card-sci">Thuja plicata</span></li>
+          <li><a href="./ink-wolf-lichen.html">Wolf lichen</a> <span class="card-sci">Letharia vulpina</span></li>
+          <li><a href="./ink-dyers-polypore.html">Dyer&#039;s polypore</a> <span class="card-sci">Phaeolus schweinitzii</span></li>
+          <li><a href="./ink-turkey-tail.html">Turkey tail</a> <span class="card-sci">Trametes versicolor</span></li>
+          <li><a href="./ink-artists-conk.html">Artist&#039;s conk</a> <span class="card-sci">Ganoderma applanatum</span></li>
+          <li><a href="./ink-red-belted-conk.html">Red-belted conk</a> <span class="card-sci">Fomitopsis mounceae complex</span></li>
+          <li><a href="./ink-tinder-conk.html">Tinder conk</a> <span class="card-sci">Fomes fomentarius</span></li>
+          <li><a href="./ink-chicken-of-the-woods.html">Chicken of the woods</a> <span class="card-sci">Laetiporus sulphureus / cincinnatus</span></li>
+        </ul>
+      </div>
+      <div class="index-group">
+        <h2>Herbalism</h2>
+        <ul class="card-list">
+          <li><a href="./medicine-jewelweed.html">Jewelweed</a> <span class="card-sci">Impatiens capensis</span></li>
+          <li><a href="./medicine-broadleaf-plantain.html">Broadleaf plantain</a> <span class="card-sci">Plantago major</span></li>
+          <li><a href="./medicine-yarrow.html">Yarrow</a> <span class="card-sci">Achillea millefolium</span></li>
+          <li><a href="./medicine-chickweed.html">Chickweed</a> <span class="card-sci">Stellaria media</span></li>
+          <li><a href="./medicine-witch-hazel.html">Witch hazel</a> <span class="card-sci">Hamamelis virginiana</span></li>
+          <li><a href="./medicine-elderberry.html">Elderberry</a> <span class="card-sci">Sambucus</span></li>
+          <li><a href="./medicine-echinacea.html">Echinacea</a> <span class="card-sci">Echinacea purpurea</span></li>
+          <li><a href="./medicine-mullein.html">Mullein</a> <span class="card-sci">Verbascum thapsus</span></li>
+          <li><a href="./medicine-bergamot.html">Wild bergamot / bee balm</a> <span class="card-sci">Monarda fistulosa</span></li>
+          <li><a href="./medicine-goldenrod.html">Goldenrod</a> <span class="card-sci">Solidago</span></li>
+          <li><a href="./medicine-dandelion.html">Dandelion</a> <span class="card-sci">Taraxacum officinale</span></li>
+          <li><a href="./medicine-garlic-mustard.html">Garlic mustard</a> <span class="card-sci">Alliaria petiolata</span></li>
+          <li><a href="./medicine-violet.html">Violet</a> <span class="card-sci">Viola sororia</span></li>
+          <li><a href="./medicine-cleavers.html">Cleavers</a> <span class="card-sci">Galium aparine</span></li>
+        </ul>
+      </div>
+      <div class="index-group">
+        <h2>Minerals</h2>
+        <ul class="card-list">
+          <li><a href="./mineral-quartz.html">Quartz crystal</a> <span class="card-sci">Quartz · SiO₂</span></li>
+          <li><a href="./mineral-novaculite.html">Novaculite whetstone</a> <span class="card-sci">Novaculite (microcrystalline quartz)</span></li>
+          <li><a href="./mineral-silica.html">Silica (chert / flint)</a> <span class="card-sci">Silica · SiO₂ (chert, flint, novaculite)</span></li>
+          <li><a href="./mineral-soapstone.html">Soapstone (steatite)</a> <span class="card-sci">Steatite (talc-rich rock)</span></li>
+          <li><a href="./mineral-clay.html">Clay (pottery)</a> <span class="card-sci">Clay minerals (kaolinite group)</span></li>
+          <li><a href="./mineral-slate.html">Slate (engraving &amp; inlay)</a> <span class="card-sci">Slate (metamorphic rock)</span></li>
+          <li><a href="./mineral-gemstone.html">Gemstone / diamond</a> <span class="card-sci">Diamond &amp; gemstone (various)</span></li>
+          <li><a href="./mineral-alabaster.html">Alabaster (gypsum)</a> <span class="card-sci">Gypsum · CaSO₄·2H₂O</span></li>
+          <li><a href="./mineral-pipestone.html">Pipestone (catlinite)</a> <span class="card-sci">Catlinite (indurated red claystone)</span></li>
+          <li><a href="./mineral-serpentine.html">Serpentine</a> <span class="card-sci">Serpentinite (antigorite / chrysotile)</span></li>
+          <li><a href="./mineral-limestone.html">Limestone (carving freestone)</a> <span class="card-sci">Limestone (dimension freestone)</span></li>
+          <li><a href="./mineral-marble.html">Marble (carving / statuary)</a> <span class="card-sci">Marble (metamorphic calcite)</span></li>
+          <li><a href="./mineral-obsidian.html">Obsidian</a> <span class="card-sci">Obsidian (volcanic glass)</span></li>
+          <li><a href="./mineral-agate.html">Agate / chalcedony / jasper</a> <span class="card-sci">Chalcedony (cryptocrystalline quartz)</span></li>
+          <li><a href="./mineral-petrified-wood.html">Petrified wood</a> <span class="card-sci">Silicified wood (chalcedony / agate)</span></li>
+        </ul>
+      </div>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

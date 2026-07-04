@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sumac berry ink · Craft Almanac</title>
+    <meta name="description" content="A color-shifting chemistry set">
+    <link rel="canonical" href="https://craftalmanac.com/projects/ink-sumac.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Sumac berry ink · Craft Almanac">
+    <meta property="og:description" content="A color-shifting chemistry set">
+    <meta property="og:url" content="https://craftalmanac.com/projects/ink-sumac.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Sumac berry ink</h1>
+      <p class="teaser">A color-shifting chemistry set</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Ink</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#9d3a5f"></span>Pink-purple</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>Identification is safety: never use poison sumac (drooping white/grey berries, smooth leaflets, swampy habitat) — its urushiol causes severe rashes and is dangerous if burned. Use only true Rhus with upright red fuzzy fruit and toothed leaflets.</li>
+          <li>This is ink, not food. (Edible sumac makes sumac-ade in food contexts, but this concentrated craft prep may contain iron salts — don&#039;t consume it.)</li>
+          <li>Even true sumac&#039;s sap can irritate sensitive skin — wear gloves to harvest and handle.</li>
+          <li>The iron modifier is corrosive and an eye/skin irritant — label it, keep it from kids and pets, wear eye protection, and rinse splashes at once. The steel-wool/vinegar jar off-gasses hydrogen — keep its lid loose.</li>
+          <li>Iron-tannate ink is acidic (pH ~1–3) and corrodes paper and nibs over time — wipe nibs and don&#039;t use it on archival originals untreated.</li>
+          <li>Reserve the pot, spoon, and jars for craft only; never burn sumac brush you haven&#039;t positively identified.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Steep the fuzzy red berry cones of staghorn or smooth sumac and you get a tart pink-purple ink that behaves like a chemistry set: nudge it alkaline and it slides toward green; drop in iron and the tannins crash to a deep grey-black. Its cousin, Sicilian &#039;Tanner&#039;s sumac,&#039; was one of Europe&#039;s most prized leather tannins.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>True Rhus sumac berries — red, upright, fuzzy clusters (staghorn or smooth) — ½–1 cup material per cup water <span class="note">· berries give the pink-purple; leaves and spent &#039;bobs&#039; give more tannin for grey/black</span></li>
+        <li>Water — 1 cup per batch</li>
+        <li>Iron acetate (steel wool in vinegar) or ferrous sulfate — a few drops to ½ tsp per ¼ cup ink <span class="opt">(optional)</span> <span class="note">· the dramatic modifier — shifts toward grey, then near-black</span></li>
+        <li>Baking soda — a small pinch <span class="opt">(optional)</span> <span class="note">· alkaline shift — slides the berry color toward green</span></li>
+        <li>White vinegar — a splash <span class="opt">(optional)</span> <span class="note">· keeps berry tones pink and bright</span></li>
+        <li>Gum arabic — ~¼ tsp per ¼ cup ink <span class="opt">(optional)</span> <span class="note">· flow and body for pen ink; a drop of honey works too</span></li>
+        <li>Whole cloves — 1 per jar <span class="opt">(optional)</span> <span class="note">· preservative against mold</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Stainless or enamel pot reserved for craft use, Heat source, Coffee filter, fine sieve, or muslin, Craft-only spoon, Heatproof jar or bottle, Gloves</p>
+      <p><strong>Optional:</strong> Second jar for the iron modifier, Dropper for adding iron drop by drop, pH strips, Test paper and a pen/brush, Scale for repeatable batches</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Identify first (non-negotiable): use only true Rhus sumac — upright, fuzzy red berry cones and toothed leaflets, in dry sunny ground. Never use poison sumac (Toxicodendron vernix): drooping white/grey berries, smooth leaflets, swampy habitat. If the berries aren&#039;t red and upright, walk away.</li>
+        <li>Harvest where permitted; snip a modest share of ripe red clusters from abundant stands, leaving the shrub intact. Gloves on — even true sumac&#039;s sap can irritate. Rinse the berries.</li>
+        <li>Optional, 1–2 days ahead: make iron water — cover steel wool with white vinegar in a jar, lid loose, until rusty-orange; strain. Label it and keep it out of food areas.</li>
+        <li>Combine sumac with water in the craft pot (~½–1 cup material per cup water). Bring just to a boil, then lower to a gentle simmer.</li>
+        <li>Simmer, stirring, until reduced by at least half and the color deepens — ~45–90 min. For leaves/bobs you can simmer longer or steep overnight for more tannin; for berries, avoid hard boiling, which dulls the pink.</li>
+        <li>Cool, then strain thoroughly through a coffee filter or muslin into a clean jar. You now have a pink-purple base ink.</li>
+        <li>Tune the color on a TEST swatch: a pinch of baking soda slides it toward green; a splash of vinegar keeps it pink; iron water, a few drops at a time, takes it to grey then near-black (and darkens further as it dries). Add iron sparingly — too much makes a dull, over-acidic, paper-damaging ink.</li>
+        <li>For pen/brush work, stir in a little gum arabic (or a drop of honey) for flow. Keep it thin for washes.</li>
+        <li>Bottle, drop in a clove, and label &#039;INK — NOT FOOD, contains iron/tannin.&#039; Store cool and dark; test on your actual paper and let it dry, since iron inks darken as they oxidize.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Sumac is tannin-and-anthocyanin chemistry. Acid (vinegar) keeps the berry color pink and bright. Alkali (a pinch of baking soda) slides it toward green. Iron is the dramatic modifier: tannin + iron forms iron tannate (the iron-gall reaction), turning pink to cool grey, grey-brown, or near-black, deepening as it oxidizes. Add iron gradually — too much yields a flat, strongly acidic black that corrodes paper and nibs.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Add one whole clove per jar and bottle in a sterilized jar. Berry ink is the most perishable — refrigerate and expect a few weeks to a couple of months. Iron-modified grey/black is more stable and keeps longer, since the iron and acidity discourage microbes.</p>
+      <h2>Yield</h2>
+      <p>About ⅓–½ cup per batch. The pink/purple berry color is FUGITIVE (fades within weeks to months in light) — use it for sketchbooks and protected work. The iron grey/black is far more lightfast. Shelf life: berry ink a few weeks to ~2 months refrigerated; iron-tannate ink several months cool and dark.</p>
+      <h2>Beyond the ink</h2>
+      <p>Sumac&#039;s tannin makes it a quiet workhorse: &#039;Tanner&#039;s sumac&#039; was a prized leather tannin, and it doubles as a cotton/linen pre-mordant for dyeing. On fiber the bright berry pink mutes to earthy tan/brown (alum mordant; iron afterbath for grey), so plan for the tannin browns as the lasting result. (The dried berries of true edible sumac are also the Middle-Eastern spice — never poison sumac.)</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://botanicalcolors.com/mordant-monday-spotlight-on-sumac/" rel="noreferrer">Mordant Monday: Spotlight on Sumac — Botanical Colors</a></li>
+        <li><a href="http://viaverdefarm.blogspot.com/2020/11/natural-dyeing-with-sumac-berries.html" rel="noreferrer">Natural Dyeing with Sumac Berries — Via Verde Farm</a></li>
+        <li><a href="https://plants.ces.ncsu.edu/plants/toxicodendron-vernix/" rel="noreferrer">Poison Sumac identification — NC State Extension</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

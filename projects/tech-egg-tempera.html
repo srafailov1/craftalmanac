@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Egg tempera binder · Craft Almanac</title>
+    <meta name="description" content="Luminous paint from a yolk">
+    <link rel="canonical" href="https://craftalmanac.com/projects/tech-egg-tempera.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Egg tempera binder · Craft Almanac">
+    <meta property="og:description" content="Luminous paint from a yolk">
+    <meta property="og:url" content="https://craftalmanac.com/projects/tech-egg-tempera.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Egg tempera binder</h1>
+      <p class="teaser">Luminous paint from a yolk</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Binder</li><li class="chip">Beginner</li><li class="chip">Pantry binder</li></ul>
+      <div class="safety mild">
+        <div class="k">Safety</div>
+        <ul>
+          <li>This is an art binder, not food. Even though the ingredients are groceries, the finished paint is for making marks — do not eat or drink it, keep it away from children and pets, and label jars clearly &#039;NOT FOOD&#039;.</li>
+          <li>Raw egg can carry bacteria. Wash hands, bowls, and tools after handling, never taste-test paint, and keep it off food-prep surfaces.</li>
+          <li>Many plant and berry colorants you bind are themselves toxic (pokeweed, privet, elderberry leaves and stems, Boston ivy). The binder does not make them safe — keep toxic-plant inks out of reach and never ingest them.</li>
+          <li>Pigments and fine powders can stain and should not be inhaled. Mix powders gently, consider a dust mask for fine pigment, and protect your work area.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Egg yolk thinned with a little water becomes egg tempera — the luminous, fast-drying paint medieval panels have survived on for 600 years. Whisk it into loose pigment or dried plant color and it makes paint that grips paper, board, or panel and shrugs off water once cured.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Fresh whole egg — yolk only — 1 yolk per small session <span class="note">· duck or other yolks work but are richer; use only the yolk</span></li>
+        <li>Clean water (distilled preferred) — 1-3 tsp per yolk, added a little at a time <span class="note">· thins the yolk to light cream; filtered or cooled boiled tap water is fine</span></li>
+        <li>White vinegar or a drop of clove oil — preservative — 1 drop per yolk <span class="opt">(optional)</span> <span class="note">· not needed, but slows spoilage and mold for the day or two the binder keeps</span></li>
+        <li>Pigment, dried plant powder, soot/lampblack, or a strong plant extract — your colorant — roughly 1:1 by volume with the binder, then adjust <span class="opt">(optional)</span> <span class="note">· earth pigments and lampblack give the most durable, lightfast results; berry and flower colors are easy but fugitive</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Small bowls or jars (one for binder, one for mixing paint), Spoon or palette knife for mixing, Paper towel (to dry and de-sac the yolk)</p>
+      <p><strong>Optional:</strong> Glass dropper for vinegar or clove oil, Small airtight jar for fridge storage, Mortar and pestle or muller to grind gritty pigment smooth, Gloves to keep stains off hands</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Work in a craft-use bowl, not your good dishes, and label finished jars &#039;PAINT — NOT FOOD&#039;. Egg tempera is fast, simple, and water-resistant per effort — best for paint on paper, board, or panel.</li>
+        <li>Separate the yolk: crack a fresh egg and pass the yolk back and forth between the shell halves, or pour it into your cupped hand and let the white run through your fingers, keeping the yolk intact.</li>
+        <li>De-sac the yolk: roll it gently on a paper towel to shed clinging white. Then pinch the thin sac and let only the orange yolk run into your bowl; discard the empty sac. This keeps skins out of your paint.</li>
+        <li>Thin the yolk: stir in clean water a few drops at a time until the binder is the consistency of light cream — usually 1-3 teaspoons per yolk. Optional: add one drop of vinegar or clove oil to slow spoilage. This is your egg tempera binder.</li>
+        <li>Make tempera paint: mix your pigment or plant powder to a smooth paste with a little water first, then blend in the yolk binder starting around 1:1 and adjust. More binder is more transparent and glossy; more pigment is more opaque and matte. It should brush like thin cream — use it within this one session.</li>
+        <li>Dry and cure: apply in thin coats and let each dry. Egg tempera is touch-dry in minutes, water-resistant within a few hours, and keeps hardening for weeks to months — handle finished work gently the first day. It is not fully waterproof, so protect finished pieces from soaking.</li>
+        <li>Store or discard: egg tempera is perishable — use it the same session; refrigerate any leftover in a sealed jar no more than about 2 days and discard if it smells off. When in doubt, throw it out and mix a fresh small batch.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Egg yolk is roughly neutral and lends only a faint warm cast that slightly warms pale colors — it preserves your color rather than changing it. Iron, acid, and heat modifiers belong to the colorant recipe, not the binder: set your final shade first, then bind it.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Egg tempera spoils because it is made from fresh yolk, so mix small and fresh. One drop of vinegar or clove oil per yolk plus refrigeration in a sealed jar keeps it usable about 2 days; discard when it smells sour. Never reuse a binder that smells bad or shows mold. The dried, cured paint film does not spoil — only the wet binder does.</p>
+      <h2>Yield</h2>
+      <p>1 yolk makes enough binder for one small painting session; it keeps about 2 days refrigerated with a preservative, but the paint is best used the same sitting. Dried, cured films last indefinitely — medieval egg tempera survives 600-plus years — provided the colorant itself is lightfast.</p>
+      <h2>Beyond the ink</h2>
+      <p>A foundational binder that turns other recipes into paint: pair it with earth pigments, lampblack, or any dried plant color to make egg tempera for panel and paper. Egg white (glair), whisked to a foam and left to settle back to liquid, is a related historic binder for illuminated-manuscript work on paper. There is no textile-dye variation — tempera fixes color onto hard surfaces rather than dyeing fiber.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://naturalearthpaint.com/blogs/blog/recipe-natural-egg-tempera" rel="noreferrer">Natural Earth Paint — Recipe: Natural Egg Tempera</a></li>
+        <li><a href="https://www.royalacademy.org.uk/article/how-to-make-egg-tempera-paint" rel="noreferrer">Royal Academy of Arts — How to make egg tempera paint</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

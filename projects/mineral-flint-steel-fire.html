@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flint-and-steel fire striking · Craft Almanac</title>
+    <meta name="description" content="The most beginner-friendly way to use toolstone">
+    <link rel="canonical" href="https://craftalmanac.com/projects/mineral-flint-steel-fire.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Flint-and-steel fire striking · Craft Almanac">
+    <meta property="og:description" content="The most beginner-friendly way to use toolstone">
+    <meta property="og:url" content="https://craftalmanac.com/projects/mineral-flint-steel-fire.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Flint-and-steel fire striking</h1>
+      <p class="teaser">The most beginner-friendly way to use toolstone</p>
+      <ul class="chips"><li class="chip">Minerals map</li><li class="chip">Craft</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#c8541c"></span>Orange sparks, glowing ember on char cloth</li></ul>
+      <div class="safety mild">
+        <div class="k">Safety</div>
+        <ul>
+          <li>Sharp silica edges cut skin easily — handle the dressed stone carefully and consider a glove on the stone hand.</li>
+          <li>Wear eye protection when dressing an edge: struck chert throws sharp flakes.</li>
+          <li>Dressing or breaking chert/flint/quartz/agate releases fine crystalline silica dust — silicosis risk with repeated exposure. Do edge-dressing outdoors, minimize repeated flaking, don&#039;t dry-sweep the debris, and consider a dust mask if you shape stone often.</li>
+          <li>You are making fire — clear a non-flammable area, keep water/dirt at hand, mind wind and dry fuels, and fully extinguish before leaving.</li>
+          <li>Char cloth production makes smoke — do it outdoors or well ventilated.</li>
+          <li>Collect toolstone responsibly: use naturally broken hand pieces, and never collect worked stone tools or artifacts (protected under ARPA). Occurrence is not permission.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Long before matches, fire came from scraping a high-carbon steel down the sharp edge of a stone: the edge shaves off tiny curls of steel, friction ignites them, and a shower of sparks around 800°C or hotter (burning iron particles) rains onto a scrap of char cloth. It is the most beginner-friendly way to use knapping toolstone — no flintknapping skill required, just a sharp edge, which you can dress with a single blow. Chert, flint, quartz, and agate all work; what you actually need is a hard stone with a fresh, acute edge to &#039;bite&#039; the steel.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Chert / flint / quartz / agate with a sharp edge — A palm-fillable hand piece <span class="note">· Any hard (Mohs ~7) silica stone with a fresh acute edge; freshly broken edge sparks best.</span></li>
+        <li>High-carbon steel striker — One C-shaped striker, or an old file/hacksaw blade <span class="note">· Must be high-carbon (hardened) steel — stainless and mild steel won&#039;t spark.</span></li>
+        <li>Char cloth (charred cotton) — A few small squares <span class="note">· Catches the spark as a glowing coal; make it from 100% cotton in a sealed tin.</span></li>
+        <li>Tinder bundle (dry grass, jute, birch bark, cattail down) — A bird&#039;s-nest handful <span class="note">· Receives the glowing char and blows into flame.</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> High-carbon steel striker, Sharp chert/flint edge, Char cloth, Dry tinder bundle, A safe, cleared fire spot or hearth</p>
+      <p><strong>Optional:</strong> Small tin with a lid (to char cloth over coals), Leather glove for the stone hand, Tinder box to store char cloth dry, Second stone to dress the edge</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Make char cloth (once): pack squares of 100% cotton into a small tin with a tiny vent hole, set it in a fire until the smoke stops jetting, then let it cool sealed. Do not open the tin until it is completely cool, or the cloth will flash and burn to ash on air contact. You get black, fragile charred cloth.</li>
+        <li>Dress a sharp edge on your stone if needed — one sharp tap with a hammerstone or the back of the striker to expose a fresh, acute ridge. This is the whole &#039;knapping&#039; requirement.</li>
+        <li>Pinch a piece of char cloth against the top of the sharp stone edge with your thumb, so falling sparks land on it.</li>
+        <li>Grip the steel and strike down and across the sharp edge at a glancing angle, scraping shavings of steel off. Short, firm, repeated strokes throw the most sparks.</li>
+        <li>A spark catches the char cloth as a spreading orange glow — protect it from wind.</li>
+        <li>Fold the glowing char into your tinder bundle, cup it, and blow steadily. The coal grows and the bundle bursts into flame.</li>
+        <li>Transfer the flaming bundle to your fire lay. Keep water/dirt at hand to fully extinguish when done.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Freshly fractured chert/flint sparks best; a smoothed or rounded edge won&#039;t bite — re-dress it. English flint, novaculite, jasper, quartz, and agate all work as long as they&#039;re hard and sharp. If sparks are weak, the steel may be too soft (test with a known carbon-steel file) or the edge too dull. Amadou (fungus) or true tinder fungus can replace char cloth in the traditional kit.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Keep char cloth and tinder bone-dry in a sealed tin — damp char won&#039;t catch; do not open the tin until fully cool. The stone and steel are effectively permanent; wipe the steel to prevent rust and re-dress the stone edge as it wears smooth.</p>
+      <h2>Yield</h2>
+      <p>One striker + one stone + a tin of char cloth is a lifetime fire kit — hundreds to thousands of lights.</p>
+      <h2>Beyond the recipe</h2>
+      <p>A gentle, non-destructive gateway to the map&#039;s toolstone (chert, flint, novaculite, obsidian) that needs no knapping skill or ARPA-sensitive artifact collecting — you use a broken hand piece, not a worked point. The same char-cloth-and-tinder skill supports the pit-fire and wild-clay cards&#039; fire-starting.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://www.artofmanliness.com/skills/outdoor-survival/traditional-firestarting-part-i-how-to-make-fire-with-flint-and-steel/" rel="noreferrer">Traditional Firestarting: How to Make Fire with Flint and Steel — Art of Manliness</a></li>
+        <li><a href="https://wildernessawareness.org/articles/flint-and-steel-firemaking/" rel="noreferrer">Flint and Steel Firemaking — Wilderness Awareness School</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Fire_making" rel="noreferrer">Fire making with flint and steel (char cloth, technique) — Wikipedia</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Minerals map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

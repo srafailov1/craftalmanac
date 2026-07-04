@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pigment sticks &amp; soft pastels · Craft Almanac</title>
+    <meta name="description" content="Roll pigment into drawing sticks">
+    <link rel="canonical" href="https://craftalmanac.com/projects/tech-pigment-sticks.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Pigment sticks &amp; soft pastels · Craft Almanac">
+    <meta property="og:description" content="Roll pigment into drawing sticks">
+    <meta property="og:url" content="https://craftalmanac.com/projects/tech-pigment-sticks.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Pigment sticks &amp; soft pastels</h1>
+      <p class="teaser">Roll pigment into drawing sticks</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Pigment</li><li class="chip">Intermediate</li><li class="chip">Draw with your pigment</li></ul>
+      <div class="safety mild">
+        <div class="k">Safety</div>
+        <ul>
+          <li>Art materials, not food — label &#039;NOT FOOD&#039;, keep from children and pets.</li>
+          <li>Wear a dust mask and gloves — dry pigment and chalk make fine dust that should not be inhaled, and pigment stains skin.</li>
+          <li>Sticks made from toxic dye-plant pigments remain toxic — do not let children mouth them; these are not for young kids.</li>
+          <li>Work over a wipeable surface; clean up dust with a damp cloth, not by sweeping it into the air.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Mix pigment with a little gum-tragacanth (or honey) binder and a chalk extender into a stiff dough, roll it into sticks, and dry — soft pastels and pigment sticks you can draw with, straight from your own lake pigments. More binder makes a harder stick; less makes a softer, more velvety one that lays down more color.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Dry pigment — a lake pigment or earth pigment — the color base, to taste <span class="note">· see the lake-pigment recipe</span></li>
+        <li>Gum tragacanth (powder) OR honey — the binder — tragacanth: 1 part powder to ~30 parts water; or a 1:5 honey-to-pigment mix <span class="note">· tragacanth soaked in water 48 h to a gel is the classic pastel binder; honey is the pantry alternative</span></li>
+        <li>Chalk / whiting (precipitated calcium carbonate) — extender — blend with pigment to set softness and tint strength <span class="opt">(optional)</span> <span class="note">· more chalk = paler, softer, more &#039;pastel&#039;; less = stronger color</span></li>
+        <li>Clean water — as needed to form a dough <span class="note">· distilled preferred</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Glass plate or tile + palette knife, Small jar for the binder gel, Paper towels (to dry the rolled sticks on), Gloves (pigment stains hands)</p>
+      <p><strong>Optional:</strong> Mortar and pestle, Dust mask, A grooved board or stiff paper to roll even sticks</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Make the binder gel: stir 1 part gum-tragacanth powder into ~30 parts water, then refrigerate 48 h until it swells to a clear gel. (Or skip ahead with honey.)</li>
+        <li>Blend the dry color: on the plate, mix your pigment with chalk to the tint and softness you want — more chalk for a paler, softer stick.</li>
+        <li>Make a dough: make a well in the powder, add a little binder gel, and work it in with the knife, then gloved hands, adding pigment or a drop of water until you have a stiff, clay-like dough that holds a shape without crumbling or sticking.</li>
+        <li>Roll sticks: roll the dough into pencil-thick sticks on a paper towel (a stiff paper or grooved board helps make them even).</li>
+        <li>Dry: set the sticks on a fresh paper towel and air-dry 24-48 h, turning once, until hard all the way through.</li>
+        <li>Test and adjust: if a stick crumbles in use it needs a bit more binder; if it is too hard to leave a mark, the next batch needs a touch more water or less binder.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Binder is the main lever: more gum/honey = harder stick and less color release; less = softer, more crumbly, more pigment on the paper. Chalk both softens the stick and lightens/extends the color into tints. Set the pigment&#039;s shade before rolling.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Dried sticks keep indefinitely if stored dry and unbroken; wrap them or box them so they don&#039;t rub. Finished pastel marks are delicate — frame under glass or store flat in a folio, and use a fixative if you want to handle the work.</p>
+      <h2>Yield</h2>
+      <p>A tablespoon or two of pigment plus extender makes several sticks.</p>
+      <h2>Beyond the ink</h2>
+      <p>Turns lake pigments into dry drawing media. The same dough pressed into a shallow mold makes pigment cakes; the same pigment bound in oil and wax makes oil-pastel-style sticks (an Advanced variation). Pairs with the lake-pigment recipe.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://www.art-is-fun.com/how-to-make-your-own-soft-pastels-from-scratch" rel="noreferrer">Art is Fun — How to make your own soft pastels from scratch</a></li>
+        <li><a href="https://naturalearthpaint.com/blogs/blog/recipe-natural-earth-pastels" rel="noreferrer">Natural Earth Paint — Recipe: Natural Earth Pastels</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

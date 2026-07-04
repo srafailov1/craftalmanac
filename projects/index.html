@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Projects · Craft Almanac</title>
+    <meta name="description" content="Every project recipe on Craft Almanac — inks, dyes, pigments, foods, and mineral crafts — grouped by map and kind.">
+    <link rel="canonical" href="https://craftalmanac.com/projects/">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Projects · Craft Almanac">
+    <meta property="og:description" content="Every project recipe on Craft Almanac — inks, dyes, pigments, foods, and mineral crafts — grouped by map and kind.">
+    <meta property="og:url" content="https://craftalmanac.com/projects/">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="/">&larr; Back to the map</a>
+    <main>
+      <h1>Projects</h1>
+      <p class="teaser">Every project recipe on Craft Almanac — grouped by map and kind. Each lives in the Projects sheet of its map.</p>
+      <div class="index-group">
+        <h2>Food map</h2>
+        <div class="k">Fresh</div>
+        <ul class="card-list">
+          <li><a href="./food-chokecherry-syrup.html">Chokecherry Syrup (No Pits)</a></li>
+          <li><a href="./food-morel-cream.html">Morel Cream Saute</a></li>
+          <li><a href="./food-pawpaw-icecream.html">Pawpaw Custard Ice Cream</a></li>
+          <li><a href="./food-berry-shrub.html">Wild Berry Drinking Shrub</a></li>
+          <li><a href="./food-sumac-drupe-rinse.html">Cold-Steeped Sumac &#039;Lemonade&#039;</a></li>
+          <li><a href="./food-elderberry-cordial.html">Cooked Elderberry Cordial</a></li>
+          <li><a href="./food-elderflower-cordial.html">Elderflower Cordial</a></li>
+          <li><a href="./food-mesquite-atole.html">Mesquite Pod Atole</a></li>
+          <li><a href="./food-persimmon-pudding.html">Wild Persimmon Pudding</a></li>
+          <li><a href="./food-grape-verjus.html">Wild Grape Verjus</a></li>
+        </ul>
+        <div class="k">Preserve</div>
+        <ul class="card-list">
+          <li><a href="./food-iqf-frozen-berries.html">Tray-frozen (IQF) wild berries</a></li>
+          <li><a href="./food-plum-jam.html">Wild &amp; beach plum jam</a></li>
+          <li><a href="./food-wild-grape-crabapple-jelly.html">Wild Grape &amp; Crabapple Jelly</a></li>
+          <li><a href="./food-apple-butter.html">Wild apple butter &amp; dried apple rings</a></li>
+          <li><a href="./food-elderberry-syrup-cooked.html">Cooked Elderberry Syrup (Freezer &amp; Fridge Keeping)</a></li>
+          <li><a href="./food-cornelian-cherry-preserves.html">Cornelian cherry preserves &amp; sharbat</a></li>
+          <li><a href="./food-black-walnut-curing-storage.html">Cured &amp; Frozen Black Walnuts (and Pinyon, Hickory)</a></li>
+          <li><a href="./food-dried-morel-mushrooms.html">Dried Morels (Cook-Before-Eating)</a></li>
+          <li><a href="./food-sumac-juniper-spice-drying.html">Dried Sumac &amp; Juniper Spice</a></li>
+          <li><a href="./food-gooseberry-currant-jelly.html">Gooseberry &amp; wild currant jelly</a></li>
+          <li><a href="./food-hawthorn-haw-jelly.html">Hawthorn haw jelly &amp; haw &#039;ketchup&#039;</a></li>
+          <li><a href="./food-mesquite-flour-drying.html">Mesquite Pod Flour (Dry-Milled)</a></li>
+          <li><a href="./food-nocino-green-walnut.html">Nocino green black-walnut liqueur</a></li>
+          <li><a href="./food-rose-hip-flesh-syrup.html">Rose-Hip Flesh Syrup (Seeds Removed)</a></li>
+          <li><a href="./food-fruit-leather-drying.html">Wild Berry &amp; Pawpaw Fruit Leather</a></li>
+          <li><a href="./food-blueberry-jam-waterbath.html">Wild Blueberry &amp; Huckleberry Jam (Water-Bath Canned)</a></li>
+          <li><a href="./food-cherry-bounce-cordial.html">Wild Cherry &amp; Rose-Hip Cordial (Cherry Bounce)</a></li>
+          <li><a href="./food-persimmon-hoshigaki.html">Hoshigaki hand-massaged dried persimmon</a></li>
+          <li><a href="./food-berry-soda-wild-fermentation.html">Wild-Fermented Berry Soda</a></li>
+        </ul>
+        <div class="k">Waste</div>
+        <ul class="card-list">
+          <li><a href="./food-berry-pulp-fruit-leather.html">Jelly-Bag Berry-Pulp Fruit Leather</a></li>
+          <li><a href="./food-apple-core-pectin-stock.html">Apple &amp; Crabapple Pectin Stock</a></li>
+          <li><a href="./food-hickory-shell-syrup.html">Hickory-Shell &amp; Bark Syrup</a></li>
+          <li><a href="./food-glut-pulp-freezing.html">Persimmon &amp; pawpaw pulp freezing</a></li>
+          <li><a href="./food-mushroom-stem-stock.html">Saved-Scrap Mushroom Stock</a></li>
+          <li><a href="./food-prickly-pear-whole-pad-fruit.html">Whole-Plant Prickly Pear: Pads + Tunas</a></li>
+          <li><a href="./food-fruit-scrap-vinegar-fermentation.html">Wild Apple &amp; Fruit-Scrap Vinegar</a></li>
+          <li><a href="./food-pulp-seed-crackers.html">Pulp-and-Seed Scrap Crackers</a></li>
+        </ul>
+      </div>
+      <div class="index-group">
+        <h2>Ink &amp; Dye map</h2>
+        <div class="k">Ink</div>
+        <ul class="card-list">
+          <li><a href="./ink-black-walnut.html">Black walnut hull ink</a></li>
+          <li><a href="./ink-oak.html">Oak gall &amp; acorn cap iron-gall ink</a></li>
+          <li><a href="./ink-sumac.html">Sumac berry ink</a></li>
+          <li><a href="./ink-pokeweed.html">Pokeberry ink</a></li>
+          <li><a href="./ink-elderberry.html">Elderberry ink</a></li>
+          <li><a href="./ink-tupelo.html">Tupelo (black gum) berry ink</a></li>
+          <li><a href="./ink-osage-orange.html">Osage orange fruit ink</a></li>
+          <li><a href="./ink-hickory.html">Hickory hull ink</a></li>
+          <li><a href="./ink-goldenrod.html">Goldenrod ink</a></li>
+          <li><a href="./ink-autumn-olive.html">Autumn olive berry ink</a></li>
+          <li><a href="./ink-wineberry.html">Wineberry ink</a></li>
+          <li><a href="./ink-privet.html">Privet berry ink</a></li>
+          <li><a href="./ink-wild-grape.html">Wild grape &amp; Boston ivy ink</a></li>
+          <li><a href="./ink-himalayan-blackberry.html">Himalayan blackberry ink</a></li>
+          <li><a href="./ink-prickly-pear.html">Prickly pear fruit ink</a></li>
+          <li><a href="./ink-rouge-plant.html">Rouge plant (pigeonberry) ink</a></li>
+          <li><a href="./ink-bee-plant.html">Rocky Mountain bee plant black</a></li>
+          <li><a href="./ink-brazilian-pepper.html">Brazilian pepper berry ink</a></li>
+          <li><a href="./ink-oregon-grape.html">Oregon grape &amp; barberry berry ink</a></li>
+        </ul>
+        <div class="k">Modifier</div>
+        <ul class="card-list">
+          <li><a href="./tech-iron-acetate.html">Iron acetate (rust water)</a></li>
+          <li><a href="./tech-acid-base.html">Acid &amp; base color shifters</a></li>
+          <li><a href="./tech-wood-ash-lye.html">Wood-ash alkali (juniper &amp; hardwood ash)</a></li>
+        </ul>
+        <div class="k">Binder</div>
+        <ul class="card-list">
+          <li><a href="./tech-gum-arabic.html">Gum arabic binder</a></li>
+          <li><a href="./tech-egg-tempera.html">Egg tempera binder</a></li>
+          <li><a href="./tech-milk-casein.html">Milk (casein) binder</a></li>
+          <li><a href="./tech-egg-white-glair.html">Egg-white glair binder</a></li>
+        </ul>
+        <div class="k">Pigment</div>
+        <ul class="card-list">
+          <li><a href="./tech-lake-pigment.html">Lake pigment (dye → solid pigment)</a></li>
+          <li><a href="./tech-watercolor-pans.html">Watercolor pans</a></li>
+          <li><a href="./tech-pigment-sticks.html">Pigment sticks &amp; soft pastels</a></li>
+        </ul>
+        <div class="k">Preservative</div>
+        <ul class="card-list">
+          <li><a href="./tech-preserving.html">Preserving inks naturally</a></li>
+        </ul>
+        <div class="k">Dye</div>
+        <ul class="card-list">
+          <li><a href="./dye-artemisia.html">Sagebrush &amp; mugwort dye</a></li>
+          <li><a href="./dye-mormon-tea.html">Mormon tea (Ephedra) dye</a></li>
+          <li><a href="./dye-camphor.html">Camphor tree leaf dye</a></li>
+          <li><a href="./dye-canaigre.html">Canaigre (tanner dock) dye</a></li>
+          <li><a href="./dye-cliffrose.html">Cliffrose dye</a></li>
+          <li><a href="./dye-st-johns-wort.html">St. John&#039;s wort (Klamath weed) dye</a></li>
+          <li><a href="./dye-coyote-brush.html">Coyote brush dye</a></li>
+          <li><a href="./dye-curly-dock.html">Curly dock root dye</a></li>
+          <li><a href="./dye-douglas-fir.html">Douglas-fir cone &amp; bark dye</a></li>
+          <li><a href="./dye-eucalyptus.html">Eucalyptus leaf &amp; bark dye</a></li>
+          <li><a href="./dye-greenthread.html">Greenthread (Navajo tea) dye</a></li>
+          <li><a href="./dye-honey-mesquite.html">Honey mesquite bark &amp; gum dye</a></li>
+          <li><a href="./dye-manzanita.html">Manzanita bark &amp; leaf dye</a></li>
+          <li><a href="./dye-one-seed-juniper.html">One-seed juniper dye &amp; ash mordant</a></li>
+          <li><a href="./dye-madrone.html">Pacific madrone bark dye</a></li>
+          <li><a href="./dye-plains-coreopsis.html">Plains coreopsis (dyer&#039;s tickseed) dye</a></li>
+          <li><a href="./dye-alder.html">Alder bark dye</a></li>
+          <li><a href="./dye-rabbitbrush.html">Rabbitbrush dye</a></li>
+          <li><a href="./dye-scotch-broom.html">Scotch broom dye</a></li>
+          <li><a href="./dye-wax-myrtle.html">Southern wax myrtle leaf dye</a></li>
+          <li><a href="./dye-spanish-moss.html">Spanish moss dye</a></li>
+          <li><a href="./dye-toyon.html">Toyon (California holly) dye</a></li>
+          <li><a href="./dye-wild-fennel.html">Wild fennel dye</a></li>
+          <li><a href="./dye-dyers-woad.html">Dyer&#039;s woad (removal-only) blue</a></li>
+          <li><a href="./dye-mountain-mahogany.html">Mountain mahogany dye</a></li>
+          <li><a href="./ink-carolina-redroot.html">Carolina redroot (observe-only)</a></li>
+          <li><a href="./ink-tanoak.html">Tanoak bark (observe-only)</a></li>
+          <li><a href="./ink-western-redcedar.html">Western redcedar (observe-only)</a></li>
+          <li><a href="./ink-wolf-lichen.html">Wolf lichen (observe-only)</a></li>
+          <li><a href="./dye-cochineal.html">Cochineal (educational)</a></li>
+        </ul>
+      </div>
+      <div class="index-group">
+        <h2>Minerals map</h2>
+        <div class="k">Clay</div>
+        <ul class="card-list">
+          <li><a href="./mineral-iron-clay-earthenware-stoneware.html">Iron Clay: Earthenware vs. Stoneware</a></li>
+          <li><a href="./mineral-whiting-limestone-flux-note.html">Limestone &amp; Marble as Whiting Flux</a></li>
+          <li><a href="./mineral-silica-quartz-body-opener.html">Silica &amp; Quartz Body Opener</a></li>
+          <li><a href="./mineral-soapstone-talc-lowfire-body.html">Talc Low-Fire Body (from Soapstone)</a></li>
+          <li><a href="./mineral-wild-clay-temper-body.html">Tempered Wild-Clay Body</a></li>
+          <li><a href="./mineral-wild-clay-field-test-processing.html">Wild Clay: Field Test &amp; Processing</a></li>
+        </ul>
+        <div class="k">Glaze</div>
+        <ul class="card-list">
+          <li><a href="./mineral-iron-clay-celadon.html">Iron-Clay Celadon</a></li>
+          <li><a href="./mineral-wood-ash-glaze-40-40-20.html">Wood-Ash Glaze (40/40/20)</a></li>
+          <li><a href="./mineral-whiting-limestone-flux-glaze.html">Limestone / Whiting Flux Glaze</a></li>
+          <li><a href="./mineral-raw-slip-decoration.html">Raw Slip Decoration (Engobe)</a></li>
+          <li><a href="./mineral-silica-quartz-glaze-fit.html">Silica / Quartz Glass-Former Addition</a></li>
+          <li><a href="./mineral-talc-matte-glaze.html">Talc / Soapstone Matte Glaze</a></li>
+          <li><a href="./mineral-terra-sigillata-burnish.html">Terra Sigillata Burnish</a></li>
+          <li><a href="./mineral-wild-clay-slip-glaze.html">Wild-Clay Slip Glaze (Albany style)</a></li>
+        </ul>
+        <div class="k">Craft</div>
+        <ul class="card-list">
+          <li><a href="./mineral-lapidary-tumbling.html">Agate &amp; jasper tumbling</a></li>
+          <li><a href="./mineral-petrified-wood-lapidary.html">Petrified wood lapidary</a></li>
+          <li><a href="./mineral-cabochon.html">Agate &amp; jasper cabochon</a></li>
+          <li><a href="./mineral-alabaster-carving.html">Alabaster carving (translucent)</a></li>
+          <li><a href="./mineral-chalk-gesso.html">Chalk gesso / whiting ground</a></li>
+          <li><a href="./mineral-slate-engraving.html">Engraved slate coaster</a></li>
+          <li><a href="./mineral-flint-steel-fire.html">Flint-and-steel fire striking</a></li>
+          <li><a href="./mineral-plaster-molds-wedging-bats.html">Gypsum Plaster: Molds &amp; Wedging Bats</a></li>
+          <li><a href="./mineral-lime-cycle.html">Lime cycle: limewash &amp; putty</a></li>
+          <li><a href="./mineral-marble-lettering.html">Marble &amp; limestone lettering</a></li>
+          <li><a href="./mineral-novaculite-whetstone.html">Novaculite whetstone finish</a></li>
+          <li><a href="./mineral-ochre-pigment.html">Ochre pigment from iron clay</a></li>
+          <li><a href="./mineral-pipestone-education.html">Pipestone (catlinite) — do not carve</a></li>
+          <li><a href="./mineral-primitive-kiln-pit-fire.html">Primitive pit-fire / simple updraft kiln</a></li>
+          <li><a href="./mineral-quartz-wire-wrap.html">Quartz crystal wire-wrap</a></li>
+          <li><a href="./mineral-serpentine-carving.html">Serpentine carving (asbestos-aware)</a></li>
+          <li><a href="./mineral-soapstone-carving.html">Soapstone bowl or pendant</a></li>
+          <li><a href="./mineral-black-walnut-shell-abrasive.html">Black-Walnut Shell Abrasive &amp; Mulch</a></li>
+          <li><a href="./mineral-plaster-of-paris-calcining.html">Calcining gypsum into plaster of Paris</a></li>
+          <li><a href="./mineral-knapping.html">Obsidian &amp; chert knapping intro</a></li>
+        </ul>
+      </div>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

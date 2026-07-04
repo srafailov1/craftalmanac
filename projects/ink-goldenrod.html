@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Goldenrod ink · Craft Almanac</title>
+    <meta name="description" content="The classic dye yellow">
+    <link rel="canonical" href="https://craftalmanac.com/projects/ink-goldenrod.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Goldenrod ink · Craft Almanac">
+    <meta property="og:description" content="The classic dye yellow">
+    <meta property="og:url" content="https://craftalmanac.com/projects/ink-goldenrod.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Goldenrod ink</h1>
+      <p class="teaser">The classic dye yellow</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Ink</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#c89a26"></span>Golden yellow</li></ul>
+      <div class="safety mild">
+        <div class="k">Safety</div>
+        <ul>
+          <li>This is ink, not food. Don&#039;t taste or ingest it, and keep it from children and pets.</li>
+          <li>Use a dedicated non-food pot, spoon, jar, and bottle; alum and especially iron shouldn&#039;t be prepared or stored in cookware you eat from.</li>
+          <li>Goldenrod isn&#039;t toxic to people, but it&#039;s in the aster/daisy family and can cause allergic contact dermatitis; anyone with ragweed or Asteraceae allergies should wear gloves and a mask or skip it.</li>
+          <li>Alum is a mild irritant: avoid eye contact, keep it from kids, and wash hands after use.</li>
+          <li>The iron (steel-wool-and-vinegar) modifier is corrosive and stains; make and store it labeled in a non-food jar with its lid loose, keep it off skin and eyes, and never ingest it.</li>
+          <li>Work in a ventilated area while simmering; don&#039;t hard-boil. Fresh ink stains skin and surfaces — protect your work area. Occurrence on a map is not permission to harvest.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Goldenrod gets blamed every autumn for hay fever, but it&#039;s framed: its pollen is sticky and insect-carried, while the real culprit is the inconspicuous wind-pollinated ragweed blooming alongside it. The same showy flower tops that draw bees give one of North America&#039;s most reliable folk dyes a warm, honeyed yellow.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Goldenrod (Solidago) flowering tops, in full bloom — about 2 cups loosely packed fresh heads (or ~1 cup dried) per 2 cups water <span class="note">· pick heads in full bright bloom; buds give a greener, paler color</span></li>
+        <li>Water (tap or distilled) — about 2 cups, enough to just cover the flowers</li>
+        <li>Alum (potassium aluminum sulfate, pickling alum) — 1/4 to 1/2 tsp in the simmering pot <span class="opt">(optional)</span> <span class="note">· not needed, but makes a clearer, brighter, slightly more lasting yellow</span></li>
+        <li>Gum arabic — about 1/2 tsp per 1/2 cup finished ink <span class="opt">(optional)</span> <span class="note">· binder for flow and body; a little honey or glycerin works in a pinch</span></li>
+        <li>White vinegar and a pinch of salt — 1 tsp vinegar; a pinch of salt <span class="opt">(optional)</span> <span class="note">· help the color bind to and soak into paper</span></li>
+        <li>Whole cloves — 1 per small bottle <span class="opt">(optional)</span> <span class="note">· preservative against mold; a drop of clove oil or refrigeration also works</span></li>
+        <li>Iron acetate (steel wool in vinegar) — a few drops to 1/4 tsp, to taste <span class="opt">(optional)</span> <span class="note">· shifts the yellow to olive/sage green; can be made 1-2 days ahead</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> A dedicated (non-food) pot, A craft-only spoon or stir stick, Strainer plus a coffee filter or fine cloth, A heatproof jar or measuring cup, A small bottle or jar with a tight lid, Scrap white paper for color-testing</p>
+      <p><strong>Optional:</strong> A small jar to make the steel-wool-and-vinegar iron modifier ahead, Funnel for bottling, Gloves (to avoid temporary yellow staining and keep alum/iron off skin), Dropper for dosing binder and preservative</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Harvest goldenrod flowering tops only where harvesting is permitted, choosing heads in full bright bloom. It&#039;s abundant and resilient, but take only a small share and leave plenty for pollinators. Snip the flower fronds and discard the woody stalks. Goldenrod is in the aster family — if you have ragweed or Asteraceae allergies, wear gloves and a mask or skip it.</li>
+        <li>Roughly chop or tear the flower heads into your dedicated pot and add about 2 cups water, just enough to cover. This is craft material, not food.</li>
+        <li>Heat to a gentle simmer (don&#039;t hard-boil) and, if using, add 1/4 to 1/2 tsp alum to brighten and clarify the yellow. Simmer about 40-60 minutes; for a stronger ink, steep overnight and reheat briefly.</li>
+        <li>Test the color on a strip of white paper. When it clearly marks the paper, it&#039;s as deep as it will get. Let it cool enough to handle.</li>
+        <li>Strain through a coffee-filter-lined strainer into a clean jar, pressing the spent flowers. Compost the flowers.</li>
+        <li>Optional: stir in 1 tsp white vinegar and a pinch of salt to help the color bind to and soak into paper (keep the ink slightly acidic; alkaline paper can dull the yellow).</li>
+        <li>Optional binder: while the liquor is still warm, whisk in gum arabic at about 1/2 tsp per 1/2 cup. Add a touch more for thicker ink, less for a watery wash.</li>
+        <li>Optional olive-green version: to part of the batch, add iron water a few drops at a time, testing on paper — the yellow shifts through gold to olive/sage. Iron is potent, so go slow; too much turns it muddy. Keep the iron version in its own bottle.</li>
+        <li>Bottle in a clean (ideally sterilized) jar, drop in a clove to discourage mold, cap, and label. Store cool and dark; refrigerate to extend life. The color is fugitive — keep finished art out of direct sun.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Goldenrod&#039;s color comes from flavonoids (quercetin, kaempferol). Alum makes the yellow clearer and brighter and helps it last a little longer. Acid (vinegar) keeps it warm and helps it bind to paper; strongly alkaline conditions dull or shift it. Iron is the big modifier: a small dose of iron water saddens the yellow to olive/sage or khaki — a few drops is enough, and overdoing it turns it muddy brown. Picking buds before full bloom yields a greener, paler yellow without any iron.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Add a whole clove or a drop of clove oil per small bottle to inhibit mold (a traditional natural-ink preservative), bottle in a sterilized jar, cap tightly, and store cool and dark; refrigerate to extend shelf life. Discard if it smells off or grows fuzz.</p>
+      <h2>Yield</h2>
+      <p>Roughly 1/2 to 3/4 cup of ink from 2 cups of fresh flowers. Refrigerated with a preservative it keeps several months to about a year; watch for mold. The applied color is fugitive — in sunlight it fades toward pale lemon over weeks to months, so keep finished work out of light.</p>
+      <h2>Beyond the ink</h2>
+      <p>Goldenrod is one of North America&#039;s classic textile dyes, but it&#039;s mordant-dependent: pre-mordant wool or silk with alum (roughly 10-15% weight-of-fiber) for clear, lasting yellows; without a mordant the color washes out. Simmer the flowering tops (don&#039;t hard-boil) and finish with an iron afterbath to shift toward olive/sage green. Cotton and linen need a tannin step plus alum to take it well. The same flowers also make a botanical watercolor and feed pollinators in a dye garden.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://saltinmycoffee.com/dyeing-with-goldenrod/" rel="noreferrer">Dyeing With Goldenrod (method, lemon-yellow with alum, iron shift, slow fading) — Salt in My Coffee</a></li>
+        <li><a href="https://shepherdtextiles.com/dyeing-with-goldenrod-extract" rel="noreferrer">Dyeing With Goldenrod Extract (iron modifier shifts yellow to olive/sage) — Shepherd Textiles</a></li>
+        <li><a href="https://blog.ellistextiles.com/2018/10/04/its-goldenrod-season/" rel="noreferrer">Goldenrod Season (flavonoid pigments; lightfastness good but below weld) — Ellis Textiles</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

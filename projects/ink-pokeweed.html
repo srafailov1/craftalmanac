@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pokeberry ink · Craft Almanac</title>
+    <meta name="description" content="The simplest ink — just crush &amp; strain">
+    <link rel="canonical" href="https://craftalmanac.com/projects/ink-pokeweed.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Pokeberry ink · Craft Almanac">
+    <meta property="og:description" content="The simplest ink — just crush &amp; strain">
+    <meta property="og:url" content="https://craftalmanac.com/projects/ink-pokeweed.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Pokeberry ink</h1>
+      <p class="teaser">The simplest ink — just crush &amp; strain</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Ink</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#bd2f6b"></span>Magenta</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>Toxic plant — all parts are poisonous (berries, juice, leaves, stems, especially roots). This ink is not food and must never be tasted or swallowed.</li>
+          <li>The juice can absorb through broken skin and the sap can cause a rash — always wear waterproof gloves and avoid skin and eye contact; wash splashes off immediately.</li>
+          <li>If anyone swallows the berries or ink, contact Poison Control (US: 1-800-222-1222) or emergency services.</li>
+          <li>Keep berries, juice, and finished ink away from children and pets, who may mistake the bright magenta for food or drink. Label the bottle clearly.</li>
+          <li>Never burn pokeweed — the toxin carries in the smoke. Dispose of pulp, seeds, and skins in the regular trash, not compost.</li>
+          <li>The juice stains skin, clothing, counters, and grout permanently — protect surfaces. Reserve any pot or mortar as craft-only.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>Cut off from store-bought ink by the wartime blockade, Confederate soldiers wrote letters home in pokeberry juice — archivists still spot those letters by their telltale magenta cast. The same fuchsia that made it the wartime ink is exactly why it won&#039;t last.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Ripe pokeberries (dark purple-black, on fuchsia stems) — ~2 cups <span class="note">· use only fully ripe berries; green ones are more toxic and give poor color</span></li>
+        <li>White vinegar (or lemon juice) — 1 tsp per ½ cup juice <span class="opt">(optional)</span> <span class="note">· not needed, but keeps the color brighter and more magenta, and mildly preserves</span></li>
+        <li>Salt — a small pinch <span class="opt">(optional)</span> <span class="note">· slight preservation help — but too much crystallizes and makes the ink drag on paper</span></li>
+        <li>Whole cloves or a crushed vitamin-C tablet — 2–3 cloves, or a pinch of ascorbic acid <span class="opt">(optional)</span> <span class="note">· vitamin C is a documented stabilizer; or just refrigerate</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Waterproof gloves (nitrile/latex/dish), A bowl or wide-mouth jar, A fork, masher, or spoon to crush, A strainer lined with coffee filter, cheesecloth, or cloth, A lidded jar for storage, Newspaper or a tray to protect surfaces</p>
+      <p><strong>Optional:</strong> Funnel, Dropper for testing color, Craft-only mortar and pestle, Apron or old clothes</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Gloves on, surfaces covered, kids and pets out of the room. Pokeweed juice is toxic and can absorb through broken skin, and it stains permanently.</li>
+        <li>Collect ~2 cups of fully ripe (dark) berries, pulling them from the bright stems. Use only ripe berries. Harvest only where permitted. Rinse and drain.</li>
+        <li>Crush the berries with a fork, masher, or spoon until they release all their juice. Do NOT heat — heat turns the magenta brown. Keep it a cold process throughout.</li>
+        <li>Strain through a coffee filter or cloth into a clean jar; press gently. Strain twice for a smoother ink. Discard the spent pulp and seeds in the trash, not compost (seeds stay toxic), and never burn pokeweed.</li>
+        <li>Optional: stir in ~1 tsp vinegar per ½ cup juice to keep it bright, and/or a pinch of salt, a couple of cloves, or a little vitamin C to help it keep.</li>
+        <li>Test on the paper you&#039;ll actually use — expect vivid magenta. If too thin, let it sit uncovered in a cool spot to concentrate, or crush more berries.</li>
+        <li>Bottle, label TOXIC — NOT FOOD, NOT FOR SKIN, and refrigerate away from food, kids, and pets. Use within days for the best color, and keep finished art out of direct light.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Pokeberry color is a betalain (betacyanin), not an anthocyanin, so it does NOT do the dramatic acid/base rainbow other berries do — it stays magenta. Vinegar or lemon keeps it brighter and a touch redder; strong alkali (baking soda) dulls and browns it, so avoid it. The real enemies are light, heat, oxygen, and time; keep it cold, dark, and slightly acidic to slow the fade.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Perishable and fugitive — there is no way to make it truly permanent at home. To stretch its life: vinegar or lemon plus a pinch of vitamin C (a documented betalain stabilizer), optionally a clove or two and a pinch of salt, and refrigeration in a sealed, light-blocking jar. Even so, expect noticeable color loss within days to a couple of weeks.</p>
+      <h2>Yield</h2>
+      <p>About ½–1 cup of ink from 2 cups of berries. Best color in the first few days; usable ~1–2 weeks refrigerated before it dulls. Finished writing will visibly fade over weeks to months — treat it as a temporary, expressive ink, not an archival one.</p>
+      <h2>Beyond the ink</h2>
+      <p>Mostly an ink. As a dye it is poor and short-lived — an acid stain that only grabs wool/silk after an acidic mordant, and even then needs periodic re-dyeing. Treat any color from pokeweed as temporary.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://insteading.com/blog/diy-pokeberry-ink/" rel="noreferrer">DIY Pokeberry Ink — Insteading</a></li>
+        <li><a href="https://www.ajc.com/lifestyles/home--garden/poke-plant-unsung-war-hero/ozy2UMz21YoTQ5dH9PWfKL/" rel="noreferrer">Poke plant, an unsung Civil War hero (pokeberry ink history) — AJC</a></li>
+        <li><a href="https://ucanr.edu/node/115176/printable/print" rel="noreferrer">UC ANR — pokeweed: all parts toxic, sap causes rash, do not burn</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

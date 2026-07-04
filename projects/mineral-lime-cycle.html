@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lime cycle: limewash &amp; putty · Craft Almanac</title>
+    <meta name="description" content="Rock to caustic putty to stone-on-the-wall again">
+    <link rel="canonical" href="https://craftalmanac.com/projects/mineral-lime-cycle.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Lime cycle: limewash &amp; putty · Craft Almanac">
+    <meta property="og:description" content="Rock to caustic putty to stone-on-the-wall again">
+    <meta property="og:url" content="https://craftalmanac.com/projects/mineral-lime-cycle.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Lime cycle: limewash &amp; putty</h1>
+      <p class="teaser">Rock to caustic putty to stone-on-the-wall again</p>
+      <ul class="chips"><li class="chip">Minerals map</li><li class="chip">Craft</li><li class="chip">Advanced</li><li class="chip"><span class="swatch" style="background:#f2efe6"></span>Chalk-white breathable limewash</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>CAUSTIC: quicklime and fresh lime are strongly alkaline and cause chemical burns to skin and eyes; slaking is exothermic and can boil and spatter. Full PPE is non-negotiable.</li>
+          <li>Lime burns can feel painless at first — flush any skin or eye contact with running water for 15+ minutes, remove contaminated clothing, and get medical help for eye exposure.</li>
+          <li>Always add lime to water in stages — never water to a mass of quicklime.</li>
+          <li>P100 respirator against lime dust; never breathe quicklime powder.</li>
+          <li>Home calcining requires a real high-temperature kiln — most should buy quicklime or putty, not burn stone.</li>
+          <li>Occurrence is not permission — do not quarry limestone or marble from mapped or protected land.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>The lime cycle is the oldest chemistry in building: burn limestone or marble (calcium carbonate) above ~900°C to drive off CO2 and get quicklime, slake that quicklime in water — a violently exothermic reaction that can boil and spit — into a smooth putty, then thin it to a limewash that slowly re-absorbs CO2 from the air and turns back to stone on the wall. It is beautiful and it is genuinely dangerous: quicklime and fresh putty are strongly caustic and will burn skin and eyes.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Quicklime (calcium oxide) OR mature lime putty — As needed <span class="note">· Most crafters start from purchased quicklime or ready putty rather than burning their own stone. Quicklime is the hazardous step.</span></li>
+        <li>Limestone or marble — For the burn (advanced only) <span class="opt">(optional)</span> <span class="note">· Calcining your own requires a lime kiln reaching ~900°C+ — a serious undertaking, not a casual step.</span></li>
+        <li>Clean water — Roughly 2-3x lime by volume for slaking <span class="note">· Always add lime to water in stages, never the reverse, to control the boil.</span></li>
+        <li>Natural earth pigment (optional) — Up to ~5-10% by volume <span class="opt">(optional)</span> <span class="note">· Only alkali-stable pigments (ochres, oxides) survive lime&#039;s high pH.</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Chemical goggles and face shield, Heavy rubber/neoprene gauntlets, P100 respirator, Non-reactive slaking tub (steel or heavy-duty HDPE — never aluminum or galvanized; slaking heat can soften thin plastic), Long stir stick, Full skin cover</p>
+      <p><strong>Optional:</strong> Sieve for straining putty, Masonry brush for limewash, Sealed maturing bucket</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>SAFETY FIRST: goggles, face shield, heavy rubber/neoprene gauntlets, respirator, covered skin, and running water nearby before any lime touches water.</li>
+        <li>Slaking (if starting from quicklime): add quicklime to water in small increments. It will hiss, steam, and can boil — stand back and stir; never lean over the tub.</li>
+        <li>Let the slaked putty rest under a layer of water; mature it sealed for weeks to months (older putty works better).</li>
+        <li>For limewash: dilute mature putty with water to a thin-milk consistency (roughly 1 part putty to several parts water), tint with alkali-stable pigment if desired.</li>
+        <li>Wet the wall, then brush on many thin coats, letting each carbonate before the next. Thin coats bond; thick coats crack.</li>
+        <li>Keep the fresh work damp and out of direct sun/frost so it carbonates slowly and hard.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Thicker putty plus sand becomes lime plaster; on wet plaster, painting with lime-fast pigment is buon fresco. Add casein or linseed for durability tweaks. Pigment load stays low — high-pH lime kills fugitive and many organic colors, so stick to ochres and oxides.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Mature putty keeps indefinitely under water in a sealed tub. Lime finishes tolerate hairline movement and can be renewed with a fresh coat yearly. Store quicklime absolutely dry.</p>
+      <h2>Yield</h2>
+      <p>A few pounds of putty makes liters of limewash — enough for a small wall or several test panels.</p>
+      <h2>Beyond the recipe</h2>
+      <p>Lime putty is also a mortar, a fresco ground, a tannery and hide-processing agent, and a soil amendment. Leftover carbonated wash is inert chalk.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://www.cdc.gov/niosh/npg/npgd0093.html" rel="noreferrer">NIOSH Pocket Guide to Chemical Hazards — Calcium oxide</a></li>
+        <li><a href="https://lancasterlimeworks.com/learning-center/types-of-lime/" rel="noreferrer">Types of Lime — Lancaster Lime Works</a></li>
+        <li><a href="https://www.themudhome.com/lime-hydrated-hydraulic-and-putty.html" rel="noreferrer">Lime: Hydrated, Hydraulic, and Putty — The Mud Home</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Minerals map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

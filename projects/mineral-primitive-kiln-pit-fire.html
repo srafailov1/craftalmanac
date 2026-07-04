@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Primitive pit-fire / simple updraft kiln · Craft Almanac</title>
+    <meta name="description" content="Turn dug clay into pottery in a fire in a hole">
+    <link rel="canonical" href="https://craftalmanac.com/projects/mineral-primitive-kiln-pit-fire.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Primitive pit-fire / simple updraft kiln · Craft Almanac">
+    <meta property="og:description" content="Turn dug clay into pottery in a fire in a hole">
+    <meta property="og:url" content="https://craftalmanac.com/projects/mineral-primitive-kiln-pit-fire.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Primitive pit-fire / simple updraft kiln</h1>
+      <p class="teaser">Turn dug clay into pottery in a fire in a hole</p>
+      <ul class="chips"><li class="chip">Minerals map</li><li class="chip">Craft</li><li class="chip">Intermediate</li><li class="chip"><span class="swatch" style="background:#8a5a3c"></span>Smoke-flashed earth tones, black to blush</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>Open-fire hazard: work only where permitted, clear a firebreak, keep water/extinguisher ready, mind wind and dry surroundings, and fully drown/extinguish the ashes before leaving.</li>
+          <li>Exploding pots: any moisture in the clay flashes to steam and can burst a pot violently, throwing hot shards — use only bone-dry (ideally pre-bisqued) ware, pre-warm it, and heat the fire up slowly. Wear eye protection and keep bystanders back.</li>
+          <li>Severe burn risk from an open high-temperature fire and hot ware/coals — heavy gloves, eye protection, long tongs, and no reaching over the fire.</li>
+          <li>Silica dust: dry wild clay, grog, and silica sand contain crystalline silica. Mix and process clay wet, don&#039;t dry-sweep, and wear a NIOSH N95/P100 respirator when handling dry clay/grog or dry-cleaning fired ware — repeated exposure causes silicosis.</li>
+          <li>Smoke and fumes: reducing fires make heavy smoke and carbon monoxide — fire OUTDOORS only, never in an enclosed or poorly ventilated space, and stay upwind. Some added colorants (copper compounds, salt) release irritating fumes.</li>
+          <li>Pit-fired ware is porous, not vitrified — treat it as decorative; do not assume it is watertight or food-safe. Cracked fired fragments have sharp edges — handle with gloves and blunt them before use/display.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>The oldest way to turn dug clay into pottery is a fire in a hole. Pit firing dates back over 10,000 years — Jomon, Ancestral Puebloan, and countless others hardened pots at 600–900°C in an open bonfire or a simple clay updraft kiln. It never vitrifies the clay; it sinters it, leaving an open, porous body that survives the very thermal shock of the fire. The reward is a surface no glaze can imitate: carbon blacks, copper blushes, and smoke flashing painted on by the flames themselves.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Bone-dry, coarse/grogged wild-clay pots (bisque or greenware) — As many as fit with space between <span class="note">· Must be BONE DRY; open, grogged bodies with sand/silica resist thermal shock.</span></li>
+        <li>Dry firewood / hardwood — A generous pile <span class="note">· The main fuel — dry only; green wood steams and cracks pots.</span></li>
+        <li>Fine combustibles (straw, sawdust, dung, dry leaves, paper) — Layers around and over the pots <span class="note">· Create the reducing atmosphere and surface color.</span></li>
+        <li>Colorant combustibles (copper carbonate, salt, seaweed, banana skins, coffee grounds) — Sprinkled/wrapped around pots <span class="opt">(optional)</span> <span class="note">· Give blushes, flashes, and blacks on the surface; copper compounds and salt release irritating fumes.</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> A dug pit or a simple clay/brick updraft kiln, Dry firewood + fine tinder, Long tongs / iron poker, Heavy heat gloves + eye protection, Water/hose/extinguisher and a cleared firebreak, NIOSH N95/P100 respirator for handling dry clay/grog or dry-cleaning fired ware</p>
+      <p><strong>Optional:</strong> Sawdust/dung for a slow smoulder, Kiln bricks or a metal drum shell, Chimney/updraft opening for a simple kiln, A cover (metal sheet) to bank and slow the burn</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Fire only where open fires are permitted and safe — check burn bans, get any permit, clear a wide firebreak, and have water/extinguisher on hand. Occurrence of clay is not permission to burn.</li>
+        <li>Use bone-dry pots made from an open, grogged/sandy wild-clay body. Warm them thoroughly near the fire first (or pre-bisque low) to drive off all moisture — any trapped water flashes to steam and explodes the pot.</li>
+        <li>Bed the pit: a base layer of sawdust/combustibles, then nestle the warmed pots with space around each, packing fine combustibles (and any colorants) around and between them.</li>
+        <li>Build the fuel up GRADUALLY — light kindling and let heat rise slowly over the first hour so the pots don&#039;t thermal-shock; add wood in stages to a full burn, reaching roughly 600–900°C.</li>
+        <li>Hold the burn until the pots glow and the wood collapses to coals (several hours). A cover or extra sawdust creates a smoky reducing atmosphere for blacks.</li>
+        <li>Let it cool SLOWLY, undisturbed, overnight — rushing the cool cracks the ware by thermal shock. Don&#039;t pull hot pots into cold air.</li>
+        <li>Once cold, lift pots out and wet-wipe or rinse off ash rather than dry-brushing, to avoid raising silica/ash dust. Expect some losses — cracks and &#039;pings&#039; are normal to the method; cracked fired fragments have sharp edges, so handle with gloves and blunt them.</li>
+        <li>Fully extinguish and drown the ashes before leaving; stir and confirm cold-out.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Atmosphere is the palette: an open oxidizing fire gives warm reds/buffs; smothering with sawdust/dung for a reducing smoke gives blacks and greys; copper carbonate and salt flash greens and pinks; seaweed and organic wraps leave line and haze. A simple clay/brick updraft kiln (even built from the same clay as the pots) holds heat better and fires more evenly than a bare pit. Terra sigillata burnished on before firing gives a soft sheen.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>The fired ware is finished but porous — keep decorative pieces dry; don&#039;t rely on them for liquids or food unless a proper high-fire/glazed body is used. A post-fire wax or milk/organic burnish can reduce porosity slightly for looks, not food-safety. Store fuel dry; never store combustibles near the firing pit.</p>
+      <h2>Yield</h2>
+      <p>A single pit or small kiln fires a batch of small-to-medium pots at once; plan for a portion to crack, especially early on.</p>
+      <h2>Beyond the recipe</h2>
+      <p>This is the firing step that actually completes the wild-clay body cards — dug and processed clay becomes usable pottery here. The grog/sand in the body is the same silica material on the map, and wood ash from the fire is a classic glaze ingredient, feeding the ash-glaze side of the studio and the &#039;remnant becomes ingredient&#039; loop.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://digitalfire.com/glossary/primitive+firing" rel="noreferrer">Primitive Firing (sintering, thermal shock, temperatures) — Digitalfire</a></li>
+        <li><a href="https://ceramicartsnetwork.org/pottery-making-illustrated/pottery-making-illustrated-article/A-Pit-Firing-Color-Palette" rel="noreferrer">A Pit Firing Color Palette — Ceramic Arts Network</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Pit_fired_pottery" rel="noreferrer">Pit fired pottery (history, technique, temperatures) — Wikipedia</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Minerals map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

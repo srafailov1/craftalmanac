@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iron Clay: Earthenware vs. Stoneware · Craft Almanac</title>
+    <meta name="description" content="Fire a ladder of tiles to find your clay&#039;s cone">
+    <link rel="canonical" href="https://craftalmanac.com/projects/mineral-iron-clay-earthenware-stoneware.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Iron Clay: Earthenware vs. Stoneware · Craft Almanac">
+    <meta property="og:description" content="Fire a ladder of tiles to find your clay&#039;s cone">
+    <meta property="og:url" content="https://craftalmanac.com/projects/mineral-iron-clay-earthenware-stoneware.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Iron Clay: Earthenware vs. Stoneware</h1>
+      <p class="teaser">Fire a ladder of tiles to find your clay&#039;s cone</p>
+      <ul class="chips"><li class="chip">Minerals map</li><li class="chip">Clay</li><li class="chip">Advanced</li><li class="chip"><span class="swatch" style="background:#8C4A32"></span>Terracotta red to toasty brown</li><li class="chip" style="border-color:#a5321f;color:#a5321f">Toxic — read safety</li></ul>
+      <div class="safety">
+        <div class="k">Safety — read before you start</div>
+        <ul>
+          <li>Firing unknown wild clay can bloat or melt onto the shelf — always fire test tiles on a scrap shelf or catch-tray and vent the kiln (fumes from organics and sulfur).</li>
+          <li>Dry clay and any crushing of overfired scrap are silica hazards — process wet or masked.</li>
+          <li>Do not assume an iron wild-clay pot is food-safe; earthenware needs a tested food-safe glaze liner, and no raw or crazed surface should hold food.</li>
+          <li>Collect clay for food-contact ware away from roadsides, industrial fill, or contaminated ground, and use a lead-free, leach-tested liner glaze.</li>
+          <li>Occurrence is not permission — collect the clay only with consent.</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>The same iron that stains a wild clay red is what caps how hot you can fire it: push an iron-rich terracotta past its range and it bloats, slumps, or turns to a black bubbled slag. Earthenware clays mature low (roughly cone 010-04); stonewares vitrify dense and waterproof higher (about cone 5-10). The only way to know which yours is, is to fire a ladder of test tiles and watch where it tightens up — and where it fails.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Processed iron-rich wild clay — Enough for 6-10 test tiles + trial pots <span class="note">· Red/brown color signals iron; iron is a flux that lowers the melting point.</span></li>
+        <li>Optional flux or temper — To taste <span class="opt">(optional)</span> <span class="note">· A little talc or whiting can nudge a body; sand/grog opens it for thermal shock.</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> Test kiln with pyrometric cones or accurate controller, Test-tile molds or slab, Ruler + marker for shrinkage line (mark 10 cm), Scale for absorption test, Boiling setup for the fired-absorption test, P100 mask</p>
+      <p><strong>Optional:</strong> Kiln shelf posts to catch bloating/melting drips</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Make identical test tiles, each with a scored 10 cm reference line; record the wet length, then the bone-dry length to get drying shrinkage.</li>
+        <li>Fire tiles in steps across a range — e.g., cone 06, 04, 1, 5, 8 — placing each on a scrap shelf or in a catch-tray in case it melts.</li>
+        <li>After each firing, re-measure the line for fired shrinkage: shrinkage climbs to a maximum as the body densifies, then the body swells/bloats if overfired — that peak marks maturity.</li>
+        <li>Run the absorption test: weigh a fired tile, boil and soak it, weigh again; low absorption (under ~2%, ideally under 1.5%) means it is vitrifying like stoneware and is functionally watertight; 3%+ ware can still weep.</li>
+        <li>Watch for failure signs: blistering, warping, or slumping mean you have passed the body&#039;s ceiling — back off to the last good cone. Black coring is different: it usually means the firing climbed too fast for carbon and sulfur to burn out — slow the bisque and ensure good oxidation rather than lowering the cone.</li>
+        <li>Fire actual ware at that proven cone; glaze earthenware bodies to make them hold liquid, since they never fully vitrify.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>To extend an iron earthenware upward, blend in a more refractory light clay or reduce iron by blending. To lower a stubborn body, a touch of flux (talc, whiting, or feldspar) drops the maturing cone. Reduction firing deepens iron colors and can flux the body further; oxidation keeps brighter terracotta reds.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>Unfired body stores wet and sealed. Correctly matured stoneware is waterproof and dishwasher-durable; earthenware stays porous and must be glaze-lined for utility. Overfired, bloated ware is scrap — recover only as grog.</p>
+      <h2>Yield</h2>
+      <p>This is a diagnostic card: a few pounds of clay yields a tile ladder plus a couple of trial pots. The payoff is knowing your clay&#039;s cone, not volume.</p>
+      <h2>Beyond the recipe</h2>
+      <p>Overfired, bloated, or melted tiles crush into grog and even into a raw slip glaze (some iron clays melt to a glossy brown &#039;slip glaze&#039; at stoneware temperatures — the origin of Albany-type slips). Well-matured scraps become the sig and temper feedstock for other cards.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://ceramicartsnetwork.org/daily/article/A-Simple-Test-Determines-the-Best-Firing-Temperature-for-a-Clay-Body" rel="noreferrer">Ceramic Arts Network — A Simple Test Determines the Best Firing Temperature for a Clay Body</a></li>
+        <li><a href="https://digitalfire.com/glossary/earthenware" rel="noreferrer">Digitalfire — Earthenware (glossary)</a></li>
+        <li><a href="https://www.lindaarbuckle.com/handouts/clay-earthenware.pdf" rel="noreferrer">Linda Arbuckle — Earthenware Clays (handout)</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Minerals map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>

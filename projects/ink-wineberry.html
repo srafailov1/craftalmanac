@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wineberry ink · Craft Almanac</title>
+    <meta name="description" content="Magenta from an invasive berry">
+    <link rel="canonical" href="https://craftalmanac.com/projects/ink-wineberry.html">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Wineberry ink · Craft Almanac">
+    <meta property="og:description" content="Magenta from an invasive berry">
+    <meta property="og:url" content="https://craftalmanac.com/projects/ink-wineberry.html">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; --muted:#6b7256; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto; padding: 32px 20px 72px; max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+      background: var(--paper); line-height: 1.6;
+    }
+    a { color: var(--green); word-break: break-word; }
+    .back-link { font-size: 0.85rem; display: inline-block; margin-bottom: 20px; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.12em; line-height: 1.2; }
+    h2 { font-size: 1.15rem; margin: 1.9em 0 0.5em; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    .sci { font-style: italic; color: #5a6152; margin: 0 0 0.5em; font-size: 1.05rem; }
+    .teaser { font-size: 1.06rem; color: #3a4432; margin: 0.2em 0 1em; }
+    .k, .label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    }
+    .k { font-size: 0.72rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.6em 0 1.1em; padding: 0; list-style: none; }
+    .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.74rem;
+      border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .swatch { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 50%; border: 1px solid rgba(0,0,0,0.25); }
+    .meta-list { list-style: none; padding: 0; margin: 0.6em 0 1em; }
+    .meta-list li { margin: 0.5em 0; }
+    .meta-list .label { font-size: 0.7rem; display: block; margin-bottom: 0.1em; }
+    .safety { border: 2px solid #a5321f; background: #fbeee9; border-radius: 8px; padding: 14px 16px; margin: 1.3em 0; }
+    .safety .k { color: #a5321f; }
+    .safety ul { margin: 0.5em 0 0; padding-left: 1.2em; }
+    .safety.mild { border-color: #b98a2e; background: #f8f2e2; }
+    .safety.mild .k { color: #916516; }
+    ol, ul { padding-left: 1.3em; }
+    ol li, ul li { margin: 0.35em 0; }
+    .ingredients { list-style: none; padding: 0; }
+    .ingredients li { margin: 0.4em 0; padding-left: 1em; text-indent: -1em; }
+    .opt { color: var(--muted); font-size: 0.85em; }
+    .note { color: #5a6152; }
+    .cta {
+      display: inline-block; margin: 1.1em 0 0.4em; padding: 11px 18px; background: var(--green);
+      color: var(--paper); border-radius: 8px; text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    }
+    .cta:hover { background: #17482f; }
+    .cta-note { font-size: 0.9rem; color: #5a6152; margin: 0.3em 0 0; }
+    .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; margin: 0.4em 0; }
+    .tags li {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.73rem;
+      border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; background: #fff; margin: 0;
+    }
+    p { margin: 0.6em 0; }
+    footer { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; font-size: 0.85rem; color: #5a6152; }
+    footer p { margin: 0.55em 0; }
+    .index-group { margin-bottom: 1.7em; }
+    .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
+    .card-list li { margin: 0.35em 0; }
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./">&larr; All projects</a>
+    <main>
+      <h1>Wineberry ink</h1>
+      <p class="teaser">Magenta from an invasive berry</p>
+      <ul class="chips"><li class="chip">Ink &amp; Dye map</li><li class="chip">Ink</li><li class="chip">Beginner</li><li class="chip"><span class="swatch" style="background:#b23a55"></span>Rose-pink</li></ul>
+      <div class="safety mild">
+        <div class="k">Safety</div>
+        <ul>
+          <li>This is ink, not food — even though wineberries are edible, the finished ink contains vinegar, preservative, and possibly gum arabic. Don&#039;t taste or ingest it; label the jar not food.</li>
+          <li>Keep ink, fruit-in-progress, and preservatives away from children and pets.</li>
+          <li>Strong staining: wear gloves and protect skin, eyes, clothing, grout, and wood; wipe spills immediately.</li>
+          <li>Use a dedicated craft pot once preservative or gum arabic is added; don&#039;t return it to cooking.</li>
+          <li>Ventilate while simmering vinegar (sharp vapors) and avoid leaning over the pot.</li>
+          <li>Wineberry canes are bristly — wear long sleeves and watch your hands and eyes while harvesting. Don&#039;t confuse this beginner-safe berry with the toxic ink plants on this site (pokeweed, privet, Boston ivy, elderberry leaves/stems).</li>
+        </ul>
+      </div>
+      <h2>About</h2>
+      <p>An aggressive Asian raspberry brought to the US around 1890 to breed better berries, wineberry now blankets eastern woods edges — recognizable by canes and fruit-cups furred in sticky red glandular hairs. Crush the ripe berries and you get a gorgeous magenta-rose juice that writes beautifully and, sadly, fades almost as fast as you can admire it.</p>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>Ripe wineberries (bright orange-red), favoring invasive stands — 2 cups (about 250-300 g) <span class="note">· ripe black or red raspberries, blackberries, or mulberries behave almost identically</span></li>
+        <li>White vinegar — a little under 1/2 cup (about 100 ml) <span class="opt">(optional)</span> <span class="note">· extracts color and mildly preserves/acidifies; a splash of water can stand in but the color keeps less well</span></li>
+        <li>Salt — 1 tsp <span class="opt">(optional)</span> <span class="note">· helps draw out pigment; optional</span></li>
+        <li>Whole clove — 1 per small jar <span class="opt">(optional)</span> <span class="note">· preservative against mold; a drop of clove oil also works</span></li>
+        <li>Gum arabic — about 1.5-2 Tbsp per 1 cup finished ink <span class="opt">(optional)</span> <span class="note">· binder for smoother dip-pen flow; skip for a thinner watercolor wash</span></li>
+      </ul>
+      <h2>Tools</h2>
+      <p><strong>Required:</strong> A pot reserved for craft use, Potato masher, fork, or sturdy spoon, Fine strainer plus cheesecloth or a coffee filter, A bowl to strain into, A small glass jar or bottle with a lid (sterilize with boiling water first)</p>
+      <p><strong>Optional:</strong> Rubber/nitrile gloves (the juice stains), Funnel for bottling, Apron and surface covering, Dropper for adding preservative or pH modifiers</p>
+      <h2>Steps</h2>
+      <ol>
+        <li>Harvest about 2 cups of fully ripe, bright orange-red berries only where harvesting is permitted. Wineberry is invasive (its sale/possession is banned in CT and NY), so taking ripe fruit from established stands is low-impact and even helpful — but get landowner or agency permission first, and pick fruit rather than cutting living canes.</li>
+        <li>Set up a stain-safe workspace: cover the surface, wear gloves, and use a pot you&#039;ll keep for craft only. The juice stains skin, clothing, counters, and grout.</li>
+        <li>Put the berries in the craft pot, add the vinegar (and salt if using), and crush thoroughly with a masher or fork.</li>
+        <li>Warm over medium-low and simmer gently 10-15 minutes, stirring and mashing so it doesn&#039;t scorch. Ventilate the room (simmering vinegar is sharp), and don&#039;t boil hard. Never taste the ink.</li>
+        <li>Remove from heat and let it cool completely.</li>
+        <li>Strain through a fine strainer, then again through cheesecloth or a coffee filter into a clean bowl, until no pulp or seeds remain (so it won&#039;t clog a pen).</li>
+        <li>Optional: stir in gum arabic (about 1.5-2 Tbsp per cup) for dip-pen use, or leave it thin for washes. To play with pH, brush a little vinegar (brighter pink) or baking-soda water (toward purple/blue-grey) over a test swatch — keep these separate from the storage jar.</li>
+        <li>Bottle in a sterilized jar, drop in a clove to discourage mold, label it clearly as ink / not food, and refrigerate. The color is fugitive: it fades and browns over months, faster in direct light, so keep finished art out of sunlight and scan work you want to keep.</li>
+      </ol>
+      <h2>Variations &amp; modifiers</h2>
+      <p>Wineberry color is anthocyanin, a natural pH indicator. Acid (the vinegar, or a drop of lemon) keeps the ink in its brightest pink-to-red range. A base such as baking soda raises the pH and shifts it toward purple then a dull blue-grey; these basic shifts on red-berry inks tend to look muted. Iron (iron water) dulls and saddens the color toward grey-brown rather than brightening it. Heat beyond a gentle simmer dulls and browns the pigment, so keep cooking brief and low.</p>
+      <h2>Preservation &amp; storage</h2>
+      <p>The vinegar gives mild protection; for storage add a clove (or a drop of clove oil) per jar, bottle in a jar sterilized with boiling water, and refrigerate. This guards against mold but does not stop light-fading — the anthocyanin color is inherently fugitive.</p>
+      <h2>Yield</h2>
+      <p>Roughly 3/4 to 1 cup of ink from 2 cups of berries. Refrigerated with a clove it keeps a few weeks to a few months before molding; discard if it smells off or grows fuzz. The written color itself is fugitive and will fade and brown over months, faster in sunlight.</p>
+      <h2>Beyond the ink</h2>
+      <p>Not a durable textile dye: like other Rubus berry juices it doesn&#039;t bond to cellulose on its own, and even an alum mordant on wool/silk gives only a brighter pink-red that stays poorly lightfast and washes out. Honestly, ink/stain only — for lasting cloth color, use a different dye plant. The berries&#039; best use is the kitchen: raw, jam, pie, syrup, or wine.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Rubus_phoenicolasius" rel="noreferrer">Rubus phoenicolasius — Wikipedia (range, invasive status, ripe color, edibility)</a></li>
+        <li><a href="https://plants.ces.ncsu.edu/plants/rubus-phoenicolasius/" rel="noreferrer">Wineberry — North Carolina Extension Gardener Plant Toolbox</a></li>
+        <li><a href="https://thedruidsgarden.com/2012/08/29/making-berry-inks-huckleberry-raspberry-blackberry-pokeberry-etc/" rel="noreferrer">Making Berry Inks (crush/simmer/strain, vinegar, gum arabic, fading) — The Druid&#039;s Garden</a></li>
+      </ul>
+      <a class="cta" href="https://craftalmanac.com/">Open Craft Almanac &rarr;</a>
+      <p class="cta-note">This recipe lives in the Projects sheet of the Ink &amp; Dye map.</p>
+    </main>
+    <footer>
+      <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+    </footer>
+  </body>
+</html>
