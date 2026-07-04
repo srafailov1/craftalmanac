@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -122,7 +142,7 @@
       <h2>Beyond the recipe</h2>
       <p>Verified asbestos-free serpentine and its cousin soapstone are the same family used for carved bowls, beads, and cabochons; a tested-clean offcut can feed the lapidary bench. The main &#039;byproduct&#039; of this card is the transferable skill: a wet-work + respirator + HEPA protocol that also protects you when cutting silica stone elsewhere in the shop.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://ehs.princeton.edu/health-safety-the-campus-community/art-theater-safety/art-safety/sculpture" rel="noreferrer">Sculpture safety (asbestos in serpentine/soapstone/greenstone) — Princeton EHS</a></li>
         <li><a href="https://carvestone.org/safety-for-stone-sculptors-osha/" rel="noreferrer">Safety for Stone Sculptors (OSHA) — Northwest Stone Sculptors Association</a></li>
         <li><a href="https://ww2.arb.ca.gov/sites/default/files/classic/toxics/asbestos/tm435/workshops/m435-asbestosguidance-appacd2017.pdf" rel="noreferrer">Method 435: Determination of Asbestos Content of Serpentine — California Air Resources Board</a></li>
@@ -132,7 +152,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

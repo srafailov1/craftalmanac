@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -126,7 +146,7 @@
       <h2>Beyond the ink</h2>
       <p>These are CRAFT colors, not food or medicine — never eat the plant or take it internally as part of this work. As a textile dye it gives golden yellows on alum-mordanted wool and silk and a fleeting red-violet on silk; on cotton/linen it performs poorly. The alcohol-extracted red tincture can be brushed as a fugitive watercolor-style stain or used for small ephemeral paper and fabric experiments where impermanence is acceptable. Because both colors fade, it&#039;s best suited to teaching demos, dye-sampling, and short-lived decorative pieces rather than heirloom work.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://www.cal-ipc.org/plants/profile/hypericum-perforatum-profile/" rel="noreferrer">Cal-IPC Plant Profile: Hypericum perforatum (Klamath weed)</a></li>
         <li><a href="https://www.fs.usda.gov/database/feis/plants/forb/hypper/all.html" rel="noreferrer">USDA Forest Service FEIS — Hypericum perforatum (invasion and biological control)</a></li>
         <li><a href="https://evelynoldroyd.wordpress.com/2010/07/09/natural-dyeing-with-hypericum-perforatum/" rel="noreferrer">Natural Dyeing with Hypericum perforatum — Evelyn Oldroyd (process, mordants, red-from-glands, acid/alkali shifts)</a></li>
@@ -137,7 +157,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

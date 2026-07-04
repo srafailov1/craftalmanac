@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -121,7 +141,7 @@
       <h2>Beyond the ink</h2>
       <p>Beyond ink and pottery paint, the same boiled concentrate paints basketry designs, and the younger plant boiled with an alum mordant is the source of the Navajo yellow-green wool dye used in rugs and blankets. The pottery use is the headline: this is the carbon-based black paint behind Ancestral and modern Pueblo black-on-white ceramics. (The plant also has long-standing food and medicine uses in Indigenous cultures — young shoots and ground seed, eaten in moderation, since the plant can accumulate nitrates and is toxic in quantity — but that is a separate tradition, outside this craft card and outside this not-for-ingestion process.)</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://www.fs.usda.gov/wildflowers/plant-of-the-week/cleome_serrulata.shtml" rel="noreferrer">USDA Forest Service — Rocky Mountain Bee Plant (Cleome serrulata), Plant of the Week</a></li>
         <li><a href="https://www.tandfonline.com/doi/abs/10.1080/00231940.2002.11758462" rel="noreferrer">Adams, K.R. &amp; Stewart, J.D. — Pottery Paint and Other Uses of Rocky Mountain Beeweed (Cleome serrulata) in the Southwestern United States (KIVA 67:4)</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Cleomella_serrulata" rel="noreferrer">Cleomella serrulata — Wikipedia (synonymy, range, ethnobotanical dye and pottery-paint uses)</a></li>
@@ -131,7 +151,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

@@ -49,6 +49,11 @@ node scripts/test_project_recipes.mjs || { echo "FAIL: Project recipes validatio
 echo "Verifying static pages freshness..."
 node scripts/build_static_pages.mjs --verify || { echo "FAIL: Static pages are stale — run: node scripts/build_static_pages.mjs"; exit 1; }
 
+# Verify the committed QR field-card sheets (cards/) match a fresh
+# regeneration from the catalogs (Phase 5.6 teaching pack)
+echo "Verifying field-card sheets freshness..."
+node scripts/build_field_cards.mjs --verify || { echo "FAIL: Field-card sheets are stale — run: node scripts/build_field_cards.mjs"; exit 1; }
+
 # Validate the extracted rule tables (data/rules/*.json): envelope, provenance
 # (checked.by/date), reserved-word rule ("Verified" only for owner-checked),
 # baked record counts, and crown-jewel semantic anchors. While app.js still

@@ -5,7 +5,11 @@
 // previews see none of its authored knowledge. This script emits crawlable,
 // JS-free HTML for every material profile and project recipe, plus sitemap.xml
 // and robots.txt — the same committed-artifact pattern as the other
-// scripts/build_*.mjs generators.
+// scripts/build_*.mjs generators. The sitemap is the single source of truth
+// for the site's static URLs and also lists the QR field-card sheets emitted
+// by scripts/build_field_cards.mjs (which imports CARD_PAGES + the shared
+// extraction/formatting helpers from this module). Pages carry @media print
+// rules so a material or project page prints as a clean one-pager (Phase 5.6).
 //
 // Sources (all read-only):
 //   - app.js  : the four species catalogs + SAFETY_TAGS_BY_SPECIES +
@@ -29,7 +33,7 @@ const ROOT = path.resolve(path.dirname(__filename), "..");
 const APP_PATH = path.join(ROOT, "app.js");
 const RECIPES_PATH = path.join(ROOT, "data", "project-recipes.json");
 
-const SITE = "https://craftalmanac.com";
+export const SITE = "https://craftalmanac.com";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 // ---------------------------------------------------------------------------
@@ -95,7 +99,7 @@ function extractConstExpression(source, name) {
   return source.slice(expressionStart, end + 1);
 }
 
-async function loadAppConstants() {
+export async function loadAppConstants() {
   const appSource = await readFile(APP_PATH, "utf8");
   const names = [
     "foodSpeciesCatalog",
@@ -103,7 +107,8 @@ async function loadAppConstants() {
     "medicineSpeciesCatalog",
     "mineralSpeciesCatalog",
     "SAFETY_TAGS_BY_SPECIES",
-    "HARVEST_ETHIC_BY_SPECIES"
+    "HARVEST_ETHIC_BY_SPECIES",
+    "MINERAL_WORKABILITY"
   ];
   const context = { MONTHS: [] };
   vm.createContext(context);
@@ -118,12 +123,22 @@ async function loadAppConstants() {
 // MAP_MODE_CONFIG in app.js. Kept in sync by the safety-tag / phenology gates
 // that already assert every catalog species has a considered decision.
 // ---------------------------------------------------------------------------
-const MODES = [
+export const MODES = [
   { key: "food", catalog: "foodSpeciesCatalog", label: "Food" },
   { key: "ink", catalog: "inkSpeciesCatalog", label: "Ink & Dye" },
   { key: "medicine", catalog: "medicineSpeciesCatalog", label: "Herbalism" },
   { key: "minerals", catalog: "mineralSpeciesCatalog", label: "Minerals" }
 ];
+
+// QR field-card sheets (scripts/build_field_cards.mjs). Declared here so the
+// sitemap — whose single source of truth is this generator — and the card
+// generator agree on the exact page set; build_field_cards.mjs imports this.
+export const CARD_PAGES = ["cards/index.html", ...MODES.map((m) => `cards/${m.key}.html`)];
+
+// Public URL for a card page ("cards/index.html" -> "<SITE>/cards/").
+function cardPageUrl(rel) {
+  return `${SITE}/${rel.replace(/index\.html$/, "")}`;
+}
 
 const CATEGORY_LABELS = {
   food: { berry: "Berries", fruit: "Fruit", mushroom: "Mushrooms", nut: "Nuts" },
@@ -148,7 +163,7 @@ function categoryLabel(mode, category) {
   return (CATEGORY_LABELS[mode] && CATEGORY_LABELS[mode][category]) || titleCase(category);
 }
 
-function titleCase(value) {
+export function titleCase(value) {
   return String(value || "")
     .replace(/[-_]+/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
@@ -157,7 +172,7 @@ function titleCase(value) {
 // ---------------------------------------------------------------------------
 // Shared text helpers.
 // ---------------------------------------------------------------------------
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -205,7 +220,7 @@ function metaDescription(text, fallback = "") {
 }
 
 // Contiguous month-run formatting, reimplemented from getMonthRangeText.
-function monthRangeText(months) {
+export function monthRangeText(months) {
   const sorted = [...new Set(months || [])].filter((m) => m >= 1 && m <= 12).sort((a, b) => a - b);
   if (!sorted.length) return "Unknown";
   if (sorted.length === 12) return "Year-round";
@@ -287,7 +302,27 @@ const SHARED_CSS = `
     .index-group { margin-bottom: 1.7em; }
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
-    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }`;
+    .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }`;
 
 function pageShell({ title, description, canonicalPath, ogType, body, backHref, backLabel }) {
   const canonical = `${SITE}${canonicalPath}`;
@@ -328,14 +363,14 @@ function footerHtml({ educationalOnly = false, mineralMaterial = false } = {}) {
   if (mineralMaterial) {
     lines.push(`<p>Many recorded mineral localities are old, inactive, or abandoned workings. Never enter shafts, adits, or pits — collect only surface float, and confirm the ground is neither posted nor hazardous.</p>`);
   }
-  lines.push(`<p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>`);
+  lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>`);
   return `    <footer>\n${lines.map((l) => `      ${l}`).join("\n")}\n    </footer>`;
 }
 
 // ---------------------------------------------------------------------------
 // Species (material) page.
 // ---------------------------------------------------------------------------
-function speciesSafetyTags(species, safetyMap) {
+export function speciesSafetyTags(species, safetyMap) {
   if (Array.isArray(species.safetyTags)) return species.safetyTags;
   if (Object.prototype.hasOwnProperty.call(safetyMap, species.id)) return safetyMap[species.id];
   return [];
@@ -504,7 +539,7 @@ function renderRecipePage(recipe, ctx) {
   const sources = Array.isArray(recipe.sources) ? recipe.sources.filter((s) => s && s.url) : [];
   if (sources.length) {
     parts.push(`      <h2>Sources</h2>`);
-    parts.push(`      <ul>`);
+    parts.push(`      <ul class="sources">`);
     for (const src of sources) {
       parts.push(`        <li><a href="${escapeHtml(src.url)}" rel="noreferrer">${escapeHtml(src.title || src.url)}</a></li>`);
     }
@@ -613,7 +648,8 @@ function renderSitemap(speciesUrls, recipeUrls) {
     `${SITE}/materials/`,
     ...speciesUrls,
     `${SITE}/projects/`,
-    ...recipeUrls
+    ...recipeUrls,
+    ...CARD_PAGES.map(cardPageUrl)
   ];
   const body = urls.map((u) => `  <url><loc>${escapeHtml(u)}</loc></url>`).join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
@@ -733,7 +769,11 @@ async function main() {
   console.log(`Wrote ${files.size} files: ${speciesCount} material pages + index, ${recipeCount} project pages + index, sitemap.xml, robots.txt.`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Run only when invoked directly — scripts/build_field_cards.mjs imports the
+// shared extraction/formatting helpers from this module without side effects.
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

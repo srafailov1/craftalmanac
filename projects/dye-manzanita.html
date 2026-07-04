@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -124,7 +144,7 @@
       <h2>Beyond the ink</h2>
       <p>Beyond textiles, manzanita&#039;s tannin liquor makes a warm wash for paper, basketry fibers, and wood, and is closely related to leather tanning — Arctostaphylos leaves and bark have a documented history as a vegetable-tanning material, and Indigenous Californian peoples including the Pomo, Wintu, and Miwok long used manzanita&#039;s tannin-rich leaves both to tan hides and, brewed as an astringent leaf tea, as medicine. Concentrated and bound with <a href="tech-gum-arabic.html">gum arabic</a>, the bath can serve as a watercolor-style wash, and reacting it with iron yields a brownish-black iron-tannin ink in the same family as oak-gall inks. As a high-tannin material it also doubles as the tannin mordant step for dyeing cotton and linen with other plants.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://skillcult.com/blog/tanningmaterials" rel="noreferrer">SkillCult — Vegetable Tanning Materials (Arctostaphylos / manzanita &amp; uva-ursi as tannin sources)</a></li>
         <li><a href="https://www.fs.usda.gov/wildflowers/ethnobotany/dyes.shtml" rel="noreferrer">US Forest Service — Celebrating Wildflowers: Native Plant Dyes (substantive/tannic-acid dyes and Indigenous dye knowledge)</a></li>
         <li><a href="https://botanicalcolors.com/10-natural-dye-extracts-you-can-also-use-as-a-mordant/" rel="noreferrer">Botanical Colors — 10 Natural Dye Extracts You Can Also Use as a Mordant (substantive tannin dyeing)</a></li>
@@ -135,7 +155,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

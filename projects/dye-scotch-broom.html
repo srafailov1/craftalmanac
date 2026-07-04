@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -126,7 +146,7 @@
       <h2>Beyond the ink</h2>
       <p>As a textile dye this is its main home: protein fibers (wool, silk) take the soft yellow and iron-modified olives best, while cellulose (cotton, linen) needs a tannin-plus-alum sequence and still reads paler. The concentrated, strained bath can be brushed onto paper or thickened with <a href="tech-gum-arabic.html">gum arabic</a> for a fugitive watercolor-style yellow wash, though its poor lightfastness makes it better for sketchbooks and ephemera than for archival work. It is also a satisfying dye for basketry materials and natural-fiber cordage harvested alongside your broom-removal work. Across all uses, treat the color as a soft, sun-sensitive yellow rather than a permanent one — and as a toxic, non-food pigment.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://www.cal-ipc.org/plants/profile/cytisus-scoparius-profile/" rel="noreferrer">Cytisus scoparius Profile — California Invasive Plant Council (Cal-IPC)</a></li>
         <li><a href="https://www.nwcb.wa.gov/weeds/scotch-broom" rel="noreferrer">Scotch Broom — Washington State Noxious Weed Control Board</a></li>
         <li><a href="https://blog.ellistextiles.com/2015/05/14/a-lesson-about-dye-plants-broom/" rel="noreferrer">A Lesson About Dye Plants: Broom — Catharine Ellis, Natural Dye: Experiments and Results</a></li>
@@ -137,7 +157,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

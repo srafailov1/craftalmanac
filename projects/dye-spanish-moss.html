@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -125,7 +145,7 @@
       <h2>Beyond the ink</h2>
       <p>These are craft colors, not food. Beyond skeins of wool and silk, the same tan-brown liquor works as a soft watercolor-style wash or a wood/paper stain — thicken it with <a href="tech-gum-arabic.html">gum arabic</a> for a brushable ink or paint. It is well suited to natural, earthy palettes: tan tote bags, garment overdyeing, basketry fiber, and paper. The cleaned, dried strands themselves are also a traditional craft material — historically spun into the tough black inner fiber for cordage, mats, and stuffing — so a single gathering can serve both your dyepot and other fiber work. For a related regional brown-family color, see <a href="dye-one-seed-juniper.html">one-seed juniper</a>.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://plants.sc.egov.usda.gov/home/plantProfile?symbol=TIUS" rel="noreferrer">USDA NRCS PLANTS Database — Spanish Moss (Tillandsia usneoides), symbol TIUS</a></li>
         <li><a href="https://gardeningsolutions.ifas.ufl.edu/plants/ornamentals/bromeliads/spanish-moss/" rel="noreferrer">UF/IFAS Gardening Solutions — Spanish Moss (Tillandsia usneoides): epiphyte not parasite, does not harm host trees, organisms it shelters</a></li>
         <li><a href="https://bioone.org/journals/southeastern-naturalist/volume-9/issue-1/058.009.0107/Spanish-Moss-the-Unfinished-Chigger-Story/10.1656/058.009.0107.short" rel="noreferrer">Mosher et al., &#039;Spanish Moss, the Unfinished Chigger Story&#039; — Southeastern Naturalist 9(1): no chiggers found among 3,297 organisms from moss on trees and on the ground</a></li>
@@ -135,7 +155,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -125,7 +145,7 @@
       <h2>Beyond the ink</h2>
       <p>Rabbitbrush is first and foremost a textile dye — the basis of a documented Diné (Navajo) and Hopi tradition of dyeing handspun wool for weaving, and historically used on leather and basketry fibers as well. The same strained, concentrated bath can be thickened with <a href="tech-gum-arabic.html">gum arabic</a> into a soft yellow paint or wash for paper, though it reads more muted on a page than it does saturating wool. Treat it throughout as a craft material, not a food or beverage: this card is for color work only.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://exhibitions.bgc.bard.edu/shapedbytheloom/interactive/navajo-dye-chart/" rel="noreferrer">Navajo Dye Chart — Bard Graduate Center, Shaped by the Loom</a></li>
         <li><a href="https://www.nrcs.usda.gov/plantmaterials/idpmcpg11104.pdf" rel="noreferrer">USDA NRCS Plant Guide: Yellow Rabbitbrush (Chrysothamnus viscidiflorus)</a></li>
         <li><a href="https://santafebotanicalgarden.gardenexplorer.org/taxon-743.aspx" rel="noreferrer">Santa Fe Botanical Garden — Rubber Rabbitbrush / Chamisa (Ericameria nauseosa)</a></li>
@@ -136,7 +156,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

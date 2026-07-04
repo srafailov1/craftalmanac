@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -126,7 +146,7 @@
       <h2>Beyond the ink</h2>
       <p>Beyond wool, juniper tannin dyes silk and other protein fibers well and will tint cotton and linen to softer tans, especially with the ash or alum mordant. The browns work for skein dyeing, fiber for spinning, and overdyeing — laid under indigo or over a yellow it shifts toward olive and khaki. The tannin-rich bath also doubles as a pre-mordant tannin bath for cellulose fibers headed toward other dyes. Diné and other Southwestern weavers have long used juniper both as a dye and as the ash mordant behind a whole palette of native plant colors; present and credit that tradition with respect rather than as a novelty. As a brown earth-tone it suits basketry materials, paper, and rustic textile work; it is not a reliable artist&#039;s lightfast pigment.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://www2.cs.arizona.edu/patterns/weaving/monographs/bys_dyes.pdf" rel="noreferrer">Navajo Native Dyes: Their Preparation and Use (Bryan &amp; Young) — Indian Arts and Crafts Board / Univ. of Arizona weaving archive</a></li>
         <li><a href="http://griffindyeworks.com/understanding-mordants/juniper.html" rel="noreferrer">Griffin Dyeworks — Understanding Mordants: Juniper Ash</a></li>
         <li><a href="https://plants.usda.gov/plant-profile/JUMO" rel="noreferrer">USDA PLANTS Database — Juniperus monosperma (one-seed juniper)</a></li>
@@ -136,7 +156,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

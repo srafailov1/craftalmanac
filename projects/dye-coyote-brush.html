@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -123,7 +143,7 @@
       <h2>Beyond the ink</h2>
       <p>Primarily a textile dye for wool, silk, and (more weakly) alum-treated cotton and linen — a regional California-coast yellow well suited to overdyeing for greens (over indigo) or saddening to scrub khaki with iron. The strained, concentrated bath can also be brushed onto paper or used as a wash in botanical-color work, though its fugitive nature makes it better for craft and study pieces than for archival paint or lightfast art meant to last. It pairs naturally with other chaparral and coastal dyes such as <a href="dye-one-seed-juniper.html">one-seed juniper</a> in a place-based palette.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://fibershed.org/2010/03/31/designs-and-dye-plants/" rel="noreferrer">Fibershed — Designs and Dye Plants (coyote brush clippings boiled into skein dye)</a></li>
         <li><a href="https://books.google.com/books/about/Harvesting_Color.html?id=8CwxW75P_dsC" rel="noreferrer">Rebecca Burgess, Harvesting Color: How to Find Plants and Make Natural Dyes (book listing; profiles coyote brush as a yellow dye)</a></li>
         <li><a href="https://calscape.org/Baccharis-pilularis-(Coyote-Brush)" rel="noreferrer">Baccharis pilularis (coyote brush) — Calscape, California Native Plant Society</a></li>
@@ -133,7 +153,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

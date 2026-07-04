@@ -70,6 +70,26 @@
     .card-list { list-style: none; padding: 0; margin: 0.4em 0; }
     .card-list li { margin: 0.35em 0; }
     .card-list .card-sci { font-style: italic; color: #6b7256; font-size: 0.9em; }
+    /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
+       Navigation and the license paragraph drop out; safety content ALWAYS
+       prints — nothing below may ever hide a .safety block. */
+    @page { margin: 14mm; }
+    @media print {
+      :root { --ink:#000; --paper:#fff; --green:#000; --muted:#333; }
+      body { max-width: none; padding: 0; background: #fff; color: #000; line-height: 1.45; }
+      .back-link, .cta, .cta-note, footer .license { display: none; }
+      a { color: #000; text-decoration: none; }
+      .sci, .teaser, .note, .opt, .card-list .card-sci { color: #222; }
+      .chip, .tags li, .safety, .safety.mild { background: #fff; }
+      .safety, .safety.mild { border-color: #000; }
+      .safety .k, .safety.mild .k { color: #000; }
+      .safety, .ingredients, .meta-list, ol li, .ingredients li { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2 { break-after: avoid; page-break-after: avoid; }
+      h2 { border-bottom-color: #000; }
+      footer { border-top-color: #000; color: #000; }
+      /* Print the URL of each cited source — only in the Sources list. */
+      .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
+    }
     </style>
   </head>
   <body>
@@ -126,7 +146,7 @@
       <h2>Beyond the ink</h2>
       <p>Beyond pen-and-brush ink, the berry juice works as a fugitive watercolor wash and as a playful natural pH-indicator for science demos — paint a stripe and breathe acid or alkali across it to watch the color move. On fiber it will tint wool, silk, and paper in soft purples and pinks, but as an anthocyanin &quot;stain&quot; rather than a fast dye, so expect heavy fading and wash-out without much permanence even with a mordant. The destructive root/bark route is the historic source of a genuine yellow textile and basketry dye — used by many western Indigenous peoples, including the Nlaka&#039;pamux and Sinixt, who prized its bright yellow for basketry — but that tradition belongs to the plant&#039;s roots and inner bark, and this card deliberately keeps you on the berries. Honor that history; do not casually replicate it by killing wild shrubs.</p>
       <h2>Sources</h2>
-      <ul>
+      <ul class="sources">
         <li><a href="https://rebeccadesnos.com/blogs/journal/dyeing-with-berries/" rel="noreferrer">Rebecca Desnos — Dyeing with berries (anthocyanins as pH-sensitive natural dyes; fading/permanence notes)</a></li>
         <li><a href="https://www.nps.gov/articles/000/oregon-grape.htm" rel="noreferrer">NPS — Oregon Grape (berberine yellow dye from roots &amp; inner bark; Nlaka&#039;pamux basketry; berry vs. root/bark distinction)</a></li>
         <li><a href="https://www.stravaiginyarnco.com/journal/2018/4/20/traditional-sinixt-dye-oregon-grape" rel="noreferrer">Stravaigin Yarn Co. — Oregon Grape, a traditional Sinixt dye (yellow root/bark dye in the Sinixt basketry palette)</a></li>
@@ -137,7 +157,7 @@
     </main>
     <footer>
       <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-      <p>Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+      <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
     </footer>
   </body>
 </html>

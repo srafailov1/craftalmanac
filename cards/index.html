@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Field cards · Craft Almanac</title>
+    <meta name="description" content="Printable QR field cards for the Craft Almanac maps — food, ink and dye, herbalism, and minerals. Cut-out cards with seasons, safety tags, and profile links.">
+    <link rel="canonical" href="https://craftalmanac.com/cards/">
+    <meta name="theme-color" content="#20241f">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Field cards · Craft Almanac">
+    <meta property="og:description" content="Printable QR field cards for the Craft Almanac maps — food, ink and dye, herbalism, and minerals. Cut-out cards with seasons, safety tags, and profile links.">
+    <meta property="og:url" content="https://craftalmanac.com/cards/">
+    <style>
+    :root { --ink:#23301f; --paper:#faf8f0; --green:#1f5c3d; --rule:#d8d2bf; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 28px 14px 56px; background: var(--paper); color: #111; font-family: Georgia, "Times New Roman", serif; }
+    a { color: var(--green); }
+    .intro { max-width: 720px; margin: 0 auto 22px; line-height: 1.55; }
+    .intro h1 { font-size: 1.5rem; margin: 0 0 0.3em; color: var(--ink); }
+    .intro p { margin: 0.5em 0; font-size: 0.95rem; }
+    .intro .k { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: #6b7256; }
+    .sheet-list { list-style: none; padding: 0; margin: 1em 0; }
+    .sheet-list li { margin: 0.5em 0; }
+    .sheet-list .count { color: #6b7256; font-size: 0.85em; }
+    .sheet { display: grid; grid-template-columns: repeat(2, 85mm); grid-auto-rows: minmax(54mm, auto); gap: 3mm; justify-content: center; }
+    .card { display: flex; flex-direction: column; border: 1px dashed #8b8b8b; background: #fff; padding: 3.2mm 3.5mm 2.4mm; break-inside: avoid; page-break-inside: avoid; }
+    .card-top { display: flex; gap: 2.5mm; flex: 1; }
+    .card-main { flex: 1; min-width: 0; }
+    .card-side { width: 19mm; flex: none; display: flex; flex-direction: column; align-items: center; gap: 0.6mm; }
+    .qr { width: 19mm; height: 19mm; display: block; }
+    .qr-cap { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 4.6pt; color: #555; letter-spacing: 0.02em; }
+    .name { font-size: 10.5pt; line-height: 1.12; margin: 0; font-weight: 700; color: #000; }
+    .sci { font-size: 7.5pt; font-style: italic; color: #333; margin: 0.4mm 0 1.3mm; }
+    .row { font-size: 6.8pt; line-height: 1.35; margin: 0.7mm 0; color: #111; }
+    .row b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 5.6pt; text-transform: uppercase; letter-spacing: 0.06em; color: #444; font-weight: 700; }
+    .row.safety b { color: #7a1e10; }
+    .mode-note { font-variant: small-caps; font-size: 6.6pt; letter-spacing: 0.03em; margin: 1mm 0 0; color: #000; }
+    .foot { margin-top: 1.4mm; padding-top: 1mm; border-top: 0.3mm solid #b9b9b9; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 5.4pt; text-transform: uppercase; letter-spacing: 0.04em; color: #333; }
+    footer.page-foot { max-width: 720px; margin: 34px auto 0; border-top: 1px solid var(--rule); padding-top: 1em; font-size: 0.85rem; color: #5a6152; line-height: 1.55; }
+    @page { margin: 14mm; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print { display: none; }
+    }
+    </style>
+  </head>
+  <body>
+    <main class="intro">
+      <div class="k">Craft Almanac · teaching pack</div>
+      <h1>Field cards</h1>
+      <p>Printable sheets of cut-out field cards — one card per material, with its season (or workability, for minerals), safety tags, harvest-ethic label, and a QR code that opens the material's profile page. Print at 100% scale (no “fit to page”) on letter or A4 paper, portrait, then cut along the dashed borders; each printed page holds eight cards.</p>
+      <ul class="sheet-list">
+        <li><a href="./food.html">Food field cards</a> <span class="count">— 45 cards</span></li>
+        <li><a href="./ink.html">Ink &amp; Dye field cards</a> <span class="count">— 54 cards</span></li>
+        <li><a href="./medicine.html">Herbalism field cards</a> <span class="count">— 14 cards</span></li>
+        <li><a href="./minerals.html">Minerals field cards</a> <span class="count">— 15 cards</span></li>
+      </ul>
+    </main>
+    <footer class="page-foot">
+      <p><strong>Occurrence is never permission</strong> — the cards are identification and ethics aids, not harvest rights. Every point in the app carries the rule for the land it sits on; check it before collecting. Herbalism cards are educational reference only, not medical advice.</p>
+    </footer>
+  </body>
+</html>
