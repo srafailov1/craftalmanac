@@ -140,6 +140,28 @@ full suite green, main fast-forwarded to include all Phase 1–4 work (commit
 b21e029). Remaining: 4.2 (rules/catalog extraction, work order) and the three
 in-flight background agents (food cards, mineral cards, handoff harness).
 
+## Pre-public checklist (2026-07-04)
+
+- [x] Licenses landed BEFORE the flip (commit 29f6a2c) so all visible history
+      carries terms: PolyForm-NC (code), CC BY-NC-SA 4.0 (content + rule prose,
+      facts free), no-warranty educational-use terms.
+- [x] Full-history secret scan (288 commits, all refs): no credentials, no
+      private keys, no API secrets, no PII outside commit metadata. The only
+      finding: an OLD Mapbox public token (pk.…cmpe9enzm…) in history alongside
+      the current one. pk tokens are designed to be public, but **OWNER: delete
+      or restrict the old token in the Mapbox account** so history-miners can't
+      burn quota on it.
+- [x] Informed-consent notes: commit metadata carries sasson.rafailov@gmail.com
+      (standard git practice, 277 commits — fine unless you want GitHub's
+      noreply address going forward); docs/, KNOWN_ISSUES.md, and the agent
+      work orders become readable (already deploy-excluded, just repo-visible).
+      Local-only branches (harness-test, permissions-research, keen-elbakyan)
+      stay private — only origin/main, origin/minerals-map,
+      origin/design/relaunch publish.
+- [ ] **OWNER: flip repo to public**, then Claude enables branch protection
+      (no-force-push / no-delete; NOT required checks, which would block
+      GitHub-Desktop direct pushes).
+
 ## Phase 5 — Strategic builds (the position-changers)
 
 Order matters here (license → provenance → publication):
