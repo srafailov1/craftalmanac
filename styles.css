@@ -1707,6 +1707,31 @@ body[data-register="night"] {
   line-height: 1.5;
 }
 
+/* "Full profile ↗" / "Recipe page ↗": opens the standalone material/project
+   page in a new tab. A distinct, quieter affordance below the card body — the
+   card body-click still isolates (materials) / opens the in-app recipe
+   (projects); the sheet click handler ignores anchor clicks so this navigates. */
+.mini-card-link {
+  display: inline-block;
+  margin-top: 9px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--reg-accent);
+  text-decoration: none;
+}
+
+.mini-card-link:hover {
+  text-decoration: underline;
+}
+
+.mini-card-link:focus-visible {
+  outline: 2px solid var(--reg-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Educational-only badge on a project tile (matches the .dnote treatment). */
 .project-card .pc-edu {
   display: inline-block;

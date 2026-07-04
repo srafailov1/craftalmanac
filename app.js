@@ -4137,6 +4137,7 @@ function sheetPlantsHTML() {
         <h3 class="serif">${escapeHTML(species.commonName)}</h3>
         <div class="m">${escapeHTML(meta)}</div>
         <div class="uses">${escapeHTML(uses)}</div>
+        <a class="mini-card-link" href="/materials/${escapeHTML(species.id)}.html" target="_blank" rel="noopener">Full profile ↗</a>
       </div>`;
   }).join("");
 
@@ -4242,6 +4243,7 @@ function projectCardHTML(recipe) {
       <div class="m">${escapeHTML(meta.toUpperCase())}</div>
       ${eduTag}
       <div class="uses">${escapeHTML(recipe.teaser || "")}<span class="pc-arrow" aria-hidden="true">→</span></div>
+      <a class="mini-card-link" href="/projects/${escapeHTML(recipe.id)}.html" target="_blank" rel="noopener">Recipe page ↗</a>
     </div>`;
 }
 
@@ -4537,6 +4539,11 @@ function closeSheet() {
 function selectOnlySpecies(speciesId) {
   state.savedLocationsOnly = false;
   state.selectedSpecies = new Set([speciesId]);
+  // Isolating one species also lifts the season/day filter (state.allSeasons):
+  // otherwise "Open on the map" from a material's static page — or a shelf tap —
+  // lands on an empty map whenever that species is out of season on the selected
+  // day. Showing the one species wherever it occurs is the intent of isolating it.
+  state.allSeasons = true;
   render();
 }
 
@@ -4549,6 +4556,9 @@ function initSheets() {
   });
   sheetEl.addEventListener("click", (event) => {
     if (event.target.closest(".closer")) { closeSheet(); return; }
+    // In-card links (e.g. "Full profile ↗") open the standalone page in a new
+    // tab — let the anchor navigate instead of isolating/opening the card behind it.
+    if (event.target.closest("a[href]")) return;
     const matFilter = event.target.closest("[data-materials-filter]");
     if (matFilter) {
       state.materialsAvailableOnly = matFilter.dataset.materialsFilter === "available";
@@ -4590,6 +4600,9 @@ function initSheets() {
       return;
     }
     if (event.key !== "Enter" && event.key !== " ") return;
+    // A focused in-card link handles its own Enter/Space (native navigation);
+    // don't also fire the card's isolate/open action behind it.
+    if (event.target.closest("a[href]")) return;
     const card = event.target.closest("[data-mode], [data-species], [data-recipe]");
     if (!card) return;
     event.preventDefault();
