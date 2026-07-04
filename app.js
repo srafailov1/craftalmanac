@@ -3840,6 +3840,55 @@ function showFirstRunCoach() {
   document.querySelector('#mastLinks [data-sheet="plants"]')?.addEventListener("click", dismiss, { once: true });
 }
 
+// Offline indicator (Phase 5.5 PWA): a small, honest chip that makes the
+// offline capability legible. Foraging/rockhounding happen off-grid — the
+// cached rules + safety layer still work, but map tiles and live conditions
+// may not, so we say so. Reuses the .floating panel + coach-chip styling.
+// The chip is dismissible, but reappears if the connection drops again after a
+// return to online (each fresh offline event re-shows it).
+let offlineChipDismissed = false;
+
+function setOfflineChip(show) {
+  const mapArea = document.querySelector(".map-area");
+  if (!mapArea) return;
+  let chip = document.getElementById("offlineChip");
+
+  if (!show) {
+    // Back online: remove the chip and reset the dismissal so a later drop
+    // shows it again.
+    if (chip) chip.remove();
+    offlineChipDismissed = false;
+    return;
+  }
+
+  // Offline. Respect a manual dismissal for this offline stretch; don't double up.
+  if (offlineChipDismissed || chip) return;
+  chip = document.createElement("div");
+  chip.id = "offlineChip";
+  chip.className = "floating";
+  chip.setAttribute("role", "status");
+  chip.setAttribute("aria-live", "polite");
+  chip.innerHTML = `<span>Offline — showing cached rules &amp; data; map tiles and live conditions may be unavailable.</span><button type="button" aria-label="Dismiss offline notice">&times;</button>`;
+  mapArea.appendChild(chip);
+  chip.querySelector("button").addEventListener("click", () => {
+    offlineChipDismissed = true;
+    chip.remove();
+  });
+}
+
+function initOfflineIndicator() {
+  // The online/offline events are the source of truth for a live transition;
+  // we do not re-query navigator.onLine there (a synthetic event may not update
+  // it, and the event already tells us the direction).
+  window.addEventListener("online", () => setOfflineChip(false));
+  window.addEventListener("offline", () => {
+    offlineChipDismissed = false; // a fresh drop overrides an earlier dismissal
+    setOfflineChip(true);
+  });
+  // Reflect the current state on load (e.g. launched already offline).
+  setOfflineChip(navigator.onLine === false);
+}
+
 function initWelcomeModal() {
   if (!welcomeModal || !welcomeModalButton) return;
   const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
@@ -9003,6 +9052,7 @@ function setDataStatus(message) {
 }
 
 initControls();
+initOfflineIndicator();
 render();
 // Rule tables load immediately (not gated on the map): they gate record-level
 // access resolution, and resolvers fall back conservatively until they land.

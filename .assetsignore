@@ -2,6 +2,10 @@
 # origin. The app fetches ONLY: index.html, attribution.html, app.js, config.js,
 # styles.css, fonts/, and data/ EXCEPT the two build caches below.
 # ATTRIBUTION.md must stay deployed — attribution.html fetches it at runtime.
+#
+# PWA (Phase 5.5): manifest.webmanifest, sw.js, and icons/ MUST deploy and are
+# deliberately NOT excluded here. sw.js must be served from the root path so it
+# can control the whole origin scope ("/"); nothing below blocks it.
 
 # Build-pipeline caches (referenced only by scripts/*.mjs, never by app.js):
 data/falling-fruit/us/cell-containment/

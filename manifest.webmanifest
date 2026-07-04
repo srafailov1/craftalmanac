@@ -1,0 +1,25 @@
+{
+  "name": "Craft Almanac",
+  "short_name": "Craft Almanac",
+  "description": "Map of local material availability, ethical harvesting practice, craft knowledge, and safety information across the contiguous United States. Works in the field: safety and harvesting rules stay reachable offline.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#20241f",
+  "background_color": "#20241f",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

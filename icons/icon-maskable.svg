@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="512" height="512" role="img" aria-label="Craft Almanac">
+  <rect width="16" height="16" fill="#20241f"/>
+  <g transform="translate(1.6 1.6) scale(0.8)">
+    <path d="M8 2.5c3.2 1.6 3.2 6.4 0 11C4.8 8.9 4.8 4.1 8 2.5z" fill="#6b7f2e"/>
+  </g>
+</svg>

@@ -9,6 +9,12 @@
     <meta property="og:url" content="https://craftalmanac.com/">
     <meta name="theme-color" content="#20241f">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2320241f'/%3E%3Cpath d='M8 2.5c3.2 1.6 3.2 6.4 0 11C4.8 8.9 4.8 4.1 8 2.5z' fill='%236b7f2e'/%3E%3C/svg%3E">
+    <!-- Offline-capable PWA: install manifest + service worker (see sw.js, docs/pwa.md) -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/icons/icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Craft Almanac">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Craft Almanac · United States Material Maps">
     <meta property="og:description" content="A map of local material availability, ethical harvesting practice, and safety information across the contiguous United States.">
@@ -17,7 +23,7 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=phase5-rules-1">
+    <link rel="stylesheet" href="./styles.css?v=phase5-pwa-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -103,6 +109,16 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=phase5-rules-1"></script>
+    <script src="./app.js?v=phase5-pwa-1"></script>
+    <script>
+      // Register the offline service worker from the root scope (controls the
+      // whole origin). Guarded and deferred to load so it never blocks first
+      // paint; failures are non-fatal (the app works the same without it).
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
