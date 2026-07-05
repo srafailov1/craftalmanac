@@ -2868,6 +2868,178 @@ body[data-register="night"] {
   background: var(--subject, var(--reg-accent));
 }
 
+/* ---- "Save this area" offline panel (Phase 5.5) ---- */
+
+#offline-panel {
+  right: 14px;
+  bottom: 190px; /* refined at open time to sit above the control cluster */
+  width: min(324px, calc(100% - 28px));
+  max-height: min(58vh, 480px);
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  font-size: 13px;
+  z-index: 6;
+}
+
+#offline-panel .k {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--reg-sub);
+}
+
+#offline-panel .off-close {
+  border: 0;
+  background: transparent;
+  color: var(--reg-sub);
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 4px;
+}
+
+#offline-panel .off-lede {
+  margin: 8px 0 10px;
+  line-height: 1.5;
+}
+
+#offline-panel .off-save {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--reg-accent);
+  border-radius: 8px;
+  background: var(--reg-accent);
+  /* Panel color, not #fff: dusk/night accents are light (#ff9447/#ffd166), and
+     their panel tokens are dark — matches every other accent-filled control. */
+  color: var(--reg-panel);
+  font-weight: 650;
+  font-size: 13px;
+}
+
+#offline-panel .off-save:disabled {
+  border-color: var(--reg-hair);
+  background: transparent;
+  color: var(--reg-sub);
+  cursor: default;
+}
+
+#offline-panel .off-hint,
+#offline-panel .off-progress {
+  margin-top: 7px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--reg-sub);
+  line-height: 1.5;
+}
+
+#offline-panel .off-notice {
+  margin-top: 9px;
+  padding: 8px 10px;
+  border: 1px solid var(--reg-hair);
+  border-left: 3px solid var(--reg-accent);
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#offline-panel .off-list-label {
+  margin-top: 13px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--reg-sub);
+}
+
+#offline-panel .off-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--reg-hair);
+}
+
+#offline-panel .off-goto {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--reg-ink);
+  text-align: left;
+  padding: 0;
+}
+
+#offline-panel .off-area-t {
+  display: block;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+#offline-panel .off-area-m {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--reg-sub);
+}
+
+#offline-panel .off-remove {
+  flex: none;
+  border: 1px solid var(--reg-hair);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--reg-sub);
+  font-size: 11px;
+  padding: 4px 9px;
+  min-height: 24px;
+}
+
+#offline-panel .off-remove:hover {
+  color: var(--reg-st-prohibited);
+  border-color: var(--reg-st-prohibited);
+}
+
+#offline-panel .off-notes {
+  margin-top: 12px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--reg-sub);
+}
+
+#offline-panel .off-notes div {
+  margin-top: 4px;
+}
+
+#offline-panel .off-storage {
+  margin-top: 9px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--reg-sub);
+}
+
+.offline-ctrl-btn svg {
+  display: block;
+  margin: 0 auto;
+  color: #333;
+}
+
+/* Visually hidden but announced — the offline save-progress live region. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 #rail-panel .pad {
   padding: 15px 15px 13px 20px;
 }

@@ -81,12 +81,46 @@ Also keep these three in sync per deploy (they all encode the same version):
 The `?v=` strings bust the HTTP cache for those two files; `ASSET_VERSION` in
 `sw.js` makes the precache store the exact versioned URLs the page requests.
 
-## "Save this area" — follow-up stub
+## "Save this area" — SHIPPED (Phase 5.5 complete)
 
-User-triggered viewport tile caching ("save this area") is a **follow-up**, not
-part of this task. The seam is already in place: `sw.js` has a `message` handler
-that recognizes `{ type: "CACHE_AREA", ... }` and currently replies
-`{ ok: false, reason: "not-implemented" }`. When implemented it will enumerate
-the tile URLs for the current viewport + zoom range and pre-warm them into the
-cache **with a hard size cap** so it never approaches the full basemap. See the
-`TODO(phase5.5-followup)` comment in `sw.js`.
+User-triggered offline areas are live, implemented **page-side** (app.js) rather
+than via the originally-stubbed SW message:
+
+- **UI**: a download-glyph map control in the bottom-right cluster (next to
+  zoom/geolocate) toggles the `#offline-panel` floating panel — save button with
+  a live pre-save estimate (files/~MB for the current view), progress while
+  saving, a list of saved areas (tap to fly there, Remove to evict), storage
+  usage, and honest scope notes.
+- **What a save stores**: the Falling Fruit chunk files intersecting the current
+  viewport, plus the manifest and status raster the layer needs to boot cold.
+  Records carry their access status inline (`accessClass`/`publicLand`/
+  `accessNote`), so the rules layer works offline. Hard cap
+  `SAVE_AREA_MAX_CHUNKS = 400` (~12 MB) — never the full ~82 MB corpus; a
+  too-wide view disables the button with a "zoom in" hint.
+- **Where it lives**: the dedicated `craft-almanac-saved-areas-v1` cache
+  (`SAVED_AREAS_CACHE` in sw.js = `SAVED_AREAS_CACHE_NAME` in app.js — keep them
+  in sync). It is **excluded from the activate cleanup**, so saves survive
+  deploys, and the SW reads it **only as an offline fallback** after a network
+  failure — an online session always prefers fresh data, so an old save can
+  never shadow updated access rules. Per-area registry in localStorage
+  (`craftalmanac.savedAreas.v1`); removal only evicts chunks no other saved
+  area still claims.
+- **Deliberately out of scope**: bulk-prefetching basemap tiles (Mapbox GL JS
+  terms — offline map packs are a mobile-SDK feature). Browsing the area online
+  opportunistically caches its tiles via `mapboxNetworkFirst`; the panel tells
+  the user to pan the area once before going out. Live iNaturalist points and
+  PAD-US public-land shading remain online-only, and the panel says so.
+- `navigator.storage.persist()` is requested on first save (best-effort) so the
+  browser is less likely to evict field data under storage pressure.
+- **Fresh saves**: the save fetches with `cache: "no-cache"`, and
+  `sameOriginCacheFirst` bypasses its runtime-cache lookup for such requests —
+  a save snapshots save-day bytes, never whatever CACHE_NAME held from an
+  earlier session (chunk files are not precached, so a chunks-only data deploy
+  would otherwise never refresh them). Failed saves evict the chunks they wrote
+  (unless another area claims them) so the never-rotating cache can't
+  accumulate orphans.
+- **Offline chunk tolerance**: `loadFallingFruit` uses `Promise.allSettled` and
+  renders whichever chunks resolve — offline, a viewport straddling the edge of
+  a saved area shows the saved sites instead of blanking the layer because one
+  out-of-save chunk failed. It still throws (→ "source unavailable" reporting)
+  only when every chunk fails.

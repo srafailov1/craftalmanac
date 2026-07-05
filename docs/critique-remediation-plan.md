@@ -185,18 +185,43 @@ Order matters here (license → provenance → publication):
       staleness monitor in check.sh; app.js −120KB. Completes the rules half of
       work-order 4.2. **OWNER path to green ✓s: flip `checked.by` to "owner"
       rule-by-rule as you personally re-verify each source.**
-- [~] 5.3 Regionalized phenology — IN FLIGHT. Owner chose **Köppen** climate
-      groups (5 CONUS groups authored in data/phenology-regions.json, every
-      state assigned). Approach: pull iNat histograms per state once, sum into
-      groups, sparse cells fall back to national. Scoped in
-      docs/TODO-regional-phenology.md; ~5,400-request resumable API build +
-      app viewport→state→group lookup. Interim caveat still ships until it lands.
+- [x] 5.3 Regionalized phenology DONE (commit 8ddd71c, 2026-07-04): Köppen
+      climate groups (5 CONUS groups in data/phenology-regions.json, every
+      state assigned — owner's choice). Per-state iNat histograms (5,650-request
+      resumable build; ~2h floor at the polite 1.3 s/request throttle) summed
+      into groups, normalized after summing; cells under a 40-observation floor
+      fall back to the national curve. The app picks the viewport's regional
+      curve (center→state→Köppen group via the Census polygons already loaded)
+      and names the region in the timing caveats; national → species.months
+      fallbacks keep it graceful before/without data.
 - [x] 5.4 Static SEO pages DONE (commit 5070d99): 128 material + 131 project
       pages + grouped indexes, sitemap.xml (263 URLs), robots.txt, canonical +
       og:url, --verify staleness gate in check.sh. Deep-links via
       #map=...&sp=... (og:image deferred — needs a designed asset).
-- [ ] 5.5 Offline PWA: manifest + service worker caching shell, rules, safety tags,
-      phenology + user-triggered "save this area" (never the full 125 MB).
+      **REBUILT 2026-07-04 per owner (commits 25f9cba, 9684d88, c9cbae7):**
+      app-matched register design (Fraunces / Public Sans / Plex Mono, category
+      spines, sheet look), real researched content on every material page
+      (summary, identification + toxic lookalikes, habitat, craft use, safety,
+      sources — data/material-profiles.json, 128 adversarially safety-verified
+      profiles), materials↔projects cross-links, mobile breakpoint. Map shelf
+      cards now link out ("Full profile ↗" / "Recipe page ↗"), and "Open on the
+      map" no longer blanks for out-of-season materials (isolating a species
+      lifts the season filter).
+- [x] 5.5 Offline PWA DONE (2026-07-04): manifest + service worker caching
+      shell, rules, safety tags, phenology (shipped earlier), and now the
+      user-triggered **"save this area"** flow — a bottom-right map control +
+      panel that caches the Falling Fruit chunk files covering the current view
+      (capped at 400 files ≈ 12 MB; never the full ~82 MB corpus) into a
+      version-stable cache that survives deploys and that the SW reads ONLY as
+      an offline fallback (a stale save can never shadow fresh access rules
+      online; saves fetch with no-cache so they snapshot save-day data).
+      Saved records keep their baked-in access status; the panel carries honest
+      scope notes (live iNat / PAD-US shading need a connection; basemap keeps
+      only browsed tiles; occurrence is never permission). Adversarially
+      reviewed (4-lens workflow): the offline chunk-tolerance fix
+      (Promise.allSettled in loadFallingFruit), try/finally busy-flag safety,
+      failed-save cleanup, phone height cap, Escape layering, and an SR live
+      region all landed from confirmed findings.
 - [x] 5.6 Teaching pack DONE (commit 1984f4b): @media print one-pagers on all
       static pages (safety never hidden) + cards/ QR field-card sheets (128
       cards across the four maps, 8/page, vendored MIT qrcodegen, all 128 QRs

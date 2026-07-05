@@ -46,14 +46,21 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-phase5-maplinks-1";
+const CACHE_VERSION = "v1-phase5-offline-1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
+
+// User-saved offline areas ("save this area", Phase 5.5). DELIBERATELY not
+// keyed to CACHE_VERSION: the activate cleanup rotates CACHE_NAME on every
+// deploy, and a field user's saved area must survive app updates. The page
+// owns writes to this cache (app.js saveCurrentOfflineArea, same constant);
+// the SW only reads it as a fallback after a CACHE_NAME miss.
+const SAVED_AREAS_CACHE = "craft-almanac-saved-areas-v1";
 
 // Cache-busting query strings for the shell scripts/styles. Keep these in sync
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "phase5-maplinks-1";
+const ASSET_VERSION = "phase5-offline-1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly
@@ -200,7 +207,7 @@ self.addEventListener("activate", (event) => {
       const names = await caches.keys();
       await Promise.all(
         names
-          .filter((name) => name.startsWith("craft-almanac-") && name !== CACHE_NAME)
+          .filter((name) => name.startsWith("craft-almanac-") && name !== CACHE_NAME && name !== SAVED_AREAS_CACHE)
           .map((name) => caches.delete(name))
       );
       await self.clients.claim();
@@ -324,7 +331,12 @@ async function appShellNavigation(request) {
 async function sameOriginCacheFirst(request) {
   const cache = await caches.open(CACHE_NAME);
 
-  const cached = await cache.match(request, { ignoreSearch: false });
+  // Honor explicit freshness requests: "save this area" fetches with
+  // cache:"no-cache" so a save snapshots TODAY'S data — serving it the runtime
+  // copy here would silently enshrine stale bytes (chunk files are not
+  // precached, so a chunks-only data deploy never rotates CACHE_NAME).
+  const wantsFresh = request.cache === "no-cache" || request.cache === "reload";
+  const cached = wantsFresh ? null : await cache.match(request, { ignoreSearch: false });
   if (cached) return cached;
 
   try {
@@ -336,6 +348,14 @@ async function sameOriginCacheFirst(request) {
     }
     return response;
   } catch {
+    // Network failed. Before giving up, check the user's saved offline areas
+    // ("save this area"). ORDER MATTERS for safety: the saved-areas cache never
+    // rotates, so it must only ever serve as an OFFLINE fallback — if it were
+    // checked before the network, a months-old save could keep shadowing fresh
+    // data (including updated access rules) for an online user.
+    const savedAreas = await caches.open(SAVED_AREAS_CACHE);
+    const savedCopy = await savedAreas.match(request, { ignoreSearch: false });
+    if (savedCopy) return savedCopy;
     // Offline and not cached: a network error is the honest answer for a
     // subresource (the app degrades gracefully when a data file is absent).
     return Response.error();
@@ -370,21 +390,18 @@ async function mapboxNetworkFirst(request) {
 }
 
 // --- Message handler ---------------------------------------------------------
-// FOLLOW-UP STUB (Phase 5.5 scope note): user-triggered "save this area"
-// viewport tile caching lands here. The plan is a message of the shape
-// { type: "CACHE_AREA", bbox: [w,s,e,n], minZoom, maxZoom, styleUrl } that
-// enumerates the tile URLs for the current viewport/zoom range and pre-warms
-// them into CACHE_NAME (with a hard cap so we never approach the full 125 MB
-// basemap). Intentionally NOT implemented in this task — see docs/pwa.md
-// ("save this area" follow-up). Left as an explicit stub so the seam is obvious.
+// "Save this area" (Phase 5.5) SHIPPED page-side, not here: app.js
+// (saveCurrentOfflineArea) enumerates the Falling Fruit chunk files covering
+// the current viewport from the manifest and writes them into
+// SAVED_AREAS_CACHE with the window Cache API — the page owns the progress UI,
+// the per-area registry (localStorage), and removal. The SW's only roles are
+// (a) excluding SAVED_AREAS_CACHE from the activate cleanup so saves survive
+// deploys, and (b) reading it as the offline fallback in sameOriginCacheFirst.
+// Basemap tiles are deliberately NOT bulk-prefetched (Mapbox GL JS terms;
+// offline map packs are a mobile-SDK feature) — mapboxNetworkFirst's
+// opportunistic caching of browsed tiles is the whole basemap story.
 self.addEventListener("message", (event) => {
   const type = event.data && event.data.type;
-  if (type === "CACHE_AREA") {
-    // TODO(phase5.5-followup): enumerate + pre-warm viewport tiles into
-    // CACHE_NAME with a size cap. See docs/pwa.md. Acknowledge for now.
-    event.ports?.[0]?.postMessage({ ok: false, reason: "not-implemented" });
-    return;
-  }
   if (type === "SKIP_WAITING") {
     self.skipWaiting();
   }

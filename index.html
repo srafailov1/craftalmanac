@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=phase5-maplinks-1">
+    <link rel="stylesheet" href="./styles.css?v=phase5-offline-1">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -88,6 +88,10 @@
         </div>
         <div id="conditions-rail" class="floating" aria-label="Current conditions"></div>
         <div id="rail-panel" class="floating"><div class="spine"></div><div class="pad" id="rail-pad"></div></div>
+        <div id="offline-panel" class="floating" aria-label="Offline areas" hidden></div>
+        <!-- Lives OUTSIDE #offline-panel: the panel rebuilds via innerHTML, which
+             would silently destroy an in-panel live region between announcements. -->
+        <div id="offlineLive" class="sr-only" aria-live="polite"></div>
         <div class="map-legend" id="mapLegend" aria-label="Map legend"></div>
       </section>
     </main>
@@ -109,7 +113,7 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=phase5-maplinks-1"></script>
+    <script src="./app.js?v=phase5-offline-1"></script>
     <script>
       // Register the offline service worker from the root scope (controls the
       // whole origin). Guarded and deferred to load so it never blocks first

@@ -57,6 +57,18 @@ const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
 const INATURALIST_RECORD_CACHE_MAX = 12000;
 const INATURALIST_AGGREGATE_CACHE_MAX = 800;
 const FALLING_FRUIT_CHUNK_CACHE_MAX = 400;
+// "Save this area" (Phase 5.5): user-triggered offline caching of the Falling
+// Fruit chunk files covering the current viewport. The cache name MUST match
+// SAVED_AREAS_CACHE in sw.js (the SW reads it as its offline fallback and
+// excludes it from the deploy-time cache rotation so saves survive updates).
+const SAVED_AREAS_CACHE_NAME = "craft-almanac-saved-areas-v1";
+const SAVED_AREAS_STORAGE_KEY = "craftalmanac.savedAreas.v1";
+// Hard cap per save — the whole dataset is ~2,900 chunks / ~82 MB and must
+// never be saved wholesale ("never the full corpus"); 400 chunks ≈ 12 MB.
+const SAVE_AREA_MAX_CHUNKS = 400;
+const SAVE_AREA_FETCH_CONCURRENCY = 6;
+// Pre-save size hint only (chunks average ~29 KB; real bytes counted while saving).
+const SAVE_AREA_APPROX_CHUNK_BYTES = 29 * 1024;
 const PUBLIC_LANDS_MIN_RENDER_ZOOM = 8;
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
@@ -2120,6 +2132,9 @@ const state = {
   favoriteSpecies: new Set(readFavoriteSpecies()),
   savedLocations: new Set(readSavedLocations()),
   savedLocationsOnly: false,
+  // "Save this area" offline registry + in-flight progress (null when idle).
+  savedAreas: readSavedAreas(),
+  savedAreaBusy: null,
   // "Available" filters: show only species / projects whose material is in
   // season on the selected day (folds the old standalone "Now" view into the
   // Materials and Projects shelves). Independent per sheet, same selected day.
@@ -3515,6 +3530,8 @@ const mapLegend = document.querySelector("#mapLegend");
 const conditionsRail = document.querySelector("#conditions-rail");
 const railPanel = document.querySelector("#rail-panel");
 const railPad = document.querySelector("#rail-pad");
+const offlinePanel = document.querySelector("#offline-panel");
+let offlineCtrlButton = null;
 const locationSearchForm = document.querySelector("#locationSearchForm");
 const locationSearchInput = document.querySelector("#locationSearchInput");
 const locationSearchSuggestions = document.querySelector("#locationSearchSuggestions");
@@ -7510,7 +7527,14 @@ async function loadFallingFruit() {
       .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
   }
 
-  await Promise.all(chunks.map(loadFallingFruitChunk));
+  // Tolerate per-chunk failures: offline with a saved area, chunks outside the
+  // save are absent by design — render the chunks that DID resolve instead of
+  // letting one miss blank the whole layer. Only when every chunk fails do we
+  // rethrow, preserving the online "Falling Fruit unavailable" reporting.
+  const results = await Promise.allSettled(chunks.map(loadFallingFruitChunk));
+  if (results.length && results.every((r) => r.status === "rejected")) {
+    throw results[0].reason;
+  }
   state.fallingFruitRecords = chunks
     .flatMap((chunk) => state.fallingFruitChunkCache.get(chunk.id) || [])
     .filter((record) => recordInBounds(record, bounds))
@@ -7519,12 +7543,21 @@ async function loadFallingFruit() {
   return state.fallingFruitRecords;
 }
 
+let fallingFruitManifestLoad = null;
 async function getFallingFruitManifest() {
   if (state.fallingFruitManifest) return state.fallingFruitManifest;
-  const response = await fetch(FALLING_FRUIT_MANIFEST_URL);
-  if (!response.ok) throw new Error(`Falling Fruit manifest returned ${response.status}`);
-  state.fallingFruitManifest = await response.json();
-  return state.fallingFruitManifest;
+  // Share one in-flight fetch: the offline panel's estimate and the map load
+  // can race here, and the manifest is ~1.9 MB — never download it twice.
+  if (!fallingFruitManifestLoad) {
+    fallingFruitManifestLoad = (async () => {
+      const response = await fetch(FALLING_FRUIT_MANIFEST_URL);
+      if (!response.ok) throw new Error(`Falling Fruit manifest returned ${response.status}`);
+      state.fallingFruitManifest = await response.json();
+      return state.fallingFruitManifest;
+    })();
+    fallingFruitManifestLoad.catch(() => { fallingFruitManifestLoad = null; });
+  }
+  return fallingFruitManifestLoad;
 }
 
 function getVisibleFallingFruitChunks(manifest, bounds) {
@@ -7570,6 +7603,375 @@ function expandFallingFruitRecord(row, fields) {
     record[field] = row[index];
     return record;
   }, {});
+}
+
+// ---------------------------------------------------------------------------
+// "Save this area" — user-triggered offline caching (Phase 5.5).
+//
+// Saves the Falling Fruit chunk files covering the current viewport (plus the
+// manifest + status raster the app needs to boot the layer cold) into the
+// version-stable SAVED_AREAS_CACHE_NAME cache, which sw.js reads as its
+// OFFLINE fallback only — online sessions always prefer network-fresh data, so
+// a months-old save can never shadow updated access rules. Saved records keep
+// the access status baked into each chunk row (accessClass / publicLand /
+// accessNote), so the rules layer works in the field without a signal. The
+// basemap is deliberately NOT bulk-prefetched (Mapbox GL JS terms); browsing
+// the area online opportunistically caches its tiles (see sw.js).
+// ---------------------------------------------------------------------------
+function readSavedAreas() {
+  try {
+    const stored = JSON.parse(window.localStorage?.getItem(SAVED_AREAS_STORAGE_KEY) || "[]");
+    return Array.isArray(stored) ? stored.filter((area) => area && typeof area.id === "string" && Array.isArray(area.chunkIds)) : [];
+  } catch {
+    return [];
+  }
+}
+
+function persistSavedAreas() {
+  try {
+    window.localStorage?.setItem(SAVED_AREAS_STORAGE_KEY, JSON.stringify(state.savedAreas));
+  } catch { /* quota / private mode — keep the in-memory list */ }
+}
+
+function savedAreaChunkPath(chunkId) {
+  return `./data/falling-fruit/us/chunks/${chunkId}.json`;
+}
+
+function formatSavedBytes(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "0 MB";
+  const mb = bytes / (1024 * 1024);
+  return mb >= 10 ? `${Math.round(mb)} MB` : `${mb.toFixed(1)} MB`;
+}
+
+// The chunks a save of the CURRENT viewport would cover — also drives the
+// panel's pre-save estimate line, so the button and the save agree exactly.
+async function getSaveableAreaChunks() {
+  const manifest = await getFallingFruitManifest();
+  return getVisibleFallingFruitChunks(manifest, map.getBounds());
+}
+
+async function saveCurrentOfflineArea() {
+  if (state.savedAreaBusy) return;
+  // Claim the busy flag SYNCHRONOUSLY — every await below is a window where a
+  // second tap could otherwise start a concurrent save.
+  const busy = { done: 0, total: 0, bytes: 0, chunkBytes: 0, failed: 0 };
+  state.savedAreaBusy = busy;
+  let notice = null;
+  try {
+    if (navigator.onLine === false) {
+      notice = "You're offline — connect to save an area.";
+      return;
+    }
+    let chunks;
+    try {
+      chunks = await getSaveableAreaChunks();
+    } catch {
+      notice = "Couldn't load the site catalog — check your connection and try again.";
+      return;
+    }
+    if (!chunks.length) {
+      notice = "No catalogued sites in this view. Pan or zoom to the area you want to save.";
+      return;
+    }
+    if (chunks.length > SAVE_AREA_MAX_CHUNKS) {
+      notice = `This view spans ${chunks.length} files — zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
+      return;
+    }
+
+    // Ask the browser not to evict field data under storage pressure. Best-effort.
+    try { navigator.storage?.persist?.(); } catch { /* unsupported */ }
+
+    const bounds = map.getBounds();
+    const supportFiles = [FALLING_FRUIT_MANIFEST_URL, STATUS_RASTER_URL];
+    busy.total = chunks.length + supportFiles.length;
+    renderOfflinePanel();
+
+    const cache = await caches.open(SAVED_AREAS_CACHE_NAME);
+    const fetchIntoCache = async (url, isChunk) => {
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          // cache:"no-cache" makes this save-time FRESH: the SW bypasses its
+          // runtime cache for it (see sameOriginCacheFirst) and the HTTP cache
+          // revalidates — a save must snapshot today's data, not whatever bytes
+          // happened to be cached since the last deploy.
+          const response = await fetch(url, { cache: "no-cache" });
+          if (!response.ok) throw new Error(`${url}: ${response.status}`);
+          const buffer = await response.arrayBuffer();
+          await cache.put(url, new Response(buffer, { headers: { "Content-Type": "application/json" } }));
+          busy.bytes += buffer.byteLength;
+          if (isChunk) busy.chunkBytes += buffer.byteLength;
+          return true;
+        } catch {
+          if (attempt === 1) return false;
+        }
+      }
+      return false;
+    };
+    const step = (ok) => {
+      busy.done += 1;
+      if (!ok) busy.failed += 1;
+      // Re-render every few files so progress reads live without thrashing.
+      if (busy.done % 5 === 0 || busy.done === busy.total) renderOfflinePanel();
+      announceOffline(`Saving ${busy.done} of ${busy.total} files`);
+    };
+
+    for (const url of supportFiles) step(await fetchIntoCache(url, false));
+    await mapWithConcurrency(chunks, SAVE_AREA_FETCH_CONCURRENCY, async (chunk) => {
+      step(await fetchIntoCache(chunk.path, true));
+    });
+
+    if (busy.failed > 0) {
+      // Nothing was registered — evict this attempt's chunks so the
+      // never-rotating cache doesn't accumulate orphans (keep any chunk an
+      // existing saved area still claims).
+      const claimed = new Set(state.savedAreas.flatMap((area) => area.chunkIds));
+      for (const chunk of chunks) {
+        if (!claimed.has(chunk.id)) await cache.delete(chunk.path);
+      }
+      if (!state.savedAreas.length) {
+        await cache.delete(FALLING_FRUIT_MANIFEST_URL);
+        await cache.delete(STATUS_RASTER_URL);
+      }
+      notice = `${busy.failed} of ${busy.total} files failed — nothing was saved. Check your connection and try again.`;
+      return;
+    }
+    const center = bounds.getCenter();
+    state.savedAreas.push({
+      id: `area-${Date.now().toString(36)}`,
+      savedAt: new Date().toISOString(),
+      bbox: [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()],
+      center: [Number(center.lng.toFixed(4)), Number(center.lat.toFixed(4))],
+      zoom: Number(map.getZoom().toFixed(2)),
+      chunkIds: chunks.map((chunk) => chunk.id),
+      records: chunks.reduce((sum, chunk) => sum + (chunk.recordCount || 0), 0),
+      // Chunk bytes only: the ~5.6 MB manifest + raster are SHARED across areas
+      // (one cache entry each), so counting them per-area would double-book.
+      bytes: busy.chunkBytes
+    });
+    persistSavedAreas();
+    notice = "Saved. These sites now work without a signal — browse the area once online so the basemap keeps its tiles too.";
+  } finally {
+    // ALWAYS clear the busy flag — an unexpected throw (caches.open denied,
+    // quota, private mode) must not wedge the panel at "Saving…" forever.
+    state.savedAreaBusy = null;
+    renderOfflinePanel(notice ? { notice } : {});
+    if (notice) announceOffline(notice);
+  }
+}
+
+async function removeSavedArea(areaId) {
+  // Never evict while a save is writing — the in-flight save may be about to
+  // claim chunks this removal would delete (its Remove buttons render disabled
+  // too; this guard covers keyboard/scripted paths).
+  if (state.savedAreaBusy) return;
+  const area = state.savedAreas.find((entry) => entry.id === areaId);
+  if (!area) return;
+  state.savedAreas = state.savedAreas.filter((entry) => entry.id !== areaId);
+  persistSavedAreas();
+  renderOfflinePanel();
+  try {
+    const cache = await caches.open(SAVED_AREAS_CACHE_NAME);
+    // Only evict chunks no other saved area still claims.
+    const stillClaimed = new Set(state.savedAreas.flatMap((entry) => entry.chunkIds));
+    for (const chunkId of area.chunkIds) {
+      if (!stillClaimed.has(chunkId)) await cache.delete(savedAreaChunkPath(chunkId));
+    }
+    if (!state.savedAreas.length) {
+      await cache.delete(FALLING_FRUIT_MANIFEST_URL);
+      await cache.delete(STATUS_RASTER_URL);
+    }
+  } catch { /* cache API unavailable — registry is already updated */ }
+}
+
+// --- Offline panel UI (toggled from the bottom-right map control) ------------
+function isOfflinePanelOpen() {
+  return !!offlinePanel && !offlinePanel.hidden;
+}
+
+function positionOfflinePanel() {
+  if (!offlinePanel) return;
+  // Sit just above the bottom-right control cluster, tracking whatever offset
+  // the season bar currently imposes on it (see initMapControlsOffset).
+  const ctrlCluster = document.querySelector(".mapboxgl-ctrl-bottom-right");
+  const gap = 10;
+  const clusterTop = ctrlCluster ? ctrlCluster.getBoundingClientRect().top : window.innerHeight - 180;
+  const bottom = Math.max(90, Math.round(window.innerHeight - clusterTop + gap));
+  offlinePanel.style.bottom = `${bottom}px`;
+  // Cap the height to the space actually left between the masthead and the
+  // cluster — on phones the raised cluster leaves little room, and an uncapped
+  // panel clips its header (and eventually the save button) off-screen.
+  const mastheadClearance = 84;
+  offlinePanel.style.maxHeight = `${Math.max(180, Math.round(clusterTop - gap - mastheadClearance))}px`;
+}
+
+function toggleOfflinePanel(forceOpen) {
+  if (!offlinePanel) return;
+  const open = typeof forceOpen === "boolean" ? forceOpen : offlinePanel.hidden;
+  offlinePanel.hidden = !open;
+  offlineCtrlButton?.setAttribute("aria-expanded", String(open));
+  if (open) {
+    positionOfflinePanel();
+    renderOfflinePanel();
+  }
+}
+
+// Screen-reader announcements survive the panel's wholesale innerHTML rebuilds
+// because the live region lives OUTSIDE the panel (index.html #offlineLive).
+function announceOffline(message) {
+  const live = document.querySelector("#offlineLive");
+  if (live) live.textContent = message;
+}
+
+async function renderOfflinePanel(options = {}) {
+  if (!offlinePanel || offlinePanel.hidden) return;
+  const busy = state.savedAreaBusy;
+  const offline = navigator.onLine === false;
+
+  // First paint synchronously — the estimate below may need the ~1.9 MB
+  // manifest, and an empty panel that stays blank for seconds reads as broken.
+  if (!offlinePanel.innerHTML) {
+    offlinePanel.innerHTML = `<div class="k">OFFLINE AREAS</div><p class="off-lede">Sizing up this view…</p>`;
+  }
+
+  // Pre-save estimate for the current view (skipped mid-save and offline).
+  let estimate = null;
+  if (!busy && !offline) {
+    try {
+      const chunks = await getSaveableAreaChunks();
+      let catalogSaved = false;
+      try {
+        const savedCache = await caches.open(SAVED_AREAS_CACHE_NAME);
+        catalogSaved = !!(await savedCache.match(FALLING_FRUIT_MANIFEST_URL));
+      } catch { /* Cache API unavailable — assume first save */ }
+      estimate = { count: chunks.length, bytes: chunks.length * SAVE_AREA_APPROX_CHUNK_BYTES, catalogSaved };
+    } catch { estimate = null; }
+  }
+
+  const rows = [];
+  rows.push(`<div class="k">OFFLINE AREAS<button class="off-close" type="button" aria-label="Close">&times;</button></div>`);
+  rows.push(`<p class="off-lede">Save the catalogued sites in the current view, so the map still knows them where there's no signal.</p>`);
+
+  if (busy) {
+    rows.push(`<div class="off-progress" role="status">Saving… ${busy.done}/${busy.total} files · ${formatSavedBytes(busy.bytes)}</div>`);
+  } else {
+    let disabled = "";
+    let hint = "";
+    if (offline) {
+      disabled = "disabled";
+      hint = "You're offline — saved areas below still work.";
+    } else if (estimate && estimate.count === 0) {
+      disabled = "disabled";
+      hint = "No catalogued sites in this view — pan or zoom first.";
+    } else if (estimate && estimate.count > SAVE_AREA_MAX_CHUNKS) {
+      disabled = "disabled";
+      hint = `This view spans ${estimate.count} files — zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
+    } else if (estimate) {
+      const catalogNote = estimate.catalogSaved ? "" : " + ~5.4 MB shared catalog on the first save";
+      hint = `≈ ${estimate.count} site files · ~${formatSavedBytes(estimate.bytes)}${catalogNote}.`;
+    }
+    rows.push(`<button class="off-save" id="offlineSaveBtn" type="button" ${disabled}>Save this view</button>`);
+    if (hint) rows.push(`<div class="off-hint">${escapeHTML(hint)}</div>`);
+  }
+
+  if (options.notice) {
+    rows.push(`<div class="off-notice" role="status">${escapeHTML(options.notice)}</div>`);
+  }
+
+  if (state.savedAreas.length) {
+    rows.push(`<div class="off-list-label">SAVED</div>`);
+    for (const area of state.savedAreas) {
+      const when = new Date(area.savedAt);
+      const dateLabel = Number.isNaN(when.getTime()) ? "" : `${FULL_MONTHS[when.getMonth()]} ${when.getDate()}`;
+      const centerLabel = Array.isArray(area.center) ? `${area.center[1].toFixed(2)}, ${area.center[0].toFixed(2)}` : "";
+      rows.push(`
+        <div class="off-area" data-area="${escapeHTML(area.id)}">
+          <button class="off-goto" type="button" data-goto-area="${escapeHTML(area.id)}" title="Fly to this area">
+            <span class="off-area-t">${escapeHTML(dateLabel)} · ${escapeHTML(centerLabel)}</span>
+            <span class="off-area-m">${area.records.toLocaleString()} sites · ${formatSavedBytes(area.bytes)}</span>
+          </button>
+          <button class="off-remove" type="button" data-remove-area="${escapeHTML(area.id)}" aria-label="Remove this saved area"${busy ? " disabled" : ""}>Remove</button>
+        </div>`);
+    }
+  }
+
+  // Honest scope notes — what offline does and does not cover. Saves store the
+  // Falling Fruit site catalog, which only the Food and Ink & Dye maps draw —
+  // say so explicitly on the maps that don't.
+  const modeNote = state.activeMap === "medicine"
+    ? `<div>The Herbalism map draws live iNaturalist observations, which always need a connection — saves cover the Food and Ink &amp; Dye site catalog.</div>`
+    : state.activeMap === "minerals"
+      ? `<div>Mineral localities are their own dataset (cached once viewed) — saves cover the Food and Ink &amp; Dye site catalog.</div>`
+      : "";
+  rows.push(`<div class="off-notes">
+    ${modeNote}
+    <div>Saved sites keep their access status. Live iNaturalist points and public-land shading need a connection.</div>
+    <div>The basemap keeps only tiles you browse while online — pan the area once before you go.</div>
+    <div>Occurrence is never permission.</div>
+  </div>`);
+
+  if (navigator.storage?.estimate) {
+    try {
+      const { usage } = await navigator.storage.estimate();
+      if (Number.isFinite(usage)) rows.push(`<div class="off-storage">Browser storage in use: ${formatSavedBytes(usage)}</div>`);
+    } catch { /* unsupported */ }
+  }
+
+  offlinePanel.innerHTML = rows.join("");
+}
+
+function initOfflineAreas() {
+  if (!offlinePanel) return;
+
+  // Bottom-right map control (next to zoom/geolocate): toggles the panel.
+  class OfflineAreaControl {
+    onAdd() {
+      this._container = document.createElement("div");
+      this._container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "offline-ctrl-btn";
+      button.setAttribute("aria-label", "Offline areas — save this view for field use");
+      button.setAttribute("aria-expanded", "false");
+      button.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M4 17h16"></path><path d="M4 21h16"></path></svg>`;
+      button.addEventListener("click", () => toggleOfflinePanel());
+      offlineCtrlButton = button;
+      this._container.appendChild(button);
+      return this._container;
+    }
+    onRemove() {
+      this._container?.remove();
+    }
+  }
+  map.addControl(new OfflineAreaControl(), "bottom-right");
+
+  offlinePanel.addEventListener("click", (event) => {
+    if (event.target.closest(".off-close")) { toggleOfflinePanel(false); return; }
+    if (event.target.closest("#offlineSaveBtn")) { saveCurrentOfflineArea(); return; }
+    const goto = event.target.closest("[data-goto-area]");
+    if (goto) {
+      const area = state.savedAreas.find((entry) => entry.id === goto.dataset.gotoArea);
+      if (area && Array.isArray(area.center)) {
+        map.flyTo({ center: area.center, zoom: area.zoom || 10 });
+        toggleOfflinePanel(false);
+      }
+      return;
+    }
+    const remove = event.target.closest("[data-remove-area]");
+    if (remove) removeSavedArea(remove.dataset.removeArea);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !isOfflinePanelOpen()) return;
+    // Only close when this panel is the topmost layer — a sheet (z-index 30)
+    // or an open masthead drop-down owns Escape while it covers the panel.
+    if (document.querySelector("#sheet-wrap.open")) return;
+    if (typeof currentMastPanel === "function" && currentMastPanel()) return;
+    toggleOfflinePanel(false);
+  });
+  // Keep the pre-save estimate honest as the user pans with the panel open.
+  map.on("moveend", () => { if (isOfflinePanelOpen() && !state.savedAreaBusy) renderOfflinePanel(); });
+  window.addEventListener("resize", () => { if (isOfflinePanelOpen()) positionOfflinePanel(); });
+  window.addEventListener("online", () => { if (isOfflinePanelOpen()) renderOfflinePanel(); });
+  window.addEventListener("offline", () => { if (isOfflinePanelOpen()) renderOfflinePanel(); });
 }
 
 function bboxIntersectsBounds(bbox, bounds) {
@@ -9291,6 +9693,7 @@ function setDataStatus(message) {
 
 initControls();
 initOfflineIndicator();
+initOfflineAreas();
 render();
 // Rule tables load immediately (not gated on the map): they gate record-level
 // access resolution, and resolvers fall back conservatively until they land.
