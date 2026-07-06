@@ -168,6 +168,7 @@ async function buildRuleContext() {
     "getRecordStateCode",
     "getPublicLandAccessRule",
     "getNpsCompendiumRule",
+    "stateEdibleOnlyNonFoodRule",
     "getStateSystemRule",
     "getLocalParkRule",
     "getUsfsForestRule",
@@ -233,8 +234,22 @@ function getStatusForUnitsAt(context, mode, species, point, units) {
   return landRule?.status || "unknown";
 }
 
+// The units containing the CENTER sample point. Boundary cells carry the full
+// 5-point `samples` (CELL_SAMPLE_OFFSETS order); samples[0] is the [0,0] center
+// offset. Uniform cells have no `samples`, so cell.units is already equal across
+// every sample point.
+function getCenterUnits(cell) {
+  return Array.isArray(cell.samples) && cell.samples.length === CELL_SAMPLE_OFFSETS.length
+    ? (cell.samples[0] || [])
+    : (cell.units || []);
+}
+
 function getCellStatus(context, mode, species, cell) {
-  return getStatusForUnitsAt(context, mode, species, cell.center, cell.units);
+  // Record-level (single) status keeps center-point semantics: resolve from only
+  // the units containing the CENTER sample point so a big permissive unit that
+  // merely clips the cell can't overstate permission at the center (KNOWN_ISSUES
+  // 1b step 2a).
+  return getStatusForUnitsAt(context, mode, species, cell.center, getCenterUnits(cell));
 }
 
 // Thin-park apportioning (KNOWN_ISSUES 1b): for a boundary cell (one carrying a
@@ -260,8 +275,8 @@ function getCellStatusFractions(context, mode, species, cell) {
   return fractions;
 }
 
-function getPublicLandTextFromCell(cell) {
-  return (cell.units || [])
+function publicLandTextFromUnits(units) {
+  return (units || [])
     .map((properties) => [
       properties.Unit_Nm,
       properties.MngNm_Desc,
@@ -271,11 +286,14 @@ function getPublicLandTextFromCell(cell) {
     .join(" | ");
 }
 
+// True when the cell's CENTER point sits inside an NYC local park. Uses the
+// center-point containment (getCenterUnits) rather than the cell-intersection
+// union so validation matches the record-level (single) status semantics.
 function isManhattanNycParkCell(context, cell) {
   const record = makeCellRecord(cell);
   const [lng, lat] = cell.center;
   if (lat < 40.68 || lat > 40.88 || lng < -74.03 || lng > -73.9) return false;
-  return (cell.units || []).some((properties) => (
+  return getCenterUnits(cell).some((properties) => (
     context.isNycLocalPark(context.getPublicLandText(properties), "NY", record)
   ));
 }
@@ -337,7 +355,12 @@ async function readCellCacheFiles() {
 }
 
 function validateRaster(context, cells, raster, statusIds) {
-  const smokyCells = cells.filter((cell) => getPublicLandTextFromCell(cell).includes("great smoky"));
+  // Select by the CENTER sample's containment (not the cell-intersection union):
+  // boundary cells whose union merely clips Great Smoky but whose center is empty
+  // or in an adjacent unit (Nantahala NF, Blue Ridge Parkway, Foothills WMA) are
+  // no longer expected to bake food/allowed. Cells whose center is actually
+  // inside Great Smoky must still resolve food/allowed.
+  const smokyCells = cells.filter((cell) => publicLandTextFromUnits(getCenterUnits(cell)).includes("great smoky"));
   if (!smokyCells.length) throw new Error("Raster validation failed: found no Great Smoky cells");
   const smokyBad = smokyCells.filter((cell) => raster[cell.key]?.food !== "allowed");
   if (smokyBad.length) throw new Error(`Raster validation failed: ${smokyBad.length} Great Smoky cells were not food/allowed`);
