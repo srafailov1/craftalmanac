@@ -257,15 +257,18 @@ const ACCESS_STATUS_OPTIONS = [
 // Access-status ring colors for the map markers. These mirror the prototype's
 // status hues and the day-register --reg-st-* tokens so the marker ring matches
 // the legend access ring (the legend brightens per register; markers stay
-// constant, exactly as the prototype does). Solid rings; the status is read by
-// hue. "permit" uses the legibility-tuned amber (#a8730a), per owner decision.
+// constant, exactly as the prototype does). Hue is NOT the only channel:
+// restrictive statuses (prohibited, private) get a dotted ring so colorblind
+// users can tell them from the solid allowed/permit rings (the PRODUCT.md
+// pattern-channel promise). "permit" uses the legibility-tuned amber
+// (#a8730a), per owner decision.
 const ACCESS_MARKER_STYLES = {
   allowed: { label: "Allowed", color: "#2f8f46", dashed: false },
   "permit-required": { label: "Permit required", color: "#a8730a", dashed: false },
-  private: { label: "Private", color: "#7e6654", dashed: false },
-  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", dashed: false },
+  private: { label: "Private", color: "#7e6654", dashed: true },
+  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", dashed: true },
   unknown: { label: "Unknown", color: "#8b8f86", dashed: false },
-  prohibited: { label: "Prohibited", color: "#c74437", dashed: false }
+  prohibited: { label: "Prohibited", color: "#c74437", dashed: true }
 };
 const LEGEND_PERMISSION_OPTIONS = [
   { id: "allowed", label: "Allowed" },
@@ -2159,7 +2162,7 @@ const state = {
 const ACTIVE_MAP_STORAGE_KEY = "craftAlmanacActiveMap";
 
 function parseUrlBootState() {
-  const boot = { center: null, zoom: null, speciesId: null };
+  const boot = { center: null, zoom: null, speciesId: null, hadDayFilter: false };
   let params = null;
   try {
     params = new URLSearchParams(window.location.hash.slice(1));
@@ -2172,6 +2175,11 @@ function parseUrlBootState() {
   })();
   if (mode && MAP_MODE_CONFIG[mode]) state.activeMap = mode;
   else if (storedMode && MAP_MODE_CONFIG[storedMode]) state.activeMap = storedMode;
+  // Booting into minerals defaults to "All materials" — the same open state
+  // setMapMode forces on UI entry — unless the hash carries an explicit filter.
+  if (MAP_MODE_CONFIG[state.activeMap]?.loadMinerals && !params.has("w") && params.get("season") !== "all") {
+    state.allSeasons = true;
+  }
   const c = (params.get("c") || "").split(",").map(Number);
   const z = Number(params.get("z"));
   if (c.length === 2 && c.every(Number.isFinite) && Number.isFinite(z)) {
@@ -2183,11 +2191,13 @@ function parseUrlBootState() {
   if (Number.isFinite(day) && day >= 1 && day <= 366) {
     state.selectedDay = Math.round(day);
     state.allSeasons = false;
+    boot.hadDayFilter = true;
   }
   const w = Number(params.get("w"));
   if (Number.isFinite(w) && w >= 0 && w <= 100 && state.activeMap === "minerals") {
     state.mineralWorkability = Math.round(w);
     state.allSeasons = false;
+    boot.hadDayFilter = true;
   }
   boot.speciesId = params.get("sp") || null;
   return boot;
@@ -2818,15 +2828,11 @@ function updateSunDial() {
   if (railPanel) railPanel.classList.toggle("simulating", state.simMins != null);
 }
 
-// Re-derive the register from the simulated time without rebuilding the panel.
-function applyRegisterLight() {
-  const reg = computeRegister(simNow(), state.location.lat, state.location.lng);
-  if (reg === state.register) return;
-  state.register = reg;
-  document.body.dataset.register = reg;
-  if (state.mapReady) { syncLightPreset(reg); updateMarkerHalo(); }
-}
-
+// The dial's time preview re-derives the register via applyRegister(): it
+// respects a pinned MAP LIGHT override (a pin must not flip during a preview)
+// and repaints the register-baked surfaces (legend, histogram, cluster and
+// aggregate tints) only on actual register transitions — its early return
+// keeps the per-pointermove cost nil.
 function bindSunDial() {
   const dial = document.getElementById("sun-dial");
   if (!dial) return;
@@ -2838,7 +2844,7 @@ function bindSunDial() {
     const phi = Math.atan2(-dx, -dy);
     const mins = Math.round((phi / (2 * Math.PI)) * 1440 + 720);
     state.simMins = ((mins % 1440) + 1440) % 1440;
-    applyRegisterLight();
+    applyRegister();
     updateSunDial();
   };
   const readout = () => document.getElementById("sun-readout");
@@ -2867,7 +2873,7 @@ function bindSunDial() {
     else return;
     event.preventDefault();
     state.simMins = ((Math.round(next) % 1440) + 1440) % 1440;
-    applyRegisterLight();
+    applyRegister();
     updateSunDial();
   });
 }
@@ -3524,8 +3530,6 @@ const dateInput = document.querySelector("#dateInput");
 const seasonDateLabel = document.querySelector("#seasonDateLabel");
 const seasonName = document.querySelector("#seasonName");
 const seasonHistogram = document.querySelector("#seasonHistogram");
-const categoryList = document.querySelector("#categoryList");
-const accessStatusList = document.querySelector("#accessStatusList");
 const mapLegend = document.querySelector("#mapLegend");
 const conditionsRail = document.querySelector("#conditions-rail");
 const railPanel = document.querySelector("#rail-panel");
@@ -3538,7 +3542,6 @@ const locationSearchSuggestions = document.querySelector("#locationSearchSuggest
 const locationSearchStatus = document.querySelector("#locationSearchStatus");
 const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
-let categoryInputs = [];
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
 const seasonReset = document.querySelector("#seasonReset");
 const whenToggle = document.querySelector("#whenToggle");
@@ -3771,27 +3774,10 @@ function renderModeChrome() {
   renderMapLegend();
 }
 
-function renderFilterControls() {
-  const config = getActiveMapConfig();
-  // #categoryList was removed in Phase 3e (replaced by the legend category
-  // chips). Keep this guard for older markup, but species selection now lives
-  // in state and is driven by floating legend chips plus Plants-sheet cards.
-  if (categoryList) {
-    categoryList.innerHTML = config.categories.map((category) => `
-      <label class="category-option ${category.id}">
-        <input type="checkbox" name="category" value="${category.id}" checked> ${category.label}
-      </label>
-    `).join("");
-  }
-
-  categoryInputs = [...document.querySelectorAll("input[name='category']")];
-  categoryInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      setSpeciesByCategory(input.value, input.checked);
-      render();
-    });
-  });
-}
+// Phase 3e removed the sidebar's #categoryList checkbox panel; category and
+// species selection live in state, driven by the floating legend chips and
+// the Materials-sheet cards (the dead #categoryList/#accessStatusList
+// remnants were fully deleted 2026-07).
 
 function initAccessControls() {
   // Phase 3e: the access filter now lives in state and is driven by the
@@ -3994,6 +3980,7 @@ function renderMapLegend() {
           <div class="legend-chips">${categoryChips}</div>
         </div>
       </div>
+      <div class="legend-note">Cluster bubbles take the tint of their most common category — never an access status.</div>
     </div>
     <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
     <div class="legend-active">ACTIVE MAP: ${escapeHTML(modeName)}</div>
@@ -4142,12 +4129,27 @@ function sheetPlantsHTML() {
   const availCount = isMineral ? 0 : speciesCatalogByName.filter(isSpeciesInSeasonOnSelectedDay).length;
   const list = availOnly ? speciesCatalogByName.filter(isSpeciesInSeasonOnSelectedDay) : speciesCatalogByName;
 
+  // The keyboard/SR route to point cards (PRODUCT.md promise): the map's
+  // canvas markers are mouse-only, so each shelf card offers its species'
+  // nearest in-view record. Enabled only when a record is actually in the
+  // viewport (records load at point-band zoom, >= 8).
+  const openableSpecies = new Set();
+  if (state.mapReady) {
+    const shelfBounds = map.getBounds();
+    for (const record of state.records) {
+      if (recordInBounds(record, shelfBounds)) openableSpecies.add(record.speciesId);
+    }
+  }
+
   const cards = list.map((species) => {
     const color = CATEGORY_COLORS[species.category] || "#777";
     const meta = isMineral
       ? `${species.scientificName} · ${getCategoryLabel(species.category)}`
       : `${species.scientificName} · ${getMonthRangeText(species.months)}`;
     const uses = species.usedParts || getCategoryLabel(species.category);
+    const openButton = openableSpecies.has(species.id)
+      ? `<button type="button" class="mini-card-open" data-open-record="${escapeHTML(species.id)}">Open nearest in view</button>`
+      : `<button type="button" class="mini-card-open" disabled title="No record in the current view — zoom the map to an area with this species first">Open nearest in view</button>`;
     return `
       <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(color)}"></div>
@@ -4155,6 +4157,7 @@ function sheetPlantsHTML() {
         <div class="m">${escapeHTML(meta)}</div>
         <div class="uses">${escapeHTML(uses)}</div>
         <a class="mini-card-link" href="/materials/${escapeHTML(species.id)}.html" target="_blank" rel="noopener">Full profile ↗</a>
+        ${openButton}
       </div>`;
   }).join("");
 
@@ -4526,7 +4529,10 @@ function openSheet(name) {
   if (!sheetWrap || !sheetEl || !builder) return;
   // Remember who opened it and neutralize the background so the modal traps
   // focus and pointer interaction (#sheet-wrap is a sibling of .app-shell).
-  sheetOpener = document.activeElement;
+  // Only capture on a fresh open: a sheet-to-sheet switch (masthead hit-test
+  // below, or the internal openSheet re-invocations) would otherwise capture
+  // an about-to-be-destroyed in-sheet element and break close's focus restore.
+  if (!state.openSheet) sheetOpener = document.activeElement;
   state.openSheet = name;
   // Projects prose is lazy-loaded (data/project-recipes.json); kick the fetch
   // when the sheet opens — loadProjectRecipes re-renders here once it lands.
@@ -4564,6 +4570,31 @@ function selectOnlySpecies(speciesId) {
   render();
 }
 
+// Keyboard/SR route to a point card (the map's canvas markers are mouse-only;
+// PRODUCT.md promises popups as a keyboard-reachable primary flow). Isolates
+// the species — the same action as tapping its shelf card, so the record's
+// marker is actually rendered — then opens the in-view record nearest the map
+// center. bindPopupActions moves focus into the opened card.
+function openNearestRecordInView(speciesId) {
+  if (!state.mapReady) return;
+  const bounds = map.getBounds();
+  const center = map.getCenter();
+  let best = null;
+  let bestDist = Infinity;
+  for (const record of state.records) {
+    if (record.speciesId !== speciesId || !recordInBounds(record, bounds)) continue;
+    const dLat = Number(record.lat) - center.lat;
+    const dLng = Number(record.lng) - center.lng;
+    const dist = dLat * dLat + dLng * dLng;
+    if (dist < bestDist) { bestDist = dist; best = record; }
+  }
+  if (!best) return;
+  selectOnlySpecies(speciesId);
+  closeSheet();
+  const feature = buildRecordFeature(best);
+  if (feature) openRecordCard(feature);
+}
+
 function initSheets() {
   const sheetWrap = document.querySelector("#sheet-wrap");
   const sheetEl = document.querySelector("#sheet");
@@ -4590,6 +4621,10 @@ function initSheets() {
     }
     const modeCard = event.target.closest("[data-mode]");
     if (modeCard) { const mode = modeCard.dataset.mode; closeSheet(); setMapMode(mode); return; }
+    // Checked BEFORE the species-card branch: the button nests inside a
+    // [data-species] card, which would otherwise swallow the click.
+    const openRecord = event.target.closest("[data-open-record]");
+    if (openRecord) { openNearestRecordInView(openRecord.dataset.openRecord); return; }
     const speciesCard = event.target.closest("[data-species]");
     if (speciesCard) { selectOnlySpecies(speciesCard.dataset.species); closeSheet(); return; }
     if (event.target.closest("[data-recipe-back]")) { showProjectsGrid(); return; }
@@ -4617,16 +4652,36 @@ function initSheets() {
       return;
     }
     if (event.key !== "Enter" && event.key !== " ") return;
-    // A focused in-card link handles its own Enter/Space (native navigation);
-    // don't also fire the card's isolate/open action behind it.
+    // A focused in-card link handles its own Enter/Space (native navigation),
+    // and the open-record button its own native activation; don't also fire
+    // the card's isolate/open action behind them.
     if (event.target.closest("a[href]")) return;
+    if (event.target.closest("[data-open-record]")) return;
     const card = event.target.closest("[data-mode], [data-species], [data-recipe]");
     if (!card) return;
     event.preventDefault();
     card.click();
   });
   sheetWrap.addEventListener("click", (event) => {
-    if (event.target === sheetWrap) closeSheet();
+    if (event.target !== sheetWrap) return;
+    // The open sheet's backdrop covers the masthead (the .app-shell is inert),
+    // so a click meant for a nav button lands here and used to close the
+    // sheet — making every cross-sheet move cost two clicks. Hit-test the nav
+    // buttons' rects and switch directly instead. (elementsFromPoint is
+    // unreliable on inert subtrees; rects are not. The width>0 guard skips
+    // the collapsed mobile nav, and clicking the CURRENT sheet's own button
+    // still falls through to close — the toggle feel is preserved.)
+    const hit = Array.from(document.querySelectorAll("#masthead .links button[data-sheet]")).find((button) => {
+      const r = button.getBoundingClientRect();
+      return r.width > 0
+        && event.clientX >= r.left && event.clientX <= r.right
+        && event.clientY >= r.top && event.clientY <= r.bottom;
+    });
+    if (hit && hit.dataset.sheet !== state.openSheet) {
+      openSheet(hit.dataset.sheet);
+      return;
+    }
+    closeSheet();
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && sheetWrap.classList.contains("open")) closeSheet();
@@ -4673,7 +4728,6 @@ function setMapMode(mode) {
   state.hoverPopup?.remove();
   syncActiveCatalog();
   renderModeChrome();
-  renderFilterControls();
   updateLayerHandoff();
   render();
   // Returning users come back to the map they last used; the URL always names
@@ -4887,10 +4941,10 @@ function setLocationSearchStatus(message) {
 }
 
 // NOTE: an "In view" record-list (keyboard route to point cards) shipped
-// briefly and was removed as bar clutter (owner decision, 2026-07). The
-// building blocks it validated — buildRecordFeature(record) ->
-// openRecordCard(feature) — remain the supported programmatic path to a point
-// card; a future keyboard route belongs in the Materials sheet, not the bar.
+// briefly and was removed as bar clutter (owner decision, 2026-07). Its
+// replacement lives in the Materials sheet as designated: each shelf card's
+// "Open nearest in view" button (openNearestRecordInView) routes through the
+// same buildRecordFeature(record) -> openRecordCard(feature) path.
 
 function initControls() {
   syncActiveCatalog();
@@ -4900,13 +4954,21 @@ function initControls() {
   // resolvable; silently ignored if it isn't in the active catalog.
   if (urlBootState.speciesId && speciesCatalogById.has(urlBootState.speciesId)) {
     selectOnlySpecies(urlBootState.speciesId);
+    // selectOnlySpecies lifts the season filter (right for shelf taps and the
+    // static pages' bare sp links), but a shared hash that ALSO carries an
+    // explicit day/workability filter must keep it — restore what was parsed.
+    if (urlBootState.hadDayFilter) state.allSeasons = false;
   }
-  daySlider.max = String(getDaysInYear(ACTIVE_YEAR));
-  daySlider.value = String(state.selectedDay);
+  // Minerals boots with the 0–100 workability range renderModeChrome() just
+  // set; overwriting max with 365 here would misscale the band filter and
+  // hide most minerals (the first render() syncs the value).
+  if (!getActiveMapConfig().loadMinerals) {
+    daySlider.max = String(getDaysInYear(ACTIVE_YEAR));
+    daySlider.value = String(state.selectedDay);
+  }
   dateInput.value = getDateInputValue(getSelectedDate());
   dateInput.min = `${ACTIVE_YEAR}-01-01`;
   dateInput.max = `${ACTIVE_YEAR}-12-31`;
-  renderFilterControls();
   initAccessControls();
   initMapLegend();
   initSheets();
@@ -5093,7 +5155,6 @@ function render() {
   if (openConditionSeg === "sun") updateSunDial();
   renderSpeciesState();
   renderMapLegend();
-  renderAccessFilterNote();
   renderHistogram();
   renderMarkers();
   updateFallingFruitAggregates();
@@ -5119,12 +5180,6 @@ function scheduleRender() {
     renderQueuedFrame = false;
     render();
   });
-}
-
-function renderAccessFilterNote() {
-  const note = document.querySelector("#accessFilterNote");
-  if (!note) return;
-  note.hidden = !isAccessFilterActive();
 }
 
 function renderSeasonControls() {
@@ -5471,7 +5526,10 @@ function renderHistogram() {
       .map((category) => `${getCategoryLabel(category)}: ${entry.counts[category]}`)
       .join(", ");
     // Month letters live in the static .season-months row below the bars now.
-    return `<div class="histogram-bar${activeClass}" style="height: ${height}px" title="${MONTHS[index]}: ${title || "none in season"}">${segments}</div>`;
+    // title (sighted hover) AND aria-label + role=img (keyboard/SR) both carry
+    // the per-month data — the bars are plain divs otherwise silent to AT.
+    const barText = `${MONTHS[index]}: ${title || "none in season"}`;
+    return `<div class="histogram-bar${activeClass}" style="height: ${height}px" role="img" aria-label="${escapeHTML(barText)}" title="${barText}">${segments}</div>`;
   }).join("");
 
   // Header reflects the active map; the category swatch legend sits below.
@@ -5520,7 +5578,8 @@ function renderMineralHistogram() {
     // misread as real-world abundance.
     let shortLabel = label.replace(/\s*\([^)]*\)\s*/g, "").trim().split(" / ")[0];
     if (shortLabel.length > 14) shortLabel = shortLabel.split(" ")[0];
-    return `<div class="histogram-bar${inBand ? " active" : ""}" title="${escapeHTML(label)}: ${n} localit${n === 1 ? "y" : "ies"}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="mbar-label">${escapeHTML(shortLabel)}</span></div>`;
+    const mbarText = `${label}: ${n} localit${n === 1 ? "y" : "ies"}`;
+    return `<div class="histogram-bar${inBand ? " active" : ""}" role="img" aria-label="${escapeHTML(mbarText)}" title="${escapeHTML(mbarText)}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="mbar-label">${escapeHTML(shortLabel)}</span></div>`;
   }).join("");
   if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;
   renderSeasonCats();
@@ -6732,8 +6791,8 @@ function bindMapInteractions() {
 
 }
 
-// Open the point card for a marker feature (from a map click OR the "In view"
-// record list — the keyboard route to the same dialog).
+// Open the point card for a marker feature (from a map click OR the shelf's
+// "Open nearest in view" button — the keyboard route to the same dialog).
 function openRecordCard(feature) {
   if (!feature?.geometry?.coordinates) return;
   state.hoverPopup?.remove();
@@ -6973,9 +7032,11 @@ function getMarkerPopupHTML(properties) {
         ${flushLine}
         ${ethicNote}
         ${warning}
-        <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK WHO MANAGES THIS LAND</div>
         ${mineralHazard}
         ${medNote}
+      </div>
+      <div class="pt-foot">
+        <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK WHO MANAGES THIS LAND</div>
         <button
           class="save-location-button ${saved ? "is-saved" : ""}"
           type="button"
@@ -7135,9 +7196,9 @@ async function loadMapData() {
     // hold a fraction of its points: the "clusters fall off, then recover
     // with a lag" bug. Keep the last point-band records intact instead.
     if (state.records.length) {
-      setDataStatus(`${state.records.length} records held for the point view; overview shows aggregate counts`);
+      setDataStatus(`${state.records.length} records held for the point view; overview shows aggregate counts`, { transient: true });
     } else {
-      setDataStatus("Overview shows aggregate counts; zoom in to load records");
+      setDataStatus("Overview shows aggregate counts; zoom in to load records", { transient: true });
     }
     return;
   }
@@ -7209,9 +7270,12 @@ async function loadMapData() {
     config.loadNpsOrchards && npsOrchardResult.status === "rejected" ? "NPS orchards" : "",
     config.loadMinerals && mineralResult.status === "rejected" ? "USGS MRDS" : ""
   ].filter(Boolean);
-  setDataStatus(failedSources.length
-    ? `${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`
-    : `${state.records.length} current records loaded from ${config.sourceNames.join(", ")}`);
+  if (failedSources.length) {
+    // Source outages stay visible — the map is silently partial otherwise.
+    setDataStatus(`${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`);
+  } else {
+    setDataStatus(`${state.records.length} current records loaded from ${config.sourceNames.join(", ")}`, { transient: true });
+  }
 }
 
 async function loadINaturalist() {
@@ -7701,7 +7765,14 @@ async function saveCurrentOfflineArea() {
           busy.bytes += buffer.byteLength;
           if (isChunk) busy.chunkBytes += buffer.byteLength;
           return true;
-        } catch {
+        } catch (err) {
+          // Storage-full is not a connectivity problem — flag it so the
+          // failure notice tells the user to free space, and skip the retry
+          // (repeating a quota-rejected put is futile).
+          if (err && err.name === "QuotaExceededError") {
+            busy.quota = true;
+            return false;
+          }
           if (attempt === 1) return false;
         }
       }
@@ -7732,7 +7803,9 @@ async function saveCurrentOfflineArea() {
         await cache.delete(FALLING_FRUIT_MANIFEST_URL);
         await cache.delete(STATUS_RASTER_URL);
       }
-      notice = `${busy.failed} of ${busy.total} files failed — nothing was saved. Check your connection and try again.`;
+      notice = busy.quota
+        ? "Browser storage is full — remove a saved area or free space, then try again."
+        : `${busy.failed} of ${busy.total} files failed — nothing was saved. Check your connection and try again.`;
       return;
     }
     const center = bounds.getCenter();
@@ -7750,6 +7823,11 @@ async function saveCurrentOfflineArea() {
     });
     persistSavedAreas();
     notice = "Saved. These sites now work without a signal — browse the area once online so the basemap keeps its tiles too.";
+  } catch {
+    // Unexpected failure (Cache API denied, private mode): say SOMETHING —
+    // the panel resetting silently would read as a broken button — and don't
+    // leak an unhandled rejection to the click handler.
+    notice = "Saving failed — this browser may be blocking offline storage (private mode?).";
   } finally {
     // ALWAYS clear the busy flag — an unexpected throw (caches.open denied,
     // quota, private mode) must not wedge the panel at "Saving…" forever.
@@ -9686,9 +9764,20 @@ function pointInRing(point, ring) {
   return inside;
 }
 
-function setDataStatus(message) {
+// Writes the season bar's status line (#dataStatus). Sticky by default —
+// loading progress, source outages, and token errors stay visible until
+// replaced. Pass transient:true for success/informational messages so they
+// clear after a beat instead of living on the map forever.
+let dataStatusTimer = null;
+function setDataStatus(message, { transient = false } = {}) {
   if (!dataStatus) return;
+  window.clearTimeout(dataStatusTimer);
   dataStatus.textContent = message;
+  if (transient && message) {
+    dataStatusTimer = window.setTimeout(() => {
+      dataStatus.textContent = "";
+    }, 6000);
+  }
 }
 
 initControls();

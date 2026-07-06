@@ -459,160 +459,6 @@ h2 {
   color: #fff;
 }
 
-.filter-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 14px;
-}
-
-.type-list {
-  margin-top: 12px;
-  gap: 8px;
-}
-
-.access-list {
-  grid-template-columns: 1fr;
-  margin-top: 12px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-}
-
-.permission-list {
-  gap: 8px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.permission-option {
-  min-height: 34px;
-  padding: 7px 9px;
-  border: 1px solid currentColor;
-  border-radius: 6px;
-  background: #fff;
-  color: var(--access-unknown);
-  font-weight: 850;
-}
-
-.permission-option.allowed { color: var(--access-allowed); }
-.permission-option.permit-required { color: var(--access-permit); }
-.permission-option.private,
-.permission-option.private-unsourced { color: var(--access-private); }
-.permission-option.prohibited { color: var(--access-prohibited); }
-.permission-option.unknown { color: var(--access-unknown); }
-
-.permission-option:has(input:not(:checked)) {
-  border-color: var(--line);
-  color: var(--muted);
-  opacity: 0.62;
-}
-
-.filter-list label,
-.species-list label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.type-list label {
-  min-height: 42px;
-  padding: 8px 10px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 850;
-}
-
-.type-list .category-option.fruit {
-  background: var(--leaf);
-}
-
-.type-list .category-option.berry {
-  background: var(--berry);
-}
-
-.type-list .category-option.nut {
-  background: var(--nut);
-}
-
-.type-list .category-option.mushroom {
-  background: var(--mushroom);
-}
-
-.type-list .category-option.black {
-  background: #252321;
-}
-
-.type-list .category-option.brown {
-  background: #8a5a2b;
-}
-
-.type-list .category-option.yellow {
-  background: #d8a829;
-}
-
-.type-list .category-option.red {
-  background: #bf4150;
-}
-
-.type-list .category-option.purple {
-  background: #624c9f;
-}
-
-.type-list .category-option.blue {
-  background: #316d8f;
-}
-
-.type-list .category-option.topical {
-  background: #3f8d76;
-}
-
-.type-list .category-option.immune {
-  background: #6978b8;
-}
-
-.type-list .category-option.digestive {
-  background: #b7792f;
-}
-
-.type-list .category-option.lymphatic {
-  background: #9a5f9f;
-}
-
-.filter-list.type-list .category-option input {
-  accent-color: #fff;
-}
-
-.filter-list input,
-.species-list input {
-  accent-color: var(--leaf);
-}
-
-.fine-print {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.attribution-block p {
-  margin: 10px 0 6px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.42;
-}
-
-.attribution-block a {
-  color: var(--leaf-dark);
-  font-size: 12px;
-  font-weight: 850;
-}
-
 .count {
   min-width: 30px;
   padding: 3px 8px;
@@ -696,7 +542,7 @@ h2 {
 }
 
 .legend-title {
-  font-size: 10.5px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   color: var(--reg-ink);
   font-family: var(--font-mono);
@@ -721,6 +567,18 @@ h2 {
   color: var(--reg-sub);
   font-family: var(--font-mono);
   margin-bottom: 6px;
+}
+
+/* Teaches the cluster-bubble tint (dominant category) so its rose/green hues
+   are never misread as access statuses. */
+.legend-note {
+  margin-top: 8px;
+  max-width: 250px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  color: var(--reg-sub);
+  font-family: var(--font-mono);
 }
 
 .legend-chips {
@@ -765,7 +623,8 @@ h2 {
   padding: 7px 12px;
   max-width: min(300px, calc(100vw - 28px));
   color: var(--reg-warn);
-  font-size: 10.5px;
+  /* Safety text gets the larger bump (was 10.5px — illegible in sunlight). */
+  font-size: 11.5px;
   letter-spacing: 0.07em;
   line-height: 1.4;
   font-family: var(--font-mono);
@@ -789,82 +648,6 @@ h2 {
 .leg-chip.off .swatch {
   background: transparent;
   box-shadow: inset 0 0 0 1.5px var(--reg-sub);
-}
-
-.legend-section {
-  display: grid;
-  gap: 5px;
-}
-
-.legend-section strong {
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.legend-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px 8px;
-}
-
-.legend-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  color: var(--muted);
-  line-height: 1.2;
-}
-
-.legend-dot,
-.legend-swatch {
-  flex: 0 0 auto;
-  width: 12px;
-  height: 12px;
-}
-
-.legend-dot {
-  border-radius: 999px;
-  background: transparent;
-}
-
-.legend-swatch {
-  border-radius: 999px;
-}
-
-.legend-dot.outline-allowed {
-  background: #fff;
-  border: 1.5px solid #111;
-}
-
-.access-filter-note {
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: #f4f1e6;
-  color: #46513f;
-}
-
-.legend-dot.outline-permit-required {
-  background: #fff;
-  border: 1.5px dotted #111;
-}
-
-.legend-dot.outline-private {
-  background: #74786c;
-  border: 1.5px solid #fff;
-}
-
-.legend-dot.outline-private-unsourced,
-.legend-dot.outline-unknown {
-  background: #74786c;
-  border: 1.5px dotted #fff;
-}
-
-.legend-dot.outline-prohibited {
-  background: #fff;
-  border: 1.5px solid #d51f1f;
 }
 
 .mapboxgl-ctrl-bottom-right {
@@ -1219,10 +1002,6 @@ body.modal-open .app-shell {
     font-size: 11px;
   }
 
-  .legend-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .control-group {
     min-height: 0;
     padding: 9px 0;
@@ -1247,8 +1026,7 @@ body.modal-open .app-shell {
   }
 
   .season-histogram,
-  .day-slider,
-  .filter-list {
+  .day-slider {
     max-width: 100%;
     min-width: 0;
   }
@@ -1404,6 +1182,13 @@ body[data-register="night"] {
 
 .pt-card {
   position: relative;
+  /* Scrollable body + pinned footer: the card is a column whose .pad scrolls
+     internally while .pt-foot (the occurrence-is-not-permission caution +
+     Save) stays visible. 60vh from the auto-pan's top anchor (~16% down)
+     clears the season bar; 80vh did not. */
+  display: flex;
+  flex-direction: column;
+  max-height: min(60vh, 520px);
   width: min(336px, 88vw);
   background: var(--reg-panel-a);
   border: 1px solid var(--reg-hair);
@@ -1428,15 +1213,30 @@ body[data-register="night"] {
 
 .pt-card .pad {
   padding: 17px 18px 13px 24px;
-  /* Never let a long card (esp. minerals) run off-screen: cap it and scroll the
-     content internally, so the auto-pan can always show the whole card. */
-  max-height: 80vh;
+  /* Never let a long card (esp. minerals) run off-screen: the flex column on
+     .pt-card caps the card and this body scrolls internally, so the caution
+     footer can always stay visible. */
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   /* The card carries exactly what a teaching/research user wants to copy —
      scientific names, rules, safety notes, sources — so re-enable selection
      (the .floating/.pt-card shells set user-select:none for drag ergonomics). */
   user-select: text;
   -webkit-user-select: text;
+}
+
+/* Pinned card footer: the safety caution + Save action never scroll away. */
+.pt-card .pt-foot {
+  flex: none;
+  padding: 8px 18px 12px 24px;
+  border-top: 1px solid var(--reg-hair);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.pt-card .pt-foot .oinp {
+  margin-top: 0;
 }
 
 .pt-card h2 {
@@ -1522,7 +1322,7 @@ body[data-register="night"] {
 
 .pt-card .oinp {
   margin-top: 9px;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--reg-warn);
   font-family: var(--font-mono);
@@ -1643,6 +1443,10 @@ body[data-register="night"] {
   padding: 13px 14px 11px 19px;
 }
 
+.pt-card.compact .pt-foot {
+  padding: 7px 14px 10px 19px;
+}
+
 .pt-card.compact h2 {
   font-size: 18px;
 }
@@ -1730,6 +1534,40 @@ body[data-register="night"] {
   outline: 2px solid var(--reg-accent);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* Keyboard/SR route to a point card: opens the species' nearest in-view
+   record (mirrors .mini-card-link's specimen-label look; a real button so
+   Enter/Space activate it natively inside the role=button card). */
+.mini-card-open {
+  display: inline-block;
+  margin: 9px 0 0 12px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--reg-accent);
+}
+
+.mini-card-open:hover {
+  text-decoration: underline;
+}
+
+.mini-card-open:focus-visible {
+  outline: 2px solid var(--reg-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.mini-card-open:disabled {
+  color: var(--reg-sub);
+  opacity: 0.6;
+  cursor: default;
+  text-decoration: none;
 }
 
 /* Educational-only badge on a project tile (matches the .dnote treatment). */
@@ -2116,7 +1954,7 @@ body[data-register="night"] {
 }
 
 .season-hh {
-  font-size: 10.5px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   color: var(--reg-sub);
   font-family: var(--font-mono);
@@ -2131,11 +1969,28 @@ body[data-register="night"] {
 .season-caveat {
   display: block;
   margin-top: 3px;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.03em;
   text-transform: none;
   color: var(--reg-sub);
   opacity: 0.85;
+}
+
+/* Data-load status line (app.js setDataStatus): loading progress, record
+   counts, per-source outages, and the Mapbox-token error. Sits as the season
+   bar's quiet last row; empty (and hidden) outside load cycles — the same
+   :empty pattern as .location-search-status. */
+#dataStatus {
+  margin: 7px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  font-family: var(--font-mono);
+  color: var(--reg-sub);
+}
+
+#dataStatus:empty {
+  display: none;
 }
 
 #season-bar .season-histogram {
