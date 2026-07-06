@@ -272,8 +272,8 @@ const SHARED_CSS = `
     @font-face { font-family:"IBM Plex Mono"; font-style:normal; font-weight:500; font-display:swap; src:url("/fonts/ibm-plex-mono/IBMPlexMono-Medium.woff2") format("woff2"); }
     :root {
       --ground:#f1f5ec; --panel:#ffffff; --ink:#1f2421; --sub:#5a615b; --hair:#d5dad2;
-      --accent:#6b7f2e; --accent-dark:#55671f; --warn:#a8730a;
-      --st-allowed:#2f8f46; --st-prohibited:#c74437;
+      --accent:#6b7f2e; --accent-dark:#55671f; --warn:#8a5e08;
+      --st-allowed:#2f8f46; --st-prohibited:#b33c31;
       --glow:0 6px 24px rgba(31,36,33,0.10); --spine:#8b8f86;
       --font-display:"Fraunces Display", Georgia, "Times New Roman", serif;
       --font-ui:"Public Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;

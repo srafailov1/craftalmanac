@@ -132,6 +132,46 @@ for (const [reg, vars] of Object.entries(registers)) {
   }
 }
 
+// --- static-page palette (scripts/build_static_pages.mjs) ---------------------
+// The ~261 generated material/project pages embed their own inline palette
+// (SHARED_CSS template) that styles.css never touches, so the register audit
+// above does not cover them. Parse the safety-callout foregrounds and the
+// grounds they render on straight out of the generator source and hold the
+// label text to the AA normal floor (the labels are ~10.7px mono — small text).
+const staticSrc = readFileSync(join(ROOT, "scripts", "build_static_pages.mjs"), "utf8");
+function parseStaticHex(re, what) {
+  const m = staticSrc.match(re);
+  if (!m) {
+    failures++;
+    lines.push(`  FAIL  could not parse ${what} from scripts/build_static_pages.mjs — template refactor? update this audit's regexes`);
+    return null;
+  }
+  return m[1];
+}
+
+lines.push(`\n[static pages]  source scripts/build_static_pages.mjs (inline SHARED_CSS palette)`);
+const stWarn = parseStaticHex(/--warn:\s*(#[0-9a-fA-F]{3,8})/, "--warn");
+const stProhibited = parseStaticHex(/--st-prohibited:\s*(#[0-9a-fA-F]{3,8})/, "--st-prohibited");
+const stGround = parseStaticHex(/--ground:\s*(#[0-9a-fA-F]{3,8})/, "--ground");
+const safetyBg = parseStaticHex(/\.safety\s*\{[^}]*background:\s*(#[0-9a-fA-F]{3,8})/, ".safety background");
+const mildBg = parseStaticHex(/\.safety\.mild\s*\{[^}]*background:\s*(#[0-9a-fA-F]{3,8})/, ".safety.mild background");
+
+const STATIC_PAIRS = [
+  [stProhibited, safetyBg, "--st-prohibited", ".safety .k label on callout"],
+  [stWarn, mildBg, "--warn", ".safety.mild .k label on callout"],
+  [stProhibited, stGround, "--st-prohibited", "toxic chip text on --ground"]
+];
+for (const [fg, bg, token, desc] of STATIC_PAIRS) {
+  if (!fg || !bg) continue; // parse failure already counted above
+  const cr = contrast(fg, bg);
+  const meets = cr >= AA_NORMAL;
+  if (!meets) failures++;
+  lines.push(
+    `  ${meets ? "PASS" : "FAIL"}  ${token.padEnd(20)} ${fg.padEnd(8)} ` +
+      `${cr.toFixed(2)}:1 (need ${AA_NORMAL})  [on ${bg}]  ${desc}`
+  );
+}
+
 console.log(lines.join("\n"));
 if (failures) {
   console.error(`\nContrast audit FAILED: ${failures} pair(s) below floor.`);
