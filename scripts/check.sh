@@ -66,6 +66,12 @@ node scripts/test_rules_extraction.mjs || { echo "FAIL: Rule-table extraction eq
 echo "Reporting rule staleness (informational)..."
 node scripts/check_rule_staleness.mjs || true
 
+# Dead-CSS report — informational only (raw-token matching over-approximates
+# liveness, and composed class names need the script's allowlist), so a human
+# judges each candidate before deletion.
+echo "Reporting dead CSS candidates (informational)..."
+node scripts/report_dead_css.mjs || true
+
 # Run permission rule tests
 echo "Running permission rule tests..."
 node scripts/test_rules.mjs || { echo "FAIL: Permission rule tests failed"; exit 1; }
