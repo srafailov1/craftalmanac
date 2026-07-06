@@ -596,6 +596,52 @@ its data-validation gate with ~86 errors.
 
 **No asset-version bump** (no `app.js`/`styles.css` change this run).
 
+## Tune-up run log — 2026-07-06 (full-review + fix pass, Fable)
+
+Full-codebase review (7 dimensions, adversarially verified; 28 confirmed
+findings) followed by a same-day fix pass — commits `4f9a221`..`80d6a4e`.
+Remaining work orders: `docs/TODO-fable-handoff.md`.
+
+**Fixed and gate-verified this run:**
+1. **Status raster overstated permission** (safety): record-level cell
+   status was resolved against every PAD-US unit clipping the cell, not the
+   units containing the center — Big Bend wilderness cells baked
+   food:"allowed" against fr {prohibited:0.8}. Center-point semantics
+   restored (the documented 1b intent); 821 food cells dropped an
+   overstated "allowed". The bake script itself was also broken (missing
+   `stateEdibleOnlyNonFoodRule` in the extraction harness → ReferenceError).
+2. **#dataStatus dead since the sidebar retirement**: all loading/outage/
+   token messages silently dropped. Restored as the season bar's last row
+   (role=status; transient success messages).
+3. **Point-card safety footer buried**: 80vh cards hid the OCCURRENCE IS
+   NOT PERMISSION line + Save under the season bar. Now min(60vh,520px)
+   flex column with a pinned footer.
+4. **SW offline-safety holes** (4): stale saved-area bytes served to
+   no-cache save fetches; redirected /index.html precache (navigation
+   hard-fail); chunks-only data deploys never reaching returning online
+   users (now network-first for non-precached /data/); unguarded cache.put.
+5. **Static-page safety-label AA failures** on all 261 pages (3.68–4.36:1
+   → 5.11–5.27:1 via the generator); contrast gate now covers static pages.
+6. **Minerals boot bugs**: initControls rescaled the 0–100 workability
+   slider to 0–365 (hid most minerals for returning minerals users);
+   bare-URL minerals boot started band-filtered instead of All materials.
+7. **sp deep-links clobbered day/w filters** from the same hash.
+8. **Sun-dial preview** bypassed the register pin + left register-baked
+   paints stale (now routes through applyRegister).
+9. **Marker access status was color-only** (PRODUCT.md violation):
+   prohibited/private now dotted rings. Keyboard route to point cards
+   restored (Materials-shelf "Open nearest in view"). Nav clicks switch
+   sheets. Micro-labels ≥11px. Cluster-tint legend note. Histogram aria.
+   Quota-exceeded save notice. Dead sidebar code/CSS removed.
+10. **New gates**: sw.js/index.html version sync; manifest source-species
+    resolvability (check g, ink-honeysuckle grandfathered).
+
+**Resolved from the 2026-07-03 log:** the ink-phenology drift (34 missing
+curves) was fixed by the Phase 5.3 regional rebuild (commit 8ddd71c) — the
+phenology↔catalog gate passes; entry closed.
+
+**Asset version:** `critique-fixes-1` (index.html + sw.js, gate-enforced).
+
 ## Hand-offs (for the 6am queue-grooming loop)
 
 1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work
