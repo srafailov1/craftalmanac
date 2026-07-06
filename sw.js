@@ -33,6 +33,10 @@
  *        working with whatever it has). We deliberately DO NOT precache tiles —
  *        the full basemap is ~125 MB of remote data. Caching the small safety
  *        layer, not the tiles, is the whole point.
+ *        Cached Mapbox entries EXPIRE AFTER 30 DAYS (Mapbox Product Terms
+ *        §2.8.1 caps on-device caching of Licensed Map Content at 30 days):
+ *        each put is stamped with a save-time header, expired entries are
+ *        treated as misses at read time, and sweeps clear them in bulk.
  *
  *   3. Live/personal APIs (iNaturalist, Open-Meteo, NOAA/tides, USGS PAD-US,
  *        Mapbox geocoding) → NEVER cached, NETWORK-ONLY. These are live and/or
@@ -46,7 +50,7 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-critique-fixes-2";
+const CACHE_VERSION = "v1-tile-ttl-1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
 
 // User-saved offline areas ("save this area", Phase 5.5). DELIBERATELY not
@@ -60,7 +64,7 @@ const SAVED_AREAS_CACHE = "craft-almanac-saved-areas-v1";
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "critique-fixes-2";
+const ASSET_VERSION = "tile-ttl-1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly
@@ -136,6 +140,16 @@ const MAPBOX_TILE_HOSTS = [
   "d.tiles.mapbox.com",
   "events.mapbox.com",
 ];
+
+// Mapbox Product Terms §2.8.1 (June 17, 2026 version) permits on-device caching
+// of Licensed Map Content for a MAXIMUM OF 30 DAYS. Every Mapbox entry we
+// cache is stamped with this save-time header at put (the upstream Date header
+// is not reliably exposed on cross-origin responses), and any entry older than
+// 30 days is treated as a miss at read time and swept in bulk on activate /
+// SW startup. A fresh network fetch re-stamps the entry, so the window runs
+// from the last successful download.
+const MAPBOX_CACHED_AT_HEADER = "x-ca-cached-at";
+const MAPBOX_TILE_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
 // Live/personal APIs — NEVER cached; allowed to fail offline.
 const LIVE_API_HOSTS = [
@@ -227,6 +241,10 @@ self.addEventListener("activate", (event) => {
           .filter((name) => name.startsWith("craft-almanac-") && name !== CACHE_NAME && name !== SAVED_AREAS_CACHE)
           .map((name) => caches.delete(name))
       );
+      // Evict Mapbox entries past the 30-day cap (Mapbox Product Terms §2.8.1).
+      // Mostly relevant when the cache survived the deploy (CACHE_VERSION
+      // unchanged); read-time expiry in mapboxNetworkFirst is the backstop.
+      await sweepExpiredMapboxEntries().catch(() => {});
       await self.clients.claim();
     })()
   );
@@ -428,23 +446,39 @@ async function dataNetworkFirst(request) {
   }
 }
 
+// Sweep-once-per-SW-startup latch for mapboxNetworkFirst below.
+let mapboxSweepKicked = false;
+
 // Network-first for Mapbox map assets: fresh tiles when online, cached tiles
-// when offline, and a SILENT empty response on a full miss so a tile gap does
-// not surface as a hard error inside Mapbox GL.
+// when offline (if saved within the last 30 days — see MAPBOX_TILE_MAX_AGE_MS),
+// and a SILENT empty response on a full miss so a tile gap does not surface as
+// a hard error inside Mapbox GL.
 async function mapboxNetworkFirst(request) {
   const cache = await caches.open(CACHE_NAME);
+  // The activate sweep only runs on deploys, but SW startups happen constantly;
+  // sweeping once per startup keeps entries an online user never re-reads from
+  // outliving the 30-day cap between deploys.
+  if (!mapboxSweepKicked) {
+    mapboxSweepKicked = true;
+    sweepExpiredMapboxEntries().catch(() => {});
+  }
   try {
     const response = await fetch(request);
     if (response && response.status === 200) {
       // Tiles/glyphs are large but bounded per session; cache successful ones so
       // a previously-visited area still renders offline. (This is NOT the "save
       // this area" feature — it is opportunistic caching of what was viewed.)
-      cache.put(request, response.clone()).catch(() => {});
+      putStampedMapboxEntry(cache, request, response.clone()).catch(() => {});
     }
     return response;
   } catch {
     const cached = await cache.match(request);
-    if (cached) return cached;
+    if (cached) {
+      if (isFreshMapboxEntry(cached)) return cached;
+      // Older than 30 days (or unstamped): §2.8.1 says it must not be served.
+      // Delete it and fall through to the synthetic miss below.
+      cache.delete(request).catch(() => {});
+    }
     // Silent miss: 504 with an empty body. Mapbox GL treats a non-2xx tile as
     // simply absent and keeps rendering the rest of the map, so the offline map
     // shows "cached data only" instead of throwing.
@@ -453,6 +487,55 @@ async function mapboxNetworkFirst(request) {
       statusText: "Offline — tile not cached",
     });
   }
+}
+
+// Store a Mapbox response stamped with the save time. Rebuilding the response
+// is required to add the header (fetched Response headers are immutable), and
+// buffering the body is fine — tiles/glyphs/sprites are individually small.
+async function putStampedMapboxEntry(cache, request, response) {
+  const headers = new Headers(response.headers);
+  headers.set(MAPBOX_CACHED_AT_HEADER, String(Date.now()));
+  const body = await response.arrayBuffer();
+  await cache.put(
+    request,
+    new Response(body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    })
+  );
+}
+
+// An entry is servable only if its save-time stamp proves it is within the
+// 30-day window. Missing/garbled stamps and future timestamps (a clock that
+// moved backwards) cannot prove that, so they count as expired.
+function isFreshMapboxEntry(cachedResponse) {
+  const cachedAt = Number(cachedResponse.headers.get(MAPBOX_CACHED_AT_HEADER));
+  if (!Number.isFinite(cachedAt)) return false;
+  const age = Date.now() - cachedAt;
+  return age >= 0 && age <= MAPBOX_TILE_MAX_AGE_MS;
+}
+
+// Bulk-delete expired Mapbox entries. Runs on activate and once per SW
+// startup; read-time expiry in mapboxNetworkFirst remains the backstop.
+async function sweepExpiredMapboxEntries() {
+  const cache = await caches.open(CACHE_NAME);
+  const requests = await cache.keys();
+  await Promise.all(
+    requests.map(async (request) => {
+      let url;
+      try {
+        url = new URL(request.url);
+      } catch {
+        return;
+      }
+      if (!isMapboxTile(url)) return;
+      const cached = await cache.match(request);
+      if (cached && !isFreshMapboxEntry(cached)) {
+        await cache.delete(request);
+      }
+    })
+  );
 }
 
 // --- Message handler ---------------------------------------------------------

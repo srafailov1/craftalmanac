@@ -62,7 +62,11 @@ APIs — iNaturalist, Open-Meteo, NOAA tides/weather, USGS PAD-US, and Mapbox
    silent miss.** Online users get fresh tiles; offline users get whatever was
    cached from a previous online session; a full miss returns a synthetic empty
    `504` so Mapbox GL treats the tile as simply absent and keeps rendering — the
-   map shows "cached data only" rather than erroring.
+   map shows "cached data only" rather than erroring. Cached Mapbox entries
+   expire after **30 days** (Mapbox Product Terms §2.8.1 caps on-device caching
+   of Licensed Map Content at 30 days): each entry is stamped with a save-time
+   header on write, expired entries count as misses on read, and sweeps on
+   activate / SW startup evict them in bulk.
 3. **Live/personal APIs → network-only, never cached.** They fail offline; the
    app already falls back conservatively when they do.
 
