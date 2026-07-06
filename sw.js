@@ -46,7 +46,7 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-phase5-offline-1";
+const CACHE_VERSION = "v1-critique-fixes-1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
 
 // User-saved offline areas ("save this area", Phase 5.5). DELIBERATELY not
@@ -60,7 +60,7 @@ const SAVED_AREAS_CACHE = "craft-almanac-saved-areas-v1";
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "phase5-offline-1";
+const ASSET_VERSION = "critique-fixes-1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly
@@ -116,6 +116,11 @@ const PRECACHE = [
   "/data/contiguous-us-states.json",
   "/data/nps-historic-orchards.json",
 ];
+
+// Pathname view of the precache list (query strings stripped) so the fetch
+// router can tell precached files (cache-first, rotated by CACHE_VERSION
+// bumps) from non-precached bulk data (network-first — see router 1c).
+const PRECACHED_PATHS = new Set(PRECACHE.map((entry) => entry.split("?")[0]));
 
 // --- Host classification ------------------------------------------------------
 
@@ -187,7 +192,19 @@ self.addEventListener("install", (event) => {
             // cache: "reload" bypasses the HTTP cache so install always stores
             // the freshest bytes for the current deploy.
             const response = await fetch(new Request(url, { cache: "reload" }));
-            if (response.ok) await cache.put(url, response.clone());
+            if (response.ok) {
+              // Never store a redirected response: Cloudflare 307s /index.html
+              // -> "/", and a cached redirected response served to a navigation
+              // is a network error in every engine. Rebuild it as a clean 200
+              // from the same bytes (the Workbox copyResponse pattern).
+              const clean = response.redirected
+                ? new Response(await response.arrayBuffer(), {
+                    status: 200,
+                    headers: response.headers,
+                  })
+                : response.clone();
+              await cache.put(url, clean);
+            }
           } catch {
             /* offline during install, or a missing file — skip it */
           }
@@ -264,8 +281,20 @@ self.addEventListener("fetch", (event) => {
       return;
     }
 
-    // 1c. All other same-origin GETs (app.js, styles.css, fonts, data files):
-    //     cache-first.
+    // 1c. Non-precached bulk data (Falling Fruit chunks/manifest/status raster,
+    //     minerals, project recipes): NETWORK-FIRST. These bake access-status
+    //     fields but are not precached, so a chunks-only data deploy never
+    //     rotates CACHE_NAME — cache-first would pin stale safety data for
+    //     online users indefinitely. Network-first keeps online users fresh
+    //     (the browser HTTP cache still absorbs repeats) while the runtime +
+    //     saved-areas caches keep the offline fallback.
+    if (url.pathname.startsWith("/data/") && !PRECACHED_PATHS.has(url.pathname)) {
+      event.respondWith(dataNetworkFirst(request));
+      return;
+    }
+
+    // 1d. All other same-origin GETs (app.js, styles.css, fonts, precached
+    //     data files): cache-first.
     event.respondWith(sameOriginCacheFirst(request));
     return;
   }
@@ -301,6 +330,14 @@ async function appShellNavigation(request) {
         /* offline — keep the cached shell */
       }
     })();
+    // Belt-and-braces for caches poisoned before the install-time redirect
+    // scrub existed: never hand a redirected response to a navigation.
+    if (cached.redirected) {
+      return new Response(await cached.arrayBuffer(), {
+        status: 200,
+        headers: cached.headers,
+      });
+    }
     return cached;
   }
 
@@ -344,10 +381,15 @@ async function sameOriginCacheFirst(request) {
     // Cache successful same-origin GETs we did not precache (basic responses
     // only — opaque/error responses are not worth persisting).
     if (response.ok && response.type === "basic") {
-      cache.put(request, response.clone());
+      cache.put(request, response.clone()).catch(() => {});
     }
     return response;
   } catch {
+    // A fetch that demanded freshness (cache:"no-cache" — the "save this area"
+    // snapshot path) must FAIL here, not fall back: serving a months-old saved
+    // copy would let a failed re-save silently re-register stale access data
+    // as a fresh snapshot. The save flow's retry/abort path reports honestly.
+    if (wantsFresh) return Response.error();
     // Network failed. Before giving up, check the user's saved offline areas
     // ("save this area"). ORDER MATTERS for safety: the saved-areas cache never
     // rotates, so it must only ever serve as an OFFLINE fallback — if it were
@@ -358,6 +400,30 @@ async function sameOriginCacheFirst(request) {
     if (savedCopy) return savedCopy;
     // Offline and not cached: a network error is the honest answer for a
     // subresource (the app degrades gracefully when a data file is absent).
+    return Response.error();
+  }
+}
+
+// Network-first for non-precached /data/ files (see router 1c). Fresh bytes
+// when online; offline falls back to the runtime cache, then the user's saved
+// areas — the same safe order as sameOriginCacheFirst's failure path.
+async function dataNetworkFirst(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const wantsFresh = request.cache === "no-cache" || request.cache === "reload";
+  try {
+    const response = await fetch(request);
+    if (response.ok && response.type === "basic") {
+      cache.put(request, response.clone()).catch(() => {});
+    }
+    return response;
+  } catch {
+    // Freshness-demanding fetches (the save-area snapshot path) fail honestly.
+    if (wantsFresh) return Response.error();
+    const cached = await cache.match(request, { ignoreSearch: false });
+    if (cached) return cached;
+    const savedAreas = await caches.open(SAVED_AREAS_CACHE);
+    const savedCopy = await savedAreas.match(request, { ignoreSearch: false });
+    if (savedCopy) return savedCopy;
     return Response.error();
   }
 }
