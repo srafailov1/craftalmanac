@@ -257,18 +257,19 @@ const ACCESS_STATUS_OPTIONS = [
 // Access-status ring colors for the map markers. These mirror the prototype's
 // status hues and the day-register --reg-st-* tokens so the marker ring matches
 // the legend access ring (the legend brightens per register; markers stay
-// constant, exactly as the prototype does). Hue is NOT the only channel:
-// restrictive statuses (prohibited, private) get a dotted ring so colorblind
-// users can tell them from the solid allowed/permit rings (the PRODUCT.md
-// pattern-channel promise). "permit" uses the legibility-tuned amber
-// (#a8730a), per owner decision.
+// constant, exactly as the prototype does). Hue is NOT the only channel
+// (the PRODUCT.md pattern-channel promise): ring style encodes restriction —
+// solid = allowed/unknown, dashed = permit-required, dotted = prohibited and
+// private — so colorblind users read the tiers without the hue. The legend
+// ring chips mirror the same styles. "permit" uses the legibility-tuned
+// amber (#a8730a), per owner decision.
 const ACCESS_MARKER_STYLES = {
-  allowed: { label: "Allowed", color: "#2f8f46", dashed: false },
-  "permit-required": { label: "Permit required", color: "#a8730a", dashed: false },
-  private: { label: "Private", color: "#7e6654", dashed: true },
-  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", dashed: true },
-  unknown: { label: "Unknown", color: "#8b8f86", dashed: false },
-  prohibited: { label: "Prohibited", color: "#c74437", dashed: true }
+  allowed: { label: "Allowed", color: "#2f8f46", ring: "solid" },
+  "permit-required": { label: "Permit required", color: "#a8730a", ring: "dashed" },
+  private: { label: "Private", color: "#7e6654", ring: "dotted" },
+  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", ring: "dotted" },
+  unknown: { label: "Unknown", color: "#8b8f86", ring: "solid" },
+  prohibited: { label: "Prohibited", color: "#c74437", ring: "dotted" }
 };
 const LEGEND_PERMISSION_OPTIONS = [
   { id: "allowed", label: "Allowed" },
@@ -3544,6 +3545,7 @@ const welcomeModal = document.querySelector("#welcomeModal");
 const welcomeModalButton = document.querySelector("#welcomeModalButton");
 const allSeasonsButton = document.querySelector("#allSeasonsButton");
 const seasonReset = document.querySelector("#seasonReset");
+const histToggle = document.querySelector("#histToggle");
 const whenToggle = document.querySelector("#whenToggle");
 const whenApply = document.querySelector("#whenApply");
 const whenForm = document.querySelector("#whenForm");
@@ -3950,7 +3952,10 @@ function renderMapLegend() {
   const accessChips = permissionOptions.map((status) => {
     const token = ACCESS_STATUS_TOKEN[status.id] || "unknown";
     const off = !selectedAccess.has(status.id);
-    return `<button type="button" class="leg-chip${off ? " off" : ""}" data-leg-access="${escapeHTML(status.id)}" aria-pressed="${String(!off)}"><span class="ring" style="color: var(--reg-st-${token})"></span>${escapeHTML(status.label)}</button>`;
+    // The chip ring mirrors the marker's ring STYLE (solid/dashed/dotted) so
+    // the legend teaches the non-color access channel, not just the hue.
+    const ringStyle = (ACCESS_MARKER_STYLES[status.id] || {}).ring || "solid";
+    return `<button type="button" class="leg-chip${off ? " off" : ""}" data-leg-access="${escapeHTML(status.id)}" aria-pressed="${String(!off)}"><span class="ring" data-ring="${ringStyle}" style="color: var(--reg-st-${token})"></span>${escapeHTML(status.label)}</button>`;
   }).join("");
 
   const categoryChips = config.categories.map((category) => {
@@ -5009,6 +5014,15 @@ function initControls() {
     render();
   });
 
+  // "Chart" (desktop) pins the season histogram open — the visible
+  // affordance for what was otherwise a hover/focus-only reveal. Mobile
+  // hides this button (SET DATE opens the chart + slider there).
+  histToggle.addEventListener("click", () => {
+    const open = seasonBar.classList.toggle("season-open");
+    histToggle.classList.toggle("active", open);
+    histToggle.setAttribute("aria-expanded", String(open));
+  });
+
   // "Set date" reveals the precise date-entry form (prototype #when-form).
   whenToggle.addEventListener("click", () => {
     // On phones SET DATE opens the day slider + histogram (.season-open) — the
@@ -5064,7 +5078,22 @@ function initControls() {
       // aggregate paint lands — symmetric with the upward handoff bridge.
       setINaturalistAggregateReady(false);
       beginAggregateBridge();
-      scheduleINaturalistAggregateLoad();
+      if (aggregateTilesCachedForView()) {
+        // Warm crossing (tiles prefetched or previously fetched): swap now
+        // instead of waiting out the 260ms schedule debounce. The bridge
+        // still settles on idle, so the old source buffer never paints —
+        // clusters hold for roughly one idle cycle, not debounce + fetch.
+        // (KNOWN_ISSUES item 1 plan 3; a hard visibility flip without the
+        // idle wait would risk the documented async-setData old-buffer
+        // flash, so "skip the bridge" is realized as "shrink it to the
+        // paint".)
+        window.clearTimeout(state.inatAggregateTimer);
+        logHandoff("down-cross-warm");
+        loadINaturalistAggregates();
+      } else {
+        logHandoff("down-cross-cold");
+        scheduleINaturalistAggregateLoad();
+      }
     }
     state.wasBelowPointZoom = belowPointZoom;
     updateLayerHandoff();
@@ -5245,6 +5274,8 @@ function initMobileSeasonControls() {
         seasonBar.classList.remove("season-open");
         whenToggle.classList.remove("active");
         whenToggle.setAttribute("aria-expanded", "false");
+        histToggle?.classList.remove("active");
+        histToggle?.setAttribute("aria-expanded", "false");
       }
       syncMapControlsOffset();
     });
@@ -5278,15 +5309,23 @@ function setMastPanel(name) {
   }
 }
 
-// Fold away the season drop-up (SET DATE histogram) and the legend, resetting
-// their triggers, so the bar collapses to its slim resting height.
+// Fold away the season drop-up (SET DATE histogram on mobile, the CHART pin
+// on desktop) and the legend, resetting their triggers, so the bar collapses
+// to its slim resting height.
 function closeSeasonExpanders() {
   if (!seasonBar) return;
   let changed = false;
   if (seasonBar.classList.contains("season-open")) {
     seasonBar.classList.remove("season-open");
-    whenToggle?.classList.remove("active");
-    whenToggle?.setAttribute("aria-expanded", "false");
+    histToggle?.classList.remove("active");
+    histToggle?.setAttribute("aria-expanded", "false");
+    // On desktop whenToggle's state tracks the #whenForm calendar, not
+    // season-open — resetting it here would desync an open form. Mobile's
+    // SET DATE is the season-open owner there.
+    if (window.matchMedia("(max-width: 720px)").matches) {
+      whenToggle?.classList.remove("active");
+      whenToggle?.setAttribute("aria-expanded", "false");
+    }
     changed = true;
   }
   if (seasonBar.classList.contains("legend-open")) {
@@ -6182,15 +6221,16 @@ function ensureMarkerIcon(iconName, fillColor, accessStatus) {
   context.fillStyle = fillColor;
   context.fill();
 
-  drawMarkerOutline(context, center, outlineRadius, style.color, style.dashed, ringWidth);
+  drawMarkerOutline(context, center, outlineRadius, style.color, style.ring, ringWidth);
 
   const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
   map.addImage(iconName, imageData, { pixelRatio: MARKER_ICON_PIXEL_RATIO });
 }
 
-function drawMarkerOutline(context, center, radius, color, dashed, lineWidth) {
+// ringStyle: "solid" | "dashed" | "dotted" — the non-color access channel.
+function drawMarkerOutline(context, center, radius, color, ringStyle, lineWidth) {
   context.save();
-  if (dashed) {
+  if (ringStyle === "dotted") {
     const dotCount = 14;
     const dotRadius = lineWidth * 0.42;
     context.fillStyle = color;
@@ -6209,6 +6249,11 @@ function drawMarkerOutline(context, center, radius, color, dashed, lineWidth) {
   } else {
     context.strokeStyle = color;
     context.lineWidth = lineWidth;
+    if (ringStyle === "dashed") {
+      // ~8 dashes around the ~49-unit circumference: long enough to read as
+      // line segments (vs the dotted ring's points) at map icon sizes.
+      context.setLineDash([4, 2.2]);
+    }
     context.beginPath();
     context.arc(center, center, radius, 0, Math.PI * 2);
     context.stroke();
@@ -7075,6 +7120,94 @@ function scheduleINaturalistAggregateLoad() {
   state.inatAggregateTimer = window.setTimeout(loadINaturalistAggregates, INATURALIST_AGGREGATE_DELAY);
 }
 
+// Opt-in handoff instrumentation (KNOWN_ISSUES item 1 plan 4): set
+// window.FORAGE_DEBUG = true and read window.__handoffLog. Deliberately NOT
+// called from the extracted state-machine functions (updateLayerHandoff etc.)
+// — scripts/test_zoom_handoff.mjs evals those into a stub sandbox where this
+// helper doesn't exist.
+function logHandoff(event, extra) {
+  if (!window.FORAGE_DEBUG) return;
+  const log = (window.__handoffLog = window.__handoffLog || []);
+  log.push({
+    t: Math.round(performance.now()),
+    zoom: state.mapReady ? Number(map.getZoom().toFixed(2)) : null,
+    event,
+    bridge: state.aggregateBridgeActive,
+    pointDataReady: state.pointDataReady,
+    aggReady: state.inatAggregateReady,
+    ...(extra || {})
+  });
+}
+
+// True when every aggregate tile the CURRENT view needs is already cached for
+// the CURRENT taxon set — the warm case where the aggregate swap can run
+// immediately (zero fetches), so the downward handoff needn't wait out the
+// schedule debounce (KNOWN_ISSUES item 1 plan 3). A changed taxon set (day
+// moved, species toggled while in the point band) is never warm: it must take
+// the full gated load path.
+function aggregateTilesCachedForView() {
+  if (!state.mapReady || state.savedLocationsOnly || !state.statusRaster) return false;
+  const selectedSpecies = getSelectedCatalogItems()
+    .filter((species) => isSpeciesAvailableOnSelectedDate(species));
+  const taxonIds = getINaturalistTaxonIdString(selectedSpecies);
+  if (!taxonIds || taxonIds !== state.inatAggregateTaxonKey) return false;
+  return getINaturalistAggregateTiles(map.getBounds(), map.getZoom())
+    .every((tile) => state.inatAggregateCache.has(getINaturalistAggregateCacheKey(taxonIds, tile)));
+}
+
+// Background tile-cache warmer (KNOWN_ISSUES item 1 plan 2): fetch the
+// aggregate grid tiles a zoom-out WOULD need before the user zooms out, so
+// downward crossings find them cached and the handoff paints immediately.
+// Strictly best-effort: concurrency 2 (never competes with foreground loads,
+// which run 3-6), results go only into the shared tile cache — no
+// state.inatAggregateItems, ready-gate, or paint mutations. Supersession is
+// per CHANNEL: a new pan's "band" prefetch cancels the previous pan's (its
+// viewport is stale), but the one-shot "boot" region warm and the band warms
+// are complementary and must never cancel each other. options.regionWide
+// computes tiles from the whole-region bounds regardless of the current
+// viewport (a boot restored to a city view would otherwise warm ~2 tiles and
+// leave the first zoom-out cold anyway).
+async function prefetchINaturalistAggregateTiles(zoomTargets, { channel = "band", regionWide = false } = {}) {
+  if (!state.mapReady || state.savedLocationsOnly) return;
+  const selectedSpecies = getSelectedCatalogItems()
+    .filter((species) => isSpeciesAvailableOnSelectedDate(species));
+  const taxonIds = getINaturalistTaxonIdString(selectedSpecies);
+  if (!taxonIds) return;
+  const ids = state.aggregatePrefetchIds || (state.aggregatePrefetchIds = {});
+  const prefetchId = (ids[channel] || 0) + 1;
+  ids[channel] = prefetchId;
+  // Statuses are baked into grid items at fetch time — raster first (cached
+  // after the boot load, so this usually resolves immediately).
+  await loadStatusRaster();
+  if (ids[channel] !== prefetchId) return;
+  const bounds = regionWide
+    ? new mapboxgl.LngLatBounds(REGION_MAX_BOUNDS[0], REGION_MAX_BOUNDS[1])
+    : map.getBounds();
+  const seen = new Set();
+  const missing = [];
+  for (const zoom of zoomTargets) {
+    for (const tile of getINaturalistAggregateTiles(bounds, zoom)) {
+      const key = getINaturalistAggregateCacheKey(taxonIds, tile);
+      if (seen.has(key) || state.inatAggregateCache.has(key)) continue;
+      seen.add(key);
+      missing.push({ tile, key });
+    }
+  }
+  if (!missing.length) return;
+  logHandoff("prefetch-start", { channel, tiles: missing.length });
+  await mapWithConcurrency(missing, 2, async ({ tile, key }) => {
+    if (ids[channel] !== prefetchId) return null;
+    if (state.inatAggregateCache.has(key)) return null; // foreground got it
+    try {
+      const items = await fetchINaturalistAggregateTileWithRetry(taxonIds, tile);
+      touchCacheEntry(state.inatAggregateCache, key, items);
+    } catch { /* best-effort warm — the foreground path retries on demand */ }
+    return null;
+  });
+  trimCache(state.inatAggregateCache, INATURALIST_AGGREGATE_CACHE_MAX);
+  logHandoff("prefetch-done", { channel, tiles: missing.length });
+}
+
 async function loadINaturalistAggregates() {
   if (!state.mapReady || state.savedLocationsOnly) {
     state.inatAggregateItems = [];
@@ -7117,9 +7250,18 @@ async function loadINaturalistAggregates() {
   await loadStatusRaster();
   if (requestId !== state.activeINaturalistAggregateRequest) return;
   const tiles = getINaturalistAggregateTiles(map.getBounds(), map.getZoom());
-  const missingTiles = tiles.filter((tile) => (
-    !state.inatAggregateCache.has(getINaturalistAggregateCacheKey(taxonIds, tile))
-  ));
+  // Snapshot the already-cached tiles NOW: a background prefetch's trim could
+  // otherwise evict them from the shared LRU while this load awaits its
+  // missing fetches, and the swap below would silently drop their cells while
+  // still reporting a complete paint.
+  const cachedTileItems = new Map();
+  const missingTiles = [];
+  for (const tile of tiles) {
+    const cacheKey = getINaturalistAggregateCacheKey(taxonIds, tile);
+    const items = state.inatAggregateCache.get(cacheKey);
+    if (items) cachedTileItems.set(cacheKey, items);
+    else missingTiles.push(tile);
+  }
 
   if (missingTiles.length) {
     // Gate repaints while tiles are in flight so partially covered viewports
@@ -7145,12 +7287,15 @@ async function loadINaturalistAggregates() {
   // Swap the full tile set in at once so counts never paint partially.
   state.inatAggregateItems = getNonzeroAggregateItems(tiles.flatMap((tile) => {
     const cacheKey = getINaturalistAggregateCacheKey(taxonIds, tile);
-    const items = state.inatAggregateCache.get(cacheKey);
-    // Failed tiles stay uncached so the next pass retries them.
+    // Prefer the live cache (fresh fetches from this pass), fall back to the
+    // pre-await snapshot for anything evicted mid-flight; failed tiles have
+    // neither and stay uncached so the next pass retries them.
+    const items = state.inatAggregateCache.get(cacheKey) || cachedTileItems.get(cacheKey);
     if (items) touchCacheEntry(state.inatAggregateCache, cacheKey, items);
     return items || [];
   }));
   trimCache(state.inatAggregateCache, INATURALIST_AGGREGATE_CACHE_MAX);
+  logHandoff("agg-swap", { tiles: tiles.length, fetched: missingTiles.length, items: state.inatAggregateItems.length });
   setINaturalistAggregateReady(true);
   updateFallingFruitAggregates();
 }
@@ -7275,6 +7420,15 @@ async function loadMapData() {
     setDataStatus(`${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`);
   } else {
     setDataStatus(`${state.records.length} current records loaded from ${config.sourceNames.join(", ")}`, { transient: true });
+  }
+  logHandoff("points-loaded", { records: state.records.length });
+
+  // While the user sits in the point band, warm the aggregate tiles a
+  // zoom-out from HERE would need (gz6 for the first landing band under 8;
+  // gz4 whole-region is usually already warm from boot and dedups to zero).
+  // Cache-dedup'd, concurrency 2 — repeats after ordinary pans cost nothing.
+  if (state.mapReady && !config.loadMinerals && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    prefetchINaturalistAggregateTiles([7, 4]);
   }
 }
 
@@ -7701,6 +7855,27 @@ function savedAreaChunkPath(chunkId) {
   return `./data/falling-fruit/us/chunks/${chunkId}.json`;
 }
 
+// Cross-tab mutual exclusion for SAVED_AREAS_CACHE writers. The in-memory
+// state.savedAreaBusy flag only covers THIS tab; without a lock, a startup
+// reconcile in a fresh tab could delete chunks a save in another tab has
+// written but not yet registered. Web Locks are origin-scoped in all current
+// engines; where unavailable, callers run unguarded (single-tab semantics,
+// the pre-lock behavior).
+const SAVED_AREAS_LOCK = "craftalmanac-saved-areas";
+
+// Resolves to a release function once the lock is held (waits for holders).
+function acquireSavedAreasLock() {
+  if (!navigator.locks?.request) return Promise.resolve(() => {});
+  return new Promise((resolveAcquire) => {
+    let releaseResolve;
+    const released = new Promise((resolve) => { releaseResolve = resolve; });
+    navigator.locks.request(SAVED_AREAS_LOCK, () => {
+      resolveAcquire(releaseResolve);
+      return released;
+    }).catch(() => resolveAcquire(() => {}));
+  });
+}
+
 function formatSavedBytes(bytes) {
   if (!Number.isFinite(bytes) || bytes <= 0) return "0 MB";
   const mb = bytes / (1024 * 1024);
@@ -7721,7 +7896,11 @@ async function saveCurrentOfflineArea() {
   const busy = { done: 0, total: 0, bytes: 0, chunkBytes: 0, failed: 0 };
   state.savedAreaBusy = busy;
   let notice = null;
+  let releaseSavedAreasLock = () => {};
   try {
+    // Cross-tab guard: hold the writers' lock for the whole write + register
+    // sequence so another tab's reconcile can't collect our chunks mid-save.
+    releaseSavedAreasLock = await acquireSavedAreasLock();
     if (navigator.onLine === false) {
       notice = "You're offline — connect to save an area.";
       return;
@@ -7809,8 +7988,9 @@ async function saveCurrentOfflineArea() {
       return;
     }
     const center = bounds.getCenter();
+    const areaId = `area-${Date.now().toString(36)}`;
     state.savedAreas.push({
-      id: `area-${Date.now().toString(36)}`,
+      id: areaId,
       savedAt: new Date().toISOString(),
       bbox: [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()],
       center: [Number(center.lng.toFixed(4)), Number(center.lat.toFixed(4))],
@@ -7822,7 +8002,15 @@ async function saveCurrentOfflineArea() {
       bytes: busy.chunkBytes
     });
     persistSavedAreas();
-    notice = "Saved. These sites now work without a signal — browse the area once online so the basemap keeps its tiles too.";
+    // Read the registry back: if this browser silently refused the write
+    // (private mode, quota), the save still works for THIS session — the
+    // cache holds the bytes and the in-memory list knows them — but it will
+    // be forgotten on the next visit (and its chunks reclaimed by the
+    // startup reconcile). Say so instead of promising persistence.
+    const remembered = readSavedAreas().some((area) => area.id === areaId);
+    notice = remembered
+      ? "Saved. These sites now work without a signal — browse the area once online so the basemap keeps its tiles too."
+      : "Saved for this session, but this browser isn't remembering saved areas (private mode or blocked storage) — the save will be gone on your next visit.";
   } catch {
     // Unexpected failure (Cache API denied, private mode): say SOMETHING —
     // the panel resetting silently would read as a broken button — and don't
@@ -7831,6 +8019,7 @@ async function saveCurrentOfflineArea() {
   } finally {
     // ALWAYS clear the busy flag — an unexpected throw (caches.open denied,
     // quota, private mode) must not wedge the panel at "Saving…" forever.
+    releaseSavedAreasLock();
     state.savedAreaBusy = null;
     renderOfflinePanel(notice ? { notice } : {});
     if (notice) announceOffline(notice);
@@ -7847,7 +8036,9 @@ async function removeSavedArea(areaId) {
   state.savedAreas = state.savedAreas.filter((entry) => entry.id !== areaId);
   persistSavedAreas();
   renderOfflinePanel();
+  let releaseSavedAreasLock = () => {};
   try {
+    releaseSavedAreasLock = await acquireSavedAreasLock();
     const cache = await caches.open(SAVED_AREAS_CACHE_NAME);
     // Only evict chunks no other saved area still claims.
     const stillClaimed = new Set(state.savedAreas.flatMap((entry) => entry.chunkIds));
@@ -7858,7 +8049,9 @@ async function removeSavedArea(areaId) {
       await cache.delete(FALLING_FRUIT_MANIFEST_URL);
       await cache.delete(STATUS_RASTER_URL);
     }
-  } catch { /* cache API unavailable — registry is already updated */ }
+  } catch { /* cache API unavailable — registry is already updated */ } finally {
+    releaseSavedAreasLock();
+  }
 }
 
 // --- Offline panel UI (toggled from the bottom-right map control) ------------
@@ -8050,6 +8243,56 @@ function initOfflineAreas() {
   window.addEventListener("resize", () => { if (isOfflinePanelOpen()) positionOfflinePanel(); });
   window.addEventListener("online", () => { if (isOfflinePanelOpen()) renderOfflinePanel(); });
   window.addEventListener("offline", () => { if (isOfflinePanelOpen()) renderOfflinePanel(); });
+  reconcileSavedAreaCache();
+}
+
+// One-time startup reconcile. The chunk bytes live in SAVED_AREAS_CACHE_NAME
+// (deliberately never rotated by deploys) while the user-visible listing
+// lives in localStorage — if a persist write was ever swallowed (private
+// mode, quota) or a save crashed mid-flight, its entries would sit in the
+// cache invisibly and permanently, with no UI path to remove them. Delete
+// whatever the registry doesn't claim; drop the shared manifest + raster
+// once no areas remain. sw.js only READS this cache, so removing
+// unregistered entries cannot break anything. Bails whenever a save is in
+// flight so it never deletes chunks a running save just wrote.
+async function reconcileSavedAreaCache() {
+  if (!("caches" in window)) return;
+  try {
+    if (state.savedAreaBusy) return;
+    // Cross-tab guard: only reconcile while holding the writers' lock, and
+    // skip entirely if any tab's save currently holds it. Where Web Locks
+    // are unavailable, fall back to the per-tab busy checks below.
+    const run = async () => {
+      if (state.savedAreaBusy) return;
+      const cache = await caches.open(SAVED_AREAS_CACHE_NAME);
+      const keys = await cache.keys();
+      // Re-read the registry INSIDE the lock: another tab's completed save
+      // lives in localStorage but not in this tab's boot-time snapshot.
+      const registries = [...state.savedAreas, ...readSavedAreas()];
+      const claimed = new Set(registries.flatMap((area) => area.chunkIds));
+      const anySaved = registries.length > 0;
+      const sharedPaths = new Set([
+        new URL(FALLING_FRUIT_MANIFEST_URL, window.location.href).pathname,
+        new URL(STATUS_RASTER_URL, window.location.href).pathname
+      ]);
+      for (const request of keys) {
+        if (state.savedAreaBusy) return; // a save started mid-reconcile — stop
+        const pathname = new URL(request.url).pathname;
+        if (sharedPaths.has(pathname)) {
+          if (!anySaved) await cache.delete(request);
+          continue;
+        }
+        const chunkMatch = /\/chunks\/([^/]+)\.json$/.exec(pathname);
+        if (chunkMatch && claimed.has(chunkMatch[1])) continue;
+        await cache.delete(request);
+      }
+    };
+    if (navigator.locks?.request) {
+      await navigator.locks.request(SAVED_AREAS_LOCK, { ifAvailable: true }, (lock) => (lock ? run() : null));
+    } else {
+      await run();
+    }
+  } catch { /* Cache API unavailable/denied — nothing to reconcile */ }
 }
 
 function bboxIntersectsBounds(bbox, bounds) {
@@ -9807,6 +10050,10 @@ map.on("load", () => {
   render();
   loadMapData();
   schedulePublicLandLoad();
+  // Warm the whole-region gz 2/4 aggregate tile sets once boot settles
+  // (~4-12 requests at concurrency 2): a boot into the point band otherwise
+  // has NO aggregate tiles, so the first zoom-out always paid the fetch.
+  window.setTimeout(() => prefetchINaturalistAggregateTiles([2, 4], { channel: "boot", regionWide: true }), 3000);
 });
 
 map.on("error", (event) => {

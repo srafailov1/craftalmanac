@@ -135,127 +135,9 @@ button {
   overflow: hidden;
 }
 
-.section-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 34px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-}
-
-.section-toggle::before {
-  width: 18px;
-  color: var(--leaf-dark);
-  font-size: 18px;
-  font-weight: 850;
-  content: "+";
-}
-
-.mobile-section.is-open .section-toggle::before {
-  content: "−";
-}
-
-.brand-block h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 38px;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.site-slogan {
-  margin: 8px 0 0;
-  color: #4f5b50;
-  font-size: 15px;
-  font-weight: 750;
-  line-height: 1.35;
-}
-
-.map-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
-  margin-top: 16px;
-}
-
-.map-tabs button {
-  min-height: 32px;
-  padding: 7px 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: #fff;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 0.04em;
-  text-align: center;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.map-tabs button:disabled {
-  cursor: default;
-  opacity: 0.52;
-}
-
-.map-tabs .active {
-  border-color: var(--leaf-dark);
-  background: var(--leaf);
-  color: #fff;
-}
-
-.lede {
-  margin: 12px 0 0;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.safety-lede {
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-  font-size: 13px;
-}
-
-.control-group {
-  padding: 16px 0 18px;
-  border-top: 1px solid var(--line);
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.section-body {
-  display: none;
-  padding-top: 12px;
-}
-
-.mobile-section.is-open .section-body {
-  display: block;
-}
-
-.location-search-group {
-  padding-bottom: 16px;
-}
-
 .location-search-form {
   display: grid;
   gap: 7px;
-}
-
-.location-search-label {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
 .location-search-form input {
@@ -341,10 +223,6 @@ h2 {
   text-transform: uppercase;
 }
 
-.section-heading h2 {
-  margin-bottom: 0;
-}
-
 .text-button {
   min-height: 38px;
   border: 1px solid var(--line);
@@ -402,16 +280,6 @@ h2 {
   outline-offset: 2px;
 }
 
-.histogram-label {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 800;
-}
-
 .histogram-segment {
   width: 100%;
 }
@@ -457,17 +325,6 @@ h2 {
   border-color: var(--leaf-dark);
   background: var(--leaf-dark);
   color: #fff;
-}
-
-.count {
-  min-width: 30px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: var(--sky);
-  color: #274956;
-  font-size: 12px;
-  font-weight: 850;
-  text-align: center;
 }
 
 .map-area {
@@ -614,6 +471,13 @@ h2 {
 /* mobile-only season controls (CHART / LEGEND toggles), shown at <=720 */
 .mobile-only {
   display: none;
+}
+
+/* desktop-only controls (the CHART pin — mobile's SET DATE covers it there) */
+@media (max-width: 720px) {
+  .desktop-only {
+    display: none;
+  }
 }
 
 /* Persistent herbalism disclaimer (prototype #mode-disclaimer), medicine only. */
@@ -842,103 +706,6 @@ body.modal-open .app-shell {
   display: none;
 }
 
-.popup-title {
-  margin: 0 0 6px;
-  font-weight: 850;
-  font-size: 16px;
-}
-
-.popup-meta {
-  margin: 0;
-  color: #5d6659;
-  line-height: 1.35;
-}
-
-.popup-grid {
-  display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 5px 10px;
-  margin: 10px 0;
-  color: #5d6659;
-}
-
-.popup-grid dt {
-  margin: 0;
-  color: #30372f;
-  font-weight: 850;
-}
-
-.popup-grid dd {
-  margin: 0;
-}
-
-.popup-source {
-  color: var(--leaf-dark);
-  font-weight: 850;
-}
-
-.access-status {
-  display: inline-flex;
-  align-items: center;
-  min-height: 20px;
-  margin: 0 4px 2px 0;
-  padding: 1px 7px;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  background: #fff;
-  font-size: 10px;
-  font-weight: 850;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.access-status.allowed { color: var(--access-allowed); }
-.access-status.permit-required { color: var(--access-permit); }
-.access-status.prohibited { color: var(--access-prohibited); }
-.access-status.private,
-.access-status.private-unsourced { color: var(--access-private); }
-.access-status.unknown { color: var(--access-unknown); }
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.safety-tag,
-.ethic-tag {
-  display: inline-flex;
-  align-items: center;
-  min-height: 19px;
-  padding: 1px 7px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 850;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-}
-
-.safety-tag {
-  border: 1px solid #c9a25d;
-  background: #fff8e8;
-  color: #8a631b;
-}
-
-.ethic-tag {
-  border: 1px solid #9eb492;
-  background: #f4f8ef;
-  color: #426436;
-}
-
-.popup-warning {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: #fff4d6;
-  color: #64480b;
-  font-size: 12px;
-  font-weight: 780;
-}
-
 .save-location-button {
   width: 100%;
   min-height: 34px;
@@ -970,59 +737,11 @@ body.modal-open .app-shell {
     overflow: hidden;
   }
 
-  .brand-block {
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    flex: 0 0 auto;
-    gap: 4px;
-    min-width: 0;
-    padding: 0;
-    text-align: left;
-  }
-
-  .brand-block h1 {
-    font-size: 26px;
-    line-height: 1;
-  }
-
-  .brand-block .site-slogan,
-  .brand-block .map-tabs {
-    display: none;
-  }
-
-  .brand-block .lede {
-    display: none;
-  }
-
   .map-legend {
     left: 14px;
     bottom: 14px;
     padding: 9px 12px;
     font-size: 11px;
-  }
-
-  .control-group {
-    min-height: 0;
-    padding: 9px 0;
-  }
-
-  .control-group + .control-group {
-    margin-top: 0;
-  }
-
-  .section-heading {
-    min-height: 34px;
-  }
-
-  .section-toggle h2 {
-    margin: 0;
-  }
-
-  .section-body {
-    max-width: 100%;
-    padding-top: 9px;
-    overflow-x: hidden;
   }
 
   .season-histogram,
@@ -1056,10 +775,6 @@ body.modal-open .app-shell {
 }
 
 @media (max-width: 520px) {
-  .brand-block h1 {
-    font-size: 24px;
-  }
-
   .welcome-modal-backdrop {
     align-items: end;
     padding: 12px;
@@ -1792,11 +1507,9 @@ body[data-register="night"] {
 
 .steps-list li { margin: 0 0 8px; padding-left: 2px; }
 
-.tool-row { margin: 0 0 5px; }
 /* Bold the Required/Optional labels so they read as headers, not run together
    with the tools that follow — matching the bold ingredient / regular quantity
-   style above. (Tools render inside .recipe-sec p, not .tool-row, so this must
-   be unscoped.) */
+   style above (tools render inside .recipe-sec p, so this stays unscoped). */
 .tool-lab { font-weight: 600; margin-right: 4px; }
 
 .recipe-link {
@@ -1939,7 +1652,11 @@ body[data-register="night"] {
   padding: 10px 18px 9px;
 }
 
-/* The histogram is collapsed and expands UP on hover/focus (prototype). */
+/* The histogram is collapsed; it expands UP on hover (pointer discovery) or
+   via .season-open — the CHART button (desktop) / SET DATE (mobile) pin, the
+   deterministic keyboard route whose aria-expanded matches what shows. (The
+   old :focus-within reveal is gone: it expanded the chart while the Chart
+   button honestly announced collapsed.) */
 .season-hist {
   max-height: 0;
   opacity: 0;
@@ -1948,7 +1665,7 @@ body[data-register="night"] {
 }
 
 #season-bar:hover .season-hist,
-#season-bar:focus-within .season-hist {
+#season-bar.season-open .season-hist {
   max-height: 230px;
   opacity: 1;
 }
@@ -2564,6 +2281,16 @@ body[data-register="night"] {
   flex: none;
   border: 2.5px solid currentColor;
   background: transparent;
+}
+
+/* Mirror the marker rings' non-color access channel (ACCESS_MARKER_STYLES):
+   solid = allowed/unknown, dashed = permit, dotted = prohibited/private. */
+.leg-chip .ring[data-ring="dashed"] {
+  border-style: dashed;
+}
+
+.leg-chip .ring[data-ring="dotted"] {
+  border-style: dotted;
 }
 
 .leg-chip.off {

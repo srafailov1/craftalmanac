@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=critique-fixes-1">
+    <link rel="stylesheet" href="./styles.css?v=critique-fixes-2">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -76,6 +76,7 @@
             <span class="season-readout"><strong id="seasonDateLabel">May 20</strong> <span id="seasonName">Spring</span></span>
             <span class="season-mbtns">
               <button class="text-button mobile-only" id="legendMob" type="button" aria-pressed="false">Legend</button>
+              <button class="text-button desktop-only" id="histToggle" type="button" aria-expanded="false" aria-controls="seasonHist">Chart</button>
               <button class="text-button" id="allSeasonsButton" type="button" aria-pressed="false">All seasons</button>
               <button class="text-button" id="seasonReset" type="button">Back to now</button>
               <button class="text-button" id="whenToggle" type="button" aria-expanded="false" aria-controls="whenForm">Set date</button>
@@ -114,7 +115,7 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=critique-fixes-1"></script>
+    <script src="./app.js?v=critique-fixes-2"></script>
     <script>
       // Register the offline service worker from the root scope (controls the
       // whole origin). Guarded and deferred to load so it never blocks first
