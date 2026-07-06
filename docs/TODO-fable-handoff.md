@@ -5,8 +5,12 @@ verified) ran 2026-07-06 against the mission in `PRODUCT.md` and the
 2026-07-05 live-site critique (`.impeccable/critique/`). 28 findings were
 confirmed; the high-value ones landed the same day (commits `4f9a221` →
 `80d6a4e`). This file is the queue of what remains, scoped so a fresh agent
-can execute without re-deriving context. Every item below was verified
-against the code as of those commits — re-check line anchors before editing.
+can execute without re-deriving context. Re-check line anchors before editing.
+
+**Round 2 (same day, commits `e86241a`, `8012dcb`): B1, B3, B4, B5, and B6
+plan items 2–4 are DONE** (each adversarially reviewed pre-commit; 8 findings
+fixed). Still open: section A (owner sign-off, now including round-2 items),
+B2 (bundled into the next regen), B6's item-5 contingency, B7, and section C.
 
 ## A. Owner visual sign-off (no code needed — checklist)
 
@@ -33,9 +37,30 @@ look on craftalmanac.com after deploy:
 6. **Legend note** — the cluster-tint explainer reads well in the hover
    legend; wording is editable at app.js `renderMapLegend`.
 
+Round-2 additions to the same checklist:
+
+7. **Three-level rings** — permit-required markers now DASHED (allowed
+   solid, prohibited/private dotted); legend chips mirror the border
+   styles. Eyeball at 2–3 zoom levels + night register.
+8. **Chart button** — desktop season bar has a CHART pin; hover still
+   reveals; tabbing into the bar no longer auto-expands (the button is the
+   keyboard route now). Escape and the mobile legend toggle reset it.
+9. **Warm zoom-out** — after browsing at point zoom, zooming below 8
+   should paint aggregates with no sparse flash (tiles prefetched). To
+   inspect: set `window.FORAGE_DEBUG = true`, zoom around, read
+   `window.__handoffLog` (down-cross-warm vs down-cross-cold events).
+10. **Saved-area reconcile** — saving still works; a save in a private
+    window warns that it won't be remembered.
+
 ## B. Remaining verified findings (unlanded)
 
-### B1. Saved-area registry/cache reconcile (low, ~half day)
+### B1. Saved-area registry/cache reconcile — DONE round 2 (e86241a)
+Landed as designed plus a cross-tab Web Lock (save/remove/reconcile all
+hold `craftalmanac-saved-areas`; the reconcile skips when a save holds it
+and re-reads localStorage inside the lock). Original scoping kept below
+for context.
+
+### B1-original. Saved-area registry/cache reconcile (low, ~half day)
 `localStorage` registry and `SAVED_AREAS_CACHE` can desync (persist write
 swallowed → invisible permanent orphans in a never-rotating cache).
 Verified-correct design (the naive fix is a no-op — see below):
@@ -64,7 +89,11 @@ scripts/validate_data.mjs so the gate goes strict. Do NOT hand-drop rows
 from chunks: check (d) requires positional row alignment with the
 access-cache; a surgical purge must delete the same indices from both.
 
-### B3. Desktop histogram affordance (~1–2 h)
+### B3. Desktop histogram affordance — DONE round 2 (e86241a)
+CHART pin button + `#season-bar.season-open` desktop rule; the ARIA-dishonest
+:focus-within reveal was removed (hover kept). Original scoping below.
+
+### B3-original. Desktop histogram affordance (~1–2 h)
 The signature chart only appears on hover/focus-within of the season bar —
 invisible to a mouse user who never hovers. Add a small always-visible
 "CHART" toggle in the season-meta row (desktop; mirror the mobile
@@ -73,7 +102,12 @@ OUTSIDE the ≤720px media query (the existing .season-open rules are
 mobile-scoped; without the desktop rule the chart collapses when the
 button loses focus).
 
-### B4. Three-level marker dash pattern (optional polish, ~1–2 h)
+### B4. Three-level marker dash pattern — DONE round 2 (e86241a)
+solid/dashed/dotted + legend chip mirror; rendering verified in all three
+engines by the review. Point-card ring pattern (pairs with text) not done —
+optional. Original scoping below.
+
+### B4-original. Three-level marker dash pattern (optional polish, ~1–2 h)
 Restrictive statuses now use the two-level dotted/solid channel. The full
 proposal: prohibited = dotted, permit-required = dashed
 (`context.setLineDash([4,3])` in a new `drawMarkerOutline` branch),
@@ -83,7 +117,12 @@ accessChips builder; `border-style: dotted/dashed` per status — chips
 already pair with text so this is consistency, not safety). Eyeball dots
 at 2–3 zoom levels; icon cache keys already include status.
 
-### B5. Dead-CSS sweep (~1 h, mechanical)
+### B5. Dead-CSS sweep — DONE round 2 (e86241a, 8012dcb)
+~120 further lines removed; `scripts/report_dead_css.mjs` (report-only,
+brace-aware, composed-class allowlist) now runs informationally in check.sh
+and reports zero candidates. Original scoping below.
+
+### B5-original. Dead-CSS sweep (~1 h, mechanical)
 The sidebar-era block was removed, but stragglers remain (verify each has
 zero references in app.js/index.html/attribution.html before deleting —
 match whole class tokens, not substrings): `.count`, and inside the mobile
@@ -93,10 +132,15 @@ from styles.css and greps the HTML/JS surfaces, allowlisting Mapbox's
 `.mapboxgl-*` and dynamically-composed names (`.leg-chip`, `histogram-*`,
 register/status suffixes).
 
-### B6. KNOWN_ISSUES item 1 plan items 2–4 (pre-existing queue)
-Prefetch/warm gz 2/4 aggregate tiles; data-availability-bounded downward
-bridge; zoom-handoff instrumentation. Unchanged priority — the harness
-(`scripts/test_zoom_handoff.mjs`) is in place to protect refactors.
+### B6. KNOWN_ISSUES item 1 plan items 2–4 — DONE round 2 (e86241a)
+Prefetch (boot region warm + per-pan gz6 landing warm, per-channel
+supersession), warm downward crossings (immediate load instead of the 260ms
+debounce when every tile is cached; the bridge still settles on idle — a
+hard skip would risk the documented async-setData old-buffer flash), and
+FORAGE_DEBUG instrumentation. Item 5 of the original plan (FF-manifest-only
+immediate paint on cold crossings) remains a contingency IF a residual flash
+is still seen live — owner judgment; note the owner prefers
+complete-at-once.
 
 ### B7. getVisibleRecords memoization (only if phones jank)
 Deferred from Phase 4.6. Profile minerals-mode slider drags on a phone

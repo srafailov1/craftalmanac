@@ -4,7 +4,7 @@ Issues queued for the daily tune-up pass. Investigate, fix, and remove entries
 once verified on the live site. Keep this file current: future debugging
 sessions rely on it for context.
 
-## 1. Sparse-counts flash during zoom transitions around zoom 8 (PARTIAL FIX SHIPPED 2026-06-11 evening — see update; plan items 2–4 still open)
+## 1. Sparse-counts flash during zoom transitions around zoom 8 (plan items 2–4 SHIPPED 2026-07-06 — see the 2026-07-06 round-2 run log; owner live sign-off pending)
 
 **Update 2026-06-11 evening (owner-reported, fixed in interactive session):**
 Owner reproduced two related symptoms: (a) with default permissions, overview
@@ -641,6 +641,43 @@ curves) was fixed by the Phase 5.3 regional rebuild (commit 8ddd71c) — the
 phenology↔catalog gate passes; entry closed.
 
 **Asset version:** `critique-fixes-1` (index.html + sw.js, gate-enforced).
+
+## Tune-up run log — 2026-07-06 round 2 (handoff execution, Fable)
+
+Executed the remaining `docs/TODO-fable-handoff.md` section-B items (commits
+`e86241a`, `8012dcb`); every change went through a 5-reviewer adversarial
+workflow before commit and all 8 confirmed findings were fixed pre-commit
+(notably: the foreground aggregate swap now snapshots its cached tiles so a
+concurrent prefetch trim can't make it paint an incomplete overview; the
+prefetch channels don't cancel each other; closeSeasonExpanders resets the
+new Chart toggle; the ARIA-dishonest :focus-within histogram reveal was
+removed in favor of the explicit button).
+
+1. **Item 1 plan items 2–4 SHIPPED**: background aggregate-tile prefetch
+   (boot warms whole-region gz2/4 explicitly region-wide at +3s; each
+   point-band load warms the gz6 landing tiles; concurrency 2), warm
+   downward crossings (all-tiles-cached skips the 260ms debounce and loads
+   immediately; the bridge still settles on idle so the old buffer never
+   paints — a hard visibility flip would risk the documented async-setData
+   flash), and opt-in instrumentation (`window.FORAGE_DEBUG = true` →
+   `window.__handoffLog`, with down-cross-warm/cold + prefetch + agg-swap +
+   points-loaded events). Plan item 5 (FF-manifest-only immediate paint)
+   remains a contingency if a residual flash shows live. The zoom-handoff
+   harness passes; instrumentation deliberately stays out of the extracted
+   functions. **Owner:** wheel/pinch zoom over Charlottesville + NYC per the
+   item-1 verification standard, ideally with FORAGE_DEBUG on.
+2. **Three-level access rings** (solid allowed/unknown, dashed permit,
+   dotted prohibited/private) on markers + legend chips — engine rendering
+   verified (Blink/Gecko/WebKit) by the review.
+3. **Desktop CHART pin** for the season histogram (keyboard route with
+   honest aria-expanded; hover reveal kept; :focus-within reveal removed).
+4. **Saved-area reconcile**: startup cleanup of unregistered cache entries,
+   honest private-mode warning, cross-tab Web Lock around save/remove/
+   reconcile.
+5. **Dead CSS**: ~120 further lines removed; report-only detector
+   (`scripts/report_dead_css.mjs`) added to check.sh (informational).
+
+**Asset version:** `critique-fixes-2`.
 
 ## Hand-offs (for the 6am queue-grooming loop)
 
