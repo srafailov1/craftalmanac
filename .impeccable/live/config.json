@@ -1,0 +1,13 @@
+{
+  "files": [
+    "index.html",
+    "attribution.html",
+    "materials/*.html",
+    "projects/*.html",
+    "cards/*.html"
+  ],
+  "exclude": ["prototype/**", "docs/**", "outputs/**"],
+  "insertBefore": "</body>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}
