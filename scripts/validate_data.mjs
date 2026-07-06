@@ -290,6 +290,38 @@ runCheck("Check (e): accessCounts per species never exceed chunk species counts"
   });
 });
 
+// Source species ids that are KNOWN to resolve to no catalog entry: dropped
+// from a catalog after the data was baked, kept in the raw chunks as harmless
+// orphans until the next full subset regen (see KNOWN_ISSUES.md, 2026-07-03).
+// Anything NOT on this list that resolves nowhere fails the check — a fresh
+// orphan means a regen or catalog rename shipped records no mode can render.
+const GRANDFATHERED_ORPHAN_SPECIES = new Set(["ink-honeysuckle"]);
+
+runCheck("Check (g): every manifest source species resolves to a catalog species in some mode", () => {
+  const importContext = buildImportContext();
+  const sourceIds = new Set();
+  chunks.forEach((chunk) => {
+    Object.keys(chunk.countsBySpeciesId || {}).forEach((id) => sourceIds.add(id));
+  });
+  (manifest?.states || []).forEach((state) => {
+    Object.keys(state.countsBySpeciesId || {}).forEach((id) => sourceIds.add(id));
+  });
+  const orphans = [];
+  sourceIds.forEach((sourceSpeciesId) => {
+    const resolves = ["food", "ink"].some((mode) => {
+      importContext.context.state.activeMap = mode;
+      const modeSpeciesId = importContext.context.getImportedSpeciesId(sourceSpeciesId);
+      return importContext.catalogByMode[mode]?.has(modeSpeciesId);
+    });
+    if (!resolves && !GRANDFATHERED_ORPHAN_SPECIES.has(sourceSpeciesId)) {
+      orphans.push(sourceSpeciesId);
+    }
+  });
+  orphans.forEach((id) => {
+    fail(`Source species ${id} resolves to no catalog entry in any mode (dead records in the baked data)`);
+  });
+});
+
 runCheck("Check (f): contiguous US states have bbox and Polygon/MultiPolygon geometry", () => {
   const statesData = readJson(STATES_PATH);
   if (statesData?.__readError) {

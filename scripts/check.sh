@@ -90,4 +90,25 @@ node scripts/test_thin_park_apportioning.mjs || { echo "FAIL: Thin-park apportio
 echo "Running register contrast audit..."
 node scripts/audit_contrast.mjs || { echo "FAIL: Register contrast audit failed"; exit 1; }
 
+# Verify sw.js ASSET_VERSION/CACHE_VERSION stay in sync with index.html's ?v=
+# strings. A mismatch precaches URLs the page never requests — online users are
+# fine, but a cold OFFLINE launch boots a shell with no app.js/styles.css: a
+# silent, offline-only failure nothing else catches.
+echo "Verifying service-worker/asset version sync..."
+AV=$(sed -n 's/^const ASSET_VERSION = "\(.*\)";$/\1/p' sw.js)
+CV=$(sed -n 's/^const CACHE_VERSION = "\(.*\)";$/\1/p' sw.js)
+if [ -z "$AV" ] || [ -z "$CV" ]; then
+    echo "FAIL: could not extract ASSET_VERSION/CACHE_VERSION from sw.js"; exit 1
+fi
+QV_COUNT=$(grep -c "?v=$AV" index.html || true)
+QV_TOTAL=$(grep -c "?v=" index.html || true)
+if [ "$QV_COUNT" -ne 2 ] || [ "$QV_TOTAL" -ne "$QV_COUNT" ]; then
+    echo "FAIL: index.html ?v= strings do not all match sw.js ASSET_VERSION ($AV): $QV_COUNT of $QV_TOTAL match"; exit 1
+fi
+case "$CV" in
+    *"$AV"*) ;;
+    *) echo "FAIL: sw.js CACHE_VERSION ($CV) does not contain ASSET_VERSION ($AV) — bump both together"; exit 1 ;;
+esac
+echo "Version sync OK: $AV / $CV"
+
 echo "All checks PASSED"
