@@ -4013,7 +4013,18 @@ function initWelcomeModal() {
   const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
   if (hasSeenModal) return;
 
-  const focusAfterClose = document.querySelector(".mapboxgl-ctrl-zoom-in") || document.body;
+  // Keyboard flow should resume at the app's own chrome, not Mapbox's zoom
+  // cluster in the far corner. Resolved at DISMISS time (not init) and only to
+  // a VISIBLE control: at narrow widths the nav links are collapsed behind the
+  // menu trigger, and focusing a display:none element is a silent no-op.
+  const resolveFocusAfterClose = () => {
+    const candidates = [
+      document.querySelector("#masthead .links button[data-sheet]"),
+      document.querySelector("#mastMenuBtn"),
+      document.querySelector(".mapboxgl-ctrl-zoom-in")
+    ];
+    return candidates.find((el) => el && el.offsetParent !== null) || document.body;
+  };
   welcomeModal.hidden = false;
   document.body.classList.add("modal-open");
   window.setTimeout(() => welcomeModalButton.focus(), 0);
@@ -4028,7 +4039,7 @@ function initWelcomeModal() {
     try { window.localStorage?.setItem(WELCOME_MODAL_STORAGE_KEY, "true"); } catch { /* private mode */ }
     welcomeModal.hidden = true;
     document.body.classList.remove("modal-open");
-    focusAfterClose?.focus?.();
+    resolveFocusAfterClose()?.focus?.();
     showFirstRunCoach();
   };
 
@@ -4273,7 +4284,7 @@ function sheetPlantsHTML() {
     const uses = species.usedParts || getCategoryLabel(species.category);
     const openButton = openableSpecies.has(species.id)
       ? `<button type="button" class="mini-card-open" data-open-record="${escapeHTML(species.id)}">Open nearest in view</button>`
-      : `<button type="button" class="mini-card-open" disabled title="No record in the current view — zoom the map to an area with this species first">Open nearest in view</button>`;
+      : `<button type="button" class="mini-card-open" disabled title="No record in the current view — zoom the map to an area with this species first" aria-label="Open nearest in view — unavailable: no record in the current view; zoom the map to an area with this species first">Open nearest in view</button>`;
     return `
       <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(color)}"></div>
@@ -4313,6 +4324,14 @@ function sheetPlantsHTML() {
   const medNote = state.activeMap === "medicine"
     ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>`
     : "";
+
+  // At overview zooms records aren't loaded, so EVERY "Open nearest in view"
+  // button renders disabled with no visible reason. Say why once, up top.
+  // (Also shown while the map is still booting — records aren't loaded then
+  // either, and the same remedy applies.)
+  const zoomNote = (!isMineral && (!state.mapReady || map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM))
+    ? `<div class="dnote">ZOOM THE MAP IN TO LOAD RECORDS — "OPEN NEAREST IN VIEW" WORKS AT NEIGHBORHOOD ZOOM</div>`
+    : "";
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE SHELF · ${speciesCatalogByName.length} PROFILES</div>
@@ -4320,6 +4339,7 @@ function sheetPlantsHTML() {
     <p class="sheet-lede">${escapeHTML(config.lede)}</p>
     ${filterRow}
     <p>Tap a profile to show just that species on the map.</p>
+    ${zoomNote}
     ${medNote}
     ${emptyNote}
     <div class="card-grid">${cards}</div>
