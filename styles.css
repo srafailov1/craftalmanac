@@ -2283,16 +2283,6 @@ body[data-register="night"] {
   background: transparent;
 }
 
-/* Mirror the marker rings' non-color access channel (ACCESS_MARKER_STYLES):
-   solid = allowed/unknown, dashed = permit, dotted = prohibited/private. */
-.leg-chip .ring[data-ring="dashed"] {
-  border-style: dashed;
-}
-
-.leg-chip .ring[data-ring="dotted"] {
-  border-style: dotted;
-}
-
 .leg-chip.off {
   opacity: 0.32;
 }

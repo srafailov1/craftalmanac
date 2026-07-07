@@ -257,19 +257,18 @@ const ACCESS_STATUS_OPTIONS = [
 // Access-status ring colors for the map markers. These mirror the prototype's
 // status hues and the day-register --reg-st-* tokens so the marker ring matches
 // the legend access ring (the legend brightens per register; markers stay
-// constant, exactly as the prototype does). Hue is NOT the only channel
-// (the PRODUCT.md pattern-channel promise): ring style encodes restriction —
-// solid = allowed/unknown, dashed = permit-required, dotted = prohibited and
-// private — so colorblind users read the tiers without the hue. The legend
-// ring chips mirror the same styles. "permit" uses the legibility-tuned
-// amber (#a8730a), per owner decision.
+// constant, exactly as the prototype does). Solid rings; the status is read by
+// hue — OWNER DECISION 2026-07-06: no dashed/dotted pattern channel on the
+// rings (a three-level pattern shipped briefly and was reverted; the hover
+// label and point card carry the textual channel). "permit" uses the
+// legibility-tuned amber (#a8730a), per owner decision.
 const ACCESS_MARKER_STYLES = {
-  allowed: { label: "Allowed", color: "#2f8f46", ring: "solid" },
-  "permit-required": { label: "Permit required", color: "#a8730a", ring: "dashed" },
-  private: { label: "Private", color: "#7e6654", ring: "dotted" },
-  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", ring: "dotted" },
-  unknown: { label: "Unknown", color: "#8b8f86", ring: "solid" },
-  prohibited: { label: "Prohibited", color: "#c74437", ring: "dotted" }
+  allowed: { label: "Allowed", color: "#2f8f46", dashed: false },
+  "permit-required": { label: "Permit required", color: "#a8730a", dashed: false },
+  private: { label: "Private", color: "#7e6654", dashed: false },
+  "private-unsourced": { label: "Private / unchecked", color: "#7e6654", dashed: false },
+  unknown: { label: "Unknown", color: "#8b8f86", dashed: false },
+  prohibited: { label: "Prohibited", color: "#c74437", dashed: false }
 };
 const LEGEND_PERMISSION_OPTIONS = [
   { id: "allowed", label: "Allowed" },
@@ -3952,10 +3951,7 @@ function renderMapLegend() {
   const accessChips = permissionOptions.map((status) => {
     const token = ACCESS_STATUS_TOKEN[status.id] || "unknown";
     const off = !selectedAccess.has(status.id);
-    // The chip ring mirrors the marker's ring STYLE (solid/dashed/dotted) so
-    // the legend teaches the non-color access channel, not just the hue.
-    const ringStyle = (ACCESS_MARKER_STYLES[status.id] || {}).ring || "solid";
-    return `<button type="button" class="leg-chip${off ? " off" : ""}" data-leg-access="${escapeHTML(status.id)}" aria-pressed="${String(!off)}"><span class="ring" data-ring="${ringStyle}" style="color: var(--reg-st-${token})"></span>${escapeHTML(status.label)}</button>`;
+    return `<button type="button" class="leg-chip${off ? " off" : ""}" data-leg-access="${escapeHTML(status.id)}" aria-pressed="${String(!off)}"><span class="ring" style="color: var(--reg-st-${token})"></span>${escapeHTML(status.label)}</button>`;
   }).join("");
 
   const categoryChips = config.categories.map((category) => {
@@ -6221,16 +6217,15 @@ function ensureMarkerIcon(iconName, fillColor, accessStatus) {
   context.fillStyle = fillColor;
   context.fill();
 
-  drawMarkerOutline(context, center, outlineRadius, style.color, style.ring, ringWidth);
+  drawMarkerOutline(context, center, outlineRadius, style.color, style.dashed, ringWidth);
 
   const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
   map.addImage(iconName, imageData, { pixelRatio: MARKER_ICON_PIXEL_RATIO });
 }
 
-// ringStyle: "solid" | "dashed" | "dotted" — the non-color access channel.
-function drawMarkerOutline(context, center, radius, color, ringStyle, lineWidth) {
+function drawMarkerOutline(context, center, radius, color, dashed, lineWidth) {
   context.save();
-  if (ringStyle === "dotted") {
+  if (dashed) {
     const dotCount = 14;
     const dotRadius = lineWidth * 0.42;
     context.fillStyle = color;
@@ -6249,11 +6244,6 @@ function drawMarkerOutline(context, center, radius, color, ringStyle, lineWidth)
   } else {
     context.strokeStyle = color;
     context.lineWidth = lineWidth;
-    if (ringStyle === "dashed") {
-      // ~8 dashes around the ~49-unit circumference: long enough to read as
-      // line segments (vs the dotted ring's points) at map icon sizes.
-      context.setLineDash([4, 2.2]);
-    }
     context.beginPath();
     context.arc(center, center, radius, 0, Math.PI * 2);
     context.stroke();

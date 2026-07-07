@@ -39,9 +39,8 @@ look on craftalmanac.com after deploy:
 
 Round-2 additions to the same checklist:
 
-7. **Three-level rings** — permit-required markers now DASHED (allowed
-   solid, prohibited/private dotted); legend chips mirror the border
-   styles. Eyeball at 2–3 zoom levels + night register.
+7. ~~Three-level rings~~ — REVERTED per owner 2026-07-06 (rings stay
+   solid + color-coded; nothing to check).
 8. **Chart button** — desktop season bar has a CHART pin; hover still
    reveals; tabbing into the bar no longer auto-expands (the button is the
    keyboard route now). Escape and the mobile legend toggle reset it.
@@ -102,10 +101,13 @@ OUTSIDE the ≤720px media query (the existing .season-open rules are
 mobile-scoped; without the desktop rule the chart collapses when the
 button loses focus).
 
-### B4. Three-level marker dash pattern — DONE round 2 (e86241a)
-solid/dashed/dotted + legend chip mirror; rendering verified in all three
-engines by the review. Point-card ring pattern (pairs with text) not done —
-optional. Original scoping below.
+### B4. Three-level marker dash pattern — REVERTED per owner (2026-07-06)
+Shipped in e86241a, then the owner declined it: the color-coded solid rings
+work as-is. Reverted to solid rings everywhere (including round 1's dotted
+prohibited/private). DO NOT re-add ring patterns or flag their absence in
+future audits — the textual channel is the hover label + point card, and
+the ACCESS_MARKER_STYLES comment records the decision. Original scoping
+kept below for history only.
 
 ### B4-original. Three-level marker dash pattern (optional polish, ~1–2 h)
 Restrictive statuses now use the two-level dotted/solid channel. The full

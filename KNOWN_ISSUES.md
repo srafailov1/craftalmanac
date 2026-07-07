@@ -666,9 +666,10 @@ removed in favor of the explicit button).
    harness passes; instrumentation deliberately stays out of the extracted
    functions. **Owner:** wheel/pinch zoom over Charlottesville + NYC per the
    item-1 verification standard, ideally with FORAGE_DEBUG on.
-2. **Three-level access rings** (solid allowed/unknown, dashed permit,
-   dotted prohibited/private) on markers + legend chips — engine rendering
-   verified (Blink/Gecko/WebKit) by the review.
+2. **Three-level access rings** — shipped, then REVERTED same day per owner
+   (color-coded solid rings work as-is; do not re-add ring patterns or flag
+   their absence in audits). Revert commit follows this log entry; asset
+   version `solid-rings-1`.
 3. **Desktop CHART pin** for the season histogram (keyboard route with
    honest aria-expanded; hover reveal kept; :focus-within reveal removed).
 4. **Saved-area reconcile**: startup cleanup of unregistered cache entries,
