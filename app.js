@@ -3758,7 +3758,11 @@ function setRegisterOverride(value) {
   // is happening and clear the note once the map settles. Pinning via the
   // Auto/Day/Night control is the only path that gets the cue; the sun-dial
   // preview drags through registers too fast for a per-change message.
-  if (state.mapReady && state.register !== prevRegister) {
+  // Skip the cue when a sticky loading/outage/error message owns the line —
+  // burying "iNaturalist unavailable" under a light notice (which then clears
+  // to a healthy count on idle) would silently erase a real warning.
+  if (state.mapReady && state.register !== prevRegister
+    && dataStatusKind !== "loading" && dataStatusKind !== "outage" && dataStatusKind !== "error") {
     setDataStatus("Adjusting map light…", { kind: "notice" });
     map.once("idle", () => {
       if (dataStatusKind === "notice") {
@@ -4299,7 +4303,7 @@ function sheetPlantsHTML() {
     const uses = species.usedParts || getCategoryLabel(species.category);
     const openButton = openableSpecies.has(species.id)
       ? `<button type="button" class="mini-card-open" data-open-record="${escapeHTML(species.id)}">Open nearest in view</button>`
-      : `<button type="button" class="mini-card-open" disabled title="No record in the current view — zoom the map to an area with this species first" aria-label="Open nearest in view — unavailable: no record in the current view; zoom the map to an area with this species first">Open nearest in view</button>`;
+      : `<button type="button" class="mini-card-open" disabled aria-label="Open nearest in view, unavailable" title="No record in the current view — zoom the map to an area with this species first">Open nearest in view</button>`;
     return `
       <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(color)}"></div>
@@ -4885,13 +4889,16 @@ function setMapMode(mode) {
   cancelAggregateBridge();
   state.activePopup?.remove();
   state.hoverPopup?.remove();
-  // A calendar form left open in the previous mode is stale after a switch —
-  // and meaningless in minerals, which has no dates at all. Close it and
-  // re-sync its toggle so the season bar arrives clean.
-  if (whenForm) whenForm.hidden = true;
-  if (whenToggle) {
-    whenToggle.classList.remove("active");
-    whenToggle.setAttribute("aria-expanded", "false");
+  // Leave the season bar in a clean resting state. closeSeasonExpanders folds
+  // the mobile SET DATE / CHART / legend drop-ups and re-syncs their triggers
+  // (on mobile, SET DATE owns .season-open, not #whenForm — clearing only the
+  // form's toggle would strand the panel open with its button reading closed).
+  // The desktop #whenForm calendar is separate, so hide it explicitly too.
+  closeSeasonExpanders();
+  if (whenForm && !whenForm.hidden) {
+    whenForm.hidden = true;
+    whenToggle?.classList.remove("active");
+    whenToggle?.setAttribute("aria-expanded", "false");
   }
   syncActiveCatalog();
   renderModeChrome();
@@ -5900,8 +5907,13 @@ function updateRecordCountStatus() {
   if (visibleInView === 0) {
     // Empty viewports were dead ends: a blank map over a "4881 records
     // loaded" line reads as broken. Say WHY it is empty and what to do next.
-    if (loadedInView > 0) {
-      const seasonHint = !state.allSeasons && !isMinerals ? "tap All seasons or " : "";
+    if (loadedInView > 0 && isMinerals) {
+      // In minerals the usual reason everything is hidden is the workability
+      // band (the bottom slider), not the legend.
+      const bandHint = !state.allSeasons ? "widen the workability band or " : "";
+      message = `0 of ${loadedInView} localities in view shown — ${bandHint}adjust the legend filters`;
+    } else if (loadedInView > 0) {
+      const seasonHint = !state.allSeasons ? "tap All seasons or " : "";
       message = `0 of ${loadedInView} records in view shown — ${seasonHint}adjust the legend filters`;
     } else if (isMinerals) {
       const near = describeNearestRecord();
@@ -5941,7 +5953,9 @@ function describeNearestRecord() {
     if (km < bestKm) { bestKm = km; best = record; }
   }
   if (!best || !Number.isFinite(bestKm)) return null;
-  const miles = Math.round(bestKm * 0.621371);
+  // A locality just outside the viewport edge rounds to "~0 mi", which reads as
+  // a bug; floor the displayed distance to 1 mi.
+  const miles = Math.max(1, Math.round(bestKm * 0.621371));
   const toRad = (deg) => (deg * Math.PI) / 180;
   const dLng = toRad(Number(best.lng) - center.lng);
   const lat1 = toRad(center.lat);
@@ -9453,7 +9467,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
 
   return {
     status: properties.Pub_Access === "RA" ? "permit-required" : "unknown",
-    label: properties.Pub_Access === "RA" ? "Permit required" : "Unknown",
+    label: properties.Pub_Access === "RA" ? "Permit required" : "Unverified",
     area,
     limit: properties.Pub_Access === "RA"
       ? "PAD-US marks this area as restricted public access; check the managing agency before harvesting."
@@ -10262,7 +10276,11 @@ let dataStatusKind = "idle";
 function setDataStatus(message, { transient = false, kind = "info" } = {}) {
   if (!dataStatus) return;
   window.clearTimeout(dataStatusTimer);
-  dataStatus.textContent = message;
+  // #dataStatus is a role="status" live region: re-assigning identical text
+  // re-announces the whole line to screen readers. renderMarkers re-runs the
+  // count writer on every render/pan, usually with an unchanged message, so
+  // only touch the DOM when the text actually changes.
+  if (dataStatus.textContent !== message) dataStatus.textContent = message;
   dataStatusKind = message ? kind : "idle";
   if (transient && message) {
     dataStatusTimer = window.setTimeout(() => {

@@ -436,7 +436,10 @@ h2 {
   font-size: 7px;
   margin-left: 5px;
   vertical-align: 2px;
-  color: var(--reg-accent);
+  /* Sole visual filter cue on phones — use the darker text-accent so it clears
+     the 3:1 non-text-contrast floor in every register (base --reg-accent sits
+     at 2.55:1 on the dawn panel). */
+  color: var(--reg-accent-text, var(--reg-accent));
 }
 
 .legend-k {
@@ -661,9 +664,11 @@ body.modal-open .app-shell {
   }
 
   /* The legend and season-chart reveals animate max-height/opacity; collapse
-     them to instant show/hide for reduced-motion users. */
-  .legend-body,
-  .season-hist {
+     them to instant show/hide for reduced-motion users. Scoped to their
+     containers so this beats the base .season-hist transition rule, which sits
+     LATER in the file with equal specificity (a media query adds none). */
+  .map-legend .legend-body,
+  #season-bar .season-hist {
     transition: none;
   }
 }
@@ -1155,7 +1160,8 @@ body[data-register="night"] {
 .pt-card .mine-hazard {
   margin-top: 10px;
   padding: 8px 11px;
-  border: 1px solid color-mix(in srgb, var(--reg-warn) 55%, transparent);
+  border: 1px solid var(--reg-warn);
+  border-color: color-mix(in srgb, var(--reg-warn) 55%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, var(--reg-warn) 10%, transparent);
   color: var(--reg-ink);
@@ -1169,7 +1175,8 @@ body[data-register="night"] {
 .pt-card .med-note {
   margin-top: 10px;
   padding: 9px 11px;
-  border: 1px solid color-mix(in srgb, var(--reg-warn) 55%, transparent);
+  border: 1px solid var(--reg-warn);
+  border-color: color-mix(in srgb, var(--reg-warn) 55%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, var(--reg-warn) 12%, transparent);
   color: var(--reg-ink);
@@ -1267,6 +1274,19 @@ body[data-register="night"] {
   margin-top: 7px;
   font-family: var(--font-mono);
   line-height: 1.5;
+}
+
+/* Sheet-level .dnote (the zoom-in hint + the medicine "educational only"
+   disclaimer) sits outside a .mini-card, so it needs its own rule or it
+   renders as unstyled 16px body text. Mono caution voice, matching the map's
+   #mode-disclaimer banner. */
+#sheet .dnote {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  color: var(--reg-warn);
 }
 
 /* "Full profile ↗" / "Recipe page ↗": opens the standalone material/project
@@ -2246,7 +2266,8 @@ body[data-register="night"] {
 /* Projects scope note shown when the active map isn't Ink/Dye. */
 #sheet .proj-scope {
   padding: 8px 11px;
-  border: 1px solid color-mix(in srgb, var(--reg-accent) 45%, transparent);
+  border: 1px solid var(--reg-hair);
+  border-color: color-mix(in srgb, var(--reg-accent) 45%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, var(--reg-accent) 9%, transparent);
   color: var(--reg-ink);
@@ -2551,7 +2572,8 @@ body[data-register="night"] {
 #offline-panel .off-notice {
   margin-top: 9px;
   padding: 8px 10px;
-  border: 1px solid color-mix(in srgb, var(--reg-accent) 45%, transparent);
+  border: 1px solid var(--reg-hair);
+  border-color: color-mix(in srgb, var(--reg-accent) 45%, transparent);
   border-radius: 8px;
   font-size: 12px;
   line-height: 1.5;

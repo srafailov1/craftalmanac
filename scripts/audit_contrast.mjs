@@ -23,6 +23,11 @@ import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const css = readFileSync(join(ROOT, "styles.css"), "utf8");
+// Comment-stripped view for the register-block parser: prose in /* ... */ can
+// mention `body[data-register="..."]` (the parseBlock comment itself does), and
+// the merge-all-matches parser would otherwise capture those. Comments carry no
+// --reg-* declarations, so this only removes false matches, never real tokens.
+const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
 
 // WCAG floors.
 const AA_NORMAL = 4.5; // body + secondary text
@@ -75,7 +80,7 @@ function parseBlock(selector) {
   );
   const vars = {};
   let found = false;
-  for (const m of css.matchAll(re)) {
+  for (const m of cssNoComments.matchAll(re)) {
     found = true;
     for (const decl of m[1].split(";")) {
       const mm = decl.match(/(--reg-[\w-]+)\s*:\s*([^;]+)/);
