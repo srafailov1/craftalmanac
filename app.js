@@ -5844,13 +5844,31 @@ function updateRecordCountStatus() {
   const config = getActiveMapConfig();
   const isMinerals = !!config.loadMinerals;
   if (!isMinerals && (!state.pointDataReady || map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM)) return;
+  // Right after a mode switch the record set is empty because the load hasn't
+  // landed yet — "0 nationwide" would read as broken. Let the loading message
+  // own the line until the minerals file arrives.
+  if (isMinerals && !state.records.length) return;
   const counts = getRecordViewCounts();
   if (!counts) return;
   const { loadedInView, visibleInView } = counts;
   const hidden = Math.max(0, loadedInView - visibleInView);
   const filtersOn = getActiveFilterSummary().length > 0;
   let message;
-  if (isMinerals) {
+  if (visibleInView === 0) {
+    // Empty viewports were dead ends: a blank map over a "4881 records
+    // loaded" line reads as broken. Say WHY it is empty and what to do next.
+    if (loadedInView > 0) {
+      const seasonHint = !state.allSeasons && !isMinerals ? "tap All seasons or " : "";
+      message = `0 of ${loadedInView} records in view shown — ${seasonHint}adjust the legend filters`;
+    } else if (isMinerals) {
+      const near = describeNearestRecord();
+      message = near
+        ? `No localities in view — nearest is ${near} · ${state.records.length} nationwide`
+        : `No localities in view · ${state.records.length} nationwide`;
+    } else {
+      message = "No records in this view — zoom out or pan toward a town or park";
+    }
+  } else if (isMinerals) {
     const noun = visibleInView === 1 ? "locality" : "localities";
     message = `${visibleInView} ${noun} in view · ${state.records.length} nationwide · ${config.sourceNames.join(", ")}`;
     if (hidden && filtersOn) message = `Showing ${visibleInView} of ${loadedInView} localities in view · ${state.records.length} nationwide`;
@@ -5861,6 +5879,36 @@ function updateRecordCountStatus() {
     message = `${visibleInView} ${noun} in view · ${config.sourceNames.join(", ")}`;
   }
   setDataStatus(message, { kind: "count" });
+}
+
+// "Nearest is ~120 mi NE" hint for empty minerals viewports — the mineral set
+// is national and in memory, so the nearest locality is always computable.
+// Food/ink/medicine records are viewport-loaded; there is nothing beyond the
+// viewport to measure against, so those modes get no nearest hint.
+function describeNearestRecord() {
+  if (!state.mapReady || !state.records.length) return null;
+  const center = map.getCenter();
+  let best = null;
+  let bestKm = Infinity;
+  for (const record of state.records) {
+    const lat = Number(record.lat);
+    const lng = Number(record.lng);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+    const km = haversineKm(center.lat, center.lng, lat, lng);
+    if (km < bestKm) { bestKm = km; best = record; }
+  }
+  if (!best || !Number.isFinite(bestKm)) return null;
+  const miles = Math.round(bestKm * 0.621371);
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const dLng = toRad(Number(best.lng) - center.lng);
+  const lat1 = toRad(center.lat);
+  const lat2 = toRad(Number(best.lat));
+  const y = Math.sin(dLng) * Math.cos(lat2);
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+  const bearing = ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
+  const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  const dir = dirs[Math.round(bearing / 45) % 8];
+  return `~${miles} mi ${dir}`;
 }
 
 function updateFallingFruitAggregates() {
@@ -7061,6 +7109,10 @@ function updateSaveLocationButton(button) {
   button.classList.toggle("is-saved", saved);
   button.setAttribute("aria-pressed", String(saved));
   button.textContent = saved ? "Saved location" : "Save location";
+  // "Where did it go?" pointer: saved points surface in the Offline areas
+  // panel's SAVED list, which nothing else on the card hints at.
+  const note = button.parentElement?.querySelector(".save-note");
+  if (note) note.hidden = !saved;
 }
 
 // Monthly seasonality sparkline for the point card (ported from the prototype).
@@ -7232,6 +7284,7 @@ function getMarkerPopupHTML(properties) {
           data-save-location="${escapeHTML(properties.id)}"
           aria-pressed="${String(saved)}"
         >${saved ? "Saved location" : "Save location"}</button>
+        <div class="save-note"${saved ? "" : " hidden"}>In your saved list — open Offline areas (bottom right) to revisit or keep offline.</div>
       </div>
     </div>
   `;
