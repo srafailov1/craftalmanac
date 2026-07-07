@@ -424,7 +424,7 @@ h2 {
 .legend-filters {
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   font-family: var(--font-mono);
   margin-top: 7px;
 }
@@ -599,7 +599,10 @@ h2 {
 }
 
 .welcome-opening strong {
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2em;
+  letter-spacing: 0.01em;
 }
 
 /* Safety block reads as clearly secondary to the mission copy above it:
@@ -655,6 +658,13 @@ body.modal-open .app-shell {
 @media (prefers-reduced-motion: reduce) {
   .welcome-modal {
     animation: none;
+  }
+
+  /* The legend and season-chart reveals animate max-height/opacity; collapse
+     them to instant show/hide for reduced-motion users. */
+  .legend-body,
+  .season-hist {
+    transition: none;
   }
 }
 
@@ -805,11 +815,6 @@ body.modal-open .app-shell {
     max-height: calc(100dvh - 24px);
     padding: 22px;
   }
-
-  .welcome-modal h2 {
-    font-size: 27px;
-  }
-
 }
 
 /* ===================================================================
@@ -836,6 +841,11 @@ body[data-register="day"] {
   --reg-sub: #5a615b;
   --reg-hair: #d5dad2;
   --reg-accent: #6b7f2e;
+  /* Text-sized accent uses (links, mono buttons, kickers): one step darker
+     than --reg-accent so small type clears WCAG AA with headroom — the base
+     olive sits at exactly 4.47:1 on the white panel. Fills/borders keep
+     --reg-accent. */
+  --reg-accent-text: #5d7027;
   --reg-warn: #a8730a;
   --reg-st-allowed: #2f8f46;
   --reg-st-permit: #a8730a;
@@ -853,6 +863,7 @@ body[data-register="dawn"] {
   --reg-sub: #6a7580;
   --reg-hair: #d3dbe1;
   --reg-accent: #d98a6a;
+  --reg-accent-text: #a8532f;
   --reg-warn: #a8730a;
 }
 
@@ -871,6 +882,7 @@ body[data-register="dusk"] {
   --reg-sub: #bcafa5;
   --reg-hair: #5e5664;
   --reg-accent: #ff9447;
+  --reg-accent-text: #ffb37f;
   --reg-warn: #ffc94d;
   --reg-st-allowed: #4fc979;
   --reg-st-permit: #ffc94d;
@@ -888,6 +900,7 @@ body[data-register="night"] {
   --reg-sub: #9db0a2;
   --reg-hair: #2e3b33;
   --reg-accent: #ffd166;
+  --reg-accent-text: #ffd166;
   --reg-warn: #ffc94d;
   --reg-st-allowed: #5be08a;
   --reg-st-permit: #ffc94d;
@@ -1110,7 +1123,7 @@ body[data-register="night"] {
 .pt-card .flush {
   margin-top: 6px;
   font-size: 10.5px;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   letter-spacing: 0.06em;
   font-family: var(--font-mono);
   display: none;
@@ -1133,7 +1146,7 @@ body[data-register="night"] {
 }
 
 .pt-card .src-link {
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -1142,12 +1155,12 @@ body[data-register="night"] {
 .pt-card .mine-hazard {
   margin-top: 10px;
   padding: 8px 11px;
-  border-left: 3px solid var(--reg-warn);
-  border-radius: 0 6px 6px 0;
+  border: 1px solid color-mix(in srgb, var(--reg-warn) 55%, transparent);
+  border-radius: 8px;
   background: color-mix(in srgb, var(--reg-warn) 10%, transparent);
   color: var(--reg-ink);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.03em;
   line-height: 1.55;
 }
@@ -1156,8 +1169,8 @@ body[data-register="night"] {
 .pt-card .med-note {
   margin-top: 10px;
   padding: 9px 11px;
-  border-left: 3px solid var(--reg-warn);
-  border-radius: 0 6px 6px 0;
+  border: 1px solid color-mix(in srgb, var(--reg-warn) 55%, transparent);
+  border-radius: 8px;
   background: color-mix(in srgb, var(--reg-warn) 12%, transparent);
   color: var(--reg-ink);
   font-size: 12px;
@@ -1267,7 +1280,7 @@ body[data-register="night"] {
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   text-decoration: none;
 }
 
@@ -1295,7 +1308,7 @@ body[data-register="night"] {
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
 }
 
 .mini-card-open:hover {
@@ -1344,7 +1357,7 @@ body[data-register="night"] {
 
 .project-card .pc-arrow {
   margin-left: auto;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   font-size: 13px;
 }
 
@@ -1422,7 +1435,7 @@ body[data-register="night"] {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
 }
 .shelf-toggle:hover { text-decoration: underline; }
 .shelf-row {
@@ -1430,20 +1443,17 @@ body[data-register="night"] {
   gap: 12px;
   margin-top: 8px;
   overflow-x: auto;
-  scroll-snap-type: x proximity;
   padding-bottom: 8px;
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
 }
 .shelf-row > .mini-card {
   flex: 0 0 210px;
-  scroll-snap-align: start;
 }
 .shelf-row.expanded {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   overflow-x: visible;
-  scroll-snap-type: none;
 }
 .shelf-row.expanded > .mini-card { flex: initial; }
 
@@ -1460,7 +1470,7 @@ body[data-register="night"] {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   cursor: pointer;
 }
 
@@ -1533,7 +1543,7 @@ body[data-register="night"] {
 .ing-list { list-style: none; padding-left: 0; }
 .ing-list li { margin: 0 0 7px; }
 .ing-item { font-weight: 600; }
-.opt-tag { color: var(--reg-accent); }
+.opt-tag { color: var(--reg-accent-text, var(--reg-accent)); }
 
 .steps-list li { margin: 0 0 8px; padding-left: 2px; }
 
@@ -1547,7 +1557,7 @@ body[data-register="night"] {
   border: none;
   padding: 0;
   font: inherit;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   text-decoration: underline;
   cursor: pointer;
 }
@@ -1578,13 +1588,14 @@ body[data-register="night"] {
 .safety-box li:last-child { margin-bottom: 0; }
 
 .beyond-box {
-  border-left: 3px solid var(--reg-accent);
-  padding: 2px 0 2px 12px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 8px;
+  padding: 10px 12px;
   margin: 0 0 18px;
 }
 
 .recipe-sources a {
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   font-size: 12px;
   display: block;
   margin: 0 0 3px;
@@ -1956,7 +1967,7 @@ body[data-register="night"] {
 
 #season-bar .season-readout span {
   margin-left: 7px;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1975,7 +1986,7 @@ body[data-register="night"] {
   min-height: 24px;
   background: none;
   border: 1px solid transparent;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   cursor: pointer;
   font-size: 10.5px;
   letter-spacing: 0.08em;
@@ -2208,7 +2219,7 @@ body[data-register="night"] {
 #sheet .k {
   font-size: 10.5px;
   letter-spacing: 0.12em;
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
   margin-bottom: 14px;
   font-family: var(--font-mono);
 }
@@ -2221,7 +2232,7 @@ body[data-register="night"] {
 }
 
 #sheet p a {
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
 }
 
 /* Per-mode mission lede at the top of the Materials sheet (config.lede). */
@@ -2235,8 +2246,8 @@ body[data-register="night"] {
 /* Projects scope note shown when the active map isn't Ink/Dye. */
 #sheet .proj-scope {
   padding: 8px 11px;
-  border-left: 3px solid var(--reg-accent);
-  border-radius: 0 6px 6px 0;
+  border: 1px solid color-mix(in srgb, var(--reg-accent) 45%, transparent);
+  border-radius: 8px;
   background: color-mix(in srgb, var(--reg-accent) 9%, transparent);
   color: var(--reg-ink);
   font-size: 12.5px;
@@ -2436,7 +2447,7 @@ body[data-register="night"] {
 }
 
 .rail-seg.active .k {
-  color: var(--reg-accent);
+  color: var(--reg-accent-text, var(--reg-accent));
 }
 
 /* ---- conditions detail panel (Phase 4b) ---- */
@@ -2540,9 +2551,8 @@ body[data-register="night"] {
 #offline-panel .off-notice {
   margin-top: 9px;
   padding: 8px 10px;
-  border: 1px solid var(--reg-hair);
-  border-left: 3px solid var(--reg-accent);
-  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--reg-accent) 45%, transparent);
+  border-radius: 8px;
   font-size: 12px;
   line-height: 1.5;
 }

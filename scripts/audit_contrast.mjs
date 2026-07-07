@@ -63,18 +63,26 @@ function contrast(fg, bg) {
 // from the ":root, body[data-register=\"day\"]" base (the cascade). Replicate
 // that by layering each register's own declarations over the day base.
 function parseBlock(selector) {
-  // Match the selector's declaration block. The day base is the combined
-  // ":root,\n body[data-register=\"day\"] { ... }" rule.
+  // Match EVERY declaration block whose selector list mentions this register,
+  // merging them in file order. A first-match-only parse silently bound
+  // "night" to the shared `body[data-register="dusk"], body[data-register=
+  // "night"] { color-scheme: dark; }` rule and audited night against the day
+  // fallbacks — the real night token block was never read (caught 2026-07-07
+  // when --reg-accent-text joined the audit).
   const re = new RegExp(
-    selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*\\{([^}]*)\\}"
+    selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[^{]*\\{([^}]*)\\}",
+    "g"
   );
-  const m = css.match(re);
-  if (!m) throw new Error("register block not found: " + selector);
   const vars = {};
-  for (const decl of m[1].split(";")) {
-    const mm = decl.match(/(--reg-[\w-]+)\s*:\s*([^;]+)/);
-    if (mm) vars[mm[1].trim()] = mm[2].trim();
+  let found = false;
+  for (const m of css.matchAll(re)) {
+    found = true;
+    for (const decl of m[1].split(";")) {
+      const mm = decl.match(/(--reg-[\w-]+)\s*:\s*([^;]+)/);
+      if (mm) vars[mm[1].trim()] = mm[2].trim();
+    }
   }
+  if (!found) throw new Error("register block not found: " + selector);
   return vars;
 }
 
@@ -94,6 +102,7 @@ const FOREGROUNDS = [
   ["--reg-ink", AA_NORMAL, "primary text"],
   ["--reg-sub", AA_NORMAL, "secondary text"],
   ["--reg-accent", AA_LARGE, "accent (labels/active)"],
+  ["--reg-accent-text", AA_NORMAL, "accent text (links/kickers)"],
   ["--reg-warn", AA_LARGE, "warn label"],
   ["--reg-st-allowed", AA_LARGE, "status: allowed"],
   ["--reg-st-permit", AA_LARGE, "status: permit"],

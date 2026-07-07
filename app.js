@@ -3751,7 +3751,22 @@ function setRegisterOverride(value) {
   } catch { /* private mode — keep the in-memory choice */ }
   // Clearing to auto also ends any sun-dial preview so the live sun resumes.
   if (!next) state.simMins = null;
+  const prevRegister = state.register;
   applyRegister();
+  // The Mapbox lightPreset relight trails the (instant) chrome flip by several
+  // silent seconds — dark panels float over a daylight map meanwhile. Say what
+  // is happening and clear the note once the map settles. Pinning via the
+  // Auto/Day/Night control is the only path that gets the cue; the sun-dial
+  // preview drags through registers too fast for a per-change message.
+  if (state.mapReady && state.register !== prevRegister) {
+    setDataStatus("Adjusting map light…", { kind: "notice" });
+    map.once("idle", () => {
+      if (dataStatusKind === "notice") {
+        setDataStatus("", { kind: "idle" });
+        updateRecordCountStatus();
+      }
+    });
+  }
 }
 
 function saveFavoriteSpecies() {
@@ -4870,6 +4885,14 @@ function setMapMode(mode) {
   cancelAggregateBridge();
   state.activePopup?.remove();
   state.hoverPopup?.remove();
+  // A calendar form left open in the previous mode is stale after a switch —
+  // and meaningless in minerals, which has no dates at all. Close it and
+  // re-sync its toggle so the season bar arrives clean.
+  if (whenForm) whenForm.hidden = true;
+  if (whenToggle) {
+    whenToggle.classList.remove("active");
+    whenToggle.setAttribute("aria-expanded", "false");
+  }
   syncActiveCatalog();
   renderModeChrome();
   updateLayerHandoff();
@@ -5860,7 +5883,7 @@ function renderMarkers() {
 // aggregate-count notices.
 function updateRecordCountStatus() {
   if (!state.mapReady) return;
-  if (dataStatusKind === "loading" || dataStatusKind === "outage" || dataStatusKind === "error") return;
+  if (dataStatusKind === "loading" || dataStatusKind === "outage" || dataStatusKind === "error" || dataStatusKind === "notice") return;
   const config = getActiveMapConfig();
   const isMinerals = !!config.loadMinerals;
   if (!isMinerals && (!state.pointDataReady || map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM)) return;
