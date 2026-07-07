@@ -324,7 +324,7 @@ const SAFETY_TAGS_BY_SPECIES = {
   plum: ["toxic parts"],
   sumac: ["lookalikes"],
   grape: ["lookalikes"],
-  morel: ["lookalikes"],
+  morel: ["deadly lookalike"],
   "wild-strawberry": ["lookalikes"],
   "ink-pokeweed": ["toxic parts", "do not ingest"],
   "ink-elderberry": ["toxic parts", "do not ingest"],
@@ -2721,7 +2721,7 @@ function conditionsDataAge() {
   if (!w || !w.fetched) return "";
   const age = Math.round((Date.now() - w.fetched) / 6e4);
   const freshness = w.src === "cached" ? `CACHED · ${age} MIN AGO` : age <= 1 ? "JUST FETCHED" : `${age} MIN AGO`;
-  return `<div class="age">SOURCE: OPEN-METEO · ${freshness}</div>`;
+  return `<div class="age">SOURCE: <a href="https://open-meteo.com" target="_blank" rel="noopener">OPEN-METEO</a> · ${freshness}</div>`;
 }
 
 function conditionsLocLine() {
@@ -3544,7 +3544,7 @@ function loadRadar() {
       const past = (j.radar && j.radar.past) || [];
       if (!past.length || map.getSource("radar")) return;
       const tiles = j.host + past[past.length - 1].path + "/256/{z}/{x}/{y}/2/1_1.png";
-      map.addSource("radar", { type: "raster", tiles: [tiles], tileSize: 256, maxzoom: 6, attribution: "Radar © RainViewer" });
+      map.addSource("radar", { type: "raster", tiles: [tiles], tileSize: 256, maxzoom: 6, attribution: "Weather data by <a href=\"https://rainviewer.com\" target=\"_blank\" rel=\"noopener\">RainViewer</a>" });
       const beforeId = map.getLayer(FALLING_FRUIT_AGGREGATE_LAYER_ID) ? FALLING_FRUIT_AGGREGATE_LAYER_ID : undefined;
       map.addLayer({
         id: "radar", type: "raster", source: "radar", slot: "top",
@@ -3849,6 +3849,15 @@ function renderModeChrome() {
   applyMarkerZoomRangeForMode();
   updateClusterTint();
   renderMapLegend();
+  // Keep the mobile active-map chip in sync with the current map.
+  const mapChip = document.getElementById("activeMapChip");
+  if (mapChip) {
+    const info = MODE_SHEET_INFO[state.activeMap];
+    mapChip.innerHTML =
+      `<span class="amc-dot" style="background:${info ? info.color : "#888"}"></span>`
+      + `<span class="amc-label">${info ? escapeHTML(info.label) : ""}</span>`
+      + `<span class="amc-caret" aria-hidden="true">▾</span>`;
+  }
 }
 
 // Phase 3e removed the sidebar's #categoryList checkbox panel; category and
@@ -3966,7 +3975,7 @@ function showFirstRunCoach() {
   chip.id = "coachChip";
   chip.className = "floating";
   chip.setAttribute("role", "note");
-  chip.innerHTML = `<span><b>Try:</b> search your town, then open <b>Materials</b> and tap a species to see it on the map.</span><button type="button" aria-label="Dismiss tip">&times;</button>`;
+  chip.innerHTML = `<span><b>Start here:</b> search your town to see what grows nearby — every point carries the harvesting rule for that land. Try all four maps (food · ink · herbs · minerals) and open <b>Materials</b> for full profiles.</span><button type="button" aria-label="Dismiss tip">&times;</button>`;
   mapArea.appendChild(chip);
   const dismiss = () => {
     try { window.localStorage?.setItem(COACH_STORAGE_KEY, "true"); } catch { /* private mode */ }
@@ -3976,6 +3985,32 @@ function showFirstRunCoach() {
   // Acting on either suggested control also counts as "got it".
   document.getElementById("locationSearchInput")?.addEventListener("focus", dismiss, { once: true });
   document.querySelector('#mastLinks [data-sheet="plants"]')?.addEventListener("click", dismiss, { once: true });
+}
+
+// A bare `sp=` deep link (shared from a static material/project page) isolates
+// the species but carries no center/zoom, so the visitor lands on the national
+// map where no point records load (zoom ≥ 8 is required). Rather than leave an
+// unexplained empty map, name the material and point them at the place search.
+function promptSearchForDeepLink(materialName) {
+  const mapArea = document.querySelector(".map-area");
+  if (!mapArea || document.getElementById("deepLinkPrompt")) return;
+  const chip = document.createElement("div");
+  chip.id = "deepLinkPrompt";
+  chip.className = "floating";
+  chip.setAttribute("role", "note");
+  chip.innerHTML = `<span>Showing <b>${escapeHTML(materialName)}</b> — search your town to see it near you.</span><button type="button" aria-label="Dismiss">&times;</button>`;
+  mapArea.appendChild(chip);
+  chip.querySelector("button").addEventListener("click", () => chip.remove());
+  // Best-effort: reveal + focus the place search once boot wiring has settled.
+  window.setTimeout(() => {
+    try {
+      const masthead = document.getElementById("masthead");
+      if (masthead && !masthead.classList.contains("search-open")) {
+        document.getElementById("mastSearchBtn")?.click();
+      }
+      document.getElementById("locationSearchInput")?.focus({ preventScroll: true });
+    } catch { /* non-fatal */ }
+  }, 600);
 }
 
 // Offline indicator (Phase 5.5 PWA): a small, honest chip that makes the
@@ -4227,7 +4262,7 @@ function sheetAboutHTML() {
     <div class="k">CRAFT ALMANAC</div>
     <h2 class="serif">A map that keeps the almanac's hours</h2>
     <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. It is made for teachers, foragers, and makers sourcing materials responsibly. The map is the front door; material profiles and project recipes live one tap away.</p>
-    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Every point carries the rule for the land it sits on, encoded from primary law, and unknowns say so.</p>
+    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Where we have researched it, a point carries the harvesting rule for the land it sits on, read from primary law — and where we haven't, it says so plainly.</p>
     <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice.</p>
     <div class="about-block">
       <div class="k">THIS MAP'S SOURCES</div>
@@ -4240,7 +4275,9 @@ function sheetAboutHTML() {
     </div>
     <div class="about-block">
       <div class="k">TERMS &amp; PRIVACY</div>
-      <p>The harvesting rules are a good-faith reading of primary sources, offered without warranty for educational use — always confirm current rules with the land manager before collecting. The locate button sends your coordinates to Open-Meteo (for weather) and Mapbox; place search sends your query to Mapbox. There is no account and no tracking.</p>
+      <p>The harvesting rules were compiled by an automated research process — an AI research agent reading primary sources such as park compendiums, 36 CFR, and state and federal regulations — and are reviewed by the site's author. They are informational, not legal advice; rules change, and any entry can be wrong or out of date. Always confirm current rules with the land manager before collecting. Everything here is offered without warranty for educational use, and you assume the risk of any harvest or preparation you undertake.</p>
+      <p>There is no account, no cookies, and no tracking. Your device stores only your own preferences and saved places (kept in this browser, never sent anywhere). As you browse, your browser talks directly to the services that draw the map and its data — Mapbox (basemap and place search), iNaturalist (occurrences), USGS and Esri (public-land boundaries), Open-Meteo and RainViewer (weather and radar), and Cloudflare (the host) — each of which receives your IP address and the map area you are viewing.</p>
+      <p>Spotted a wrong rule, a questionable identification, or anything unsafe? <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report">Report an error →</a> Corrections are welcome and help keep the map trustworthy.</p>
       <p>Craft Almanac is a noncommercial project: the code is licensed under the PolyForm Noncommercial License 1.0.0, and original content — recipes, species notes, and the rule summaries — under CC BY-NC-SA 4.0 (the underlying legal facts in the rules are public and unrestricted). Inbound data sources keep their own licenses.</p>
     </div>
     <p><a href="./materials/" target="_blank" rel="noreferrer">Material profiles →</a> · <a href="./projects/" target="_blank" rel="noreferrer">Project pages →</a> · <a href="./cards/" target="_blank" rel="noreferrer">Printable field cards →</a></p>
@@ -5132,6 +5169,12 @@ function initControls() {
     // static pages' bare sp links), but a shared hash that ALSO carries an
     // explicit day/workability filter must keep it — restore what was parsed.
     if (urlBootState.hadDayFilter) state.allSeasons = false;
+    // Bare deep link (no center/zoom): don't strand the visitor on the empty
+    // national map — name the material and steer them to the place search.
+    if (!urlBootState.center) {
+      const sp = speciesCatalogById.get(urlBootState.speciesId);
+      promptSearchForDeepLink(sp?.commonName || "this material");
+    }
   }
   // Minerals boots with the 0–100 workability range renderModeChrome() just
   // set; overwriting max with 365 here would misscale the band filter and
@@ -5522,6 +5565,13 @@ function initMobileMasthead() {
   mastMenuBtn?.addEventListener("click", (event) => { event.stopPropagation(); toggle("menu"); });
   mastSearchBtn?.addEventListener("click", (event) => { event.stopPropagation(); toggle("search"); });
   mastCondBtn?.addEventListener("click", (event) => { event.stopPropagation(); toggle("cond"); });
+  // Mobile-only active-map chip: shows which of the four maps is active and
+  // opens the Maps sheet to switch (the desktop nav already exposes this).
+  document.getElementById("activeMapChip")?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setMastPanel(null);
+    openSheet("maps");
+  });
   // Picking a destination from the menu closes it.
   masthead.querySelectorAll(".links button[data-sheet]").forEach((button) => {
     button.addEventListener("click", () => setMastPanel(null));
@@ -7284,7 +7334,7 @@ function getMarkerPopupHTML(properties) {
   const flushLine = flushOn ? `<div class="flush on">RAIN-FED FLUSH LIKELY THIS WEEK</div>` : "";
 
   const warning = properties.harvestStatus
-    ? `<div class="oinp" style="color:var(--reg-warn)">${escapeHTML(properties.harvestStatus)} — ${escapeHTML(properties.harvestNote)}</div>`
+    ? `<div class="oinp" style="color:var(--reg-warn-text, var(--reg-warn))">${escapeHTML(properties.harvestStatus)} — ${escapeHTML(properties.harvestNote)}</div>`
     : "";
   // Medicine mode keeps the educational-use disclaimer prominent (CLAUDE.md).
   const medSafetyNote = getActiveMapConfig().safetyNote;
@@ -7309,6 +7359,14 @@ function getMarkerPopupHTML(properties) {
     ? `<div class="approx-note">APPROXIMATE — iNaturalist obscured this location for privacy (±~20&nbsp;km). Treat it as an area, not a spot.</div>`
     : "";
   const saved = isSavedLocation(properties.id);
+  // The map-tap card is the primary decision surface: link it to the full
+  // profile (identification + toxic lookalikes live there) and give a one-tap,
+  // pre-addressed way to report a wrong rule or a dangerous entry.
+  const profileHref = `/materials/${escapeHTML(properties.speciesId)}.html`;
+  const reportSubject = encodeURIComponent(
+    `Craft Almanac error report: ${properties.speciesName}${properties.name ? " — " + properties.name : ""}`
+  );
+  const reportHref = `mailto:reports@craftalmanac.com?subject=${reportSubject}`;
 
   return `
     <div class="pt-card${compact ? " compact" : ""}" role="dialog" aria-label="${escapeHTML(properties.speciesName)} details" tabindex="-1">
@@ -7318,7 +7376,7 @@ function getMarkerPopupHTML(properties) {
         <h2>${escapeHTML(properties.speciesName)}</h2>
         <div class="sci">${sci}</div>
         ${eduStamp}
-        <div class="row access"><span class="lab">ACCESS</span><span class="val" style="color:${statusColor}"><span class="ring"></span>${accessLabel}</span></div>
+        <div class="row access"><span class="lab">ACCESS</span><span class="val"><span class="ring" style="color:${statusColor}"></span>${accessLabel}</span></div>
         <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}${ruleNote}</span></div>
         ${safetyRow}
         ${usedPartsRow}
@@ -7335,6 +7393,10 @@ function getMarkerPopupHTML(properties) {
       </div>
       <div class="pt-foot">
         <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK WHO MANAGES THIS LAND</div>
+        <div class="pt-links">
+          <a class="pt-link" href="${profileHref}" target="_blank" rel="noopener">Full profile ↗</a>
+          <a class="pt-link" href="${reportHref}">Report an error</a>
+        </div>
         <button
           class="save-location-button ${saved ? "is-saved" : ""}"
           type="button"
@@ -7577,6 +7639,19 @@ async function fetchINaturalistAggregateTileWithRetry(taxonIds, tile) {
   }
 }
 
+// The point (viewport-record) path needs the same Retry-After-aware single
+// retry the aggregate path has: a classroom sharing one NAT/IP can trip
+// iNaturalist's rate limit, and the herbalism map is iNaturalist-only, so an
+// un-retried 429 renders it empty for everyone on that connection.
+async function fetchINaturalistBoundsWithRetry(taxonIds, bounds) {
+  try {
+    return await fetchINaturalistBounds(taxonIds, bounds);
+  } catch (error) {
+    await new Promise((resolve) => window.setTimeout(resolve, retryDelayMs(error)));
+    return fetchINaturalistBounds(taxonIds, bounds);
+  }
+}
+
 function getNonzeroAggregateItems(items) {
   return items.filter((item) => (
     getAggregateRecordCount(item, new Set(), new Set(), false) > 0
@@ -7702,7 +7777,7 @@ async function loadINaturalist() {
   // Same politeness as the aggregate path: capped concurrency instead of firing
   // every viewport tile at once (a classroom of panning students is the
   // realistic burst case against iNaturalist's published rate guidance).
-  const results = await mapWithConcurrency(tiles, 4, (tile) => fetchINaturalistBounds(taxonIds, tile));
+  const results = await mapWithConcurrency(tiles, 4, (tile) => fetchINaturalistBoundsWithRetry(taxonIds, tile));
   return dedupeRecords(results.flatMap((data) => data.results || []))
     .map(mapINaturalistObservation)
     .filter(Boolean);
@@ -10325,7 +10400,13 @@ map.on("load", () => {
 
 map.on("error", (event) => {
   const message = event?.error?.message || "";
-  if (message.includes("401") || message.includes("403")) {
-    setDataStatus("Mapbox tiles are blocked for this origin. Add this URL to the token restrictions.", { kind: "error" });
+  const status = event?.error?.status;
+  // A traffic spike that exhausts the Mapbox map-load quota surfaces as 429 /
+  // rate-limit, not 401/403 — surface it honestly so the map never just blanks.
+  if (message.includes("429") || status === 429 || /quota|rate.?limit|too many requests/i.test(message)) {
+    setDataStatus("The map is temporarily over capacity — please try again in a little while.", { kind: "error" });
+  } else if (message.includes("401") || message.includes("403") || status === 401 || status === 403) {
+    // Origin/token error: developer-actionable, but a visitor only needs an honest cue.
+    setDataStatus("The map can’t load right now (basemap access error). If this keeps happening, please report it.", { kind: "error" });
   }
 });

@@ -510,7 +510,7 @@ h2 {
   left: 14px;
   padding: 7px 12px;
   max-width: min(300px, calc(100vw - 28px));
-  color: var(--reg-warn);
+  color: var(--reg-warn-text, var(--reg-warn));
   /* Safety text gets the larger bump (was 10.5px — illegible in sunlight). */
   font-size: 11.5px;
   letter-spacing: 0.07em;
@@ -616,6 +616,8 @@ h2 {
   border-top: 1px solid var(--reg-hair);
   font-size: 12.5px;
   line-height: 1.5;
+  /* Safety copy must clear AA in every register (was inheriting sub-AA --reg-sub). */
+  color: var(--reg-ink);
 }
 
 .welcome-primary {
@@ -637,7 +639,7 @@ h2 {
 }
 
 .welcome-primary:focus-visible {
-  outline: 2px solid var(--reg-accent);
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
   outline-offset: 2px;
   border-color: var(--reg-accent);
 }
@@ -1094,7 +1096,7 @@ body[data-register="night"] {
   margin-top: 9px;
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--reg-warn);
+  color: var(--reg-warn-text, var(--reg-warn));
   font-family: var(--font-mono);
 }
 
@@ -1277,7 +1279,7 @@ body[data-register="night"] {
 .mini-card .dnote {
   font-size: 10px;
   letter-spacing: 0.06em;
-  color: var(--reg-warn);
+  color: var(--reg-warn-text, var(--reg-warn));
   margin-top: 7px;
   font-family: var(--font-mono);
   line-height: 1.5;
@@ -1316,7 +1318,7 @@ body[data-register="night"] {
 }
 
 .mini-card-link:focus-visible {
-  outline: 2px solid var(--reg-accent);
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -1343,7 +1345,7 @@ body[data-register="night"] {
 }
 
 .mini-card-open:focus-visible {
-  outline: 2px solid var(--reg-accent);
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -1669,7 +1671,7 @@ body[data-register="night"] {
 
 #search-bar .location-search-form input:focus {
   border-color: var(--reg-accent);
-  outline: 2px solid var(--reg-accent);
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
   outline-offset: 1px;
 }
 
@@ -2101,7 +2103,8 @@ body[data-register="night"] {
 }
 
 /* First-run coach chip: one guided task, dismissible, first visit only. */
-#coachChip {
+#coachChip,
+#deepLinkPrompt {
   position: absolute;
   top: 118px;
   left: 18px;
@@ -2116,7 +2119,14 @@ body[data-register="night"] {
   color: var(--reg-ink);
 }
 
-#coachChip button {
+/* If a first-time visitor arrives via a deep link, the coach and the deep-link
+   prompt can both mount — stack the prompt below the coach. */
+#deepLinkPrompt {
+  top: 196px;
+}
+
+#coachChip button,
+#deepLinkPrompt button {
   flex: none;
   min-width: 24px;
   min-height: 24px;
@@ -2126,6 +2136,74 @@ body[data-register="night"] {
   font-size: 16px;
   cursor: pointer;
   border-radius: 6px;
+}
+
+/* Mobile-only active-map chip in the masthead: shows which of the four maps is
+   active (color dot + label) and opens the Maps sheet to switch. Hidden on
+   desktop, where the nav already exposes Maps (the four-pill switcher was
+   removed 2026-07 for top-bar overflow; this is a single indicator, not that). */
+.active-map-chip {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 999px;
+  background: var(--reg-panel);
+  color: var(--reg-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.active-map-chip .amc-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.active-map-chip .amc-caret {
+  color: var(--reg-sub);
+  font-size: 9px;
+}
+
+.active-map-chip:focus-visible {
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
+  outline-offset: 2px;
+}
+
+/* Point-card footer links: reach the full profile (deep ID + lookalikes) and
+   report an error, both from the primary map-tap surface. Quiet, ≥24px targets. */
+.pt-card .pt-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 10px;
+}
+
+.pt-card .pt-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--reg-accent-text, var(--reg-accent));
+  text-decoration: none;
+}
+
+.pt-card .pt-link:hover {
+  text-decoration: underline;
+}
+
+.pt-card .pt-link:focus-visible {
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Offline indicator chip (Phase 5.5 PWA): unobtrusive, bottom-center, honest
@@ -2316,7 +2394,7 @@ body[data-register="night"] {
 #sheet .closer:focus-visible,
 #sheet .mini-card:focus-visible,
 .pt-card .close:focus-visible {
-  outline: 2px solid var(--reg-accent);
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
   outline-offset: 2px;
 }
 
@@ -2932,6 +3010,9 @@ body[data-register="night"] {
   #masthead .wordmark { font-size: 18px; }
   #masthead .links { gap: 10px; padding-left: 10px; }
   #coachChip { top: 128px; left: 10px; right: 10px; max-width: none; }
+  #deepLinkPrompt { top: 206px; left: 10px; right: 10px; max-width: none; }
+  /* The nav folds behind ☰ on mobile, so surface a persistent active-map chip. */
+  .active-map-chip { display: inline-flex; }
 
   /* Search + conditions are hidden until their masthead trigger opens them;
      both drop down just under the bar (see the .search-open / .cond-open

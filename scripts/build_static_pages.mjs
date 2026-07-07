@@ -315,6 +315,7 @@ const SHARED_CSS = `
     h1 { font-family: var(--font-display); font-weight: 600; font-size: 2.5rem; line-height: 1.06; letter-spacing: -0.01em; margin: 0 0 0.12em; }
     .sci { font-family: var(--font-mono); font-style: italic; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--sub); margin: 0 0 1.1em; }
     .lead { font-size: 1.2rem; line-height: 1.5; color: #313a30; margin: 0.2em 0 0.4em; }
+    .med-disclaimer { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; line-height: 1.5; color: var(--warn); border-left: 3px solid var(--warn); padding: 6px 0 6px 12px; margin: 0.6em 0 0.4em; }
     .teaser { font-size: 1.18rem; line-height: 1.5; color: #313a30; margin: 0.2em 0 1.1em; }
     h2 {
       font-family: var(--font-mono); font-weight: 500; font-size: 0.74rem;
@@ -426,6 +427,12 @@ function pageShell({ title, description, canonicalPath, ogType, body, backHref, 
     <meta property="og:description" content="${descAttr}">
     <meta property="og:url" content="${canonical}">
     <meta property="og:site_name" content="Craft Almanac">
+    <meta property="og:image" content="${SITE}/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Craft Almanac — a United States material foraging map. Occurrence is never permission.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="${SITE}/og-image.png">
     <link rel="preload" as="font" type="font/woff2" href="/fonts/fraunces/Fraunces-Display.woff2" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="/fonts/public-sans/PublicSans-Regular.woff2" crossorigin>
     <style>${SHARED_CSS}
@@ -445,7 +452,7 @@ ${body}
 }
 
 // Shared footer. `flags` toggles the extra safety/disclaimer lines.
-function footerHtml({ educationalOnly = false, mineralMaterial = false } = {}) {
+function footerHtml({ educationalOnly = false, mineralMaterial = false, reportSubject = "" } = {}) {
   const lines = [
     `<p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>`
   ];
@@ -455,6 +462,8 @@ function footerHtml({ educationalOnly = false, mineralMaterial = false } = {}) {
   if (mineralMaterial) {
     lines.push(`<p>Many recorded mineral localities are old, inactive, or abandoned workings. Never enter shafts, adits, or pits — collect only surface float, and confirm the ground is neither posted nor hazardous.</p>`);
   }
+  const subject = encodeURIComponent(reportSubject || "Craft Almanac error report");
+  lines.push(`<p><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> <a href="mailto:reports@craftalmanac.com?subject=${subject}">Report a problem with this page &rarr;</a> Corrections are welcome and help keep the map trustworthy.</p>`);
   lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>`);
   return `    <footer>\n      <div class="fbox">\n${lines.map((l) => `        ${l}`).join("\n")}\n      </div>\n    </footer>`;
 }
@@ -491,6 +500,11 @@ function renderSpeciesPage(species, mode, ctx) {
   parts.push(`        <h1>${escapeHtml(name)}</h1>`);
   if (sci) parts.push(`        <p class="sci">${escapeHtml(sci)}</p>`);
   if (profile && profile.summary) parts.push(`        <p class="lead">${escapeHtml(profile.summary)}</p>`);
+  // Herbalism disclaimer above the fold (matches the app's persistent banner) —
+  // a stranger who reads only the lead still meets the not-medical-advice framing.
+  if (mode.key === "medicine") {
+    parts.push(`        <p class="med-disclaimer"><strong>Educational reference only</strong> — historical and traditional use, not medical advice.</p>`);
+  }
 
   parts.push(`        <ul class="meta">`);
   parts.push(`          <li><span class="label">In season</span><span class="val">${escapeHtml(season)}</span></li>`);
@@ -528,6 +542,10 @@ function renderSpeciesPage(species, mode, ctx) {
   // Safety: the profile's single most-important point leads, then the encoded
   // safety tags. Never hidden (also survives @media print).
   const safetyNote = profile && profile.safetyNote ? profile.safetyNote.trim() : "";
+  // Species where an ingestion mistake is plausible (toxic parts, a dangerous
+  // lookalike, or any fungus) carry Poison Control guidance systematically.
+  const POISON_RISK_TAGS = new Set(["toxic parts", "deadly lookalike", "toxic lookalike", "lookalikes"]);
+  const poisonRisk = species.category === "mushroom" || tags.some((t) => POISON_RISK_TAGS.has(t));
   if (safetyNote || tags.length) {
     parts.push(`        <div class="safety">`);
     parts.push(`          <div class="k">Safety</div>`);
@@ -536,6 +554,9 @@ function renderSpeciesPage(species, mode, ctx) {
       parts.push(`          <ul>`);
       for (const tag of tags) parts.push(`            <li>${escapeHtml(tag)}</li>`);
       parts.push(`          </ul>`);
+    }
+    if (poisonRisk) {
+      parts.push(`          <p><strong>If something is ingested and there are symptoms:</strong> in the US call Poison Control at 1-800-222-1222 (free, 24/7), or 911 for an emergency.</p>`);
     }
     parts.push(`        </div>`);
   }
@@ -569,7 +590,8 @@ function renderSpeciesPage(species, mode, ctx) {
   parts.push(`      </main>`);
   parts.push(footerHtml({
     educationalOnly: mode.key === "medicine",
-    mineralMaterial: mode.key === "minerals"
+    mineralMaterial: mode.key === "minerals",
+    reportSubject: `Craft Almanac error report: ${name} (materials/${species.id}.html)`
   }));
 
   return pageShell({
@@ -711,7 +733,10 @@ function renderRecipePage(recipe, ctx) {
   parts.push(`      <a class="cta" href="${SITE}/">Open Craft Almanac &rarr;</a>`);
   parts.push(`      <p class="cta-note">This recipe lives in the Projects sheet of the ${escapeHtml(mapLabel)} map.</p>`);
   parts.push(`    </main>`);
-  parts.push(footerHtml({ educationalOnly: recipe.educationalOnly === true }));
+  parts.push(footerHtml({
+    educationalOnly: recipe.educationalOnly === true,
+    reportSubject: `Craft Almanac error report: ${name} (projects/${recipe.id}.html)`
+  }));
 
   return pageShell({
     title: name,
