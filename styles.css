@@ -418,6 +418,27 @@ h2 {
   margin-top: 5px;
 }
 
+/* Active-filter badge: stays visible on the COLLAPSED legend so a filter set
+   an hour ago can't silently read as "no data here". Rendered only when a
+   user-applied filter deviates from the defaults. */
+.legend-filters {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--reg-accent);
+  font-family: var(--font-mono);
+  margin-top: 7px;
+}
+
+/* Mobile mirror of the same state: the collapsed title lines are hidden in the
+   season-bar slot, so the Legend toggle carries a dot when filters are on. */
+#season-bar .text-button.has-filters::after {
+  content: "●";
+  font-size: 7px;
+  margin-left: 5px;
+  vertical-align: 2px;
+  color: var(--reg-accent);
+}
+
 .legend-k {
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -2993,8 +3014,11 @@ body[data-register="night"] {
     flex: 1;
   }
 
-  /* The collapsed title bar is redundant in the slot (the toggle is the label). */
-  #legendSlot .legend-title {
+  /* The collapsed title bar is redundant in the slot (the toggle is the label).
+     The filter badge is too — the Legend toggle's dot + aria-label carry the
+     filters-active state on phones. */
+  #legendSlot .legend-title,
+  #legendSlot .legend-filters {
     display: none;
   }
 

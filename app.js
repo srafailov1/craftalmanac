@@ -251,7 +251,7 @@ const ACCESS_STATUS_OPTIONS = [
   { id: "permit-required", label: "Permit required", defaultChecked: true },
   { id: "private", label: "Private", defaultChecked: true },
   { id: "private-unsourced", label: "Private / unchecked", defaultChecked: true },
-  { id: "unknown", label: "Unknown", defaultChecked: true },
+  { id: "unknown", label: "Unverified", defaultChecked: true },
   { id: "prohibited", label: "Prohibited", defaultChecked: false }
 ];
 // Access-status ring colors for the map markers. These mirror the prototype's
@@ -267,14 +267,18 @@ const ACCESS_MARKER_STYLES = {
   "permit-required": { label: "Permit required", color: "#a8730a", dashed: false },
   private: { label: "Private", color: "#7e6654", dashed: false },
   "private-unsourced": { label: "Private / unchecked", color: "#7e6654", dashed: false },
-  unknown: { label: "Unknown", color: "#8b8f86", dashed: false },
+  unknown: { label: "Unverified", color: "#8b8f86", dashed: false },
   prohibited: { label: "Prohibited", color: "#c74437", dashed: false }
 };
+// Each legend chip governs a GROUP of underlying statuses: the "Private" chip
+// must cover both sourced-private and private-unsourced records ("Private /
+// unchecked" cards) — the latter had no chip at all before 2026-07-07, so
+// turning "Private" off silently left the far larger unchecked set visible.
 const LEGEND_PERMISSION_OPTIONS = [
-  { id: "allowed", label: "Allowed" },
-  { id: "permit-required", label: "Permit required" },
-  { id: "private", label: "Private" },
-  { id: "unknown", label: "Unverified" }
+  { id: "allowed", label: "Allowed", statuses: ["allowed"] },
+  { id: "permit-required", label: "Permit required", statuses: ["permit-required"] },
+  { id: "private", label: "Private", statuses: ["private", "private-unsourced"] },
+  { id: "unknown", label: "Unverified", statuses: ["unknown"] }
 ];
 // Maps an access status to its fixed-semantics register token suffix
 // (--reg-st-<suffix>). Safety/access colors are identical across registers
@@ -434,6 +438,59 @@ const SAFETY_TAGS_BY_SPECIES = {
   "dye-alder": ["dye only"],
   "dye-wax-myrtle": ["dye only"]
 };
+// Point-card rendering of safety tags: the catalog keeps tags terse (they also
+// feed the static-page and field-card generators), but on the card a bare
+// "lookalikes" under-communicates the hazard. Terse tags expand to a fuller
+// phrase at render time via this map; tags that are already self-explanatory
+// ("confirm ID before eating", "urushiol — contact dermatitis") pass through
+// unchanged. Expansions clarify the existing tag only — no new safety claims.
+const SAFETY_TAG_SENTENCES = {
+  "lookalikes": "has lookalikes — confirm identification",
+  "deadly lookalike": "deadly lookalike exists — expert identification required",
+  "remove pit": "remove the pit before eating",
+  "remove seeds": "remove the seeds before eating",
+  "spines": "spines — handle with gloves",
+  "thorns": "thorns — handle with care",
+  "spines/glochids": "spines and glochids — wear thick gloves",
+  "glochids/spines": "glochids and spines — wear thick gloves",
+  "invasive": "invasive — removal helps native habitat",
+  "ventilate": "work in a ventilated space",
+  "do not ingest": "do not ingest any part",
+  "dye only": "dye use only — not for eating",
+  "observe only": "observe only — do not harvest",
+  "wear gloves": "wear gloves when handling",
+  "stains skin": "stains skin — wear gloves",
+  "hard shell": "hard shell — crack with care",
+  "toxic parts": "some parts are toxic — know which before use",
+  "never burn": "never burn this material",
+  "drug interactions": "may interact with medications — check first",
+  "avoid pregnancy": "avoid during pregnancy",
+  "external use only": "external use only — do not ingest",
+  "ripe fruit only": "only fully ripe fruit is edible",
+  "salicylate content": "contains salicylates (the aspirin family)",
+  "conservation concern": "conservation concern — harvest sparingly, if at all",
+  "over-harvest concern": "over-harvest concern — take lightly",
+  "milky sap irritant": "milky sap can irritate skin",
+  "latex sap irritant": "latex sap can irritate skin",
+  "staining hulls": "hulls stain skin and clothing",
+  "astringent unripe": "astringent until fully ripe",
+  "berries not roots": "harvest berries, not roots",
+  "seeds not for eating": "the seeds are not edible",
+  "skin/seeds not for eating": "skin and seeds are not edible",
+  "dead/felled wood only": "collect from dead or felled wood only",
+  "shed bark only": "collect naturally shed bark only",
+  "not savin juniper": "confirm it is not savin juniper (toxic)",
+  "not white sage (Salvia)": "confirm it is not white sage (Salvia) — culturally protected",
+  "ragweed confusion (pollen allergy)": "can be confused with ragweed (pollen allergy)",
+  "mind SOD quarantine": "observe sudden-oak-death quarantine rules",
+  "fugitive color": "fugitive color — fades with light",
+  "tannin stains skin": "tannin stains skin — wear gloves",
+  "eat in moderation": "eat in moderation",
+  "not for children": "not for children"
+};
+function expandSafetyTag(tag) {
+  return SAFETY_TAG_SENTENCES[tag] || tag;
+}
 // Safety-first (CLAUDE.md): a park's "edible fungi" allowance applies only to
 // species on this whitelist. Any other mushroom stays prohibited, so a future
 // non-whitelisted fungus can never silently inherit an "allowed" park rule.
@@ -3799,16 +3856,6 @@ function getSelectedAccessStatuses() {
   return new Set(state.selectedAccessStatuses);
 }
 
-function toggleAccessStatus(statusId) {
-  const set = state.selectedAccessStatuses
-    || (state.selectedAccessStatuses = new Set(getDefaultAccessStatuses()));
-  if (set.has(statusId)) {
-    set.delete(statusId);
-  } else {
-    set.add(statusId);
-  }
-}
-
 // Legend "ONLY ALLOWED" quick filter (prototype #only-allowed): toggles between
 // allowed-only and the full default status set.
 function setOnlyAllowed() {
@@ -3820,6 +3867,68 @@ function setOnlyAllowed() {
 function isAccessFilterActive(selectedStatuses = getSelectedAccessStatuses()) {
   const defaults = getDefaultAccessStatuses();
   return selectedStatuses.size !== defaults.length || defaults.some((id) => !selectedStatuses.has(id));
+}
+
+// One legend chip can govern several underlying statuses (see
+// LEGEND_PERMISSION_OPTIONS): a chip reads as ON when ANY of its statuses is
+// selected, and toggling flips the whole group together.
+function getLegendChipStatuses(chipId) {
+  if (chipId === "prohibited") return ["prohibited"];
+  const option = LEGEND_PERMISSION_OPTIONS.find((entry) => entry.id === chipId);
+  return option?.statuses || [chipId];
+}
+
+function toggleAccessChip(chipId) {
+  const set = state.selectedAccessStatuses
+    || (state.selectedAccessStatuses = new Set(getDefaultAccessStatuses()));
+  const statuses = getLegendChipStatuses(chipId);
+  const anyOn = statuses.some((id) => set.has(id));
+  statuses.forEach((id) => {
+    if (anyOn) set.delete(id);
+    else set.add(id);
+  });
+}
+
+// Short mono badge lines for the collapsed legend: every user-applied filter
+// that hides data must stay visible after the legend folds shut, or a pan an
+// hour later reads as "no data here". The prohibited-off DEFAULT is deliberate
+// design (not a user filter) and is not badged; the expanded chips carry it.
+function getActiveFilterSummary() {
+  const bits = [];
+  const selected = getSelectedAccessStatuses();
+  if (selected.size === 1 && selected.has("allowed")) {
+    bits.push("ALLOWED ONLY");
+  } else if (isAccessFilterActive(selected)) {
+    const chipIds = [...LEGEND_PERMISSION_OPTIONS.map((o) => o.id), "prohibited"];
+    const onCount = chipIds.filter((id) => getLegendChipStatuses(id).some((s) => selected.has(s))).length;
+    if (onCount === chipIds.length) {
+      // All groups on = the only deviation is prohibited being VISIBLE; a
+      // "FILTERS: ACCESS 5/5" badge would misread as a restriction.
+      bits.push("PROHIBITED SHOWN");
+    } else {
+      bits.push(`ACCESS ${onCount}/${chipIds.length}`);
+    }
+  }
+  if (state.savedLocationsOnly) bits.push("SAVED ONLY");
+  const total = speciesCatalog.length;
+  const picked = speciesCatalog.filter((species) => state.selectedSpecies.has(species.id));
+  if (picked.length === 1) {
+    bits.push(`${String(picked[0].commonName || picked[0].id).toUpperCase()} ONLY`);
+  } else if (total && picked.length < total) {
+    bits.push(`${picked.length}/${total} SPECIES`);
+  }
+  return bits;
+}
+
+// Loaded-vs-shown record counts for the current viewport; null before the map
+// is ready. "Loaded" is the fetched set (viewport-scoped for food/ink/medicine,
+// national for minerals), "visible" is what survives the active filters.
+function getRecordViewCounts() {
+  if (!state.mapReady) return null;
+  const bounds = map.getBounds();
+  const loadedInView = state.records.filter((record) => recordInBounds(record, bounds)).length;
+  const visibleInView = getVisibleRecords().filter((record) => recordInBounds(record, bounds)).length;
+  return { loadedInView, visibleInView };
 }
 
 // One guided first task after the welcome modal (first visit only): the two
@@ -3946,11 +4055,11 @@ function renderMapLegend() {
   if (!mapLegend) return;
   const config = getActiveMapConfig();
   const selectedAccess = getSelectedAccessStatuses();
-  const permissionOptions = [...LEGEND_PERMISSION_OPTIONS, { id: "prohibited", label: "Prohibited" }];
+  const permissionOptions = [...LEGEND_PERMISSION_OPTIONS, { id: "prohibited", label: "Prohibited", statuses: ["prohibited"] }];
 
   const accessChips = permissionOptions.map((status) => {
     const token = ACCESS_STATUS_TOKEN[status.id] || "unknown";
-    const off = !selectedAccess.has(status.id);
+    const off = !getLegendChipStatuses(status.id).some((id) => selectedAccess.has(id));
     return `<button type="button" class="leg-chip${off ? " off" : ""}" data-leg-access="${escapeHTML(status.id)}" aria-pressed="${String(!off)}"><span class="ring" style="color: var(--reg-st-${token})"></span>${escapeHTML(status.label)}</button>`;
   }).join("");
 
@@ -3965,6 +4074,7 @@ function renderMapLegend() {
   const catHeading = config.speciesHeading.replace(/\s*&\s*(Species|Materials)/i, "").toUpperCase();
   const selected = getSelectedAccessStatuses();
   const onlyAllowedActive = selected.size === 1 && selected.has("allowed");
+  const filterBits = getActiveFilterSummary();
 
   // Prototype layout: a collapsed title bar (bottom-left) that expands UP on
   // hover/focus into two columns — ACCESS (rings) | CATEGORIES (filled squares).
@@ -3983,9 +4093,22 @@ function renderMapLegend() {
       </div>
       <div class="legend-note">Cluster bubbles take the tint of their most common category — never an access status.</div>
     </div>
+    ${filterBits.length ? `<div class="legend-filters">FILTERS: ${filterBits.map(escapeHTML).join(" · ")}</div>` : ""}
     <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
     <div class="legend-active">ACTIVE MAP: ${escapeHTML(modeName)}</div>
   `;
+
+  // The collapsed title/active lines are hidden on phones (the legend lives in
+  // the season bar's slot there), so mirror the filters-active state onto the
+  // mobile "Legend" toggle as a dot + spoken summary.
+  const legendMobButton = document.getElementById("legendMob");
+  if (legendMobButton) {
+    legendMobButton.classList.toggle("has-filters", filterBits.length > 0);
+    legendMobButton.setAttribute(
+      "aria-label",
+      filterBits.length ? `Legend — filters active: ${filterBits.join(", ").toLowerCase()}` : "Legend"
+    );
+  }
 }
 
 function getCategorySelectionState(categoryId) {
@@ -4008,7 +4131,7 @@ function initMapLegend() {
     }
     const accessChip = event.target.closest("[data-leg-access]");
     if (accessChip) {
-      toggleAccessStatus(accessChip.dataset.legAccess);
+      toggleAccessChip(accessChip.dataset.legAccess);
       render();
       return;
     }
@@ -5707,6 +5830,37 @@ function renderMarkers() {
     type: "FeatureCollection",
     features
   });
+  updateRecordCountStatus();
+}
+
+// Persistent "N in view" line for the season bar: unlike the old transient
+// success message it stays current across filter toggles (the stale-"229"
+// bug: chips re-rendered markers but nothing re-wrote the count). Yields to
+// loading/outage/error messages, and leaves overview zooms to loadMapData's
+// aggregate-count notices.
+function updateRecordCountStatus() {
+  if (!state.mapReady) return;
+  if (dataStatusKind === "loading" || dataStatusKind === "outage" || dataStatusKind === "error") return;
+  const config = getActiveMapConfig();
+  const isMinerals = !!config.loadMinerals;
+  if (!isMinerals && (!state.pointDataReady || map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM)) return;
+  const counts = getRecordViewCounts();
+  if (!counts) return;
+  const { loadedInView, visibleInView } = counts;
+  const hidden = Math.max(0, loadedInView - visibleInView);
+  const filtersOn = getActiveFilterSummary().length > 0;
+  let message;
+  if (isMinerals) {
+    const noun = visibleInView === 1 ? "locality" : "localities";
+    message = `${visibleInView} ${noun} in view · ${state.records.length} nationwide · ${config.sourceNames.join(", ")}`;
+    if (hidden && filtersOn) message = `Showing ${visibleInView} of ${loadedInView} localities in view · ${state.records.length} nationwide`;
+  } else if (hidden && filtersOn) {
+    message = `Showing ${visibleInView} of ${loadedInView} records in view · ${hidden} hidden by current filters`;
+  } else {
+    const noun = visibleInView === 1 ? "record" : "records";
+    message = `${visibleInView} ${noun} in view · ${config.sourceNames.join(", ")}`;
+  }
+  setDataStatus(message, { kind: "count" });
 }
 
 function updateFallingFruitAggregates() {
@@ -6807,7 +6961,7 @@ function bindMapInteractions() {
       .setHTML(
         `<div class="hover-sp" style="background:${hp.categoryColor || "var(--reg-accent)"}"></div>`
         + `<div class="hover-nm">${escapeHTML(hp.speciesName)}</div>`
-        + `<div class="hover-st" style="color:${hoverStatusColor}">${escapeHTML((hp.accessStatusLabel || "Unknown").toUpperCase())}</div>`
+        + `<div class="hover-st" style="color:${hoverStatusColor}">${escapeHTML((hp.accessStatusLabel || "Unverified").toUpperCase())}</div>`
       )
       .addTo(map);
   });
@@ -6934,7 +7088,7 @@ function formatCheckedMonth(value) {
 function getMarkerPopupHTML(properties) {
   const status = properties.accessStatus || "unknown";
   const statusColor = `var(--reg-st-${ACCESS_STATUS_TOKEN[status] || "unknown"})`;
-  const accessLabel = escapeHTML(properties.accessStatusLabel || "Unknown");
+  const accessLabel = escapeHTML(properties.accessStatusLabel || "Unverified");
   const sci = escapeHTML(properties.scientificName || properties.observedScientificName || "");
 
   // ID-source value: dataset (linked) · license · observer · observed date.
@@ -6994,7 +7148,7 @@ function getMarkerPopupHTML(properties) {
     : "";
   const safetyTags = String(properties.safetyTags || "").split("|").filter(Boolean);
   const safetyRow = safetyTags.length
-    ? `<div class="row safety"><span class="lab">SAFETY</span><span class="val">${safetyTags.map(escapeHTML).join(" · ")}</span></div>`
+    ? `<div class="row safety"><span class="lab">SAFETY</span><span class="val">${safetyTags.map((tag) => escapeHTML(expandSafetyTag(tag))).join(" · ")}</span></div>`
     : "";
   // Ethic reads as a soft trailing paragraph, not a labeled row (prototype).
   const ethicNote = (!compact && !isMineral && properties.harvestEthic)
@@ -7343,7 +7497,7 @@ async function loadMapData() {
   const loadBounds = state.mapReady ? map.getBounds() : null;
   const loadZoom = state.mapReady ? map.getZoom() : 0;
   const hadRecords = state.records.length > 0;
-  if (!hadRecords) setDataStatus("Loading current map data...");
+  if (!hadRecords) setDataStatus("Loading current map data...", { kind: "loading" });
 
   const [inatResult, fallingFruitResult, npsOrchardResult, mineralResult] = await Promise.allSettled([
     config.loadMinerals ? Promise.resolve([]) : loadINaturalist(),
@@ -7407,9 +7561,12 @@ async function loadMapData() {
   ].filter(Boolean);
   if (failedSources.length) {
     // Source outages stay visible — the map is silently partial otherwise.
-    setDataStatus(`${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`);
+    setDataStatus(`${state.records.length} records loaded; ${failedSources.join(", ")} unavailable`, { kind: "outage" });
   } else {
-    setDataStatus(`${state.records.length} current records loaded from ${config.sourceNames.join(", ")}`, { transient: true });
+    // Hand the line to the persistent in-view count (it was blocked while the
+    // sticky loading message owned the line).
+    setDataStatus("", { kind: "idle" });
+    updateRecordCountStatus();
   }
   logHandoff("points-loaded", { records: state.records.length });
 
@@ -8634,7 +8791,7 @@ function getMineralAccessRule(record) {
   };
   return {
     status: base.status,
-    label: ACCESS_MARKER_STYLES[base.status]?.label || "Unknown",
+    label: ACCESS_MARKER_STYLES[base.status]?.label || "Unverified",
     area: base.area,
     limit: base.limit,
     note: base.note,
@@ -8684,7 +8841,7 @@ function computeRecordAccessRule(record, species) {
   if (record.publicLand && record.accessClass === "open") {
     return {
       status: "unknown",
-      label: "Unknown",
+      label: "Unverified",
       area: record.access || "Reported public access",
       limit: "This spot is reported as publicly accessible, but its harvesting rules aren't confirmed — check the managing agency's posted rules before collecting.",
       note: record.accessNote || "Reported as publicly accessible; confirm the managing agency's rules before harvesting.",
@@ -9106,7 +9263,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
-        label: "Unknown",
+        label: "Unverified",
         area,
         limit: "We don't have a confirmed rule for collecting this here; check access requirements and posted site rules before collecting.",
         note: "Confirm DWR access requirements and posted site rules before collecting plant material.",
@@ -9130,7 +9287,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
-        label: "Unknown",
+        label: "Unverified",
         area,
         limit: "We don't have a confirmed rule for collecting this here; check posted rules before collecting.",
         note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
@@ -9154,7 +9311,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
     if (state.activeMap !== "food") {
       return {
         status: "unknown",
-        label: "Unknown",
+        label: "Unverified",
         area,
         limit: "We don't have a confirmed rule for collecting this here; check posted rules before collecting.",
         note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
@@ -9177,7 +9334,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   if (text.includes("charlottesville")) {
     return {
       status: "unknown",
-      label: "Unknown",
+      label: "Unverified",
       area,
       limit: "Charlottesville public access is mapped, but a specific city foraging rule has not been confirmed.",
       note: "Treat municipal park records as access hints only until posted park rules or city code can be checked.",
@@ -9189,7 +9346,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   if (text.includes("albemarle")) {
     return {
       status: "unknown",
-      label: "Unknown",
+      label: "Unverified",
       area,
       limit: "Albemarle public access is mapped, but a specific county foraging rule has not been confirmed.",
       note: "Treat county park records as access hints only until posted park rules or county code can be checked.",
@@ -10000,15 +10157,21 @@ function pointInRing(point, ring) {
 // Writes the season bar's status line (#dataStatus). Sticky by default —
 // loading progress, source outages, and token errors stay visible until
 // replaced. Pass transient:true for success/informational messages so they
-// clear after a beat instead of living on the map forever.
+// clear after a beat instead of living on the map forever. `kind` records
+// what currently owns the line so the persistent record-count writer never
+// clobbers an outage/error/loading message (priority lives in
+// updateRecordCountStatus, the only reader).
 let dataStatusTimer = null;
-function setDataStatus(message, { transient = false } = {}) {
+let dataStatusKind = "idle";
+function setDataStatus(message, { transient = false, kind = "info" } = {}) {
   if (!dataStatus) return;
   window.clearTimeout(dataStatusTimer);
   dataStatus.textContent = message;
+  dataStatusKind = message ? kind : "idle";
   if (transient && message) {
     dataStatusTimer = window.setTimeout(() => {
       dataStatus.textContent = "";
+      dataStatusKind = "idle";
     }, 6000);
   }
 }
@@ -10049,6 +10212,6 @@ map.on("load", () => {
 map.on("error", (event) => {
   const message = event?.error?.message || "";
   if (message.includes("401") || message.includes("403")) {
-    setDataStatus("Mapbox tiles are blocked for this origin. Add this URL to the token restrictions.");
+    setDataStatus("Mapbox tiles are blocked for this origin. Add this URL to the token restrictions.", { kind: "error" });
   }
 });
