@@ -109,6 +109,7 @@ const FOREGROUNDS = [
   ["--reg-accent", AA_LARGE, "accent (labels/active)"],
   ["--reg-accent-text", AA_NORMAL, "accent text (links/kickers)"],
   ["--reg-warn", AA_LARGE, "warn label"],
+  ["--reg-warn-text", AA_NORMAL, "warn text (11px disclaimers)"],
   ["--reg-st-allowed", AA_LARGE, "status: allowed"],
   ["--reg-st-permit", AA_LARGE, "status: permit"],
   ["--reg-st-prohibited", AA_LARGE, "status: prohibited"],

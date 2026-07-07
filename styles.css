@@ -852,6 +852,10 @@ body[data-register="day"] {
      --reg-accent. */
   --reg-accent-text: #5d7027;
   --reg-warn: #a8730a;
+  /* Text-sized warn (11px disclaimers on a light panel): #a8730a is only
+     4.1:1 there, below the 4.5:1 body floor. Darker for day/dawn; the light
+     warn already clears it on the dark dusk/night panels. */
+  --reg-warn-text: #8a5e08;
   --reg-st-allowed: #2f8f46;
   --reg-st-permit: #a8730a;
   --reg-st-prohibited: #c74437;
@@ -870,6 +874,7 @@ body[data-register="dawn"] {
   --reg-accent: #d98a6a;
   --reg-accent-text: #a8532f;
   --reg-warn: #a8730a;
+  --reg-warn-text: #8a5e08;
 }
 
 /* Dark registers: let native controls (the date input, scrollbars) render dark
@@ -889,6 +894,7 @@ body[data-register="dusk"] {
   --reg-accent: #ff9447;
   --reg-accent-text: #ffb37f;
   --reg-warn: #ffc94d;
+  --reg-warn-text: #ffc94d;
   --reg-st-allowed: #4fc979;
   --reg-st-permit: #ffc94d;
   --reg-st-prohibited: #ff7b6e;
@@ -907,6 +913,7 @@ body[data-register="night"] {
   --reg-accent: #ffd166;
   --reg-accent-text: #ffd166;
   --reg-warn: #ffc94d;
+  --reg-warn-text: #ffc94d;
   --reg-st-allowed: #5be08a;
   --reg-st-permit: #ffc94d;
   --reg-st-prohibited: #ff6b5e;
@@ -1286,7 +1293,7 @@ body[data-register="night"] {
   font-size: 11px;
   letter-spacing: 0.05em;
   line-height: 1.5;
-  color: var(--reg-warn);
+  color: var(--reg-warn-text, var(--reg-warn));
 }
 
 /* "Full profile ↗" / "Recipe page ↗": opens the standalone material/project
