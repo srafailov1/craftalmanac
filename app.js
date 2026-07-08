@@ -4591,10 +4591,12 @@ function sheetPlantsHTML() {
 }
 
 function getProjectSpineColor(recipe) {
-  // Ink cards key off the ink color category; food and mineral cards have their
-  // own categories, so fall back to the recipe's result swatch (the finished
-  // dish/stone color) — every card gets a meaningful spine, matching ink's look.
+  // Ink cards key off the ink color category; herbs cards key off their product
+  // category (same 5 colors as the map legend); food and mineral cards fall back
+  // to the recipe's result swatch (the finished dish/stone color) — every card
+  // gets a meaningful spine, matching ink's look.
   if (recipe.category && INK_CATEGORY_COLORS[recipe.category]) return INK_CATEGORY_COLORS[recipe.category];
+  if (recipe.category && MEDICINE_CATEGORY_COLORS[recipe.category]) return MEDICINE_CATEGORY_COLORS[recipe.category];
   if (typeof recipe.swatch === "string" && /^#?[0-9a-f]{6}$/i.test(recipe.swatch)) return recipe.swatch;
   return "#5a615b"; // technique / neutral
 }

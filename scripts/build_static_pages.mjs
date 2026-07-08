@@ -711,14 +711,15 @@ function renderRecipePage(recipe, ctx) {
   const mapLabel = RECIPE_MAP_LABEL[recipe.map] || titleCase(recipe.map);
   const description = metaDescription(recipe.teaser || recipe.hook, `${name}, a ${mapLabel} project recipe on Craft Almanac.`);
 
-  // Spine color: the recipe's own swatch, else its material's category color,
-  // else the olive accent — so every project card carries a meaningful spine.
+  // Spine color: the recipe's own swatch, else its own category color (so the
+  // page matches the in-app card, which keys off recipe.category), else the
+  // plant's category color, else the olive accent — every card gets a spine.
   const material = recipe.plantId ? speciesIndex.get(recipe.plantId) : null;
   let spine = "#6b7f2e";
   if (/^#[0-9a-fA-F]{3,8}$/.test(recipe.swatch || "")) spine = recipe.swatch;
   else if (material) {
     const colors = categoryColorsByMode[material.mode.key] || {};
-    spine = colors[material.species.category] || spine;
+    spine = colors[recipe.category] || colors[material.species.category] || spine;
   }
 
   const parts = [];
