@@ -113,6 +113,7 @@ export async function loadAppConstants() {
     "FOOD_CATEGORY_COLORS",
     "INK_CATEGORY_COLORS",
     "MEDICINE_CATEGORY_COLORS",
+    "MEDICINE_SPECIES_COLORS",
     "MINERAL_CATEGORY_COLORS"
   ];
   const context = { MONTHS: [] };
@@ -705,18 +706,19 @@ function renderSpeciesPage(species, mode, ctx) {
 // Recipe (project) page.
 // ---------------------------------------------------------------------------
 function renderRecipePage(recipe, ctx) {
-  const { recipeIds, speciesIndex, categoryColorsByMode } = ctx;
+  const { recipeIds, speciesIndex, categoryColorsByMode, speciesSpineColors } = ctx;
   const prose = (t) => renderProse(t, recipeIds, "");
   const name = recipe.name || recipe.id;
   const mapLabel = RECIPE_MAP_LABEL[recipe.map] || titleCase(recipe.map);
   const description = metaDescription(recipe.teaser || recipe.hook, `${name}, a ${mapLabel} project recipe on Craft Almanac.`);
 
-  // Spine color: the recipe's own swatch, else its own category color (so the
-  // page matches the in-app card, which keys off recipe.category), else the
-  // plant's category color, else the olive accent — every card gets a spine.
+  // Spine color: the recipe's own swatch, else its plant's color (Herbs cards
+  // are colored by the plant used, matching the in-app card), else the plant's
+  // category color, else the olive accent — every card gets a spine.
   const material = recipe.plantId ? speciesIndex.get(recipe.plantId) : null;
   let spine = "#6b7f2e";
   if (/^#[0-9a-fA-F]{3,8}$/.test(recipe.swatch || "")) spine = recipe.swatch;
+  else if (recipe.plantId && speciesSpineColors[recipe.plantId]) spine = speciesSpineColors[recipe.plantId];
   else if (material) {
     const colors = categoryColorsByMode[material.mode.key] || {};
     spine = colors[recipe.category] || colors[material.species.category] || spine;
@@ -991,6 +993,7 @@ async function generateAll() {
     profileMap,
     recipesByPlant,
     categoryColorsByMode,
+    speciesSpineColors: app.MEDICINE_SPECIES_COLORS || {},
     speciesIndex
   };
 

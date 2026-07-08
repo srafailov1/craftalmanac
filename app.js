@@ -105,6 +105,25 @@ const MEDICINE_CATEGORY_COLORS = {
   greens: "#6b8e23",
   garden: "#6978b8"
 };
+// Per-plant color for Herbs project card spines, keyed by plantId, so a shelf
+// shows a mix of plant colors instead of one flat category color. Each hue nods
+// to the plant's signature color (flower, berry, or foliage).
+const MEDICINE_SPECIES_COLORS = {
+  "medicine-yarrow": "#c9b458",          // cream-gold flower heads
+  "medicine-witch-hazel": "#d98f2b",     // spidery orange-yellow winter bloom
+  "medicine-elderberry": "#4d2e63",      // dark ripe berries
+  "medicine-echinacea": "#c05f88",       // pink-purple coneflower
+  "medicine-bergamot": "#8a5fa8",        // lavender bee balm
+  "medicine-goldenrod": "#c99414",       // deep goldenrod plumes
+  "medicine-dandelion": "#e6b800",       // bright yellow flower
+  "medicine-mullein": "#9aa24e",         // gray-green stalk, soft yellow spike
+  "medicine-violet": "#6a4a9c",          // violet flower
+  "medicine-cleavers": "#7fa758",        // fresh spring green
+  "medicine-garlic-mustard": "#5f8a43",  // leafy green
+  "medicine-jewelweed": "#e2742e",       // orange spotted flower
+  "medicine-broadleaf-plantain": "#6d8a4a", // broad green leaf
+  "medicine-chickweed": "#a7c07a"        // pale green mat
+};
 // Minerals map: each craft-material type is its own category/color (1:1 with the
 // mineralSpeciesCatalog), the way ink colors map to dye materials.
 const MINERAL_CATEGORY_COLORS = {
@@ -4591,12 +4610,12 @@ function sheetPlantsHTML() {
 }
 
 function getProjectSpineColor(recipe) {
-  // Ink cards key off the ink color category; herbs cards key off their product
-  // category (same 5 colors as the map legend); food and mineral cards fall back
-  // to the recipe's result swatch (the finished dish/stone color) — every card
-  // gets a meaningful spine, matching ink's look.
+  // Herbs cards take the color of the PLANT used, so a shelf shows a mix of
+  // plant colors rather than one flat category color. Ink cards key off the ink
+  // color category; food and mineral cards fall back to the recipe's result
+  // swatch (the finished dish/stone color) — every card gets a meaningful spine.
+  if (recipe.plantId && MEDICINE_SPECIES_COLORS[recipe.plantId]) return MEDICINE_SPECIES_COLORS[recipe.plantId];
   if (recipe.category && INK_CATEGORY_COLORS[recipe.category]) return INK_CATEGORY_COLORS[recipe.category];
-  if (recipe.category && MEDICINE_CATEGORY_COLORS[recipe.category]) return MEDICINE_CATEGORY_COLORS[recipe.category];
   if (typeof recipe.swatch === "string" && /^#?[0-9a-f]{6}$/i.test(recipe.swatch)) return recipe.swatch;
   return "#5a615b"; // technique / neutral
 }
