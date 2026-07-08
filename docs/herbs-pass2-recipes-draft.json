@@ -1,0 +1,2117 @@
+[
+ {
+  "map": "medicine",
+  "kind": "dried",
+  "category": "dried",
+  "id": "medicine-everlasting-yarrow-bundles",
+  "plantId": "medicine-yarrow",
+  "name": "Everlasting Yarrow Bundles",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "toxic": true,
+  "teaser": "Flat papery flower heads that keep their shape and color hung to dry for weeks.",
+  "hook": "Yarrow is a classic everlasting. Its flat clusters of tiny flowers hold their form and color for months once air dried, which is why bunches have long been hung to dry and worked into wreaths, swags, and dried bouquets. Here everlasting carries only its ordinary floristry sense, dried flowers that keep their shape, and the whole project is simply a matter of cutting, tying, and hanging. This card presents it strictly as a decorative drying and arranging craft.",
+  "timeline": {
+   "active": "20 to 30 minutes to cut and tie",
+   "passive": "5 to 10 days to dry in dry conditions, up to 2 to 3 weeks in humid ones"
+  },
+  "yield": "2 to 3 small bundles of 8 to 12 stems each",
+  "ingredients": [
+   {
+    "item": "Yarrow flowering stems (Achillea millefolium), flat clusters in full open bloom",
+    "amount": "16 to 36 stems",
+    "required": true,
+    "note": "Cut in the morning once flower heads are fully open and papery firm. Prefer garden grown, home patch, or florist stems over wild ones."
+   },
+   {
+    "item": "Natural twine or jute string",
+    "amount": "one 10 in length per bundle",
+    "required": true,
+    "note": "Rubber bands or elastics also work well and grip better as stems shrink."
+   }
+  ],
+  "toolsRequired": [
+   "Garden snips or pruners",
+   "Gardening gloves"
+  ],
+  "toolsOptional": [
+   "Rubber bands or elastics",
+   "Clothespins, S hooks, or a drying rack",
+   "A dark, dry, well ventilated room or closet"
+  ],
+  "steps": [
+   "Once you have confirmed the plant is true yarrow (see safety), put on gloves and cut flowering stems in the morning after the dew has dried, choosing heads that are fully open and papery firm rather than soft and freshly opened. Take only a light share of any stand.",
+   "Strip the lower leaves from each stem so the bottom few inches are bare. This improves air flow inside the bundle and gives the twine clean stems to grip.",
+   "Gather 8 to 12 stems into a small bundle, keeping the flower heads at slightly staggered heights so air can move between them.",
+   "Wrap the bare cut ends snugly with twine and tie tight, or slip on a rubber band. The stems shrink as they dry, so bind them firmly and plan to re tighten twine after a day or two, or use an elastic that keeps its grip.",
+   "Hang each bundle upside down in a dark, dry, well ventilated spot, spacing bundles so air circulates around and through them. Darkness preserves the yellow and white color far better than a bright window.",
+   "Leave them for about 5 to 10 days in dry conditions, longer in humid weather, checking every few days for good air flow and no clumping.",
+   "The bundles are ready when the flower heads feel papery and the stems snap crisply instead of bending. Damp or bendy stems need more time.",
+   "Work the finished everlasting stems into wreaths, swags, and dried arrangements, and display them out of reach of pets and children."
+  ],
+  "modifiers": "Yarrow comes in white, soft yellow, and warm garden shades of pink, coral, and red. Sort each bundle by color for a clean look, or mix shades for a meadow feel. Cutting longer stems gives you more to work with in tall arrangements. Golden flowered Achillea filipendulina holds an especially strong yellow and reads well in mixed everlasting bunches.",
+  "preservation": "Dried yarrow keeps its shape and color for many months, often a year or more, when kept out of direct sun, damp, and heavy dust. Store spare stems flat or upright in a dry box. Faded or dusty heads can be swapped out as arrangements age.",
+  "safety": [
+   "Identify your plant with certainty before cutting. True yarrow grows about 2 to 3 ft tall with soft, finely divided, feathery, fern like leaves and a fuzzy green stem with no purple markings, and it smells sweetly herbaceous. Do not cut white flat topped clusters from tall (5 to 10 ft) plants with smooth, hairless stems bearing purple spots or blotches, which is poison hemlock (Conium maculatum) and deadly, or from plants growing in wet ground with a chambered stem base, which is water hemlock (Cicuta species) and deadly. Both can be fatal, and poison hemlock toxins can pass through skin. If you are not certain, do not cut.",
+   "Prefer cultivated or purchased yarrow. For this purely decorative craft, garden grown Achillea, stems from your own patch, or florist and dried goods stems remove the field misidentification hazard almost entirely.",
+   "The finished dried bundle is a toxic household object. The ASPCA lists yarrow as toxic to dogs, cats, and horses, with vomiting, diarrhea, drooling, and skin irritation if chewed. Hang or display arrangements out of reach of pets and small children, and sweep up any dropped flower heads and stem fragments.",
+   "Wear gloves while cutting and stripping leaves, especially if you are ragweed sensitive, since handling yarrow foliage can cause an Asteraceae family skin reaction. Wash your hands after handling.",
+   "Watch for co occurring carrot family plants such as wild parsnip, wild carrot, and giant hogweed, whose sap can cause blistering skin burns on skin later exposed to sun. Cover your skin, wash your hands after cutting, and keep sap off bare skin.",
+   "This is a decorative craft only. Do not burn, smudge, steam, brew, or otherwise use the dried bundles on or in the body.",
+   "Occurrence on the map is not harvest permission. Take only a light share of any stand, and keep wild collected stems away from children and pets until identity is fully confirmed."
+  ],
+  "sources": [
+   {
+    "title": "Harvesting Everlasting Flowers for Drying, Iowa State University Yard and Garden",
+    "url": "https://yardandgarden.extension.iastate.edu/article/2003/6-27-2003/everlast.html"
+   },
+   {
+    "title": "Poison hemlock, University of Minnesota Extension",
+    "url": "https://extension.umn.edu/identify-invasive-species/poison-hemlock"
+   },
+   {
+    "title": "How to Dry Yarrow for Flower Arrangements, Farmhouse and Blooms",
+    "url": "https://farmhouseandblooms.com/how-to-dry-yarrow-for-flower-arrangements/"
+   }
+  ]
+ },
+ {
+  "category": "dried",
+  "difficulty": "Beginner",
+  "hook": "Witch hazel (Hamamelis) is one of the very few North American shrubs that flowers in the dark half of the year, sending out spidery, ribbon-petaled yellow blooms along bare or nearly bare stems. The native common witch hazel (Hamamelis virginiana) flowers in fall to early winter, so its branches are simply cut while already in bloom for a vase. True forcing of tight dormant buds is a trick for the late winter hybrids (Hamamelis x intermedia), whose stems can be cut in midwinter and coaxed open indoors. Either way, cut branches have long been a favorite way to bring a little yellow and a light citrusy scent into a home during the gray months.",
+  "id": "medicine-witch-hazel-cut-branches-for-a-winter-vase",
+  "ingredients": [
+   {
+    "item": "Cut witch hazel stems (garden or nursery)",
+    "amount": "1 to 2 stems",
+    "required": true,
+    "note": "From your own cultivated garden shrub, a shrub cut with the owner's permission, or nursery bought cut stems only. Cut just above a bud."
+   },
+   {
+    "item": "Cool fresh water",
+    "amount": "enough to fill the vase halfway",
+    "required": true,
+    "note": "Room temperature to warm water helps the stems drink; refresh every 2 to 3 days."
+   },
+   {
+    "item": "Clear lemon-lime soda (optional preservative)",
+    "amount": "1 tablespoon per quart of water",
+    "required": false,
+    "note": "A common cut-branch trick to help the water stay fresh; plain water works too."
+   }
+  ],
+  "kind": "dried",
+  "map": "medicine",
+  "modifiers": "For a midwinter version, use the late winter hybrids (Hamamelis x intermedia) in yellow, orange, or red: cut stems with tight dormant buds and let them truly force open indoors over a week or two. To build out an arrangement, stand a witch hazel stem with bare red twig dogwood or a few evergreen sprigs in the same vase.",
+  "name": "Witch Hazel Cut Branches for a Winter Vase",
+  "plantId": "medicine-witch-hazel",
+  "preservation": "A cool room, out of direct heat and sun, plus fresh water every 2 to 3 days keeps the blooms open longest, often 1 to 2 weeks. This is a decorative arrangement only: when it is spent, compost the stems. Do not dry, save, or process any part for skin or body use.",
+  "route": "non-body-craft",
+  "safety": [
+   "This is a decorative cut-branch craft only. Do not steep, distill, dab, or apply the stems, leaves, or bark to skin, and do not ingest any part.",
+   "Keep the vase water out of reach of children and pets, and do not let anyone drink it, since swallowed plant tannins in the water can cause stomach upset. The foliage itself is listed as non-toxic to cats and dogs by the ASPCA, so the concern is the standing water rather than the plant.",
+   "Cut only from your own cultivated garden shrub, a shrub cut with the owner's explicit permission, or nursery bought cut stems. Never cut from wild or mapped plants, because the catalog ethic for witch hazel is observe only.",
+   "The occurrence map shows where a plant grows, never permission to harvest it.",
+   "Use standard care with sharp pruning tools. Cut just above a bud and take only a stem or two so you guide rather than harm the shrub's shape.",
+   "Identify your plant before cutting. Witch hazel (Hamamelis) shows spidery, ribbon-petaled yellow flowers along bare or nearly bare stems in fall through late winter, with wavy edged oval leaves.",
+   "External, non-body use only: this arrangement is for looking at, not for touching to skin or taking internally."
+  ],
+  "sources": [
+   {
+    "title": "Brooklyn Botanic Garden: Witch-Hazels: Winter Flowers, Fall Foliage, and Lovely Form",
+    "url": "https://www.bbg.org/article/witch_hazels_winter_flowers_fall_foliage_and_lovely_form"
+   },
+   {
+    "title": "Iowa State University Yard and Garden: All About Witch Hazels",
+    "url": "https://yardandgarden.extension.iastate.edu/how-to/all-about-witch-hazels"
+   },
+   {
+    "title": "American Beauties Native Plants: Bring Spring Inside: Forcing Witchhazel to Bloom",
+    "url": "https://abnativeplants.com/blogs/posts/bring-spring-inside-forcing-witchhazel-to-bloom"
+   },
+   {
+    "title": "UNH Extension: Which Witchhazel",
+    "url": "https://extension.unh.edu/blog/2018/02/which-witchhazel"
+   }
+  ],
+  "steps": [
+   "Source your stems first. Cut only from your own cultivated garden witch hazel, a shrub cut with the owner's explicit permission, or buy nursery cut stems. Take only a stem or two and cut just above a bud to guide the shrub's shape.",
+   "Match the plant to the season. For the native common witch hazel (Hamamelis virginiana), which flowers in fall to early winter, cut stems that already show open or opening blooms. For the late winter hybrids (Hamamelis x intermedia), you can cut stems with tight dormant buds in midwinter and force them.",
+   "Back inside, recut the base at an angle and split the bottom inch of each stem with your pruners or a light tap of a hammer so the woody stem can take up water.",
+   "Stand the stems in a vase filled halfway with cool to warm water, and set it in a bright, cool room away from direct heat and drafts.",
+   "If you like, add 1 tablespoon of clear lemon-lime soda per quart of water to help the water stay fresh; plain water is fine too.",
+   "Over several days the ribbon-like petals unfurl and lightly scent the room. If a warm then cold swing curls them shut, they reopen once it warms again.",
+   "Every 2 to 3 days, pour out the old water, refresh it, and recut the base about an inch to keep the stems drinking.",
+   "Keep the vase where children and pets cannot reach the water, and do not let anyone drink it. When the stems are spent, compost them."
+  ],
+  "teaser": "Cut just a stem or two from your own garden shrub or from nursery stems: spidery yellow blooms and a light citrusy scent for a cool, bright winter room.",
+  "timeline": {
+   "active": "About 10 minutes to source, recut, and set up, plus a couple of minutes every 2 to 3 days to refresh the water.",
+   "passive": "Several days for the petals to open indoors, with the arrangement lasting about 1 to 2 weeks."
+  },
+  "toolsOptional": [
+   "Hammer or small mallet (to split the woody stem base)",
+   "Sharp knife"
+  ],
+  "toolsRequired": [
+   "Sharp pruning shears or secateurs",
+   "Vase"
+  ],
+  "toxic": true,
+  "yield": "One vase arrangement from a stem or two."
+ },
+ {
+  "id": "medicine-witch-hazel-and-rose-facial-splash",
+  "map": "medicine",
+  "kind": "skincare",
+  "plantId": "medicine-witch-hazel",
+  "name": "Witch Hazel and Rose Facial Splash",
+  "category": "skincare",
+  "difficulty": "Beginner",
+  "route": "topical",
+  "teaser": "Dried rose and calendula slowly tint a jar of store bought witch hazel water to a pale amber.",
+  "toxic": true,
+  "hook": "Commercial producers have distilled witch hazel twigs and bark into a clear scented water for well over a century, and barbers once kept a bottle on the shelf to dab on the skin after a shave. This project does not distill anything: you start from that finished, store bought witch hazel water and infuse it with dried rose petals and calendula until it takes on a soft color. It is a traditional grooming and skin care craft, made at home in a small jar. Witch hazel is observe only on this map, so no part of the wild shrub is collected.",
+  "timeline": {
+   "active": "About 15 minutes of hands on work",
+   "passive": "3 to 7 days steeping, plus a 24 hour patch test before first use"
+  },
+  "yield": "About 1 cup (240 ml)",
+  "ingredients": [
+   {
+    "item": "Commercial witch hazel water (distillate)",
+    "amount": "About 1 cup (240 ml)",
+    "required": true,
+    "note": "Store bought pharmacy distillate, the kind sold for grooming. No wild witch hazel is harvested for this project."
+   },
+   {
+    "item": "Dried rose petals",
+    "amount": "About 1/2 cup (about 20 g)",
+    "required": true,
+    "note": "Culinary or organically grown petals, not florist roses."
+   },
+   {
+    "item": "Dried calendula petals",
+    "amount": "2 tablespoons",
+    "required": false,
+    "note": "Optional. Leave out if you react to daisy family plants (see safety)."
+   }
+  ],
+  "toolsRequired": [
+   "Clean half pint (240 ml) glass jar with a tight lid",
+   "Bowl for a warm water bath",
+   "Coffee filter or fine cloth for straining",
+   "Clean bottle for storage",
+   "Label and pen"
+  ],
+  "toolsOptional": [
+   "Small funnel",
+   "Measuring cup and spoons"
+  ],
+  "steps": [
+   "Start from a fresh, sealed bottle of commercial witch hazel water, the distillate sold in pharmacies. Do not use any wild plant material: no witch hazel is harvested for this craft.",
+   "Measure about 1/2 cup of dried rose petals and 2 tablespoons of dried calendula petals into the clean, dry glass jar. If you are leaving the calendula out, use a little more rose.",
+   "Stand your measured witch hazel water (about 1 cup) in a bowl of hot tap water for a few minutes to take the chill off. Keep it well away from any open flame or hot burner, and never let it boil, because it contains alcohol and is flammable.",
+   "Pour the warmed witch hazel water over the petals until they are fully covered and the jar is nearly full. Cap it tightly and swirl so every petal is wet.",
+   "Set the jar in a cool spot out of direct light and let it steep 3 to 7 days, swirling once a day, until the liquid takes on color.",
+   "Strain through a coffee filter or fine cloth into a clean bottle, pressing gently to catch the last of the liquid, and compost the spent petals.",
+   "Label the bottle External Use Only with the date, and keep it in the refrigerator between uses.",
+   "Before the first use, dab a little on the inner forearm and wait 24 hours. If it stays clear, apply only to intact skin, at most once a day, and stop at any redness, stinging, or dryness."
+  ],
+  "modifiers": "Leave the calendula out for a rose only version, which is the safer choice if you react to daisy family plants. Dried lavender buds or a short strip of dried organic orange peel can stand in for part of the rose. For a lighter feel on the skin, some makers cut the finished water with an equal part of plain rose hydrosol. Every version still contains alcohol and stays external use only.",
+  "preservation": "Store in the refrigerator and use within about 2 weeks for the best color and freshness. The witch hazel water's own alcohol helps keep it, but the added botanicals shorten its life, so make small batches you can finish while fresh. Discard it if it turns cloudy, smells off, or grows any film.",
+  "safety": [
+   "External use only. Do not swallow this, and keep it away from the eyes, mouth, and any broken or freshly shaved skin. Swallowed witch hazel water can upset the stomach.",
+   "Label the finished bottle External Use Only and store it out of reach of children and pets.",
+   "Commercial witch hazel water contains alcohol and is flammable. Warm it gently in a warm water bath, away from any open flame or hot burner, and never boil it.",
+   "Asteraceae (daisy family) allergy caution: calendula is a documented contact allergen. If you react to ragweed, daisies, chrysanthemums, or marigolds, or have related hay fever, leave the calendula out or skip this project.",
+   "Patch test on the inner forearm first, but know that a clear forearm test can still miss a reaction on the more delicate skin of the face. Apply only to intact skin, not right after shaving, no more than once a day, and stop at any redness, stinging, or dryness. People with rosacea or perioral dermatitis should skip it.",
+   "Use culinary or organically grown rose petals and calendula, not florist flowers, which can carry pesticide residues that are not meant for contact with skin.",
+   "No wild witch hazel is harvested for this project. Witch hazel is observe only on this map, and commercial distillate is made largely from the bark and wood, the restricted parts that need land manager permission on public land. Start only from finished, store bought witch hazel water. Occurrence points on the map are not permission to collect.",
+   "Identify your plant material: buy rose petals, calendula, and witch hazel water that are clearly labeled by a reputable supplier, so you know exactly what is going into the jar."
+  ],
+  "sources": [
+   {
+    "title": "Rose Infused Witch Hazel: method, steep time, and refrigerated storage",
+    "url": "https://thenerdyfarmwife.com/rose-infused-witch-hazel/"
+   },
+   {
+    "title": "DermNet: Compositae allergy and sesquiterpene lactones",
+    "url": "https://dermnetnz.org/topics/compositae-allergy"
+   },
+   {
+    "title": "The seamy side of natural medicines: contact sensitization to arnica and marigold (Calendula officinalis)",
+    "url": "https://www.researchgate.net/publication/11632238_The_seamy_side_of_natural_medicines_Contact_sensitization_to_arnica_Arnica_montana_L_and_marigold_Calendula_officinalis_L"
+   }
+  ]
+ },
+ {
+  "id": "medicine-cultivated-witch-hazel-twig-skin-wash",
+  "map": "medicine",
+  "kind": "skincare",
+  "plantId": "medicine-witch-hazel",
+  "name": "Cultivated Witch Hazel Twig Skin Wash",
+  "category": "skincare",
+  "difficulty": "Beginner",
+  "route": "topical",
+  "teaser": "Garden prunings simmered down to an amber twig water, strained and jarred for external use only.",
+  "toxic": true,
+  "hook": "Boiling witch hazel twigs and cooling the liquid is the old North American method behind the familiar witch hazel water. Early New England settlers learned the technique from Indigenous peoples, who prepared decoctions from the stems of this native shrub, and by the nineteenth century a bottled version was a common household item. This card presents the craft only: a way to reuse prunings from a cultivated garden witch hazel by simmering, cooling, and straining them into a small labeled batch. It describes technique and history and makes no claim about any effect on skin or body.",
+  "timeline": {
+   "active": "About 40 minutes: rinse and chop twigs, simmer 20 to 30 minutes, then strain.",
+   "passive": "Cool to room temperature, then refrigerate and use within about two days."
+  },
+  "yield": "About 1.5 cups of strained twig water; a single small batch to keep refrigerated and discard within two days.",
+  "ingredients": [
+   {
+    "item": "Twigs from a cultivated garden witch hazel (Hamamelis virginiana), already pruned, or bought cut stem trimmings",
+    "amount": "A small handful, about 1 to 2 tablespoons chopped",
+    "required": true,
+    "note": "Start with a commercial witch hazel product or use prunings from a cultivated shrub. Do not wild harvest. Bought cut stem trimmings are a secondary path so no beginner is left with wild cutting as the only route."
+   },
+   {
+    "item": "Water",
+    "amount": "2 cups",
+    "required": true,
+    "note": "Use ample water so the brew stays modest rather than a strong reduction."
+   }
+  ],
+  "toolsRequired": [
+   "Small saucepan",
+   "Fine sieve or cheesecloth",
+   "Clean glass jar with a lid",
+   "Label and pen"
+  ],
+  "toolsOptional": [
+   "Kitchen scale",
+   "Clean cotton pads or a soft cloth for a compress"
+  ],
+  "steps": [
+   "Source safely first: buy a commercial witch hazel product, or use twigs already pruned from a cultivated garden shrub, or bought cut stem trimmings. Do not cut from wild or mapped plants.",
+   "Rinse the twigs, chop a small handful (about 1 to 2 tablespoons) into short pieces, and put them in the saucepan with 2 cups of water so the twigs stay covered.",
+   "Bring to a boil, then reduce the heat and simmer gently for 20 to 30 minutes, topping up with a little water if needed to keep the twigs submerged. Keep it a modest brew, not a strong reduction.",
+   "Remove from the heat and let the liquid cool completely to room temperature.",
+   "Strain through the fine sieve or cheesecloth into the clean glass jar and discard the spent twigs.",
+   "Label the jar External Use Only with the date, then refrigerate.",
+   "Patch test before wider use: dab a little on the inner forearm, wait 24 to 48 hours, and check for redness or itching.",
+   "If the patch test is clear, use within about two days as a topical wipe on ordinary intact skin, or soak a cloth for a cool (cold temperature) compress. Discard any leftover after two days."
+  ],
+  "modifiers": "For a cool (cold temperature) compress, chill the strained liquid and soak a clean cloth in it before laying it on ordinary intact skin. Keep every batch small and dilute, since a strong reduction is more irritating and gives no craft advantage. This project describes technique and history only and makes no claim about any effect on skin or body.",
+  "preservation": "This is a preservative free water decoction. Refrigerate it in a closed, labeled glass jar and discard within about two days. Do not leave it at room temperature, do not can it, and do not blend it into lotions or store bought products.",
+  "safety": [
+   "External use only. Never swallow this decoction. It is tannin rich, and taken by mouth in quantity it can upset the gut and stress the liver.",
+   "This home twig decoction is not the same product as the distilled witch hazel water sold in stores. The store product is a tannin free steam distillate, while this home version is tannin rich and has a meaningfully higher chance of irritating skin.",
+   "Witch hazel tannins are documented skin sensitizers and can cause irritant or allergic contact dermatitis. Patch test on the inner forearm, wait 24 to 48 hours, and check for delayed redness or itching before any wider use.",
+   "Use on ordinary, intact skin only. Keep it away from the eyes, the mouth and other mucous membranes, and any broken, weeping, eczematous, or rashy skin.",
+   "Keep the brew modest: a small amount of twig in ample water rather than a strong reduction, since a heavily concentrated decoction is more irritating.",
+   "Do not use on infants, on young children's skin, or on pets. Keep the labeled container out of reach of children and pets.",
+   "This is a preservative free water decoction. Make only small batches, keep them refrigerated, and discard within a couple of days.",
+   "Use only twigs already pruned from a cultivated garden shrub, or bought cut stem trimmings. Do not wild harvest witch hazel. It is an observe only species vulnerable to overharvest and local loss, and the map grants no cutting permission.",
+   "Identify your plant before using any prunings: American witch hazel (Hamamelis virginiana) shows strap shaped yellow flowers on bare branches in fall. Confirm the shrub with a garden label or a knowledgeable grower, since ornamental Hamamelis hybrids and other shrubs can look similar out of bloom.",
+   "This project describes technique and history only and makes no claim about any effect on skin or body."
+  ],
+  "sources": [
+   {
+    "title": "North Carolina Extension Gardener Plant Toolbox: Hamamelis virginiana",
+    "url": "https://plants.ces.ncsu.edu/plants/hamamelis-virginiana/"
+   },
+   {
+    "title": "USDA Forest Service Fire Effects Information System: Hamamelis virginiana species review",
+    "url": "https://www.fs.usda.gov/database/feis/plants/tree/hamvir/all.html"
+   },
+   {
+    "title": "National Capital Poison Center (Poison Control)",
+    "url": "https://www.poison.org/"
+   },
+   {
+    "title": "American Herbal Products Association Botanical Safety Handbook, 2nd Edition",
+    "url": "https://www.ahpa.org/botanical-safety-handbook"
+   }
+  ]
+ },
+ {
+  "id": "medicine-dried-elderflower-fragrance-bundles",
+  "map": "medicine",
+  "kind": "dried",
+  "plantId": "medicine-elderberry",
+  "name": "Dried Elderflower Fragrance Bundles",
+  "category": "dried",
+  "difficulty": "Intermediate",
+  "route": "aromatic",
+  "teaser": "Cream colored flower clusters, tied in threes and hung head down until they dry papery and hold the honeyed scent of early summer.",
+  "toxic": true,
+  "hook": "Elder has been cut in early summer and hung to dry in farmhouses and stillrooms for generations, prized for the honeyed scent its cream colored flower clusters give off as they dry. This card presents elderflower purely as a seasonal botanical craft: a hanging bundle or a bowl of crumbled potpourri that captures the smell of the season. Nothing here is eaten or put on skin. The whole craft rests on a single skill, cutting the right plant.",
+  "timeline": {
+   "active": "About 20 minutes to harvest, shake, and tie",
+   "passive": "1 to 2 weeks of hanging or screen drying"
+  },
+  "yield": "3 to 4 hanging bundles, or about 2 cups of crumbled dried florets",
+  "ingredients": [
+   {
+    "item": "Fresh elder flower clusters (cymes), fully open and sweet smelling",
+    "amount": "8 to 12 clusters",
+    "required": true,
+    "note": "Cut each with 4 to 6 inches of stem. Prefer cultivated or purchased flowers as your default source."
+   },
+   {
+    "item": "Kitchen twine or natural string",
+    "amount": "about 3 feet",
+    "required": true,
+    "note": "For binding bundles of 3 to 5 cluster stems and leaving a hanging loop."
+   },
+   {
+    "item": "Dried, food safe botanicals for a mixed potpourri, such as rose petals or dried citrus peel",
+    "amount": "to taste",
+    "required": false,
+    "note": "Optional. Keep elder content low and keep all of it away from food and utensils."
+   }
+  ],
+  "toolsRequired": [
+   "Pruning snips or scissors",
+   "Kitchen twine or natural string"
+  ],
+  "toolsOptional": [
+   "Mesh drying screen or cooling rack",
+   "Parchment paper",
+   "Paper bags for storage",
+   "Cloth sachet bag",
+   "Ribbon"
+  ],
+  "steps": [
+   "On a dry morning after the dew has lifted, choose 8 to 12 flower clusters that are fully open and sweet smelling. Take only a light share from any one shrub, leaving most of the flowers for pollinators and birds, and snip each cluster with about 4 to 6 inches of stem.",
+   "Hold each cluster head down and tap or shake it gently for a few seconds to send resident insects on their way. Do not wash the flowers, since water browns the florets and slows drying.",
+   "Trim away the lower green stem, keeping just enough to tie. Gather 3 to 5 cluster stems and bind them near the cut ends with a length of twine, leaving a small loop for hanging.",
+   "Hang the bundles head down in a warm, dark, airy spot at roughly 80 F or cooler, spaced so air moves freely around each head. Alternatively, lay single heads in one layer on a mesh screen or a sheet of parchment.",
+   "Leave them undisturbed for 1 to 2 weeks, until the florets feel papery and rustle and the stems snap rather than bend.",
+   "Display the finished bundles as a hanging piece, or gently rub the dried florets off the stems over a bowl to collect loose potpourri. Discard the stripped green stems.",
+   "For a sachet, spoon about 1/2 cup of crumbled florets into a cloth bag and tie it closed. Keep every part of the finished piece well away from food surfaces, dishes, and utensils."
+  ],
+  "modifiers": "Blend the crumbled florets with other dried, food safe botanicals such as rose petals, lavender buds, or dried citrus peel for a mixed potpourri, keeping the elder content low and every piece away from food. For a longer lasting hanging display, tie the dried bundle with a ribbon and refresh it each season, since the honeyed scent softens over a few weeks and is strongest when freshly dried.",
+  "preservation": "Store loose dried florets in a labeled paper bag or a paper lined tin in a cool, dark, dry place. Paper lets any last moisture escape, while a tightly sealed jar can trap it and invite mold. Kept dry, the florets hold their look for many months, though the honeyed scent fades over a few weeks. Compost spent material once the scent is gone, keeping it away from pets.",
+  "safety": [
+   "Identify the plant with certainty before you cut. Elder is a woody shrub or small tree with opposite, pinnately compound leaves and flat flower clusters (cymes) held over spongy white pith inside the stems.",
+   "Do not confuse elder with poison hemlock or water hemlock. Those are herbaceous plants with hollow or chambered green stems, finely divided alternate leaves, and umbrella shaped clusters, and they grow in and beside wet ditches. They are among the most lethal plants in North America.",
+   "Reject any white flowered plant on a soft green herbaceous stem, growing in or next to standing water, or smelling rank, musty, or of nothing. True elderflower smells sweet and honeyed. If you have any doubt, do not cut it.",
+   "Rule out toxic relatives in the same genus, including dwarf elder (Sambucus ebulus), a non woody plant whose flowers carry a ricin-like toxin, and red elderberry (Sambucus racemosa). Confirm the shrub with an expert or across seasons before harvesting.",
+   "Green stems and leaves are cyanogenic and toxic. Strip and discard as much green stem and leaf material as you can, keep only the dried florets, and keep all elder material out of anything that will later touch food or tea.",
+   "Hang or display the bundle and any potpourri out of reach of children and pets. Cats are especially sensitive to cyanogenic plant material, and signs can appear soon after they mouth it. Wash your hands after handling.",
+   "Occurrence and map data are not harvest permission and do not confirm a plant's identity. Verifying identity on the ground is the maker's responsibility.",
+   "Prefer cultivated or purchased elderflower as your default source. This decorative fragrance craft does not require wild harvest, and buying or growing the flowers removes the lethal lookalike risk for beginners."
+  ],
+  "sources": [
+   {
+    "title": "Midwest Elderberry Cooperative: Quality Elderflower Harvesting and Drying",
+    "url": "https://www.midwest-elderberry.coop/quality-elderflower-harvest.pdf"
+   },
+   {
+    "title": "Savanna Institute: The best way to dry elderberry flowers",
+    "url": "https://www.savannainstitute.org/the-best-way-to-dry-elderberry-flowers-surprisingly-simple/"
+   },
+   {
+    "title": "UC ANR California Elderberries: Elderberry and Elderflower Processing",
+    "url": "https://ucanr.edu/site/california-elderberries/elderberry-and-elderflower-processing"
+   },
+   {
+    "title": "Michigan State University Extension: Poison hemlock identification and control",
+    "url": "https://www.canr.msu.edu/news/poison-hemlock-identification-and-control"
+   },
+   {
+    "title": "Oregon State University Extension: Poison hemlock and Western waterhemlock",
+    "url": "https://extension.oregonstate.edu/catalog/poison-hemlock-western-waterhemlock-deadly-plants-may-be-growing-your-pasture"
+   }
+  ]
+ },
+ {
+  "id": "medicine-coneflower-seed-heads-for-the-winter-garden-and-the-birds",
+  "map": "medicine",
+  "kind": "garden",
+  "plantId": "medicine-echinacea",
+  "name": "Coneflower Seed Heads for the Winter Garden and the Birds",
+  "category": "garden",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "teaser": "Stiff, spiky cones left standing to catch the frost and feed winter finches.",
+  "toxic": true,
+  "hook": "Long before it was potted up as a garden border ornamental, purple coneflower stood through the open winter as a stiff, seed-filled cone. Gardeners have kept that habit on purpose: the browned cones give a bed its winter architecture and hold seed that goldfinches and sparrows work loose in the cold months. This card presents the plant purely as standing garden structure and bird food, and as seed you can save from cultivated plants and resow.",
+  "timeline": {
+   "active": "About 30 minutes to clip and clean a few cones",
+   "passive": "About 2 weeks of drying; cones can stand in the bed all fall and winter"
+  },
+  "yield": "A labeled envelope of dried coneflower seed, plus standing seed heads that hold their structure and feed birds through winter",
+  "ingredients": [
+   {
+    "item": "Cultivated purple coneflower (Echinacea purpurea) with spent, browned seed cones",
+    "amount": "A few plants, or 3 to 6 fully dry cones if saving seed",
+    "required": true,
+    "note": "Grown or bought as a garden plant. Above-ground spent tops and cones only, no roots."
+   },
+   {
+    "item": "Paper envelope or small paper bag for storage",
+    "amount": "1",
+    "required": true,
+    "note": "Label it with the plant name and the year so seed does not get mixed up."
+   }
+  ],
+  "toolsRequired": [
+   "Garden gloves",
+   "Garden snips or scissors",
+   "A bowl to break the cones apart over"
+  ],
+  "toolsOptional": [
+   "Paper bag with a few small holes punched in it, for drying",
+   "Kitchen strainer or sieve for separating seed from chaff",
+   "Dust mask if you are sensitive to daisy-family pollen or dust"
+  ],
+  "steps": [
+   "Through late summer, stop deadheading your cultivated coneflower and let the last flush of flowers finish and set seed on the plant.",
+   "Leave the stiff, spiky central cones standing on their stems through fall and winter for garden structure and for seed-eating birds such as goldfinches and sparrows, which peck the seed straight from the dry cones.",
+   "To also save seed, pick a dry day and choose a few cones that have turned fully brown and hard. Put on garden gloves first, because the cones are prickly.",
+   "Clip those cones with a long stem and drop them head first into a paper bag with a few small holes punched in it. Hang the bag in a dry, well ventilated spot for about two weeks to finish drying.",
+   "Working outdoors or in a well ventilated spot, break the dry cones apart over a bowl and rub them between gloved fingers. Look for the tan, cone-shaped seeds in the center; the long, needle-like spikes are chaff, not seed.",
+   "Tip the seed and chaff into a kitchen strainer and toss it gently so the lighter chaff falls or blows away, leaving the heavier dark seed behind.",
+   "Let the seed air-dry fully, then pour it into a labeled paper envelope and keep it in a cool, dry place to sow next spring.",
+   "In late winter or early spring, cut the remaining standing stems back to tidy the bed. Native bees sometimes overwinter in the hollow stems, so waiting until then rewards them as well as the birds."
+  ],
+  "modifiers": "If your only goal is winter interest, leave every cone in place and skip seed saving entirely: the frosted silhouette and the birds are the whole point. Note that named cultivars and hybrids often do not come true from saved seed, so seedlings grown from a purchased hybrid may vary in flower color and form.",
+  "preservation": "Store fully dried seed in a labeled paper envelope in a cool, dry, dark place; paper lets any last moisture escape rather than trapping it. Keep the envelope away from damp so the seed does not clump or grow mold, and sow the following spring. Standing cones left on the plant need no storage; they hold through fall and winter and are cut back in late winter.",
+  "safety": [
+   "Wear gloves when you clip and break apart the dried seed cones. The spiky central cones are prickly.",
+   "Coneflower is in the daisy (Asteraceae) family. If you are sensitive to ragweed or other daisy-family plants, break the dry cones apart outdoors or in a well ventilated spot so you are not breathing the airborne chaff and dust.",
+   "This is a garden and wildlife craft only. Do not eat or otherwise put any part of the plant to use, and do not prepare it for any human use.",
+   "Use only coneflower that you grow or buy as a cultivated garden plant. Occurrence points on the map are not permission to collect seed or plants from land you do not manage.",
+   "Collect no roots. Wild Echinacea roots are overharvested and some wild Echinacea species are rare or federally protected, so this craft uses only cultivated, above-ground parts.",
+   "Identify your plant before you save seed. Purple coneflower has pinkish-purple, downward-drooping ray petals and a raised, coppery, spiky central cone. Black-eyed Susan (Rudbeckia) looks similar but has yellow petals and a darker, smoother brown to near-black central dome, so keep the two apart when you collect and label seed.",
+   "This is not food. Keep the dry cones, the loose chaff, and the saved seed away from children and pets, and store the labeled envelope out of their reach."
+  ],
+  "sources": [
+   {
+    "title": "Clemson Cooperative Extension, Home & Garden Information Center: Echinacea (Coneflower) care and cultivars",
+    "url": "https://hgic.clemson.edu/factsheet/echinacea/"
+   },
+   {
+    "title": "GrowItBuildIt: How to Harvest Echinacea Seeds, an Illustrated Guide (drying, separating seed from chaff, storage)",
+    "url": "https://growitbuildit.com/harvest-echinacea-seeds-an-illustrated-guide/"
+   },
+   {
+    "title": "HGTV: Coneflower (Echinacea) Seeds, saving and sowing",
+    "url": "https://www.hgtv.com/outdoors/flowers-and-plants/coneflower-echinacea-seeds"
+   }
+  ]
+ },
+ {
+  "id": "medicine-dried-coneflower-bundles-and-wreaths",
+  "map": "medicine",
+  "kind": "dried",
+  "plantId": "medicine-echinacea",
+  "name": "Dried Coneflower Bundles and Wreaths",
+  "category": "dried",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "teaser": "Stiff stems, papery ray petals, and a dark bristled cone that keeps its shape long after the season ends.",
+  "toxic": true,
+  "hook": "Purple coneflower has been a favorite of cut flower gardeners for generations, prized as much for its stiff seed cone as for its ray petals. Cut and hung to dry, the blooms hold their form for arrangements, wreaths, and ornamental bunches, and the bare cones make a spiky dark accent once the petals fall. This project is decorative only and makes no reference to eating, brewing, or any traditional health use of the plant.",
+  "timeline": {
+   "active": "About 30 minutes to cut, strip, and bind",
+   "passive": "2 to 3 weeks hanging to dry"
+  },
+  "yield": "2 to 3 dried bundles, or one small wreath",
+  "ingredients": [
+   {
+    "item": "Coneflower flowering stems (Echinacea purpurea), cultivated only",
+    "amount": "10 to 15 firm stems per bundle",
+    "required": true,
+    "note": "Cut from your own bed or nursery grown plants. Choose freshly open blooms on firm stems, ideally in the morning after dew dries. No roots and no bark."
+   },
+   {
+    "item": "Grapevine or wire wreath frame",
+    "amount": "1 frame",
+    "required": false,
+    "note": "Only needed if you are building a wreath rather than hanging loose bundles."
+   },
+   {
+    "item": "Ribbon or raffia",
+    "amount": "1 to 2 yards",
+    "required": false,
+    "note": "Optional finishing for a hung bundle or wreath."
+   }
+  ],
+  "toolsRequired": [
+   "Sharp bypass pruners or floral snips",
+   "Rubber bands or twist ties",
+   "Garden gloves",
+   "Twine or hooks for hanging"
+  ],
+  "toolsOptional": [
+   "Long sleeved shirt",
+   "Floral wire",
+   "Clear matte spray sealant"
+  ],
+  "steps": [
+   "Wearing gloves and long sleeves, cut in the morning once the dew has dried. Choose freshly open blooms on firm stems from your own bed or a nursery grown plant, and cut stems 12 to 18 inches long with clean pruners.",
+   "Strip the lower leaves by holding a stem just below the flower and running a gloved hand down toward the cut end. Leaves hold moisture and slow the dry, so remove all of the lower foliage.",
+   "Gather small bunches of about 8 to 12 stems, offsetting the heads so the cones do not crush each other. Bind the stem ends with a rubber band or twist tie rather than string, since the band keeps tension as the stems shrink.",
+   "Hang the bunches upside down from twine or hooks in a warm, dark, dry, well ventilated space. Darkness holds the petal color and good airflow prevents mold, so space the bundles apart so air moves around each one.",
+   "Leave the bundles undisturbed for 2 to 3 weeks, until the stems snap cleanly and the central cones feel hard and dry to the touch.",
+   "For a spiky textural accent, cut the cones alone once the petals have dropped and dry them the same way, or wire short dried stems in overlapping fan shaped tufts around a grapevine or wire frame to build a wreath.",
+   "Optional: a light pass of clear matte spray sealant helps hold the petals and reduce shatter. Keep finished pieces in a dry indoor spot out of direct sun."
+  ],
+  "modifiers": "Cones only: wait until the petals have dropped, cut the bare cones, and dry them for a darker, spikier accent. Wreath: wire short dried stems in overlapping fan shaped tufts around a grapevine or wire frame. Color: coneflower petals fade toward tan over the months, so pair them in a mixed bundle with statice or goldenrod, whose blues and yellows hold color longest when air dried.",
+  "preservation": "Fully dried bundles keep their form for a year or more in a dry indoor spot out of direct sun. Humidity softens the stems and invites mold, so avoid bathrooms and basements. A light coat of clear matte spray sealant reduces petal shatter. Store the pieces hanging or laid flat, and never box them while any moisture remains in the stems.",
+  "safety": [
+   "This is a decorative botanical craft only. Nothing here is eaten, brewed, or applied to the body.",
+   "Identify your plant before cutting. Coneflower (Echinacea purpurea) has rough, coarsely toothed lance shaped leaves and a single daisy like flower with a raised, bristly central cone. Do not confuse a young coneflower rosette with foxglove (Digitalis), whose soft, downy, finely scalloped leaves form a low basal rosette and which is dangerous to handle and to keep near food. Foxglove never forms the raised bristly cone.",
+   "Coneflower is in the daisy and aster family (Asteraceae). People who are sensitive to ragweed, chamomile, feverfew, chrysanthemums, or daisies can get skin irritation from the sap, or a pollen reaction while cutting, stripping, and drying. Wear gloves and long sleeves if you are sensitive.",
+   "Dry the bundles in a well ventilated space rather than a small closed room. Good airflow limits pollen and dust buildup indoors during the multi week dry.",
+   "Use cultivated material only: home grown, garden bed, or nursery bought plants. Do not wild harvest coneflower. Some wild coneflowers are protected or declining (Echinacea laevigata is federally listed), and native prairie stands should be left to set seed.",
+   "Map occurrence data is not harvest permission and never marks a plant as free to cut.",
+   "Keep finished dried arrangements out of reach of children and of pets that might chew them, and away from food surfaces. Coneflower is listed as non toxic to pets, with only minor irritation possible at worst if a pet chews it."
+  ],
+  "sources": [
+   {
+    "title": "Drying Flowers, Clemson Cooperative Extension Home and Garden Information Center",
+    "url": "https://hgic.clemson.edu/factsheet/drying-flowers/"
+   },
+   {
+    "title": "Drying Flowers and Foliage for Arrangements, University of Missouri Extension G6540",
+    "url": "https://extension.missouri.edu/publications/g6540"
+   },
+   {
+    "title": "Echinacea purpurea (Purple Coneflower), North Carolina Extension Gardener Plant Toolbox",
+    "url": "https://plants.ces.ncsu.edu/plants/echinacea-purpurea/"
+   },
+   {
+    "title": "Harvesting and Drying Flowers, Iowa State University Extension and Outreach",
+    "url": "https://www.extension.iastate.edu/plymouth/files/documents/Harvesting&DryingFlowers.pdf"
+   }
+  ]
+ },
+ {
+  "map": "medicine",
+  "id": "medicine-pressed-coneflower-botanical-art",
+  "kind": "dried",
+  "plantId": "medicine-echinacea",
+  "name": "Pressed Coneflower Botanical Art",
+  "category": "dried",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "teaser": "Pink-purple coneflower petals flattened onto paper and kept behind glass.",
+  "toxic": true,
+  "hook": "Pressing flowers is a botanical art tradition that runs from sixteenth century herbarium sheets to Victorian scrapbooks, preserving a bloom's exact form and color on paper. The purple coneflower presses well: its long ray petals and domed central cone hold their shape and their pink-purple color for years behind glass. This card treats the plant purely as a subject for framed art, bookmarks, and greeting cards. Presented strictly as pressed-flower art, with no reference to any medicinal or edible use.",
+  "timeline": {
+   "active": "30 to 45 minutes of hands-on cutting, arranging, and later mounting",
+   "passive": "2 to 3 weeks pressing and drying undisturbed"
+  },
+  "yield": "6 to 12 pressed blooms and loose petals, enough for several bookmarks or cards or one framed piece",
+  "ingredients": [
+   {
+    "item": "Freshly opened coneflower blooms from a cultivated bed",
+    "amount": "6 to 12 stems",
+    "required": true,
+    "note": "Cut on a dry morning after the dew has burned off, choosing firm, unblemished flowers."
+   },
+   {
+    "item": "Absorbent paper (newspaper or blotting paper)",
+    "amount": "6 to 12 folded sheets per layer, above and below",
+    "required": true,
+    "note": "Blotting paper can be reused; newspaper is cheapest but swap it out as it dampens."
+   },
+   {
+    "item": "Cardstock or heavy acid-free paper for mounting",
+    "amount": "1 sheet per finished piece",
+    "required": true,
+    "note": "Acid-free stock keeps the mount from yellowing over time."
+   },
+   {
+    "item": "Archival PVA glue or acid-free glue dots",
+    "amount": "a few small dots per bloom",
+    "required": false,
+    "note": "Apply only at the petal bases so the glue does not show."
+   },
+   {
+    "item": "Clear self-adhesive film or a glass frame",
+    "amount": "1 per finished piece",
+    "required": false,
+    "note": "Seals the art against handling and humidity."
+   }
+  ],
+  "toolsRequired": [
+   "Flower press or a heavy book",
+   "Scissors or a craft knife",
+   "Gardening or nitrile gloves",
+   "Cutting board"
+  ],
+  "toolsOptional": [
+   "Tweezers for lifting fragile pressed petals",
+   "Picture frame with glass",
+   "Self-adhesive laminating film",
+   "Soft brush for dusting off pollen"
+  ],
+  "steps": [
+   "On a dry morning after the dew has burned off, put on gloves and cut 6 to 12 freshly opened coneflower blooms from your own cultivated bed, choosing flowers with firm, unblemished petals.",
+   "Work outdoors or beside an open window. For a flat press, either pull the ray petals free one at a time, or lay a bloom on the cutting board and slice it in half from top to bottom through the cone with a craft knife so it will lie flat.",
+   "Arrange the petals and halved blooms in a single layer, not touching, between two sheets of absorbent paper. Stack 6 to 12 folded sheets of newspaper or blotting paper above and below to soak up moisture.",
+   "Close the layers inside a flower press tightened evenly, or weight them under a heavy book, and set them somewhere dry and warm.",
+   "For the first few days, open the press and swap in fresh dry paper each day so the blooms do not brown, then change the paper every few days after that.",
+   "Leave the flowers undisturbed for two to three weeks until they are fully dry and papery to the touch, with no cool or damp feel at the cone.",
+   "Lift each pressed piece with tweezers, arrange it on cardstock, and fix it down with tiny dots of archival glue at the petal bases.",
+   "Seal the finished piece under a sheet of clear self-adhesive film, or set it behind glass in a frame, to protect it from handling and humidity."
+  ],
+  "modifiers": "For bookmarks, mount a single petal or a slim half-bloom on a narrow card strip and laminate it. For greeting cards, glue a whole pressed bloom to folded cardstock. Pressing the halved cone shows the plant's structure, while pressing loose petals gives a lighter, more scattered design. Pot marigold, cosmos, and larkspur from the same cultivated bed press well alongside coneflower for mixed arrangements.",
+  "preservation": "Keep finished pieces out of direct sunlight, which fades the pink and purple over months. Store loose pressed blooms flat between sheets of paper in a dry box until you mount them. Sealed under film or glass and kept dry, mounted pieces hold their color and shape for years.",
+  "safety": [
+   "This is a decorative craft only. Nothing here is eaten or put on the skin, and it is not a medicine or a health product of any kind.",
+   "Identify your plant with confidence before cutting. Garden coneflower (Echinacea purpurea) has a raised, bristly orange-brown central cone with drooping pink to purple ray petals. Do not confuse it with black-eyed Susan (Rudbeckia hirta), which has a darker brown to near-black dome and yellow petals. Either way, cut only named plants from your own cultivated bed.",
+   "Coneflower is in the Asteraceae (daisy) family. Its fresh leaves, stems, flowers, and pollen contain compounds that can cause an itchy contact rash. People allergic to ragweed, chrysanthemums, daisies, or marigolds are especially likely to react, so wear gloves when cutting and pressing the blooms and keep your hands away from your eyes and face.",
+   "The allergy and pollen risk is present only during the fresh picking and pressing step. The finished, fully dried art under glass poses no such exposure.",
+   "Fresh pollen can set off hay fever or asthma symptoms in people who are sensitive to it. Work outdoors or in a well ventilated space and avoid breathing in pollen when you halve the blooms.",
+   "Use only flowers you grow yourself or buy from cultivated plants. Do not pick from wild stands or restoration plantings, because several wild coneflower species are under harvest pressure or federally listed. Use the flowers only, never the roots.",
+   "Keep cut plant material, gloves, and the finished art away from children and pets, since the blooms are for display only and are not food.",
+   "Occurrence points on the map show where a plant has been recorded. They are not permission to pick, and they never grant harvest rights on any land."
+  ],
+  "sources": [
+   {
+    "title": "Techniques for Pressing Flowers, New York Botanical Garden Research Guides",
+    "url": "https://libguides.nybg.org/c.php?g=655088&p=4597610"
+   },
+   {
+    "title": "How to Press Flowers, University of Maryland Extension Master Gardeners",
+    "url": "https://extension.umd.edu/sites/extension.umd.edu/files/2021-03/FC-MGPub%20Flower%20Pressing%20Bookmark%20Fair%202018.pdf"
+   },
+   {
+    "title": "Compositae Allergy, DermNet",
+    "url": "https://dermnetnz.org/topics/compositae-allergy"
+   },
+   {
+    "title": "Asteraceae Dermatitis: Everyday Plants With Allergenic Potential, MDedge Dermatology",
+    "url": "https://www.mdedge.com/cutis/article/271338/contact-dermatitis/asteraceae-dermatitis-everyday-plants-allergenic-potential"
+   }
+  ]
+ },
+ {
+  "id": "medicine-hags-taper-a-dipped-mullein-garden-torch",
+  "map": "medicine",
+  "kind": "garden",
+  "plantId": "medicine-mullein",
+  "name": "Hag's Taper: a dipped mullein garden torch",
+  "category": "garden",
+  "difficulty": "Intermediate",
+  "route": "non-body-craft",
+  "teaser": "A dead winter stalk built up in beeswax until it stands like a fat candle.",
+  "toxic": true,
+  "hook": "Long before wax candles were common, a dried mullein stalk dipped in fat made a cheap standing torch. The Romans dipped mullein stalks in tallow (rendered beef or mutton fat) and carried them in funeral processions, and the plant kept a whole shelf of torch-and-candle folk names down the centuries: Hag's Taper, Candlewick, King's Candle, Torches. This card revives that old outdoor craft with beeswax, which burns cleaner than tallow, using the plant's dead second-year seed stalk after it has finished its life and dried standing in the field. Presented purely as a botanical craft that reuses the plant's tall dead stalk, not for any use on the body.",
+  "timeline": {
+   "active": "About 1 hour to cut, strip, melt wax, and dip the stalk.",
+   "passive": "48 hours of cooling and hardening before the torch is lit."
+  },
+  "yield": "1 garden torch, about 30 to 60 minutes of open-air burn (roughly 10 minutes per inch of waxed head).",
+  "ingredients": [
+   {
+    "item": "Dried second-year mullein flower stalk (Verbascum thapsus), standing dead seed stalk",
+    "amount": "1 stalk, about 2 to 5 feet long",
+    "required": true,
+    "note": "Cut only a bone-dry, fully dead stalk. The woolly pith of the seed-head end is what holds the wax."
+   },
+   {
+    "item": "Beeswax (blocks or pellets)",
+    "amount": "1 to 2 pounds",
+    "required": true,
+    "note": "Pellets melt faster. You want enough depth in the pot to submerge the seed-head end of the stalk."
+   },
+   {
+    "item": "Water",
+    "amount": "Enough to fill the outer pot of the double boiler",
+    "required": true,
+    "note": "For the water bath only. Wax is never heated directly over the flame."
+   },
+   {
+    "item": "Cotton wick, natural fiber",
+    "amount": "A 2 to 3 inch length",
+    "required": false,
+    "note": "Optional. Pressed into the warm wax at the tip, it makes the torch easier to light."
+   }
+  ],
+  "toolsRequired": [
+   "Tall double boiler, or a tall clean metal can set inside a pot of water",
+   "Heat source (stovetop or hot plate)",
+   "Heat-resistant gloves and eye protection",
+   "A closed bag or lidded container for the stripped seed capsules",
+   "Metal torch holder or a metal ground spike to stand the base in"
+  ],
+  "toolsOptional": [
+   "Candy or dipping thermometer",
+   "Pruning saw or loppers",
+   "A second tall metal vessel deep enough to dip into",
+   "A comb or gloved hand for stripping seed heads"
+  ],
+  "steps": [
+   "Positively identify the plant, then cut. Confirm mullein by its single tall stalk topped with a dense woolly seed spike and, at the base, a felted fuzzy leaf rosette. Cut one bone-dry dead stalk near ground level with a saw or loppers. Do this outdoors, wearing gloves and eye protection, and avoid crushing the fuzzy stalk near your face.",
+   "Strip the seed heads outdoors. Working over a closed bag or lidded container, shake and comb the mature seed capsules off the spike so they cannot scatter. Seal the bag and put it in household trash. Keep the stripped seed away from children and pets.",
+   "Set up the water bath and melt the wax. Fill the outer pot with water, set the inner vessel of beeswax inside, and warm over medium heat until the wax is fully liquid, about 150 to 160 F. Keep the wax over the water bath the whole time, never directly over the flame.",
+   "Dip the seed-head end. Lower the woolly top of the stalk into the melted wax, hold it a few seconds so the pith soaks, then lift it out and let the coat set for one to two minutes until it clouds and firms.",
+   "Build up the head. Repeat the dip-and-cool cycle 10 to 20 times, letting each coat cool between dips, until a waxed shell about a quarter to a half inch thick has built up around the seed-head end. If using the optional wick, press it into the warm wax at the very tip during the last few dips.",
+   "Harden the torch. Stand or lay the finished torch in a cool, dry spot and let it set undisturbed for 48 hours before burning so the wax fully hardens.",
+   "Burn it outdoors only. Set the base in a metal holder or ground spike on bare soil, well away from dry brush, branches, and structures, with water within reach. Scrape a small bare spot at the very tip, light it, and stand upwind. Expect roughly 10 minutes of burn per inch of waxed head; the pith wicks fast and the head can drip hot wax."
+  ],
+  "modifiers": "Traditional Roman torches used rendered tallow instead of beeswax. Tallow is the authentic material but it smokes more, so beeswax is the cleaner-burning choice here. More dips build a thicker shell that burns longer, while a slimmer shell lights and catches faster. Cutting the stalk shorter (12 to 18 inches) makes a tabletop-height garden torch that is easier to seat firmly in a holder.",
+  "preservation": "Store the finished torch upright or flat in a cool, dry place out of direct sun and away from any heat source, so the wax does not soften or slump. Kept dry, a waxed stalk holds for years. Keep the stored torch and any leftover seed away from children and pets.",
+  "safety": [
+   "Positively identify the plant before you cut. Confirm mullein by its single tall stalk topped with a dense woolly seed-capsule spike and a felted, fuzzy leaf rosette at the base. Other tall biennials leave similar dead stalks standing through winter. Poison hemlock (Conium maculatum) has a smooth, hairless, hollow stalk blotched and streaked with purple or maroon, never woolly, and it stays toxic when dead and gives off poisonous smoke when burned. Teasel leaves a rigid, prickly, egg-shaped spiny seed head, unlike mullein's soft felted spike. Never cut, dip, or burn a stalk you have not positively identified as mullein.",
+   "Strip the seed heads before you dip or burn. Shake or comb the mature seed capsules into a closed bag and put them in household trash, and never scatter them on the ground, which keeps this weedy seed from spreading and keeps you from burning the plant's most concentrated part. Mullein seeds contain rotenone and saponins, so keep them away from children and pets and never eat them.",
+   "Burn with open flame outdoors only. Use it in the open air, never indoors and never on an enclosed or screened porch. Keep the torch well away from dry brush, overhanging branches, and structures, set the base in a metal holder on bare soil, and keep water within reach. The pith wicks fast and the head can drip hot wax.",
+   "Stay out of the smoke. Stand upwind, do not lean over the flame or fan it, and keep people with breathing difficulties, pregnant people, children, and pets out of the smoke plume. Burning any plant material produces fine-particle smoke and combustion irritants.",
+   "Handle the dry stalk with care. Cut and process it outdoors, wear gloves and eye protection, avoid crushing the fuzzy stalk near your face, and wash your hands afterward. The dry, branched (stellate) leaf and stem hairs shed easily and can irritate skin, eyes, and airways.",
+   "Dispose of ash, burnt debris, and stripped seed in household trash, never near ponds, streams, or storm drains, because mullein saponins are toxic to fish.",
+   "Occurrence is never harvest permission. The map shows where mullein grows, not where you may gather it or light a flame. Cut dead plant material only where it is allowed, preferring your own garden, waste ground, or disturbed roadsides where mullein is abundant, and remember that many parks and preserves prohibit all collection and all open flame.",
+   "This is a garden craft object, not for any use on the body. Keep the finished torch and all materials away from children and pets."
+  ],
+  "sources": [
+   {
+    "title": "Making Mullein Torches (Hag's Taper): A Samhain Tradition (The Druid's Garden)",
+    "url": "https://thedruidsgarden.com/2024/10/20/making-mullein-torches-hag-wands-a-magical-samhain-tradition/"
+   },
+   {
+    "title": "The Hag's Taper: Mullein (Blood and Spicebush)",
+    "url": "https://www.bloodandspicebush.com/blog/the-hags-taper-mullein"
+   },
+   {
+    "title": "Poison hemlock identification and control (King County, Washington)",
+    "url": "https://kingcounty.gov/en/dept/dnrp/nature-recreation/environment-ecology-conservation/noxious-weeds/identification-control/poison-hemlock"
+   },
+   {
+    "title": "Poison hemlock (University of Minnesota Extension)",
+    "url": "https://extension.umn.edu/identify-invasive-species/poison-hemlock"
+   }
+  ]
+ },
+ {
+  "id": "medicine-wild-bergamot-aromatic-bundles-and-sachets",
+  "map": "medicine",
+  "kind": "dried",
+  "plantId": "medicine-bergamot",
+  "name": "Wild Bergamot Aromatic Bundles and Sachets",
+  "category": "dried",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "teaser": "Square-stemmed prairie wildflower bound into bundles and dried for a lasting oregano-mint-citrus scent.",
+  "toxic": true,
+  "hook": "Wild bergamot is a square-stemmed mint-family wildflower of North American prairies and meadows, topped with a shaggy lavender flower head that hums with bees in midsummer. Early gardeners and households prized its foliage for a lasting fragrance and kept dried bundles about the home. This card treats it purely as a scent and decoration craft: cut a light share of the flowering tops, dry them in an airy spot, and strip the brittle leaves into sachets or a bowl of potpourri.",
+  "timeline": {
+   "active": "20 to 30 minutes to cut, bind, and hang, plus about 15 minutes later to strip and bag",
+   "passive": "5 to 10 days of hanging until fully dry"
+  },
+  "yield": "One hanging bundle plus 2 to 4 small sachets, or a bowl of potpourri",
+  "ingredients": [
+   {
+    "item": "Wild bergamot flowering tops (top 6 inches of stem)",
+    "amount": "8 to 12 stems",
+    "required": true,
+    "note": "Clean, mildew-free foliage only, cut cultivated, bought, or from a large abundant stand"
+   },
+   {
+    "item": "Natural twine or cotton string",
+    "amount": "About 2 feet",
+    "required": true,
+    "note": "For binding the cut ends, tied loose so air moves through the bundle"
+   },
+   {
+    "item": "Cotton muslin sachet bags or cloth squares",
+    "amount": "2 to 4",
+    "required": false,
+    "note": "Only needed if you plan to make sachets rather than a hanging bundle"
+   },
+   {
+    "item": "Other dried garden flowers such as calendula or lavender",
+    "amount": "A handful",
+    "required": false,
+    "note": "Optional, for mixing into potpourri"
+   }
+  ],
+  "toolsRequired": [
+   "Garden snips or scissors",
+   "Twine or string",
+   "A warm, dry, airy spot out of direct sun"
+  ],
+  "toolsOptional": [
+   "Muslin sachet bags",
+   "A shallow bowl for potpourri",
+   "Sealed glass jar for storage",
+   "Garden gloves"
+  ],
+  "steps": [
+   "Identify the plant with certainty. Wild bergamot has a square stem, opposite aromatic leaves, and a single dense lavender flower head. Crush one leaf to confirm the oregano-mint scent. Cut only from a large, dense stand and take just a small share, or use plants you grow or buy.",
+   "Choose clean stems. Inspect the leaves for a white powdery coating or orange rust spots and skip any that show them. Using snips, cut the top 6 inches from 8 to 12 healthy flowering stems, leaving most of the tops standing for pollinators.",
+   "Strip the leaves from the lowest inch or two of each cut end. Gather the stems into a loose bundle and bind the bare ends together with twine. Keep the bundle loose, not packed tight, so air can move through it and the stems do not mold.",
+   "Hang the bundle upside down in a warm, dry, airy spot out of direct sun. Direct sun fades both the color and the scent, so a shaded corner, closet, or covered porch works well.",
+   "Leave the bundle 5 to 10 days. It is fully dry when the thickest stem snaps cleanly instead of bending and the leaves crumble between your fingers. Damp weather lengthens this time.",
+   "Use the finished bundle as-is as a fragrant hanging decoration, or strip the dried leaves and flower petals into muslin sachet bags or a bowl. The dried foliage keeps a lasting oregano-mint-citrus scent.",
+   "Work in a well-ventilated space when you strip or crush the brittle foliage. Store any spare dried leaves in a sealed jar away from light, and squeeze a sachet to bruise the leaves when its scent starts to fade."
+  ],
+  "modifiers": "For potpourri, toss the stripped petals and leaves with other dried garden flowers such as calendula or lavender in a shallow bowl. For a longer-lasting hanging bundle, bind in a few dried grass seed heads or yarrow stalks alongside the bergamot for shape and texture. Keep spare dried leaves in a sealed jar away from light and refresh a tired sachet by squeezing it to bruise the leaves.",
+  "preservation": "Fully dried and kept in a sealed jar away from light and heat, the stripped leaves and petals hold their scent for several months up to about a year. Sachets fade sooner with handling, so squeeze them to renew the scent and replace the contents once squeezing no longer revives it. Discard any batch that smells musty or shows fuzzy growth, which means moisture was trapped before drying finished.",
+  "safety": [
+   "Identify your plant before cutting. Wild bergamot has a square stem, opposite aromatic leaves, and one dense lavender flower head. Confirm all three features before you harvest.",
+   "Harvest only clean, mildew-free foliage. Skip any leaves or stems with a white powdery coating or orange rust spots instead of drying them. Strip or crush the dried leaves in a well-ventilated space, since crushing diseased dried foliage can release fungal spores.",
+   "This is a scent and decoration craft only. Do not eat it, brew it, apply it to skin, or burn it indoors.",
+   "Keep hanging bundles and sachets out of reach of cats and other pets, and away from small children. The thymol and carvacrol in the dried foliage are phenolic compounds that cats process poorly, so chewing the material can cause vomiting or stomach upset.",
+   "Take only a small share of a large, dense stand and leave the flowering tops for pollinators. Growing or buying Monarda is the preferred, low-impact source for this craft.",
+   "Map occurrence shows only where the plant grows. It is not harvest permission. Many parks, preserves, and roadsides prohibit all plant collection regardless of abundance, so confirm the land manager allows harvest before cutting."
+  ],
+  "sources": [
+   {
+    "title": "NC State Extension Gardener Plant Toolbox: Monarda fistulosa",
+    "url": "https://plants.ces.ncsu.edu/plants/monarda-fistulosa/"
+   },
+   {
+    "title": "USDA NRCS Plant Guide: Wild Bergamot (Monarda fistulosa)",
+    "url": "https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_mofi.pdf"
+   },
+   {
+    "title": "Practical Self Reliance: Ways to Use Bee Balm (drying and sachets)",
+    "url": "https://practicalselfreliance.com/using-bee-balm/"
+   },
+   {
+    "title": "Blooming Boulevards: Monarda and Powdery Mildew",
+    "url": "https://www.bloomingboulevards.org/post/monarda-and-powdery-mildew"
+   }
+  ]
+ },
+ {
+  "id": "medicine-wild-bergamot-leaf-tea",
+  "map": "medicine",
+  "kind": "kitchen",
+  "plantId": "medicine-bergamot",
+  "name": "Wild Bergamot Leaf Tea, One of the Colonial Liberty Teas",
+  "category": "kitchen",
+  "difficulty": "Beginner",
+  "route": "ingested-food-beverage",
+  "teaser": "A fragrant oregano, thyme, and citrus garden tisane.",
+  "toxic": true,
+  "hook": "Wild bergamot was one of several native plants that colonists brewed as a homegrown tea substitute during the colonial tea boycotts of the 1770s, when imported black tea was set aside. Long before that, Indigenous peoples across its range steeped the leaves and flowering tops as a garden beverage. Its lavender pom-pom flowers and leaves carry a bright oregano-and-thyme scent that fills a mug with garden aroma. This card dries the summer cuttings and steeps them into a simple, fragrant tisane.",
+  "modifiers": "Blend the dried bergamot with garden mint or lemon balm for a milder cup, or add a few of the dried lavender colored florets for color. For a cold version, steep the same measure in cool water in the refrigerator for several hours, then strain and serve over ice. Keep every version a normally brewed, single strength beverage rather than a concentrated brew. Closely related garden bee balms such as scarlet Monarda didyma can be dried and brewed the same way for a similar aromatic cup.",
+  "preservation": "Store the dried leaves and flowers whole in a cool, dark, airtight jar and use within about a year, when the aroma is strongest. Keep the jar away from heat, light, and moisture, and check now and then for any musty smell or mold, discarding the batch if you find either. Freezing is unnecessary for a dried herb kept dry.",
+  "yield": "A pint jar of dried herb from a summer's light cuttings, enough for dozens of cups. One heaping tablespoon brews a single mug.",
+  "timeline": {
+   "active": "About 15 minutes of hands on work, plus a few minutes to brew a cup",
+   "passive": "1 to 2 weeks to air dry, or a few hours in a dehydrator"
+  },
+  "ingredients": [
+   {
+    "item": "Wild bergamot leaves and flowering tops (Monarda fistulosa), picked in bloom",
+    "amount": "A few good handfuls",
+    "required": true,
+    "note": "Cut only clean foliage that is free of powdery mildew and rust spots. Leave most flower heads standing for pollinators."
+   },
+   {
+    "item": "Just boiled water",
+    "amount": "1 cup (about 240 ml) per serving",
+    "required": true,
+    "note": "Take the kettle off the boil before pouring."
+   },
+   {
+    "item": "Honey or a lemon slice",
+    "amount": "To taste",
+    "required": false,
+    "note": "Optional, for flavor only. The herb is fragrant enough to drink plain."
+   }
+  ],
+  "toolsRequired": [
+   "Garden snips or scissors",
+   "Twine for bundles or a drying rack",
+   "An airtight jar for storage",
+   "A kettle and a mug or teapot with a strainer"
+  ],
+  "toolsOptional": [
+   "A dehydrator with a low herb setting",
+   "A fine mesh tea strainer or infuser"
+  ],
+  "steps": [
+   "Cut leaves and flowering tops while the plant is in full bloom, choosing only clean, dry foliage with no mildew or rust. Take mostly leaves and leave most flower heads in place as pollinator forage.",
+   "Give the cuttings a gentle rinse only if needed, then pat and shake them fully dry, since surface moisture invites mold during drying.",
+   "To air dry, gather small loose bundles, tie the stems, and hang them upside down in a warm, airy spot out of direct sun for 1 to 2 weeks until the leaves are brittle and crumble easily. To speed it up, lay them in a single layer in a dehydrator on a low herb setting around 100 to 130 F (38 to 54 C) until crisp.",
+   "Strip the dried leaves and petals from the stems, crumble them lightly, and store them whole leaf in a cool, dry, airtight jar away from light. Discard any batch that smells musty or shows mold.",
+   "To brew a cup, put about one heaping tablespoon of the crumbled dried herb in a mug or infuser and pour over one cup of just boiled water.",
+   "Cover the cup and steep for about 5 minutes, no longer, then strain out the herb. Do not simmer it or let it steep for a long time, as the brew turns harsh.",
+   "Taste before adding more herb. The flavor is assertive, so start light and adjust to taste, sweetening with a little honey or a lemon slice if you like."
+  ],
+  "safety": [
+   "Do not use during pregnancy.",
+   "Avoid while breastfeeding as a precaution, since safety data during lactation is limited.",
+   "Enjoy this only as an occasional, normally brewed beverage. Do not make concentrated decoctions, do not over steep, and never use essential oil strength preparations. The leaf is rich in the aromatic compounds thymol and carvacrol, which can irritate the mouth, stomach, and mucous membranes when concentrated.",
+   "If you take prescription medication, check with a doctor or pharmacist before adding any new herbal beverage, since concentrated botanicals can interact with some drugs.",
+   "Identify your plant before picking, and confirm it only when it is in bloom, using the lavender pom pom flower head, square stem, opposite leaves, and strong oregano and thyme aroma together. Related garden bee balms in the same genus (Monarda) are used for tea the same way, so a mix up within the genus is low risk.",
+   "Cut only clean foliage that is free of powdery mildew and rust.",
+   "Prefer garden grown material or an established patch you own. Use wild collection only as a fallback, take mostly leaves, and leave the flowering tops in place as forage for pollinators, including specialist bees that rely on this plant.",
+   "Map occurrence is not harvest permission. Get the land manager's permission before collecting on public or protected land.",
+   "Keep the dried herb and the brewed tea out of reach of children and pets.",
+   "Educational and traditional use reference only. This is a beverage, not medical advice, and it carries no health claims and no dosing."
+  ],
+  "sources": [
+   {
+    "title": "How To Make Bee Balm Tea From Your Garden, Get Busy Gardening",
+    "url": "https://getbusygardening.com/make-bee-balm-tea/"
+   },
+   {
+    "title": "Foraging and Cooking with Bee Balm (Monarda fistulosa), Forager Chef",
+    "url": "https://foragerchef.com/bergamot-monarda-fistulosa-wild-oregano/"
+   },
+   {
+    "title": "12 Ways to Use Bee Balm, Practical Self Reliance",
+    "url": "https://practicalselfreliance.com/using-bee-balm/"
+   },
+   {
+    "title": "Monarda fistulosa (Wild Bergamot), Lady Bird Johnson Wildflower Center",
+    "url": "https://www.wildflower.org/plants/result.php?id_plant=MOFI"
+   }
+  ]
+ },
+ {
+  "id": "medicine-wild-bergamot-in-the-kitchen-petals-and-pizza-plant-leaf",
+  "map": "medicine",
+  "kind": "kitchen",
+  "plantId": "medicine-bergamot",
+  "name": "Wild Bergamot in the Kitchen: Petals and Pizza Plant Leaf",
+  "category": "kitchen",
+  "difficulty": "Beginner",
+  "route": "ingested-food-beverage",
+  "teaser": "A native mint family plant with mild, faintly citrusy petals and a bold oregano-thyme leaf that cooks nickname the pizza plant.",
+  "toxic": true,
+  "hook": "Wild bergamot, also called bee balm, is a native mint family plant of North American prairies and meadows with a long food and beverage record. Cooks have scattered its lavender florets over dishes as edible confetti and used its leaves the way a Mediterranean kitchen reaches for oregano or thyme. Crush a leaf and the aroma is unmistakable, which is how it earned the kitchen nickname pizza plant. This card presents it purely as a culinary flavoring and edible garnish.",
+  "timeline": {
+   "active": "About 20 minutes of hands on prep",
+   "passive": "1 to 2 weeks to air dry the leaves"
+  },
+  "yield": "Fresh garnish plus roughly 1/2 cup of crumbled dried leaf from a few garden plants.",
+  "ingredients": [
+   {
+    "item": "Fresh wild bergamot leaves (Monarda fistulosa), from garden or nursery plants",
+    "amount": "1 small handful, about 1/2 cup loosely packed",
+    "required": true,
+    "note": "Pick leafy tops just before or as the plant flowers, when the leaf is most tender and aromatic."
+   },
+   {
+    "item": "Fresh wild bergamot flower heads",
+    "amount": "2 to 3 heads",
+    "required": false,
+    "note": "For pulling individual florets as garnish; take only a few from cultivated plants and leave the rest for pollinators."
+   },
+   {
+    "item": "Dishes to flavor: tomato sauce, marinade, vinaigrette, soft cheese, salad, or a summer drink",
+    "amount": "As needed",
+    "required": false,
+    "note": "The leaf pairs well anywhere you would use a light touch of oregano or thyme."
+   },
+   {
+    "item": "Cool water for rinsing",
+    "amount": "As needed",
+    "required": true,
+    "note": "Rinse and pat or spin the leaves and florets dry before use."
+   }
+  ],
+  "toolsRequired": [
+   "Kitchen knife",
+   "Cutting board",
+   "Colander or salad spinner",
+   "Labeled airtight jar"
+  ],
+  "toolsOptional": [
+   "String or twine for bundling",
+   "Paper bag",
+   "Small labels"
+  ],
+  "steps": [
+   "Pick leafy tops and a few flower heads from your own garden or nursery plants, ideally just before or as they flower. Rinse gently in cool water and pat or spin dry.",
+   "For an edible garnish, pull the individual florets from a clean flower head and scatter about 1 tablespoon over a salad, a plate of soft cheese, or a summer drink as a mild, faintly citrusy confetti.",
+   "For a fresh seasoning, stack a few leaves, roll them, and chop finely. Start with about 1/2 to 1 teaspoon of chopped fresh leaf per serving stirred into tomato sauce, a marinade, or a vinaigrette. Taste and add a little more only if you want it stronger, since the flavor is bold.",
+   "To dry leaves for the pantry, tie small bundles of leafy stems and hang them upside down in a warm, dark, airy spot, or lay the tops in an open paper bag. Leave them 1 to 2 weeks until the leaves are crisp and crumble easily.",
+   "Crumble the dried leaves off the stems and store them whole in a labeled airtight jar, away from heat and light.",
+   "When cooking with the dried leaf, crush a pinch between your fingers just before adding it to release the aroma, and season sparingly, tasting as you go."
+  ],
+  "modifiers": "For the gentlest result, use only the petals as garnish, since they are much milder than the leaf. Fresh to dried swap: about 1 teaspoon of chopped fresh leaf is roughly 1/3 teaspoon of crumbled dried leaf, so scale down when cooking with the dried pantry version. The florets lose their punch once dried, so enjoy petals fresh and reserve leaves for the drying jar.",
+  "preservation": "Store fully dried, crumbled leaves whole in a labeled airtight jar kept away from heat and light, and crush just before cooking. Use within about a year for the best aroma. Use fresh petals the same day you pick them, since they fade quickly.",
+  "safety": [
+   "This is the mint family bee balm (Monarda fistulosa), not the citrus bergamot orange (Citrus bergamia) used to flavor Earl Grey tea. The two plants are unrelated, so none of the citrus oil notes or citrus sun sensitivity apply here.",
+   "Identify your plant before eating. Wild bergamot has a square stem, paired opposite leaves, a single dense whorl of pale lavender flowers, and a strong oregano or thyme scent when you crush a leaf. The only realistic look-alikes are harmless mint relatives such as mountain mints (Pycnanthemum) and wood mints (Blephilia), but check every feature anyway.",
+   "Do not use the look-alike spotted beebalm (Monarda punctata), which shows yellowish, purple-spotted flowers stacked in several tiers and carries a much heavier thymol and carvacrol load. Keep it out of the kitchen.",
+   "Use garnish and light seasoning amounts only. The leaf is rich in the aromatic compounds thymol and carvacrol, so add a little, taste as you go, and skip strong or daily leaf teas.",
+   "Avoid this leaf during pregnancy. Traditional food guidance keeps it to small culinary garnish amounts and avoids larger or concentrated amounts while pregnant.",
+   "If you take prescription medication, keep this to ordinary food amounts and check with your doctor before using larger quantities.",
+   "Use only whole fresh or dried leaves and petals. Do not make concentrated, distilled, or essential oil forms.",
+   "Prefer your own garden or nursery plants and harvest the leaves. Leave the wild flowering tops for native bees and hummingbird moths, and take only a few florets from cultivated plants.",
+   "A map dot is not harvest permission. Gather only from your own garden, or with the landowner's or land manager's permission.",
+   "Keep dried leaf, whole plants, and any prepared seasonings out of reach of children and pets."
+  ],
+  "sources": [
+   {
+    "title": "Forager Chef: Foraging and Cooking with Bee Balm (Monarda fistulosa)",
+    "url": "https://foragerchef.com/bergamot-monarda-fistulosa-wild-oregano/"
+   },
+   {
+    "title": "Practical Self Reliance: 12 Ways to Use Bee Balm",
+    "url": "https://practicalselfreliance.com/using-bee-balm/"
+   },
+   {
+    "title": "Grow a Good Life: How to Grow, Harvest, and Preserve Bee Balm (Monarda)",
+    "url": "https://growagoodlife.com/bee-balm-monarda/"
+   },
+   {
+    "title": "USDA NRCS Plant Guide: Wild Bergamot (Monarda fistulosa)",
+    "url": "https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_mofi.pdf"
+   }
+  ]
+ },
+ {
+  "id": "medicine-everlasting-goldenrod-drying-flowering-tops",
+  "map": "medicine",
+  "kind": "dried",
+  "plantId": "medicine-goldenrod",
+  "name": "Everlasting Goldenrod: Drying Flowering Tops for Autumn Bundles",
+  "category": "dried",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "teaser": "Loose bunches of late summer gold, hung in the dark until the stems snap crisp.",
+  "toxic": true,
+  "hook": "Goldenrod lights up roadsides and old fields across North America from August into October, and its plumes have long been gathered for dried arrangements that hold their color into winter. This card is purely a decorating craft: cut a few flowering tops from an abundant weedy stand, hang them to dry, and use the golden bundles in wreaths and bouquets. One common misconception worth correcting up front: goldenrod is often wrongly blamed for autumn hay fever, but its heavy pollen is carried by insects rather than the wind, and the real wind pollinated culprit is ragweed, which blooms at the same time.",
+  "timeline": {
+   "active": "20 to 30 minutes to cut, strip, and tie",
+   "passive": "1 to 3 weeks of hang drying, longer in humid air"
+  },
+  "yield": "3 to 5 small bundles, enough for one wreath or a few arrangements",
+  "ingredients": [
+   {
+    "item": "Goldenrod flowering tops with stem",
+    "amount": "3 to 5 small handfuls (about 20 to 40 stems)",
+    "required": true,
+    "note": "Cut from a large stand of common weedy goldenrod (Canada or tall goldenrod). Choose heads that are open and freshly gold but not yet gone to fluffy seed, so they hold color and shed less."
+   },
+   {
+    "item": "Garden twine, jute string, or rubber bands",
+    "amount": "1 per bundle",
+    "required": true,
+    "note": "Rubber bands keep gripping as the stems shrink while drying, so bundles do not slip loose."
+   }
+  ],
+  "toolsRequired": [
+   "Bypass pruners or sharp scissors",
+   "A warm, dark, well ventilated space with a hook, line, or nail to hang from"
+  ],
+  "toolsOptional": [
+   "Gloves",
+   "Dust mask",
+   "Airtight container or box for storing finished bundles"
+  ],
+  "steps": [
+   "Go out on a dry morning after the dew has burned off, and pick a large, dense stand of common weedy goldenrod. Look for plumes that are open and bright gold but have not started turning to fluffy white seed, since those hold their color best and shed the least in the house.",
+   "Cut only a small fraction of the stand, taking flowering tops with 12 to 18 inches of stem and leaving most of the heads standing. Snip cleanly with pruners or scissors.",
+   "Strip the lower leaves off each stem so they will not mold in the bundle, and shake each stem gently to knock off loose pollen and insects before bringing it indoors.",
+   "Gather 5 to 10 stems into a small, loose bunch. Keep bunches small and airy so air moves through the middle, which prevents mold and helps the color set.",
+   "Tie the base of the stems tightly with twine or wrap them with a rubber band, then hang each bunch upside down from a hook, line, or nail.",
+   "Leave the bundles hanging in a warm, dark, well ventilated room for 1 to 3 weeks, longer in humid climates. Drying in the dark keeps the gold from fading. They are done when the stems snap crisply and the heads feel papery.",
+   "Once fully dry, work the bundles into wreaths, swags, or dried bouquets, or simply stand them in a vase.",
+   "Store any extra bundles flat or upright in an airtight container away from direct sunlight, where they keep their color for about a year."
+  ],
+  "modifiers": "Mixing in a few stems cut slightly earlier, when the buds are still tight and greenish gold, gives a range of tones in a finished arrangement. For a fuller wreath, dry extra bundles and wire them onto the frame in overlapping layers.",
+  "preservation": "Fully dried bundles kept in an airtight box away from direct sunlight and damp hold their gold color for roughly a year. Sunlight fades them and humidity can bring back mold, so keep them cool and dark between seasons.",
+  "safety": [
+   "Identify your plant with certainty before cutting. Goldenrod (Solidago) is a genus of many look alike species, and this project is only for common, abundant, weedy kinds such as Canada goldenrod or tall goldenrod.",
+   "Do not confuse true goldenrod with rayless goldenrod (Isocoma pluriflora), a different and toxic plant in another genus. True goldenrod has showy yellow ray flowers along plume shaped heads, while rayless goldenrod has small rayless flower clusters and grows mainly in the dry Southwest. If you are unsure of the plant, do not cut it.",
+   "Some Solidago species are rare or legally protected, for example Houghton's goldenrod and Short's goldenrod. Harvest only from large stands of the common weedy kinds, and never from solitary, unusual, or shoreline and dune plants, or from any plant you cannot confidently identify as abundant.",
+   "Anyone with a ragweed, Asteraceae (also called Compositae), or latex sensitivity, or with asthma, should skip this project or work carefully. Handling the flowers and leaves and breathing in dislodged pollen or fine fluff can cause a skin rash or a breathing reaction in sensitized people. Wear gloves, work in good ventilation, and put on a dust mask when stripping leaves or handling heads near the fluffy seed stage.",
+   "Keep finished dried bundles out of reach of pets, livestock, and small children, who might chew on dried plant material.",
+   "Map occurrence is not harvest permission. Public land may require permission from the land manager. Cut only a small fraction of any stand and leave most flowering heads standing, since goldenrod is a magnet for native bees and migrating butterflies late in the season."
+  ],
+  "sources": [
+   {
+    "title": "Blame Ragweed Not Goldenrod for Fall Hay Fever, UF/IFAS Extension Okaloosa County",
+    "url": "https://blogs.ifas.ufl.edu/okaloosaco/2016/11/22/blame-ragweed-not-goldenrod-for-fall-hay-fever-2/"
+   },
+   {
+    "title": "Autumn allergies: don't blame goldenrod, University of Illinois Extension",
+    "url": "https://extension.illinois.edu/blogs/good-growing/2022-10-21-autumn-allergies-dont-blame-goldenrod"
+   },
+   {
+    "title": "Four Techniques for Dried Flowers, Gardener's Supply",
+    "url": "https://www.gardeners.com/how-to/dried-flowers/5028.html"
+   },
+   {
+    "title": "How To Dry Goldenrod: Harvest, Dry and Store, Farmhouse & Blooms",
+    "url": "https://farmhouseandblooms.com/how-to-dry-goldenrod-harvest-dry-and-store/"
+   }
+  ]
+ },
+ {
+  "id": "medicine-dandelion-blossom-infused-oil",
+  "map": "medicine",
+  "kind": "skincare",
+  "plantId": "medicine-dandelion",
+  "name": "Dandelion Blossom Infused Oil",
+  "category": "skincare",
+  "difficulty": "Beginner",
+  "route": "topical",
+  "teaser": "An amber oil steeped from dried spring blossoms in a clean jar.",
+  "toxic": true,
+  "hook": "Dandelion flowers turn a jar of plain carrier oil a soft gold after a few weeks in the dark. Steeping petals in oil is one of the oldest folk kitchen and skincare crafts, and this bright spring weed is a forgiving place to start your first infusion. Traditionally the finished oil was a folk body oil smoothed onto hands and elbows after time outdoors. This card covers only the making and its customary external use, and makes no health or benefit claims of any kind.",
+  "timeline": {
+   "active": "20 to 30 min",
+   "passive": "4 to 6 weeks (plus 1 to 3 days drying)"
+  },
+  "yield": "About 1 to 1.5 cups (250 to 375 ml) of strained flower oil from a half-filled pint jar.",
+  "ingredients": [
+   {
+    "item": "Open dandelion flower heads (Taraxacum officinale), air-dried",
+    "amount": "Enough loose blossoms to half-fill your jar, about 1 to 1.5 cups fresh",
+    "required": true,
+    "note": "flower heads only, never the root or stems; dry them 1 to 3 days first"
+   },
+   {
+    "item": "Skin-friendly carrier oil (olive, sunflower, or sweet almond)",
+    "amount": "Enough to cover the blossoms fully, about 1 to 1.5 cups (250 to 375 ml)",
+    "required": true,
+    "note": "olive keeps longest; sunflower and sweet almond feel lighter and carry less scent"
+   },
+   {
+    "item": "Purchased dried dandelion flowers",
+    "amount": "Substitute for the fresh blossoms, same jar-half volume",
+    "required": false,
+    "note": "use these whenever a spray-free harvest site is not certain"
+   }
+  ],
+  "toolsRequired": [
+   "Clean, fully dry glass jar with a lid (half-pint or pint)",
+   "Paper or a mesh screen for air-drying the blossoms",
+   "Fine strainer plus cheesecloth or a coffee filter",
+   "Clean dark glass bottle for storage",
+   "Waterproof label and a pen"
+  ],
+  "toolsOptional": [
+   "Small saucepan for a warm-water speed infusion",
+   "Kitchen thermometer",
+   "Funnel",
+   "Scissors to snip the heads from the stems"
+  ],
+  "steps": [
+   "Pick fully open flower heads on a dry day, late morning once the dew has gone, from ground you know has never been sprayed. Snip the yellow head from the stem and leave the root in the ground. Occurrence on the map is not permission, so clear the specific site first.",
+   "Spread the blossoms in a single layer on paper or a screen, out of direct sun, for 1 to 3 days until the surface moisture is gone. Fresh, wet flowers make oil that turns cloudy or spoils, so this drying step is the real safety control, not a smell check later.",
+   "Half-fill a clean, fully dry jar with the dried blossoms, then pour in carrier oil until the flowers sit under at least half an inch of oil. Slide a clean knife around the inside to release air bubbles and keep every petal submerged.",
+   "Slow method: cap the jar, label it, and stand it in a cool dark cabinet for 4 to 6 weeks, giving it a gentle shake whenever you pass by.",
+   "Fast method: stand the uncapped jar in a saucepan of water and warm it gently, holding the oil around 100 to 120°F for 2 to 3 hours. Keep it low, never let it simmer, and do not leave it unattended.",
+   "Strain the oil through cheesecloth or a coffee filter into a clean dark bottle, pressing the spent flowers to recover the last of it, then discard the petals.",
+   "Label the bottle \"external use only, do not eat\" together with the date, then refrigerate. Store it cool and dark, and discard it if it ever smells rancid."
+  ],
+  "modifiers": "Carrier oil sets the character: olive is the most shelf-stable and traditional, while sunflower and sweet almond feel lighter and lend a fainter scent. Fuller, well-dried blossoms and a longer steep give a deeper gold. The warm-water method trades a little color and shelf life for same-day results. Keep the ratio simple: blossoms loosely filling the jar, with oil covering them completely.",
+  "preservation": "Because the flowers are dried, the main risks are the oil going rancid and, if any moisture sneaks in, mold or Clostridium botulinum growing in the low-acid oil. Use fully dried blossoms and a clean dry jar, keep the petals submerged, cap to exclude air, refrigerate, and keep the bottle away from light and heat. Dried-flower oils generally keep about three months refrigerated. Discard at the first rancid or off smell, and never taste it to check.",
+  "safety": [
+   "External use only, do not eat. Label the bottle \"external use only, do not eat\" along with the infusing date so the jar is never mistaken for food, because botanical material steeped in low-acid oil can support Clostridium botulinum and mold if swallowed.",
+   "Identify your plant before picking: a true dandelion carries a single flower head on one hollow, unbranched, leafless stem. Skip branched or multi-flowered yellow lookalikes such as cat's ear, hawksbeard, sow thistle, and groundsel or ragwort.",
+   "Patch test before wider use: dab a little on the inner forearm and wait about a day. People sensitive to ragweed, chamomile, marigold, chrysanthemum, or feverfew (the Asteraceae or Compositae family) can react to dandelion on the skin. Wash it off and stop using it if any redness, itching, or rash appears.",
+   "Use flower heads only, never the root or stems. The latex that most often causes skin reactions concentrates in the root and stems, and the root is a restricted part that needs land-manager permission on public land, so leave it in the ground.",
+   "Gather only from ground you know has never been sprayed. Dandelion is the main target of residential broadleaf weed killers (2,4-D, dicamba, mecoprop, weed-and-feed products), so avoid lawns, roadsides, parking-lot edges, and their spray drift. When a spray-free site is not certain, use purchased dried dandelion flowers instead.",
+   "Fully air-dry the blossoms and use a clean, dry jar. Cover the flowers completely with oil, cap to keep air out, refrigerate, store away from light and heat, and discard the oil if it ever smells rancid.",
+   "Not for broken or infected skin. Keep it out of the eyes, and store it out of reach of children and pets.",
+   "Occurrence on the map is not harvest permission. Get permission for the specific site, and remember that many parks and preserves prohibit collecting."
+  ],
+  "sources": [
+   {
+    "title": "How To Make Fresh Dandelion Blossom Oil, Herbal Academy",
+    "url": "https://theherbalacademy.com/blog/fresh-dandelion-blossom-oil/"
+   },
+   {
+    "title": "Bulletin #4385, Safe Homemade Flavored and Infused Oils, University of Maine Cooperative Extension",
+    "url": "https://extension.umaine.edu/publications/4385e/"
+   },
+   {
+    "title": "How to Safely Make Infused Oils, Penn State Extension",
+    "url": "https://extension.psu.edu/how-to-safely-make-infused-oils"
+   },
+   {
+    "title": "How to Safely Make Infused Oils, University of Georgia Extension",
+    "url": "https://fieldreport.caes.uga.edu/publications/C1334/how-to-safely-make-infused-oils/"
+   }
+  ]
+ },
+ {
+  "id": "medicine-dandelion-sauteed-spring-greens",
+  "map": "medicine",
+  "kind": "greens",
+  "plantId": "medicine-dandelion",
+  "name": "Sauteed Dandelion Spring Greens",
+  "category": "greens",
+  "difficulty": "Intermediate",
+  "route": "ingested-food-beverage",
+  "teaser": "A bitter wild spring green, blanched to tame the bite and sauteed with garlic and a squeeze of lemon.",
+  "toxic": true,
+  "hook": "Dandelion greens are one of the oldest wild spring vegetables, gathered from lawns and field edges across Italian, Greek, Korean, and Appalachian kitchens long before they reached the grocery aisle. In southern Italy the young leaves are cooked ripassata style, blanched first to tame their bite, then finished in olive oil and garlic. This card presents the plant purely as seasonal foraged food: a bitter green cooked much like spinach, a weedy and abundant lawn plant whose leaf harvest is low impact.",
+  "timeline": {
+   "active": "about 20 minutes",
+   "passive": "none"
+  },
+  "yield": "Serves 2 as a side",
+  "ingredients": [
+   {
+    "item": "Young dandelion leaves",
+    "amount": "about 8 oz, a large colander full, packed",
+    "required": true,
+    "note": "Picked before the plant flowers, milky white sap confirmed on a snapped leaf."
+   },
+   {
+    "item": "Extra virgin olive oil",
+    "amount": "4 tablespoons",
+    "required": true,
+    "note": ""
+   },
+   {
+    "item": "Garlic",
+    "amount": "1 to 2 cloves, crushed",
+    "required": true,
+    "note": ""
+   },
+   {
+    "item": "Lemon",
+    "amount": "half a lemon",
+    "required": false,
+    "note": "For a squeeze at the finish."
+   },
+   {
+    "item": "Salt",
+    "amount": "to taste",
+    "required": true,
+    "note": "Plus a pinch for the blanching water."
+   },
+   {
+    "item": "Water",
+    "amount": "a large pot",
+    "required": true,
+    "note": "For blanching."
+   },
+   {
+    "item": "Red pepper flakes",
+    "amount": "a pinch",
+    "required": false,
+    "note": "Optional heat with the garlic."
+   }
+  ],
+  "toolsRequired": [
+   "Large pot",
+   "Colander",
+   "Saute pan",
+   "Knife",
+   "Cutting board"
+  ],
+  "toolsOptional": [
+   "Salad spinner",
+   "Kitchen towel"
+  ],
+  "steps": [
+   "Harvest young, tender leaves in early spring before the plant flowers, when the bite is mildest. Snap one leaf to confirm the milky white sap, cut the leaves at the base, and leave the taproot in the ground.",
+   "Sort the leaves, discard any flower stalks and tough older outer leaves, and wash in three or four changes of cold water until no grit remains.",
+   "Bring a large pot of water to a rolling boil, add a pinch of salt, and blanch the leaves for 2 to 3 minutes to temper the bitterness.",
+   "Drain in a colander, rinse under cold water to stop the cooking, then squeeze out as much water as you can.",
+   "Warm 4 tablespoons olive oil in a saute pan over medium low heat, add 1 to 2 crushed garlic cloves, and cook about 5 minutes until softened but not browned.",
+   "Add the blanched greens, toss to coat in the oil, and cook over medium heat for 3 to 5 minutes until silky and tender.",
+   "Finish with a squeeze of lemon and salt to taste. Serve as a side, or fold into eggs, pasta, or beans the way you would cooked spinach."
+  ],
+  "modifiers": "For younger, milder leaves you can skip the blanching and toss a small handful raw into a mixed salad, applying the same clean ground and wash well cautions. Add a pinch of red pepper flakes with the garlic for heat, or a spoonful of pasta cooking water to loosen the greens. The cooked greens also work stirred into scrambled eggs, tossed through pasta, or folded into white beans.",
+  "preservation": "Best eaten fresh. Store washed and dried raw leaves in a sealed container in the refrigerator and use within 2 to 3 days. Cooked greens keep in the refrigerator for up to 3 days, or freeze the blanched and squeezed greens in a sealed bag for up to 3 months.",
+  "safety": [
+   "Identify the plant before you harvest. True dandelion is a flat basal rosette with no leaves on the flower stalk, hairless jagged toothed leaves whose teeth point back toward the base, a single unbranched hollow stalk carrying exactly one yellow flower head, and milky white sap that oozes from any broken leaf or stem.",
+   "Because you pick at the leafless rosette stage, first confirm the patch when it is in flower, or at minimum snap a leaf and verify the milky white latex, before eating any pre-flowering rosette.",
+   "Know the lookalikes. Cat's ear, hawkbit, and false dandelion have hairy leaves and solid branching stems carrying several heads. Sow thistle and wild lettuce grow tall leafy stems rather than a flat rosette. The rosettes of tansy ragwort and coltsfoot have lobed or ruffled basal leaves, no milky latex, and branched multi head flower stems, and can cause liver damage. If any feature does not match, or the plant lacks milky sap, do not eat it.",
+   "Harvest only from clean ground. Avoid roadsides, any herbicide, pesticide, or fertilizer treated turf, and areas with dog or pet traffic. Wash the leaves in several changes of water.",
+   "The milky sap in the stems and leaves can cause contact dermatitis in people with latex sensitivity or eczema, so rinse the sap off your hands after handling. This is external use guidance for the raw sap, not a preparation to apply to skin.",
+   "People with ragweed or other Asteraceae allergy may react. Reactions can include mouth tingling or stomach upset, not only skin irritation.",
+   "Eat in normal food amounts, the way you would any cooked leafy green. Because these are leafy greens high in vitamin K, sudden large or irregular quantities can affect warfarin or other anticoagulant control, so consistency matters. Dandelion may also interact with diuretics, lithium, and blood sugar medication. If you take any of these, check with a clinician.",
+   "A pin on the map shows where a plant grows, not that you may harvest there. Gather only on land you own or have explicit permission to harvest, and never in parks or preserves that prohibit collecting.",
+   "Take only young leaves as a light harvest and leave the taproot in the ground. Do not dig the root.",
+   "Prefer the cooked preparation, blanch and then sautee, which cuts bitterness and reduces contamination and pathogen exposure. If you keep any raw salad use, apply the same clean ground and wash well cautions.",
+   "Keep harvested greens and trimmings away from children and pets until they have been washed and identified."
+  ],
+  "sources": [
+   {
+    "title": "Dandelion Greens (Southern Italian Recipe), The Mediterranean Dish",
+    "url": "https://www.themediterraneandish.com/dandelion-greens/"
+   },
+   {
+    "title": "Identifying Dandelions and Avoiding Look-Alikes, Practical Self Reliance",
+    "url": "https://practicalselfreliance.com/dandelion-identification/"
+   },
+   {
+    "title": "Dandelion and cat's ear, Identify That Plant",
+    "url": "http://identifythatplant.com/dandelion-and-cats-ear/"
+   },
+   {
+    "title": "Hypochaeris radicata (cat's ear, false dandelion), Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Hypochaeris_radicata"
+   }
+  ]
+ },
+ {
+  "id": "medicine-dandelion-flower-syrup",
+  "map": "medicine",
+  "kind": "kitchen",
+  "plantId": "medicine-dandelion",
+  "name": "Dandelion Flower Syrup (a pancake syrup)",
+  "category": "kitchen",
+  "difficulty": "Beginner",
+  "route": "ingested-food-beverage",
+  "teaser": "A golden, floral petal syrup cooked down near thread stage, colloquially called dandelion honey.",
+  "toxic": true,
+  "hook": "Long a country kitchen thrift preserve, dandelion flower syrup turns a yard full of yellow blossoms into a golden, honey like pour. Cooks pull the petals free of the green bases, infuse them with water and a few lemon slices, then cook the liquid down with sugar until it sheets off a spoon. Poured over pancakes and toast or stirred into drinks, it is often nicknamed dandelion honey. This card presents it strictly as a beginner kitchen preserve and canning adjacent project.",
+  "timeline": {
+   "active": "About 1 hour of hands on picking, cooking, and straining",
+   "passive": "Plus several hours or overnight to infuse the petals"
+  },
+  "yield": "About 1.5 cups (roughly 350 mL) of syrup",
+  "ingredients": [
+   {
+    "item": "Dandelion yellow petals, pulled free of all green bases and stems",
+    "amount": "About 2 cups, loosely packed",
+    "required": true,
+    "note": "Pick on a dry morning from a known unsprayed site. The green parts and bitter stem sap muddy the flavor, so keep them out of the pot."
+   },
+   {
+    "item": "Water",
+    "amount": "4 cups (about 950 mL)",
+    "required": true,
+    "note": "Filtered or tap is fine."
+   },
+   {
+    "item": "Lemon, sliced",
+    "amount": "1 lemon",
+    "required": true,
+    "note": "Adds brightness and a little acidity to the infusion."
+   },
+   {
+    "item": "Granulated sugar",
+    "amount": "About 4 cups (about 800 g), roughly 1 to 1 by volume with the strained liquid",
+    "required": true,
+    "note": "The high sugar level is what lets a sealed, sterilized jar keep in a cool dark place. Do not cut it well below 1 to 1 if you want a shelf stable jar."
+   }
+  ],
+  "toolsRequired": [
+   "Medium saucepan",
+   "Fine mesh strainer or cheesecloth",
+   "Candy or instant read thermometer",
+   "Sterilized glass jar with a tight lid"
+  ],
+  "toolsOptional": [
+   "Kitchen scale",
+   "Canning funnel",
+   "Ladle"
+  ],
+  "steps": [
+   "Pick and prep the petals: on a dry morning, gather dandelion heads from a known unsprayed site. Pinch or snip the yellow petals free of the green base and stem so no green goes into the pot. You want about 2 cups loosely packed petals.",
+   "Infuse: combine the petals, 4 cups water, and the lemon slices in a saucepan. Bring to a gentle boil, lower the heat, and simmer about 5 minutes. Take it off the heat, cover, and let the liquid infuse several hours or overnight.",
+   "Strain: pour the liquid through a fine mesh strainer or cheesecloth into a clean bowl, pressing the petals to release all the liquid. Discard the spent petals and lemon.",
+   "Sweeten: measure the strained liquid, return it to the cleaned pan, and stir in sugar at roughly 1 to 1 by volume (about 4 cups) until fully dissolved.",
+   "Cook to thread stage: simmer gently, stirring often, until it thickens to a pourable syrup near thread stage, about 230 to 235 F (110 to 113 C) on the thermometer, roughly 45 to 60 minutes. It sets up more as it cools, so stop while it is still pourable.",
+   "Bottle: ladle the hot syrup through a funnel into a sterilized jar, leaving about a half inch of headspace. Seal and let it cool completely.",
+   "Store: keep the sealed jar in a cool, dark place. Refrigerate after opening and use within about a month."
+  ],
+  "modifiers": "For a thicker, honey like set, cook a few minutes longer toward 235 F; for a thinner pouring syrup, stop nearer 225 F. A vanilla bean or a strip of orange peel added during the infusion changes the aroma. Cutting the sugar well below a 1 to 1 ratio gives a looser syrup that is not shelf stable and must stay refrigerated the whole time.",
+  "preservation": "A sealed, sterilized jar of properly thickened syrup keeps in a cool, dark place; the high sugar level near thread stage (about 230 to 235 F, roughly 65 percent sugar or more) is what lets it keep. An under thickened, low sugar batch is not shelf stable: keep it refrigerated the whole time and use it quickly, since a weak batch can mold or ferment. Refrigerate any jar after opening and use within about a month.",
+  "safety": [
+   "Sourcing is the most important safety step. Dandelions are the exact weed that residential lawn products (2,4-D, dicamba, weed and feed) are meant to kill, so a lawn full of dandelions is a warning sign, not a harvest site. Do not pick from lawns, park turf, golf courses, roadsides, ditches, or any ground walked by dogs. Prefer your own untreated yard, an organic garden, or a known unsprayed field, and skip any ground treated in the past season. When the spray history is unknown, do not harvest.",
+   "Identify your plant before picking. True dandelion has a single flower head on one smooth, hollow, leafless, unbranched stalk rising from a ground rosette. If the stalk is forked, branched, solid, or leafy, it is a lookalike such as cat's ear, also called false dandelion (Hypochaeris radicata); leave it. Milky sap alone is not a reliable check because the lookalikes have it too.",
+   "Use the yellow petals only and cook the syrup. Concentrate it to a high sugar level near thread stage (about 230 to 235 F, roughly 65 percent sugar or more), which is what lets a sealed, sterilized jar keep in a cool dark place. An under thickened, low sugar batch is not shelf stable: refrigerate it the whole time and use it quickly, or it can mold or ferment. Refrigerate any jar after opening.",
+   "Do not give this syrup to infants under one year old. It is used and named like honey, and the general infant caution against honey style sweeteners applies.",
+   "Keep the syrup and any harvested plant material away from young children and pets, and remember the infant caution above.",
+   "People allergic to ragweed and other plants in the aster (Asteraceae) family may react to dandelion. The plant's milky latex can irritate skin in sensitive people, so pulling clean yellow petals free of the green base reduces sap contact.",
+   "This is a petals only project. Leave the root in the ground: digging dandelion roots is a discouraged practice here, and the plant keeps flowering when it stays rooted.",
+   "The map shows only where the plant occurs; it is not permission to harvest. On public or managed land, follow the land manager's rules and gather only where you may legally do so.",
+   "As a conservative note, people taking diuretics, blood thinners, blood sugar medication, or lithium may prefer to check with a clinician before regularly eating large amounts. This is a general food caution, not a claim that the syrup is anything more than a sweetener.",
+   "This is a food project only. There is no dosing, and no wellness claim is made or implied."
+  ],
+  "sources": [
+   {
+    "title": "Dandelion Syrup (Dandelion Honey), The Old Farmer's Almanac",
+    "url": "https://www.almanac.com/recipe/dandelion-syrup-dandelion-honey"
+   },
+   {
+    "title": "Sterilization of Empty Jars, National Center for Home Food Preservation (University of Georgia Cooperative Extension)",
+    "url": "https://nchfp.uga.edu/how/can/general-information/sterilization-of-empty-jars/"
+   },
+   {
+    "title": "Infant feeding and honey style sweeteners, American Academy of Pediatrics (HealthyChildren.org)",
+    "url": "https://www.healthychildren.org/English/health-issues/conditions/infections/Pages/Botulism.aspx"
+   }
+  ]
+ },
+ {
+  "id": "medicine-wilted-garlic-mustard-greens-skillet",
+  "map": "medicine",
+  "kind": "greens",
+  "plantId": "medicine-garlic-mustard",
+  "name": "Wilted Garlic Mustard Greens Skillet",
+  "category": "greens",
+  "difficulty": "Intermediate",
+  "route": "ingested-food-beverage",
+  "teaser": "Spring greens with a mild garlic bite, gathered on an invasive removal outing and cooked down in a hot skillet like spinach.",
+  "toxic": true,
+  "hook": "European settlers carried garlic mustard to North America in the 1860s as a garden pot-herb, and cooked spring greens are one of its oldest kitchen uses. Today the same plant spreads aggressively through eastern woodlands, so pulling it during an organized removal outing and cooking the young leaves is a way to put the day's haul to use. This is a simple skillet green with a mild garlic flavor, cooked down the way you would cook spinach or kale. Think of it as a seasonal side, not a wild novelty.",
+  "timeline": {
+   "active": "20 minutes",
+   "passive": "5 minutes resting the chopped greens before cooking"
+  },
+  "yield": "2 side servings (about 1 packed cup cooked)",
+  "ingredients": [
+   {
+    "item": "Young garlic mustard leaves and tender shoots",
+    "amount": "4 packed cups (about 6 oz), stems trimmed",
+    "required": true,
+    "note": "First-year basal leaves and second-year shoots picked March to May before flowering. Wash in two changes of cold water."
+   },
+   {
+    "item": "Olive oil",
+    "amount": "2 tablespoons",
+    "required": true,
+    "note": ""
+   },
+   {
+    "item": "Fresh garlic",
+    "amount": "2 cloves, thinly sliced",
+    "required": false,
+    "note": "Optional; the greens already carry a mild garlic flavor."
+   },
+   {
+    "item": "Salt",
+    "amount": "1 pinch (about 1/4 teaspoon)",
+    "required": true,
+    "note": ""
+   },
+   {
+    "item": "Lemon juice or vinegar",
+    "amount": "2 teaspoons, to finish",
+    "required": false,
+    "note": "Cider or white wine vinegar both work; brightens the finished greens."
+   }
+  ],
+  "toolsRequired": [
+   "Cutting board and knife",
+   "Large skillet or saute pan",
+   "Colander for washing"
+  ],
+  "toolsOptional": [
+   "Salad spinner",
+   "Medium pot for blanching larger batches",
+   "Slotted spoon"
+  ],
+  "steps": [
+   "On a sanctioned removal outing, confirm each plant before pulling: crush a leaf and check for a clear garlic smell, and look for smooth hairless leaves with scalloped kidney or heart shapes. If it does not smell of garlic, leave it. Pull whole plants, but keep only the young leaves and tender shoots for the kitchen and bag every root and seedpod for the trash.",
+   "Back home, strip the leaves and tender tops from the stems and wash them well in two changes of cold water, then drain in a colander.",
+   "Chop the greens coarsely and let the chopped pile rest for about 5 minutes. Chopping and resting begins driving off the plant's volatile compounds before cooking.",
+   "For a larger batch or milder flavor, blanch the greens in boiling water for 1 to 2 minutes, then lift them out and discard the cooking water. Discarding the water is what carries off the water-soluble compounds. Squeeze the greens dry before the next step.",
+   "Warm 2 tablespoons olive oil in a large skillet over medium heat. If using, add the sliced garlic and cook 30 to 60 seconds until fragrant but not browned.",
+   "Add the chopped greens and a pinch of salt. Cook, tossing often, for 3 to 5 minutes until fully wilted and darkened with no raw crunch left.",
+   "Take the pan off the heat and finish with a squeeze of lemon or a splash of vinegar. Serve warm as a side, or fold into eggs, pasta, or a grain bowl."
+  ],
+  "modifiers": "For a brighter plate, finish with lemon instead of vinegar and a little grated hard cheese. The blanch and discard step gives the mildest, least bitter result and is worth it for larger batches. Fold the cooked greens into scrambled eggs, toss with pasta and olive oil, or spoon over a grain bowl. A pinch of chili flakes with the garlic adds warmth without changing the method.",
+  "preservation": "Cook the greens fully before storing. Keep cooked greens covered in the refrigerator and use within 3 to 4 days. To hold longer, blanch, discard the water, squeeze dry, and freeze in a sealed bag; use within 3 months. Store cooked greens away from where children and pets can reach them.",
+  "safety": [
+   "Always cook garlic mustard thoroughly before eating and never eat it raw. The young first-year leaves this dish targets carry the highest hydrogen cyanide load, so raw nibbling is exactly the wrong move.",
+   "Chop the greens, let them rest a few minutes, then cook until fully wilted and darkened with no raw crunch left. For larger batches, blanch in boiling water and pour off the water before cooking, since discarding the blanch water most reliably carries off the water-soluble compounds.",
+   "Identify your plant with 100 percent certainty before you pull or eat anything. Crushed leaves smell distinctly of garlic, and the leaves are smooth and hairless with scalloped kidney or heart shapes. If it does not smell of garlic, do not eat it.",
+   "Do not confuse native lookalikes while pulling. Cut-leaf toothwort (Cardamine concatenata) has deeply cut, divided leaves, not rounded scalloped ones. Sweet cicely (Osmorhiza claytonii) has soft fuzzy, fern-like compound leaves and no garlic smell. Native violets (Viola spp.) have simple heart-shaped leaves but no garlic smell. Ground ivy (Glechoma hederacea) has a square stem and a minty, not garlicky, smell. Confirm the garlic smell and leaf shape before pulling any plant.",
+   "Garlic mustard contains oxalates, so handle it like spinach: eat normal food-size portions rather than one enormous serving. Anyone advised to limit dietary oxalate, for example people who form kidney stones, should handle it as they would spinach.",
+   "Do not feed raw trimmings or freshly pulled plants to children or pets. Cook the greens before serving them to anyone.",
+   "Keep raw trimmings, cooked greens, and pulled plants where children and pets cannot reach them.",
+   "Occurrence on the map is not permission to remove or harvest. Gather only at a sanctioned removal event or a site where you have the land manager's written permission, and note that some jurisdictions require a permit even for hand-pulling.",
+   "Respect the harvest ethic: eat only the young leaves and tender shoots and never harvest the root. Bag and trash all pulled plants, including roots and any forming seedpods. Do not compost them and do not leave pulled material on site, because seedpods keep maturing and spreading seed."
+  ],
+  "sources": [
+   {
+    "title": "Garlic Mustard: A Dangerous Invasive Edible (cooking and cyanogenic compounds) - Forager Chef",
+    "url": "https://foragerchef.com/garlic-mustard/"
+   },
+   {
+    "title": "Sauteed Garlic Mustard Recipe (Foraged Wild Greens) - Yang's Nourishing Kitchen",
+    "url": "https://www.yangsnourishingkitchen.com/sauteed-garlic-mustard-recipe/"
+   },
+   {
+    "title": "Garlic Mustard: Eat It to Beat It (invasive removal and recipes) - Wood County, WI Land Conservation",
+    "url": "https://www.woodcountywi.gov/Departments/LandConservation/Brochures/Garlic%20Mustard%20Recipes.pdf"
+   }
+  ]
+ },
+ {
+  "id": "medicine-blanched-garlic-mustard-pesto",
+  "map": "medicine",
+  "kind": "greens",
+  "plantId": "medicine-garlic-mustard",
+  "name": "Blanched Garlic Mustard Pesto",
+  "category": "greens",
+  "difficulty": "Beginner",
+  "route": "ingested-food-beverage",
+  "teaser": "A vivid green, garlicky spoonable sauce made from a plant you are helping pull.",
+  "toxic": true,
+  "hook": "Cooks across the Mid-Atlantic have turned an aggressive woodland invader into a kitchen ingredient. Garlic mustard was carried to North America in the 1800s as a culinary herb and escaped into forest understories, where volunteers now pull it by the bagful each spring. State agencies, including Maryland's Department of Natural Resources, publish a blanched pesto so the plants you help remove end up in the kitchen instead of the compost pile.",
+  "timeline": {
+   "active": "About 30 minutes of washing, blanching, and blending.",
+   "passive": "None beyond a few minutes of blanching and a short ice water cool-down."
+  },
+  "yield": "About 1.5 to 2 cups of sauce.",
+  "ingredients": [
+   {
+    "item": "Young garlic mustard leaves and tender flowering tops (first- and second-year plants, spring)",
+    "amount": "5 cups packed",
+    "required": true,
+    "note": "Gather while pulling plants for removal. Use leaves and tender tops only, not the root."
+   },
+   {
+    "item": "Olive oil",
+    "amount": "1 to 1.25 cups",
+    "required": true,
+    "note": "Start with 1 cup and add more for a looser sauce."
+   },
+   {
+    "item": "Hard grating cheese, Parmesan style, grated",
+    "amount": "1/2 cup",
+    "required": true,
+    "note": "Dairy allergen. Leave out for a dairy-free sauce and add a little extra salt."
+   },
+   {
+    "item": "Garlic cloves",
+    "amount": "3 cloves",
+    "required": true,
+    "note": "Peeled."
+   },
+   {
+    "item": "Lemon juice",
+    "amount": "1 tablespoon",
+    "required": true,
+    "note": "Added at the end, to taste."
+   },
+   {
+    "item": "Salt",
+    "amount": "To taste",
+    "required": true,
+    "note": ""
+   },
+   {
+    "item": "Tender herbs (parsley, mint, or basil)",
+    "amount": "1 cup packed",
+    "required": false,
+    "note": "Optional, to round out the flavor."
+   },
+   {
+    "item": "Toasted nuts (pine nuts, walnuts, or hazelnuts)",
+    "amount": "1/2 cup",
+    "required": false,
+    "note": "Optional. Tree nuts or pine nuts are a common allergen. Sunflower seeds work as a nut-free swap."
+   },
+   {
+    "item": "Black pepper",
+    "amount": "To taste",
+    "required": false,
+    "note": ""
+   }
+  ],
+  "toolsRequired": [
+   "Large pot",
+   "Bowl of ice water",
+   "Slotted spoon or colander",
+   "Food processor or blender",
+   "Sealed bags for the pulled plants"
+  ],
+  "toolsOptional": [
+   "Small skillet for toasting nuts",
+   "Clean storage jar"
+  ],
+  "steps": [
+   "Confirm the plant while pulling it for removal: crush a leaf and check that it smells clearly of garlic. Discard any similar rosette that lacks the garlic scent. Pick young leaves and tender flowering tops, and leave the root in the ground.",
+   "Rinse the leaves and tender stems thoroughly in cool water, then measure about 5 cups packed.",
+   "Bring a large pot of water to a rolling boil. Drop the leaves in for 2 to 3 minutes, until they turn vividly green. This boil is the required cook step, not an optional one.",
+   "Lift the leaves out with a slotted spoon straight into the bowl of ice water to stop the cooking. Pour the boiling water down the drain and do not save it. Once cool, gather the leaves in your hands and squeeze them as dry as you can.",
+   "In a food processor, combine the garlic, optional herbs, optional toasted nuts, grated cheese, salt, and pepper. Pulse to a coarse paste.",
+   "Add the squeezed blanched leaves and 1 cup of olive oil. Blend until smooth, scraping down the sides and adding more oil for the consistency you want. Finish with the lemon juice and adjust salt to taste.",
+   "Spoon into a clean jar, cover the surface with a thin film of olive oil, and refrigerate. Serve on pasta, crusty bread, or cooked vegetables.",
+   "Bag the remaining pulled plants in sealed bags, take any flowering tops before they set seed, do not compost them, and do not carry seeding plants offsite."
+  ],
+  "modifiers": "Swap the optional herbs (parsley, mint, or basil) or the optional nuts (pine nuts, walnuts, hazelnuts, or sunflower seeds) to change the flavor. Leave out the cheese and nuts for a lighter, allergen-friendly version. For single servings, freeze the finished sauce in an ice cube tray, then pop the cubes into a bag. The root is a restricted part on this map, so keep it out and use leaves and tender tops only.",
+  "preservation": "Refrigerate in a sealed jar with a thin film of olive oil over the surface and use within about 5 days, or freeze in small portions for up to 3 months. The base is cooked by blanching, not raw.",
+  "safety": [
+   "Identify the plant before you pull or eat it. Crush a leaf: it should smell clearly of garlic. Discard any similar rosette that does not smell of garlic.",
+   "Rule out understory lookalikes: wild violet, white avens (Geum), toothwort (Cardamine), fringecup, piggyback plant, and ground ivy (creeping charlie). None of these smell of garlic, so a leaf that lacks the garlic scent is not garlic mustard.",
+   "Blanching is a required cook step, not an optional flavor step. Drop the leaves into boiling water for 2 to 3 minutes until vividly green. Garlic mustard carries cyanogenic compounds (higher than in cultivated brassicas, and highest in first-year plants), and the boil greatly reduces them along with the bitterness. Do not skip or shorten it.",
+   "Do not make a raw version. Many pesto recipes online blend the leaves raw. This project is deliberately different: it uses no raw leaf preparation.",
+   "Discard the blanching water. Never reuse it as broth or stock, because the cyanogenic compounds and soluble oxalates leach into it. The ice water plunge is a separate cooling step and does not replace pouring the boiling water out.",
+   "Use this as an occasional condiment, not a staple green. Garlic mustard contains oxalates, so do not eat large quantities on consecutive days.",
+   "Allergen note: this recipe contains hard grating cheese (dairy) and, if you add them, tree nuts or pine nuts.",
+   "Keep the finished sauce and the raw plant material away from children and pets.",
+   "Occurrence on the map is not permission to harvest or to run a removal. Pull or remove only on land you own, with explicit land manager permission, or through an organized invasive pull or weed warrior program. National Park Service units (36 CFR 2.1) and most state parks and preserves prohibit removing plants, even invasives, without authorization.",
+   "Control seed spread: carry pulled plants in sealed bags, take flowering tops before seed set, never compost them, and do not move seeding plants offsite."
+  ],
+  "sources": [
+   {
+    "title": "Shockingly Green Garlic Mustard Pesto, Maryland Department of Natural Resources",
+    "url": "https://dnr.maryland.gov/cookbook/Pages/Shockingly-Green-Garlic-Mustard-Pesto.aspx"
+   },
+   {
+    "title": "Cipollini and Gruner, Cyanide in the Chemical Arsenal of Garlic Mustard, Alliaria petiolata, Journal of Chemical Ecology",
+    "url": "https://link.springer.com/article/10.1007/s10886-006-9205-x"
+   }
+  ]
+ },
+ {
+  "map": "medicine",
+  "kind": "dried",
+  "category": "dried",
+  "plantId": "medicine-violet",
+  "id": "medicine-pressed-violet-botanical-cards",
+  "name": "Pressed Violet Botanical Cards",
+  "difficulty": "Beginner",
+  "route": "non-body-craft",
+  "toxic": true,
+  "teaser": "Spring's blue and purple blooms flattened flat and papery, ready to tuck into a letter.",
+  "hook": "Violets have a long place in folk decoration and in the Victorian language of flowers, pressed into keepsake letters, autograph books, and pressed-flower albums that captured a single spring. This card follows that tradition purely as a seasonal botanical craft: you gather a light scatter of open blooms, flatten them in a heavy book, and mount them on paper. Nothing here is eaten or applied to the body, and this project makes no wellness or benefit claim of any kind.",
+  "timeline": {
+   "active": "About 30 to 45 minutes of hands-on work spread across the project",
+   "passive": "2 to 3 weeks of undisturbed pressing"
+  },
+  "yield": "6 to 10 finished pressed-flower cards or bookmarks",
+  "ingredients": [
+   {
+    "item": "Open violet flowers (Viola sororia), picked with a short stem",
+    "amount": "15 to 25 blooms",
+    "required": true,
+    "note": "Gather only from patches in full bloom, and take just a light scatter from any one spot."
+   },
+   {
+    "item": "Violet foliage leaves for accents",
+    "amount": "6 to 10 leaves",
+    "required": false,
+    "note": "Optional. Pick only from a rosette that is itself currently flowering, never from a separate leaf-only rosette nearby."
+   }
+  ],
+  "toolsRequired": [
+   "A heavy hardcover book or a two-board flower press",
+   "Smooth uncoated paper such as parchment or plain copy paper",
+   "Card stock or pre-cut blank cards",
+   "PVA craft glue",
+   "Small scissors"
+  ],
+  "toolsOptional": [
+   "Tweezers for placing delicate blooms",
+   "A brick or extra books for added weight",
+   "Clear self-adhesive laminating film to seal the finished flowers",
+   "A soft pencil for labeling and dating"
+  ],
+  "steps": [
+   "Harvest on a dry morning while the violets are in full bloom, taking only a light scatter of flowers from any patch. The open bloom is what confirms the plant, so pick flowers, not leaves alone.",
+   "Back home, sort the blooms and gently blot away any surface moisture. Lay each flower face down and well spaced between two smooth sheets of paper so no petals overlap.",
+   "Slide the paper sandwich into the middle of a heavy hardcover book, or stack it in a two-board flower press, and add extra books or a brick on top for even weight. Set the whole stack somewhere dry and undisturbed.",
+   "Leave the flowers to press for 2 to 3 weeks. If you like, swap the paper for dry sheets after the first 3 days to carry off moisture, then close it back up.",
+   "Open the press once the blooms feel papery, flat, and fully dry, with no cool or leathery spots. Thicker leaves may need closer to 4 weeks.",
+   "Lift each flower with tweezers or fingertips and fix it to card stock with a few small dots of PVA craft glue on the back, pressing lightly until it sets.",
+   "For a hard-wearing finish, seal the mounted flower under a sheet of clear self-adhesive laminating film and trim the edges with scissors.",
+   "Label the back of each card with the flower name and the date in soft pencil, then let the glue dry flat for a few hours before handling."
+  ],
+  "modifiers": "Trim the card stock to bookmark size before mounting for a slimmer keepsake, or tuck a single pressed bloom into a folded note card. Pair a flower with one or two accent leaves for a fuller botanical arrangement. Deeper blue and purple violets tend to hold their color best on cream or white stock.",
+  "preservation": "Store finished cards flat and out of direct sunlight, which fades pressed color over time. A slim box, an envelope, or the pages of a book all work well. Sealed film helps guard against humidity and handling. Unmounted pressed blooms can be kept flat between paper sheets in a dry spot until you are ready to use them.",
+  "safety": [
+   "Identify your plant with confidence before picking. If you are not certain it is a violet, leave it and do not gather it.",
+   "Harvest only violets that are in full bloom, so the open flower confirms the plant. Take foliage leaves only from a rosette that is itself currently flowering, never from a separate leaf-only rosette in the same patch.",
+   "Know the leaf lookalike. Violet leaves can be confused with lesser celandine (Ficaria verna) and marsh marigold, whose leaves are glossy and heart shaped. The flower is the reliable tell: violet flowers are purple or blue and nod downward, while lesser celandine and marsh marigold flowers are bright yellow.",
+   "This is a decorative craft only. Nothing in this project is eaten or applied to the body.",
+   "Wash your hands after handling gathered plant material, and keep it away from your mouth and eyes.",
+   "This is a craft object, not a food. Keep finished cards, glue, and adhesive film away from small children and pets.",
+   "Occurrence on the map is not harvest permission. Collect only where gathering is allowed, and take only a light scatter of flowers."
+  ],
+  "sources": [
+   {
+    "title": "University of Maryland Extension: How to Press Flowers",
+    "url": "https://extension.umd.edu/sites/extension.umd.edu/files/2021-03/FC-MGPub%20Flower%20Pressing%20Bookmark%20Fair%202018.pdf"
+   },
+   {
+    "title": "New York Botanical Garden: Techniques for Pressing Flowers",
+    "url": "https://www.nybg.org/blogs/plant-talk/2010/06/tip-of-the-week/tip-of-the-week-techniques-for-pressing-flowers/"
+   }
+  ]
+ },
+ {
+  "category": "skincare",
+  "difficulty": "Intermediate",
+  "hook": "Steeping violet flowers and leaves into a plain carrier oil is one of the older cosmetic crafts in the European and Appalachian folk kitchen, where cooks and gardeners set jars of spring flowers in a warm spot and strained the colored oil weeks later. This card presents it purely as that: a traditional botanical body oil and a patient infusing project. Common blue violet (Viola sororia) blooms in moist, partly shaded ground from roughly March through June, exactly when its dangerous buttercup-family lookalike is also up, so the whole craft begins with careful identification. It is an educational reference only, not medical advice and not a harvest recommendation.",
+  "id": "medicine-violet-flower-and-leaf-infused-skin-oil",
+  "kind": "skincare",
+  "map": "medicine",
+  "name": "Violet Flower and Leaf Infused Body Oil",
+  "plantId": "medicine-violet",
+  "route": "topical",
+  "teaser": "Spring violet blossoms and a few young leaves, fully dried, then steeped slowly into a light oil, a classic hands-on infusing project. Harvest only from plants in open five-petal bloom: the toxic lookalike lesser celandine shares the same wet spring ground.",
+  "toxic": true,
+  "timeline": {
+   "active": "About 45 minutes of hands-on time, split between harvesting, setting the plants to dry, and straining",
+   "passive": "About 1 to 2 weeks to fully dry the flowers and leaves, then 2 to 4 weeks of steeping"
+  },
+  "yield": "About 3/4 cup (180 ml) of strained infused oil",
+  "ingredients": [
+   {
+    "item": "Fully dried violet flowers and a few young leaves (Viola sororia), from plants you have confirmed by an open five-petaled flower",
+    "amount": "Enough dried material to loosely fill a clean, dry 8 oz (240 ml) jar",
+    "required": true,
+    "note": "Flowers and young leaves only, never roots. Pick only leaves attached to a plant you have confirmed by its flower, then dry them completely before use. If you are not fully sure of the leaves, use a flowers-only batch. Dried plant material is essential here: fresh or partly dried plants carry internal water into the oil and can support harmful bacteria."
+   },
+   {
+    "item": "Light carrier oil (olive or sunflower)",
+    "amount": "About 1 cup (240 ml), enough to cover the plant material completely",
+    "required": true,
+    "note": "A mild, low-flavor oil covers the plants and carries the color. Use enough to keep every piece submerged."
+   }
+  ],
+  "toolsRequired": [
+   "Clean, dry glass jar with a tight lid (about 8 oz / 240 ml)",
+   "Screen, rack, or clean cloth for fully drying the flowers and leaves",
+   "Fine cloth, muslin, or a fine mesh strainer",
+   "Clean, dry bottle or jar for storing the finished oil"
+  ],
+  "toolsOptional": [
+   "A small clean glass weight or fermentation stone to keep plant material submerged",
+   "Funnel",
+   "Labels for the date and contents"
+  ],
+  "steps": [
+   "Identify before you pick. Harvest only from plants showing an open, five-petaled violet flower. Violet leaves are toothed or scalloped all around the margin and matte in texture. Do not gather from the toxic lookalike lesser celandine (Ficaria verna), which grows in the same moist spring ground, blooms at the same time, and has glossy, waxy, kidney-shaped leaves with smooth to only shallowly scalloped edges. Confirm each plant by its flower and pick only the flowers and young leaves attached to that confirmed plant. Never scoop up loose leaves from a patch.",
+   "Dry the plants completely. Spread the flowers and leaves in a single layer on a screen, rack, or clean cloth, out of direct sun in a dry, airy spot, and leave them until they are fully dry, usually about 1 to 2 weeks. They are ready only when the leaves crumble and the flowers feel papery and crisp with no soft or leathery spots. Any moisture left inside the plants can support harmful bacteria once they sit in oil, so do not rush this step or infuse fresh or half-dried material.",
+   "Pack the jar. Loosely fill the clean, dry jar with the fully dried flowers and leaves. Do not cram them in; the oil needs to reach every piece.",
+   "Cover completely with oil. Pour in the carrier oil until the plant material is fully submerged with a little oil above it. Press down any floating pieces, and set a clean glass weight on top if needed to keep everything under the surface.",
+   "Steep. Cap the jar, label it with the date, and set it in a warm spot out of direct sunlight for 2 to 4 weeks. Because the plant material is fully dried, no water is added to the oil. Check the jar every day or two: keep all plant matter submerged and top off with a little more oil if any pieces rise above the surface.",
+   "Strain. Pour the oil through fine cloth or a fine strainer into a clean, dry bottle, pressing the plant material lightly to release the oil. Discard the spent flowers and leaves.",
+   "Label and refrigerate. Mark the bottle with the date, then store it in the refrigerator, kept cool and dark. For external use only. Discard the oil at the first rancid smell or any sign of cloudiness or mold."
+  ],
+  "modifiers": "Flowers-only version: skip the leaves entirely and infuse only fully dried violet blossoms. This is the safer choice any time you are not fully confident telling violet leaves apart from lesser celandine, and it still gives a colored, scented oil. You can use either a light olive oil or sunflower oil. Scale the batch up or down freely, as long as all the plant material is fully dried first, the jar stays loosely packed, and the plants stay completely covered with oil.",
+  "preservation": "Strain the oil completely, then keep it in a clean, dry, capped bottle in the refrigerator, cool and dark. Use it within a few months. The main spoilage risks are water carried in on the plants and soil bacteria, so the real controls are drying the flowers and leaves completely before infusing, keeping them fully submerged while steeping, and refrigerating the finished oil. Never use fresh or partly dried plants. Do not rely on smell as the safety check. Discard the oil at any rancid odor, any cloudiness, or any sign of mold.",
+  "safety": [
+   "Identify your plant. Harvest only from plants showing an open, five-petaled violet flower. Confirm each plant by its flower and pick only leaves attached to that confirmed plant. Never batch-gather loose leaves from a patch, and never gather violet leaves on their own before the plants bloom. If you are unsure of the leaves, make a flowers-only version.",
+   "Positive identification cue: violet leaves are toothed or scalloped around the whole margin and matte in texture. Lesser celandine leaves are glossy and waxy with smooth to only shallowly scalloped edges.",
+   "Toxic lookalike. Violet leaves resemble lesser celandine (Ficaria verna), a buttercup relative that grows in the same moist spring ground and blooms at the same time. Its compound protoanemonin is a skin irritant, dissolves into oil, and is not removed by drying or by cold infusion, so a single misidentified leaf carries straight into the finished oil.",
+   "External use only. This is a folk cosmetic body oil, not for eating or drinking.",
+   "Keep the finished oil away from children and pets. Cats are especially sensitive if they lick it.",
+   "Violet leaf naturally contains methyl salicylate, an aspirin-like compound. Skip this oil if you are sensitive to salicylates or aspirin, do not apply it to broken, cracked, or irritated skin, and patch test a small area first, since any botanical can cause a skin reaction in some people.",
+   "Use no roots. Violet roots contain irritating saponins and are left out of this craft entirely.",
+   "Spoilage control. Dry the flowers and leaves completely before infusing, never using fresh or partly dried material, pack them loosely into a clean, dry jar, and keep all plant matter fully submerged in oil. Using fully dried plants, keeping them submerged, and refrigerating the finished oil guard against mold, rancidity, and bacterial growth. Store the finished oil refrigerated, cool and dark, and discard it if it smells rancid or shows any cloudiness or mold.",
+   "Occurrence data on the map is not harvest permission. Confirm you have the right to gather at a location before harvesting."
+  ],
+  "sources": [
+   {
+    "title": "Don't Be Deceived by This Beguiling Springtime Plant (Lesser Celandine), Penn State Extension",
+    "url": "https://extension.psu.edu/don-t-be-deceived-by-this-beguiling-springtime-plant"
+   },
+   {
+    "title": "Viola sororia (Common Blue Violet), NC State Extension Gardener Plant Toolbox",
+    "url": "https://plants.ces.ncsu.edu/plants/viola-sororia/"
+   },
+   {
+    "title": "Ranunculus ficaria (Lesser Celandine, Fig Buttercup), NC State Extension Gardener Plant Toolbox",
+    "url": "https://plants.ces.ncsu.edu/plants/ranunculus-ficaria/"
+   },
+   {
+    "title": "Lesser celandine (Ficaria verna), Minnesota Department of Natural Resources",
+    "url": "https://www.dnr.state.mn.us/invasives/terrestrialplants/lesser-celandine-invasive-species.html"
+   }
+  ]
+ },
+ {
+  "id": "medicine-violet-flower-syrup",
+  "map": "medicine",
+  "kind": "kitchen",
+  "plantId": "medicine-violet",
+  "name": "Violet Flower Syrup",
+  "category": "kitchen",
+  "difficulty": "Beginner",
+  "route": "ingested-food-beverage",
+  "teaser": "A deep blue petal syrup that flips to pink the moment it meets lemon.",
+  "toxic": true,
+  "hook": "Violet flowers have colored and flavored confections and drinks for centuries. French confectioners candied the petals into crystallized violets, and cordial makers steeped them for their deep blue color and delicate floral scent. This syrup carries on that kitchen tradition, a jewel-toned pour for sodas, lemonade, and desserts. Because violet petals hold anthocyanins (the same pigments in red cabbage and blueberries), the syrup acts as a natural pH indicator and shifts from blue to pink when it meets something acidic.",
+  "timeline": {
+   "active": "About 20 minutes",
+   "passive": "1 hour to overnight steep"
+  },
+  "yield": "About 1 to 1.5 cups (250 to 350 ml) of syrup",
+  "ingredients": [
+   {
+    "item": "Fresh open violet flowers, blue or purple",
+    "amount": "1 to 2 cups, loosely packed",
+    "required": true,
+    "note": "Open blooms at full bloom only. Pinch off the green sepals and stems so you have petals only. No leaves, no roots, no yellow-flowered violets."
+   },
+   {
+    "item": "Just-boiled water",
+    "amount": "About 1 cup (240 ml)",
+    "required": true,
+    "note": "Pour over the flowers just off the boil, enough to cover them."
+   },
+   {
+    "item": "White granulated sugar",
+    "amount": "Equal to the strained infusion, about 1 cup (200 g)",
+    "required": true,
+    "note": "White sugar keeps the color clear. Darker or unrefined sugars turn it muddy brown."
+   },
+   {
+    "item": "Lemon juice",
+    "amount": "A few drops, to taste",
+    "required": false,
+    "note": "Optional. Stirred into a serving, it turns the syrup from blue to pink."
+   }
+  ],
+  "toolsRequired": [
+   "Heatproof jar or bowl",
+   "Fine-mesh strainer",
+   "Small saucepan",
+   "Clean bottle or jar with a lid"
+  ],
+  "toolsOptional": [
+   "Cheesecloth",
+   "Funnel",
+   "Kitchen scale"
+  ],
+  "steps": [
+   "Pick 1 to 2 cups of open blue or purple violet flowers at full bloom from your own untreated ground or verified chemical-free areas, or buy culinary violets. Pinch off every green sepal and stem so you are left with petals only.",
+   "Rinse the flowers gently in cool water and drain them on a clean towel.",
+   "Place the flowers in a heatproof jar and pour about 1 cup of just-boiled water over them until they are covered.",
+   "Cover the jar and refrigerate it, letting the flowers steep until the water turns deep blue, at least 1 hour and up to overnight.",
+   "Strain the blue infusion through a fine-mesh strainer into a small saucepan, pressing the petals to release the liquid, then discard the spent flowers.",
+   "Measure the infusion, add an equal amount of white granulated sugar, and warm over medium-low heat, stirring until the sugar fully dissolves.",
+   "Bring the syrup to a brief simmer, then pour it into a clean bottle or jar and let it cool.",
+   "Refrigerate and use within a short time. To serve, stir a spoonful into lemonade or sparkling water and add a few drops of lemon juice to watch the color turn from blue to pink."
+  ],
+  "modifiers": "Stir a spoonful into still or sparkling water, or over ice, and add lemon juice to taste for the blue-to-pink color change. Spoon it over pancakes, yogurt, or ice cream, or brush it onto a plain cake. For a thicker pouring syrup, simmer a minute or two longer before bottling.",
+  "preservation": "Bottle in a clean jar and keep it refrigerated, using it within about two weeks. For longer keeping, freeze the syrup in an ice cube tray and thaw cubes as needed. If the syrup ever smells off, looks cloudy, or shows any growth, discard it.",
+  "safety": [
+   "Use the open flowers only. Do not use the leaves or the roots. The roots contain saponins that can cause vomiting, and eating leaves in quantity can have a strong laxative effect.",
+   "Use only blue or purple violets. Skip yellow-flowered violets, which are more bitter and more strongly laxative.",
+   "Identify your plant. Pick only at full bloom and confirm the distinctive five-petal, downward-facing violet flower. Do not go by leaf alone. A toxic spring lookalike, lesser celandine (Ficaria verna), can grow in the same patch, but it has glossy heart-shaped leaves and yellow buttercup-like flowers with 8 to 12 petals, very different from the violet's five purple petals. Do not confuse spring violets with autumn crocus (Colchicum), a highly toxic fall bulb bloom.",
+   "Do not pick violets from lawns, turf, parks, roadsides, or drainage edges. Wild violet is a common target of broadleaf lawn weed killers such as triclopyr and 2,4-D, and such ground may also carry pesticide residue, road runoff, or pet waste. Take flowers only from your own untreated ground or verified chemical-free areas, or buy culinary violets. Rinse the flowers before use.",
+   "Refrigerate the flower infusion while it steeps rather than leaving a low-acid floral water at room temperature overnight. Bring the sweetened syrup to a brief simmer before bottling, keep it refrigerated, and use it within a short time.",
+   "This is a culinary syrup and a beverage flavoring, not a medicine. Use no dosing language and make no health claims.",
+   "Keep the syrup and any raw plant material out of reach of children and pets.",
+   "The map shows where violets may occur, not that picking is allowed. Get the landowner's or land manager's permission before harvesting on any public or private land."
+  ],
+  "sources": [
+   {
+    "title": "Wild Violet Syrup: Spring Foraging Recipe (Grow Forage Cook Ferment)",
+    "url": "https://www.growforagecookferment.com/wild-violet-syrup/"
+   },
+   {
+    "title": "Violet Simple Syrup (Feasting At Home)",
+    "url": "https://www.feastingathome.com/violette-syrup/"
+   },
+   {
+    "title": "Homemade Wild Violet Syrup Recipe (Fare Isle)",
+    "url": "https://fareisle.com/wild-violet-syrup/"
+   }
+  ]
+ },
+ {
+  "id": "medicine-candied-violet-flowers",
+  "map": "medicine",
+  "kind": "kitchen",
+  "plantId": "medicine-violet",
+  "name": "Candied Violet Flowers",
+  "category": "kitchen",
+  "difficulty": "Beginner",
+  "route": "ingested-food-beverage",
+  "teaser": "Open spring blossoms set under a thin, glassy crust of sugar.",
+  "toxic": true,
+  "hook": "Crystallized violets are a traditional European confection, long associated with the city of Toulouse, where sugared blossoms decorated cakes, chocolates, and pastries. This card follows that crystallized-flower tradition rather than reproducing the famous scented Toulouse sweet, since the common blue violet is essentially scentless and is not the fragrant Parma violet historically candied there. It is a simple candy-making craft that captures a spring flower in a thin shell of sugar.",
+  "timeline": {
+   "active": "30 to 45 minutes of coating",
+   "passive": "24 to 48 hours of drying"
+  },
+  "yield": "About 30 to 40 crystallized flowers",
+  "ingredients": [
+   {
+    "item": "Fresh open violet flowers",
+    "amount": "30 to 40 blooms",
+    "required": true,
+    "note": "Common blue violet (Viola sororia), sweet violet (Viola odorata), or Johnny-jump-up (Viola tricolor), picked dry at full bloom with a short stem left as a handle."
+   },
+   {
+    "item": "Pasteurized egg white",
+    "amount": "1 large egg white",
+    "required": true,
+    "note": "Use pasteurized egg white, or substitute 2 teaspoons food-grade meringue powder mixed with 2 tablespoons water. Never use raw egg."
+   },
+   {
+    "item": "Superfine (caster) sugar",
+    "amount": "about 1 cup (200 g)",
+    "required": true,
+    "note": "If you only have granulated sugar, pulse it a few times in a food processor to make it superfine."
+   },
+   {
+    "item": "Water",
+    "amount": "2 tablespoons",
+    "required": false,
+    "note": "Only needed to reconstitute meringue powder if you use it in place of egg white."
+   }
+  ],
+  "toolsRequired": [
+   "Small soft paintbrush",
+   "Small bowl",
+   "Fork or small whisk",
+   "Parchment-lined tray"
+  ],
+  "toolsOptional": [
+   "Fine sieve or sugar shaker",
+   "Tweezers",
+   "Small kitchen scissors",
+   "Toothpicks"
+  ],
+  "steps": [
+   "Pick 30 to 40 fully open violet flowers on a dry morning, snipping each with a short stem to use as a handle. Confirm the identification against the safety notes before you gather anything.",
+   "Shake or brush off any dirt and insects. Do not rinse the flowers, because wet petals will not hold the coating. If a flower is damp, let it air-dry on a towel until fully dry.",
+   "In a small bowl, lightly beat 1 pasteurized egg white with a fork until just loosened and slightly frothy, or whisk 2 teaspoons meringue powder with 2 tablespoons water until smooth.",
+   "Holding a flower by its stem, use the small paintbrush to paint a thin, even layer of the egg white over every petal surface, front and back. Keep the coat light, since pooled liquid makes the flower collapse.",
+   "Hold the flower over a bowl and dust superfine sugar evenly over all sides, turning it so every petal is fully covered. Gently tap off the excess.",
+   "Lay each finished flower on the parchment-lined tray and coax the petals open with a toothpick or tweezers. Snip off the stem once the flower holds its shape.",
+   "Dry the tray uncovered in a cool, dry spot or in the refrigerator for 24 to 48 hours, until the flowers are crisp and no longer tacky. To speed drying, set them in an oven with only the pilot light on, or at 150 to 200 F with the door propped open, checking often.",
+   "Once fully crisp, store the flowers airtight between layers of parchment and use them as a decorative garnish on cakes, chocolates, and pastries."
+  ],
+  "modifiers": "Pansies and edible violas labeled for food use crystallize the same way and give larger, more colorful petals. Rose petals and borage flowers also take well to this method. A drop of gel food coloring stirred into the sugar deepens the finished color. Working in small batches keeps the egg white from drying out before you coat each flower.",
+  "preservation": "Dry the coated flowers fully until crisp, then store them airtight between layers of parchment in a cool, dry spot away from humidity. Handled this way they keep for several months, and up to about a year if they stay completely dry.",
+  "safety": [
+   "Identify your plant with certainty before gathering, and if you are unsure, use a cultivated or purchased source instead.",
+   "Use only a true violet: common blue violet (Viola sororia), sweet violet (Viola odorata), or Johnny-jump-up (Viola tricolor). Do not use African violet (Saintpaulia), which is an unrelated houseplant, not a true violet, and not food.",
+   "Confirm the flower: five bilaterally symmetric petals (two upper, two side, one lower landing petal) with a streaked or white throat, on a leafless stalk rising from a rosette of heart-shaped, round-toothed basal leaves. Pick only when the flowers are fully open.",
+   "Use blue or purple violets only, and use the open flowers only, never the leaves or the pre-flower growth. Violet leaves resemble early-spring lookalikes such as lesser celandine (Ficaria verna, low glossy leaves with yellow star flowers) and buttercups (Ranunculus, deeply lobed leaves), so leave the foliage alone.",
+   "Do not pick mauve, leafless, fall-blooming flowers with six tepals and orange anthers. That is autumn crocus (Colchicum autumnale), which is highly toxic. True violets bloom in spring and rise from heart-shaped leaves.",
+   "Coat the flowers with pasteurized egg white or food-grade meringue powder, never raw egg, to avoid Salmonella, and store the finished flowers airtight.",
+   "Gather only from sites free of pesticide and herbicide treatment and away from roadsides. Do not use garden-center violas unless they are labeled edible, since ornamentals often carry systemic pesticides.",
+   "Use these strictly as a small decorative garnish, not a food eaten in quantity.",
+   "Occurrence on the map is not harvest permission. Follow local rules and get landowner permission before gathering.",
+   "Harvest lightly: pinch individual open flowers and leave the rosette and roots so the colony keeps blooming.",
+   "Keep the finished confection and any gathered plant material away from children and pets."
+  ],
+  "sources": [
+   {
+    "title": "Crystallized (Candied) Edible Flowers, What's Cooking America",
+    "url": "https://whatscookingamerica.net/elleneaston/crystallized_candyflowers.htm"
+   },
+   {
+    "title": "How to Make Candied Violets (Sugared Violets Recipe), Fare Isle",
+    "url": "https://fareisle.com/candied-violets/"
+   },
+   {
+    "title": "Candied Wild Violets, Edible Cape Cod",
+    "url": "https://ediblecapecod.ediblecommunities.com/recipe/recipes-candied-wild-violets/"
+   }
+  ]
+ },
+ {
+  "id": "medicine-spring-cleavers-soup-greens",
+  "map": "medicine",
+  "kind": "greens",
+  "plantId": "medicine-cleavers",
+  "name": "Spring Cleavers Soup Greens",
+  "category": "greens",
+  "difficulty": "Intermediate",
+  "route": "ingested-food-beverage",
+  "teaser": "A mild, cucumber scented spring green that turns soft and grassy once it simmers in the pot.",
+  "toxic": true,
+  "hook": "Long before it picked up garden nicknames like sticky willy and goosegrass, cleavers was a humble spring pot green across Britain and northern Europe, simmered into a plain country soup that cooks called goosegrass broth. Its hooked, clinging hairs make the raw plant a nuisance to eat, so cooks always cooked it right down until soft. This card follows that tradition: young cleavers as one seasonal wild leaf, gathered before it sets seed and dropped into a spring soup pot. This card is about the food and the flavor, nothing else.",
+  "timeline": {
+   "active": "About 30 minutes of gathering, cleaning, and cooking.",
+   "passive": "15 to 20 minutes simmering in the pot."
+  },
+  "yield": "One pot, about 4 bowls.",
+  "ingredients": [
+   {
+    "item": "Young cleavers aerial parts",
+    "amount": "2 to 3 packed cups",
+    "required": true,
+    "note": "The youngest tender tips only, gathered in early spring before any fruits appear."
+   },
+   {
+    "item": "Olive oil or butter",
+    "amount": "1 to 2 tbsp",
+    "required": true,
+    "note": "For sweating the aromatics."
+   },
+   {
+    "item": "Onion or leek, chopped",
+    "amount": "1 medium",
+    "required": true,
+    "note": "A mild allium base for the broth."
+   },
+   {
+    "item": "Garlic, chopped",
+    "amount": "1 to 2 cloves",
+    "required": false,
+    "note": "Optional, for depth."
+   },
+   {
+    "item": "Potato, diced",
+    "amount": "1 medium",
+    "required": false,
+    "note": "Optional, gives body and a creamy texture when blended."
+   },
+   {
+    "item": "Vegetable or chicken broth",
+    "amount": "4 cups (about 1 liter)",
+    "required": true,
+    "note": "Enough to cover the greens with room to simmer."
+   },
+   {
+    "item": "Salt and pepper",
+    "amount": "to taste",
+    "required": true,
+    "note": "Season at the end."
+   }
+  ],
+  "toolsRequired": [
+   "Gloves",
+   "Gathering basket or bag",
+   "Colander",
+   "Cutting board",
+   "Knife",
+   "Soup pot"
+  ],
+  "toolsOptional": [
+   "Long sleeves",
+   "Blender or immersion blender",
+   "Kitchen scissors"
+  ],
+  "steps": [
+   "Gather 2 to 3 packed cups of the youngest cleavers tips in early spring, picking strand by strand and inspecting each stem as you go. Take only the soft, tender growth from before the plant flowers.",
+   "Back in the kitchen, rinse the cleavers well in a colander under cold running water. Pick out and discard any stray leaves, stems, or debris the plant was clinging to, keeping only stems you have confirmed as cleavers. Chop into rough 1 inch pieces.",
+   "Warm the oil or butter in the pot over medium heat. Add the chopped onion or leek (and garlic, if using) and sweat until soft, about 5 minutes. Stir in the diced potato if you want a creamy soup.",
+   "Pour in the broth, bring to a gentle simmer, and cook until the potato is tender, about 10 minutes.",
+   "Add the chopped cleavers and simmer gently for 15 to 20 minutes, until the hooked bristles have fully softened and the greens are limp and tender. Do not shortcut this simmer: the long cook is what makes the greens pleasant to eat.",
+   "Season with salt and pepper. For a smooth soup, blend until creamy. For a rustic pot, leave it chunky.",
+   "Serve hot as a spring green soup, treating the cleavers as one leafy vegetable among the others in the bowl."
+  ],
+  "modifiers": "Blend the finished soup with a cooked potato for a smooth, cucumber like texture, or leave it chunky and rustic. Cleavers pairs well with other mild spring greens in the same pot, such as chickweed or young dandelion leaf, and with cooked nettle. A squeeze of lemon or a spoon of cream at the end rounds out the grassy flavor.",
+  "preservation": "Cleavers is a spring green, best used fresh the day you gather it while the tips are tender. Raw cleavers wilts and toughens quickly, so do not hold it for long. The finished soup keeps in a covered container in the refrigerator for up to 3 days, or freezes for up to 3 months.",
+  "safety": [
+   "Identify your plant before eating. True cleavers has thin square stems, whorls of six to eight narrow leaves, and backward hooked hairs that make it cling to skin and clothing. Do not confuse the tangle it climbs through: poison ivy has woody stems, leaves in groups of three, and does not cling, and nightshade has broad leaves with small round berries. Pick only stems you can positively confirm as cleavers.",
+   "Cook it fully. Simmer cleavers in the pot rather than giving it a quick wilt, so the hooked bristles soften all the way. Undercooked cleavers can scratch the mouth and throat.",
+   "Harvest strand by strand, never a whole tangled mat. Cleavers is a clinging scrambler that hooks onto and grows through its neighbors, so a grabbed handful can sweep in whatever it was climbing on, including poison ivy or nightshade. Inspect every stem, confirm it is cleavers, and discard anything it was clinging to.",
+   "External contact caution: wear gloves and long sleeves while gathering, because the fresh plant causes a contact rash on some skin. If handling it makes your skin react, do not eat it.",
+   "Use it as one ordinary green in a mixed pot, in modest amounts and only now and then, not as a strong standalone brew and not as a daily habit.",
+   "If you take a diuretic (water pill) or lithium, or have a kidney or fluid balance condition, keep cleavers minor and occasional and check with a clinician first. Cleavers can increase urination, and a documented case of severe lithium toxicity has been linked to herbal diuretics.",
+   "During pregnancy or while breastfeeding, do not make cleavers a large or frequent part of the diet. It is a wild green with no established safety record at that amount.",
+   "Keep gathered cleavers and the finished pot away from children and pets until you have confirmed the greens and removed anything the plant was clinging to.",
+   "Map occurrence is not harvest permission. Confirm that gathering is allowed on the specific piece of land before you pick."
+  ],
+  "sources": [
+   {
+    "title": "Catchweed bedstraws and false cleavers, Cornell CALS Weed Profiles",
+    "url": "https://cals.cornell.edu/weed-science/weed-profiles/catchweed-bedstraws-and-false-cleavers"
+   },
+   {
+    "title": "Catchweed Bedstraw (Galium aparine), University of Wisconsin Horticulture Extension",
+    "url": "https://hort.extension.wisc.edu/articles/catchweed-bedstraw-galium-aparine/"
+   },
+   {
+    "title": "Weeds: Catchweed bedstraw (Cleavers), Washington State University Hortsense",
+    "url": "https://hortsense.cahnrs.wsu.edu/fact-sheet/weeds-catchweed-bedstraw-cleavers-galium-aparine/"
+   },
+   {
+    "title": "American Herbal Products Association Botanical Safety Handbook, 2nd ed., Galium aparine safety and interaction entry",
+    "url": "https://bsh.ahpa.org/Mobile/m-frontMatter.aspx"
+   },
+   {
+    "title": "Pyevich D, Bogenschutz MP. Herbal diuretics and lithium toxicity. Am J Psychiatry 2001;158(8):1329 (clinical case, lithium and diuretic caution)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/11481175/"
+   }
+  ]
+ }
+]
