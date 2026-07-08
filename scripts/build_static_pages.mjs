@@ -430,7 +430,7 @@ function pageShell({ title, description, canonicalPath, ogType, body, backHref, 
     <meta property="og:image" content="${SITE}/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Craft Almanac — a United States material foraging map. Occurrence is never permission.">
+    <meta property="og:image:alt" content="Craft Almanac, a United States material foraging map. Occurrence is never permission.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="${SITE}/og-image.png">
     <link rel="preload" as="font" type="font/woff2" href="/fonts/fraunces/Fraunces-Display.woff2" crossorigin>
@@ -503,7 +503,7 @@ function renderSpeciesPage(species, mode, ctx) {
   // Herbalism disclaimer above the fold (matches the app's persistent banner) —
   // a stranger who reads only the lead still meets the not-medical-advice framing.
   if (mode.key === "medicine") {
-    parts.push(`        <p class="med-disclaimer"><strong>Educational reference only</strong> — historical and traditional use, not medical advice.</p>`);
+    parts.push(`        <p class="med-disclaimer"><strong>Educational reference only.</strong> Historical and traditional use, not medical advice.</p>`);
   }
 
   parts.push(`        <ul class="meta">`);

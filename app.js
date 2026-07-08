@@ -3975,7 +3975,7 @@ function showFirstRunCoach() {
   chip.id = "coachChip";
   chip.className = "floating";
   chip.setAttribute("role", "note");
-  chip.innerHTML = `<span><b>Start here:</b> search your town to see what grows nearby — every point carries the harvesting rule for that land. Try all four maps (food · ink · herbs · minerals) and open <b>Materials</b> for full profiles.</span><button type="button" aria-label="Dismiss tip">&times;</button>`;
+  chip.innerHTML = `<span><b>Start here:</b> search your town to see what grows nearby. Every point carries the harvesting rule for that land. Try all four maps (food · ink · herbs · minerals) and open <b>Materials</b> for full profiles.</span><button type="button" aria-label="Dismiss tip">&times;</button>`;
   mapArea.appendChild(chip);
   const dismiss = () => {
     try { window.localStorage?.setItem(COACH_STORAGE_KEY, "true"); } catch { /* private mode */ }
@@ -3998,7 +3998,7 @@ function promptSearchForDeepLink(materialName) {
   chip.id = "deepLinkPrompt";
   chip.className = "floating";
   chip.setAttribute("role", "note");
-  chip.innerHTML = `<span>Showing <b>${escapeHTML(materialName)}</b> — search your town to see it near you.</span><button type="button" aria-label="Dismiss">&times;</button>`;
+  chip.innerHTML = `<span>Showing <b>${escapeHTML(materialName)}</b>. Search your town to see it near you.</span><button type="button" aria-label="Dismiss">&times;</button>`;
   mapArea.appendChild(chip);
   chip.querySelector("button").addEventListener("click", () => chip.remove());
   // Best-effort: reveal + focus the place search once boot wiring has settled.
@@ -4262,7 +4262,7 @@ function sheetAboutHTML() {
     <div class="k">CRAFT ALMANAC</div>
     <h2 class="serif">A map that keeps the almanac's hours</h2>
     <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. It is made for teachers, foragers, and makers sourcing materials responsibly. The map is the front door; material profiles and project recipes live one tap away.</p>
-    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Where we have researched it, a point carries the harvesting rule for the land it sits on, read from primary law — and where we haven't, it says so plainly.</p>
+    <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Where we have researched it, a point carries the harvesting rule for the land it sits on, read from primary law, and where we haven't, it says so plainly.</p>
     <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice.</p>
     <div class="about-block">
       <div class="k">THIS MAP'S SOURCES</div>
@@ -4275,8 +4275,8 @@ function sheetAboutHTML() {
     </div>
     <div class="about-block">
       <div class="k">TERMS &amp; PRIVACY</div>
-      <p>The harvesting rules were compiled by an automated research process — an AI research agent reading primary sources such as park compendiums, 36 CFR, and state and federal regulations — and are reviewed by the site's author. They are informational, not legal advice; rules change, and any entry can be wrong or out of date. Always confirm current rules with the land manager before collecting. Everything here is offered without warranty for educational use, and you assume the risk of any harvest or preparation you undertake.</p>
-      <p>There is no account, no cookies, and no tracking. Your device stores only your own preferences and saved places (kept in this browser, never sent anywhere). As you browse, your browser talks directly to the services that draw the map and its data — Mapbox (basemap and place search), iNaturalist (occurrences), USGS and Esri (public-land boundaries), Open-Meteo and RainViewer (weather and radar), and Cloudflare (the host) — each of which receives your IP address and the map area you are viewing.</p>
+      <p>The harvesting rules were compiled by an automated research process (an AI research agent reading primary sources such as park compendiums, 36 CFR, and state and federal regulations) and are reviewed by the site's author. They are informational, not legal advice; rules change, and any entry can be wrong or out of date. Always confirm current rules with the land manager before collecting. Everything here is offered without warranty for educational use, and you assume the risk of any harvest or preparation you undertake.</p>
+      <p>There is no account, no cookies, and no tracking. Your device stores only your own preferences and saved places (kept in this browser, never sent anywhere). As you browse, your browser talks directly to the services that draw the map and its data: Mapbox (basemap and place search), iNaturalist (occurrences), USGS and Esri (public-land boundaries), Open-Meteo and RainViewer (weather and radar), and Cloudflare (the host). Each of these receives your IP address and the map area you are viewing.</p>
       <p>Spotted a wrong rule, a questionable identification, or anything unsafe? <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report">Report an error →</a> Corrections are welcome and help keep the map trustworthy.</p>
       <p>Craft Almanac is a noncommercial project: the code is licensed under the PolyForm Noncommercial License 1.0.0, and original content — recipes, species notes, and the rule summaries — under CC BY-NC-SA 4.0 (the underlying legal facts in the rules are public and unrestricted). Inbound data sources keep their own licenses.</p>
     </div>
@@ -7364,7 +7364,7 @@ function getMarkerPopupHTML(properties) {
   // pre-addressed way to report a wrong rule or a dangerous entry.
   const profileHref = `/materials/${escapeHTML(properties.speciesId)}.html`;
   const reportSubject = encodeURIComponent(
-    `Craft Almanac error report: ${properties.speciesName}${properties.name ? " — " + properties.name : ""}`
+    `Craft Almanac error report: ${properties.speciesName}${properties.name ? ", " + properties.name : ""}`
   );
   const reportHref = `mailto:reports@craftalmanac.com?subject=${reportSubject}`;
 
@@ -10404,7 +10404,7 @@ map.on("error", (event) => {
   // A traffic spike that exhausts the Mapbox map-load quota surfaces as 429 /
   // rate-limit, not 401/403 — surface it honestly so the map never just blanks.
   if (message.includes("429") || status === 429 || /quota|rate.?limit|too many requests/i.test(message)) {
-    setDataStatus("The map is temporarily over capacity — please try again in a little while.", { kind: "error" });
+    setDataStatus("The map is temporarily over capacity. Please try again in a little while.", { kind: "error" });
   } else if (message.includes("401") || message.includes("403") || status === 401 || status === 403) {
     // Origin/token error: developer-actionable, but a visitor only needs an honest cue.
     setDataStatus("The map can’t load right now (basemap access error). If this keeps happening, please report it.", { kind: "error" });
