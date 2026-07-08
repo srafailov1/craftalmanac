@@ -120,7 +120,10 @@ async function handleReport(request, env) {
       text,
       html
     });
-  } catch {
+  } catch (err) {
+    // Surface the send failure in logs (visible via `wrangler tail`); the visitor
+    // still gets the graceful fallback response below.
+    console.error("EMAIL.send failed:", (err && (err.stack || err.message)) || String(err));
     return respond(asJson, 502, false, "We couldn't send that just now. Please try again, or email reports@craftalmanac.com directly.");
   }
 
