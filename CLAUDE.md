@@ -13,8 +13,18 @@ A map-based site sharing local material availability, ethical harvesting practic
 
 ## Architecture
 
-Static site, no build step, no framework, no package manager. Vanilla JS + Mapbox GL JS.
+Static assets served by a thin Cloudflare Worker, no build step, no framework, no
+package manager. Vanilla JS + Mapbox GL JS. The Worker exists only for the report
+form; every real file is still served as a static asset.
 
+- `worker.js` — Cloudflare Worker entrypoint (`main` in `wrangler.jsonc`). Handles
+  `POST /api/report` (the in-site "Report an error" form) by sending to
+  `reports@craftalmanac.com` via the Cloudflare Email Sending `send_email` binding;
+  every other request falls through to `env.ASSETS.fetch`. Abuse control is a
+  honeypot field + per-IP `ratelimits` binding (no cookies). No npm deps. Requires
+  a one-time `wrangler email sending enable craftalmanac.com` on the account before
+  sends succeed; until then the forms degrade to a `mailto:` fallback. `.assetsignore`
+  keeps `worker.js` out of the served origin.
 - `index.html` — single page (~120 lines)
 - `app.js` — entire application (~17,000 lines). Constants, safety tags, and rule
   tables at top; species catalogs from ~line 2500; `MAP_MODE_CONFIG` (line ~3890)

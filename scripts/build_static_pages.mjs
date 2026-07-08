@@ -131,7 +131,7 @@ export async function loadAppConstants() {
 export const MODES = [
   { key: "food", catalog: "foodSpeciesCatalog", label: "Food" },
   { key: "ink", catalog: "inkSpeciesCatalog", label: "Ink & Dye" },
-  { key: "medicine", catalog: "medicineSpeciesCatalog", label: "Herbalism" },
+  { key: "medicine", catalog: "medicineSpeciesCatalog", label: "Herbs" },
   { key: "minerals", catalog: "mineralSpeciesCatalog", label: "Minerals" }
 ];
 
@@ -151,7 +151,7 @@ const CATEGORY_LABELS = {
     black: "Black / gray", blue: "Blue / green", brown: "Brown",
     purple: "Purple", red: "Red / pink", yellow: "Yellow / gold"
   },
-  medicine: { digestive: "Digestive", immune: "Immune", lymphatic: "Lymphatic", topical: "Topical" },
+  medicine: { dried: "Dried & Everlasting", skincare: "Skin & Body", kitchen: "Teas, Syrups & Edible Flowers", greens: "Wild Greens", garden: "Garden & Household" },
   minerals: {
     clay: "Clay (pottery)", alabaster: "Alabaster (gypsum)", pipestone: "Pipestone (catlinite)",
     soapstone: "Soapstone (steatite)", serpentine: "Serpentine", limestone: "Limestone (carving)",
@@ -376,6 +376,26 @@ const SHARED_CSS = `
     footer { margin: 26px 0 0; padding-bottom: 56px; }
     footer .fbox { border-top: 2px solid var(--hair); padding-top: 1.3em; font-size: 0.85rem; color: var(--sub); }
     footer p { margin: 0.6em 0; line-height: 1.55; }
+    /* In-site report form (posts to /api/report). Register-plain, matches page. */
+    footer .report-intro { margin: 0.9em 0 0.7em; }
+    footer .report-form { display: block; max-width: 40rem; margin: 0.2em 0 0.6em; }
+    footer .report-field { display: block; margin: 0 0 12px; }
+    footer .report-lab { display: block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--sub); margin-bottom: 5px; }
+    footer .report-lab em { font-style: normal; text-transform: none; letter-spacing: 0; opacity: 0.85; }
+    footer .report-message, footer .report-email { width: 100%; box-sizing: border-box; font-family: var(--font-ui); font-size: 0.95rem; color: var(--ink); background: var(--panel); border: 1px solid var(--hair); border-radius: 8px; padding: 9px 11px; }
+    footer .report-message { min-height: 92px; resize: vertical; line-height: 1.5; }
+    footer .report-message:focus, footer .report-email:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(107,127,46,0.22); }
+    footer .report-message::placeholder, footer .report-email::placeholder { color: var(--sub); opacity: 0.75; }
+    footer .report-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    footer .report-status { min-height: 1.1em; font-size: 0.85rem; margin: 0 0 8px; color: var(--sub); }
+    footer .report-status.is-err { color: var(--st-prohibited); }
+    footer .report-status.is-ok { color: var(--st-allowed); }
+    footer .report-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    footer .report-submit { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em; color: #fff; background: var(--accent-dark); border: none; border-radius: 8px; padding: 9px 18px; min-height: 40px; cursor: pointer; }
+    footer .report-submit:hover { background: var(--accent); }
+    footer .report-submit:disabled { opacity: 0.6; cursor: default; }
+    footer .report-submit:focus-visible { outline: 2px solid var(--accent-dark); outline-offset: 2px; }
+    footer .report-done { color: var(--ink); font-size: 0.95rem; font-weight: 600; margin: 0.6em 0; }
     @media (max-width: 480px) {
       .topbar, .wrap { padding-left: 14px; padding-right: 14px; }
       main.sheet { padding: 24px 20px 24px 22px; border-radius: 12px; }
@@ -395,7 +415,7 @@ const SHARED_CSS = `
       .wordmark { color: #000; }
       main.sheet { border: none; border-radius: 0; box-shadow: none; padding: 0 0 0 10px; }
       main.sheet::before { background: #000; width: 3px; }
-      .back-link, .cta, .cta-note, footer .license { display: none; }
+      .back-link, .cta, .cta-note, footer .license, footer .report-form { display: none; }
       a { color: #000; text-decoration: none; }
       .sci, .teaser, .lead, .note, .opt, .card-list .card-sci { color: #222; }
       .chip, .tags li, .safety, .safety.mild, .xlink { background: #fff; }
@@ -446,10 +466,63 @@ function pageShell({ title, description, canonicalPath, ogType, body, backHref, 
     <div class="wrap">
 ${body}
     </div>
+    <script>${REPORT_FORM_SCRIPT}</script>
   </body>
 </html>
 `;
 }
+
+// Progressive enhancement for the footer report form: submit over fetch() to
+// /api/report (no page navigation), show inline status, confirm on success. If
+// JS is off this never runs and the form's native POST handles the submit; if
+// the fetch fails we point the visitor at the email fallback in the intro.
+const REPORT_FORM_SCRIPT = `
+(function () {
+  var form = document.querySelector(".report-form");
+  if (!form) return;
+  var status = form.querySelector(".report-status");
+  var submit = form.querySelector(".report-submit");
+  var message = form.querySelector('[name="message"]');
+  function setStatus(t, k) { if (!status) return; status.textContent = t || ""; status.className = "report-status" + (k ? " is-" + k : ""); }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (form.dataset.sending === "1") return;
+    var text = (message.value || "").trim();
+    if (!text) { setStatus("Please add a short note about what's wrong.", "err"); message.focus(); return; }
+    form.dataset.sending = "1";
+    submit.disabled = true;
+    var label = submit.textContent;
+    submit.textContent = "Sending\\u2026";
+    setStatus("Sending\\u2026", "");
+    var payload = {};
+    new FormData(form).forEach(function (v, k) { payload[k] = v; });
+    payload.page = location.href;
+    fetch("/api/report", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-requested-with": "fetch" },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        return { ok: res.ok && data.ok, msg: data.message };
+      });
+    }).then(function (r) {
+      if (r.ok) {
+        var done = document.createElement("p");
+        done.className = "report-done";
+        done.setAttribute("role", "status");
+        done.textContent = r.msg || "Thanks \\u2014 your report was sent. We read every one.";
+        form.replaceWith(done);
+        return;
+      }
+      setStatus(r.msg || "We couldn't send that. Please email reports@craftalmanac.com directly.", "err");
+      submit.disabled = false; submit.textContent = label; form.dataset.sending = "0";
+    }).catch(function () {
+      setStatus("We couldn't reach the server. Please email reports@craftalmanac.com directly.", "err");
+      submit.disabled = false; submit.textContent = label; form.dataset.sending = "0";
+    });
+  });
+})();
+`;
 
 // Shared footer. `flags` toggles the extra safety/disclaimer lines.
 function footerHtml({ educationalOnly = false, mineralMaterial = false, reportSubject = "" } = {}) {
@@ -457,15 +530,38 @@ function footerHtml({ educationalOnly = false, mineralMaterial = false, reportSu
     `<p><strong>Occurrence is never permission</strong>, every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>`
   ];
   if (educationalOnly) {
-    lines.push(`<p><strong>Herbalism content is educational reference only</strong>, historical and traditional use, not medical advice, and not a harvest recommendation.</p>`);
+    lines.push(`<p><strong>Herbs content is educational reference only</strong>, historical and traditional use, not medical advice, and not a harvest recommendation.</p>`);
   }
   if (mineralMaterial) {
     lines.push(`<p>Many recorded mineral localities are old, inactive, or abandoned workings. Never enter shafts, adits, or pits, collect only surface float, and confirm the ground is neither posted nor hazardous.</p>`);
   }
-  const subject = encodeURIComponent(reportSubject || "Craft Almanac error report");
-  lines.push(`<p><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> <a href="mailto:reports@craftalmanac.com?subject=${subject}">Report a problem with this page &rarr;</a> Corrections are welcome and help keep the map trustworthy.</p>`);
+  // In-site correction form (posts to /api/report -> reports@craftalmanac.com),
+  // replacing the mailto hand-off. The intro paragraph stays OUTSIDE the form so
+  // it (and its mailto fallback) survives both print and a no-JS visit; a no-JS
+  // submit still works via the form's native POST, and the worker answers with a
+  // plain confirmation page.
+  const subjectPlain = reportSubject || "Craft Almanac error report";
+  const mailtoHref = `mailto:reports@craftalmanac.com?subject=${encodeURIComponent(subjectPlain)}`;
+  lines.push(`<p class="report-intro"><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> Write a correction below and it reaches the maintainer directly, or email <a href="${escapeHtml(mailtoHref)}">reports@craftalmanac.com</a>. Corrections are welcome and help keep the map trustworthy.</p>`);
+  lines.push(reportFormHtml(subjectPlain));
   lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses, see <a href="/attribution.html">attribution notes</a>.</p>`);
   return `    <footer>\n      <div class="fbox">\n${lines.map((l) => `        ${l}`).join("\n")}\n      </div>\n    </footer>`;
+}
+
+// The report form markup shared by every generated page. `context` is a plain
+// human label (species/place + path) sent along as the email subject. The
+// hidden "website" field is a honeypot; the pageShell script enhances the submit
+// to fetch()/JSON and a live status, and the native POST is the no-JS fallback.
+function reportFormHtml(context) {
+  const ctx = escapeHtml(context);
+  return `<form class="report-form" novalidate method="post" action="/api/report">
+          <label class="report-field"><span class="report-lab">What&rsquo;s wrong? <em>(required)</em></span><textarea class="report-message" name="message" rows="4" maxlength="5000" required placeholder="What did you find, and where? Include the species or place if you can."></textarea></label>
+          <label class="report-field"><span class="report-lab">Your email <em>(optional, so we can follow up)</em></span><input class="report-email" type="email" name="email" maxlength="300" autocomplete="email" inputmode="email" placeholder="you@example.com"></label>
+          <input type="hidden" name="context" value="${ctx}">
+          <div class="report-hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <p class="report-status" role="status" aria-live="polite"></p>
+          <div class="report-actions"><button class="report-submit" type="submit">Send report</button></div>
+        </form>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -500,7 +596,7 @@ function renderSpeciesPage(species, mode, ctx) {
   parts.push(`        <h1>${escapeHtml(name)}</h1>`);
   if (sci) parts.push(`        <p class="sci">${escapeHtml(sci)}</p>`);
   if (profile && profile.summary) parts.push(`        <p class="lead">${escapeHtml(profile.summary)}</p>`);
-  // Herbalism disclaimer above the fold (matches the app's persistent banner) —
+  // Herbs disclaimer above the fold (matches the app's persistent banner) —
   // a stranger who reads only the lead still meets the not-medical-advice framing.
   if (mode.key === "medicine") {
     parts.push(`        <p class="med-disclaimer"><strong>Educational reference only.</strong> Historical and traditional use, not medical advice.</p>`);

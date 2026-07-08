@@ -135,6 +135,26 @@
     footer { margin: 26px 0 0; padding-bottom: 56px; }
     footer .fbox { border-top: 2px solid var(--hair); padding-top: 1.3em; font-size: 0.85rem; color: var(--sub); }
     footer p { margin: 0.6em 0; line-height: 1.55; }
+    /* In-site report form (posts to /api/report). Register-plain, matches page. */
+    footer .report-intro { margin: 0.9em 0 0.7em; }
+    footer .report-form { display: block; max-width: 40rem; margin: 0.2em 0 0.6em; }
+    footer .report-field { display: block; margin: 0 0 12px; }
+    footer .report-lab { display: block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--sub); margin-bottom: 5px; }
+    footer .report-lab em { font-style: normal; text-transform: none; letter-spacing: 0; opacity: 0.85; }
+    footer .report-message, footer .report-email { width: 100%; box-sizing: border-box; font-family: var(--font-ui); font-size: 0.95rem; color: var(--ink); background: var(--panel); border: 1px solid var(--hair); border-radius: 8px; padding: 9px 11px; }
+    footer .report-message { min-height: 92px; resize: vertical; line-height: 1.5; }
+    footer .report-message:focus, footer .report-email:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(107,127,46,0.22); }
+    footer .report-message::placeholder, footer .report-email::placeholder { color: var(--sub); opacity: 0.75; }
+    footer .report-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    footer .report-status { min-height: 1.1em; font-size: 0.85rem; margin: 0 0 8px; color: var(--sub); }
+    footer .report-status.is-err { color: var(--st-prohibited); }
+    footer .report-status.is-ok { color: var(--st-allowed); }
+    footer .report-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    footer .report-submit { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em; color: #fff; background: var(--accent-dark); border: none; border-radius: 8px; padding: 9px 18px; min-height: 40px; cursor: pointer; }
+    footer .report-submit:hover { background: var(--accent); }
+    footer .report-submit:disabled { opacity: 0.6; cursor: default; }
+    footer .report-submit:focus-visible { outline: 2px solid var(--accent-dark); outline-offset: 2px; }
+    footer .report-done { color: var(--ink); font-size: 0.95rem; font-weight: 600; margin: 0.6em 0; }
     @media (max-width: 480px) {
       .topbar, .wrap { padding-left: 14px; padding-right: 14px; }
       main.sheet { padding: 24px 20px 24px 22px; border-radius: 12px; }
@@ -154,7 +174,7 @@
       .wordmark { color: #000; }
       main.sheet { border: none; border-radius: 0; box-shadow: none; padding: 0 0 0 10px; }
       main.sheet::before { background: #000; width: 3px; }
-      .back-link, .cta, .cta-note, footer .license { display: none; }
+      .back-link, .cta, .cta-note, footer .license, footer .report-form { display: none; }
       a { color: #000; text-decoration: none; }
       .sci, .teaser, .lead, .note, .opt, .card-list .card-sci { color: #222; }
       .chip, .tags li, .safety, .safety.mild, .xlink { background: #fff; }
@@ -214,10 +234,65 @@
     <footer>
       <div class="fbox">
         <p><strong>Occurrence is never permission</strong>, every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
-        <p><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report%3A%20Wild%20cranberries%20(materials%2Fcranberry.html)">Report a problem with this page &rarr;</a> Corrections are welcome and help keep the map trustworthy.</p>
+        <p class="report-intro"><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> Write a correction below and it reaches the maintainer directly, or email <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report%3A%20Wild%20cranberries%20(materials%2Fcranberry.html)">reports@craftalmanac.com</a>. Corrections are welcome and help keep the map trustworthy.</p>
+        <form class="report-form" novalidate method="post" action="/api/report">
+          <label class="report-field"><span class="report-lab">What&rsquo;s wrong? <em>(required)</em></span><textarea class="report-message" name="message" rows="4" maxlength="5000" required placeholder="What did you find, and where? Include the species or place if you can."></textarea></label>
+          <label class="report-field"><span class="report-lab">Your email <em>(optional, so we can follow up)</em></span><input class="report-email" type="email" name="email" maxlength="300" autocomplete="email" inputmode="email" placeholder="you@example.com"></label>
+          <input type="hidden" name="context" value="Craft Almanac error report: Wild cranberries (materials/cranberry.html)">
+          <div class="report-hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <p class="report-status" role="status" aria-live="polite"></p>
+          <div class="report-actions"><button class="report-submit" type="submit">Send report</button></div>
+        </form>
         <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses, see <a href="/attribution.html">attribution notes</a>.</p>
       </div>
     </footer>
     </div>
+    <script>
+(function () {
+  var form = document.querySelector(".report-form");
+  if (!form) return;
+  var status = form.querySelector(".report-status");
+  var submit = form.querySelector(".report-submit");
+  var message = form.querySelector('[name="message"]');
+  function setStatus(t, k) { if (!status) return; status.textContent = t || ""; status.className = "report-status" + (k ? " is-" + k : ""); }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (form.dataset.sending === "1") return;
+    var text = (message.value || "").trim();
+    if (!text) { setStatus("Please add a short note about what's wrong.", "err"); message.focus(); return; }
+    form.dataset.sending = "1";
+    submit.disabled = true;
+    var label = submit.textContent;
+    submit.textContent = "Sending\u2026";
+    setStatus("Sending\u2026", "");
+    var payload = {};
+    new FormData(form).forEach(function (v, k) { payload[k] = v; });
+    payload.page = location.href;
+    fetch("/api/report", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-requested-with": "fetch" },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        return { ok: res.ok && data.ok, msg: data.message };
+      });
+    }).then(function (r) {
+      if (r.ok) {
+        var done = document.createElement("p");
+        done.className = "report-done";
+        done.setAttribute("role", "status");
+        done.textContent = r.msg || "Thanks \u2014 your report was sent. We read every one.";
+        form.replaceWith(done);
+        return;
+      }
+      setStatus(r.msg || "We couldn't send that. Please email reports@craftalmanac.com directly.", "err");
+      submit.disabled = false; submit.textContent = label; form.dataset.sending = "0";
+    }).catch(function () {
+      setStatus("We couldn't reach the server. Please email reports@craftalmanac.com directly.", "err");
+      submit.disabled = false; submit.textContent = label; form.dataset.sending = "0";
+    });
+  });
+})();
+</script>
   </body>
 </html>

@@ -232,7 +232,7 @@ function renderCardsIndex(countsByMode) {
   parts.push(`      </ul>`);
   parts.push(`    </main>`);
   parts.push(`    <footer class="page-foot">`);
-  parts.push(`      <p><strong>Occurrence is never permission</strong>, the cards are identification and ethics aids, not harvest rights. Every point in the app carries the rule for the land it sits on; check it before collecting. Herbalism cards are educational reference only, not medical advice.</p>`);
+  parts.push(`      <p><strong>Occurrence is never permission</strong>, the cards are identification and ethics aids, not harvest rights. Every point in the app carries the rule for the land it sits on; check it before collecting. Herbs cards are educational reference only, not medical advice.</p>`);
   parts.push(`    </footer>`);
   return cardsPageShell({
     title: "Field cards",

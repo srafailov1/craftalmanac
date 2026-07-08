@@ -189,11 +189,11 @@ const MUSHROOM_SPECIES = { id: "morel", commonName: "Morels", category: "mushroo
 // Non-food species that EXTEND the food allowance (berries / leaves; not in the
 // restricted set). shenandoahAllowed:false mirrors the real ink/medicine catalog.
 const INK_EXTEND_SPECIES = { id: "ink-elderberry", commonName: "Elderberry (ink)", category: "purple", shenandoahAllowed: false };
-const MED_EXTEND_SPECIES = { id: "medicine-mullein", commonName: "Mullein", category: "immune", shenandoahAllowed: false };
+const MED_EXTEND_SPECIES = { id: "medicine-mullein", commonName: "Mullein", category: "garden", shenandoahAllowed: false };
 // Non-food species whose harvest is a live root / live bark / whole plant, so it
 // is restricted on edibles-only land (NONFOOD_HARVEST_NEEDS_PERMISSION).
 const INK_RESTRICTED_SPECIES = { id: "dye-curly-dock", commonName: "Curly dock", category: "brown", shenandoahAllowed: false };
-const MED_RESTRICTED_SPECIES = { id: "medicine-echinacea", commonName: "Echinacea", category: "immune", shenandoahAllowed: false };
+const MED_RESTRICTED_SPECIES = { id: "medicine-echinacea", commonName: "Echinacea", category: "dried", shenandoahAllowed: false };
 // Extends by material, but its food-equivalent is NOT Shenandoah-listed (privet
 // is not an edible), so it must stay prohibited at Shenandoah (food>=non-food).
 const INK_UNLISTED_AT_SHENANDOAH = { id: "ink-privet", commonName: "Privet (ink)", category: "blue", shenandoahAllowed: false };

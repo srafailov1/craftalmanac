@@ -99,10 +99,11 @@ const INK_CATEGORY_COLORS = {
   blue: "#316d8f"
 };
 const MEDICINE_CATEGORY_COLORS = {
-  topical: "#3f8d76",
-  immune: "#6978b8",
-  digestive: "#b7792f",
-  lymphatic: "#9a5f9f"
+  dried: "#b7792f",
+  skincare: "#3f8d76",
+  kitchen: "#9a5f9f",
+  greens: "#6b8e23",
+  garden: "#6978b8"
 };
 // Minerals map: each craft-material type is its own category/color (1:1 with the
 // mineralSpeciesCatalog), the way ink colors map to dye materials.
@@ -1764,7 +1765,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-jewelweed",
     commonName: "Jewelweed",
     scientificName: "Impatiens capensis",
-    category: "topical",
+    category: "garden",
     months: [6, 7, 8, 9],
     inatTaxonIds: [47888],
     shenandoahAllowed: false,
@@ -1775,7 +1776,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-broadleaf-plantain",
     commonName: "Broadleaf plantain",
     scientificName: "Plantago major",
-    category: "topical",
+    category: "greens",
     months: [4, 5, 6, 7, 8, 9, 10],
     inatTaxonIds: [58961],
     shenandoahAllowed: false,
@@ -1786,7 +1787,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-yarrow",
     commonName: "Yarrow",
     scientificName: "Achillea millefolium",
-    category: "topical",
+    category: "dried",
     months: [5, 6, 7, 8, 9],
     inatTaxonIds: [52821],
     shenandoahAllowed: false,
@@ -1797,7 +1798,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-chickweed",
     commonName: "Chickweed",
     scientificName: "Stellaria media",
-    category: "topical",
+    category: "greens",
     months: [2, 3, 4, 5, 10, 11, 12],
     inatTaxonIds: [53298],
     shenandoahAllowed: false,
@@ -1808,7 +1809,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-witch-hazel",
     commonName: "Witch hazel",
     scientificName: "Hamamelis virginiana",
-    category: "topical",
+    category: "skincare",
     months: [9, 10, 11, 12],
     inatTaxonIds: [51970],
     shenandoahAllowed: false,
@@ -1819,7 +1820,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-elderberry",
     commonName: "Elderberry",
     scientificName: "Sambucus",
-    category: "immune",
+    category: "dried",
     months: [5, 6, 7, 8, 9],
     inatTaxonIds: [52689],
     shenandoahAllowed: false,
@@ -1830,7 +1831,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-echinacea",
     commonName: "Echinacea",
     scientificName: "Echinacea purpurea",
-    category: "immune",
+    category: "dried",
     months: [6, 7, 8, 9],
     inatTaxonIds: [48627],
     shenandoahAllowed: false,
@@ -1841,7 +1842,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-mullein",
     commonName: "Mullein",
     scientificName: "Verbascum thapsus",
-    category: "immune",
+    category: "garden",
     months: [5, 6, 7, 8, 9],
     inatTaxonIds: [59029],
     shenandoahAllowed: false,
@@ -1852,7 +1853,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-bergamot",
     commonName: "Wild bergamot / bee balm",
     scientificName: "Monarda fistulosa",
-    category: "immune",
+    category: "dried",
     months: [6, 7, 8, 9],
     inatTaxonIds: [85320],
     shenandoahAllowed: false,
@@ -1863,7 +1864,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-goldenrod",
     commonName: "Goldenrod",
     scientificName: "Solidago",
-    category: "immune",
+    category: "dried",
     months: [8, 9, 10],
     inatTaxonIds: [48678],
     shenandoahAllowed: false,
@@ -1874,7 +1875,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-dandelion",
     commonName: "Dandelion",
     scientificName: "Taraxacum officinale",
-    category: "digestive",
+    category: "kitchen",
     months: [3, 4, 5, 6, 7, 8, 9, 10, 11],
     inatTaxonIds: [47602],
     shenandoahAllowed: false,
@@ -1885,7 +1886,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-garlic-mustard",
     commonName: "Garlic mustard",
     scientificName: "Alliaria petiolata",
-    category: "digestive",
+    category: "greens",
     months: [3, 4, 5, 6],
     inatTaxonIds: [56061],
     shenandoahAllowed: false,
@@ -1896,7 +1897,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-violet",
     commonName: "Violet",
     scientificName: "Viola sororia",
-    category: "lymphatic",
+    category: "kitchen",
     months: [3, 4, 5, 6],
     inatTaxonIds: [82816],
     shenandoahAllowed: false,
@@ -1907,7 +1908,7 @@ const medicineSpeciesCatalog = [
     id: "medicine-cleavers",
     commonName: "Cleavers",
     scientificName: "Galium aparine",
-    category: "lymphatic",
+    category: "greens",
     months: [3, 4, 5, 6],
     inatTaxonIds: [53059],
     shenandoahAllowed: false,
@@ -2109,19 +2110,20 @@ const MAP_MODE_CONFIG = {
   },
   medicine: {
     id: "medicine",
-    speciesHeading: "Traditional Uses & Species",
-    lede: `Explore plants of the traditional materia medica across ${REGION_STATES} by season and habitat. This map is an educational reference to historical and traditional use, not medical advice, and not a harvest recommendation.`,
-    safetyNote: "This map is provided for educational purposes. Do not ingest or apply wild plants without guidance from a qualified practitioner or trained herbalist.",
+    speciesHeading: "Herbs & Species",
+    lede: `Explore the herb plants across ${REGION_STATES} by season and habitat, and the projects you can make from them: dried bundles, skin and body preparations, teas and syrups, wild greens, and garden crafts. This map is an educational reference to traditional use, not medical advice, and not a harvest recommendation.`,
+    safetyNote: "This map is educational. Positively identify any plant before harvesting, prefer cultivated or purchased material where a lookalike is dangerous, and do not ingest or apply wild plants without guidance from a qualified practitioner.",
     categories: [
-      { id: "digestive", label: "Digestive" },
-      { id: "immune", label: "Immune" },
-      { id: "lymphatic", label: "Lymphatic" },
-      { id: "topical", label: "Topical" }
+      { id: "dried", label: "Dried & Everlasting" },
+      { id: "skincare", label: "Skin & Body" },
+      { id: "kitchen", label: "Teas, Syrups & Edible Flowers" },
+      { id: "greens", label: "Wild Greens" },
+      { id: "garden", label: "Garden & Household" }
     ],
     categoryColors: MEDICINE_CATEGORY_COLORS,
     catalog: medicineSpeciesCatalog,
     sourceNames: ["iNaturalist"],
-    dataNotes: `Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Plant-use notes are educational and are not instructions for treatment.`,
+    dataNotes: `Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Plant and project notes are educational, historical and traditional, and are not instructions for treatment.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: false,
     loadNpsOrchards: false
@@ -2179,6 +2181,9 @@ const state = {
   activeMap: "ink",
   selectedDay: getDayOfYear(new Date()),
   allSeasons: false,
+  // Context for the "Report an error" form sheet: { subject, page } describing
+  // where the report was opened from (a record, a panel). Set by openReportForm.
+  reportContext: null,
   mineralWorkability: 50, // 0-100 workability slider position (minerals mode only)
   records: [],
   inatRecords: [],
@@ -4175,7 +4180,7 @@ function renderMapLegend() {
     return `<button type="button" class="leg-chip${cls}" data-leg-category="${escapeHTML(category.id)}" aria-pressed="${String(selection !== "none")}"><span class="swatch" style="color: ${escapeHTML(color)}"></span>${escapeHTML(category.label)}</button>`;
   }).join("");
 
-  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
+  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBS", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
   const catHeading = config.speciesHeading.replace(/\s*&\s*(Species|Materials)/i, "").toUpperCase();
   const selected = getSelectedAccessStatuses();
   const onlyAllowedActive = selected.size === 1 && selected.has("allowed");
@@ -4259,7 +4264,7 @@ function initMapLegend() {
 const MODE_SHEET_INFO = {
   food: { label: "Food", color: "#6b7f2e", blurb: "Berries · fruit · mushrooms · nuts" },
   ink: { label: "Ink/Dye", color: "#3a3f3d", blurb: "Inks & dyes by color, oak gall to rabbitbrush" },
-  medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" },
+  medicine: { label: "Herbs", color: "#7a4a52", blurb: "Herb plants and the projects made from them" },
   minerals: { label: "Minerals", color: "#5c677d", blurb: "Craft stone & minerals, quartz, novaculite, soapstone, clay" }
 };
 // Project recipes: foraged-ink "Projects" replacing the launch placeholders.
@@ -4303,7 +4308,7 @@ function sheetAboutHTML() {
     <h2 class="serif">A map that keeps the almanac's seasons</h2>
     <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information, in collaboration with the places it maps. It is made for teachers, foragers, and makers sourcing materials responsibly. The map is the front door; material profiles and project recipes live one tap away.</p>
     <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Where we have researched it, a point carries the harvesting rule for the land it sits on, read from primary law, and where we haven't, it says so plainly.</p>
-    <p><strong>Herbalism content is educational reference only</strong>, historical and traditional use, not medical advice.</p>
+    <p><strong>Herbs content is educational reference only</strong>, historical and traditional use, not medical advice.</p>
     <div class="about-block">
       <div class="k">THIS MAP'S SOURCES</div>
       <p>${escapeHTML(config.dataNotes)}</p>
@@ -4317,12 +4322,154 @@ function sheetAboutHTML() {
       <div class="k">TERMS &amp; PRIVACY</div>
       <p>The harvesting rules were compiled by an automated research process (an AI research agent reading primary sources such as park compendiums, 36 CFR, and state and federal regulations) and are reviewed by the site's author. They are informational, not legal advice; rules change, and any entry can be wrong or out of date. Always confirm current rules with the land manager before collecting. Everything here is offered without warranty for educational use, and you assume the risk of any harvest or preparation you undertake.</p>
       <p>There is no account, no cookies, and no tracking. Your device stores only your own preferences and saved places (kept in this browser, never sent anywhere). As you browse, your browser talks directly to the services that draw the map and its data: Mapbox (basemap and place search), iNaturalist (occurrences), USGS and Esri (public-land boundaries), Open-Meteo and RainViewer (weather and radar), and Cloudflare (the host). Each of these receives your IP address and the map area you are viewing.</p>
-      <p>Spotted a wrong rule, a questionable identification, or anything unsafe? <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report">Report an error →</a> Corrections are welcome and help keep the map trustworthy.</p>
+      <p>The one thing you can send us is an error report. If you use the report form, the note you write, and your email address if you choose to add one, is transmitted to us so a correction can reach the maintainer. Nothing else about you is collected, and the form sets no cookie.</p>
+      <p>Spotted a wrong rule, a questionable identification, or anything unsafe? <button type="button" class="report-link" data-report data-report-subject="About &amp; Terms panel">Report an error →</button> Corrections are welcome and help keep the map trustworthy.</p>
       <p>Craft Almanac is a noncommercial project: the code is licensed under the PolyForm Noncommercial License 1.0.0, and original content, recipes, species notes, and the rule summaries, under CC BY-NC-SA 4.0 (the underlying legal facts in the rules are public and unrestricted). Inbound data sources keep their own licenses.</p>
     </div>
     <p><a href="./materials/" target="_blank" rel="noreferrer">Material profiles →</a> · <a href="./projects/" target="_blank" rel="noreferrer">Project pages →</a> · <a href="./cards/" target="_blank" rel="noreferrer">Printable field cards →</a></p>
     <p><a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes →</a></p>
   `;
+}
+
+// "Report an error" form sheet. Lets a visitor write a correction from the site
+// and have it reach reports@craftalmanac.com (via the /api/report Worker),
+// instead of being handed off to their mail app. A plain mailto stays as the
+// fallback for when JS or the endpoint is unavailable. The hidden "website"
+// field is a honeypot; a person never sees or fills it.
+function sheetReportHTML() {
+  const ctx = state.reportContext || {};
+  const subjectLabel = (ctx.subject || "").trim();
+  const mailSubject = subjectLabel
+    ? `Craft Almanac error report: ${subjectLabel}`
+    : "Craft Almanac error report";
+  const mailtoHref = `mailto:reports@craftalmanac.com?subject=${encodeURIComponent(mailSubject)}`;
+  const contextRow = subjectLabel
+    ? `<p class="report-context">Reporting: <strong>${escapeHTML(subjectLabel)}</strong></p>`
+    : "";
+  return `
+    <button class="closer" type="button" aria-label="Close">&times;</button>
+    <div class="k">CRAFT ALMANAC</div>
+    <h2 class="serif">Report an error</h2>
+    <p>Spotted a wrong rule, a questionable identification, or anything unsafe? Tell us here and it reaches the maintainer directly. Corrections are welcome and help keep the map trustworthy.</p>
+    ${contextRow}
+    <form class="report-form" novalidate
+          data-report-mailto="${escapeHTML(mailtoHref)}"
+          data-report-subject="${escapeHTML(subjectLabel)}"
+          data-report-page="${escapeHTML(ctx.page || "")}">
+      <label class="report-field">
+        <span class="report-label">What's wrong? <em>(required)</em></span>
+        <textarea class="report-message" name="message" rows="5" maxlength="5000"
+                  required placeholder="What did you find, and where? Include the species or place if you can."></textarea>
+      </label>
+      <label class="report-field">
+        <span class="report-label">Your email <em>(optional, so we can follow up)</em></span>
+        <input class="report-email" type="email" name="email" maxlength="300"
+               autocomplete="email" inputmode="email" placeholder="you@example.com">
+      </label>
+      <div class="report-hp" aria-hidden="true">
+        <label>Leave this field empty
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+      <p class="report-status" role="status" aria-live="polite"></p>
+      <div class="report-actions">
+        <button class="report-submit" type="submit">Send report</button>
+        <a class="report-mailto" href="${escapeHTML(mailtoHref)}">Prefer your own mail app?</a>
+      </div>
+    </form>
+  `;
+}
+
+function setReportStatus(el, text, kind) {
+  if (!el) return;
+  el.textContent = text || "";
+  el.className = "report-status" + (kind ? " is-" + kind : "");
+}
+
+// Wire the report form: submit over fetch to /api/report (no page navigation),
+// show inline status, and keep the mailto fallback's body in sync with the draft
+// so a click there carries the text over. Falls back gracefully on any failure.
+function wireReportForm(sheetEl) {
+  const form = sheetEl.querySelector(".report-form");
+  if (!form) return;
+  const message = form.querySelector(".report-message");
+  const emailEl = form.querySelector(".report-email");
+  const status = form.querySelector(".report-status");
+  const submit = form.querySelector(".report-submit");
+  const mailto = form.querySelector(".report-mailto");
+  const baseMailto = form.dataset.reportMailto || "mailto:reports@craftalmanac.com";
+  // Focus synchronously, like openSheet's closer focus: the sheet is already
+  // visible here, and a deferred (rAF) focus loses the race with the browser
+  // resetting focus to <body> after the trigger element is removed.
+  message?.focus();
+
+  // Carry the in-progress draft into the mailto fallback so switching to email
+  // never loses what they typed.
+  const syncMailto = () => {
+    const body = message.value.trim();
+    mailto.href = body ? `${baseMailto}&body=${encodeURIComponent(body)}` : baseMailto;
+  };
+  message.addEventListener("input", syncMailto);
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (form.dataset.sending === "1") return;
+    const text = message.value.trim();
+    if (!text) {
+      setReportStatus(status, "Please add a short note about what's wrong.", "err");
+      message.focus();
+      return;
+    }
+    form.dataset.sending = "1";
+    submit.disabled = true;
+    const label = submit.textContent;
+    submit.textContent = "Sending…";
+    setReportStatus(status, "Sending…", "");
+    try {
+      const res = await fetch("/api/report", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-requested-with": "fetch" },
+        body: JSON.stringify({
+          message: text,
+          email: emailEl.value.trim(),
+          website: form.querySelector('[name="website"]').value,
+          context: form.dataset.reportSubject || "",
+          page: form.dataset.reportPage || location.href
+        })
+      });
+      let data = {};
+      try { data = await res.json(); } catch { /* non-JSON error body */ }
+      if (res.ok && data.ok) {
+        showReportSent(form, data.message);
+        return;
+      }
+      setReportStatus(status, data.message || "We couldn't send that. Use the email link below and it'll reach us directly.", "err");
+    } catch {
+      setReportStatus(status, "We couldn't reach the server. Use the email link below and it'll reach us directly.", "err");
+    }
+    submit.disabled = false;
+    submit.textContent = label;
+    form.dataset.sending = "0";
+  });
+}
+
+// Replace the form with a confirmation once a report is delivered — a clear done
+// state that also blocks accidental duplicate sends.
+function showReportSent(form, msg) {
+  const done = document.createElement("div");
+  done.className = "report-done";
+  done.setAttribute("role", "status");
+  const heading = document.createElement("p");
+  heading.className = "report-done-title";
+  heading.textContent = msg || "Thanks — your report was sent. We read every one.";
+  const close = document.createElement("button");
+  close.type = "button";
+  close.className = "report-submit";
+  close.textContent = "Close";
+  close.addEventListener("click", () => closeSheet());
+  done.append(heading, close);
+  form.replaceWith(done);
+  close.focus();
 }
 
 function sheetMapsHTML() {
@@ -4414,7 +4561,7 @@ function sheetPlantsHTML() {
     ? `<div class="now-foot">${matTiming} Occurrence is never permission.</div>`
     : "";
 
-  // Herbalism profiles present medicinal use-parts, so the educational-use
+  // Herbs profiles present traditional use-parts, so the educational-use
   // disclaimer must travel with them (CLAUDE.md), as it does on the map note,
   // the Maps card, and the point card.
   const medNote = state.activeMap === "medicine"
@@ -4528,14 +4675,20 @@ const PROJECT_SHELVES = {
     { label: "GLAZES", kinds: ["glaze"] },
     { label: "CRAFT & CARVING", kinds: ["craft"] }
   ],
-  medicine: []
+  medicine: [
+    { label: "DRIED & EVERLASTING", kinds: ["dried"] },
+    { label: "SKIN & BODY", kinds: ["skincare"] },
+    { label: "TEAS, SYRUPS & EDIBLE FLOWERS", kinds: ["kitchen"] },
+    { label: "WILD GREENS", kinds: ["greens"] },
+    { label: "GARDEN & HOUSEHOLD", kinds: ["garden"] }
+  ]
 };
 
 const PROJECT_INTRO = {
   ink: "Make ink, dye, and pigment from the plants on the map. Every recipe is craft, not food; harvest only where it is permitted.",
   food: "Fresh dishes, tested preserves, and waste-reduction projects built on the food species on the map. Confirm identification and follow the safety notes; harvest only where it is permitted.",
   minerals: "Clay bodies, glazes, and carving/lapidary projects built on the craft stone on the map. Mind the dust, lime, and asbestos hazards in each card; occurrence is not collecting permission.",
-  medicine: ""
+  medicine: "Herbal crafts, skin and body preparations, teas and syrups, wild greens, and garden projects built on the herb plants on the map. Every card is educational and traditional, never medical: identify your plant, prefer cultivated or bought material where a lookalike is dangerous, and harvest only where it is permitted."
 };
 
 function sheetProjectsHTML() {
@@ -4598,7 +4751,7 @@ function sheetProjectsHTML() {
     ? `<div class="now-foot">${projTiming} Techniques and binders with no seasonal material always show.</div>`
     : "";
 
-  const mapLabel = { ink: "INK & DYE", food: "FOOD", minerals: "MINERALS", medicine: "HERBALISM" }[map] || map.toUpperCase();
+  const mapLabel = { ink: "INK & DYE", food: "FOOD", minerals: "MINERALS", medicine: "HERBS" }[map] || map.toUpperCase();
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE PRESS · ${allMapRecipes.length} PROJECTS · ${mapLabel}</div>
@@ -4757,7 +4910,8 @@ const SHEET_BUILDERS = {
   maps: sheetMapsHTML,
   plants: sheetPlantsHTML,
   projects: sheetProjectsHTML,
-  about: sheetAboutHTML
+  about: sheetAboutHTML,
+  report: sheetReportHTML
 };
 
 let sheetOpener = null;
@@ -4783,7 +4937,19 @@ function openSheet(name) {
   document.body.classList.add("modal-open");
   document.querySelector(".app-shell")?.setAttribute("inert", "");
   sheetEl.scrollTop = 0;
-  sheetEl.querySelector(".closer")?.focus?.();
+  // The report form wires its own submit + moves focus to the message field;
+  // every other sheet starts focus on the close button.
+  if (name === "report") wireReportForm(sheetEl);
+  else sheetEl.querySelector(".closer")?.focus?.();
+}
+
+// Open the "Report an error" form sheet, carrying context describing where the
+// report came from. `context` is { subject, page }: subject is a short human
+// label (species + place, or a panel name) shown to the reporter and used as the
+// email subject; page is the URL/identifier we send along for the maintainer.
+function openReportForm(context) {
+  state.reportContext = context || null;
+  openSheet("report");
 }
 
 function closeSheet() {
@@ -4844,6 +5010,13 @@ function initSheets() {
   });
   sheetEl.addEventListener("click", (event) => {
     if (event.target.closest(".closer")) { closeSheet(); return; }
+    // "Report an error" (e.g. in the About panel) switches to the report form
+    // sheet, carrying a subject label describing where it was opened from.
+    const reportOpen = event.target.closest("[data-report]");
+    if (reportOpen) {
+      openReportForm({ subject: reportOpen.dataset.reportSubject || "", page: location.href });
+      return;
+    }
     // In-card links (e.g. "Full profile ↗") open the standalone page in a new
     // tab — let the anchor navigate instead of isolating/opening the card behind it.
     if (event.target.closest("a[href]")) return;
@@ -5834,7 +6007,7 @@ function renderHistogram() {
   // The caveat is load-bearing: it names the Köppen region when the chart is
   // drawn from a real regional curve (Phase 5.3), and keeps the honest
   // contiguous-US-average caveat when falling back to the national curve.
-  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
+  const modeName = { food: "FOOD", ink: "INK", medicine: "HERBS", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
   const regionLabel = usedRegionalCurve ? getRegionLabel(region) : null;
   const caveatText = regionLabel
     ? `${regionLabel}, regional timing (local ripening still varies).`
@@ -7229,6 +7402,17 @@ function bindPopupActions(popup) {
       refreshSavedView();
     });
   }
+  // "Report an error" opens the in-site report form sheet, carrying the record's
+  // species/place as the subject, instead of launching the visitor's mail app.
+  const reportButton = element.querySelector("[data-report]");
+  if (reportButton) {
+    reportButton.addEventListener("click", () => {
+      openReportForm({
+        subject: reportButton.dataset.reportSubject || "",
+        page: reportButton.dataset.reportPage || ""
+      });
+    });
+  }
 }
 
 // Bookmarking a location changes neither the catalog, the filters, nor which
@@ -7403,10 +7587,9 @@ function getMarkerPopupHTML(properties) {
   // profile (identification + toxic lookalikes live there) and give a one-tap,
   // pre-addressed way to report a wrong rule or a dangerous entry.
   const profileHref = `/materials/${escapeHTML(properties.speciesId)}.html`;
-  const reportSubject = encodeURIComponent(
-    `Craft Almanac error report: ${properties.speciesName}${properties.name ? ", " + properties.name : ""}`
-  );
-  const reportHref = `mailto:reports@craftalmanac.com?subject=${reportSubject}`;
+  // Subject label carried into the report form (shown to the reporter and used
+  // as the email subject); the form itself posts to /api/report.
+  const reportSubjectLabel = `${properties.speciesName}${properties.name ? ", " + properties.name : ""}`;
 
   return `
     <div class="pt-card${compact ? " compact" : ""}" role="dialog" aria-label="${escapeHTML(properties.speciesName)} details" tabindex="-1">
@@ -7435,7 +7618,7 @@ function getMarkerPopupHTML(properties) {
         <div class="oinp">OCCURRENCE IS NOT PERMISSION, CHECK WHO MANAGES THIS LAND</div>
         <div class="pt-links">
           <a class="pt-link" href="${profileHref}" target="_blank" rel="noopener">Full profile ↗</a>
-          <a class="pt-link" href="${reportHref}">Report an error</a>
+          <button class="pt-link" type="button" data-report data-report-subject="${escapeHTML(reportSubjectLabel)}" data-report-page="${escapeHTML(profileHref)}">Report an error</button>
         </div>
         <button
           class="save-location-button ${saved ? "is-saved" : ""}"
@@ -8541,7 +8724,7 @@ async function renderOfflinePanel(options = {}) {
   // Falling Fruit site catalog, which only the Food and Ink & Dye maps draw —
   // say so explicitly on the maps that don't.
   const modeNote = state.activeMap === "medicine"
-    ? `<div>The Herbalism map draws live iNaturalist observations, which always need a connection, saves cover the Food and Ink &amp; Dye site catalog.</div>`
+    ? `<div>The Herbs map draws live iNaturalist observations, which always need a connection, saves cover the Food and Ink &amp; Dye site catalog.</div>`
     : state.activeMap === "minerals"
       ? `<div>Mineral localities are their own dataset (cached once viewed), saves cover the Food and Ink &amp; Dye site catalog.</div>`
       : "";
