@@ -150,9 +150,9 @@ function mineralCategoryInBand(categoryId) {
   return Math.abs(index - mineralSliderColumn()) <= MINERAL_WORKABILITY_BAND_COLS;
 }
 function mineralWorkBand(value) {
-  if (value < 28) return { label: "Soft — carving & pottery", examples: "clay · alabaster · soapstone · pipestone" };
-  if (value < 56) return { label: "Medium — carving & engraving", examples: "serpentine · marble · slate · obsidian" };
-  return { label: "Hard — sharpening, knapping & lapidary", examples: "chert · quartz · agate · novaculite · gemstone" };
+  if (value < 28) return { label: "Soft, carving & pottery", examples: "clay · alabaster · soapstone · pipestone" };
+  if (value < 56) return { label: "Medium, carving & engraving", examples: "serpentine · marble · slate · obsidian" };
+  return { label: "Hard, sharpening, knapping & lapidary", examples: "chert · quartz · agate · novaculite · gemstone" };
 }
 let CATEGORY_COLORS = FOOD_CATEGORY_COLORS;
 const ACCESS_RULE_SOURCES = {
@@ -343,7 +343,7 @@ const SAFETY_TAGS_BY_SPECIES = {
   "medicine-cleavers": ["drug interactions"],
   "medicine-broadleaf-plantain": ["avoid contaminated/sprayed ground", "lookalikes"],
   "medicine-goldenrod": ["ragweed confusion (pollen allergy)", "avoid rayless/rare Solidago", "drug interactions"],
-  "medicine-garlic-mustard": ["confirm ID before eating", "contains cyanide/oxalates — cook", "invasive — bag pulled plants"],
+  "medicine-garlic-mustard": ["confirm ID before eating", "contains cyanide/oxalates, cook", "invasive, bag pulled plants"],
   // ---- 2026-06 contiguous-US food expansion (safety tags reflect the
   // adversarial safety-review pass; details live in each species' notes) ----
   "red-mulberry": ["ripe fruit only", "toxic parts", "lookalikes", "conservation concern"],
@@ -368,39 +368,39 @@ const SAFETY_TAGS_BY_SPECIES = {
   // ---- 2026-06 ink/dye expansion ----
   "ink-himalayan-blackberry": ["fugitive color", "invasive"],
   "ink-prickly-pear": ["glochids/spines", "fugitive color"],
-  "ink-rouge-plant": ["toxic berries — do not ingest", "stains skin"],
-  "ink-bee-plant": ["dye/paint only — do not ingest"],
-  "ink-brazilian-pepper": ["urushiol — contact dermatitis", "never burn", "wear gloves"],
-  "ink-oregon-grape": ["berberine — do not ingest dye", "berries not roots"],
-  "dye-artemisia": ["aromatic — do not ingest", "not white sage (Salvia)"],
-  "dye-mormon-tea": ["alkaloids — dye only"],
-  "dye-camphor": ["camphor volatiles — ventilate", "toxic if ingested"],
-  "dye-canaigre": ["high tannin/oxalate — do not ingest"],
-  "dye-st-johns-wort": ["photosensitivity — wear gloves", "do not ingest"],
-  "dye-curly-dock": ["oxalic acid in leaves — use root"],
+  "ink-rouge-plant": ["toxic berries, do not ingest", "stains skin"],
+  "ink-bee-plant": ["dye/paint only, do not ingest"],
+  "ink-brazilian-pepper": ["urushiol, contact dermatitis", "never burn", "wear gloves"],
+  "ink-oregon-grape": ["berberine, do not ingest dye", "berries not roots"],
+  "dye-artemisia": ["aromatic, do not ingest", "not white sage (Salvia)"],
+  "dye-mormon-tea": ["alkaloids, dye only"],
+  "dye-camphor": ["camphor volatiles, ventilate", "toxic if ingested"],
+  "dye-canaigre": ["high tannin/oxalate, do not ingest"],
+  "dye-st-johns-wort": ["photosensitivity, wear gloves", "do not ingest"],
+  "dye-curly-dock": ["oxalic acid in leaves, use root"],
   "dye-eucalyptus": ["leaves/oil toxic if ingested", "ventilate"],
   "dye-honey-mesquite": ["thorns", "tannin stains skin"],
-  "dye-manzanita": ["shed/fallen only — some species rare"],
-  "dye-one-seed-juniper": ["dye only — do not ingest", "not savin juniper"],
+  "dye-manzanita": ["shed/fallen only, some species rare"],
+  "dye-one-seed-juniper": ["dye only, do not ingest", "not savin juniper"],
   "dye-madrone": ["shed bark only"],
   "dye-rabbitbrush": ["possible contact sensitivity", "dye only"],
-  "dye-scotch-broom": ["alkaloids — do not ingest"],
-  "dye-spanish-moss": ["rinse — may harbor chiggers/mites"],
-  "dye-toyon": ["cyanide fumes — simmer outdoors", "do not ingest"],
-  "dye-wild-fennel": ["poison-hemlock lookalike — confirm ID", "do not ingest"],
-  "dye-dyers-woad": ["caustic vat (lye)", "removal only — bag seed heads"],
-  "dye-mountain-mahogany": ["cyanogenic foliage — do not ingest", "pruned/fallen bark only"],
-  "ink-carolina-redroot": ["toxic — do not ingest", "observe only"],
+  "dye-scotch-broom": ["alkaloids, do not ingest"],
+  "dye-spanish-moss": ["rinse, may harbor chiggers/mites"],
+  "dye-toyon": ["cyanide fumes, simmer outdoors", "do not ingest"],
+  "dye-wild-fennel": ["poison-hemlock lookalike, confirm ID", "do not ingest"],
+  "dye-dyers-woad": ["caustic vat (lye)", "removal only, bag seed heads"],
+  "dye-mountain-mahogany": ["cyanogenic foliage, do not ingest", "pruned/fallen bark only"],
+  "ink-carolina-redroot": ["toxic, do not ingest", "observe only"],
   "ink-tanoak": ["dead/felled wood only", "mind SOD quarantine"],
-  "ink-western-redcedar": ["culturally sacred — observe only"],
-  "ink-wolf-lichen": ["toxic (vulpinic acid)", "slow-growing — observe only"],
+  "ink-western-redcedar": ["culturally sacred, observe only"],
+  "ink-wolf-lichen": ["toxic (vulpinic acid)", "slow-growing, observe only"],
   // ---- 2026-06 fungal dyes (dye use only; see docs/mushroom-inks-research.md) ----
-  "ink-dyers-polypore": ["dye use only — do not eat", "seasonal fruiting — pin is not a standing harvest", "advanced process — iron modifier is caustic"],
-  "ink-turkey-tail": ["dye use only — do not eat", "identify carefully — non-toxic lookalikes"],
-  "ink-artists-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
-  "ink-red-belted-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
-  "ink-tinder-conk": ["dye use only — do not eat", "identify carefully — similar conks"],
-  "ink-chicken-of-the-woods": ["dye use only — do not eat here", "identify carefully — toxic lookalike (jack-o'-lantern)", "seasonal fruiting — pin is not a standing harvest"],
+  "ink-dyers-polypore": ["dye use only, do not eat", "seasonal fruiting, pin is not a standing harvest", "advanced process, iron modifier is caustic"],
+  "ink-turkey-tail": ["dye use only, do not eat", "identify carefully, non-toxic lookalikes"],
+  "ink-artists-conk": ["dye use only, do not eat", "identify carefully, similar conks"],
+  "ink-red-belted-conk": ["dye use only, do not eat", "identify carefully, similar conks"],
+  "ink-tinder-conk": ["dye use only, do not eat", "identify carefully, similar conks"],
+  "ink-chicken-of-the-woods": ["dye use only, do not eat here", "identify carefully, toxic lookalike (jack-o'-lantern)", "seasonal fruiting, pin is not a standing harvest"],
   // ---- Explicit "considered" decisions for established species (safety-tag
   // completeness gate, scripts/test_safety_tags.mjs). [] means reviewed with no
   // notable ingestion/contact hazard beyond general foraging caution. ----
@@ -421,10 +421,10 @@ const SAFETY_TAGS_BY_SPECIES = {
   pear: [],
   peach: ["remove pit"],
   fig: ["latex sap irritant"],
-  "ink-black-walnut": ["stains skin — wear gloves", "dye only"],
-  "ink-oak": ["tannin — dye only"],
-  "ink-hickory": ["stains skin — wear gloves", "dye only"],
-  "ink-sumac": ["lookalikes — avoid poison sumac", "dye only"],
+  "ink-black-walnut": ["stains skin, wear gloves", "dye only"],
+  "ink-oak": ["tannin, dye only"],
+  "ink-hickory": ["stains skin, wear gloves", "dye only"],
+  "ink-sumac": ["lookalikes, avoid poison sumac", "dye only"],
   "ink-goldenrod": ["dye only"],
   "ink-osage-orange": ["milky sap irritant", "dye only"],
   "ink-autumn-olive": ["invasive", "dye only"],
@@ -433,7 +433,7 @@ const SAFETY_TAGS_BY_SPECIES = {
   "dye-cliffrose": ["dye only"],
   "dye-coyote-brush": ["dye only"],
   "dye-douglas-fir": ["dye only"],
-  "dye-greenthread": ["dye only — traditionally a beverage; treat here as dye"],
+  "dye-greenthread": ["dye only, traditionally a beverage; treat here as dye"],
   "dye-plains-coreopsis": ["dye only"],
   "dye-alder": ["dye only"],
   "dye-wax-myrtle": ["dye only"]
@@ -445,31 +445,31 @@ const SAFETY_TAGS_BY_SPECIES = {
 // ("confirm ID before eating", "urushiol — contact dermatitis") pass through
 // unchanged. Expansions clarify the existing tag only — no new safety claims.
 const SAFETY_TAG_SENTENCES = {
-  "lookalikes": "has lookalikes — confirm identification",
-  "deadly lookalike": "deadly lookalike exists — expert identification required",
+  "lookalikes": "has lookalikes, confirm identification",
+  "deadly lookalike": "deadly lookalike exists, expert identification required",
   "remove pit": "remove the pit before eating",
   "remove seeds": "remove the seeds before eating",
-  "spines": "spines — handle with gloves",
-  "thorns": "thorns — handle with care",
-  "spines/glochids": "spines and glochids — wear thick gloves",
-  "glochids/spines": "glochids and spines — wear thick gloves",
-  "invasive": "invasive — removal helps native habitat",
+  "spines": "spines, handle with gloves",
+  "thorns": "thorns, handle with care",
+  "spines/glochids": "spines and glochids, wear thick gloves",
+  "glochids/spines": "glochids and spines, wear thick gloves",
+  "invasive": "invasive, removal helps native habitat",
   "ventilate": "work in a ventilated space",
   "do not ingest": "do not ingest any part",
-  "dye only": "dye use only — not for eating",
-  "observe only": "observe only — do not harvest",
+  "dye only": "dye use only, not for eating",
+  "observe only": "observe only, do not harvest",
   "wear gloves": "wear gloves when handling",
-  "stains skin": "stains skin — wear gloves",
-  "hard shell": "hard shell — crack with care",
-  "toxic parts": "some parts are toxic — know which before use",
+  "stains skin": "stains skin, wear gloves",
+  "hard shell": "hard shell, crack with care",
+  "toxic parts": "some parts are toxic, know which before use",
   "never burn": "never burn this material",
-  "drug interactions": "may interact with medications — check first",
+  "drug interactions": "may interact with medications, check first",
   "avoid pregnancy": "avoid during pregnancy",
-  "external use only": "external use only — do not ingest",
+  "external use only": "external use only, do not ingest",
   "ripe fruit only": "only fully ripe fruit is edible",
   "salicylate content": "contains salicylates (the aspirin family)",
-  "conservation concern": "conservation concern — harvest sparingly, if at all",
-  "over-harvest concern": "over-harvest concern — take lightly",
+  "conservation concern": "conservation concern, harvest sparingly, if at all",
+  "over-harvest concern": "over-harvest concern, take lightly",
   "milky sap irritant": "milky sap can irritate skin",
   "latex sap irritant": "latex sap can irritate skin",
   "staining hulls": "hulls stain skin and clothing",
@@ -480,11 +480,11 @@ const SAFETY_TAG_SENTENCES = {
   "dead/felled wood only": "collect from dead or felled wood only",
   "shed bark only": "collect naturally shed bark only",
   "not savin juniper": "confirm it is not savin juniper (toxic)",
-  "not white sage (Salvia)": "confirm it is not white sage (Salvia) — culturally protected",
+  "not white sage (Salvia)": "confirm it is not white sage (Salvia), culturally protected",
   "ragweed confusion (pollen allergy)": "can be confused with ragweed (pollen allergy)",
   "mind SOD quarantine": "observe sudden-oak-death quarantine rules",
-  "fugitive color": "fugitive color — fades with light",
-  "tannin stains skin": "tannin stains skin — wear gloves",
+  "fugitive color": "fugitive color, fades with light",
+  "tannin stains skin": "tannin stains skin, wear gloves",
   "eat in moderation": "eat in moderation",
   "not for children": "not for children"
 };
@@ -903,7 +903,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [54801],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Native bottomland tree; ID by sandpaper-rough leaves. Eat only fully ripe deep purple-black fruit — unripe fruit, raw leaves/shoots, and the milky sap are toxic raw (stomach upset plus reported nervous-system effects) and the sap irritates skin. Don't confuse the dark fruit with pokeweed (a herbaceous plant with magenta stems and round berries in hanging clusters). Native and locally protected — take only ripe or fallen fruit and don't cut the tree."
+    notes: "Native bottomland tree; ID by sandpaper-rough leaves. Eat only fully ripe deep purple-black fruit, unripe fruit, raw leaves/shoots, and the milky sap are toxic raw (stomach upset plus reported nervous-system effects) and the sap irritates skin. Don't confuse the dark fruit with pokeweed (a herbaceous plant with magenta stems and round berries in hanging clusters). Native and locally protected, take only ripe or fallen fruit and don't cut the tree."
   },
   {
     id: "thimbleberry",
@@ -915,7 +915,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [51646],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Thornless montane/Pacific bramble with large maple-like fuzzy leaves and a soft red fruit that pulls off like a thimble cap. Eat only ripe fruit (not leaves or shoots). Confirm the aggregate-cap structure to avoid same-habitat red baneberry (deadly — single shiny berries on a stalk) and red elderberry; avoid poison oak/ivy contact while picking."
+    notes: "Thornless montane/Pacific bramble with large maple-like fuzzy leaves and a soft red fruit that pulls off like a thimble cap. Eat only ripe fruit (not leaves or shoots). Confirm the aggregate-cap structure to avoid same-habitat red baneberry (deadly, single shiny berries on a stalk) and red elderberry; avoid poison oak/ivy contact while picking."
   },
   {
     id: "salmonberry",
@@ -927,7 +927,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [47543],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Pacific Northwest bramble of moist coastal forests and stream banks; raspberry-like orange-to-red fruit that detaches like a cap. Eat ripe fruit. Distinguish from red elderberry (a woody shrub with compound leaves and conical clusters — toxic raw)."
+    notes: "Pacific Northwest bramble of moist coastal forests and stream banks; raspberry-like orange-to-red fruit that detaches like a cap. Eat ripe fruit. Distinguish from red elderberry (a woody shrub with compound leaves and conical clusters, toxic raw)."
   },
   {
     id: "himalayan-blackberry",
@@ -939,7 +939,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [61317],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Aggressive West Coast invasive forming dense thorny thickets — harvest freely as invasive removal. Eat fully ripe black fruit. The bumpy multi-bead aggregate berry distinguishes true blackberry from smooth-skinned toxic lookalikes (pokeweed, nightshade, Virginia creeper); mind the stout recurved thorns."
+    notes: "Aggressive West Coast invasive forming dense thorny thickets, harvest freely as invasive removal. Eat fully ripe black fruit. The bumpy multi-bead aggregate berry distinguishes true blackberry from smooth-skinned toxic lookalikes (pokeweed, nightshade, Virginia creeper); mind the stout recurved thorns."
   },
   {
     id: "cranberry",
@@ -950,7 +950,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [63749, 126560],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Trailing wiry vine with tiny leathery leaves and firm tart red berries on acidic bog/fen moss; classic harvest after first frost. Reject any berry on an UPRIGHT shrub on the same moss hummock — bog rosemary (Andromeda) and bog laurel (Kalmia) are toxic in all parts. Peatlands are sensitive; tread lightly. May interact with warfarin."
+    notes: "Trailing wiry vine with tiny leathery leaves and firm tart red berries on acidic bog/fen moss; classic harvest after first frost. Reject any berry on an UPRIGHT shrub on the same moss hummock, bog rosemary (Andromeda) and bog laurel (Kalmia) are toxic in all parts. Peatlands are sensitive; tread lightly. May interact with warfarin."
   },
   {
     id: "red-elderberry",
@@ -961,7 +961,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [57824],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Bright-red berries in conical clusters (not the flat-topped clusters of blue/black elderberry), and more toxic raw than other elderberries. Eat only fully ripe berries, cooked, with all seeds removed — the seeds carry the highest toxin load; never eat raw fruit, stems, or leaves. DEADLY lookalike: red baneberry (Actaea rubra), a herbaceous plant whose red berries can be fatal."
+    notes: "Bright-red berries in conical clusters (not the flat-topped clusters of blue/black elderberry), and more toxic raw than other elderberries. Eat only fully ripe berries, cooked, with all seeds removed, the seeds carry the highest toxin load; never eat raw fruit, stems, or leaves. DEADLY lookalike: red baneberry (Actaea rubra), a herbaceous plant whose red berries can be fatal."
   },
   {
     id: "buffaloberry",
@@ -972,7 +972,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [79071],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Northern-plains streambank shrub with silvery scaly opposite leaves, thorns, and clustered red berries; best after frost. Raw berries foam from saponins and act as a laxative in quantity — eat in moderation or cook. Distinguish from invasive Russian olive (alternate leaves) and from bush honeysuckle (no thorns or silvery scales; mildly toxic)."
+    notes: "Northern-plains streambank shrub with silvery scaly opposite leaves, thorns, and clustered red berries; best after frost. Raw berries foam from saponins and act as a laxative in quantity, eat in moderation or cook. Distinguish from invasive Russian olive (alternate leaves) and from bush honeysuckle (no thorns or silvery scales; mildly toxic)."
   },
   {
     id: "juniper-berry",
@@ -983,7 +983,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [47574],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Culinary spice from the soft ripe blue-black cones of edible junipers (common, one-seed, alligator, California, eastern red cedar), used sparingly. NEVER eat ornamental savin juniper (Juniperus sabina) or cade (J. oxycedrus, red-brown berries) — toxic. Avoid in pregnancy/breastfeeding and with kidney disease; interacts with diabetes, diuretic, lithium, and blood-thinning medications."
+    notes: "Culinary spice from the soft ripe blue-black cones of edible junipers (common, one-seed, alligator, California, eastern red cedar), used sparingly. NEVER eat ornamental savin juniper (Juniperus sabina) or cade (J. oxycedrus, red-brown berries), toxic. Avoid in pregnancy/breastfeeding and with kidney disease; interacts with diabetes, diuretic, lithium, and blood-thinning medications."
   },
   {
     id: "kinnikinnick",
@@ -994,7 +994,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [68049],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Low trailing evergreen mat-shrub with leathery paddle leaves and dry, mealy red berries best cooked. The berries are bland but edible; the leaves are a traditional medicine/smoking herb (not a food) and contain hydroquinone. Slow-growing — harvest lightly."
+    notes: "Low trailing evergreen mat-shrub with leathery paddle leaves and dry, mealy red berries best cooked. The berries are bland but edible; the leaves are a traditional medicine/smoking herb (not a food) and contain hydroquinone. Slow-growing, harvest lightly."
   },
   {
     id: "wintergreen",
@@ -1005,7 +1005,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [62376],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Low evergreen woodland groundcover; crush a leaf or berry to confirm the strong wintergreen scent (separates it from scentless partridgeberry). Contains aspirin-like methyl salicylate — eat only small amounts and avoid with aspirin sensitivity or blood thinners, in pregnancy/breastfeeding, and in children. DEADLY lookalike: baneberry (Actaea), red berries in the same woods, separated by aroma, taller stature, and compound leaves."
+    notes: "Low evergreen woodland groundcover; crush a leaf or berry to confirm the strong wintergreen scent (separates it from scentless partridgeberry). Contains aspirin-like methyl salicylate, eat only small amounts and avoid with aspirin sensitivity or blood thinners, in pregnancy/breastfeeding, and in children. DEADLY lookalike: baneberry (Actaea), red berries in the same woods, separated by aroma, taller stature, and compound leaves."
   },
   {
     id: "chokecherry",
@@ -1017,7 +1017,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [54835],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Elongated drooping clusters of pea-sized fruit ripening dark on finely toothed leaves. Use only ripe flesh, cooked; never crush or eat the pits, leaves, twigs, or bark (cyanogenic). Confirm the single hard pit and bottlebrush cluster — toxic lookalikes include buckthorn, red elderberry, and pokeweed/nightshade (the last two can be fatal). Culturally significant to Plains and northern tribes."
+    notes: "Elongated drooping clusters of pea-sized fruit ripening dark on finely toothed leaves. Use only ripe flesh, cooked; never crush or eat the pits, leaves, twigs, or bark (cyanogenic). Confirm the single hard pit and bottlebrush cluster, toxic lookalikes include buckthorn, red elderberry, and pokeweed/nightshade (the last two can be fatal). Culturally significant to Plains and northern tribes."
   },
   {
     id: "pin-cherry",
@@ -1029,7 +1029,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [54833],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Bright-red single-seeded cherries on long stalks, on a fast-growing pioneer tree. Ripe flesh is edible (tart; usually cooked) — never crush or eat the pits, leaves, or bark (cyanogenic, like all wild cherries). Distinguish from buckthorn and bush honeysuckle berries."
+    notes: "Bright-red single-seeded cherries on long stalks, on a fast-growing pioneer tree. Ripe flesh is edible (tart; usually cooked), never crush or eat the pits, leaves, or bark (cyanogenic, like all wild cherries). Distinguish from buckthorn and bush honeysuckle berries."
   },
   {
     id: "rose-hips",
@@ -1051,7 +1051,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [51148],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Small red-to-black pomes ('haws') on thorny shrubs. The flesh is edible — never crush or eat the cyanogenic seeds, and mind the sharp thorns (puncture-infection risk). Distinguish from blackthorn/sloe, thornless buckthorn, and firethorn. Hawthorn interacts with heart medications (digoxin, beta-blockers)."
+    notes: "Small red-to-black pomes ('haws') on thorny shrubs. The flesh is edible, never crush or eat the cyanogenic seeds, and mind the sharp thorns (puncture-infection risk). Distinguish from blackthorn/sloe, thornless buckthorn, and firethorn. Hawthorn interacts with heart medications (digoxin, beta-blockers)."
   },
   {
     id: "mayapple",
@@ -1062,7 +1062,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [49288],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Harvest ONLY the fully ripe (soft, yellow, often fallen) fruit; remove the seeds and skin and eat just a small amount (laxative in excess). EVERY other part — leaves, stem, root, seeds, and green unripe fruit — contains podophyllotoxin and is seriously toxic (potentially fatal, no antidote). Abortifacient: avoid in pregnancy and with chemotherapy/cell-cycle drugs; handling the foliage or root can irritate skin. Harvest sparingly from slow-spreading colonies."
+    notes: "Harvest ONLY the fully ripe (soft, yellow, often fallen) fruit; remove the seeds and skin and eat just a small amount (laxative in excess). EVERY other part, leaves, stem, root, seeds, and green unripe fruit, contains podophyllotoxin and is seriously toxic (potentially fatal, no antidote). Abortifacient: avoid in pregnancy and with chemotherapy/cell-cycle drugs; handling the foliage or root can irritate skin. Harvest sparingly from slow-spreading colonies."
   },
   {
     id: "prickly-pear",
@@ -1073,7 +1073,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [47902],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Ripe red-to-purple tunas pull free easily from the pad; burn, scrub, and peel to remove the tiny barbed glochids before eating, and chew or spit the hard seeds (impaction risk in quantity). Pads carry oxalates. Never eat a milky-sap succulent — that signals a toxic non-cactus. Some native Opuntia are protected; harvest abundant or naturalized stands and check local status."
+    notes: "Ripe red-to-purple tunas pull free easily from the pad; burn, scrub, and peel to remove the tiny barbed glochids before eating, and chew or spit the hard seeds (impaction risk in quantity). Pads carry oxalates. Never eat a milky-sap succulent, that signals a toxic non-cactus. Some native Opuntia are protected; harvest abundant or naturalized stands and check local status."
   },
   {
     id: "pinyon-pine-nut",
@@ -1084,7 +1084,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [57902, 57892],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Large wingless seeds from pinyon cones in pinyon-juniper woodland; edible raw or roasted. Don't confuse pinyon with the juniper 'berries' growing alongside, and never eat ornamental savin juniper or yew arils (deadly seed). Pinyon woodlands face drought die-off and the nuts are a vital Indigenous (Shoshone/Paiute/Washo/Navajo/Hopi) and wildlife food — take only a share and honor tribal collecting rights; occurrence is not permission."
+    notes: "Large wingless seeds from pinyon cones in pinyon-juniper woodland; edible raw or roasted. Don't confuse pinyon with the juniper 'berries' growing alongside, and never eat ornamental savin juniper or yew arils (deadly seed). Pinyon woodlands face drought die-off and the nuts are a vital Indigenous (Shoshone/Paiute/Washo/Navajo/Hopi) and wildlife food, take only a share and honor tribal collecting rights; occurrence is not permission."
   },
   {
     id: "mesquite-bean",
@@ -1095,7 +1095,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [1493090],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Grind the sweet ripe pod pulp (not the hard seeds) into flour. Food-safety critical: pick dry, brittle pods straight off the tree BEFORE the summer monsoon and never wet or wash them — rain-dampened pods can carry aflatoxin even when they look clean; reject bitter, chalky, or mold-spotted pods. Confirm true mesquite: many desert legumes (mescal bean, coral bean, rattlebox, catclaw, paloverde, senna) are toxic. A keystone wildlife and Indigenous food."
+    notes: "Grind the sweet ripe pod pulp (not the hard seeds) into flour. Food-safety critical: pick dry, brittle pods straight off the tree BEFORE the summer monsoon and never wet or wash them, rain-dampened pods can carry aflatoxin even when they look clean; reject bitter, chalky, or mold-spotted pods. Confirm true mesquite: many desert legumes (mescal bean, coral bean, rattlebox, catclaw, paloverde, senna) are toxic. A keystone wildlife and Indigenous food."
   },
   {
     id: "chinquapin",
@@ -1106,7 +1106,7 @@ const foodSpeciesCatalog = [
     inatTaxonIds: [53386, 84363],
     parkLimit: "Confirm local rules; not listed in the encoded Shenandoah compendium allowance.",
     shenandoahAllowed: false,
-    notes: "Small sweet chestnut-relative nut in a dense, sea-urchin-spiny bur; collect fallen, opened burs (wear gloves). DEADLY-ish lookalike: buckeye/horse chestnut (Aesculus) has a smooth leathery husk with one large bitter nut, and its toxin survives cooking — only correct ID is safe. Note the name collision with chinquapin oak (an acorn, not a bur). Some chinquapin lineages are rare or blight-declining — harvest only abundant stands and leave seed for wildlife."
+    notes: "Small sweet chestnut-relative nut in a dense, sea-urchin-spiny bur; collect fallen, opened burs (wear gloves). DEADLY-ish lookalike: buckeye/horse chestnut (Aesculus) has a smooth leathery husk with one large bitter nut, and its toxin survives cooking, only correct ID is safe. Note the name collision with chinquapin oak (an acorn, not a bur). Some chinquapin lineages are rare or blight-declining, harvest only abundant stands and leave seed for wildlife."
   }
 ];
 
@@ -1252,7 +1252,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [54802],
     shenandoahAllowed: false,
     usedParts: "Ripe blue-black drupes.",
-    notes: "Ripe blue-black drupes make a dusky grape-purple ink; the fruit is edible but very sour. Leave plenty — important fall food for birds."
+    notes: "Ripe blue-black drupes make a dusky grape-purple ink; the fruit is edible but very sour. Leave plenty, important fall food for birds."
   },
   // ---- 2026-06 ink/dye expansion beyond the temperate East (candidates pass).
   // Inks (berry/fruit/pigment) ----
@@ -1265,7 +1265,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [61317],
     shenandoahAllowed: false,
     usedParts: "Ripe black berries.",
-    notes: "Crushed ripe berries give a quick purple ink — but it is fugitive (fades toward gray), so treat it as casual/ephemeral. This Pacific-Northwest shrub invasive is good to remove."
+    notes: "Crushed ripe berries give a quick purple ink, but it is fugitive (fades toward gray), so treat it as casual/ephemeral. This Pacific-Northwest shrub invasive is good to remove."
   },
   {
     id: "ink-prickly-pear",
@@ -1276,7 +1276,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [78269, 78264],
     shenandoahAllowed: false,
     usedParts: "Ripe fruit (tunas).",
-    notes: "Ripe tunas yield a vivid magenta betalain ink; handle glochid spines with tongs and gloves. The color is fugitive, and it is the plant's own pigment — not cochineal."
+    notes: "Ripe tunas yield a vivid magenta betalain ink; handle glochid spines with tongs and gloves. The color is fugitive, and it is the plant's own pigment, not cochineal."
   },
   {
     id: "ink-rouge-plant",
@@ -1287,7 +1287,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [133291],
     shenandoahAllowed: false,
     usedParts: "Ripe red berries.",
-    notes: "Ripe berries make a fugitive rouge-red ink. The berries are toxic if eaten — do not ingest, and expect stained hands."
+    notes: "Ripe berries make a fugitive rouge-red ink. The berries are toxic if eaten, do not ingest, and expect stained hands."
   },
   {
     id: "ink-bee-plant",
@@ -1298,7 +1298,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [1415100],
     shenandoahAllowed: false,
     usedParts: "Whole flowering plant, boiled to a resin.",
-    notes: "Boiled down to a black resin, this self-seeding annual is the ancestral Puebloan pottery-paint black (and a Navajo yellow-green dye). Cutting plants is low-impact; pungent — paint/dye use only."
+    notes: "Boiled down to a black resin, this self-seeding annual is the ancestral Puebloan pottery-paint black (and a Navajo yellow-green dye). Cutting plants is low-impact; pungent, paint/dye use only."
   },
   {
     id: "ink-brazilian-pepper",
@@ -1309,7 +1309,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [130872],
     shenandoahAllowed: false,
     usedParts: "Ripe red berries.",
-    notes: "A Florida-prohibited invasive worth removing — its berries give a red stain, but it is a poison-ivy relative: urushiol causes contact dermatitis, and the smoke is hazardous. Gloves; never burn."
+    notes: "A Florida-prohibited invasive worth removing, its berries give a red stain, but it is a poison-ivy relative: urushiol causes contact dermatitis, and the smoke is hazardous. Gloves; never burn."
   },
   {
     id: "ink-oregon-grape",
@@ -1320,7 +1320,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [126887, 133104, 75752, 273862],
     shenandoahAllowed: false,
     usedParts: "Ripe dusky-blue berries (not the roots).",
-    notes: "Ripe dusky-blue berries make a pH-shifting blue-purple ink. The bright berberine yellow lives in the roots and bark, but digging kills these slow-growing shrubs — use berries, not roots."
+    notes: "Ripe dusky-blue berries make a pH-shifting blue-purple ink. The bright berberine yellow lives in the roots and bark, but digging kills these slow-growing shrubs, use berries, not roots."
   },
   // ---- Dyes (foliage / bark / whole-plant) ----
   {
@@ -1332,7 +1332,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [75598, 53357, 52854],
     shenandoahAllowed: false,
     usedParts: "Leaves and soft stems.",
-    notes: "Sagebrush and mugwort foliage give yellow-to-olive dye (greener with iron); light tip-harvest is negligible. This is Artemisia, NOT white sage (Salvia) — don't confuse the two."
+    notes: "Sagebrush and mugwort foliage give yellow-to-olive dye (greener with iron); light tip-harvest is negligible. This is Artemisia, NOT white sage (Salvia), don't confuse the two."
   },
   {
     id: "dye-mormon-tea",
@@ -1343,7 +1343,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [57891],
     shenandoahAllowed: false,
     usedParts: "Green jointed twigs.",
-    notes: "Green Ephedra twigs give a soft desert tan; clip from the abundant stem mass and leave the plant rooted. Dye-only — some Ephedra carry alkaloids, so do not ingest."
+    notes: "Green Ephedra twigs give a soft desert tan; clip from the abundant stem mass and leave the plant rooted. Dye-only, some Ephedra carry alkaloids, so do not ingest."
   },
   {
     id: "dye-camphor",
@@ -1354,7 +1354,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [1591063],
     shenandoahAllowed: false,
     usedParts: "Mature/old leaves and leaf litter.",
-    notes: "Old leaves of this Florida Category-I invasive give a dark brown; removal supports control. Strong camphor volatiles — ventilate; toxic if ingested."
+    notes: "Old leaves of this Florida Category-I invasive give a dark brown; removal supports control. Strong camphor volatiles, ventilate; toxic if ingested."
   },
   {
     id: "dye-canaigre",
@@ -1365,7 +1365,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [58291],
     shenandoahAllowed: false,
     usedParts: "Tannin-rich tuberous roots.",
-    notes: "Tannin-rich tubers give a warm brown and act as their own mordant; a partial dig leaves the colony intact. High in tannin and oxalate — do not ingest."
+    notes: "Tannin-rich tubers give a warm brown and act as their own mordant; a partial dig leaves the colony intact. High in tannin and oxalate, do not ingest."
   },
   {
     id: "dye-cliffrose",
@@ -1376,7 +1376,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [78787],
     shenandoahAllowed: false,
     usedParts: "Leafy twig tips.",
-    notes: "Leafy twig tips give a Navajo gold. Abundant, but also valuable wildlife browse and erosion control — clip tips lightly."
+    notes: "Leafy twig tips give a Navajo gold. Abundant, but also valuable wildlife browse and erosion control, clip tips lightly."
   },
   {
     id: "dye-st-johns-wort",
@@ -1387,7 +1387,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [56077],
     shenandoahAllowed: false,
     usedParts: "Flowering tops; crushed dark glands for red.",
-    notes: "Flowering tops give yellow; the dark petal glands a surprising red. This invasive 'Klamath weed' is good to remove — but hypericin causes photosensitivity, so wear gloves."
+    notes: "Flowering tops give yellow; the dark petal glands a surprising red. This invasive 'Klamath weed' is good to remove, but hypericin causes photosensitivity, so wear gloves."
   },
   {
     id: "dye-coyote-brush",
@@ -1409,7 +1409,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [53197],
     shenandoahAllowed: false,
     usedParts: "Yellow forking taproot.",
-    notes: "The yellow taproot of this weedy naturalized dock gives a brown dye — and digging it out doubles as removal. Leaves are high in oxalic acid; use the root."
+    notes: "The yellow taproot of this weedy naturalized dock gives a brown dye, and digging it out doubles as removal. Leaves are high in oxalic acid; use the root."
   },
   {
     id: "dye-douglas-fir",
@@ -1420,7 +1420,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [48256],
     shenandoahAllowed: false,
     usedParts: "Fallen cones, bark, and mill waste.",
-    notes: "Fallen cones and bark give peach-to-tan dye with zero impact on living trees — a pure waste-stream pigment from the forest floor and lumber yards."
+    notes: "Fallen cones and bark give peach-to-tan dye with zero impact on living trees, a pure waste-stream pigment from the forest floor and lumber yards."
   },
   {
     id: "dye-eucalyptus",
@@ -1464,7 +1464,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [47179],
     shenandoahAllowed: false,
     usedParts: "Shed bark and fallen leaves.",
-    notes: "Shed red bark and fallen leaves give rosy-browns. Listed at genus level — use shed and fallen material of common species only; never dig or cut whole plants (some are rare)."
+    notes: "Shed red bark and fallen leaves give rosy-browns. Listed at genus level, use shed and fallen material of common species only; never dig or cut whole plants (some are rare)."
   },
   {
     id: "dye-one-seed-juniper",
@@ -1475,7 +1475,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [120145],
     shenandoahAllowed: false,
     usedParts: "Shed bark, twigs, berries; green-needle ash as mordant.",
-    notes: "Shed bark, twigs, and berries give tan and brown; the green-needle ash is a traditional Navajo alkaline mordant. Dye-only — not for ingestion; not savin juniper (J. sabina)."
+    notes: "Shed bark, twigs, and berries give tan and brown; the green-needle ash is a traditional Navajo alkaline mordant. Dye-only, not for ingestion; not savin juniper (J. sabina)."
   },
   {
     id: "dye-madrone",
@@ -1486,7 +1486,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [51046],
     shenandoahAllowed: false,
     usedParts: "Naturally shed bark sheets.",
-    notes: "Madrone sheds its cinnamon bark in thin sheets each summer — collect the sloughed sheets off the ground for a pink-brown dye. Don't strip living bark (it is root-rot sensitive)."
+    notes: "Madrone sheds its cinnamon bark in thin sheets each summer, collect the sloughed sheets off the ground for a pink-brown dye. Don't strip living bark (it is root-rot sensitive)."
   },
   {
     id: "dye-plains-coreopsis",
@@ -1497,7 +1497,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [76445],
     shenandoahAllowed: false,
     usedParts: "Flower heads in bloom.",
-    notes: "'Tinctoria' means 'used for dyeing' — the flowers give reliable gold-to-orange. A heavy self-seeder, so flower harvest and garden patches are low-impact. (Use this, not the rare giant coreopsis.)"
+    notes: "'Tinctoria' means 'used for dyeing', the flowers give reliable gold-to-orange. A heavy self-seeder, so flower harvest and garden patches are low-impact. (Use this, not the rare giant coreopsis.)"
   },
   {
     id: "dye-alder",
@@ -1530,7 +1530,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [48538],
     shenandoahAllowed: false,
     usedParts: "Flowers and flowering tips.",
-    notes: "Blossoms give a buttery yellow, and cutting this top-priority noxious weed supports control. Seeds and foliage carry toxic alkaloids — do not ingest."
+    notes: "Blossoms give a buttery yellow, and cutting this top-priority noxious weed supports control. Seeds and foliage carry toxic alkaloids, do not ingest."
   },
   {
     id: "dye-wax-myrtle",
@@ -1552,7 +1552,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [49569],
     shenandoahAllowed: false,
     usedParts: "Storm-fallen strands, off the ground.",
-    notes: "Storm-fallen strands gathered off the ground give tan-to-brown with minimal impact. Rinse and inspect — wild moss can harbor chiggers and mites."
+    notes: "Storm-fallen strands gathered off the ground give tan-to-brown with minimal impact. Rinse and inspect, wild moss can harbor chiggers and mites."
   },
   {
     id: "dye-toyon",
@@ -1563,7 +1563,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [53405],
     shenandoahAllowed: false,
     usedParts: "Leaves and bark.",
-    notes: "Leaves and bark give red-brown — but as a Rosaceae the heated bath releases cyanide fumes, so simmer OUTDOORS only. Abundant and resprouting; do not ingest."
+    notes: "Leaves and bark give red-brown, but as a Rosaceae the heated bath releases cyanide fumes, so simmer OUTDOORS only. Abundant and resprouting; do not ingest."
   },
   {
     id: "dye-wild-fennel",
@@ -1574,7 +1574,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [53052],
     shenandoahAllowed: false,
     usedParts: "Fronds, flowers, seed heads.",
-    notes: "Fronds and seed heads of this Cal-IPC invasive give a luteolin yellow; removal helps native habitat. Confirm ID — it resembles toxic poison hemlock (fennel smells of licorice)."
+    notes: "Fronds and seed heads of this Cal-IPC invasive give a luteolin yellow; removal helps native habitat. Confirm ID, it resembles toxic poison hemlock (fennel smells of licorice)."
   },
   {
     id: "dye-dyers-woad",
@@ -1585,7 +1585,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [77509],
     shenandoahAllowed: false,
     usedParts: "Leaves (eradication harvest only).",
-    notes: "Leaves give an indigo-type blue — but this is an aggressive noxious weed: harvest only to eradicate existing stands and bag the seed heads. The vat uses caustic lye; dye-only."
+    notes: "Leaves give an indigo-type blue, but this is an aggressive noxious weed: harvest only to eradicate existing stands and bag the seed heads. The vat uses caustic lye; dye-only."
   },
   {
     id: "dye-mountain-mahogany",
@@ -1596,7 +1596,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [52378],
     shenandoahAllowed: false,
     usedParts: "Bark from pruned or fallen branches.",
-    notes: "Bark from pruned or fallen branches gives a deep reddish-brown; do not dig the taproot (it kills the slow shrub). An important Navajo/Pueblo dye — handle respectfully; foliage is cyanogenic."
+    notes: "Bark from pruned or fallen branches gives a deep reddish-brown; do not dig the taproot (it kills the slow shrub). An important Navajo/Pueblo dye, handle respectfully; foliage is cyanogenic."
   },
   // ---- Educational-only / observe-only (cultural, regional, or conservation
   // knowledge required; published with an explicit stamp, not as harvest targets) ----
@@ -1609,8 +1609,8 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [164401],
     shenandoahAllowed: false,
     educationalOnly: true,
-    usedParts: "Rhizome/root — observe only; do not dig wild.",
-    notes: "Educational only. A documented Indigenous red dye, but the color is in the root of a wetland perennial — digging destroys the plant and its bog habitat, and the plant is toxic. Observe; do not harvest wild."
+    usedParts: "Rhizome/root, observe only; do not dig wild.",
+    notes: "Educational only. A documented Indigenous red dye, but the color is in the root of a wetland perennial, digging destroys the plant and its bog habitat, and the plant is toxic. Observe; do not harvest wild."
   },
   {
     id: "ink-tanoak",
@@ -1622,7 +1622,7 @@ const inkSpeciesCatalog = [
     shenandoahAllowed: false,
     educationalOnly: true,
     usedParts: "Bark from already-dead/felled wood only.",
-    notes: "Educational only. Bark gives brown to iron-black, but the tree is in steep decline from Sudden Oak Death and is a cultural acorn staple — use only already-dead or felled wood, and mind SOD quarantine rules."
+    notes: "Educational only. Bark gives brown to iron-black, but the tree is in steep decline from Sudden Oak Death and is a cultural acorn staple, use only already-dead or felled wood, and mind SOD quarantine rules."
   },
   {
     id: "ink-western-redcedar",
@@ -1633,8 +1633,8 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [48252],
     shenandoahAllowed: false,
     educationalOnly: true,
-    usedParts: "Bark — observe only; off-limits for casual harvest.",
-    notes: "Educational only. A sacred 'tree of life' to PNW Coast Salish nations; bark harvest can kill these climate-stressed trees. Listed to honor it — seek permission and local knowledge, not a how-to."
+    usedParts: "Bark, observe only; off-limits for casual harvest.",
+    notes: "Educational only. A sacred 'tree of life' to PNW Coast Salish nations; bark harvest can kill these climate-stressed trees. Listed to honor it, seek permission and local knowledge, not a how-to."
   },
   {
     id: "ink-wolf-lichen",
@@ -1645,8 +1645,8 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [54613],
     shenandoahAllowed: false,
     educationalOnly: true,
-    usedParts: "Wind-fallen branches only — observe only.",
-    notes: "Educational only. A vivid chartreuse-yellow lichen that grows ~4 mm a year and is toxic (vulpinic acid); over-collection has wiped out local stands. Observe only — use onion skins for yellow instead."
+    usedParts: "Wind-fallen branches only, observe only.",
+    notes: "Educational only. A vivid chartreuse-yellow lichen that grows ~4 mm a year and is toxic (vulpinic acid); over-collection has wiped out local stands. Observe only, use onion skins for yellow instead."
   },
   // ---- 2026-06 fungal dyes (Tier-A wood polypores; see docs/mushroom-inks-research.md).
   // Persistent/annual wood-decay brackets, non-toxic, muted yellow/gold/brown palette
@@ -1660,7 +1660,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [118084],
     shenandoahAllowed: false,
     usedParts: "Fresh or dried fruiting bodies, simmered for pigment on alum-mordanted wool.",
-    notes: "Dye use only — do not eat. The classic dye polypore: reliable yellows and golds on alum, and its signature green comes only from an iron modifier (a caustic, staining step). A velvety rust-brown annual bracket at the base of living or dead conifers; no deadly lookalike, but old specimens resemble other brown brackets (Inonotus, Fomitopsis) — none for eating either. Annual fruiting, so a pin marks a past fruiting, not a standing harvest."
+    notes: "Dye use only, do not eat. The classic dye polypore: reliable yellows and golds on alum, and its signature green comes only from an iron modifier (a caustic, staining step). A velvety rust-brown annual bracket at the base of living or dead conifers; no deadly lookalike, but old specimens resemble other brown brackets (Inonotus, Fomitopsis), none for eating either. Annual fruiting, so a pin marks a past fruiting, not a standing harvest."
   },
   {
     id: "ink-turkey-tail",
@@ -1671,7 +1671,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [54134],
     shenandoahAllowed: false,
     usedParts: "Fresh brackets, simmered for pigment on alum-mordanted wool (iron pushes toward greenish/rust).",
-    notes: "Dye use only — do not eat. The easiest dyer to find — thin, banded, year-round brackets on dead hardwood. Color is modest (tans and golds; greenish with iron). Non-toxic lookalikes include false turkey tail (Stereum ostrea) and Trichaptum; none are food. Identify carefully before harvesting."
+    notes: "Dye use only, do not eat. The easiest dyer to find, thin, banded, year-round brackets on dead hardwood. Color is modest (tans and golds; greenish with iron). Non-toxic lookalikes include false turkey tail (Stereum ostrea) and Trichaptum; none are food. Identify carefully before harvesting."
   },
   {
     id: "ink-artists-conk",
@@ -1682,7 +1682,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [48473],
     shenandoahAllowed: false,
     usedParts: "Fresh or dried perennial conk, simmered for pigment on alum-mordanted wool (iron deepens toward grey-brown).",
-    notes: "Dye use only — do not eat (it is woody and inedible regardless). A large perennial shelf polypore on dead or dying hardwood, visible year-round, so genuinely mappable. Gives warm browns. Similar conks (other Ganoderma, Fomitopsis) are likewise dye or medicinal, not casual food — identify carefully."
+    notes: "Dye use only, do not eat (it is woody and inedible regardless). A large perennial shelf polypore on dead or dying hardwood, visible year-round, so genuinely mappable. Gives warm browns. Similar conks (other Ganoderma, Fomitopsis) are likewise dye or medicinal, not casual food, identify carefully."
   },
   {
     id: "ink-red-belted-conk",
@@ -1693,7 +1693,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [877361, 495903, 877362],
     shenandoahAllowed: false,
     usedParts: "Fresh or dried perennial conk, simmered for pigment on alum-mordanted wool (iron shifts toward grey/olive).",
-    notes: "Dye use only — do not eat (woody). This maps the North American complex — F. mounceae, F. ochracea, and F. schrenkii — not the European \"Fomitopsis pinicola,\" which barely occurs here. A perennial banded conk with a red-orange margin on conifer and hardwood, visible year-round. Yellow/tan/brown palette; no deadly lookalike, but identify carefully."
+    notes: "Dye use only, do not eat (woody). This maps the North American complex, F. mounceae, F. ochracea, and F. schrenkii, not the European \"Fomitopsis pinicola,\" which barely occurs here. A perennial banded conk with a red-orange margin on conifer and hardwood, visible year-round. Yellow/tan/brown palette; no deadly lookalike, but identify carefully."
   },
   {
     id: "ink-tinder-conk",
@@ -1704,7 +1704,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [127510],
     shenandoahAllowed: false,
     usedParts: "Fresh or dried perennial conk (and its inner trama), simmered for pigment on alum-mordanted wool.",
-    notes: "Dye use only — do not eat (woody; also the traditional amadou / tinder fungus). A hoof-shaped perennial conk on hardwood, especially birch and beech, visible year-round. Yellows, golds, and browns; browner or greyer with iron. No deadly lookalike, but identify carefully before harvesting."
+    notes: "Dye use only, do not eat (woody; also the traditional amadou / tinder fungus). A hoof-shaped perennial conk on hardwood, especially birch and beech, visible year-round. Yellows, golds, and browns; browner or greyer with iron. No deadly lookalike, but identify carefully before harvesting."
   },
   {
     id: "ink-chicken-of-the-woods",
@@ -1715,7 +1715,7 @@ const inkSpeciesCatalog = [
     inatTaxonIds: [53713, 487301],
     shenandoahAllowed: false,
     usedParts: "Fresh brackets, simmered for pigment on alum-mordanted wool (iron dulls toward olive/brown).",
-    notes: "Listed here for DYE USE — its bright oranges, yellows, and golds — not as an eat-me signal. It is a popular edible when expertly identified and thoroughly cooked, but reactions are common, especially from brackets grown on conifer, eucalyptus, yew, or cedar. Toxic lookalike: the jack-o'-lantern (Omphalotus illudens) is gilled, clusters at tree bases, and causes serious GI illness — Laetiporus is pored (no gills), so check the underside. Annual fruiting; a pin marks a past fruiting, not a standing harvest."
+    notes: "Listed here for DYE USE, its bright oranges, yellows, and golds, not as an eat-me signal. It is a popular edible when expertly identified and thoroughly cooked, but reactions are common, especially from brackets grown on conifer, eucalyptus, yew, or cedar. Toxic lookalike: the jack-o'-lantern (Omphalotus illudens) is gilled, clusters at tree bases, and causes serious GI illness, Laetiporus is pored (no gills), so check the underside. Annual fruiting; a pin marks a past fruiting, not a standing harvest."
   }
 ];
 
@@ -1887,8 +1887,8 @@ const mineralSpeciesCatalog = [
     scientificName: "Quartz · SiO₂",
     category: "quartz",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Lapidary — cabochons, faceting, carving, and bead/wire-wrap work.",
-    notes: "Mount Ida / Montgomery Co. is a famous quartz-crystal district — but most named \"mines\" are commercial pay-to-dig or claimed ground, not free collecting."
+    usedParts: "Lapidary, cabochons, faceting, carving, and bead/wire-wrap work.",
+    notes: "Mount Ida / Montgomery Co. is a famous quartz-crystal district, but most named \"mines\" are commercial pay-to-dig or claimed ground, not free collecting."
   },
   {
     id: "mineral-novaculite",
@@ -1896,7 +1896,7 @@ const mineralSpeciesCatalog = [
     scientificName: "Novaculite (microcrystalline quartz)",
     category: "novaculite",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    usedParts: "Sharpening stones — whetstones and oilstones — plus knapping and fine carving/inlay.",
+    usedParts: "Sharpening stones, whetstones and oilstones, plus knapping and fine carving/inlay.",
     notes: "The classic Arkansas whetstone (Novaculite Uplift), graded by density: Washita (coarse) → Soft → Hard → Black/Translucent Arkansas (extra-fine). MRDS files most under \"Silica,\" so treat positions as a curated seed."
   },
   {
@@ -1906,7 +1906,7 @@ const mineralSpeciesCatalog = [
     category: "silica",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Knapping toolstone (flint / chert); also the holding bucket for unlabeled novaculite.",
-    notes: "Knappable chert/flint (and unconfirmed novaculite). Toolstone outcrops are often archaeological sites — this maps raw geology only; collecting artifacts is illegal (ARPA)."
+    notes: "Knappable chert/flint (and unconfirmed novaculite). Toolstone outcrops are often archaeological sites, this maps raw geology only; collecting artifacts is illegal (ARPA)."
   },
   {
     id: "mineral-soapstone",
@@ -1914,9 +1914,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Steatite (talc-rich rock)",
     category: "soapstone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["asbestos risk — cut/grind wet", "use respiratory protection"],
-    usedParts: "Carving — bowls, pipes, beads, figurines, molds, and cookware.",
-    notes: "Soft, heat-stable carving stone of Appalachia (VA/NC/GA), New England, and the Pacific NW — from pure high-talc soapstone (softest) to harder steatite that holds finer detail. Eastern steatite outcrops are often prehistoric quarry sites (ARPA)."
+    safetyTags: ["asbestos risk, cut/grind wet", "use respiratory protection"],
+    usedParts: "Carving, bowls, pipes, beads, figurines, molds, and cookware.",
+    notes: "Soft, heat-stable carving stone of Appalachia (VA/NC/GA), New England, and the Pacific NW, from pure high-talc soapstone (softest) to harder steatite that holds finer detail. Eastern steatite outcrops are often prehistoric quarry sites (ARPA)."
   },
   {
     id: "mineral-clay",
@@ -1924,7 +1924,7 @@ const mineralSpeciesCatalog = [
     scientificName: "Clay minerals (kaolinite group)",
     category: "clay",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["silica dust — process wet"],
+    safetyTags: ["silica dust, process wet"],
     usedParts: "Hand-built and wheel-thrown pottery, tile, and tobacco-pipe clay.",
     notes: "Regional clays: plastic ball clay (throwing), white kaolin (porcelain/glaze), iron-bearing stoneware/earthenware (hand-building), and high-alumina fire clay (kiln furniture)."
   },
@@ -1935,7 +1935,7 @@ const mineralSpeciesCatalog = [
     category: "slate",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Engraving, inlay, coasters, and flagstone craft.",
-    notes: "Splits into flat sheets for engraving and inlay — the Slate Valley belt (VT/NY), the PA Slate Belt, Buckingham (VA), and Monson (ME). Mostly private quarry operations; prefer waste-pile slate obtained with the operator's permission."
+    notes: "Splits into flat sheets for engraving and inlay, the Slate Valley belt (VT/NY), the PA Slate Belt, Buckingham (VA), and Monson (ME). Mostly private quarry operations; prefer waste-pile slate obtained with the operator's permission."
   },
   {
     id: "mineral-gemstone",
@@ -1944,7 +1944,7 @@ const mineralSpeciesCatalog = [
     category: "gemstone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     usedParts: "Faceting, cabochons, and bead/setting work.",
-    notes: "The Prairie Creek diatreme — Crater of Diamonds State Park, the rare public site where visitors may dig and keep diamonds (to cut and set) for a fee."
+    notes: "The Prairie Creek diatreme, Crater of Diamonds State Park, the rare public site where visitors may dig and keep diamonds (to cut and set) for a fee."
   },
   {
     id: "mineral-alabaster",
@@ -1952,9 +1952,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Gypsum · CaSO₄·2H₂O",
     category: "alabaster",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["gypsum dust — work wet or masked"],
-    usedParts: "Carving — sculpture, lamps, boxes, and translucent inlay.",
-    notes: "Soft (Mohs ~2), fine-grained massive gypsum that carves with hand tools and takes a soft translucent polish. From the gypsum districts of CO, OK, NM, UT, WY, and TX; collect loose float and quarry-waste blocks, not fresh outcrop. Bulk gypsum is a salable federal mineral — casual specimen collecting only."
+    safetyTags: ["gypsum dust, work wet or masked"],
+    usedParts: "Carving, sculpture, lamps, boxes, and translucent inlay.",
+    notes: "Soft (Mohs ~2), fine-grained massive gypsum that carves with hand tools and takes a soft translucent polish. From the gypsum districts of CO, OK, NM, UT, WY, and TX; collect loose float and quarry-waste blocks, not fresh outcrop. Bulk gypsum is a salable federal mineral, casual specimen collecting only."
   },
   {
     id: "mineral-pipestone",
@@ -1962,9 +1962,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Catlinite (indurated red claystone)",
     category: "pipestone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["culturally restricted — see the collecting rule", "clay/silica dust — work wet"],
-    usedParts: "Carving — traditionally ceremonial pipe bowls, effigies, and beads.",
-    notes: "Soft red claystone of the Upper Midwest (MN, SD, WI). CRITICAL: quarrying at Pipestone National Monument is reserved by federal law to enrolled members of federally recognized tribes — it is not open public collecting. Treat pipestone as culturally restricted; see the rule on each point."
+    safetyTags: ["culturally restricted, see the collecting rule", "clay/silica dust, work wet"],
+    usedParts: "Carving, traditionally ceremonial pipe bowls, effigies, and beads.",
+    notes: "Soft red claystone of the Upper Midwest (MN, SD, WI). CRITICAL: quarrying at Pipestone National Monument is reserved by federal law to enrolled members of federally recognized tribes, it is not open public collecting. Treat pipestone as culturally restricted; see the rule on each point."
   },
   {
     id: "mineral-serpentine",
@@ -1972,9 +1972,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Serpentinite (antigorite / chrysotile)",
     category: "serpentine",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["may contain natural asbestos — cut/grind wet", "HEPA respiratory protection"],
-    usedParts: "Carving and lapidary — figurines, bowls, beads, and cabochons.",
-    notes: "Green carving/lapidary stone of the CA Coast Ranges and Sierra foothills and the VT/Appalachian ultramafic belt. Gather float and loose blocks; avoid disturbing serpentine barrens (rare endemic plants). Serpentinite frequently hosts naturally occurring asbestos — a real hazard."
+    safetyTags: ["may contain natural asbestos, cut/grind wet", "HEPA respiratory protection"],
+    usedParts: "Carving and lapidary, figurines, bowls, beads, and cabochons.",
+    notes: "Green carving/lapidary stone of the CA Coast Ranges and Sierra foothills and the VT/Appalachian ultramafic belt. Gather float and loose blocks; avoid disturbing serpentine barrens (rare endemic plants). Serpentinite frequently hosts naturally occurring asbestos, a real hazard."
   },
   {
     id: "mineral-limestone",
@@ -1982,9 +1982,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Limestone (dimension freestone)",
     category: "limestone",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["carving dust — mask + eye protection"],
-    usedParts: "Carving and lettering — sculpture, relief, and architectural detail.",
-    notes: "Soft, homogeneous freestone for carving — the classic is Salem (Indiana) limestone (Owen/Monroe/Lawrence Cos.); also TX, KS, MN. Source mill off-cuts and reject blocks rather than outcrop. Note: most MRDS \"limestone\" is aggregate or cement stone, not carving freestone."
+    safetyTags: ["carving dust, mask + eye protection"],
+    usedParts: "Carving and lettering, sculpture, relief, and architectural detail.",
+    notes: "Soft, homogeneous freestone for carving, the classic is Salem (Indiana) limestone (Owen/Monroe/Lawrence Cos.); also TX, KS, MN. Source mill off-cuts and reject blocks rather than outcrop. Note: most MRDS \"limestone\" is aggregate or cement stone, not carving freestone."
   },
   {
     id: "mineral-marble",
@@ -1992,9 +1992,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Marble (metamorphic calcite)",
     category: "marble",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["carving dust + flying chips — mask + eye protection"],
+    safetyTags: ["carving dust + flying chips, mask + eye protection"],
     usedParts: "Sculpture and relief carving, inlay, and polished accents.",
-    notes: "Fine statuary and craft marble — Danby/Proctor (VT), Tate (GA), Yule (CO), Tennessee marble, Sylacauga (AL). Statuary grades are near-exhausted or tightly held; source quarry scrap/reject by purchase or permission rather than pulling outcrop. Calcite — no silica hazard, but fine dust and chips."
+    notes: "Fine statuary and craft marble, Danby/Proctor (VT), Tate (GA), Yule (CO), Tennessee marble, Sylacauga (AL). Statuary grades are near-exhausted or tightly held; source quarry scrap/reject by purchase or permission rather than pulling outcrop. Calcite, no silica hazard, but fine dust and chips."
   },
   {
     id: "mineral-obsidian",
@@ -2002,8 +2002,8 @@ const mineralSpeciesCatalog = [
     scientificName: "Obsidian (volcanic glass)",
     category: "obsidian",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["extremely sharp — laceration risk", "silica/glass dust when grinding"],
-    usedParts: "Knapping — pressure-flaked points and blades; some lapidary.",
+    safetyTags: ["extremely sharp, laceration risk", "silica/glass dust when grinding"],
+    usedParts: "Knapping, pressure-flaked points and blades; some lapidary.",
     notes: "Premium volcanic-glass knapping toolstone of the West (OR Glass Buttes, CA, ID, NM, NV, AZ, UT, WY). Surface-collect loose float at designated open areas only; obsidian sources are the most heavily studied archaeological toolstone (ARPA) and are prohibited in NPS units such as Yellowstone."
   },
   {
@@ -2012,9 +2012,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Chalcedony (cryptocrystalline quartz)",
     category: "agate",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["silica dust — cut/grind wet"],
-    usedParts: "Lapidary — cabbing, tumbling, beads, inlay, and knife scales.",
-    notes: "The workhorse lapidary stone — Lake Superior agate (MN/WI/MI), Montana/moss agate, and jasper across OR, WY, TX, ID. Surface-collect float and gravel-bar material; take reasonable personal amounts and refill holes. Not on active mining claims without consent."
+    safetyTags: ["silica dust, cut/grind wet"],
+    usedParts: "Lapidary, cabbing, tumbling, beads, inlay, and knife scales.",
+    notes: "The workhorse lapidary stone, Lake Superior agate (MN/WI/MI), Montana/moss agate, and jasper across OR, WY, TX, ID. Surface-collect float and gravel-bar material; take reasonable personal amounts and refill holes. Not on active mining claims without consent."
   },
   {
     id: "mineral-petrified-wood",
@@ -2022,9 +2022,9 @@ const mineralSpeciesCatalog = [
     scientificName: "Silicified wood (chalcedony / agate)",
     category: "petrified-wood",
     months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    safetyTags: ["silica dust — cut/grind wet"],
-    usedParts: "Lapidary — cabochons, slabs, bookends, and beads.",
-    notes: "Silicified wood that cuts and polishes like agate — AZ, OR, WA, WY, UT, CO, TX, MT. On BLM land, free casual collection is capped at 25 lb/day + 250 lb/yr for personal use; STRICTLY prohibited in NPS units (Petrified Forest NP) — removal there is a federal offense."
+    safetyTags: ["silica dust, cut/grind wet"],
+    usedParts: "Lapidary, cabochons, slabs, bookends, and beads.",
+    notes: "Silicified wood that cuts and polishes like agate, AZ, OR, WA, WY, UT, CO, TX, MT. On BLM land, free casual collection is capped at 25 lb/day + 250 lb/yr for personal use; STRICTLY prohibited in NPS units (Petrified Forest NP), removal there is a federal offense."
   }
 ];
 
@@ -2070,7 +2070,7 @@ const MAP_MODE_CONFIG = {
   medicine: {
     id: "medicine",
     speciesHeading: "Traditional Uses & Species",
-    lede: `Explore plants of the traditional materia medica across ${REGION_STATES} by season and habitat. This map is an educational reference to historical and traditional use — not medical advice, and not a harvest recommendation.`,
+    lede: `Explore plants of the traditional materia medica across ${REGION_STATES} by season and habitat. This map is an educational reference to historical and traditional use, not medical advice, and not a harvest recommendation.`,
     safetyNote: "This map is provided for educational purposes. Do not ingest or apply wild plants without guidance from a qualified practitioner or trained herbalist.",
     categories: [
       { id: "digestive", label: "Digestive" },
@@ -2089,7 +2089,7 @@ const MAP_MODE_CONFIG = {
   minerals: {
     id: "minerals",
     speciesHeading: "Materials & Craft Stone",
-    lede: `Locate craft stone across the contiguous US — pottery clay, carving stone (soapstone, alabaster, serpentine, marble), whetstones and knapping toolstone (novaculite, chert, obsidian), and lapidary material. Each point is a recorded mineral locality, not a collecting permission: stone-collecting rules differ sharply by land manager, and some materials are culturally restricted.`,
+    lede: `Locate craft stone across the contiguous US, pottery clay, carving stone (soapstone, alabaster, serpentine, marble), whetstones and knapping toolstone (novaculite, chert, obsidian), and lapidary material. Each point is a recorded mineral locality, not a collecting permission: stone-collecting rules differ sharply by land manager, and some materials are culturally restricted.`,
     categories: [
       { id: "clay", label: "Clay (pottery)" },
       { id: "alabaster", label: "Alabaster (gypsum)" },
@@ -2110,7 +2110,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: MINERAL_CATEGORY_COLORS,
     catalog: mineralSpeciesCatalog,
     sourceNames: ["USGS MRDS"],
-    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), a historic economic-mining inventory frozen at roughly 2011–2022 with positional grades — many points are old, inactive, or abandoned workings, so treat each as a curated seed rather than a live collecting spot. Never enter shafts, adits, or pits: collect only surface float. Land-manager context comes from NPS, USDA Forest Service, BLM, and USGS PAD-US boundaries. Occurrence is never collecting permission — rock and mineral collecting is generally allowed on BLM and national-forest land in reasonable amounts, prohibited in all national parks, varies on state land, and needs landowner permission on private land. Pipestone and some toolstone sources are culturally restricted.`,
+    dataNotes: `Recorded mineral localities from the USGS Mineral Resources Data System (public domain), a historic economic-mining inventory frozen at roughly 2011–2022 with positional grades, many points are old, inactive, or abandoned workings, so treat each as a curated seed rather than a live collecting spot. Never enter shafts, adits, or pits: collect only surface float. Land-manager context comes from NPS, USDA Forest Service, BLM, and USGS PAD-US boundaries. Occurrence is never collecting permission, rock and mineral collecting is generally allowed on BLM and national-forest land in reasonable amounts, prohibited in all national parks, varies on state land, and needs landowner permission on private land. Pipestone and some toolstone sources are culturally restricted.`,
     rulesLabel: "Rock & mineral collecting rules",
     loadFallingFruit: false,
     loadNpsOrchards: false,
@@ -2463,7 +2463,7 @@ function round1(value) {
   return Math.round(value * 10) / 10;
 }
 function formatClockTime(date) {
-  return date ? new Date(date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—";
+  return date ? new Date(date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ", ";
 }
 function windTier(kmh) {
   return kmh < 8 ? "calm" : kmh < 20 ? "medium" : "fast";
@@ -2580,8 +2580,8 @@ function flushPanelNote(past72) {
   const min = minFlushThresholdMm();
   if (min == null) return "";
   return past72 >= min
-    ? " — <b>fungal flush likely</b> for whitelisted mushrooms."
-    : " — below the flush threshold.";
+    ? ", <b>fungal flush likely</b> for whitelisted mushrooms."
+    : ", below the flush threshold.";
 }
 
 function renderConditionsRail() {
@@ -2609,7 +2609,7 @@ function renderConditionsRail() {
     tideValue = `${nt.type === "L" ? "low" : "high"} ${formatClockTime(nt.t)}`;
     tideRising = nt.type === "H";
   } else {
-    tideValue = state.tide ? "—" : "none nearby";
+    tideValue = state.tide ? ", " : "none nearby";
   }
   html += conditionsSegment("tide", "TIDE", tideValue, conditionsIconTide(tideRising));
   conditionsRail.innerHTML = html;
@@ -2711,7 +2711,7 @@ function pickWindows(daily) {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dn = (i) => (i === 3 ? "today" : dayNames[new Date(+start + i * 864e5).getDay()]);
   const out = [];
-  if (rainDay > 0) out.push(`Rain expected ${dn(rainDay)} — check mushrooms ${dn(Math.min(rainDay + 2, 9))}.`);
+  if (rainDay > 0) out.push(`Rain expected ${dn(rainDay)}, check mushrooms ${dn(Math.min(rainDay + 2, 9))}.`);
   if (dryStart > 0) out.push(`Dry window ${dn(dryStart)}–${dn(dryEnd)}: berries, fiber, drying.`);
   return out.join(" ") || "No strong windows in the forecast.";
 }
@@ -2971,10 +2971,10 @@ function renderConditionPanel() {
       <div class="fig">${svgMoon(mp)}</div>
       <div class="fig">${svgMoonAxis(mp)}</div>
       <div class="note">${Math.round(mp.illum * 100)}% illuminated, ${mp.waxing ? "waxing" : "waning"}. Bright-moon nights favor low-tide walks and evening foraging; headlamps off when you can.</div>
-      <div class="age">COMPUTED LOCALLY — NO NETWORK</div>`;
+      <div class="age">COMPUTED LOCALLY, NO NETWORK</div>`;
   } else if (openConditionSeg === "rain") {
     html = w
-      ? `<h3>RAIN — MEMORY &amp; FORECAST (MM)</h3>
+      ? `<h3>RAIN, MEMORY &amp; FORECAST (MM)</h3>
         ${rainBars(w.daily)}
         <div class="note" style="margin-top:8px">Past 72 h: <b>${w.past72} mm</b>${flushPanelNote(w.past72)}<br>${escapeHTML(pickWindows(w.daily))}</div>
         ${conditionsLocLine()}${conditionsDataAge()}`
@@ -2991,15 +2991,15 @@ function renderConditionPanel() {
     if (state.tide && state.tide.events) {
       const lowNext = state.tide.events.find((e) => e.type === "L" && +new Date(e.t) > Date.now());
       const windowLine = lowNext
-        ? `Next low ${formatClockTime(lowNext.t)} (${lowNext.v.toFixed(1)} ft) — the intertidal window runs roughly 90 minutes either side.`
+        ? `Next low ${formatClockTime(lowNext.t)} (${lowNext.v.toFixed(1)} ft), the intertidal window runs roughly 90 minutes either side.`
         : "";
-      html = `<h3>TIDE — ${escapeHTML(state.tide.stationName || "NEAREST STATION")}</h3>
+      html = `<h3>TIDE, ${escapeHTML(state.tide.stationName || "NEAREST STATION")}</h3>
         <div class="fig">${svgTideCurve(state.tide.events)}</div>
-        <div class="note">${windowLine}<br>Low tide is the gathering tide: seaweeds and shellfish beds open as the water falls. <b>Biotoxin closures always override</b> — closures are hand-encoded, never inferred.</div>
+        <div class="note">${windowLine}<br>Low tide is the gathering tide: seaweeds and shellfish beds open as the water falls. <b>Biotoxin closures always override</b>, closures are hand-encoded, never inferred.</div>
         <div class="age">SOURCE: NOAA CO-OPS · STATION ${escapeHTML(state.tide.stationId)} · PREDICTIONS</div>`;
     } else {
       html = `<h3>TIDE</h3>
-        <div class="note">No NOAA tide station within ${TIDE_MAX_DISTANCE_KM} km of this location. Tides are coastal — search or pan the map to a shoreline and the nearest station's predictions load automatically.</div>`;
+        <div class="note">No NOAA tide station within ${TIDE_MAX_DISTANCE_KM} km of this location. Tides are coastal, search or pan the map to a shoreline and the nearest station's predictions load automatically.</div>`;
     }
   }
   railPad.innerHTML = html;
@@ -4041,7 +4041,7 @@ function setOfflineChip(show) {
   chip.className = "floating";
   chip.setAttribute("role", "status");
   chip.setAttribute("aria-live", "polite");
-  chip.innerHTML = `<span>Offline — showing cached rules &amp; data; map tiles and live conditions may be unavailable.</span><button type="button" aria-label="Dismiss offline notice">&times;</button>`;
+  chip.innerHTML = `<span>Offline, showing cached rules &amp; data; map tiles and live conditions may be unavailable.</span><button type="button" aria-label="Dismiss offline notice">&times;</button>`;
   mapArea.appendChild(chip);
   chip.querySelector("button").addEventListener("click", () => {
     offlineChipDismissed = true;
@@ -4156,7 +4156,7 @@ function renderMapLegend() {
           <div class="legend-chips">${categoryChips}</div>
         </div>
       </div>
-      <div class="legend-note">Cluster bubbles take the tint of their most common category — never an access status.</div>
+      <div class="legend-note">Cluster bubbles take the tint of their most common category, never an access status.</div>
     </div>
     ${filterBits.length ? `<div class="legend-filters">FILTERS: ${filterBits.map(escapeHTML).join(" · ")}</div>` : ""}
     <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
@@ -4171,7 +4171,7 @@ function renderMapLegend() {
     legendMobButton.classList.toggle("has-filters", filterBits.length > 0);
     legendMobButton.setAttribute(
       "aria-label",
-      filterBits.length ? `Legend — filters active: ${filterBits.join(", ").toLowerCase()}` : "Legend"
+      filterBits.length ? `Legend, filters active: ${filterBits.join(", ").toLowerCase()}` : "Legend"
     );
   }
 }
@@ -4220,7 +4220,7 @@ const MODE_SHEET_INFO = {
   food: { label: "Food", color: "#6b7f2e", blurb: "Berries · fruit · mushrooms · nuts" },
   ink: { label: "Ink/Dye", color: "#3a3f3d", blurb: "Inks & dyes by color, oak gall to rabbitbrush" },
   medicine: { label: "Herbalism", color: "#7a4a52", blurb: "Plants in the traditional materia medica" },
-  minerals: { label: "Minerals", color: "#5c677d", blurb: "Craft stone & minerals — quartz, novaculite, soapstone, clay" }
+  minerals: { label: "Minerals", color: "#5c677d", blurb: "Craft stone & minerals, quartz, novaculite, soapstone, clay" }
 };
 // Project recipes: foraged-ink "Projects" replacing the launch placeholders.
 // Each opens a drilled-in recipe card (ingredient list with required vs
@@ -4260,10 +4260,10 @@ function sheetAboutHTML() {
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">CRAFT ALMANAC</div>
-    <h2 class="serif">A map that keeps the almanac's hours</h2>
-    <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information — in collaboration with the places it maps. It is made for teachers, foragers, and makers sourcing materials responsibly. The map is the front door; material profiles and project recipes live one tap away.</p>
+    <h2 class="serif">A map that keeps the almanac's seasons</h2>
+    <p>Craft Almanac shares local material availability, ethical harvesting practice, craft knowledge, and safety information, in collaboration with the places it maps. It is made for teachers, foragers, and makers sourcing materials responsibly. The map is the front door; material profiles and project recipes live one tap away.</p>
     <p><strong>Occurrence is never permission.</strong> Records show where something has been seen, not that you may take it. Where we have researched it, a point carries the harvesting rule for the land it sits on, read from primary law, and where we haven't, it says so plainly.</p>
-    <p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice.</p>
+    <p><strong>Herbalism content is educational reference only</strong>, historical and traditional use, not medical advice.</p>
     <div class="about-block">
       <div class="k">THIS MAP'S SOURCES</div>
       <p>${escapeHTML(config.dataNotes)}</p>
@@ -4278,7 +4278,7 @@ function sheetAboutHTML() {
       <p>The harvesting rules were compiled by an automated research process (an AI research agent reading primary sources such as park compendiums, 36 CFR, and state and federal regulations) and are reviewed by the site's author. They are informational, not legal advice; rules change, and any entry can be wrong or out of date. Always confirm current rules with the land manager before collecting. Everything here is offered without warranty for educational use, and you assume the risk of any harvest or preparation you undertake.</p>
       <p>There is no account, no cookies, and no tracking. Your device stores only your own preferences and saved places (kept in this browser, never sent anywhere). As you browse, your browser talks directly to the services that draw the map and its data: Mapbox (basemap and place search), iNaturalist (occurrences), USGS and Esri (public-land boundaries), Open-Meteo and RainViewer (weather and radar), and Cloudflare (the host). Each of these receives your IP address and the map area you are viewing.</p>
       <p>Spotted a wrong rule, a questionable identification, or anything unsafe? <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report">Report an error →</a> Corrections are welcome and help keep the map trustworthy.</p>
-      <p>Craft Almanac is a noncommercial project: the code is licensed under the PolyForm Noncommercial License 1.0.0, and original content — recipes, species notes, and the rule summaries — under CC BY-NC-SA 4.0 (the underlying legal facts in the rules are public and unrestricted). Inbound data sources keep their own licenses.</p>
+      <p>Craft Almanac is a noncommercial project: the code is licensed under the PolyForm Noncommercial License 1.0.0, and original content, recipes, species notes, and the rule summaries, under CC BY-NC-SA 4.0 (the underlying legal facts in the rules are public and unrestricted). Inbound data sources keep their own licenses.</p>
     </div>
     <p><a href="./materials/" target="_blank" rel="noreferrer">Material profiles →</a> · <a href="./projects/" target="_blank" rel="noreferrer">Project pages →</a> · <a href="./cards/" target="_blank" rel="noreferrer">Printable field cards →</a></p>
     <p><a href="./attribution.html" target="_blank" rel="noreferrer">Attribution and data-use notes →</a></p>
@@ -4290,7 +4290,7 @@ function sheetMapsHTML() {
     const info = MODE_SHEET_INFO[mode];
     const on = state.activeMap === mode ? " on" : "";
     const dnote = mode === "medicine"
-      ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>`
+      ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY, NOT MEDICAL ADVICE</div>`
       : "";
     return `
       <div class="mini-card mode-card${on}" data-mode="${escapeHTML(mode)}" role="button" tabindex="0">
@@ -4340,7 +4340,7 @@ function sheetPlantsHTML() {
     const uses = species.usedParts || getCategoryLabel(species.category);
     const openButton = openableSpecies.has(species.id)
       ? `<button type="button" class="mini-card-open" data-open-record="${escapeHTML(species.id)}">Open nearest in view</button>`
-      : `<button type="button" class="mini-card-open" disabled aria-label="Open nearest in view, unavailable" title="No record in the current view — zoom the map to an area with this species first">Open nearest in view</button>`;
+      : `<button type="button" class="mini-card-open" disabled aria-label="Open nearest in view, unavailable" title="No record in the current view, zoom the map to an area with this species first">Open nearest in view</button>`;
     return `
       <div class="mini-card" data-species="${escapeHTML(species.id)}" role="button" tabindex="0">
         <div class="spine" style="background: ${escapeHTML(color)}"></div>
@@ -4368,8 +4368,8 @@ function sheetPlantsHTML() {
     : "";
   const matRegionLabel = getActiveRegionCaveatLabel();
   const matTiming = matRegionLabel
-    ? `Timing is ${escapeHTML(matRegionLabel)} regional — local timing still varies.`
-    : "Timing is a contiguous-US average — local timing varies by weeks.";
+    ? `Timing is ${escapeHTML(matRegionLabel)} regional, local timing still varies.`
+    : "Timing is a contiguous-US average, local timing varies by weeks.";
   const caveat = availOnly
     ? `<div class="now-foot">${matTiming} Occurrence is never permission.</div>`
     : "";
@@ -4378,7 +4378,7 @@ function sheetPlantsHTML() {
   // disclaimer must travel with them (CLAUDE.md), as it does on the map note,
   // the Maps card, and the point card.
   const medNote = state.activeMap === "medicine"
-    ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>`
+    ? `<div class="dnote">EDUCATIONAL REFERENCE ONLY, NOT MEDICAL ADVICE</div>`
     : "";
 
   // At overview zooms records aren't loaded, so EVERY "Open nearest in view"
@@ -4386,7 +4386,7 @@ function sheetPlantsHTML() {
   // (Also shown while the map is still booting — records aren't loaded then
   // either, and the same remedy applies.)
   const zoomNote = (!isMineral && (!state.mapReady || map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM))
-    ? `<div class="dnote">ZOOM THE MAP IN TO LOAD RECORDS — "OPEN NEAREST IN VIEW" WORKS AT NEIGHBORHOOD ZOOM</div>`
+    ? `<div class="dnote">ZOOM THE MAP IN TO LOAD RECORDS, "OPEN NEAREST IN VIEW" WORKS AT NEIGHBORHOOD ZOOM</div>`
     : "";
   return `
     <button class="closer" type="button" aria-label="Close">&times;</button>
@@ -4535,7 +4535,7 @@ function sheetProjectsHTML() {
     body = `<p class="proj-scope">Loading projects…</p>`;
   } else if (!allMapRecipes.length) {
     const other = map === "food" ? "Ink/Dye" : "Ink/Dye and Food";
-    body = `<p class="proj-scope">Projects for this map are coming soon. In the meantime, the ${other} maps have full project benches — switch maps from <strong>Maps</strong>.</p>`;
+    body = `<p class="proj-scope">Projects for this map are coming soon. In the meantime, the ${other} maps have full project benches, switch maps from <strong>Maps</strong>.</p>`;
   } else if (availOnly && !mapRecipes.length) {
     const selDate = getSelectedDate();
     body = `<p class="proj-scope">No project's material is in season on ${escapeHTML(FULL_MONTHS[selDate.getMonth()])} ${selDate.getDate()}. Switch to <strong>All</strong>, or move the date slider on the map.</p>`;
@@ -4552,8 +4552,8 @@ function sheetProjectsHTML() {
     </div>` : "";
   const projRegionLabel = getActiveRegionCaveatLabel();
   const projTiming = projRegionLabel
-    ? `"In season" is ${escapeHTML(projRegionLabel)} regional — local timing still varies.`
-    : `"In season" is a contiguous-US average — local timing varies by weeks.`;
+    ? `"In season" is ${escapeHTML(projRegionLabel)} regional, local timing still varies.`
+    : `"In season" is a contiguous-US average, local timing varies by weeks.`;
   const caveat = availOnly
     ? `<div class="now-foot">${projTiming} Techniques and binders with no seasonal material always show.</div>`
     : "";
@@ -4563,7 +4563,7 @@ function sheetProjectsHTML() {
     <button class="closer" type="button" aria-label="Close">&times;</button>
     <div class="k">THE PRESS · ${allMapRecipes.length} PROJECTS · ${mapLabel}</div>
     <h2 class="serif">Projects</h2>
-    <p>${escapeHTML(PROJECT_INTRO[map] || PROJECT_INTRO.ink)} Tap a project for the full recipe — ingredients, tools, timeline, and step by step. Scroll a row sideways, or Expand a category to see all of it.</p>
+    <p>${escapeHTML(PROJECT_INTRO[map] || PROJECT_INTRO.ink)} Tap a project for the full recipe, ingredients, tools, timeline, and step by step. Scroll a row sideways, or Expand a category to see all of it.</p>
     ${filterRow}
     ${body}
     ${caveat}
@@ -4573,7 +4573,7 @@ function sheetProjectsHTML() {
 function recipeIngredientHTML(i, selfId, state) {
   const optTag = i.required ? "" : `<span class="opt-tag">(Optional)</span> `;
   const amt = i.amount ? ` · ${linkifyRecipes(i.amount, selfId, state)}` : "";
-  const note = i.note ? ` — ${linkifyRecipes(i.note, selfId, state)}` : "";
+  const note = i.note ? `, ${linkifyRecipes(i.note, selfId, state)}` : "";
   return `<li>${optTag}<span class="ing-item">${linkifyRecipes(i.item, selfId, state)}</span>${amt}${note}</li>`;
 }
 
@@ -4618,7 +4618,7 @@ function recipeDetailHTML(recipe) {
       ${recipe.hook ? `<p class="recipe-hook">${escapeHTML(recipe.hook)}</p>` : ""}
       <div class="recipe-meta">${chips.join("")}</div>
 
-      ${recipe.educationalOnly ? `<div class="edu-stamp recipe-edu">EDUCATIONAL ONLY — NOT A HARVEST RECOMMENDATION. This material is culturally sacred, conservation-sensitive, or requires regional/Indigenous knowledge to source ethically. Seek permission and local knowledge first; do not harvest casually.</div>` : ""}
+      ${recipe.educationalOnly ? `<div class="edu-stamp recipe-edu">EDUCATIONAL ONLY, NOT A HARVEST RECOMMENDATION. This material is culturally sacred, conservation-sensitive, or requires regional/Indigenous knowledge to source ethically. Seek permission and local knowledge first; do not harvest casually.</div>` : ""}
 
       ${recipe.toxic ? `<div class="safety-box"><h3>Safety first</h3><ul>${safetyHTML}</ul></div>` : ""}
 
@@ -4640,7 +4640,7 @@ function recipeDetailHTML(recipe) {
       ${(!recipe.toxic && safetyHTML) ? `<div class="recipe-sec"><h3>Safety</h3><ul class="ing-list">${safetyHTML}</ul></div>` : ""}
 
       ${srcHTML ? `<div class="recipe-sec recipe-sources"><h3>Sources</h3>${srcHTML}</div>` : ""}
-      <div class="recipe-oinp">Craft, not food · Occurrence is not permission — harvest only where allowed</div>
+      <div class="recipe-oinp">Craft, not food · Occurrence is not permission, harvest only where allowed</div>
     </div>
   `;
 }
@@ -5797,8 +5797,8 @@ function renderHistogram() {
   const modeName = { food: "FOOD", ink: "INK", medicine: "HERBALISM", minerals: "MINERALS" }[state.activeMap] || String(state.activeMap || "").toUpperCase();
   const regionLabel = usedRegionalCurve ? getRegionLabel(region) : null;
   const caveatText = regionLabel
-    ? `${regionLabel} — regional timing (local ripening still varies).`
-    : "Contiguous-US average — local ripening can differ by weeks.";
+    ? `${regionLabel}, regional timing (local ripening still varies).`
+    : "Contiguous-US average, local ripening can differ by weeks.";
   if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY<span class="season-caveat">${escapeHTML(caveatText)}</span>`;
   renderSeasonCats();
 }
@@ -5961,17 +5961,17 @@ function updateRecordCountStatus() {
       // In minerals the usual reason everything is hidden is the workability
       // band (the bottom slider), not the legend.
       const bandHint = !state.allSeasons ? "widen the workability band or " : "";
-      message = `0 of ${loadedInView} localities in view shown — ${bandHint}adjust the legend filters`;
+      message = `0 of ${loadedInView} localities in view shown, ${bandHint}adjust the legend filters`;
     } else if (loadedInView > 0) {
       const seasonHint = !state.allSeasons ? "tap All seasons or " : "";
-      message = `0 of ${loadedInView} records in view shown — ${seasonHint}adjust the legend filters`;
+      message = `0 of ${loadedInView} records in view shown, ${seasonHint}adjust the legend filters`;
     } else if (isMinerals) {
       const near = describeNearestRecord();
       message = near
-        ? `No localities in view — nearest is ${near} · ${state.records.length} nationwide`
+        ? `No localities in view, nearest is ${near} · ${state.records.length} nationwide`
         : `No localities in view · ${state.records.length} nationwide`;
     } else {
-      message = "No records in this view — zoom out or pan toward a town or park";
+      message = "No records in this view, zoom out or pan toward a town or park";
     }
   } else if (isMinerals) {
     const noun = visibleInView === 1 ? "locality" : "localities";
@@ -7334,7 +7334,7 @@ function getMarkerPopupHTML(properties) {
   const flushLine = flushOn ? `<div class="flush on">RAIN-FED FLUSH LIKELY THIS WEEK</div>` : "";
 
   const warning = properties.harvestStatus
-    ? `<div class="oinp" style="color:var(--reg-warn-text, var(--reg-warn))">${escapeHTML(properties.harvestStatus)} — ${escapeHTML(properties.harvestNote)}</div>`
+    ? `<div class="oinp" style="color:var(--reg-warn-text, var(--reg-warn))">${escapeHTML(properties.harvestStatus)}, ${escapeHTML(properties.harvestNote)}</div>`
     : "";
   // Medicine mode keeps the educational-use disclaimer prominent (CLAUDE.md).
   const medSafetyNote = getActiveMapConfig().safetyNote;
@@ -7345,18 +7345,18 @@ function getMarkerPopupHTML(properties) {
   // conservation-sensitive, or requiring regional/Indigenous knowledge to harvest
   // ethically. They carry an explicit educational-only stamp, never a how-to.
   const eduStamp = properties.educationalOnly
-    ? `<div class="edu-stamp">EDUCATIONAL ONLY — NOT A HARVEST RECOMMENDATION. Seek permission or local/cultural knowledge first.</div>`
+    ? `<div class="edu-stamp">EDUCATIONAL ONLY, NOT A HARVEST RECOMMENDATION. Seek permission or local/cultural knowledge first.</div>`
     : "";
   // MRDS localities are largely historic mine workings, positionally graded and
   // frozen ~2011–2022 (see ATTRIBUTION.md). Surface both the physical hazard of
   // old workings and the data-age caveat where the user actually looks.
   const mineralHazard = isMineral
-    ? `<div class="mine-hazard">HISTORIC MINE RECORD — many MRDS sites are inactive or abandoned workings. Never enter shafts, adits, or pits; collect only surface float, and confirm the site is not on posted or hazardous ground. Locations are a curated seed (USGS MRDS, ~2011–2022), not a guarantee that material is present or reachable today.</div>`
+    ? `<div class="mine-hazard">HISTORIC MINE RECORD, many MRDS sites are inactive or abandoned workings. Never enter shafts, adits, or pits; collect only surface float, and confirm the site is not on posted or hazardous ground. Locations are a curated seed (USGS MRDS, ~2011–2022), not a guarantee that material is present or reachable today.</div>`
     : "";
   // Points whose coordinates iNaturalist obscured for user geoprivacy are shown
   // as an area hint, never a precise spot (see mapINaturalistObservation).
   const approxNote = properties.approximate
-    ? `<div class="approx-note">APPROXIMATE — iNaturalist obscured this location for privacy (±~20&nbsp;km). Treat it as an area, not a spot.</div>`
+    ? `<div class="approx-note">APPROXIMATE, iNaturalist obscured this location for privacy (±~20&nbsp;km). Treat it as an area, not a spot.</div>`
     : "";
   const saved = isSavedLocation(properties.id);
   // The map-tap card is the primary decision surface: link it to the full
@@ -7392,7 +7392,7 @@ function getMarkerPopupHTML(properties) {
         ${medNote}
       </div>
       <div class="pt-foot">
-        <div class="oinp">OCCURRENCE IS NOT PERMISSION — CHECK WHO MANAGES THIS LAND</div>
+        <div class="oinp">OCCURRENCE IS NOT PERMISSION, CHECK WHO MANAGES THIS LAND</div>
         <div class="pt-links">
           <a class="pt-link" href="${profileHref}" target="_blank" rel="noopener">Full profile ↗</a>
           <a class="pt-link" href="${reportHref}">Report an error</a>
@@ -7403,7 +7403,7 @@ function getMarkerPopupHTML(properties) {
           data-save-location="${escapeHTML(properties.id)}"
           aria-pressed="${String(saved)}"
         >${saved ? "Saved location" : "Save location"}</button>
-        <div class="save-note"${saved ? "" : " hidden"}>In your saved list — open Offline areas (bottom right) to revisit or keep offline.</div>
+        <div class="save-note"${saved ? "" : " hidden"}>In your saved list, open Offline areas (bottom right) to revisit or keep offline.</div>
       </div>
     </div>
   `;
@@ -8234,14 +8234,14 @@ async function saveCurrentOfflineArea() {
     // sequence so another tab's reconcile can't collect our chunks mid-save.
     releaseSavedAreasLock = await acquireSavedAreasLock();
     if (navigator.onLine === false) {
-      notice = "You're offline — connect to save an area.";
+      notice = "You're offline, connect to save an area.";
       return;
     }
     let chunks;
     try {
       chunks = await getSaveableAreaChunks();
     } catch {
-      notice = "Couldn't load the site catalog — check your connection and try again.";
+      notice = "Couldn't load the site catalog, check your connection and try again.";
       return;
     }
     if (!chunks.length) {
@@ -8249,7 +8249,7 @@ async function saveCurrentOfflineArea() {
       return;
     }
     if (chunks.length > SAVE_AREA_MAX_CHUNKS) {
-      notice = `This view spans ${chunks.length} files — zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
+      notice = `This view spans ${chunks.length} files, zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
       return;
     }
 
@@ -8315,8 +8315,8 @@ async function saveCurrentOfflineArea() {
         await cache.delete(STATUS_RASTER_URL);
       }
       notice = busy.quota
-        ? "Browser storage is full — remove a saved area or free space, then try again."
-        : `${busy.failed} of ${busy.total} files failed — nothing was saved. Check your connection and try again.`;
+        ? "Browser storage is full, remove a saved area or free space, then try again."
+        : `${busy.failed} of ${busy.total} files failed, nothing was saved. Check your connection and try again.`;
       return;
     }
     const center = bounds.getCenter();
@@ -8341,13 +8341,13 @@ async function saveCurrentOfflineArea() {
     // startup reconcile). Say so instead of promising persistence.
     const remembered = readSavedAreas().some((area) => area.id === areaId);
     notice = remembered
-      ? "Saved. These sites now work without a signal — browse the area once online so the basemap keeps its tiles too."
-      : "Saved for this session, but this browser isn't remembering saved areas (private mode or blocked storage) — the save will be gone on your next visit.";
+      ? "Saved. These sites now work without a signal, browse the area once online so the basemap keeps its tiles too."
+      : "Saved for this session, but this browser isn't remembering saved areas (private mode or blocked storage), the save will be gone on your next visit.";
   } catch {
     // Unexpected failure (Cache API denied, private mode): say SOMETHING —
     // the panel resetting silently would read as a broken button — and don't
     // leak an unhandled rejection to the click handler.
-    notice = "Saving failed — this browser may be blocking offline storage (private mode?).";
+    notice = "Saving failed, this browser may be blocking offline storage (private mode?).";
   } finally {
     // ALWAYS clear the busy flag — an unexpected throw (caches.open denied,
     // quota, private mode) must not wedge the panel at "Saving…" forever.
@@ -8461,13 +8461,13 @@ async function renderOfflinePanel(options = {}) {
     let hint = "";
     if (offline) {
       disabled = "disabled";
-      hint = "You're offline — saved areas below still work.";
+      hint = "You're offline, saved areas below still work.";
     } else if (estimate && estimate.count === 0) {
       disabled = "disabled";
-      hint = "No catalogued sites in this view — pan or zoom first.";
+      hint = "No catalogued sites in this view, pan or zoom first.";
     } else if (estimate && estimate.count > SAVE_AREA_MAX_CHUNKS) {
       disabled = "disabled";
-      hint = `This view spans ${estimate.count} files — zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
+      hint = `This view spans ${estimate.count} files, zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
     } else if (estimate) {
       const catalogNote = estimate.catalogSaved ? "" : " + ~5.4 MB shared catalog on the first save";
       hint = `≈ ${estimate.count} site files · ~${formatSavedBytes(estimate.bytes)}${catalogNote}.`;
@@ -8501,14 +8501,14 @@ async function renderOfflinePanel(options = {}) {
   // Falling Fruit site catalog, which only the Food and Ink & Dye maps draw —
   // say so explicitly on the maps that don't.
   const modeNote = state.activeMap === "medicine"
-    ? `<div>The Herbalism map draws live iNaturalist observations, which always need a connection — saves cover the Food and Ink &amp; Dye site catalog.</div>`
+    ? `<div>The Herbalism map draws live iNaturalist observations, which always need a connection, saves cover the Food and Ink &amp; Dye site catalog.</div>`
     : state.activeMap === "minerals"
-      ? `<div>Mineral localities are their own dataset (cached once viewed) — saves cover the Food and Ink &amp; Dye site catalog.</div>`
+      ? `<div>Mineral localities are their own dataset (cached once viewed), saves cover the Food and Ink &amp; Dye site catalog.</div>`
       : "";
   rows.push(`<div class="off-notes">
     ${modeNote}
     <div>Saved sites keep their access status. Live iNaturalist points and public-land shading need a connection.</div>
-    <div>The basemap keeps only tiles you browse while online — pan the area once before you go.</div>
+    <div>The basemap keeps only tiles you browse while online, pan the area once before you go.</div>
     <div>Occurrence is never permission.</div>
   </div>`);
 
@@ -8533,7 +8533,7 @@ function initOfflineAreas() {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "offline-ctrl-btn";
-      button.setAttribute("aria-label", "Offline areas — save this view for field use");
+      button.setAttribute("aria-label", "Offline areas, save this view for field use");
       button.setAttribute("aria-expanded", "false");
       button.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M4 17h16"></path><path d="M4 21h16"></path></svg>`;
       button.addEventListener("click", () => toggleOfflinePanel());
@@ -8969,7 +8969,7 @@ function getMineralAccessRule(record) {
   const base = MINERAL_ACCESS_RULES[perm] || MINERAL_ACCESS_RULES["Private / other"] || {
     status: "private",
     area: "Private, leased, or claimed ground",
-    limit: "No public collecting right at this point. Most recorded localities sit on private, leased, or actively claimed land — secure written landowner permission, and check for active mining claims, before collecting.",
+    limit: "No public collecting right at this point. Most recorded localities sit on private, leased, or actively claimed land, secure written landowner permission, and check for active mining claims, before collecting.",
     note: "Land status is not publicly sourced for this exact point; treat it as private unless you can verify otherwise.",
     sourceLabel: "Land status not sourced",
     sourceUrl: ""
@@ -9028,7 +9028,7 @@ function computeRecordAccessRule(record, species) {
       status: "unknown",
       label: "Unverified",
       area: record.access || "Reported public access",
-      limit: "This spot is reported as publicly accessible, but its harvesting rules aren't confirmed — check the managing agency's posted rules before collecting.",
+      limit: "This spot is reported as publicly accessible, but its harvesting rules aren't confirmed, check the managing agency's posted rules before collecting.",
       note: record.accessNote || "Reported as publicly accessible; confirm the managing agency's rules before harvesting.",
       sourceLabel: "Falling Fruit access note",
       sourceUrl: record.sourceUrl || "https://fallingfruit.org/"
@@ -9263,7 +9263,7 @@ function getUsfsForestRule(text, species, area) {
   // but still cite THIS forest's own page so the user can confirm there.
   return { ...base, status: "allowed", label: "Allowed",
     limit: "Incidental personal-use gathering is generally allowed without a permit on national forests; larger or commercial harvests need a permit.",
-    note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm — this is the general national-forest policy; ${entry.url ? ("check " + area + "'s forest-products page") : "contact the forest"} before collecting.` };
+    note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm, this is the general national-forest policy; ${entry.url ? ("check " + area + "'s forest-products page") : "contact the forest"} before collecting.` };
 }
 
 function getPublicLandAccessRule(properties, species, stateCode, record) {
@@ -9396,7 +9396,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       label: "Allowed",
       area,
       limit: "Small amounts for personal use are generally allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
-      note: `This is the national-forest-wide default under 36 CFR 261.6 — incidental personal-use gathering is usually allowed, with permits for larger or commercial harvests. The specific designated species, free-use limits, permits, and closures are set by ${area}; confirm them on ${area}'s forest-products page or with the local ranger district before collecting.`,
+      note: `This is the national-forest-wide default under 36 CFR 261.6, incidental personal-use gathering is usually allowed, with permits for larger or commercial harvests. The specific designated species, free-use limits, permits, and closures are set by ${area}; confirm them on ${area}'s forest-products page or with the local ranger district before collecting.`,
       sourceLabel: "National-forest products rule (36 CFR 261.6)",
       sourceUrl: ACCESS_RULE_SOURCES.usfs
     };
@@ -9420,7 +9420,7 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       label: "Prohibited",
       area,
       limit: "Plant gathering on national wildlife refuges is prohibited by default; some refuges authorize berry or mushroom picking with posted limits.",
-      note: "50 CFR Part 27 prohibits plant disturbance unless the refuge specifically authorizes it — check the refuge's own rules page before collecting anything.",
+      note: "50 CFR Part 27 prohibits plant disturbance unless the refuge specifically authorizes it, check the refuge's own rules page before collecting anything.",
       sourceLabel: "50 CFR Part 27",
       sourceUrl: ACCESS_RULE_SOURCES.usfws
     };
@@ -9743,7 +9743,7 @@ function getStateSystemRule(stateCode, text, area, species) {
           label: "Prohibited",
           area,
           limit: "Removing any plant or plant part for craft or medicinal use is prohibited on Illinois DNR lands; the only exception is edible fungi, nuts, and berries gathered for personal consumption.",
-          note: "Illinois' rule (17 Ill. Adm. Code 110.70(a)) prohibits injuring or removing any plant or part thereof, with a narrow exception only for edible fungi, nuts, and berries — not for craft or medicinal plant material.",
+          note: "Illinois' rule (17 Ill. Adm. Code 110.70(a)) prohibits injuring or removing any plant or part thereof, with a narrow exception only for edible fungi, nuts, and berries, not for craft or medicinal plant material.",
           sourceLabel: "17 Ill. Adm. Code 110.70",
           sourceUrl: ACCESS_RULE_SOURCES.illinoisDnr
         };
@@ -9752,7 +9752,7 @@ function getStateSystemRule(stateCode, text, area, species) {
         status: "allowed",
         label: "Allowed",
         area,
-        limit: "Edible fungi, nuts, and berries (not ginseng berries) may be gathered for personal use only — not resale — during the site's regular open hours; not during open hunting-season hours, and not in dedicated nature preserves. Leaves, roots, stems, and whole plants are not covered.",
+        limit: "Edible fungi, nuts, and berries (not ginseng berries) may be gathered for personal use only, not resale, during the site's regular open hours; not during open hunting-season hours, and not in dedicated nature preserves. Leaves, roots, stems, and whole plants are not covered.",
         note: "Illinois DNR lands allow personal-use collection of edible fungi, nuts, and berries under 17 Ill. Adm. Code 110.70(a)(3); individual site managers may further restrict it, so check posted rules.",
         sourceLabel: "17 Ill. Adm. Code 110.70",
         sourceUrl: ACCESS_RULE_SOURCES.illinoisDnr
@@ -9766,7 +9766,7 @@ function getStateSystemRule(stateCode, text, area, species) {
         status: "prohibited",
         label: "Prohibited",
         area,
-        limit: "Picking, cutting, trimming, uprooting, or removing living vegetation — including roots, tubers, flowers, and stems — requires written park permission outside the edible-gathering exception.",
+        limit: "Picking, cutting, trimming, uprooting, or removing living vegetation, including roots, tubers, flowers, and stems, requires written park permission outside the edible-gathering exception.",
         note: "Oregon's rule (OAR 736-010-0055) allows gathering edibles and small non-living souvenirs, but collection of living plant material for craft or medicine is not authorized. Federally recognized Oregon tribal members retain customary-practice rights.",
         sourceLabel: "OAR 736-010-0055",
         sourceUrl: ACCESS_RULE_SOURCES.oregonParks
@@ -9828,7 +9828,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       label: "Allowed",
       area,
       limit: "Mushrooms, nuts, berries, and tree fruits may be harvested from Michigan state-managed lands for personal use (state land rules cap personal take at about 25 pounds); not for resale.",
-      note: "Michigan DNR allows wild-food foraging on state land, but not plants that are destroyed or damaged by harvest — no fiddleheads, ramps, ginseng, whole plants, or tree tapping.",
+      note: "Michigan DNR allows wild-food foraging on state land, but not plants that are destroyed or damaged by harvest, no fiddleheads, ramps, ginseng, whole plants, or tree tapping.",
       sourceLabel: "Michigan DNR foraging guidance",
       sourceUrl: ACCESS_RULE_SOURCES.michiganDnr
     };
@@ -9880,7 +9880,7 @@ function getStateSystemRule(stateCode, text, area, species) {
     return { status: "allowed", label: "Allowed", area,
       limit: "Mushrooms and asparagus may be harvested system-wide; fruits, nuts, and berries may be gathered for personal use unless a sign is posted prohibiting it.",
       note: "Iowa lands under Natural Resource Commission jurisdiction allow personal-use foraging under 571 IAC 54.1-54.2; dedicated state preserves are excluded.",
-      sourceLabel: "Iowa Admin. Code 571—54", sourceUrl: ACCESS_RULE_SOURCES.iowaDnr };
+      sourceLabel: "Iowa Admin. Code 571, 54", sourceUrl: ACCESS_RULE_SOURCES.iowaDnr };
   }
   if (stateCode === "KS" && (text.includes("state park") || text.includes("state recreation"))) {
     if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
@@ -9924,7 +9924,7 @@ function getStateSystemRule(stateCode, text, area, species) {
     if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not covered by Missouri's in-park foraging exception; only wild edible fruit, berries, seeds, and nuts may be collected.",
-        note: "Missouri's edible exception (10 CSR 90-2.040(4)(B)) names fruit, berries, seeds, and nuts only — not fungi.",
+        note: "Missouri's edible exception (10 CSR 90-2.040(4)(B)) names fruit, berries, seeds, and nuts only, not fungi.",
         sourceLabel: "10 CSR 90-2.040", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
     }
     return { status: "allowed", label: "Allowed", area,
@@ -9937,7 +9937,7 @@ function getStateSystemRule(stateCode, text, area, species) {
     if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not named in Hawaii's renewable-natural-products allowance; treat mushroom collection as not permitted without local confirmation.",
-        note: "HAR 13-146-32(c) lists fruits, berries, flowers, seeds, etc. — not fungi; the project excludes mushrooms conservatively.",
+        note: "HAR 13-146-32(c) lists fruits, berries, flowers, seeds, etc., not fungi; the project excludes mushrooms conservatively.",
         sourceLabel: "HAR 13-146-32", sourceUrl: ACCESS_RULE_SOURCES.hawaiiParks };
     }
     return { status: "allowed", label: "Allowed", area,
@@ -9950,7 +9950,7 @@ function getStateSystemRule(stateCode, text, area, species) {
     if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not named in Tennessee's renewable-products allowance; treat mushroom collection as not permitted without local confirmation.",
-        note: "Tenn. Comp. R. & Regs. 0400-02-02-.18(3) names fruits, berries, and driftwood — not fungi; the project excludes mushrooms conservatively.",
+        note: "Tenn. Comp. R. & Regs. 0400-02-02-.18(3) names fruits, berries, and driftwood, not fungi; the project excludes mushrooms conservatively.",
         sourceLabel: "Tenn. Comp. R. & Regs. 0400-02-02-.18", sourceUrl: ACCESS_RULE_SOURCES.tennesseeParks };
     }
     return { status: "allowed", label: "Allowed", area,
@@ -9977,7 +9977,7 @@ function getStateSystemRule(stateCode, text, area, species) {
   if (stateCode === "GA" && (text.includes("state park") || text.includes("state historic site"))) {
     return { status: "prohibited", label: "Prohibited", area,
       limit: "Collecting plants or plant parts is prohibited in Georgia state parks unless a site manager has designated specific fruits or berries for that unit.",
-      note: "Ga. Comp. R. & Regs. r. 391-5-1-.04 protects all plant material; any foraging exception is discretionary and unit-specific — check posted rules. Mushrooms are not covered.",
+      note: "Ga. Comp. R. & Regs. r. 391-5-1-.04 protects all plant material; any foraging exception is discretionary and unit-specific, check posted rules. Mushrooms are not covered.",
       sourceLabel: "Ga. Comp. R. & Regs. r. 391-5-1-.04", sourceUrl: ACCESS_RULE_SOURCES.georgiaParks };
   }
   if (stateCode === "NE" && (text.includes("state park") || text.includes("state historical park") || text.includes("state recreation"))) {
@@ -9989,7 +9989,7 @@ function getStateSystemRule(stateCode, text, area, species) {
   if (stateCode === "WY" && (text.includes("state park") || text.includes("state historic site") || text.includes("state recreation") || text.includes("state archaeological"))) {
     return { status: "prohibited", label: "Prohibited", area,
       limit: "Collecting plants is prohibited in Wyoming state parks except fruits and berries the superintendent has specifically designated for personal consumption.",
-      note: "024-1 Wyo. Code R. § 1-15 protects vegetation; only superintendent-designated fruits and berries may be gathered (no mushrooms) — check the unit.",
+      note: "024-1 Wyo. Code R. § 1-15 protects vegetation; only superintendent-designated fruits and berries may be gathered (no mushrooms), check the unit.",
       sourceLabel: "024-1 Wyo. Code R. § 1-15", sourceUrl: ACCESS_RULE_SOURCES.wyomingParks };
   }
 

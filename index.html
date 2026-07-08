@@ -28,7 +28,7 @@
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=launch1">
+    <link rel="stylesheet" href="./styles.css?v=launch2">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -64,7 +64,7 @@
           <div class="location-suggestions" id="locationSearchSuggestions" role="listbox" aria-label="Suggested locations" hidden></div>
           <p class="location-search-status" id="locationSearchStatus" aria-live="polite"></p>
         </div>
-        <div id="mode-disclaimer" class="floating" role="note" aria-live="polite" hidden>HERBALISM MAP · EDUCATIONAL REFERENCE ONLY — NOT MEDICAL ADVICE</div>
+        <div id="mode-disclaimer" class="floating" role="note" aria-live="polite" hidden>HERBALISM MAP · EDUCATIONAL REFERENCE ONLY, NOT MEDICAL ADVICE</div>
         <div id="season-bar" class="floating" aria-label="Season">
           <div class="season-hist" id="seasonHist">
             <div class="season-hh" id="seasonHistHead">IN SEASON BY MONTH · <b>INK MAP</b> · STACKED BY CATEGORY</div>
@@ -121,7 +121,7 @@
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=launch1"></script>
+    <script src="./app.js?v=launch2"></script>
     <script>
       // Register the offline service worker from the root scope (controls the
       // whole origin). Guarded and deferred to load so it never blocks first

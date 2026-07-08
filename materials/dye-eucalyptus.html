@@ -144,7 +144,7 @@
     }
     /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
        Navigation and the license paragraph drop out; safety content ALWAYS
-       prints — nothing below may ever hide a .safety block. */
+       prints, nothing below may ever hide a .safety block. */
     @page { margin: 14mm; }
     @media print {
       :root { --ground:#fff; --panel:#fff; --ink:#000; --sub:#333; --accent-dark:#000; --hair:#999; }
@@ -164,7 +164,7 @@
       h1, h2 { break-after: avoid; page-break-after: avoid; }
       h2, .meta, .meta li { border-color: #000; }
       footer .fbox { border-top-color: #000; color: #000; }
-      /* Print the URL of each cited source — only in the Sources list. */
+      /* Print the URL of each cited source, only in the Sources list. */
       .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
     }
     </style>
@@ -207,17 +207,17 @@
         </ul>
         <h2>Sources</h2>
         <ul class="sources">
-          <li><a href="https://www.cal-ipc.org/plants/profile/eucalyptus-globulus-profile/" rel="noreferrer">Cal-IPC — Eucalyptus globulus (invasive plant profile)</a></li>
-          <li><a href="https://www.fs.usda.gov/database/feis/plants/tree/eucglo/all.html" rel="noreferrer">USDA Forest Service — Eucalyptus globulus, Fire Effects Information System</a></li>
+          <li><a href="https://www.cal-ipc.org/plants/profile/eucalyptus-globulus-profile/" rel="noreferrer">Cal-IPC, Eucalyptus globulus (invasive plant profile)</a></li>
+          <li><a href="https://www.fs.usda.gov/database/feis/plants/tree/eucglo/all.html" rel="noreferrer">USDA Forest Service, Eucalyptus globulus, Fire Effects Information System</a></li>
         </ul>
         <a class="cta" href="https://craftalmanac.com/#map=ink&amp;sp=dye-eucalyptus">Open Eucalyptus on the map &rarr;</a>
         <p class="cta-note">Opens the Ink &amp; Dye map focused on this material, with the land-status rules for wherever you look.</p>
       </main>
     <footer>
       <div class="fbox">
-        <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+        <p><strong>Occurrence is never permission</strong>, every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
         <p><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report%3A%20Eucalyptus%20(materials%2Fdye-eucalyptus.html)">Report a problem with this page &rarr;</a> Corrections are welcome and help keep the map trustworthy.</p>
-        <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+        <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses, see <a href="/attribution.html">attribution notes</a>.</p>
       </div>
     </footer>
     </div>

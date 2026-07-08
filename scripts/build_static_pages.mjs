@@ -385,7 +385,7 @@ const SHARED_CSS = `
     }
     /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
        Navigation and the license paragraph drop out; safety content ALWAYS
-       prints — nothing below may ever hide a .safety block. */
+       prints, nothing below may ever hide a .safety block. */
     @page { margin: 14mm; }
     @media print {
       :root { --ground:#fff; --panel:#fff; --ink:#000; --sub:#333; --accent-dark:#000; --hair:#999; }
@@ -405,7 +405,7 @@ const SHARED_CSS = `
       h1, h2 { break-after: avoid; page-break-after: avoid; }
       h2, .meta, .meta li { border-color: #000; }
       footer .fbox { border-top-color: #000; color: #000; }
-      /* Print the URL of each cited source — only in the Sources list. */
+      /* Print the URL of each cited source, only in the Sources list. */
       .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
     }`;
 
@@ -454,17 +454,17 @@ ${body}
 // Shared footer. `flags` toggles the extra safety/disclaimer lines.
 function footerHtml({ educationalOnly = false, mineralMaterial = false, reportSubject = "" } = {}) {
   const lines = [
-    `<p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>`
+    `<p><strong>Occurrence is never permission</strong>, every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>`
   ];
   if (educationalOnly) {
-    lines.push(`<p><strong>Herbalism content is educational reference only</strong> — historical and traditional use, not medical advice, and not a harvest recommendation.</p>`);
+    lines.push(`<p><strong>Herbalism content is educational reference only</strong>, historical and traditional use, not medical advice, and not a harvest recommendation.</p>`);
   }
   if (mineralMaterial) {
-    lines.push(`<p>Many recorded mineral localities are old, inactive, or abandoned workings. Never enter shafts, adits, or pits — collect only surface float, and confirm the ground is neither posted nor hazardous.</p>`);
+    lines.push(`<p>Many recorded mineral localities are old, inactive, or abandoned workings. Never enter shafts, adits, or pits, collect only surface float, and confirm the ground is neither posted nor hazardous.</p>`);
   }
   const subject = encodeURIComponent(reportSubject || "Craft Almanac error report");
   lines.push(`<p><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> <a href="mailto:reports@craftalmanac.com?subject=${subject}">Report a problem with this page &rarr;</a> Corrections are welcome and help keep the map trustworthy.</p>`);
-  lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>`);
+  lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses, see <a href="/attribution.html">attribution notes</a>.</p>`);
   return `    <footer>\n      <div class="fbox">\n${lines.map((l) => `        ${l}`).join("\n")}\n      </div>\n    </footer>`;
 }
 
@@ -491,7 +491,7 @@ function renderSpeciesPage(species, mode, ctx) {
   const deepLink = `${SITE}/#map=${encodeURIComponent(mode.key)}&sp=${encodeURIComponent(species.id)}`;
   const description = metaDescription(
     profile && profile.summary ? profile.summary : species.notes,
-    `${name} (${sci}) — ${category} on the ${mode.label} map of Craft Almanac.`
+    `${name} (${sci}), ${category} on the ${mode.label} map of Craft Almanac.`
   );
 
   const parts = [];
@@ -613,7 +613,7 @@ function renderRecipePage(recipe, ctx) {
   const prose = (t) => renderProse(t, recipeIds, "");
   const name = recipe.name || recipe.id;
   const mapLabel = RECIPE_MAP_LABEL[recipe.map] || titleCase(recipe.map);
-  const description = metaDescription(recipe.teaser || recipe.hook, `${name} — a ${mapLabel} project recipe on Craft Almanac.`);
+  const description = metaDescription(recipe.teaser || recipe.hook, `${name}, a ${mapLabel} project recipe on Craft Almanac.`);
 
   // Spine color: the recipe's own swatch, else its material's category color,
   // else the olive accent — so every project card carries a meaningful spine.
@@ -640,14 +640,14 @@ function renderRecipePage(recipe, ctx) {
     const sw = recipe.swatch ? `<span class="swatch" style="background:${escapeHtml(recipe.swatch)}"></span>` : "";
     chips.push(`<li class="chip">${sw}${escapeHtml(recipe.color)}</li>`);
   }
-  if (recipe.toxic) chips.push(`<li class="chip" style="border-color:var(--st-prohibited);color:var(--st-prohibited)">Toxic — read safety</li>`);
+  if (recipe.toxic) chips.push(`<li class="chip" style="border-color:var(--st-prohibited);color:var(--st-prohibited)">Toxic, read safety</li>`);
   parts.push(`      <ul class="chips">${chips.join("")}</ul>`);
 
   // Safety FIRST when toxic (prominent); still shown for non-toxic recipes.
   const safety = Array.isArray(recipe.safety) ? recipe.safety.filter(Boolean) : [];
   if (safety.length) {
     parts.push(`      <div class="safety${recipe.toxic ? "" : " mild"}">`);
-    parts.push(`        <div class="k">${recipe.toxic ? "Safety — read before you start" : "Safety"}</div>`);
+    parts.push(`        <div class="k">${recipe.toxic ? "Safety, read before you start" : "Safety"}</div>`);
     parts.push(`        <ul>`);
     for (const s of safety) parts.push(`          <li>${prose(s)}</li>`);
     parts.push(`        </ul>`);
@@ -658,7 +658,7 @@ function renderRecipePage(recipe, ctx) {
   // block so a toxic recipe still leads with its warning).
   if (material) {
     const mname = material.species.commonName || material.species.id;
-    const msci = material.species.scientificName ? ` — ${material.species.scientificName}` : "";
+    const msci = material.species.scientificName ? `, ${material.species.scientificName}` : "";
     parts.push(`      <h2>Foraged from</h2>`);
     parts.push(`      <ul class="xlinks">`);
     parts.push(`        <li><a class="xlink" href="/materials/${escapeHtml(recipe.plantId)}.html"><span class="t">${escapeHtml(mname)} &rarr;</span><span class="d">${escapeHtml(material.mode.label)} map${escapeHtml(msci)}</span></a></li>`);
@@ -676,7 +676,7 @@ function renderRecipePage(recipe, ctx) {
     parts.push(`      <ul class="ingredients">`);
     for (const ing of recipe.ingredients) {
       const item = prose(ing.item);
-      const amount = ing.amount ? ` — ${prose(ing.amount)}` : "";
+      const amount = ing.amount ? `, ${prose(ing.amount)}` : "";
       const optional = ing.required === false ? ` <span class="opt">(optional)</span>` : "";
       const note = ing.note ? ` <span class="note">· ${prose(ing.note)}</span>` : "";
       parts.push(`        <li>${item}${amount}${optional}${note}</li>`);
@@ -757,7 +757,7 @@ function renderMaterialsIndex(catalogsByMode) {
   parts.push(`    <main class="sheet" style="--spine:var(--accent)">`);
   parts.push(`      <p class="kicker"><span class="dot"></span>Craft Almanac <span class="sep">/</span> Reference</p>`);
   parts.push(`      <h1>Materials</h1>`);
-  parts.push(`      <p class="teaser">Every material profile across the Craft Almanac maps — grouped by map. Each links into the live map, where every point carries the rule for the land it sits on.</p>`);
+  parts.push(`      <p class="teaser">Every material profile across the Craft Almanac maps, grouped by map. Each links into the live map, where every point carries the rule for the land it sits on.</p>`);
   for (const mode of MODES) {
     const list = catalogsByMode[mode.key];
     if (!list || !list.length) continue;
@@ -776,7 +776,7 @@ function renderMaterialsIndex(catalogsByMode) {
   parts.push(footerHtml());
   return pageShell({
     title: "Materials",
-    description: "Every material profile across the Craft Almanac maps — food, ink and dye, herbalism, and minerals — grouped by map.",
+    description: "Every material profile across the Craft Almanac maps, food, ink and dye, herbalism, and minerals, grouped by map.",
     canonicalPath: "/materials/",
     ogType: "website",
     body: parts.join("\n"),
@@ -798,7 +798,7 @@ function renderProjectsIndex(recipes) {
   parts.push(`    <main class="sheet" style="--spine:var(--accent)">`);
   parts.push(`      <p class="kicker"><span class="dot"></span>Craft Almanac <span class="sep">/</span> Reference</p>`);
   parts.push(`      <h1>Projects</h1>`);
-  parts.push(`      <p class="teaser">Every project recipe on Craft Almanac — grouped by map and kind. Each lives in the Projects sheet of its map.</p>`);
+  parts.push(`      <p class="teaser">Every project recipe on Craft Almanac, grouped by map and kind. Each lives in the Projects sheet of its map.</p>`);
   const seenMaps = [...mapOrder.filter((m) => byMap.has(m)), ...[...byMap.keys()].filter((m) => !mapOrder.includes(m))];
   for (const mapKey of seenMaps) {
     const byKind = byMap.get(mapKey);
@@ -818,7 +818,7 @@ function renderProjectsIndex(recipes) {
   parts.push(footerHtml());
   return pageShell({
     title: "Projects",
-    description: "Every project recipe on Craft Almanac — inks, dyes, pigments, foods, and mineral crafts — grouped by map and kind.",
+    description: "Every project recipe on Craft Almanac, inks, dyes, pigments, foods, and mineral crafts, grouped by map and kind.",
     canonicalPath: "/projects/",
     ogType: "website",
     body: parts.join("\n"),

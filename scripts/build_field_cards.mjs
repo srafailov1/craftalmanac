@@ -43,17 +43,17 @@ const ROOT = path.resolve(path.dirname(__filename), "..");
 // the <28 / <56 thresholds MUST match it.
 function workabilityLabel(value) {
   if (typeof value !== "number") return "Unclassified";
-  if (value < 28) return "Soft — carving & pottery";
-  if (value < 56) return "Medium — carving & engraving";
-  return "Hard — sharpening, knapping & lapidary";
+  if (value < 28) return "Soft, carving & pottery";
+  if (value < 56) return "Medium, carving & engraving";
+  return "Hard, sharpening, knapping & lapidary";
 }
 
 // Per-card standing notes required by the project's safety values.
 const MODE_CARD_NOTE = {
-  medicine: "Educational reference only — not medical advice",
-  minerals: "Surface float only — never enter old mine workings"
+  medicine: "Educational reference only, not medical advice",
+  minerals: "Surface float only, never enter old mine workings"
 };
-const CARD_FOOT = "Occurrence ≠ permission — check the rule in the app";
+const CARD_FOOT = "Occurrence ≠ permission, check the rule in the app";
 
 // ---------------------------------------------------------------------------
 // QR rendering: inline SVG (one path of dark modules), medium error
@@ -201,7 +201,7 @@ function renderSheet(mode, catalog, ctx) {
   parts.push(`    <header class="intro no-print">`);
   parts.push(`      <div class="k">Craft Almanac · field cards</div>`);
   parts.push(`      <h1>${escapeHtml(mode.label)} field cards</h1>`);
-  parts.push(`      <p>${catalog.length} cut-out cards, eight per printed page. Print at 100% scale (no “fit to page”), portrait, letter or A4, then cut on the dashed lines. Each QR code opens the material's profile; the app carries the land-status rule wherever you look — occurrence is never permission.</p>`);
+  parts.push(`      <p>${catalog.length} cut-out cards, eight per printed page. Print at 100% scale (no “fit to page”), portrait, letter or A4, then cut on the dashed lines. Each QR code opens the material's profile; the app carries the land-status rule wherever you look, occurrence is never permission.</p>`);
   parts.push(`      <p><a href="./">All card sheets</a> · <a href="/materials/">Material profiles</a></p>`);
   parts.push(`    </header>`);
   parts.push(`    <section class="sheet">`);
@@ -209,7 +209,7 @@ function renderSheet(mode, catalog, ctx) {
   parts.push(`    </section>`);
   return cardsPageShell({
     title: `${mode.label} field cards`,
-    description: `Printable cut-out field cards for every material on the Craft Almanac ${mode.label} map — season, safety tags, harvest ethic, and a QR link to each profile.`,
+    description: `Printable cut-out field cards for every material on the Craft Almanac ${mode.label} map, season, safety tags, harvest ethic, and a QR link to each profile.`,
     canonicalPath: `/cards/${mode.key}.html`,
     body: parts.join("\n")
   });
@@ -223,20 +223,20 @@ function renderCardsIndex(countsByMode) {
   parts.push(`    <main class="intro">`);
   parts.push(`      <div class="k">Craft Almanac · teaching pack</div>`);
   parts.push(`      <h1>Field cards</h1>`);
-  parts.push(`      <p>Printable sheets of cut-out field cards — one card per material, with its season (or workability, for minerals), safety tags, harvest-ethic label, and a QR code that opens the material's profile page. Print at 100% scale (no “fit to page”) on letter or A4 paper, portrait, then cut along the dashed borders; each printed page holds eight cards.</p>`);
+  parts.push(`      <p>Printable sheets of cut-out field cards, one card per material, with its season (or workability, for minerals), safety tags, harvest-ethic label, and a QR code that opens the material's profile page. Print at 100% scale (no “fit to page”) on letter or A4 paper, portrait, then cut along the dashed borders; each printed page holds eight cards.</p>`);
   parts.push(`      <ul class="sheet-list">`);
   for (const mode of MODES) {
     const count = countsByMode[mode.key] || 0;
-    parts.push(`        <li><a href="./${mode.key}.html">${escapeHtml(mode.label)} field cards</a> <span class="count">— ${count} cards</span></li>`);
+    parts.push(`        <li><a href="./${mode.key}.html">${escapeHtml(mode.label)} field cards</a> <span class="count">, ${count} cards</span></li>`);
   }
   parts.push(`      </ul>`);
   parts.push(`    </main>`);
   parts.push(`    <footer class="page-foot">`);
-  parts.push(`      <p><strong>Occurrence is never permission</strong> — the cards are identification and ethics aids, not harvest rights. Every point in the app carries the rule for the land it sits on; check it before collecting. Herbalism cards are educational reference only, not medical advice.</p>`);
+  parts.push(`      <p><strong>Occurrence is never permission</strong>, the cards are identification and ethics aids, not harvest rights. Every point in the app carries the rule for the land it sits on; check it before collecting. Herbalism cards are educational reference only, not medical advice.</p>`);
   parts.push(`    </footer>`);
   return cardsPageShell({
     title: "Field cards",
-    description: "Printable QR field cards for the Craft Almanac maps — food, ink and dye, herbalism, and minerals. Cut-out cards with seasons, safety tags, and profile links.",
+    description: "Printable QR field cards for the Craft Almanac maps, food, ink and dye, herbalism, and minerals. Cut-out cards with seasons, safety tags, and profile links.",
     canonicalPath: "/cards/",
     body: parts.join("\n")
   });

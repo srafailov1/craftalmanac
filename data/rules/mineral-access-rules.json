@@ -8,7 +8,7 @@
     "USFS": {
       "status": "allowed",
       "area": "National forest (USDA Forest Service)",
-      "limit": "Rockhounding of reasonable amounts for personal, noncommercial use is generally allowed on most national-forest land under free use — but not in wilderness, special-interest, or research areas, and not where it conflicts with a mining claim or lease. Much of the Mount Ida / Montgomery County quartz district in particular is under active mining claims or is patented private pay-to-dig ground, where free use does NOT apply. Confirm claim status and check with the local ranger district before collecting.",
+      "limit": "Rockhounding of reasonable amounts for personal, noncommercial use is generally allowed on most national-forest land under free use, but not in wilderness, special-interest, or research areas, and not where it conflicts with a mining claim or lease. Much of the Mount Ida / Montgomery County quartz district in particular is under active mining claims or is patented private pay-to-dig ground, where free use does NOT apply. Confirm claim status and check with the local ranger district before collecting.",
       "note": "A forest-wide policy, not a guarantee for this exact parcel. Occurrence is not permission.",
       "sourceLabel": "USFS Rockhounding Guide (36 CFR 228 Subpart C)",
       "sourceUrl": "https://www.fs.usda.gov/sites/default/files/rockhounding-guide-fseprd768373.pdf",
@@ -32,9 +32,9 @@
     "State park": {
       "status": "allowed",
       "area": "Crater of Diamonds State Park (Arkansas)",
-      "limit": "An exceptional case: this state park lets visitors dig and keep gems and minerals for a paid admission (finders-keepers). State parks otherwise generally prohibit collecting — never assume another state park allows it.",
+      "limit": "An exceptional case: this state park lets visitors dig and keep gems and minerals for a paid admission (finders-keepers). State parks otherwise generally prohibit collecting, never assume another state park allows it.",
       "note": "Pay the park admission and follow posted rules; this exception does not generalize to other state parks.",
-      "sourceLabel": "Arkansas State Parks — Crater of Diamonds",
+      "sourceLabel": "Arkansas State Parks, Crater of Diamonds",
       "sourceUrl": "https://www.arkansas.com/state-parks/explore/parks/crater-of-diamonds-state-park",
       "checked": {
         "by": "agent",
@@ -44,7 +44,7 @@
     "Claimed / fee-dig": {
       "status": "private",
       "area": "Commercial pay-to-dig mine or active mining claim",
-      "limit": "This named locality is a commercial fee-dig operation or sits on active/patented mining claims — common across the Mount Ida quartz district. There is no free-use collecting right here; arrange access (and any fee) with the operator, and verify claim status before digging.",
+      "limit": "This named locality is a commercial fee-dig operation or sits on active/patented mining claims, common across the Mount Ida quartz district. There is no free-use collecting right here; arrange access (and any fee) with the operator, and verify claim status before digging.",
       "note": "Downgraded from the forest-wide rule because the point is a named mine on claimed or private ground. Occurrence is not permission.",
       "sourceLabel": "BLM mining claims (43 CFR 8365.1-5)",
       "sourceUrl": "https://www.ecfr.gov/current/title-43/section-8365.1-5",
@@ -56,7 +56,7 @@
     "BLM": {
       "status": "allowed",
       "area": "BLM public land",
-      "limit": "Casual collection of reasonable amounts of rock, mineral specimens, and semiprecious gemstones for personal, noncommercial use is generally allowed on open BLM public land — but NOT at developed recreation sites, on active mining claims, on private mineral estate, or in closed/withdrawn areas. Daily/weight caps are set by the local field office (petrified wood is capped at 25 lb/day + 250 lb/yr).",
+      "limit": "Casual collection of reasonable amounts of rock, mineral specimens, and semiprecious gemstones for personal, noncommercial use is generally allowed on open BLM public land, but NOT at developed recreation sites, on active mining claims, on private mineral estate, or in closed/withdrawn areas. Daily/weight caps are set by the local field office (petrified wood is capped at 25 lb/day + 250 lb/yr).",
       "note": "A general BLM policy, not a guarantee for this exact parcel; check for claims and withdrawals with the local field office. Occurrence is not permission.",
       "sourceLabel": "BLM rockhounding (43 CFR 8365.1-5)",
       "sourceUrl": "https://www.ecfr.gov/current/title-43/section-8365.1-5",
@@ -94,7 +94,7 @@
       "area": "Tribal / reservation land",
       "limit": "Collecting on tribal or reservation land requires the tribe's permission and is often prohibited outright; federal antiquities protections also apply. Treat as closed unless a tribal authority grants access.",
       "note": "Tribal land is sovereign; never collect without explicit tribal permission.",
-      "sourceLabel": "Tribal land — permission required",
+      "sourceLabel": "Tribal land, permission required",
       "sourceUrl": "",
       "checked": {
         "by": "agent",
@@ -104,7 +104,7 @@
     "Private / other": {
       "status": "private",
       "area": "Private, leased, or claimed ground",
-      "limit": "No public collecting right at this point. Most recorded localities sit on private, leased, or actively claimed land — secure written landowner permission, and check for active mining claims, before collecting.",
+      "limit": "No public collecting right at this point. Most recorded localities sit on private, leased, or actively claimed land, secure written landowner permission, and check for active mining claims, before collecting.",
       "note": "Land status is not publicly sourced for this exact point; treat it as private unless you can verify otherwise.",
       "sourceLabel": "Land status not sourced",
       "sourceUrl": "",

@@ -144,7 +144,7 @@
     }
     /* Print: a clean black-on-white one-pager (Phase 5.6 teaching pack).
        Navigation and the license paragraph drop out; safety content ALWAYS
-       prints — nothing below may ever hide a .safety block. */
+       prints, nothing below may ever hide a .safety block. */
     @page { margin: 14mm; }
     @media print {
       :root { --ground:#fff; --panel:#fff; --ink:#000; --sub:#333; --accent-dark:#000; --hair:#999; }
@@ -164,7 +164,7 @@
       h1, h2 { break-after: avoid; page-break-after: avoid; }
       h2, .meta, .meta li { border-color: #000; }
       footer .fbox { border-top-color: #000; color: #000; }
-      /* Print the URL of each cited source — only in the Sources list. */
+      /* Print the URL of each cited source, only in the Sources list. */
       .sources a[href]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #333; word-break: break-all; }
     }
     </style>
@@ -179,9 +179,9 @@
       <p class="kicker"><span class="dot"></span>Food map <span class="sep">/</span> Preserve</p>
       <h1>Wild Grape &amp; Crabapple Jelly</h1>
       <p class="teaser">No-pectin jelly from wild fruit</p>
-      <ul class="chips"><li class="chip">Food map</li><li class="chip">Preserve</li><li class="chip">Intermediate</li><li class="chip"><span class="swatch" style="background:#6e102a"></span>Deep ruby jelly</li><li class="chip" style="border-color:var(--st-prohibited);color:var(--st-prohibited)">Toxic — read safety</li></ul>
+      <ul class="chips"><li class="chip">Food map</li><li class="chip">Preserve</li><li class="chip">Intermediate</li><li class="chip"><span class="swatch" style="background:#6e102a"></span>Deep ruby jelly</li><li class="chip" style="border-color:var(--st-prohibited);color:var(--st-prohibited)">Toxic, read safety</li></ul>
       <div class="safety">
-        <div class="k">Safety — read before you start</div>
+        <div class="k">Safety, read before you start</div>
         <ul>
           <li>Grapes are high-acid and water-bath safe, but confirm identity: Canada moonseed (Menispermum canadense) is toxic (potentially fatal) and mimics wild grape - check for grape&#039;s 2-4 teardrop seeds and forked tendrils; moonseed has a single crescent seed, no tendrils, and untoothed leaves.</li>
           <li>Use the tested juice-to-sugar ratio - sugar drives the set and keeps water activity low enough to resist mold; acidity comes from the fruit itself (add bottled lemon juice if fruit is fully ripe).</li>
@@ -192,16 +192,16 @@
       </div>
       <h2>Foraged from</h2>
       <ul class="xlinks">
-        <li><a class="xlink" href="/materials/grape.html"><span class="t">Wild grapes &rarr;</span><span class="d">Food map — Vitis</span></a></li>
+        <li><a class="xlink" href="/materials/grape.html"><span class="t">Wild grapes &rarr;</span><span class="d">Food map, Vitis</span></a></li>
       </ul>
       <h2>About</h2>
       <p>Wild fox and riverbank grapes (Vitis) are too tart and seedy to eat by the handful, but that same tartness - pH near 3.2 - is exactly what jelly wants. They carry their own pectin, and a few underripe crabapples or hawthorn haws thrown in push the set over the line so you can skip the box pectin entirely. The catch every forager learns: green wild grape juice can crystallize into gritty tartrate crystals, so the juice needs an overnight rest in the cold before it becomes jelly.</p>
       <h2>Ingredients</h2>
       <ul class="ingredients">
-        <li>Wild grapes (Vitis), part slightly underripe — ~3 1/2 lb for ~5 cups juice <span class="note">· A quarter underripe grapes boosts natural pectin and acidity. Confirm true grape, not moonseed.</span></li>
-        <li>Crabapples or hawthorn haws (optional pectin boost) — 1-2 cups, quartered <span class="opt">(optional)</span> <span class="note">· Both are high-pectin; hawthorn haws are a mapped material and set beautifully. Never crush or eat the seeds (cyanogenic) - strain them out.</span></li>
-        <li>Granulated sugar — ~3/4 cup per cup of juice (per NCHFP no-pectin jelly) <span class="note">· Follow the tested juice-to-sugar ratio for a reliable set.</span></li>
-        <li>Bottled lemon juice — 2 Tbsp if fruit is fully ripe <span class="opt">(optional)</span> <span class="note">· Adds acid and pectin help if you couldn&#039;t get underripe fruit.</span></li>
+        <li>Wild grapes (Vitis), part slightly underripe, ~3 1/2 lb for ~5 cups juice <span class="note">· A quarter underripe grapes boosts natural pectin and acidity. Confirm true grape, not moonseed.</span></li>
+        <li>Crabapples or hawthorn haws (optional pectin boost), 1-2 cups, quartered <span class="opt">(optional)</span> <span class="note">· Both are high-pectin; hawthorn haws are a mapped material and set beautifully. Never crush or eat the seeds (cyanogenic) - strain them out.</span></li>
+        <li>Granulated sugar, ~3/4 cup per cup of juice (per NCHFP no-pectin jelly) <span class="note">· Follow the tested juice-to-sugar ratio for a reliable set.</span></li>
+        <li>Bottled lemon juice, 2 Tbsp if fruit is fully ripe <span class="opt">(optional)</span> <span class="note">· Adds acid and pectin help if you couldn&#039;t get underripe fruit.</span></li>
       </ul>
       <h2>Tools</h2>
       <p><strong>Required:</strong> Large heavy pot, Jelly bag or cheesecloth-lined colander, Boiling-water canner + rack, Half-pint jars, lids, bands, Jar lifter, funnel, ladle</p>
@@ -236,9 +236,9 @@
     </main>
     <footer>
       <div class="fbox">
-        <p><strong>Occurrence is never permission</strong> — every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
+        <p><strong>Occurrence is never permission</strong>, every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
         <p><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report%3A%20Wild%20Grape%20%26%20Crabapple%20Jelly%20(projects%2Ffood-wild-grape-crabapple-jelly.html)">Report a problem with this page &rarr;</a> Corrections are welcome and help keep the map trustworthy.</p>
-        <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses — see <a href="/attribution.html">attribution notes</a>.</p>
+        <p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses, see <a href="/attribution.html">attribution notes</a>.</p>
       </div>
     </footer>
     </div>
