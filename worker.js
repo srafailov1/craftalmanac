@@ -72,7 +72,7 @@ async function handleReport(request, env) {
   // Honeypot: a person never sees or fills the hidden "website" field; bots that
   // auto-fill every input do. Pretend success so we don't teach them to adapt.
   if (honeypot) {
-    return respond(asJson, 200, true, "Thanks — your report was sent.");
+    return respond(asJson, 200, true, "Thank you, your report was sent.");
   }
 
   if (!message) {
@@ -127,7 +127,7 @@ async function handleReport(request, env) {
     return respond(asJson, 502, false, "We couldn't send that just now. Please try again, or email reports@craftalmanac.com directly.");
   }
 
-  return respond(asJson, 200, true, "Thanks — your report was sent. We read every one.");
+  return respond(asJson, 200, true, "Thank you, your report was sent.");
 }
 
 function respond(asJson, status, ok, message) {
