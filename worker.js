@@ -21,10 +21,10 @@ const MAX_MESSAGE = 5000;
 const MAX_FIELD = 300;
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === "/api/report") {
-      return handleReport(request, env);
+      return handleReport(request, env, ctx);
     }
     // Not our endpoint — serve the static site exactly as before.
     return env.ASSETS.fetch(request);
@@ -40,7 +40,7 @@ function wantsJson(request, contentType) {
     || request.headers.get("x-requested-with") === "fetch";
 }
 
-async function handleReport(request, env) {
+async function handleReport(request, env, ctx) {
   const contentType = request.headers.get("content-type") || "";
   const asJson = wantsJson(request, contentType);
 
@@ -111,21 +111,22 @@ async function handleReport(request, env) {
     + `<hr style="border:none;border-top:1px solid #d7ddce">`
     + `<p style="color:#6a7566;white-space:pre-wrap;font-size:13px;margin:1em 0 0">${escapeHtml(meta)}</p></div>`;
 
-  try {
-    await env.EMAIL.send({
+  // Hand the send to the runtime and reply immediately, so the visitor gets an
+  // instant confirmation instead of waiting on the email service. The send keeps
+  // running after the response; failures are logged (visible via `wrangler tail`)
+  // rather than surfaced, since a report is best-effort.
+  ctx.waitUntil(
+    env.EMAIL.send({
       to: REPORT_TO,
       from: REPORT_FROM,
       ...(email ? { replyTo: email } : {}),
       subject,
       text,
       html
-    });
-  } catch (err) {
-    // Surface the send failure in logs (visible via `wrangler tail`); the visitor
-    // still gets the graceful fallback response below.
-    console.error("EMAIL.send failed:", (err && (err.stack || err.message)) || String(err));
-    return respond(asJson, 502, false, "We couldn't send that just now. Please try again, or email reports@craftalmanac.com directly.");
-  }
+    }).catch((err) => {
+      console.error("EMAIL.send failed:", (err && (err.stack || err.message)) || String(err));
+    })
+  );
 
   return respond(asJson, 200, true, "Thank you, your report was sent.");
 }
