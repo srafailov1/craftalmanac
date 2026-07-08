@@ -91,11 +91,20 @@ function extractConstExpression(source, name) {
   let expressionStart = equals + 1;
   while (/\s/.test(source[expressionStart])) expressionStart += 1;
   const openChar = source[expressionStart];
-  const closeChar = openChar === "[" ? "]" : openChar === "{" ? "}" : "";
-  if (!closeChar) throw new Error(`Const ${name} does not start with an object or array literal`);
-  const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
-  if (end < 0) throw new Error(`Could not parse const ${name}`);
-  return source.slice(expressionStart, end + 1);
+  if (openChar === "[" || openChar === "{") {
+    const closeChar = openChar === "[" ? "]" : "}";
+    const end = findMatchingDelimiter(source, expressionStart, openChar, closeChar);
+    if (end < 0) throw new Error(`Could not parse const ${name}`);
+    return source.slice(expressionStart, end + 1);
+  }
+  // Constructor initializer such as `new Set([...])` or `new Map([...])`.
+  if (source.startsWith("new ", expressionStart)) {
+    const parenOpen = source.indexOf("(", expressionStart);
+    const end = findMatchingDelimiter(source, parenOpen, "(", ")");
+    if (end < 0) throw new Error(`Could not parse const ${name}`);
+    return source.slice(expressionStart, end + 1);
+  }
+  throw new Error(`Const ${name} does not start with an object, array, or constructor literal`);
 }
 
 function extractFunctionSource(source, name) {
@@ -126,7 +135,7 @@ async function buildRuleContext() {
   // Constants the rule functions close over. NPS_GATHERING_RULES now lives in
   // versioned JSON (data/rules/, loaded at boot by loadAccessRuleTables); feed
   // the vm the same data the app fetches.
-  ["ACCESS_RULE_SOURCES"].forEach((name) => {
+  ["ACCESS_RULE_SOURCES", "NONFOOD_HARVEST_NEEDS_PERMISSION", "NONFOOD_SHENANDOAH_LISTED"].forEach((name) => {
     const expression = extractConstExpression(appSource, name);
     vm.runInContext(`var ${name} = ${expression};`, context, { filename: APP_PATH });
   });
@@ -139,6 +148,9 @@ async function buildRuleContext() {
   [
     "getRecordStateCode",
     "getPublicLandAccessRule",
+    "resolvePublicLandRule",
+    "isNonFoodHarvestRestricted",
+    "restrictedNonFoodHarvestRule",
     "getNpsCompendiumRule",
     "getStateSystemRule",
     "getLocalParkRule",
@@ -170,9 +182,21 @@ async function buildRuleContext() {
 }
 
 // Synthetic species. getStateSystemRule ignores species entirely; the NPS
-// compendium path keys off species.category.
+// compendium path keys off species.category; the cross-map extension keys off
+// the non-food id being in NONFOOD_HARVEST_NEEDS_PERMISSION.
 const FOOD_SPECIES = { id: "blackberry", commonName: "Blackberries", category: "berry", shenandoahAllowed: true };
 const MUSHROOM_SPECIES = { id: "morel", commonName: "Morels", category: "mushroom", shenandoahAllowed: true };
+// Non-food species that EXTEND the food allowance (berries / leaves; not in the
+// restricted set). shenandoahAllowed:false mirrors the real ink/medicine catalog.
+const INK_EXTEND_SPECIES = { id: "ink-elderberry", commonName: "Elderberry (ink)", category: "purple", shenandoahAllowed: false };
+const MED_EXTEND_SPECIES = { id: "medicine-mullein", commonName: "Mullein", category: "immune", shenandoahAllowed: false };
+// Non-food species whose harvest is a live root / live bark / whole plant, so it
+// is restricted on edibles-only land (NONFOOD_HARVEST_NEEDS_PERMISSION).
+const INK_RESTRICTED_SPECIES = { id: "dye-curly-dock", commonName: "Curly dock", category: "brown", shenandoahAllowed: false };
+const MED_RESTRICTED_SPECIES = { id: "medicine-echinacea", commonName: "Echinacea", category: "immune", shenandoahAllowed: false };
+// Extends by material, but its food-equivalent is NOT Shenandoah-listed (privet
+// is not an edible), so it must stay prohibited at Shenandoah (food>=non-food).
+const INK_UNLISTED_AT_SHENANDOAH = { id: "ink-privet", commonName: "Privet (ink)", category: "blue", shenandoahAllowed: false };
 
 // Build PAD-US-like properties. getPublicLandText only reads these four fields.
 function landProps({ unit, mng, mngTp, desTp, pubAccess }) {
@@ -248,7 +272,9 @@ function testStateSystemRules(context) {
       props: { unit: "Cherry Creek State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
     { label: "OR State Park (food)", stateCode: "OR", mode: "food", record: { lat: 44.0, lng: -123.0 },
       props: { unit: "Silver Falls State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
-    { label: "OR State Park (ink, non-food)", stateCode: "OR", mode: "ink", record: { lat: 44.0, lng: -123.0 },
+    { label: "OR State Park (ink, extends by material)", stateCode: "OR", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 44.0, lng: -123.0 },
+      props: { unit: "Silver Falls State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "OR State Park (ink, live-root harvest restricted)", stateCode: "OR", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 44.0, lng: -123.0 },
       props: { unit: "Silver Falls State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
     { label: "MD State Park", stateCode: "MD", record: { lat: 39.4, lng: -77.0 },
       props: { unit: "Patapsco State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
@@ -262,7 +288,9 @@ function testStateSystemRules(context) {
       props: { unit: "Itasca State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
     { label: "IL State Park (food)", stateCode: "IL", mode: "food", record: { lat: 41.32, lng: -88.99 },
       props: { unit: "Starved Rock State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
-    { label: "IL State Park (medicine, non-food)", stateCode: "IL", mode: "medicine", record: { lat: 41.32, lng: -88.99 },
+    { label: "IL State Park (medicine leaves, extends)", stateCode: "IL", mode: "medicine", species: MED_EXTEND_SPECIES, record: { lat: 41.32, lng: -88.99 },
+      props: { unit: "Starved Rock State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "IL State Park (medicine root harvest restricted)", stateCode: "IL", mode: "medicine", species: MED_RESTRICTED_SPECIES, record: { lat: 41.32, lng: -88.99 },
       props: { unit: "Starved Rock State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
     { label: "IL State Fish & Wildlife Area (food)", stateCode: "IL", mode: "food", record: { lat: 40.4, lng: -91.0 },
       props: { unit: "Mississippi River State Fish and Wildlife Area", mngTp: "State", desTp: "State Fish and Wildlife Area" }, expected: "allowed" },
@@ -427,6 +455,65 @@ function testNewNpsParks(context) {
   return passed;
 }
 
+function testCrossMapExtension(context) {
+  reportSection("Cross-map permission extension (food Allowed carries into ink/herbalism by material):");
+  // On gathering-permitted land, a non-food species inherits the food status
+  // (extends) unless its harvest is a live root / bark / whole plant / fungus
+  // (NONFOOD_HARVEST_NEEDS_PERMISSION), which downgrades to prohibited. Broad
+  // forest-products land (USFS/BLM) is exempt from the downgrade.
+  const cases = [
+    // Shenandoah: the per-species food allow-list no longer blocks non-food maps
+    { label: "Shenandoah ink berries (extends, was prohibited)", stateCode: "VA", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 38.53, lng: -78.43 },
+      props: { unit: "Shenandoah National Park", mng: "National Park Service", desTp: "National Park" }, expected: "allowed" },
+    { label: "Shenandoah ink live root (restricted)", stateCode: "VA", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 38.53, lng: -78.43 },
+      props: { unit: "Shenandoah National Park", mng: "National Park Service", desTp: "National Park" }, expected: "prohibited" },
+    // Invariant: a non-food species whose food twin is NOT Shenandoah-listed stays prohibited (not more permissive than food)
+    { label: "Shenandoah ink unlisted twin (prohibited, food>=non-food)", stateCode: "VA", mode: "ink", species: INK_UNLISTED_AT_SHENANDOAH, record: { lat: 38.53, lng: -78.43 },
+      props: { unit: "Shenandoah National Park", mng: "National Park Service", desTp: "National Park" }, expected: "prohibited" },
+    // NPS compendium park
+    { label: "Great Smoky ink berries (extends)", stateCode: "TN", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 35.68, lng: -83.53 },
+      props: { unit: "Great Smoky Mountains National Park", mng: "National Park Service", desTp: "National Park" }, expected: "allowed" },
+    // Non-compendium NPS unit: the food prohibition carries across
+    { label: "Arches ink (no compendium, prohibited carries across)", stateCode: "UT", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 38.73, lng: -109.59 },
+      props: { unit: "Arches National Park", mng: "National Park Service", desTp: "National Park" }, expected: "prohibited" },
+    // Broad forest-products land: even a restricted-harvest species stays allowed
+    { label: "National Forest ink live root (broad products, allowed)", stateCode: "CA", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 36.0, lng: -118.6 },
+      props: { unit: "Sequoia National Forest", mng: "Forest Service", desTp: "National Forest" }, expected: "allowed" },
+    // Virginia state park (was "unknown" for non-food before this change)
+    { label: "VA State Park ink berries (extends)", stateCode: "VA", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 37.5, lng: -79.0 },
+      props: { unit: "Douthat State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
+    { label: "VA State Park ink live root (restricted)", stateCode: "VA", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 37.5, lng: -79.0 },
+      props: { unit: "Douthat State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    // Virginia WMA: extends the permit-required food status
+    { label: "VA WMA ink berries (extends permit-required)", stateCode: "VA", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 37.5, lng: -78.0 },
+      props: { unit: "Thompson Wildlife Management Area", mngTp: "State", desTp: "Wildlife Management Area" }, expected: "permit-required" },
+    // Fully-protected state park: prohibition carries across for every map
+    { label: "MD State Park ink (prohibited carries across)", stateCode: "MD", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 39.4, lng: -77.0 },
+      props: { unit: "Patapsco State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
+    // Medicine on an edibles-exception state forest: leaves extend, roots restricted
+    { label: "MI State Forest medicine leaves (extends)", stateCode: "MI", mode: "medicine", species: MED_EXTEND_SPECIES, record: { lat: 44.8, lng: -84.5 },
+      props: { unit: "Pigeon River Country State Forest", mngTp: "State", desTp: "State Forest" }, expected: "allowed" },
+    { label: "MI State Forest medicine root (restricted)", stateCode: "MI", mode: "medicine", species: MED_RESTRICTED_SPECIES, record: { lat: 44.8, lng: -84.5 },
+      props: { unit: "Pigeon River Country State Forest", mngTp: "State", desTp: "State Forest" }, expected: "prohibited" }
+  ];
+
+  let passed = true;
+  for (const c of cases) {
+    let actual;
+    try {
+      actual = runLandCase(context, c);
+    } catch (error) {
+      logResult(false, c.label, `error: ${error.message}`);
+      passed = false;
+      continue;
+    }
+    const ok = actual === c.expected;
+    logResult(ok, c.label, `expected ${c.expected}, got ${actual}`);
+    if (!ok) passed = false;
+  }
+  return passed;
+}
+
 async function main() {
   const context = await buildRuleContext();
 
@@ -434,7 +521,8 @@ async function main() {
     testStateCodeLookups(context),
     testStateSystemRules(context),
     testNpsMushroomRules(context),
-    testNewNpsParks(context)
+    testNewNpsParks(context),
+    testCrossMapExtension(context)
   ];
 
   const allPassed = results.every(Boolean);

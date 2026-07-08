@@ -495,6 +495,46 @@ function expandSafetyTag(tag) {
 // species on this whitelist. Any other mushroom stays prohibited, so a future
 // non-whitelisted fungus can never silently inherit an "allowed" park rule.
 const EDIBLE_FUNGUS_WHITELIST = new Set(["morel"]);
+// Cross-map permission extension (owner decision 2026-07-07): a food "Allowed"
+// carries across into the ink/herbalism maps for the SAME material at the same
+// location — EXCEPT for these non-food species, whose harvest takes a live root,
+// live bark, the whole living plant, or a fungal fruiting body. Edible-
+// consumption / personal-gathering exceptions do not cover those, so on such
+// edibles-only land they resolve to "needs the managing agency's permission"
+// instead of inheriting the food allowance. This does NOT apply on broad
+// forest-products land (USFS/BLM), where personal harvest of roots/bark is not
+// edibles-scoped — see the broadForestProducts flag. Fallen / shed / dead /
+// pruned material and fruit / nuts / berries / foliage EXTEND normally (madrone
+// shed bark, alder fallen-limb bark, walnut fallen hulls, elderberry berries all
+// carry across). Observe-only species (tanoak, wolf-lichen, etc.) are handled by
+// the separate harvest-ethic channel ("observe only, do not harvest"), not here,
+// so their legal access ring stays consistent across land types. Set verified by
+// a three-pass unanimous harvest-part classification of every non-food species'
+// usedParts field; see isNonFoodHarvestRestricted / restrictedNonFoodHarvestRule.
+const NONFOOD_HARVEST_NEEDS_PERMISSION = new Set([
+  // Live roots / taproots / tubers / rhizomes dug from a living plant
+  "dye-canaigre", "dye-curly-dock", "ink-carolina-redroot",
+  "medicine-echinacea", "medicine-dandelion", "medicine-garlic-mustard",
+  // Live bark or heartwood cut/stripped from a living plant
+  "dye-toyon", "ink-osage-orange", "ink-western-redcedar", "medicine-witch-hazel",
+  // Whole living plant taken (uprooted or cut entire)
+  "ink-bee-plant", "dye-greenthread",
+  // Fungal fruiting bodies (also the project's fungi-safety stance)
+  "ink-dyers-polypore", "ink-turkey-tail", "ink-artists-conk",
+  "ink-red-belted-conk", "ink-tinder-conk", "ink-chicken-of-the-woods"
+]);
+// Shenandoah National Park uses a per-species compendium allow-list, not a
+// generic edible exception, so the cross-map extension there must respect the
+// food>=non-food invariant: a non-food species may only inherit Shenandoah's
+// "Allowed" if its FOOD-equivalent material is on the compendium list. These are
+// the non-food species whose food twin is Shenandoah-listed (food entry has no
+// shenandoahAllowed:false flag). Every other non-food species stays prohibited
+// at Shenandoah, exactly as its food twin (or non-listed plant) would be. Keep
+// in sync with the food catalog's Shenandoah listing.
+const NONFOOD_SHENANDOAH_LISTED = new Set([
+  "ink-black-walnut", "ink-hickory", "ink-wineberry",
+  "ink-elderberry", "ink-wild-grape", "medicine-elderberry"
+]);
 const HARVEST_ETHIC_BY_SPECIES = {
   morel: "light harvest",
   blueberry: "light harvest",
@@ -9020,7 +9060,7 @@ function computeRecordAccessRule(record, species) {
     };
   }
 
-  const rasterRule = getStatusRasterAccessRule(record);
+  const rasterRule = getStatusRasterAccessRule(record, species);
   if (rasterRule) return rasterRule;
 
   if (record.publicLand && record.accessClass === "open") {
@@ -9055,7 +9095,7 @@ function isRecordCoveredByLoadedPublicLands(record) {
     && lat >= coverage.south && lat <= coverage.north;
 }
 
-function getStatusRasterAccessRule(record) {
+function getStatusRasterAccessRule(record, species) {
   // Provisional area-level rule from the precomputed PAD-US containment
   // raster (0.05-degree cells; status of the cell center, computed offline by
   // the same rules engine as the live path). Live PAD-US polygons only load
@@ -9072,6 +9112,14 @@ function getStatusRasterAccessRule(record) {
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   const status = state.statusRaster?.[getStatusRasterCellKey(lng, lat)]?.[state.activeMap];
   if (status !== "allowed" && status !== "permit-required" && status !== "prohibited") return null;
+  // The raster stores one status per cell per mode, computed with a non-
+  // restricted representative species, so it cannot express the restricted-
+  // harvest downgrade (live root/bark/whole-plant/fungus). Rather than let a
+  // restricted species inherit a cell's "allowed"/"permit" here, drop back to
+  // the conservative default until the live per-species rule loads at point
+  // zoom. (It also cannot tell edibles-only from broad forest-products land, so
+  // a blanket downgrade would wrongly prohibit these species on USFS/BLM.)
+  if (isNonFoodHarvestRestricted(species) && status !== "prohibited") return null;
   const labels = {
     allowed: "Allowed",
     "permit-required": "Permit required",
@@ -9217,6 +9265,14 @@ function getLocalParkRule(record, text, stateCode, area) {
       && pointInFeature([lng, lat], j);
   });
   if (!match) return null;
+  // Local-government foraging allowances are edible-only, but the food "Allowed"
+  // still carries across to the ink/herbalism maps for the same low-impact
+  // material (getPublicLandAccessRule wrapper); it only downgrades a
+  // restricted-harvest species (live root/bark/whole-plant/fungus). So this
+  // returns the jurisdiction's rule for every map and the wrapper handles the
+  // non-food restriction; permit-required/prohibited rules carry across
+  // unchanged. Dedicated food forests / edible parks that grant craft use are
+  // curated per-mode in SITE_ACCESS_RULES, which resolves before this.
   return {
     status: match.status,
     label: match.label,
@@ -9243,7 +9299,9 @@ function getUsfsForestRule(text, species, area) {
   // page that doesn't speak to edible foraging.
   const sourceUrl = entry.url || ACCESS_RULE_SOURCES.usfs;
   const sourceLabel = entry.url ? `${area} forest-products page` : "National-forest default rule (36 CFR 261.6)";
-  const base = { area, sourceLabel, sourceUrl };
+  // broadForestProducts: national-forest personal use covers roots/bark/boughs,
+  // not just edibles, so the non-food restricted-harvest downgrade skips USFS.
+  const base = { area, sourceLabel, sourceUrl, broadForestProducts: true };
   if (status === "allowed") {
     return { ...base, status: "allowed", label: "Allowed",
       limit: detail || "Edible items may be gathered for personal use at this forest without a permit; larger or commercial harvests require a forest-products permit.",
@@ -9266,7 +9324,26 @@ function getUsfsForestRule(text, species, area) {
     note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm, this is the general national-forest policy; ${entry.url ? ("check " + area + "'s forest-products page") : "contact the forest"} before collecting.` };
 }
 
+// Public-land access for a record, with the cross-map permission extension
+// applied. resolvePublicLandRule resolves the location as the food map would
+// (the same rule runs for every map now); non-food maps inherit that result —
+// EXTENDING the food allowance — except that a restricted-harvest species (live
+// root / bark / whole plant / fungus, see NONFOOD_HARVEST_NEEDS_PERMISSION) on
+// edibles-only land is downgraded to "needs agency permission". Broad forest-
+// products land (USFS/BLM, flagged broadForestProducts) is left alone: its
+// personal-use harvest is not edibles-scoped, so roots/bark carry across there.
 function getPublicLandAccessRule(properties, species, stateCode, record) {
+  const rule = resolvePublicLandRule(properties, species, stateCode, record);
+  if (rule
+    && !rule.broadForestProducts
+    && isNonFoodHarvestRestricted(species)
+    && (rule.status === "allowed" || rule.status === "permit-required")) {
+    return restrictedNonFoodHarvestRule(rule.area, rule.sourceLabel, rule.sourceUrl);
+  }
+  return rule;
+}
+
+function resolvePublicLandRule(properties, species, stateCode, record) {
   const text = getPublicLandText(properties);
   const area = getPublicLandName(properties);
 
@@ -9294,20 +9371,21 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
     };
   }
 
-  if (state.activeMap !== "food" && isNationalParkServiceLand(text)) {
-    return {
-      status: "prohibited",
-      label: "Prohibited",
-      area,
-      limit: "Collection is not authorized here unless the park has issued a specific exception or permit.",
-      note: "The encoded NPS exceptions are food-focused and should not be treated as permission to collect non-food plant materials.",
-      sourceLabel: "36 CFR 2.1",
-      sourceUrl: ACCESS_RULE_SOURCES.npsGeneral
-    };
-  }
+  // NPS land runs the same food resolution for every map: compendium parks below
+  // return "allowed" for listed material and the generic NPS branch further down
+  // returns "prohibited" for the rest. The non-food maps inherit that; the
+  // getPublicLandAccessRule wrapper downgrades restricted-harvest species.
 
   if (text.includes("shenandoah national park")) {
-    if (species.shenandoahAllowed === false) {
+    // Shenandoah gates by a per-species compendium allow-list. Food mode uses the
+    // catalog's shenandoahAllowed flag; non-food maps may inherit "Allowed" only
+    // when the food-equivalent material is listed (NONFOOD_SHENANDOAH_LISTED),
+    // keeping non-food no more permissive than food. Unlisted species stay
+    // prohibited on every map.
+    const shenandoahListed = state.activeMap === "food"
+      ? species.shenandoahAllowed !== false
+      : NONFOOD_SHENANDOAH_LISTED.has(species.id);
+    if (!shenandoahListed) {
       return {
         status: "prohibited",
         label: "Prohibited",
@@ -9395,6 +9473,10 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       status: "allowed",
       label: "Allowed",
       area,
+      // broadForestProducts: national-forest personal use is not edibles-scoped
+      // (36 CFR 261.6 covers roots, bark, boughs, etc.), so the non-food
+      // restricted-harvest downgrade does not apply here.
+      broadForestProducts: true,
       limit: "Small amounts for personal use are generally allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
       note: `This is the national-forest-wide default under 36 CFR 261.6, incidental personal-use gathering is usually allowed, with permits for larger or commercial harvests. The specific designated species, free-use limits, permits, and closures are set by ${area}; confirm them on ${area}'s forest-products page or with the local ranger district before collecting.`,
       sourceLabel: "National-forest products rule (36 CFR 261.6)",
@@ -9407,6 +9489,9 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
       status: "allowed",
       label: "Allowed",
       area,
+      // broadForestProducts: BLM personal-use collection covers plants/roots, not
+      // just edibles, so the non-food restricted-harvest downgrade does not apply.
+      broadForestProducts: true,
       limit: "Small amounts of berries, nuts, mushrooms, plants, seeds, flowers, and cones may be collected for personal use in most areas without a permit.",
       note: "BLM allows reasonable personal-use collection of renewable plant materials; local restrictions can apply, so check the managing field office.",
       sourceLabel: "BLM forest product permits",
@@ -9445,18 +9530,6 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   if (localRule) return localRule;
 
   if (stateCode === "VA" && isVirginiaWma(text)) {
-    if (state.activeMap !== "food") {
-      return {
-        status: "unknown",
-        label: "Unverified",
-        area,
-        limit: "We don't have a confirmed rule for collecting this here; check access requirements and posted site rules before collecting.",
-        note: "Confirm DWR access requirements and posted site rules before collecting plant material.",
-        sourceLabel: "Virginia WMA rules",
-        sourceUrl: ACCESS_RULE_SOURCES.virginiaWma
-      };
-    }
-
     return {
       status: "permit-required",
       label: "Permit required",
@@ -9469,18 +9542,6 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   }
 
   if (stateCode === "VA" && isVirginiaStateForest(text)) {
-    if (state.activeMap !== "food") {
-      return {
-        status: "unknown",
-        label: "Unverified",
-        area,
-        limit: "We don't have a confirmed rule for collecting this here; check posted rules before collecting.",
-        note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
-        sourceLabel: "Virginia state forest regulations",
-        sourceUrl: ACCESS_RULE_SOURCES.virginiaStateForests
-      };
-    }
-
     return {
       status: "allowed",
       label: "Allowed",
@@ -9493,18 +9554,6 @@ function getPublicLandAccessRule(properties, species, stateCode, record) {
   }
 
   if (stateCode === "VA" && isVirginiaStateParkOrDcrLand(text)) {
-    if (state.activeMap !== "food") {
-      return {
-        status: "unknown",
-        label: "Unverified",
-        area,
-        limit: "We don't have a confirmed rule for collecting this here; check posted rules before collecting.",
-        note: "Do not assume the edible-collection exception applies to leaves, roots, bark, wood, flowers, or galls.",
-        sourceLabel: "Virginia state park regulations",
-        sourceUrl: ACCESS_RULE_SOURCES.virginiaParks
-      };
-    }
-
     return {
       status: "allowed",
       label: "Allowed",
@@ -9596,19 +9645,30 @@ function getNpsCompendiumRule(text, area, species) {
   };
 }
 
-// State land whose personal-use gathering exception is edibles-only: craft
-// (dye/fiber) and medicinal plant material are NOT covered, so on the ink and
-// medicine maps it is prohibited without agency permission — rather than falling
-// through to "unknown" and looking like missing data. Mirrors the food-focused
-// NPS handling and keeps permissions consistent across all maps.
-function stateEdibleOnlyNonFoodRule(area, sourceLabel, sourceUrl) {
+// True when the current (ink/herbalism) map harvests this species by a live
+// root, live bark, or the whole living plant (or it is a fungus / observe-only
+// species). Those harvests are NOT covered by a personal-gathering or edible-
+// consumption exception, so they do not inherit a food "Allowed"; everything
+// else on the non-food maps extends the food resolution for the same location.
+// Always false in food mode. See NONFOOD_HARVEST_NEEDS_PERMISSION.
+function isNonFoodHarvestRestricted(species) {
+  return state.activeMap !== "food"
+    && !!species
+    && NONFOOD_HARVEST_NEEDS_PERMISSION.has(species.id);
+}
+
+// Rule for a non-food species whose harvest is restricted (see above) on land
+// that otherwise permits personal gathering. The food "Allowed" carries across
+// the maps for fruit and fallen material, but not for this species' live-root /
+// live-bark / whole-plant harvest, so it needs the managing agency's permission.
+function restrictedNonFoodHarvestRule(area, sourceLabel, sourceUrl) {
   return {
     status: "prohibited",
     label: "Prohibited",
     area,
-    limit: "This land's personal-use gathering exception covers edible fruit, nuts, berries, or fungi only. Collecting plant material for craft (dye/fiber) or medicinal use is not covered and requires written permission from the managing agency.",
-    note: "The edible-consumption exception does not authorize non-food plant collection; treat craft and medicinal harvest here as prohibited unless the agency permits it.",
-    sourceLabel: sourceLabel || "State land plant-protection rule (edibles-only exception)",
+    limit: "Personal gathering here carries across the maps for fruit, nuts, berries, foliage, and fallen material, but this species is harvested from its live roots, bark, or whole body, which that allowance does not cover. Get the managing agency's written permission before harvesting here.",
+    note: "The food-gathering allowance extends across the maps for low-impact material; live-root, live-bark, and whole-plant harvest is not covered, so treat it as prohibited unless the agency permits it.",
+    sourceLabel: sourceLabel || "Land manager plant-protection rule",
     sourceUrl: sourceUrl || ""
   };
 }
@@ -9630,7 +9690,6 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   if (stateCode === "NY") {
     if (text.includes("state forest") || text.includes("forest preserve") || text.includes("environmental conservation")) {
-      if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
       return {
         status: "allowed",
         label: "Allowed",
@@ -9656,7 +9715,6 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   if (stateCode === "PA"
     && (text.includes("state forest") || text.includes("state park") || text.includes("conservation and natural resources"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return {
       status: "allowed",
       label: "Allowed",
@@ -9681,7 +9739,6 @@ function getStateSystemRule(stateCode, text, area, species) {
       };
     }
     if (text.includes("state park")) {
-      if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
       return {
         status: "allowed",
         label: "Allowed",
@@ -9737,17 +9794,6 @@ function getStateSystemRule(stateCode, text, area, species) {
       || text.includes("state fish") || text.includes("state forest")
       || text.includes("state natural area") || text.includes("state habitat")
       || text.includes("illinois department of natural resources")) {
-      if (!foodMode) {
-        return {
-          status: "prohibited",
-          label: "Prohibited",
-          area,
-          limit: "Removing any plant or plant part for craft or medicinal use is prohibited on Illinois DNR lands; the only exception is edible fungi, nuts, and berries gathered for personal consumption.",
-          note: "Illinois' rule (17 Ill. Adm. Code 110.70(a)) prohibits injuring or removing any plant or part thereof, with a narrow exception only for edible fungi, nuts, and berries, not for craft or medicinal plant material.",
-          sourceLabel: "17 Ill. Adm. Code 110.70",
-          sourceUrl: ACCESS_RULE_SOURCES.illinoisDnr
-        };
-      }
       return {
         status: "allowed",
         label: "Allowed",
@@ -9761,17 +9807,6 @@ function getStateSystemRule(stateCode, text, area, species) {
   }
 
   if (stateCode === "OR" && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area") || text.includes("state scenic"))) {
-    if (!foodMode) {
-      return {
-        status: "prohibited",
-        label: "Prohibited",
-        area,
-        limit: "Picking, cutting, trimming, uprooting, or removing living vegetation, including roots, tubers, flowers, and stems, requires written park permission outside the edible-gathering exception.",
-        note: "Oregon's rule (OAR 736-010-0055) allows gathering edibles and small non-living souvenirs, but collection of living plant material for craft or medicine is not authorized. Federally recognized Oregon tribal members retain customary-practice rights.",
-        sourceLabel: "OAR 736-010-0055",
-        sourceUrl: ACCESS_RULE_SOURCES.oregonParks
-      };
-    }
     return {
       status: "allowed",
       label: "Allowed",
@@ -9822,7 +9857,6 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   if (stateCode === "MI"
     && (text.includes("state park") || text.includes("state recreation") || text.includes("state forest") || text.includes("state game") || text.includes("wildlife area"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return {
       status: "allowed",
       label: "Allowed",
@@ -9835,17 +9869,6 @@ function getStateSystemRule(stateCode, text, area, species) {
   }
 
   if (stateCode === "MN" && (text.includes("state park") || text.includes("forest recreation area"))) {
-    if (!foodMode) {
-      return {
-        status: "prohibited",
-        label: "Prohibited",
-        area,
-        limit: "Collecting or possessing naturally occurring plants in a fresh state is prohibited in Minnesota state parks; only edible fruit and mushrooms are excepted, for personal use.",
-        note: "Minnesota Rules 6100.0900 protects park vegetation; the edible exception does not extend to craft or medicinal plant material.",
-        sourceLabel: "Minnesota Rules 6100.0900",
-        sourceUrl: ACCESS_RULE_SOURCES.minnesotaParks
-      };
-    }
     return {
       status: "allowed",
       label: "Allowed",
@@ -9862,56 +9885,48 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   // --- Allowed: personal-use edibles (mushrooms included) ---
   if (stateCode === "AK" && text.includes("state park")) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Berries, fruits, mushrooms, and similar edibles may be gathered for personal consumption (not for sale); the state-park rule sets no quantity limit.",
       note: "Alaska state parks allow personal-use gathering of edibles under 11 AAC 12.170(b); other plants and natural objects remain protected.",
       sourceLabel: "11 AAC 12.170", sourceUrl: ACCESS_RULE_SOURCES.alaskaParks };
   }
   if (stateCode === "IN" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Berries, fruits, nuts, fallen cones, mushrooms, leaves, and greens may be collected for personal use; flower-picking and other plant collection remain prohibited.",
       note: "Indiana state parks (DNR properties) exempt listed edible items from the plant-collection prohibition under 312 IAC 8-2-10.",
       sourceLabel: "312 IAC 8-2-10", sourceUrl: ACCESS_RULE_SOURCES.indianaDnr };
   }
   if (stateCode === "IA" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Mushrooms and asparagus may be harvested system-wide; fruits, nuts, and berries may be gathered for personal use unless a sign is posted prohibiting it.",
       note: "Iowa lands under Natural Resource Commission jurisdiction allow personal-use foraging under 571 IAC 54.1-54.2; dedicated state preserves are excluded.",
       sourceLabel: "Iowa Admin. Code 571, 54", sourceUrl: ACCESS_RULE_SOURCES.iowaDnr };
   }
   if (stateCode === "KS" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Noncommercial gathering of edible wild plants, wild fruits, nuts, or fungi for human consumption is permitted; commercial gathering is prohibited.",
       note: "Kansas excepts personal-use edible foraging from the vegetation-removal prohibition under K.A.R. 115-8-20(a)(4)(F).",
       sourceLabel: "K.A.R. 115-8-20", sourceUrl: ACCESS_RULE_SOURCES.kansasParks };
   }
   if (stateCode === "OH" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Berries, fruit, tree nuts, and mushrooms (plus ground pine cones) may be gathered during daylight hours for personal use, not commercial.",
       note: "Ohio state parks permit personal-use foraging of listed edibles under Ohio Admin. Code 1501:46-3-10, except where a unit posts a restriction.",
       sourceLabel: "Ohio Admin. Code 1501:46-3-10", sourceUrl: ACCESS_RULE_SOURCES.ohioParks };
   }
   if (stateCode === "OK" && (text.includes("state park") || text.includes("state recreation"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Nuts, edible plants, and fungi may be foraged for personal consumption on state-managed public land (certified agricultural crops and protected species excluded).",
       note: "Oklahoma legalized personal-use foraging on state-managed public land in 2025 (61 O.S. § 335, SB 447, effective Nov 1 2025).",
       sourceLabel: "61 O.S. § 335 (SB 447, 2025)", sourceUrl: ACCESS_RULE_SOURCES.oklahomaParks };
   }
   if (stateCode === "VT" && (text.includes("state park") || text.includes("state forest"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Wild berries, fruits, seeds, nuts, and mushrooms may be collected for personal use; uprooting or cutting whole plants requires a written FPR permit.",
       note: "Vermont FPR-administered lands (state parks and forests) allow personal-use edible collection under 12-020-009 Code Vt. R.",
       sourceLabel: "12-020-009 Code Vt. R.", sourceUrl: ACCESS_RULE_SOURCES.vermontParks };
   }
   if (stateCode === "WI" && (text.includes("state park") || text.includes("state forest") || text.includes("state recreation") || text.includes("state trail") || text.includes("state natural area"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
     return { status: "allowed", label: "Allowed", area,
       limit: "Edible fruits, edible nuts, wild mushrooms, wild asparagus, and watercress may be hand-collected for personal consumption.",
       note: "Wisconsin DNR lands except personal-use edibles from the plant-protection rule under NR 45.04(1s)(a)1.",
@@ -9919,9 +9934,7 @@ function getStateSystemRule(stateCode, text, area, species) {
   }
 
   // --- Allowed with a mushroom split (need the species param) ---
-  if (stateCode === "MO" && (text.includes("state park") || text.includes("state historic site"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
-    if (species.category === "mushroom") {
+  if (stateCode === "MO" && (text.includes("state park") || text.includes("state historic site"))) {    if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not covered by Missouri's in-park foraging exception; only wild edible fruit, berries, seeds, and nuts may be collected.",
         note: "Missouri's edible exception (10 CSR 90-2.040(4)(B)) names fruit, berries, seeds, and nuts only, not fungi.",
@@ -9932,9 +9945,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       note: "Missouri state parks allow personal-use collection of wild edible fruit, berries, seeds, and nuts under 10 CSR 90-2.040(4)(B).",
       sourceLabel: "10 CSR 90-2.040", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
   }
-  if (stateCode === "HI" && (text.includes("state park") || text.includes("state recreation") || text.includes("state historical park") || text.includes("state wayside") || text.includes("state monument"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
-    if (species.category === "mushroom") {
+  if (stateCode === "HI" && (text.includes("state park") || text.includes("state recreation") || text.includes("state historical park") || text.includes("state wayside") || text.includes("state monument"))) {    if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not named in Hawaii's renewable-natural-products allowance; treat mushroom collection as not permitted without local confirmation.",
         note: "HAR 13-146-32(c) lists fruits, berries, flowers, seeds, etc., not fungi; the project excludes mushrooms conservatively.",
@@ -9945,9 +9956,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       note: "Hawaii state parks allow personal-use gathering of renewable natural products under HAR 13-146-32(c).",
       sourceLabel: "HAR 13-146-32", sourceUrl: ACCESS_RULE_SOURCES.hawaiiParks };
   }
-  if (stateCode === "TN" && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area"))) {
-    if (!foodMode) return stateEdibleOnlyNonFoodRule(area);
-    if (species.category === "mushroom") {
+  if (stateCode === "TN" && (text.includes("state park") || text.includes("state recreation") || text.includes("state natural area"))) {    if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
         limit: "Mushrooms are not named in Tennessee's renewable-products allowance; treat mushroom collection as not permitted without local confirmation.",
         note: "Tenn. Comp. R. & Regs. 0400-02-02-.18(3) names fruits, berries, and driftwood, not fungi; the project excludes mushrooms conservatively.",

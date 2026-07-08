@@ -680,6 +680,29 @@ removed in favor of the explicit button).
 
 **Asset version:** `critique-fixes-2`.
 
+## Restricted-harvest species in the iNaturalist overview aggregate (coarse, 2026-07-07)
+
+The cross-map permission extension (food "Allowed" carries into ink/herbalism,
+see `cross-map-permission-extension` memory + `NONFOOD_HARVEST_NEEDS_PERMISSION`)
+downgrades ~18 non-food species (live root/bark/whole-plant/fungus) to "needs
+agency permission" on edibles-only land. The per-record path and the point-zoom
+live path apply this correctly. The **iNaturalist overview aggregate**
+(`getINaturalistGridItems` / `getINaturalistAggregateAccessStatus`) colors cells
+by a single per-mode status read from the status raster, which is baked with one
+non-restricted representative species per mode — so it **cannot** express the
+per-species downgrade. Consequence: at low (cluster) zoom, filtering to a
+restricted species and enabling "Allowed only" can still show that species'
+observations in generally-allowed areas. This is the same class as the
+pre-existing per-species raster approximation (e.g. Shenandoah's food allow-list
+is likewise not represented in the raster). The per-record fallback
+(`getStatusRasterAccessRule`) was made species-aware and drops restricted species
+to the conservative default until live polygons load; the aggregate path was left
+area-level. **Accurate per-species status always appears at point zoom.** A full
+fix needs per-cell `broadForestProducts`/`edibleOnly` flags baked into the raster
+(and per-species aggregate grid data) — a data-pipeline work order, not a quick
+code fix. Low priority: restricted species are niche and the overview is
+explicitly area-level.
+
 ## Hand-offs (for the 6am queue-grooming loop)
 
 1. **Thin-park raster blindness (item 1b) is the queued data-pipeline work

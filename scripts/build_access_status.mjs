@@ -133,6 +133,8 @@ async function buildRuleContext() {
     "ACCESS_RULE_SOURCES",
     "ACCESS_STATUS_OPTIONS",
     "EDIBLE_FUNGUS_WHITELIST",
+    "NONFOOD_HARVEST_NEEDS_PERMISSION",
+    "NONFOOD_SHENANDOAH_LISTED",
     "INK_FALLING_FRUIT_SPECIES_ALIASES",
     "foodSpeciesCatalog",
     "inkSpeciesCatalog"
@@ -157,6 +159,9 @@ async function buildRuleContext() {
     "getSiteAccessRule",
     "getRecordStateCode",
     "getPublicLandAccessRule",
+    "resolvePublicLandRule",
+    "isNonFoodHarvestRestricted",
+    "restrictedNonFoodHarvestRule",
     "getNpsCompendiumRule",
     "getStateSystemRule",
     "getLocalParkRule",
