@@ -50,7 +50,7 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-filters1";
+const CACHE_VERSION = "v1-counts1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
 
 // User-saved offline areas ("save this area", Phase 5.5). DELIBERATELY not
@@ -64,7 +64,7 @@ const SAVED_AREAS_CACHE = "craft-almanac-saved-areas-v1";
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "filters1";
+const ASSET_VERSION = "counts1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly

@@ -6231,7 +6231,11 @@ function updateRecordCountStatus() {
     message = `Showing ${visibleInView} of ${loadedInView} records in view · ${hidden} hidden by current filters`;
   } else {
     const noun = visibleInView === 1 ? "record" : "records";
-    message = `${visibleInView} ${noun} in view · ${config.sourceNames.join(", ")}`;
+    // At point zoom the iNaturalist layer is a most-recent sample (capped per
+    // tile), so this maps fewer finds than the overview's all-time occurrence
+    // total. Say so, so the drop on zoom-in reads as sampling, not data loss.
+    const sampleNote = config.sourceNames.includes("iNaturalist") ? " · recent iNaturalist sample" : "";
+    message = `${visibleInView} ${noun} in view · ${config.sourceNames.join(", ")}${sampleNote}`;
   }
   setDataStatus(message, { kind: "count" });
 }
@@ -7933,9 +7937,9 @@ async function loadMapData() {
     // hold a fraction of its points: the "clusters fall off, then recover
     // with a lag" bug. Keep the last point-band records intact instead.
     if (state.records.length) {
-      setDataStatus(`${state.records.length} records held for the point view; overview shows aggregate counts`, { transient: true });
+      setDataStatus(`Overview circles count all recorded occurrences (iNaturalist, every year), not individual harvest sites · zoom in to map ${state.records.length} points`, { transient: true });
     } else {
-      setDataStatus("Overview shows aggregate counts; zoom in to load records", { transient: true });
+      setDataStatus("Overview circles count all recorded occurrences (iNaturalist, every year), not individual harvest sites · zoom in to map points", { transient: true });
     }
     return;
   }
