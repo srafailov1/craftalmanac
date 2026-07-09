@@ -50,7 +50,7 @@
  * additionally busts the HTTP cache for those two files.
  */
 
-const CACHE_VERSION = "v1-counts3";
+const CACHE_VERSION = "v1-perf1";
 const CACHE_NAME = `craft-almanac-${CACHE_VERSION}`;
 
 // User-saved offline areas ("save this area", Phase 5.5). DELIBERATELY not
@@ -64,7 +64,7 @@ const SAVED_AREAS_CACHE = "craft-almanac-saved-areas-v1";
 // with index.html's ?v= query strings so the precache stores the exact URLs the
 // page requests (a mismatch would silently precache a URL the page never asks
 // for, leaving the real request to fall through to the network).
-const ASSET_VERSION = "counts3";
+const ASSET_VERSION = "perf1";
 
 // --- Precache list: the app shell + the small, off-grid-critical data. --------
 // Rule of thumb: precache anything <= ~500 KB that the app fetches. Explicitly
@@ -73,13 +73,19 @@ const ASSET_VERSION = "counts3";
 //   - data/project-recipes.json      (~972 KB, lazy-loaded on the Projects sheet)
 //   - data/falling-fruit/us/*        (chunks + manifest + status raster, ~94 MB)
 // These still work via runtime cache-first once fetched online, they just are
-// not guaranteed available on a cold offline start. Total precache is ~1.7 MB.
+// not guaranteed available on a cold offline start. Total precache is ~3.5 MB
+// (~1.8 MB of it the vendored Mapbox GL SDK, without which nothing renders).
 const PRECACHE = [
   // App shell (navigations resolve to "/"; index.html is the same document).
   "/",
   "/index.html",
   `/app.js?v=${ASSET_VERSION}`,
   `/styles.css?v=${ASSET_VERSION}`,
+  // Mapbox GL SDK, self-hosted (versioned path, so no ?v= needed). Precaching
+  // it here fixes the old 30-day offline break where the CDN copy expired out
+  // of the tile cache and the app could not boot offline at all.
+  "/vendor/mapbox-gl/v3.23.1/mapbox-gl.js",
+  "/vendor/mapbox-gl/v3.23.1/mapbox-gl.css",
   // config.js is committed (public, URL-scoped Mapbox token) so it precaches
   // fine and the map can construct even offline (tiles just will not paint).
   "/config.js",
@@ -204,8 +210,13 @@ self.addEventListener("install", (event) => {
         PRECACHE.map(async (url) => {
           try {
             // cache: "reload" bypasses the HTTP cache so install always stores
-            // the freshest bytes for the current deploy.
-            const response = await fetch(new Request(url, { cache: "reload" }));
+            // the freshest bytes for the current deploy — but only for
+            // UNVERSIONED urls. ?v=-stamped and /vendor/-versioned files are
+            // deploy-busted by their URL, so the HTTP cache copy is guaranteed
+            // current and re-downloading them would just compete with the
+            // first-visit map paint for bandwidth.
+            const versioned = url.includes("?v=") || url.startsWith("/vendor/");
+            const response = await fetch(new Request(url, versioned ? {} : { cache: "reload" }));
             if (response.ok) {
               // Never store a redirected response: Cloudflare 307s /index.html
               // -> "/", and a cached redirected response served to a navigation

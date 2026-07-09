@@ -94,6 +94,8 @@ The map renders Mapbox GL JS basemap tiles and uses the Mapbox Geocoding API for
 
 **Standard style note:** the redesign migrates the basemap from `outdoors-v12` to Mapbox Standard, using its `lightPreset` (dawn/day/dusk/night) to drive the site's light-register system, and `circle-emissive-strength: 1` on custom point layers so they stay visible under non-day lighting. Maps using Mapbox Standard or a style derived from it must display both the Mapbox logo and text attribution, same as other Mapbox styles; the existing `attributionControl: true` setup continues to satisfy this.
 
+**Self-hosted SDK note:** the Mapbox GL JS library itself (`mapbox-gl.js` + `mapbox-gl.css`, v3.23.1) is vendored under `vendor/mapbox-gl/` rather than loaded from `api.mapbox.com`, so the render-blocking SDK is same-origin and works offline via the service worker. The files are the unmodified official distribution, Copyright © Mapbox, used under the Mapbox Terms of Service (self-hosting is permitted for use with a Mapbox account; the site continues to use a Mapbox token and Mapbox tile services). The copyright header is retained in the vendored files.
+
 Source: https://www.mapbox.com/legal/tos and https://docs.mapbox.com/help/getting-started/attribution/
 
 ## Fonts (self-hosted)

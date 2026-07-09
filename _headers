@@ -1,0 +1,36 @@
+# Cloudflare Workers static-assets header rules (this file is config, not served).
+# app.js/styles.css are safe to mark immutable because index.html busts them
+# with ?v= query strings on every deploy (rules here match ignoring the query);
+# vendor/ paths embed their version. sw.js and the document must always
+# revalidate so deploys propagate; /data/* re-bakes in place, so it gets a
+# short TTL with stale-while-revalidate instead of immutable.
+
+/app.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/styles.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/data/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/config.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate

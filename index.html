@@ -25,10 +25,21 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://craftalmanac.com/og-image.png">
     <link rel="preconnect" href="https://api.mapbox.com">
+    <!-- Tiles/glyphs/styles are CORS fetches and use a separate anonymous
+         connection pool, so they need their own crossorigin preconnect. -->
+    <link rel="preconnect" href="https://api.mapbox.com" crossorigin>
     <link rel="preconnect" href="https://api.inaturalist.org" crossorigin>
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=counts3">
+    <!-- The faces the first paint renders in (wordmark, welcome modal, season
+         bar). Without preloads they are discovered only after CSS parses. -->
+    <link rel="preload" href="./fonts/fraunces/Fraunces-Display.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/public-sans/PublicSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/public-sans/PublicSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/ibm-plex-mono/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Mapbox GL is self-hosted (vendor/) so the render-blocking CSS and the
+         SDK JS are same-origin, SW-precacheable, and immutable-cacheable. -->
+    <link rel="stylesheet" href="./vendor/mapbox-gl/v3.23.1/mapbox-gl.css">
+    <link rel="stylesheet" href="./styles.css?v=perf1">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -118,10 +129,26 @@
         <button class="welcome-primary" id="welcomeModalButton" type="button">Enter the map</button>
       </section>
     </div>
+    <script>
+      // Reveal the welcome modal (the first-visit LCP element) as soon as CSS
+      // paints instead of at the tail of app.js's boot. initWelcomeModal()
+      // (app.js) re-applies this reveal harmlessly and wires focus + dismissal;
+      // the storage key must stay in sync with WELCOME_MODAL_STORAGE_KEY.
+      (() => {
+        let seen = false;
+        try { seen = window.localStorage.getItem("craftAlmanacWelcomeSeen") === "true"; } catch { /* blocked storage: show it */ }
+        if (!seen) {
+          document.getElementById("welcomeModal").hidden = false;
+          document.body.classList.add("modal-open");
+        }
+      })();
+    </script>
 
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.23.1/mapbox-gl.js"></script>
-    <script src="./config.js"></script>
-    <script src="./app.js?v=counts3"></script>
+    <!-- defer: parsing never blocks on script download/eval; execution order
+         (SDK, config, app) is preserved and still precedes DOMContentLoaded. -->
+    <script src="./vendor/mapbox-gl/v3.23.1/mapbox-gl.js" defer></script>
+    <script src="./config.js" defer></script>
+    <script src="./app.js?v=perf1" defer></script>
     <script>
       // Register the offline service worker from the root scope (controls the
       // whole origin). Guarded and deferred to load so it never blocks first
