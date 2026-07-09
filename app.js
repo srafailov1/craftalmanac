@@ -3590,6 +3590,9 @@ function svgTideCurve(events, w = 320, h = 122) {
 // an enhancement that's skipped on error; pulses clear when conditions aren't met.
 let flushThresholds = null;
 let flushMarkers = [];
+// Signature of the flush marker set last painted; lets refreshFlush skip the
+// DOM teardown+rebuild on renders where the flush set did not change.
+let flushSignature = "";
 let radarAdded = false;
 
 function loadFlushThresholds() {
@@ -3626,22 +3629,36 @@ function updateRadarZoom() {
   map.setPaintProperty("radar", "raster-opacity", low ? 0.55 : 0);
 }
 
-function refreshFlush() {
+function refreshFlush(visibleRecords) {
+  const active = state.mapReady && state.weather && state.activeMap === "food" && flushThresholds;
+  if (!active) {
+    if (flushMarkers.length) { flushMarkers.forEach((m) => m.remove()); flushMarkers = []; }
+    flushSignature = "";
+    return;
+  }
+  const past72 = state.weather.past72;
+  const eligible = (visibleRecords || getVisibleRecords()).filter((record) => {
+    const species = getSpecies(record.speciesId);
+    if (!species || species.category !== "mushroom") return false;
+    const threshold = flushThresholds[species.id];
+    if (!threshold || past72 < threshold.thresholdMm72h) return false;
+    return Number.isFinite(Number(record.lat)) && Number.isFinite(Number(record.lng));
+  });
+  // Skip the DOM churn when the flush set is unchanged (the common case on a
+  // slider drag / filter tap — flush depends only on visible mushrooms and the
+  // 72 h rainfall, neither of which most renders touch). Rebuild otherwise.
+  const signature = `${past72}|${eligible.map((r) => r.id).join(",")}`;
+  if (signature === flushSignature) return;
+  flushSignature = signature;
   flushMarkers.forEach((m) => m.remove());
   flushMarkers = [];
-  if (!state.mapReady || !state.weather || state.activeMap !== "food" || !flushThresholds) return;
-  const past72 = state.weather.past72;
-  getVisibleRecords().forEach((record) => {
+  eligible.forEach((record) => {
     const species = getSpecies(record.speciesId);
-    if (!species || species.category !== "mushroom") return;
     const threshold = flushThresholds[species.id];
-    if (!threshold || past72 < threshold.thresholdMm72h) return;
-    const lat = Number(record.lat), lng = Number(record.lng);
-    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
     const el = document.createElement("div");
     el.className = "flush-pulse";
     el.title = `${species.commonName}: rain-fed flush likely (past 72 h ${past72} mm ≥ ${threshold.thresholdMm72h} mm)`;
-    flushMarkers.push(new mapboxgl.Marker({ element: el }).setLngLat([lng, lat]).addTo(map));
+    flushMarkers.push(new mapboxgl.Marker({ element: el }).setLngLat([Number(record.lng), Number(record.lat)]).addTo(map));
   });
 }
 
@@ -4015,11 +4032,12 @@ function getActiveFilterSummary() {
 // Loaded-vs-shown record counts for the current viewport; null before the map
 // is ready. "Loaded" is the fetched set (viewport-scoped for food/ink/medicine,
 // national for minerals), "visible" is what survives the active filters.
-function getRecordViewCounts() {
+function getRecordViewCounts(visibleRecords) {
   if (!state.mapReady) return null;
   const bounds = map.getBounds();
+  const visible = visibleRecords || getVisibleRecords();
   const loadedInView = state.records.filter((record) => recordInBounds(record, bounds)).length;
-  const visibleInView = getVisibleRecords().filter((record) => recordInBounds(record, bounds)).length;
+  const visibleInView = visible.filter((record) => recordInBounds(record, bounds)).length;
   return { loadedInView, visibleInView };
 }
 
@@ -5635,9 +5653,14 @@ function render() {
   renderSpeciesState();
   renderMapLegend();
   renderHistogram();
-  renderMarkers();
+  // getVisibleRecords() filters the whole loaded set and resolves a per-record
+  // access rule for each survivor: the dominant per-frame cost. Compute it ONCE
+  // and thread it through markers, the "N in view" count, and flush pulses,
+  // which each used to recompute it (2 passes normally, 3 in food mode).
+  const visibleRecords = state.mapReady ? getVisibleRecords() : null;
+  renderMarkers(visibleRecords);
   updateFallingFruitAggregates();
-  refreshFlush();
+  refreshFlush(visibleRecords);
   if (state.mapReady) {
     scheduleINaturalistAggregateLoad();
     scheduleDataLoad();
@@ -6163,10 +6186,14 @@ function buildRecordFeature(record) {
   };
 }
 
-function renderMarkers() {
+function renderMarkers(visibleRecords) {
   if (!state.mapReady || !map.getSource(MARKERS_SOURCE_ID)) return;
 
-  const features = getVisibleRecords()
+  // Standalone callers (mode switch, PAD-US load, boot loaders, status raster)
+  // pass nothing and get a fresh pass; render() threads its shared visible set
+  // so one frame resolves per-record access rules once, not two or three times.
+  const visible = visibleRecords || getVisibleRecords();
+  const features = visible
     .map(buildRecordFeature)
     .filter(Boolean);
 
@@ -6174,7 +6201,7 @@ function renderMarkers() {
     type: "FeatureCollection",
     features
   });
-  updateRecordCountStatus();
+  updateRecordCountStatus(visible);
 }
 
 // Persistent "N in view" line for the season bar: unlike the old transient
@@ -6182,7 +6209,7 @@ function renderMarkers() {
 // bug: chips re-rendered markers but nothing re-wrote the count). Yields to
 // loading/outage/error messages, and leaves overview zooms to loadMapData's
 // aggregate-count notices.
-function updateRecordCountStatus() {
+function updateRecordCountStatus(visibleRecords) {
   if (!state.mapReady) return;
   if (dataStatusKind === "loading" || dataStatusKind === "outage" || dataStatusKind === "error" || dataStatusKind === "notice") return;
   const config = getActiveMapConfig();
@@ -6192,7 +6219,7 @@ function updateRecordCountStatus() {
   // landed yet — "0 nationwide" would read as broken. Let the loading message
   // own the line until the minerals file arrives.
   if (isMinerals && !state.records.length) return;
-  const counts = getRecordViewCounts();
+  const counts = getRecordViewCounts(visibleRecords);
   if (!counts) return;
   const { loadedInView, visibleInView } = counts;
   const hidden = Math.max(0, loadedInView - visibleInView);
