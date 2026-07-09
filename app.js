@@ -4999,6 +4999,15 @@ function resetLegendFilters() {
   state.selectedSpecies = new Set(speciesCatalog.map((species) => species.id));
   state.selectedAccessStatuses = new Set(getDefaultAccessStatuses());
   state.savedLocationsOnly = false;
+  // Also snap the season scrubber back to today and drop All seasons (mirrors
+  // "Back to now") — isolating a species forces allSeasons on, so a plain
+  // species reset would otherwise leave the map stuck in the all-year view.
+  // Minerals reuses this control as the workability band (default = all
+  // materials, allSeasons true), so leave its slider alone.
+  if (!getActiveMapConfig().loadMinerals) {
+    state.selectedDay = getDayOfYear(new Date());
+    state.allSeasons = false;
+  }
   render();
 }
 
