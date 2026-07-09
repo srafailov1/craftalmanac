@@ -1,0 +1,3641 @@
+{
+  "source": "iNaturalist taxa API + GBIF species/match",
+  "inatTaxaApi": "https://api.inaturalist.org/v1/taxa",
+  "gbifMatchApi": "https://api.gbif.org/v1/species/match",
+  "generatedAt": "2026-07-09",
+  "taxonCount": 130,
+  "taxa": [
+    {
+      "inatId": 47179,
+      "inatName": "Arctostaphylos",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-manzanita",
+        "medicine": null
+      },
+      "gbifUsageKey": 2882486,
+      "gbifCanonical": "Arctostaphylos",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882486
+      ]
+    },
+    {
+      "inatId": 47543,
+      "inatName": "Rubus spectabilis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "salmonberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2993761,
+      "gbifCanonical": "Rubus spectabilis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        2993761
+      ]
+    },
+    {
+      "inatId": 47574,
+      "inatName": "Juniperus",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "juniper-berry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2684359,
+      "gbifCanonical": "Juniperus",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        194,
+        640,
+        8144,
+        2684359
+      ]
+    },
+    {
+      "inatId": 47602,
+      "inatName": "Taraxacum officinale",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-dandelion"
+      },
+      "gbifUsageKey": 5394163,
+      "gbifCanonical": "Taraxacum officinale",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        7787708,
+        5394163
+      ]
+    },
+    {
+      "inatId": 47851,
+      "inatName": "Quercus",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-oak",
+        "medicine": null
+      },
+      "gbifUsageKey": 2877951,
+      "gbifCanonical": "Quercus",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4689,
+        2877951
+      ]
+    },
+    {
+      "inatId": 47888,
+      "inatName": "Impatiens capensis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-jewelweed"
+      },
+      "gbifUsageKey": 2891774,
+      "gbifCanonical": "Impatiens capensis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        6699,
+        2891766,
+        2891774
+      ]
+    },
+    {
+      "inatId": 47902,
+      "inatName": "Opuntia",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "prickly-pear",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3084187,
+      "gbifCanonical": "Opuntia",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 97,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2519,
+        3084187
+      ]
+    },
+    {
+      "inatId": 48252,
+      "inatName": "Thuja plicata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-western-redcedar",
+        "medicine": null
+      },
+      "gbifUsageKey": 2684171,
+      "gbifCanonical": "Thuja plicata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        194,
+        640,
+        8144,
+        2684168,
+        2684171
+      ]
+    },
+    {
+      "inatId": 48256,
+      "inatName": "Pseudotsuga menziesii",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-douglas-fir",
+        "medicine": null
+      },
+      "gbifUsageKey": 2685796,
+      "gbifCanonical": "Pseudotsuga menziesii",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        194,
+        640,
+        3925,
+        2685775,
+        2685796
+      ]
+    },
+    {
+      "inatId": 48345,
+      "inatName": "Gaylussacia",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "huckleberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882726,
+      "gbifCanonical": "Gaylussacia",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882726
+      ]
+    },
+    {
+      "inatId": 48473,
+      "inatName": "Ganoderma applanatum",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-artists-conk",
+        "medicine": null
+      },
+      "gbifUsageKey": 2549834,
+      "gbifCanonical": "Ganoderma applanatum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        3286,
+        2519220,
+        2549834
+      ]
+    },
+    {
+      "inatId": 48538,
+      "inatName": "Cytisus scoparius",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-scotch-broom",
+        "medicine": null
+      },
+      "gbifUsageKey": 5354656,
+      "gbifCanonical": "Cytisus scoparius",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1370,
+        5386,
+        8089532,
+        5354656
+      ]
+    },
+    {
+      "inatId": 48599,
+      "inatName": "Phytolacca americana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-pokeweed",
+        "medicine": null
+      },
+      "gbifUsageKey": 3084015,
+      "gbifCanonical": "Phytolacca americana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2516,
+        3084013,
+        3084015
+      ]
+    },
+    {
+      "inatId": 48627,
+      "inatName": "Echinacea purpurea",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-echinacea"
+      },
+      "gbifUsageKey": 3150935,
+      "gbifCanonical": "Echinacea purpurea",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3150914,
+        3150935
+      ]
+    },
+    {
+      "inatId": 48629,
+      "inatName": "Prunus americana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "plum",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3021106,
+      "gbifCanonical": "Prunus americana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        3021106
+      ]
+    },
+    {
+      "inatId": 48678,
+      "inatName": "Solidago",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-goldenrod",
+        "medicine": "medicine-goldenrod"
+      },
+      "gbifUsageKey": 5388868,
+      "gbifCanonical": "Solidago",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 97,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        5388868
+      ]
+    },
+    {
+      "inatId": 49230,
+      "inatName": "Amelanchier",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "serviceberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3023817,
+      "gbifCanonical": "Amelanchier",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3023817
+      ]
+    },
+    {
+      "inatId": 49288,
+      "inatName": "Podophyllum peltatum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "mayapple",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3033839,
+      "gbifCanonical": "Podophyllum peltatum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        399,
+        6673,
+        3033838,
+        3033839
+      ]
+    },
+    {
+      "inatId": 49569,
+      "inatName": "Tillandsia usneoides",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-spanish-moss",
+        "medicine": null
+      },
+      "gbifUsageKey": 2695149,
+      "gbifCanonical": "Tillandsia usneoides",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        196,
+        1369,
+        3740,
+        8279994,
+        2695149
+      ]
+    },
+    {
+      "inatId": 50298,
+      "inatName": "Fragaria vesca",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "wild-strawberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3029817,
+      "gbifCanonical": "Fragaria vesca",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3029779,
+        3029817
+      ]
+    },
+    {
+      "inatId": 50897,
+      "inatName": "Asimina triloba",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "pawpaw",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3158040,
+      "gbifCanonical": "Asimina triloba",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        718,
+        9291,
+        3158021,
+        3158040
+      ]
+    },
+    {
+      "inatId": 51046,
+      "inatName": "Arbutus menziesii",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-madrone",
+        "medicine": null
+      },
+      "gbifUsageKey": 2882802,
+      "gbifCanonical": "Arbutus menziesii",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882796,
+        2882802
+      ]
+    },
+    {
+      "inatId": 51148,
+      "inatName": "Crataegus",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "hawthorn",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3013395,
+      "gbifCanonical": "Crataegus",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3013395
+      ]
+    },
+    {
+      "inatId": 51646,
+      "inatName": "Rubus parviflorus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "thimbleberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 7872219,
+      "gbifCanonical": "Rubus parviflorus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        7872219
+      ]
+    },
+    {
+      "inatId": 51815,
+      "inatName": "Eucalyptus",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-eucalyptus",
+        "medicine": null
+      },
+      "gbifUsageKey": 7493935,
+      "gbifCanonical": "Eucalyptus",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        690,
+        5014,
+        7493935
+      ]
+    },
+    {
+      "inatId": 51970,
+      "inatName": "Hamamelis virginiana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-witch-hazel"
+      },
+      "gbifUsageKey": 3152827,
+      "gbifCanonical": "Hamamelis virginiana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7219248,
+        2500,
+        3152826,
+        3152827
+      ]
+    },
+    {
+      "inatId": 52378,
+      "inatName": "Cercocarpus montanus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-mountain-mahogany",
+        "medicine": null
+      },
+      "gbifUsageKey": 3001912,
+      "gbifCanonical": "Cercocarpus montanus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3001885,
+        3001912
+      ]
+    },
+    {
+      "inatId": 52689,
+      "inatName": "Sambucus",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "elderberry",
+        "ink": "ink-elderberry",
+        "medicine": "medicine-elderberry"
+      },
+      "gbifUsageKey": 2888721,
+      "gbifCanonical": "Sambucus",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        946,
+        4924416,
+        2888721
+      ]
+    },
+    {
+      "inatId": 52740,
+      "inatName": "Vaccinium corymbosum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "blueberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882849,
+      "gbifCanonical": "Vaccinium corymbosum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882813,
+        2882849
+      ]
+    },
+    {
+      "inatId": 52821,
+      "inatName": "Achillea millefolium",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-yarrow"
+      },
+      "gbifUsageKey": 3120060,
+      "gbifCanonical": "Achillea millefolium",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3119995,
+        3120060
+      ]
+    },
+    {
+      "inatId": 52854,
+      "inatName": "Artemisia douglasiana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-artemisia",
+        "medicine": null
+      },
+      "gbifUsageKey": 3121695,
+      "gbifCanonical": "Artemisia douglasiana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3120641,
+        3121695
+      ]
+    },
+    {
+      "inatId": 53052,
+      "inatName": "Foeniculum vulgare",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-wild-fennel",
+        "medicine": null
+      },
+      "gbifUsageKey": 3034922,
+      "gbifCanonical": "Foeniculum vulgare",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1351,
+        6720,
+        10704390,
+        3034922
+      ]
+    },
+    {
+      "inatId": 53059,
+      "inatName": "Galium aparine",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-cleavers"
+      },
+      "gbifUsageKey": 2913548,
+      "gbifCanonical": "Galium aparine",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        412,
+        8798,
+        2913027,
+        2913548
+      ]
+    },
+    {
+      "inatId": 53197,
+      "inatName": "Rumex crispus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-curly-dock",
+        "medicine": null
+      },
+      "gbifUsageKey": 8195144,
+      "gbifCanonical": "Rumex crispus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2416,
+        2888942,
+        8195144
+      ]
+    },
+    {
+      "inatId": 53298,
+      "inatName": "Stellaria media",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-chickweed"
+      },
+      "gbifUsageKey": 5384604,
+      "gbifCanonical": "Stellaria media",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2518,
+        3085667,
+        5384604
+      ]
+    },
+    {
+      "inatId": 53357,
+      "inatName": "Artemisia californica",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-artemisia",
+        "medicine": null
+      },
+      "gbifUsageKey": 3120755,
+      "gbifCanonical": "Artemisia californica",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3120641,
+        3120755
+      ]
+    },
+    {
+      "inatId": 53359,
+      "inatName": "Baccharis pilularis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-coyote-brush",
+        "medicine": null
+      },
+      "gbifUsageKey": 3129497,
+      "gbifCanonical": "Baccharis pilularis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3129135,
+        3129497
+      ]
+    },
+    {
+      "inatId": 53386,
+      "inatName": "Chrysolepis sempervirens",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "chinquapin",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5333311,
+      "gbifCanonical": "Chrysolepis sempervirens",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4689,
+        2882253,
+        5333311
+      ]
+    },
+    {
+      "inatId": 53405,
+      "inatName": "Heteromeles arbutifolia",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-toyon",
+        "medicine": null
+      },
+      "gbifUsageKey": 5370154,
+      "gbifCanonical": "Heteromeles arbutifolia",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3025170,
+        5370154
+      ]
+    },
+    {
+      "inatId": 53438,
+      "inatName": "Rosa",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "rose-hips",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 8395064,
+      "gbifCanonical": "Rosa",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        8395064
+      ]
+    },
+    {
+      "inatId": 53713,
+      "inatName": "Laetiporus sulphureus",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-chicken-of-the-woods",
+        "medicine": null
+      },
+      "gbifUsageKey": 9072021,
+      "gbifCanonical": "Laetiporus sulphureus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 95,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        3272667,
+        2542160,
+        9072021
+      ]
+    },
+    {
+      "inatId": 54134,
+      "inatName": "Trametes versicolor",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-turkey-tail",
+        "medicine": null
+      },
+      "gbifUsageKey": 2548311,
+      "gbifCanonical": "Trametes versicolor",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        3286,
+        2519084,
+        2548311
+      ]
+    },
+    {
+      "inatId": 54436,
+      "inatName": "Rubus idaeus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "raspberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2993094,
+      "gbifCanonical": "Rubus idaeus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        2993094
+      ]
+    },
+    {
+      "inatId": 54504,
+      "inatName": "Juglans nigra",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "black-walnut",
+        "ink": "ink-black-walnut",
+        "medicine": null
+      },
+      "gbifUsageKey": 3054357,
+      "gbifCanonical": "Juglans nigra",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        2499,
+        3054350,
+        3054357
+      ]
+    },
+    {
+      "inatId": 54613,
+      "inatName": "Letharia vulpina",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-wolf-lichen",
+        "medicine": null
+      },
+      "gbifUsageKey": 2605403,
+      "gbifCanonical": "Letharia vulpina",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        95,
+        180,
+        1048,
+        8305,
+        2605402,
+        2605403
+      ]
+    },
+    {
+      "inatId": 54765,
+      "inatName": "Rhus",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "sumac",
+        "ink": "ink-sumac",
+        "medicine": null
+      },
+      "gbifUsageKey": 3190534,
+      "gbifCanonical": "Rhus",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        933,
+        2398,
+        3190534
+      ]
+    },
+    {
+      "inatId": 54770,
+      "inatName": "Corylus americana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "hazelnut",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2876060,
+      "gbifCanonical": "Corylus americana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4688,
+        2875967,
+        2876060
+      ]
+    },
+    {
+      "inatId": 54788,
+      "inatName": "Carya",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-hickory",
+        "medicine": null
+      },
+      "gbifUsageKey": 3054287,
+      "gbifCanonical": "Carya",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        2499,
+        3054287
+      ]
+    },
+    {
+      "inatId": 54789,
+      "inatName": "Carya glabra",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "hickory",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3054325,
+      "gbifCanonical": "Carya glabra",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        2499,
+        3054287,
+        3054325
+      ]
+    },
+    {
+      "inatId": 54791,
+      "inatName": "Carya ovata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "hickory",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3054296,
+      "gbifCanonical": "Carya ovata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        2499,
+        3054287,
+        3054296
+      ]
+    },
+    {
+      "inatId": 54801,
+      "inatName": "Morus rubra",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "red-mulberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5361886,
+      "gbifCanonical": "Morus rubra",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        6640,
+        2984545,
+        5361886
+      ]
+    },
+    {
+      "inatId": 54802,
+      "inatName": "Nyssa sylvatica",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-tupelo",
+        "medicine": null
+      },
+      "gbifUsageKey": 5383717,
+      "gbifCanonical": "Nyssa sylvatica",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        949,
+        6712,
+        3082211,
+        5383717
+      ]
+    },
+    {
+      "inatId": 54833,
+      "inatName": "Prunus pensylvanica",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "pin-cherry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 8202030,
+      "gbifCanonical": "Prunus pensylvanica",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        8202030
+      ]
+    },
+    {
+      "inatId": 54834,
+      "inatName": "Prunus serotina",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "black-cherry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3021850,
+      "gbifCanonical": "Prunus serotina",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        3021850
+      ]
+    },
+    {
+      "inatId": 54835,
+      "inatName": "Prunus virginiana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "chokecherry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3022668,
+      "gbifCanonical": "Prunus virginiana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        3022668
+      ]
+    },
+    {
+      "inatId": 55858,
+      "inatName": "Cornus mas",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "cornelian-cherry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3082263,
+      "gbifCanonical": "Cornus mas",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        949,
+        6713,
+        3082226,
+        3082263
+      ]
+    },
+    {
+      "inatId": 56034,
+      "inatName": "Alnus rubra",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-alder",
+        "medicine": null
+      },
+      "gbifUsageKey": 2876176,
+      "gbifCanonical": "Alnus rubra",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4688,
+        2876099,
+        2876176
+      ]
+    },
+    {
+      "inatId": 56061,
+      "inatName": "Alliaria petiolata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-garlic-mustard"
+      },
+      "gbifUsageKey": 5376075,
+      "gbifCanonical": "Alliaria petiolata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7225535,
+        3112,
+        3050645,
+        5376075
+      ]
+    },
+    {
+      "inatId": 56077,
+      "inatName": "Hypericum perforatum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-st-johns-wort",
+        "medicine": null
+      },
+      "gbifUsageKey": 3189486,
+      "gbifCanonical": "Hypericum perforatum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1414,
+        4900406,
+        3189452,
+        3189486
+      ]
+    },
+    {
+      "inatId": 56830,
+      "inatName": "Morchella",
+      "inatRank": "genus",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Fungi",
+      "speciesByMode": {
+        "food": "morel",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2594601,
+      "gbifCanonical": "Morchella",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 97,
+      "classificationKeys": [
+        5,
+        95,
+        316,
+        1057,
+        8398,
+        2594601
+      ]
+    },
+    {
+      "inatId": 57824,
+      "inatName": "Sambucus racemosa",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "red-elderberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2888723,
+      "gbifCanonical": "Sambucus racemosa",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        946,
+        4924416,
+        2888721,
+        2888723
+      ]
+    },
+    {
+      "inatId": 57891,
+      "inatName": "Ephedra viridis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-mormon-tea",
+        "medicine": null
+      },
+      "gbifUsageKey": 2653272,
+      "gbifCanonical": "Ephedra viridis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        282,
+        424,
+        3114,
+        2653237,
+        2653272
+      ]
+    },
+    {
+      "inatId": 57892,
+      "inatName": "Pinus monophylla",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "pinyon-pine-nut",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5285501,
+      "gbifCanonical": "Pinus monophylla",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        194,
+        640,
+        3925,
+        2684241,
+        5285501
+      ]
+    },
+    {
+      "inatId": 57902,
+      "inatName": "Pinus edulis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "pinyon-pine-nut",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5285796,
+      "gbifCanonical": "Pinus edulis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        194,
+        640,
+        3925,
+        2684241,
+        5285796
+      ]
+    },
+    {
+      "inatId": 57934,
+      "inatName": "Ericameria nauseosa",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-rabbitbrush",
+        "medicine": null
+      },
+      "gbifUsageKey": 3103017,
+      "gbifCanonical": "Ericameria nauseosa",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        8375018,
+        3103017
+      ]
+    },
+    {
+      "inatId": 58205,
+      "inatName": "Maclura pomifera",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-osage-orange",
+        "medicine": null
+      },
+      "gbifUsageKey": 2984580,
+      "gbifCanonical": "Maclura pomifera",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        6640,
+        2984579,
+        2984580
+      ]
+    },
+    {
+      "inatId": 58291,
+      "inatName": "Rumex hymenosepalus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-canaigre",
+        "medicine": null
+      },
+      "gbifUsageKey": 2889015,
+      "gbifCanonical": "Rumex hymenosepalus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2416,
+        2888942,
+        2889015
+      ]
+    },
+    {
+      "inatId": 58961,
+      "inatName": "Plantago major",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-broadleaf-plantain"
+      },
+      "gbifUsageKey": 3189767,
+      "gbifCanonical": "Plantago major",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        408,
+        2420,
+        3189695,
+        3189767
+      ]
+    },
+    {
+      "inatId": 59029,
+      "inatName": "Verbascum thapsus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-mullein"
+      },
+      "gbifUsageKey": 3171949,
+      "gbifCanonical": "Verbascum thapsus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        408,
+        2390,
+        2928970,
+        3171949
+      ]
+    },
+    {
+      "inatId": 60218,
+      "inatName": "Ficus carica",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "fig",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5361909,
+      "gbifCanonical": "Ficus carica",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        6640,
+        2984588,
+        5361909
+      ]
+    },
+    {
+      "inatId": 60773,
+      "inatName": "Vitis",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-wild-grape",
+        "medicine": null
+      },
+      "gbifUsageKey": 7467468,
+      "gbifCanonical": "Vitis",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7222050,
+        6672,
+        7467468
+      ]
+    },
+    {
+      "inatId": 61317,
+      "inatName": "Rubus armeniacus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "himalayan-blackberry",
+        "ink": "ink-himalayan-blackberry",
+        "medicine": null
+      },
+      "gbifUsageKey": 2996525,
+      "gbifCanonical": "Rubus armeniacus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        2996525
+      ]
+    },
+    {
+      "inatId": 61964,
+      "inatName": "Prunus avium",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "sweet-cherry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3020791,
+      "gbifCanonical": "Prunus avium",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        3020791
+      ]
+    },
+    {
+      "inatId": 62376,
+      "inatName": "Gaultheria procumbens",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "wintergreen",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882753,
+      "gbifCanonical": "Gaultheria procumbens",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882751,
+        2882753
+      ]
+    },
+    {
+      "inatId": 63749,
+      "inatName": "Vaccinium macrocarpon",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "cranberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882841,
+      "gbifCanonical": "Vaccinium macrocarpon",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882813,
+        2882841
+      ]
+    },
+    {
+      "inatId": 63951,
+      "inatName": "Pyrus communis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "pear",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5362573,
+      "gbifCanonical": "Pyrus communis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2986532,
+        5362573
+      ]
+    },
+    {
+      "inatId": 64697,
+      "inatName": "Elaeagnus umbellata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-autumn-olive",
+        "medicine": null
+      },
+      "gbifUsageKey": 3039267,
+      "gbifCanonical": "Elaeagnus umbellata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        2408,
+        3039266,
+        3039267
+      ]
+    },
+    {
+      "inatId": 68049,
+      "inatName": "Arctostaphylos uva-ursi",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "kinnikinnick",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882580,
+      "gbifCanonical": "Arctostaphylos uva-ursi",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882486,
+        2882580
+      ]
+    },
+    {
+      "inatId": 68053,
+      "inatName": "Vitis labrusca",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "grape",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5372424,
+      "gbifCanonical": "Vitis labrusca",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7222050,
+        6672,
+        7467468,
+        5372424
+      ]
+    },
+    {
+      "inatId": 68763,
+      "inatName": "Prunus cerasus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "sour-cherry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3021922,
+      "gbifCanonical": "Prunus cerasus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        3021922
+      ]
+    },
+    {
+      "inatId": 69819,
+      "inatName": "Ligustrum",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-privet",
+        "medicine": null
+      },
+      "gbifUsageKey": 3172289,
+      "gbifCanonical": "Ligustrum",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        408,
+        6652,
+        3172289
+      ]
+    },
+    {
+      "inatId": 69823,
+      "inatName": "Notholithocarpus densiflorus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-tanoak",
+        "medicine": null
+      },
+      "gbifUsageKey": 3906623,
+      "gbifCanonical": "Notholithocarpus densiflorus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4689,
+        9601650,
+        3906623
+      ]
+    },
+    {
+      "inatId": 75377,
+      "inatName": "Alnus incana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-alder",
+        "medicine": null
+      },
+      "gbifUsageKey": 9148577,
+      "gbifCanonical": "Alnus incana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4688,
+        2876099,
+        9148577
+      ]
+    },
+    {
+      "inatId": 75598,
+      "inatName": "Artemisia tridentata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-artemisia",
+        "medicine": null
+      },
+      "gbifUsageKey": 9396703,
+      "gbifCanonical": "Artemisia tridentata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3120641,
+        9396703
+      ]
+    },
+    {
+      "inatId": 75752,
+      "inatName": "Berberis fremontii",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-oregon-grape",
+        "medicine": null
+      },
+      "gbifUsageKey": 3033872,
+      "gbifCanonical": "Berberis fremontii",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        399,
+        6673,
+        10722889,
+        10511919,
+        3033872
+      ]
+    },
+    {
+      "inatId": 76329,
+      "inatName": "Chrysothamnus viscidiflorus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-rabbitbrush",
+        "medicine": null
+      },
+      "gbifUsageKey": 3148638,
+      "gbifCanonical": "Chrysothamnus viscidiflorus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3148624,
+        3148638
+      ]
+    },
+    {
+      "inatId": 76445,
+      "inatName": "Coreopsis tinctoria",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-plains-coreopsis",
+        "medicine": null
+      },
+      "gbifUsageKey": 3133950,
+      "gbifCanonical": "Coreopsis tinctoria",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3133864,
+        3133950
+      ]
+    },
+    {
+      "inatId": 77155,
+      "inatName": "Fragaria virginiana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "wild-strawberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 7950792,
+      "gbifCanonical": "Fragaria virginiana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3029779,
+        7950792
+      ]
+    },
+    {
+      "inatId": 77509,
+      "inatName": "Isatis tinctoria",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-dyers-woad",
+        "medicine": null
+      },
+      "gbifUsageKey": 5374118,
+      "gbifCanonical": "Isatis tinctoria",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7225535,
+        3112,
+        3043620,
+        5374118
+      ]
+    },
+    {
+      "inatId": 78264,
+      "inatName": "Opuntia engelmannii",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-prickly-pear",
+        "medicine": null
+      },
+      "gbifUsageKey": 8014872,
+      "gbifCanonical": "Opuntia engelmannii",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2519,
+        3084187,
+        8014872
+      ]
+    },
+    {
+      "inatId": 78269,
+      "inatName": "Opuntia polyacantha",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-prickly-pear",
+        "medicine": null
+      },
+      "gbifUsageKey": 5384095,
+      "gbifCanonical": "Opuntia polyacantha",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2519,
+        3084187,
+        5384095
+      ]
+    },
+    {
+      "inatId": 78755,
+      "inatName": "Prunus persica",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "peach",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 8149923,
+      "gbifCanonical": "Prunus persica",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        8149923
+      ]
+    },
+    {
+      "inatId": 78787,
+      "inatName": "Purshia stansburyana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-cliffrose",
+        "medicine": null
+      },
+      "gbifUsageKey": 5370302,
+      "gbifCanonical": "Purshia stansburiana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "FUZZY",
+      "confidence": 98,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        7956655,
+        5370302
+      ]
+    },
+    {
+      "inatId": 79071,
+      "inatName": "Shepherdia argentea",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "buffaloberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5372429,
+      "gbifCanonical": "Shepherdia argentea",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        2408,
+        3039276,
+        5372429
+      ]
+    },
+    {
+      "inatId": 79345,
+      "inatName": "Thelesperma megapotamicum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-greenthread",
+        "medicine": null
+      },
+      "gbifUsageKey": 8209518,
+      "gbifCanonical": "Thelesperma megapotamicum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        414,
+        3065,
+        3095902,
+        8209518
+      ]
+    },
+    {
+      "inatId": 82110,
+      "inatName": "Rubus allegheniensis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "blackberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 8235931,
+      "gbifCanonical": "Rubus allegheniensis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        8235931
+      ]
+    },
+    {
+      "inatId": 82816,
+      "inatName": "Viola sororia",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-violet"
+      },
+      "gbifUsageKey": 5331238,
+      "gbifCanonical": "Viola sororia",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1414,
+        6631,
+        2874237,
+        5331238
+      ]
+    },
+    {
+      "inatId": 83435,
+      "inatName": "Diospyros virginiana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "persimmon",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3032986,
+      "gbifCanonical": "Diospyros virginiana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        6709,
+        3030169,
+        3032986
+      ]
+    },
+    {
+      "inatId": 84227,
+      "inatName": "Rubus phoenicolasius",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "wineberry",
+        "ink": "ink-wineberry",
+        "medicine": null
+      },
+      "gbifUsageKey": 2995149,
+      "gbifCanonical": "Rubus phoenicolasius",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        2995149
+      ]
+    },
+    {
+      "inatId": 84270,
+      "inatName": "Vaccinium pallidum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "blueberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882895,
+      "gbifCanonical": "Vaccinium pallidum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882813,
+        2882895
+      ]
+    },
+    {
+      "inatId": 84305,
+      "inatName": "Carya tomentosa",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "hickory",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3054304,
+      "gbifCanonical": "Carya tomentosa",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        2499,
+        3054287,
+        3054302,
+        3054304
+      ]
+    },
+    {
+      "inatId": 84363,
+      "inatName": "Castanea pumila",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "chinquapin",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5333212,
+      "gbifCanonical": "Castanea pumila",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        4689,
+        2882140,
+        5333212
+      ]
+    },
+    {
+      "inatId": 84803,
+      "inatName": "Ribes cynosbati",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "ribes",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2986152,
+      "gbifCanonical": "Ribes cynosbati",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7219248,
+        2403,
+        2986095,
+        2986152
+      ]
+    },
+    {
+      "inatId": 85320,
+      "inatName": "Monarda fistulosa",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": null,
+        "medicine": "medicine-bergamot"
+      },
+      "gbifUsageKey": 5341411,
+      "gbifCanonical": "Monarda fistulosa",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        408,
+        2497,
+        2926838,
+        5341411
+      ]
+    },
+    {
+      "inatId": 118084,
+      "inatName": "Phaeolus schweinitzii",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-dyers-polypore",
+        "medicine": null
+      },
+      "gbifUsageKey": 2542126,
+      "gbifCanonical": "Phaeolus schweinitzii",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        3272667,
+        2519269,
+        2542126
+      ]
+    },
+    {
+      "inatId": 119956,
+      "inatName": "Morella cerifera",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-wax-myrtle",
+        "medicine": null
+      },
+      "gbifUsageKey": 3168995,
+      "gbifCanonical": "Morella cerifera",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1354,
+        2432,
+        7780807,
+        3168995
+      ]
+    },
+    {
+      "inatId": 120145,
+      "inatName": "Juniperus monosperma",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-one-seed-juniper",
+        "medicine": null
+      },
+      "gbifUsageKey": 2684633,
+      "gbifCanonical": "Juniperus monosperma",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        194,
+        640,
+        8144,
+        2684359,
+        2684633
+      ]
+    },
+    {
+      "inatId": 125487,
+      "inatName": "Ribes americanum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "ribes",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2986121,
+      "gbifCanonical": "Ribes americanum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7219248,
+        2403,
+        2986095,
+        2986121
+      ]
+    },
+    {
+      "inatId": 125489,
+      "inatName": "Rubus occidentalis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "raspberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2991466,
+      "gbifCanonical": "Rubus occidentalis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        2991466
+      ]
+    },
+    {
+      "inatId": 126560,
+      "inatName": "Vaccinium oxycoccos",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "cranberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2882940,
+      "gbifCanonical": "Vaccinium oxycoccos",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1353,
+        2505,
+        2882813,
+        2882940
+      ]
+    },
+    {
+      "inatId": 126887,
+      "inatName": "Berberis aquifolium",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-oregon-grape",
+        "medicine": null
+      },
+      "gbifUsageKey": 3033868,
+      "gbifCanonical": "Berberis aquifolium",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        399,
+        6673,
+        3033842,
+        3033865,
+        3033868
+      ]
+    },
+    {
+      "inatId": 127510,
+      "inatName": "Fomes fomentarius",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-tinder-conk",
+        "medicine": null
+      },
+      "gbifUsageKey": 8068867,
+      "gbifCanonical": "Fomes fomentarius",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        3286,
+        2518074,
+        8068867
+      ]
+    },
+    {
+      "inatId": 128755,
+      "inatName": "Prunus mexicana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "plum",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3022317,
+      "gbifCanonical": "Prunus mexicana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3020559,
+        3022317
+      ]
+    },
+    {
+      "inatId": 128931,
+      "inatName": "Vitis aestivalis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "grape",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 5372400,
+      "gbifCanonical": "Vitis aestivalis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7222050,
+        6672,
+        7467468,
+        5372400
+      ]
+    },
+    {
+      "inatId": 130872,
+      "inatName": "Schinus terebinthifolia",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-brazilian-pepper",
+        "medicine": null
+      },
+      "gbifUsageKey": 3660419,
+      "gbifCanonical": "Schinus terebinthifolia",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        933,
+        2398,
+        3190641,
+        3660419
+      ]
+    },
+    {
+      "inatId": 133104,
+      "inatName": "Berberis repens",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-oregon-grape",
+        "medicine": null
+      },
+      "gbifUsageKey": 3033851,
+      "gbifCanonical": "Berberis repens",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        399,
+        6673,
+        3033842,
+        3033850,
+        3033851
+      ]
+    },
+    {
+      "inatId": 133291,
+      "inatName": "Rivina humilis",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-rouge-plant",
+        "medicine": null
+      },
+      "gbifUsageKey": 3084027,
+      "gbifCanonical": "Rivina humilis",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        422,
+        2516,
+        3084026,
+        3084027
+      ]
+    },
+    {
+      "inatId": 164401,
+      "inatName": "Lachnanthes caroliana",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-carolina-redroot",
+        "medicine": null
+      },
+      "gbifUsageKey": 3715422,
+      "gbifCanonical": "Lachnanthes caroliana",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        196,
+        553,
+        7691,
+        2765921,
+        3715422
+      ]
+    },
+    {
+      "inatId": 166162,
+      "inatName": "Parthenocissus tricuspidata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-wild-grape",
+        "medicine": null
+      },
+      "gbifUsageKey": 3039209,
+      "gbifCanonical": "Parthenocissus tricuspidata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7222050,
+        6672,
+        3039188,
+        3039209
+      ]
+    },
+    {
+      "inatId": 273862,
+      "inatName": "Berberis trifoliolata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-oregon-grape",
+        "medicine": null
+      },
+      "gbifUsageKey": 3033862,
+      "gbifCanonical": "Berberis trifoliolata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        399,
+        6673,
+        10722889,
+        11344814,
+        3033862
+      ]
+    },
+    {
+      "inatId": 469472,
+      "inatName": "Malus domestica",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "apple",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 3001244,
+      "gbifCanonical": "Malus domestica",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        3001068,
+        3001244
+      ]
+    },
+    {
+      "inatId": 487301,
+      "inatName": "Laetiporus cincinnatus",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-chicken-of-the-woods",
+        "medicine": null
+      },
+      "gbifUsageKey": 2542235,
+      "gbifCanonical": "Laetiporus cincinnatus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        3272667,
+        2542160,
+        9072021,
+        2542235
+      ]
+    },
+    {
+      "inatId": 495903,
+      "inatName": "Fomitopsis ochracea",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-red-belted-conk",
+        "medicine": null
+      },
+      "gbifUsageKey": 3361986,
+      "gbifCanonical": "Fomitopsis ochracea",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        7619,
+        2523631,
+        3361986
+      ]
+    },
+    {
+      "inatId": 877361,
+      "inatName": "Fomitopsis mounceae",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-red-belted-conk",
+        "medicine": null
+      },
+      "gbifUsageKey": 10825597,
+      "gbifCanonical": "Fomitopsis mounceae",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        7619,
+        2523631,
+        10825597
+      ]
+    },
+    {
+      "inatId": 877362,
+      "inatName": "Fomitopsis schrenkii",
+      "inatRank": "species",
+      "inatIconic": "Fungi",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-red-belted-conk",
+        "medicine": null
+      },
+      "gbifUsageKey": 10867668,
+      "gbifCanonical": "Fomitopsis schrenkii",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Fungi",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 96,
+      "classificationKeys": [
+        5,
+        34,
+        186,
+        1145,
+        7619,
+        2523631,
+        10867668
+      ]
+    },
+    {
+      "inatId": 1276041,
+      "inatName": "Rubus argutus",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "blackberry",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 2990801,
+      "gbifCanonical": "Rubus argutus",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        691,
+        5015,
+        2988638,
+        2990801
+      ]
+    },
+    {
+      "inatId": 1415100,
+      "inatName": "Cleomella serrulata",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "ink-bee-plant",
+        "medicine": null
+      },
+      "gbifUsageKey": 8145885,
+      "gbifCanonical": "Cleomella serrulata",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "ACCEPTED",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        7225535,
+        3845332,
+        3054240,
+        8145885
+      ]
+    },
+    {
+      "inatId": 1493090,
+      "inatName": "Neltuma",
+      "inatRank": "genus",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": "mesquite-bean",
+        "ink": null,
+        "medicine": null
+      },
+      "gbifUsageKey": 7302311,
+      "gbifCanonical": "Neltuma",
+      "gbifRank": "GENUS",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 97,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1370,
+        5386,
+        2970763,
+        7302311
+      ]
+    },
+    {
+      "inatId": 1493134,
+      "inatName": "Neltuma glandulosa",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-honey-mesquite",
+        "medicine": null
+      },
+      "gbifUsageKey": 2970789,
+      "gbifCanonical": "Neltuma glandulosa",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 100,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        1370,
+        5386,
+        2970763,
+        5358457,
+        2970789
+      ]
+    },
+    {
+      "inatId": 1591063,
+      "inatName": "Camphora officinarum",
+      "inatRank": "species",
+      "inatIconic": "Plantae",
+      "expectedKingdom": "Plantae",
+      "speciesByMode": {
+        "food": null,
+        "ink": "dye-camphor",
+        "medicine": null
+      },
+      "gbifUsageKey": 7357147,
+      "gbifCanonical": "Camphora officinarum",
+      "gbifRank": "SPECIES",
+      "gbifKingdom": "Plantae",
+      "gbifStatus": "SYNONYM",
+      "matchType": "EXACT",
+      "confidence": 99,
+      "classificationKeys": [
+        6,
+        7707728,
+        220,
+        407,
+        6688,
+        3033980,
+        3033991,
+        7357147
+      ]
+    }
+  ]
+}

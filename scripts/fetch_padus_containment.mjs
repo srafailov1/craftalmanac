@@ -5,15 +5,9 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(__filename), "..");
-const MANIFEST_PATH = path.join(ROOT, "data", "falling-fruit", "us", "manifest.json");
-const CACHE_DIR = path.join(ROOT, "data", "falling-fruit", "us", "access-cache");
-const FAILURES_PATH = path.join(CACHE_DIR, "_failures.json");
 
 const PUBLIC_LANDS_URL = "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Public_Access/FeatureServer/0/query";
 const PUBLIC_LANDS_PAGE_SIZE = 1000;
-const MAX_CONCURRENT_CHUNKS = 2;
-const REQUEST_SPACING_MS = 500;
-const RETRY_BACKOFF_MS = 2000;
 
 const OUT_FIELDS = "OBJECTID,Unit_Nm,Pub_Access,MngNm_Desc,MngTp_Desc,DesTp_Desc,GIS_Acres";
 
@@ -25,6 +19,21 @@ for (const arg of process.argv.slice(2)) {
 
 const limit = args.has("limit") ? Number(args.get("limit")) : Infinity;
 const force = args.get("force") === "true";
+
+// The PAD-US ArcGIS service rejects bursts of large-geometry queries with
+// "Too many large geometry non-cacheable requests". Lower --concurrency and
+// raise --spacing/--retries for dense public-land regions (western mountains).
+const MAX_CONCURRENT_CHUNKS = args.has("concurrency") ? Number(args.get("concurrency")) : 2;
+const REQUEST_SPACING_MS = args.has("spacing") ? Number(args.get("spacing")) : 500;
+const RETRY_BACKOFF_MS = args.has("backoff") ? Number(args.get("backoff")) : 2000;
+const MAX_RETRIES = args.has("retries") ? Number(args.get("retries")) : 2;
+
+// --dir selects the chunk tree under data/ (default: Falling Fruit). The
+// iNaturalist bake reuses this builder with --dir=inaturalist/us.
+const DATA_DIR = args.get("dir") || "falling-fruit/us";
+const MANIFEST_PATH = path.join(ROOT, "data", DATA_DIR, "manifest.json");
+const CACHE_DIR = path.join(ROOT, "data", DATA_DIR, "access-cache");
+const FAILURES_PATH = path.join(CACHE_DIR, "_failures.json");
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -103,15 +112,18 @@ async function fetchPadusFeatures(bbox) {
 }
 
 async function withRetry(operation) {
-  try {
-    return await operation();
-  } catch (firstError) {
-    await sleep(RETRY_BACKOFF_MS);
+  let firstError = null;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
     try {
       return await operation();
-    } catch (secondError) {
-      secondError.message = `${secondError.message} (after retry; first error: ${firstError.message})`;
-      throw secondError;
+    } catch (error) {
+      if (!firstError) firstError = error;
+      if (attempt === MAX_RETRIES) {
+        error.message = `${error.message} (after ${MAX_RETRIES} retries; first error: ${firstError.message})`;
+        throw error;
+      }
+      // Exponential backoff; large-geometry throttling clears with time.
+      await sleep(RETRY_BACKOFF_MS * (2 ** attempt));
     }
   }
 }

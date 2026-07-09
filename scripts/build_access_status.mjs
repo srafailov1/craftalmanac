@@ -7,13 +7,49 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(__filename), "..");
 const APP_PATH = path.join(ROOT, "app.js");
-const MANIFEST_PATH = path.join(ROOT, "data", "falling-fruit", "us", "manifest.json");
 const STATE_BOUNDARY_PATH = path.join(ROOT, "data", "contiguous-us-states.json");
 const LOCAL_JURISDICTIONS_PATH = path.join(ROOT, "data", "local-jurisdictions.json");
 const USFS_FOREST_RULES_PATH = path.join(ROOT, "data", "usfs-forest-rules.json");
-const CACHE_DIR = path.join(ROOT, "data", "falling-fruit", "us", "access-cache");
 
-const FALLING_FRUIT_MODES = ["food", "ink"];
+const args = new Map();
+for (const arg of process.argv.slice(2)) {
+  const m = arg.match(/^--([^=]+)(?:=(.*))?$/);
+  if (m) args.set(m[1], m[2] ?? "true");
+}
+
+// --tree selects the chunk tree. Falling Fruit (default) keys records by a
+// source speciesId resolved per mode through getImportedSpeciesId; iNaturalist
+// keys records by iNat anchor taxon id resolved per mode through the catalogs'
+// inatTaxonIds, and covers medicine (Herbs) as well.
+const CATALOG_CONST_BY_MODE = {
+  food: "foodSpeciesCatalog",
+  ink: "inkSpeciesCatalog",
+  medicine: "medicineSpeciesCatalog"
+};
+const TREE_CONFIG = {
+  "falling-fruit": {
+    dir: "falling-fruit/us",
+    modes: ["food", "ink"],
+    countField: "countsBySpeciesId",
+    requiredFields: ["id", "speciesId", "lat", "lng", "access", "accessClass", "publicLand", "accessNote", "sourceUrl"],
+    dataSpotAssertions: true
+  },
+  inaturalist: {
+    dir: "inaturalist/us",
+    modes: ["food", "ink", "medicine"],
+    countField: "countsByAnchor",
+    requiredFields: ["id", "anchor", "lat", "lng"],
+    dataSpotAssertions: false
+  }
+};
+const TREE = args.get("tree") || "falling-fruit";
+const cfg = TREE_CONFIG[TREE];
+if (!cfg) throw new Error(`unknown --tree=${TREE} (expected falling-fruit or inaturalist)`);
+const LIMIT = args.has("limit") ? Number(args.get("limit")) : Infinity;
+
+const MANIFEST_PATH = path.join(ROOT, "data", cfg.dir, "manifest.json");
+const CACHE_DIR = path.join(ROOT, "data", cfg.dir, "access-cache");
+const MODES = cfg.modes;
 const STATUS_IDS = ["allowed", "permit-required", "private", "private-unsourced", "unknown", "prohibited"];
 
 function findMatchingDelimiter(source, startIndex, openChar, closeChar) {
@@ -136,8 +172,8 @@ async function buildRuleContext() {
     "NONFOOD_HARVEST_NEEDS_PERMISSION",
     "NONFOOD_SHENANDOAH_LISTED",
     "INK_FALLING_FRUIT_SPECIES_ALIASES",
-    "foodSpeciesCatalog",
-    "inkSpeciesCatalog"
+    // Only the catalogs for the active tree's modes (iNaturalist adds medicine).
+    ...MODES.map((mode) => CATALOG_CONST_BY_MODE[mode])
   ].forEach((name) => {
     const expression = extractConstExpression(appSource, name);
     vm.runInContext(`var ${name} = ${expression};`, context, { filename: APP_PATH });
@@ -196,6 +232,23 @@ async function buildRuleContext() {
 
 function getRecordObject(rawRecord, fields, speciesId) {
   const get = (field) => rawRecord[fields[field]];
+  if (TREE === "inaturalist") {
+    // Mirrors mapINaturalistObservation's access defaults (app.js ~9068-9070):
+    // land access is unknown from iNaturalist; the rule engine + PAD-US
+    // containment (cachedUnits) resolve the actual status.
+    return {
+      id: `inat-${get("id")}`,
+      speciesId,
+      source: "inaturalist",
+      lat: get("lat"),
+      lng: get("lng"),
+      access: "",
+      accessClass: "unknown",
+      publicLand: false,
+      accessNote: "Land access unknown from iNaturalist. Use the public lands layer and local rules before harvesting.",
+      sourceUrl: `https://www.inaturalist.org/observations/${get("id")}`
+    };
+  }
   return {
     id: `fallingfruit-${get("id")}`,
     speciesId,
@@ -212,10 +265,31 @@ function getRecordObject(rawRecord, fields, speciesId) {
 
 function makeFieldIndex(recordFields) {
   const fields = Object.fromEntries(recordFields.map((field, index) => [field, index]));
-  ["id", "speciesId", "lat", "lng", "access", "accessClass", "publicLand", "accessNote", "sourceUrl"].forEach((field) => {
+  cfg.requiredFields.forEach((field) => {
     if (!(field in fields)) throw new Error(`manifest is missing ${field} record field`);
   });
   return fields;
+}
+
+// Per-mode record -> catalog species id. Falling Fruit resolves a source
+// speciesId through getImportedSpeciesId; iNaturalist resolves an anchor taxon
+// id through the mode catalog's inatTaxonIds (anchorSpeciesByMode, built once).
+let anchorSpeciesByMode = {};
+function buildAnchorSpeciesByMode(catalogByMode) {
+  const maps = {};
+  for (const mode of MODES) {
+    const m = new Map();
+    for (const [, species] of catalogByMode[mode]) {
+      for (const taxonId of species.inatTaxonIds || []) m.set(taxonId, species.id);
+    }
+    maps[mode] = m;
+  }
+  return maps;
+}
+function resolveModeSpeciesId(context, mode, key) {
+  if (TREE === "inaturalist") return anchorSpeciesByMode[mode].get(Number(key));
+  context.state.activeMap = mode;
+  return context.getImportedSpeciesId(key);
 }
 
 function addCount(counts, status, speciesId) {
@@ -242,16 +316,11 @@ function finalizeCentroids(centroids) {
   ]));
 }
 
-function getModeSpeciesId(context, mode, sourceSpeciesId) {
-  context.state.activeMap = mode;
-  return context.getImportedSpeciesId(sourceSpeciesId);
-}
-
 function getExpectedModeCounts(context, chunk, catalogById, mode) {
   const expected = {};
-  Object.entries(chunk.countsBySpeciesId || {}).forEach(([sourceSpeciesId, count]) => {
-    const speciesId = getModeSpeciesId(context, mode, sourceSpeciesId);
-    if (!catalogById.has(speciesId)) return;
+  Object.entries(chunk[cfg.countField] || {}).forEach(([key, count]) => {
+    const speciesId = resolveModeSpeciesId(context, mode, key);
+    if (!speciesId || !catalogById.has(speciesId)) return;
     expected[speciesId] = (expected[speciesId] || 0) + Number(count || 0);
   });
   return expected;
@@ -268,7 +337,7 @@ function getActualModeCounts(accessCounts) {
 }
 
 function validateChunkCounts(context, chunk, catalogByMode) {
-  FALLING_FRUIT_MODES.forEach((mode) => {
+  MODES.forEach((mode) => {
     const expected = getExpectedModeCounts(context, chunk, catalogByMode[mode], mode);
     const actual = getActualModeCounts(chunk.accessCounts?.[mode]);
     const speciesIds = new Set([...Object.keys(expected), ...Object.keys(actual)]);
@@ -365,14 +434,21 @@ function validateMonticelloRule(context, catalogByMode) {
   return rule.status;
 }
 
-function validateSpotAssertions(context, catalogByMode, spots) {
+function validateSpotAssertions(context, catalogByMode, spots, dryRun) {
+  // Synthetic rule-engine checks run for every tree (they inject records, so
+  // they need no source data).
   const shenandoahBlueberry = validateShenandoahBlueberryRule(context, catalogByMode);
   const monticelloRule = validateMonticelloRule(context, catalogByMode);
-  if (spots.monticello.total && spots.monticello.prohibited !== spots.monticello.total) {
-    throw new Error(`Monticello spot assertion failed: ${JSON.stringify(spots.monticello)}`);
-  }
-  if (!spots.manhattanLocalPark.total || spots.manhattanLocalPark.prohibited <= spots.manhattanLocalPark.total / 2) {
-    throw new Error(`Manhattan local park spot assertion failed: ${JSON.stringify(spots.manhattanLocalPark)}`);
+  // Data-scan spot assertions depend on Falling-Fruit-specific geographies
+  // (Monticello, Manhattan local parks) that an arbitrary iNaturalist subset
+  // need not contain, so they only run for a full Falling Fruit bake.
+  if (cfg.dataSpotAssertions && !dryRun) {
+    if (spots.monticello.total && spots.monticello.prohibited !== spots.monticello.total) {
+      throw new Error(`Monticello spot assertion failed: ${JSON.stringify(spots.monticello)}`);
+    }
+    if (!spots.manhattanLocalPark.total || spots.manhattanLocalPark.prohibited <= spots.manhattanLocalPark.total / 2) {
+      throw new Error(`Manhattan local park spot assertion failed: ${JSON.stringify(spots.manhattanLocalPark)}`);
+    }
   }
   return { shenandoahBlueberry, monticelloRule };
 }
@@ -381,17 +457,23 @@ async function main() {
   const context = await buildRuleContext();
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, "utf8"));
   const fields = makeFieldIndex(manifest.recordFields);
-  const catalogByMode = {
-    food: new Map(context.foodSpeciesCatalog.map((species) => [species.id, species])),
-    ink: new Map(context.inkSpeciesCatalog.map((species) => [species.id, species]))
-  };
+  const catalogByMode = {};
+  for (const mode of MODES) {
+    catalogByMode[mode] = new Map(context[CATALOG_CONST_BY_MODE[mode]].map((species) => [species.id, species]));
+  }
+  anchorSpeciesByMode = buildAnchorSpeciesByMode(catalogByMode);
   const spots = {
     monticello: { total: 0, prohibited: 0 },
     manhattanLocalPark: { total: 0, prohibited: 0 }
   };
+  // Record key used to resolve a per-mode species: source speciesId (FF) or
+  // anchor taxon id (iNat).
+  const keyField = TREE === "inaturalist" ? fields.anchor : fields.speciesId;
+  const dryRun = Number.isFinite(LIMIT);
+  const chunks = dryRun ? manifest.chunks.slice(0, LIMIT) : manifest.chunks;
   let totalRecords = 0;
 
-  for (const chunk of manifest.chunks) {
+  for (const chunk of chunks) {
     const chunkPath = path.resolve(ROOT, chunk.path.replace(/^\.\//, ""));
     const cachePath = path.join(CACHE_DIR, `${chunk.id}.json`);
     const records = JSON.parse(await readFile(chunkPath, "utf8"));
@@ -403,17 +485,17 @@ async function main() {
 
     const accessCounts = {};
     const centroidAccumulators = {};
-    FALLING_FRUIT_MODES.forEach((mode) => {
+    MODES.forEach((mode) => {
       accessCounts[mode] = {};
       centroidAccumulators[mode] = {};
     });
 
     records.forEach((rawRecord, index) => {
-      const sourceSpeciesId = rawRecord[fields.speciesId];
-      FALLING_FRUIT_MODES.forEach((mode) => {
+      const recordKey = rawRecord[keyField];
+      MODES.forEach((mode) => {
         context.state.activeMap = mode;
-        const speciesId = context.getImportedSpeciesId(sourceSpeciesId);
-        const species = catalogByMode[mode].get(speciesId);
+        const speciesId = resolveModeSpeciesId(context, mode, recordKey);
+        const species = speciesId && catalogByMode[mode].get(speciesId);
         if (!species) return;
         const cachedUnits = containment[index] || [];
         context.__cachedUnits = cachedUnits;
@@ -424,7 +506,9 @@ async function main() {
         }
         addCount(accessCounts[mode], rule.status, speciesId);
         addCentroid(centroidAccumulators[mode], rule.status, Number(record.lng), Number(record.lat));
-        addSpotObservation(spots, context, mode, speciesId, rule.status, rawRecord, fields, cachedUnits);
+        if (cfg.dataSpotAssertions) {
+          addSpotObservation(spots, context, mode, speciesId, rule.status, rawRecord, fields, cachedUnits);
+        }
       });
     });
 
@@ -440,10 +524,15 @@ async function main() {
     validateChunkCounts(context, chunk, catalogByMode);
   }
 
+  const syntheticAssertions = validateSpotAssertions(context, catalogByMode, spots, dryRun);
+  if (dryRun) {
+    console.log(`Dry run (--limit=${LIMIT}): validated ${chunks.length} chunks, ${totalRecords} records. Manifest NOT written.`);
+    console.log(`Spot assertions: ${JSON.stringify({ ...syntheticAssertions, ...spots })}`);
+    return;
+  }
   if (totalRecords !== manifest.recordCount) {
     throw new Error(`Total record count changed: manifest ${manifest.recordCount}, chunks ${totalRecords}`);
   }
-  const syntheticAssertions = validateSpotAssertions(context, catalogByMode, spots);
   await writeFile(MANIFEST_PATH, `${JSON.stringify(manifest)}\n`);
   console.log(`Wrote access status aggregates for ${manifest.chunks.length} chunks and ${totalRecords} records.`);
   console.log(`Spot assertions: ${JSON.stringify({ ...syntheticAssertions, ...spots })}`);

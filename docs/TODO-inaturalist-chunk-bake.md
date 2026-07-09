@@ -1,10 +1,86 @@
 # Work order: bake iNaturalist into precomputed point chunks
 
-Status: SCOPED, not started. Written 2026-07-09 from a 3-agent research pass.
-Owner sign-off needed on the decisions in section 8 before building.
+Status: **PHASES A, B, and C (wiring) COMPLETE and verified (2026-07-09).** The
+national tree is built + access-baked + gate-validated; the app wiring is landed
+behind `USE_BAKED_INATURALIST` (default OFF = live path unchanged). Remaining is
+the owner-driven GO-LIVE (section 11) + Phase D docs + the manifest trim. Written
+2026-07-09 from a 3-agent research pass.
 
 This file is self-contained: a fresh session with no memory of the scoping
 conversation can execute it. Re-check line anchors before editing (app.js moves).
+
+## PHASE A RESULTS (2026-07-09) — all invariants passed
+
+Validated end to end on 7 taxa in Virginia (9,072 GBIF records via the sync API):
+- Overview aggregate count == plotted points, all 3 modes (food 2,444 / ink
+  6,409 / medicine 4,927). accessCounts total == plotted, all 3 modes.
+- 130/130 catalog anchors resolved to GBIF keys (1 harmless spelling-variant
+  fuzzy: Purshia). National raw = **2,879,514** CC-eligible US research-grade
+  records (GBIF's iNat mirror is 100% CC-eligible; ARR absent). 4-dec keep-ratio
+  0.93 -> ~2.6M projected national. Obscuration 95.1% precise / 4.9%
+  observer-obscured / 0 taxon-obscured.
+- DWCA and gbif-json ingest paths produce byte-identical output.
+
+Key design decisions taken during Phase A:
+- **Schema (refines 8.6): each row stores the iNat ANCHOR taxon id, not one
+  speciesId.** 6 taxa cross modes (e.g. Sambucus 52689 -> elderberry /
+  ink-elderberry / medicine-elderberry) and goldenrod (48678) has no food
+  species, so a single speciesId cannot resolve per mode. The app resolves
+  anchor -> per-mode species from the active catalog, mirroring live
+  getSpeciesForObservation. recordFields = `[id, anchor, lat, lng, idDate,
+  observer, approximate]`. Manifest chunks use `countsByAnchor` /
+  `centroidsByAnchor`; manifest carries an `anchors` list (anchor ->
+  speciesByMode). Most-specific anchor wins (validated: S. racemosa records
+  attribute to red-elderberry, not generic elderberry).
+- **Latent bug the bake fixes:** getExpectedIconicTaxon returns "Plantae" for
+  every non-`mushroom` category, so the LIVE app drops iNat observations for 7
+  ink dye fungi/lichens (Fungi kingdom): turkey tail (54134), artist's conk
+  (48473), wolf lichen (54613), chicken-of-the-woods (53713/487301), dyer's
+  polypore (118084), tinder conk (127510), red-belted conk (495903/877361/
+  877362). Anchor-based bake includes them correctly. Owner confirmed: INCLUDE.
+- **PAD-US throttles large-geometry bursts** ("Too many large geometry
+  non-cacheable requests"). Run fetch_padus_containment with
+  `--concurrency=1 --spacing=1500 --retries=4 --backoff=3000` for dense
+  public-land regions. The national build MUST use gentle settings.
+- The access-cache + cell-containment dirs are BUILD-ONLY (in `.assetsignore`,
+  never served). The iNat `data/inaturalist/us/access-cache/` must be added to
+  `.assetsignore` too. Served file count = iNat CHUNK count only.
+
+Confirmed section-8 decisions (owner, 2026-07-09):
+1. Thinning = **4 decimals**. 2. Grid = **0.30 deg** (CHANGED from 0.15 after the
+national build measured 29,240 chunks at 0.15, over Cloudflare's 20k cap; 0.30
+-> 8,949 chunks / ~12,200 served total / ~6 MB manifest. Owner picked 0.30 over
+0.25 for growth headroom). 3. Ingest = **taxonKey-scoped GBIF + post-filter on
+GBIF hierarchy** (validated). 4. Observer-obscured = **keep, badged, shown at all
+zooms, counted**. 5. Freshness = **fully static, quarterly rebuild** (no live
+iNat). 6. Schema = **anchor-taxon** (above). 7. Tree = **parallel
+`data/inaturalist/us/`**. 8. GBIF account: owner HAS it.
+
+Phase B national build (2026-07-09): GBIF DWCA download key
+`0030457-260623161305970`, **DOI 10.15468/dl.e6q6he**, CC BY-NC 4.0, 2,879,514
+records (1.5 GB zip in `~/Documents/CraftAlmanac-archives/inaturalist/`). Build
+run with `--grid=0.30 --thin=4`, `node --max-old-space-size=12288` (the builder
+holds ~2.6M records; earlier 8 GB OOM'd, fixed by reading only needed DWCA
+columns by index + compact tuples). National kept post-thin ~2.56M
+(keep 0.9077); obscuration precise 2.74M / observer-obscured 115,162 (4.1%) /
+taxon-obscured dropped 8,083 (0.3%); out-of-CONUS drops 17,164 + 34,431.
+
+Scripts landed (uncommitted, pending owner review):
+`resolve_inat_gbif_taxonkeys.mjs` (ran: `data/inaturalist/taxon-keys.json`),
+`fetch_gbif_sample.mjs` (sync-API sampler, no creds), `build_inaturalist_subset.mjs`
+(`--source=gbif-json|dwca`), `request_gbif_download.mjs` (national DWCA), and
+`--dir`/`--tree` params added to `fetch_padus_containment.mjs` +
+`build_access_status.mjs` (FF path unchanged; gate suite still green). The VA
+`data/inaturalist/us/` tree is throwaway validation data — the national build
+overwrites it; do NOT commit it.
+
+Phase B mechanics: owner runs `request_gbif_download.mjs` (auth); the resulting
+zip is public, so Claude can poll+download from the key. Then
+`build_inaturalist_subset.mjs --source=dwca --input=<unzip> --thin=4`, gentle
+`fetch_padus_containment.mjs --dir=inaturalist/us --concurrency=1`,
+`build_access_status.mjs --tree=inaturalist`, then MEASURE chunk count vs the
+20k cap and manifest size (VA extrapolates to a ~6 MB national manifest — watch
+it; trim precision or drop per-chunk centroids if needed).
 
 ---
 
@@ -375,5 +451,165 @@ phase, per CLAUDE.md's in-session fan-out convention):
 - Phase D: gates + ATTRIBUTION.md + acceptance verification + a documented
   quarterly-rebuild runbook.
 
+---
+
+## 10. PHASE C IMPLEMENTATION PLAN (refined post-Phase-A, 2026-07-09)
+
+Verified architecture facts (re-check line anchors; app.js moves):
+- `loadMapData` (~7920) fans out sources; iNat is `config.loadMinerals ?
+  Promise.resolve([]) : loadINaturalist()` (~7935).
+- `loadFallingFruit` (~8303) -> `getFallingFruitManifest` (~8344) ->
+  `getVisibleFallingFruitChunks` (~8360) -> `loadFallingFruitChunk` (~8371) ->
+  `expandFallingFruitRecord` (~8397) -> `mapFallingFruitRecord` (~9111).
+- Aggregate reads per-chunk `countsBySpeciesId`/`centroidsBySpeciesId` and
+  resolves per mode via `getImportedSpeciesId`: `getAggregateItems` (~6347),
+  `getAggregateRecordCount` (~6549, countsBySpeciesId reduce ~6571),
+  `getAggregateItemCenter` (~6577, centroids ~6609),
+  `getAggregateItemCategoryCounts` (~3254).
+- Constants: `FALLING_FRUIT_MANIFEST_URL` (:50), `FALLING_FRUIT_MIN_LOAD_ZOOM=8`
+  (:53), `FALLING_FRUIT_MAX_VIEWPORT_CHUNKS=160` (:54),
+  `FALLING_FRUIT_CHUNK_CACHE_MAX=400` (:59). State cache fields: `fallingFruit
+  Manifest/ChunkCache/ChunkLoads/Records` (~2226-2231).
+- MAP_MODE_CONFIG (~2090): food/ink `loadFallingFruit:true`; medicine
+  `loadFallingFruit:false` (Herbs is iNat-only, so baked iNat is its ONLY point
+  source). All non-mineral modes load iNat.
+
+Build it behind a flag so the live path is the zero-risk default until verified:
+`const USE_BAKED_INATURALIST = false;` (flip to true only once the NATIONAL iNat
+tree is committed + served; a flag-off build is byte-identical to today).
+
+New app.js pieces (mirror the FF names, add an anchor resolver):
+1. Constants: `INATURALIST_MANIFEST_URL="./data/inaturalist/us/manifest.json"`,
+   `INATURALIST_CHUNK_CACHE_MAX` (~400). State: `inatChunkManifest`,
+   `inatChunkCache`, `inatChunkLoads`, `inatChunkRecords`.
+2. `getActiveInatAnchorSpeciesMap()` — memoized per `state.activeMap`: build
+   `Map(anchorTaxonId -> species)` from the ACTIVE `speciesCatalog`
+   (`for species; for species.inatTaxonIds`). Clear the memo in the mode-switch
+   path that already resets `speciesCatalog` (~3881). This is the ONE resolver
+   both the point loader and the aggregate use.
+3. `getInatChunkManifest()` / `getVisibleInatChunks()` / `loadInatChunk()` /
+   `expandInatRecord(row, fields)` — copies of the FF equivalents pointed at the
+   iNat URL + caches (recordFields differ: `[id,anchor,lat,lng,idDate,observer,
+   approximate]`).
+4. `mapInatChunkRecord(record)` — resolves `species =
+   getActiveInatAnchorSpeciesMap().get(record.anchor)`; drop if absent. Build the
+   card object the live `mapINaturalistObservation` produced: `id:"inat-"+record.id`,
+   `speciesId:species.id`, `name/observedName` from species, `lat/lng`,
+   `approximate:!!record.approximate` (DRIVES the "±~20 km" badge at ~7624),
+   `source:"inaturalist"`, `idDate:record.idDate`, `observer:record.observer`,
+   `sourceUrl:"https://www.inaturalist.org/observations/"+record.id`,
+   accessClass "unknown"/publicLand false/accessNote as today. Access resolves
+   via the rule engine + the served-chunk manifest accessCounts, same as FF.
+5. `loadINaturalistChunks()` — mirror of `loadFallingFruit` over the iNat tree
+   (respect FALLING_FRUIT_MIN_LOAD_ZOOM gating; iNat points also load at zoom>=8).
+6. Wire: in `loadMapData`, when `USE_BAKED_INATURALIST`, use
+   `loadINaturalistChunks()` in place of `loadINaturalist()` for all non-mineral
+   modes (Herbs included). In `getAggregateItems` (~6347), when the flag is on,
+   push the iNat manifest chunks (for iNat modes) INSTEAD OF the live
+   `getINaturalistAggregateItems`.
+
+Aggregate branches (safe to add unconditionally — they only fire for items that
+HAVE `countsByAnchor`, which only exist once baked iNat chunks load):
+- `getAggregateRecordCount`: if `item.countsByAnchor`, sum over anchors whose
+  `getActiveInatAnchorSpeciesMap().get(anchor)` is in `selectedSpeciesIds`
+  (honor the accessFilter path via the already-baked `item.accessCounts[mode]`,
+  which IS keyed by final species id, so that path is unchanged).
+- `getAggregateItemCenter`: same, over `item.centroidsByAnchor`.
+- `getAggregateItemCategoryCounts`: same, mapping anchor -> species -> category.
+
+Verification (against the VA tree, or national once built): flip the flag on,
+point the URL at the local tree, and assert in the app that the overview circle
+count equals the plotted point count per mode (matches the offline
+`validate_data.mjs` iNat (f) check), the ±20 km badge shows on an
+`approximate:1` record, Herbs mode shows points, and ink shows the dye fungi.
+
+DELETION (only AFTER the flag path is verified against national data): remove
+`loadINaturalist`, `getINaturalistRequestBounds`, `fetchINaturalistBounds(WithRetry)`,
+`scheduleINaturalistAggregateLoad`, `loadINaturalistAggregates`,
+`getINaturalistAggregateTiles`, `fetchINaturalistAggregateTile(WithRetry)`,
+`getINaturalistGridItems`, the `INATURALIST_AGGREGATE_SPECIES_ID` aggregate
+branch, and the live aggregate paint-gate/bridge. Keep the status raster as the
+FF live-PAD-US gap fallback only. Then default the flag on (or drop it).
+
+Phase D leftovers already staged this session: `.assetsignore` excludes
+`data/inaturalist/us/access-cache/` + `taxon-keys.json`; `validate_data.mjs` has
+the iNat (a)-(f) gate (conditional on the tree existing). Still TODO in D:
+ATTRIBUTION.md rewrite (iNat section -> GBIF DWCA DOI + CC BY-NC 4.0, note the
+compilation is CC-eligible-only), a quarterly-rebuild runbook, and deciding
+whether to git-commit the ~thousands of iNat access-cache files (FF commits its
+cache; iNat's is larger, so weigh repo size vs rebuild reproducibility).
+
 Keep the live iNat path working behind a flag until Phase C is verified, so the
 map never regresses mid-build.
+
+---
+
+## 11. PHASE C DONE + GO-LIVE CHECKLIST (2026-07-09)
+
+Phase C wiring LANDED in app.js (all flag-gated on `USE_BAKED_INATURALIST`,
+default false):
+- Constants `USE_BAKED_INATURALIST`, `INATURALIST_MANIFEST_URL`,
+  `INATURALIST_CHUNK_CACHE_MAX`; state `inatChunk{Manifest,Cache,Loads,Records}`
+  + `inatAnchorSpeciesMap`.
+- `getActiveInatAnchorSpeciesMap()` (memoized, cleared in `syncActiveCatalog`).
+- `getInatChunkManifest / loadINaturalistChunks / loadINaturalistChunk /
+  mapInatChunkRecord / observationPlaceLabel` (mirror the FF loader; reuse
+  `expandFallingFruitRecord`, `bboxIntersectsBounds`, `recordInBounds`,
+  `getChunkCenterDistance`, `touchCacheEntry`, `trimCache`).
+- `loadMapData` uses `loadINaturalistChunks()` when the flag is on.
+- `getAggregateItems` pushes `state.inatChunkManifest.chunks`;
+  `getAggregateRecordCount / getAggregateItemCenter /
+  getAggregateItemCategoryCounts` gained `countsByAnchor`/`centroidsByAnchor`
+  branches; `updateFallingFruitAggregates` loads the iNat manifest at overview
+  zoom; `scheduleINaturalistAggregateLoad` + `loadINaturalistAggregates` no-op
+  when the flag is on.
+
+VERIFIED (2026-07-09): `node --check` + dup-lint pass; a vm harness drove the
+ACTUAL app fns against the national tree -> app `getAggregateRecordCount` sum ==
+plotted per mode (food 932,250 / ink 1,420,267 / Herbs 558,444); cross-mode
+(one Sambucus obs -> elderberry/ink-elderberry/medicine-elderberry) + approximate
+badge + category counts correct; flag-OFF boot is clean in-browser (no console
+errors, live path unchanged); resolver + `mapInatChunkRecord` + manifest-serving
+verified in the browser runtime. NOT verified locally: the visual Mapbox paint
+(local map render is rAF-throttled; verify on a deploy).
+
+GO-LIVE (owner-driven, do as ONE reviewed commit so the site never 404s the
+manifest):
+1. Commit the tree: `data/inaturalist/us/` (chunks + manifest;
+   access-cache is .assetsignore'd from serving but decide whether to git-commit
+   it) and `data/inaturalist/taxon-keys.json`.
+2. Flip `USE_BAKED_INATURALIST = true` in app.js.
+3. Bump the asset version query strings in index.html AND the sw.js cache
+   version (see the version-sync gate; current `counts3` / `v1-counts3`).
+4. Deploy to a preview and VISUALLY confirm: overview circle counts match
+   plotted points on zoom-in; Herbs mode shows points; ink shows the dye fungi
+   (turkey tail etc.); the "±~20 km approximate" badge shows on an obscured
+   point; the point card links to the iNaturalist observation.
+5. Update ATTRIBUTION.md (ready text below) and run `bash scripts/check.sh`.
+6. THEN the DELETION in section 10 (live path is now dead) can land in a
+   follow-up, and the flag can be dropped.
+
+READY ATTRIBUTION.md text (replace the "## iNaturalist" body's first paragraph;
+DOI 10.15468/dl.e6q6he; keep em-dash-free per owner style):
+
+  The map plots iNaturalist research-grade observations precomputed into static
+  viewport chunks, the same way the Falling Fruit records are chunked. The
+  observations are sourced from a GBIF occurrence download of the iNaturalist
+  Research-grade Observations dataset (GBIF.org, DOI 10.15468/dl.e6q6he),
+  filtered to the app's taxa in the contiguous United States and thinned to
+  roughly one point per location per species. GBIF mirrors only CC0, CC BY, and
+  CC BY-NC records, so the compilation stays license-clean and noncommercial.
+  Each point links back to its iNaturalist observation page. iNaturalist content
+  remains owned by the contributor under Creative Commons Attribution-
+  NonCommercial (CC BY-NC) unless otherwise specified. Do not reuse photos or
+  other media without checking the license on the individual observation.
+  Coordinates that iNaturalist obscured at the observer's request are shown with
+  an approximate-location badge; observations obscured to protect sensitive taxa
+  are omitted.
+
+FOLLOW-UP (non-blocking): the manifest is 17 MB raw / 3.6 MB gzip. To trim:
+derive `bbox`/`path` from the chunk id (drop them from the manifest; the loader
+already has the id), reduce centroid precision to 4 dec, and/or split
+accessCounts/accessCentroids into a lazy sidecar loaded only when the access
+filter is first used. Rebuilding with a trimmed format re-runs the subset +
+access-status but NOT the access-cache (id-keyed).

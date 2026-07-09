@@ -10,6 +10,10 @@
 # Build-pipeline caches (referenced only by scripts/*.mjs, never by app.js):
 data/falling-fruit/us/cell-containment/
 data/falling-fruit/us/access-cache/
+data/inaturalist/us/access-cache/
+# The GBIF sample/DWCA archives and the taxon-key artifact are build inputs, not
+# served assets (taxon-keys.json is read by scripts at build time only).
+data/inaturalist/taxon-keys.json
 
 # Internal docs, agent queues, and research (not site content):
 docs/

@@ -347,6 +347,122 @@ runCheck("Check (f): contiguous US states have bbox and Polygon/MultiPolygon geo
   });
 });
 
+// ---------------------------------------------------------------------------
+// iNaturalist chunk tree (data/inaturalist/us). Validated only when present, so
+// the gate stays green before the national bake lands. Mirrors checks (a)-(e)
+// but keyed by anchor taxon id resolved per mode through the catalogs'
+// inatTaxonIds (see docs/TODO-inaturalist-chunk-bake.md).
+const INAT_MANIFEST_PATH = "data/inaturalist/us/manifest.json";
+const INAT_ACCESS_CACHE_DIR = "data/inaturalist/us/access-cache";
+
+function buildAnchorMaps() {
+  const appSource = fs.readFileSync(path.resolve(ROOT, "app.js"), "utf8");
+  const context = {};
+  vm.createContext(context);
+  ["foodSpeciesCatalog", "inkSpeciesCatalog", "medicineSpeciesCatalog"].forEach((name) => {
+    vm.runInContext(`var ${name} = ${extractConstExpression(appSource, name)};`, context, { filename: "app.js" });
+  });
+  const maps = {};
+  for (const [mode, cat] of [["food", context.foodSpeciesCatalog], ["ink", context.inkSpeciesCatalog], ["medicine", context.medicineSpeciesCatalog]]) {
+    const m = new Map();
+    for (const sp of cat) for (const t of sp.inatTaxonIds || []) m.set(Number(t), sp.id);
+    maps[mode] = m;
+  }
+  return maps;
+}
+
+if (exists(INAT_MANIFEST_PATH)) {
+  const inatManifest = readJson(INAT_MANIFEST_PATH);
+  const inatRows = new Map();
+  const getInatRows = (chunk) => {
+    if (inatRows.has(chunk.id)) return inatRows.get(chunk.id);
+    const p = normalizeProjectPath(chunk.path);
+    const rows = p ? readJson(p) : null;
+    inatRows.set(chunk.id, rows);
+    return rows;
+  };
+
+  runCheck("iNat (a): every manifest chunk path exists and parses to an array", () => {
+    if (inatManifest?.__readError || !Array.isArray(inatManifest.chunks)) {
+      fail(`${INAT_MANIFEST_PATH} unreadable or missing chunks array`);
+      return;
+    }
+    inatManifest.chunks.forEach((chunk) => {
+      const p = normalizeProjectPath(chunk.path);
+      if (!p || !exists(p)) { fail(`iNat chunk ${chunk.id} path missing: ${p}`); return; }
+      const rows = getInatRows(chunk);
+      if (rows?.__readError || !Array.isArray(rows)) fail(`iNat chunk ${chunk.id} did not parse to an array`);
+    });
+  });
+
+  runCheck("iNat (b): per-chunk row count equals recordCount", () => {
+    (inatManifest.chunks || []).forEach((chunk) => {
+      const rows = getInatRows(chunk);
+      if (Array.isArray(rows) && rows.length !== toCount(chunk.recordCount)) {
+        fail(`iNat chunk ${chunk.id} recordCount ${chunk.recordCount} != file rows ${rows.length}`);
+      }
+    });
+  });
+
+  runCheck("iNat (c): summed countsByAnchor equals manifest.recordCount", () => {
+    const total = (inatManifest.chunks || []).reduce((sum, chunk) => {
+      if (!chunk.countsByAnchor || typeof chunk.countsByAnchor !== "object") {
+        fail(`iNat chunk ${chunk.id} missing countsByAnchor`);
+        return sum;
+      }
+      return sum + sumObjectValues(chunk.countsByAnchor);
+    }, 0);
+    if (total !== toCount(inatManifest.recordCount)) {
+      fail(`iNat summed countsByAnchor ${total} != manifest.recordCount ${inatManifest.recordCount}`);
+    }
+  });
+
+  runCheck("iNat (d): access-cache rows align (when the cache is present)", () => {
+    if (!exists(INAT_ACCESS_CACHE_DIR)) {
+      console.log("  (skipped: no iNat access-cache dir)");
+      return;
+    }
+    (inatManifest.chunks || []).forEach((chunk) => {
+      const rows = getInatRows(chunk);
+      if (!Array.isArray(rows)) return;
+      const cachePath = `${INAT_ACCESS_CACHE_DIR}/${chunk.id}.json`;
+      if (!exists(cachePath)) { fail(`iNat access cache missing for ${chunk.id}`); return; }
+      const cacheRows = readJson(cachePath);
+      if (!Array.isArray(cacheRows) || cacheRows.length !== rows.length) {
+        fail(`iNat access cache ${cachePath} length != chunk rows`);
+      }
+    });
+  });
+
+  runCheck("iNat (e): every manifest anchor resolves to a catalog species in some mode", () => {
+    const maps = buildAnchorMaps();
+    const anchors = new Set();
+    (inatManifest.chunks || []).forEach((chunk) => Object.keys(chunk.countsByAnchor || {}).forEach((a) => anchors.add(Number(a))));
+    anchors.forEach((anchor) => {
+      const resolves = ["food", "ink", "medicine"].some((mode) => maps[mode].has(anchor));
+      if (!resolves) fail(`iNat anchor ${anchor} resolves to no catalog species in any mode (dead baked records)`);
+    });
+  });
+
+  runCheck("iNat (f): overview count equals plotted points per mode (acceptance)", () => {
+    const maps = buildAnchorMaps();
+    const anchorIdx = (inatManifest.recordFields || []).indexOf("anchor");
+    if (anchorIdx < 0) { fail("iNat manifest recordFields missing 'anchor'"); return; }
+    for (const mode of ["food", "ink", "medicine"]) {
+      let overview = 0;
+      let plotted = 0;
+      (inatManifest.chunks || []).forEach((chunk) => {
+        for (const [anchor, n] of Object.entries(chunk.countsByAnchor || {})) {
+          if (maps[mode].has(Number(anchor))) overview += toCount(n);
+        }
+        const rows = getInatRows(chunk);
+        if (Array.isArray(rows)) rows.forEach((r) => { if (maps[mode].has(Number(r[anchorIdx]))) plotted += 1; });
+      });
+      if (overview !== plotted) fail(`iNat ${mode}: overview ${overview} != plotted ${plotted}`);
+    }
+  });
+}
+
 if (hadFailure) {
   console.log("Validation FAILED");
   process.exit(1);
