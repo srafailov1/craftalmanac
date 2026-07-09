@@ -57,6 +57,18 @@ const FALLING_FRUIT_MAX_VIEWPORT_CHUNKS = 160;
 const INATURALIST_RECORD_CACHE_MAX = 12000;
 const INATURALIST_AGGREGATE_CACHE_MAX = 800;
 const FALLING_FRUIT_CHUNK_CACHE_MAX = 400;
+
+// Baked iNaturalist chunk tree (data/inaturalist/us), the analog of the Falling
+// Fruit tree: precomputed occurrence points + a manifest whose per-chunk
+// countsByAnchor/accessCounts make the overview aggregate equal the plotted
+// points by construction (see docs/TODO-inaturalist-chunk-bake.md). When the
+// flag is on, this REPLACES the live iNaturalist grid + observation API paths.
+// The national tree is committed and served, so the baked path is live. The
+// live /v1/grid + /v1/observations code remains gated behind this flag until a
+// follow-up removes it (see docs/TODO-inaturalist-chunk-bake.md sections 10-11).
+const USE_BAKED_INATURALIST = true;
+const INATURALIST_MANIFEST_URL = "./data/inaturalist/us/manifest.json";
+const INATURALIST_CHUNK_CACHE_MAX = 400;
 // "Save this area" (Phase 5.5): user-triggered offline caching of the Falling
 // Fruit chunk files covering the current viewport. The cache name MUST match
 // SAVED_AREAS_CACHE in sw.js (the SW reads it as its offline fallback and
@@ -2102,7 +2114,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: FOOD_CATEGORY_COLORS,
     catalog: foodSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit", "NPS orchards"],
-    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.`,
+    dataNotes: `Chunked iNaturalist research-grade observations (via GBIF) across ${REGION_NAME}, chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and historic orchards from the National Park Service.`,
     rulesLabel: "Harvesting rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: true
@@ -2122,7 +2134,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: INK_CATEGORY_COLORS,
     catalog: inkSpeciesCatalog,
     sourceNames: ["iNaturalist", "Falling Fruit"],
-    dataNotes: `Live observations from iNaturalist across ${REGION_NAME}, relevant chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink and dye materials still require permission to collect.`,
+    dataNotes: `Chunked iNaturalist research-grade observations (via GBIF) across ${REGION_NAME}, relevant chunked community records from Falling Fruit, public access boundaries from USGS PAD-US, and local collection rules where sourced. Ink and dye materials still require permission to collect.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: true,
     loadNpsOrchards: false
@@ -2142,7 +2154,7 @@ const MAP_MODE_CONFIG = {
     categoryColors: MEDICINE_CATEGORY_COLORS,
     catalog: medicineSpeciesCatalog,
     sourceNames: ["iNaturalist"],
-    dataNotes: `Live observations from iNaturalist, public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Plant and project notes are educational, historical and traditional, and are not instructions for treatment.`,
+    dataNotes: `Chunked iNaturalist research-grade observations (via GBIF), public access boundaries from USGS PAD-US, and local collection rules where sourced across ${REGION_NAME}. Plant and project notes are educational, historical and traditional, and are not instructions for treatment.`,
     rulesLabel: "Collection rules and limits",
     loadFallingFruit: false,
     loadNpsOrchards: false
@@ -2229,6 +2241,12 @@ const state = {
   fallingFruitChunkCache: new Map(),
   fallingFruitChunkLoads: new Map(),
   fallingFruitRecords: null,
+  // Baked iNaturalist chunk tree (parallels the Falling Fruit fields above).
+  inatChunkManifest: null,
+  inatChunkCache: new Map(),
+  inatChunkLoads: new Map(),
+  inatChunkRecords: null,
+  inatAnchorSpeciesMap: null, // memoized anchor->species for state.activeMap
   npsOrchardData: null,
   npsOrchardRecords: null,
   mineralData: null,
@@ -3252,6 +3270,19 @@ const AGGREGATE_BASE_FILL = "#f7f2df";
 // a single opaque taxon count with no species breakdown) and for cells with no
 // selected-species records — those stay the base cream at full zoom-out.
 function getAggregateItemCategoryCounts(item, selectedSpeciesIds) {
+  // Baked iNaturalist chunk: counts keyed by anchor taxon id -> active species.
+  if (item.countsByAnchor) {
+    const anchorMap = getActiveInatAnchorSpeciesMap();
+    const out = {};
+    let any = false;
+    for (const [anchor, n] of Object.entries(item.countsByAnchor)) {
+      const species = anchorMap.get(Number(anchor));
+      if (!species || !selectedSpeciesIds.has(species.id)) continue;
+      out[species.category] = (out[species.category] || 0) + Number(n || 0);
+      any = true;
+    }
+    return any ? out : null;
+  }
   const counts = item.countsBySpeciesId;
   if (!counts || counts[INATURALIST_AGGREGATE_SPECIES_ID] != null) return null;
   const out = {};
@@ -3901,6 +3932,22 @@ function syncActiveCatalog() {
   speciesCatalogById = new Map(speciesCatalog.map((species) => [species.id, species]));
   CATEGORIES = config.categories.map((category) => category.id);
   CATEGORY_COLORS = config.categoryColors;
+  // The baked-iNaturalist anchor->species map is per-mode; drop the memo so it
+  // rebuilds from the new active catalog on next use.
+  state.inatAnchorSpeciesMap = null;
+}
+
+// Baked iNaturalist: map an anchor taxon id to the active mode's catalog species
+// (the offline analog of live getSpeciesForObservation, which resolves per
+// active mode). Memoized per mode; cleared in syncActiveCatalog.
+function getActiveInatAnchorSpeciesMap() {
+  if (state.inatAnchorSpeciesMap) return state.inatAnchorSpeciesMap;
+  const map = new Map();
+  for (const species of speciesCatalog) {
+    for (const taxonId of species.inatTaxonIds || []) map.set(taxonId, species);
+  }
+  state.inatAnchorSpeciesMap = map;
+  return map;
 }
 
 function renderModeChrome() {
@@ -6252,10 +6299,14 @@ function updateRecordCountStatus(visibleRecords) {
     message = `Showing ${visibleInView} of ${loadedInView} records in view · ${hidden} hidden by current filters`;
   } else {
     const noun = visibleInView === 1 ? "record" : "records";
-    // At point zoom the iNaturalist layer is a most-recent sample (capped per
-    // tile), so this maps fewer finds than the overview's all-time occurrence
-    // total. Say so, so the drop on zoom-in reads as sampling, not data loss.
-    const sampleNote = config.sourceNames.includes("iNaturalist") ? " · recent iNaturalist sample" : "";
+    // Live iNaturalist points are a most-recent per-tile sample, so at point
+    // zoom they map fewer finds than the overview's all-time total; the note
+    // explained that drop as sampling, not data loss. The baked path plots the
+    // same set the overview counts (overview == plotted by construction), so
+    // there is no drop and no note.
+    const sampleNote = (!USE_BAKED_INATURALIST && config.sourceNames.includes("iNaturalist"))
+      ? " · recent iNaturalist sample"
+      : "";
     message = `${visibleInView} ${noun} in view · ${config.sourceNames.join(", ")}${sampleNote}`;
   }
   setDataStatus(message, { kind: "count" });
@@ -6303,8 +6354,18 @@ function updateFallingFruitAggregates() {
   if (shouldShowPointLayers()) return;
   if (shouldDeferAggregatePaint()) return;
   window.clearTimeout(state.aggregateTimer);
-  getFallingFruitManifest()
-    .then((manifest) => {
+  const config = getActiveMapConfig();
+  // Baked iNaturalist modes that don't load Falling Fruit (Herbs) skip the FF
+  // manifest; the baked iNat manifest is loaded so getAggregateItems can add
+  // its chunks. Flag-off behavior is unchanged (FF manifest only, live grid).
+  const ffManifestPromise = (USE_BAKED_INATURALIST && !config.loadFallingFruit)
+    ? Promise.resolve({ chunks: [] })
+    : getFallingFruitManifest();
+  const inatManifestPromise = (USE_BAKED_INATURALIST && !config.loadMinerals)
+    ? getInatChunkManifest().catch(() => null)
+    : Promise.resolve(null);
+  Promise.all([ffManifestPromise, inatManifestPromise])
+    .then(([manifest]) => {
       if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
       if (shouldDeferAggregatePaint()) return;
       map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID).setData(getFallingFruitAggregateCollection(manifest));
@@ -6386,10 +6447,19 @@ function shouldUseViewportAggregateBounds(zoom, bounds) {
 }
 
 function getAggregateItems(manifest, selectedSpeciesIds, bounds, accessFilterActive = false) {
-  const items = getActiveMapConfig().loadFallingFruit
+  const config = getActiveMapConfig();
+  const items = config.loadFallingFruit
     ? [...(manifest.chunks || [])]
     : [];
-  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+  if (USE_BAKED_INATURALIST) {
+    // Baked iNaturalist manifest chunks feed the overview for every iNat mode
+    // (food/ink/Herbs). They carry countsByAnchor, which the aggregate
+    // consumers resolve to the active-mode species; getGridAggregateFeatures
+    // still bbox-filters them.
+    if (!config.loadMinerals && state.inatChunkManifest?.chunks) {
+      items.push(...state.inatChunkManifest.chunks);
+    }
+  } else if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     items.push(...getINaturalistAggregateItems(bounds));
   }
   return items;
@@ -6609,6 +6679,16 @@ function getAggregateRecordCount(item, selectedSpeciesIds, selectedAccessStatuse
       total + getFilteredAccessStatusCount(modeAccessCounts[status], selectedSpeciesIds)
     ), 0);
   }
+  // Baked iNaturalist chunk: counts keyed by anchor taxon id, resolved to the
+  // active-mode species (the access-filter path above already handles the
+  // species-keyed accessCounts, so this is only the unfiltered overview).
+  if (item.countsByAnchor) {
+    const anchorMap = getActiveInatAnchorSpeciesMap();
+    return Object.entries(item.countsByAnchor).reduce((total, [anchor, count]) => {
+      const species = anchorMap.get(Number(anchor));
+      return species && selectedSpeciesIds.has(species.id) ? total + Number(count || 0) : total;
+    }, 0);
+  }
   return Object.entries(item.countsBySpeciesId || {}).reduce((total, [sourceSpeciesId, count]) => {
     const importedSpeciesId = getImportedSpeciesId(sourceSpeciesId);
     return selectedSpeciesIds.has(importedSpeciesId) ? total + Number(count || 0) : total;
@@ -6643,6 +6723,24 @@ function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses
       accessCount += centroidCount;
     });
     if (accessCount) return [accessWeightedLng / accessCount, accessWeightedLat / accessCount];
+  }
+  // Baked iNaturalist chunk: centroids keyed by anchor taxon id.
+  if (item.centroidsByAnchor) {
+    const anchorMap = getActiveInatAnchorSpeciesMap();
+    let anchorCount = 0;
+    let anchorWeightedLng = 0;
+    let anchorWeightedLat = 0;
+    Object.entries(item.centroidsByAnchor).forEach(([anchor, centroid]) => {
+      const species = anchorMap.get(Number(anchor));
+      if (!species || !selectedSpeciesIds.has(species.id) || !Array.isArray(centroid)) return;
+      const centroidCount = Number(centroid[2] || 0);
+      if (!centroidCount) return;
+      anchorWeightedLng += Number(centroid[0]) * centroidCount;
+      anchorWeightedLat += Number(centroid[1]) * centroidCount;
+      anchorCount += centroidCount;
+    });
+    if (anchorCount) return [anchorWeightedLng / anchorCount, anchorWeightedLat / anchorCount];
+    return item.center || getBboxCenter(item.bbox);
   }
   let count = 0;
   let weightedLng = 0;
@@ -7722,6 +7820,9 @@ function scheduleDataLoad() {
 }
 
 function scheduleINaturalistAggregateLoad() {
+  // The baked iNaturalist manifest supplies the overview aggregate; the live
+  // /v1/grid path is inert when USE_BAKED_INATURALIST.
+  if (USE_BAKED_INATURALIST) return;
   window.clearTimeout(state.inatAggregateTimer);
   state.inatAggregateTimer = window.setTimeout(loadINaturalistAggregates, INATURALIST_AGGREGATE_DELAY);
 }
@@ -7815,6 +7916,13 @@ async function prefetchINaturalistAggregateTiles(zoomTargets, { channel = "band"
 }
 
 async function loadINaturalistAggregates() {
+  // Baked overview aggregate: mark ready immediately and let the manifest paint
+  // (no live /v1/grid fetch, no deferral gate).
+  if (USE_BAKED_INATURALIST) {
+    setINaturalistAggregateReady(true);
+    updateFallingFruitAggregates();
+    return;
+  }
   if (!state.mapReady || state.savedLocationsOnly) {
     state.inatAggregateItems = [];
     state.inatAggregateTaxonKey = "";
@@ -7975,7 +8083,7 @@ async function loadMapData() {
   if (!hadRecords) setDataStatus("Loading current map data...", { kind: "loading" });
 
   const [inatResult, fallingFruitResult, npsOrchardResult, mineralResult] = await Promise.allSettled([
-    config.loadMinerals ? Promise.resolve([]) : loadINaturalist(),
+    config.loadMinerals ? Promise.resolve([]) : (USE_BAKED_INATURALIST ? loadINaturalistChunks() : loadINaturalist()),
     config.loadFallingFruit ? loadFallingFruit() : Promise.resolve([]),
     config.loadNpsOrchards ? loadNpsOrchards() : Promise.resolve([]),
     config.loadMinerals ? loadMinerals() : Promise.resolve([])
@@ -7983,11 +8091,18 @@ async function loadMapData() {
 
   if (requestId !== state.activeRequest) return;
 
-  if (inatResult.status === "fulfilled") {
-    inatResult.value.forEach((record) => touchCacheEntry(state.inatRecordCache, record.id, record));
-    trimCache(state.inatRecordCache, INATURALIST_RECORD_CACHE_MAX);
+  if (USE_BAKED_INATURALIST) {
+    // Baked chunk records are already viewport-scoped; no live record cache.
+    state.inatRecords = inatResult.status === "fulfilled"
+      ? inatResult.value
+      : (state.inatChunkRecords || []);
+  } else {
+    if (inatResult.status === "fulfilled") {
+      inatResult.value.forEach((record) => touchCacheEntry(state.inatRecordCache, record.id, record));
+      trimCache(state.inatRecordCache, INATURALIST_RECORD_CACHE_MAX);
+    }
+    state.inatRecords = getCachedINaturalistRecordsInBounds();
   }
-  state.inatRecords = getCachedINaturalistRecordsInBounds();
 
   const fallingFruitRecords = fallingFruitResult.status === "fulfilled"
     ? fallingFruitResult.value
@@ -8446,6 +8561,114 @@ function expandFallingFruitRecord(row, fields) {
 }
 
 // ---------------------------------------------------------------------------
+// Baked iNaturalist chunk loader (the analog of the Falling Fruit loader above,
+// active only when USE_BAKED_INATURALIST). Each row carries an anchor taxon id
+// resolved to the active-mode species; access resolves through the same rule
+// engine + baked manifest accessCounts as Falling Fruit.
+// ---------------------------------------------------------------------------
+let inatChunkManifestLoad = null;
+async function getInatChunkManifest() {
+  if (state.inatChunkManifest) return state.inatChunkManifest;
+  if (!inatChunkManifestLoad) {
+    inatChunkManifestLoad = (async () => {
+      const response = await fetch(INATURALIST_MANIFEST_URL);
+      if (!response.ok) throw new Error(`iNaturalist manifest returned ${response.status}`);
+      state.inatChunkManifest = await response.json();
+      return state.inatChunkManifest;
+    })();
+    inatChunkManifestLoad.catch(() => { inatChunkManifestLoad = null; });
+  }
+  return inatChunkManifestLoad;
+}
+
+async function loadINaturalistChunks() {
+  if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
+    state.inatChunkRecords = [];
+    return [];
+  }
+  const manifest = await getInatChunkManifest();
+  const bounds = map.getBounds();
+  let chunks = (manifest.chunks || []).filter((chunk) => bboxIntersectsBounds(chunk.bbox, bounds));
+  if (!chunks.length) {
+    state.inatChunkRecords = [];
+    return [];
+  }
+  if (chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
+    const center = bounds.getCenter();
+    chunks = [...chunks]
+      .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center))
+      .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
+  }
+  const results = await Promise.allSettled(chunks.map(loadINaturalistChunk));
+  if (results.length && results.every((result) => result.status === "rejected")) {
+    throw results[0].reason;
+  }
+  state.inatChunkRecords = chunks
+    .flatMap((chunk) => state.inatChunkCache.get(chunk.id) || [])
+    .filter((record) => recordInBounds(record, bounds))
+    .map(mapInatChunkRecord)
+    .filter(Boolean);
+  return state.inatChunkRecords;
+}
+
+async function loadINaturalistChunk(chunk) {
+  if (state.inatChunkCache.has(chunk.id)) {
+    touchCacheEntry(state.inatChunkCache, chunk.id, state.inatChunkCache.get(chunk.id));
+    return;
+  }
+  const inFlight = state.inatChunkLoads.get(chunk.id);
+  if (inFlight) return inFlight;
+  const request = (async () => {
+    const response = await fetch(chunk.path);
+    if (!response.ok) throw new Error(`iNaturalist chunk ${chunk.id} returned ${response.status}`);
+    const rows = await response.json();
+    const fields = state.inatChunkManifest?.recordFields || [];
+    state.inatChunkCache.set(chunk.id, rows.map((row) => expandFallingFruitRecord(row, fields)));
+    trimCache(state.inatChunkCache, INATURALIST_CHUNK_CACHE_MAX);
+  })();
+  state.inatChunkLoads.set(chunk.id, request);
+  try {
+    await request;
+  } finally {
+    state.inatChunkLoads.delete(chunk.id);
+  }
+}
+
+function mapInatChunkRecord(record) {
+  const species = getActiveInatAnchorSpeciesMap().get(Number(record.anchor));
+  const lat = Number(record.lat);
+  const lng = Number(record.lng);
+  if (!species || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return {
+    id: `inat-${record.id}`,
+    speciesId: species.id,
+    name: observationPlaceLabel(record) || species.commonName,
+    observedName: species.commonName,
+    observedScientificName: species.scientificName,
+    lat,
+    lng,
+    // Drives the "APPROXIMATE, iNaturalist obscured this location" badge for
+    // observer-obscured points (baked from GBIF informationWithheld).
+    approximate: Boolean(Number(record.approximate)),
+    source: "inaturalist",
+    note: `Research-grade iNaturalist observation ${record.id}${record.idDate ? `, observed ${record.idDate}` : ""}.`,
+    confidence: "research",
+    idDate: record.idDate || "",
+    observer: record.observer || "",
+    sourceUrl: `https://www.inaturalist.org/observations/${record.id}`,
+    accessClass: "unknown",
+    publicLand: false,
+    accessNote: "Land access unknown from iNaturalist. Use the public lands layer and local rules before harvesting."
+  };
+}
+
+function observationPlaceLabel(record) {
+  // Baked rows carry no place_guess; use the observer login as a light label so
+  // the card has a source line, matching the live card's observer credit.
+  return record.observer ? `Observed by ${record.observer}` : "";
+}
+
+// ---------------------------------------------------------------------------
 // "Save this area" — user-triggered offline caching (Phase 5.5).
 //
 // Saves the Falling Fruit chunk files covering the current viewport (plus the
@@ -8791,13 +9014,13 @@ async function renderOfflinePanel(options = {}) {
   // Falling Fruit site catalog, which only the Food and Ink & Dye maps draw —
   // say so explicitly on the maps that don't.
   const modeNote = state.activeMap === "medicine"
-    ? `<div>The Herbs map draws live iNaturalist observations, which always need a connection, saves cover the Food and Ink &amp; Dye site catalog.</div>`
+    ? `<div>The Herbs map draws chunked iNaturalist observations that cache as you browse them; a saved area bulk-caches the Food and Ink &amp; Dye site catalog.</div>`
     : state.activeMap === "minerals"
       ? `<div>Mineral localities are their own dataset (cached once viewed), saves cover the Food and Ink &amp; Dye site catalog.</div>`
       : "";
   rows.push(`<div class="off-notes">
     ${modeNote}
-    <div>Saved sites keep their access status. Live iNaturalist points and public-land shading need a connection.</div>
+    <div>Saved sites keep their access status. The public-land shading layer needs a connection.</div>
     <div>The basemap keeps only tiles you browse while online, pan the area once before you go.</div>
     <div>Occurrence is never permission.</div>
   </div>`);
