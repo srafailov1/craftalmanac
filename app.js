@@ -81,6 +81,8 @@ const SAVE_AREA_MAX_CHUNKS = 400;
 const SAVE_AREA_FETCH_CONCURRENCY = 6;
 // Pre-save size hint only (chunks average ~29 KB; real bytes counted while saving).
 const SAVE_AREA_APPROX_CHUNK_BYTES = 29 * 1024;
+// iNaturalist chunks are coarser (0.30 deg) and denser, so they average larger.
+const SAVE_AREA_APPROX_INAT_CHUNK_BYTES = 42 * 1024;
 const PUBLIC_LANDS_MIN_RENDER_ZOOM = 8;
 const PUBLIC_LANDS_SOURCE_ID = "public-lands";
 const PUBLIC_LANDS_FILL_LAYER_ID = "public-lands-fill";
@@ -8684,7 +8686,11 @@ function observationPlaceLabel(record) {
 function readSavedAreas() {
   try {
     const stored = JSON.parse(window.localStorage?.getItem(SAVED_AREAS_STORAGE_KEY) || "[]");
-    return Array.isArray(stored) ? stored.filter((area) => area && typeof area.id === "string" && Array.isArray(area.chunkIds)) : [];
+    if (!Array.isArray(stored)) return [];
+    return stored
+      .filter((area) => area && typeof area.id === "string" && Array.isArray(area.chunkIds))
+      // Areas saved before iNaturalist chunks were cached have no inatChunkIds.
+      .map((area) => (Array.isArray(area.inatChunkIds) ? area : { ...area, inatChunkIds: [] }));
   } catch {
     return [];
   }
@@ -8698,6 +8704,13 @@ function persistSavedAreas() {
 
 function savedAreaChunkPath(chunkId) {
   return `./data/falling-fruit/us/chunks/${chunkId}.json`;
+}
+
+// iNaturalist chunk ids share the Falling Fruit filename format but live in a
+// separate tree (and use a different grid), so they are tracked and pathed
+// separately in the saved-area registry.
+function savedAreaInatChunkPath(chunkId) {
+  return `./data/inaturalist/us/chunks/${chunkId}.json`;
 }
 
 // Cross-tab mutual exclusion for SAVED_AREAS_CACHE writers. The in-memory
@@ -8729,9 +8742,19 @@ function formatSavedBytes(bytes) {
 
 // The chunks a save of the CURRENT viewport would cover — also drives the
 // panel's pre-save estimate line, so the button and the save agree exactly.
+// The FF + iNaturalist chunks a save of the current viewport would cover. A save
+// caches both trees so every material map (Food, Ink, and Herbs) works offline
+// in the saved area, not just the ones backed by Falling Fruit.
 async function getSaveableAreaChunks() {
-  const manifest = await getFallingFruitManifest();
-  return getVisibleFallingFruitChunks(manifest, map.getBounds());
+  const bounds = map.getBounds();
+  const ffManifest = await getFallingFruitManifest();
+  const ff = getVisibleFallingFruitChunks(ffManifest, bounds);
+  let inat = [];
+  if (USE_BAKED_INATURALIST) {
+    const inatManifest = await getInatChunkManifest();
+    inat = (inatManifest.chunks || []).filter((chunk) => bboxIntersectsBounds(chunk.bbox, bounds));
+  }
+  return { ff, inat, count: ff.length + inat.length };
 }
 
 async function saveCurrentOfflineArea() {
@@ -8750,19 +8773,19 @@ async function saveCurrentOfflineArea() {
       notice = "You're offline, connect to save an area.";
       return;
     }
-    let chunks;
+    let saveable;
     try {
-      chunks = await getSaveableAreaChunks();
+      saveable = await getSaveableAreaChunks();
     } catch {
       notice = "Couldn't load the site catalog, check your connection and try again.";
       return;
     }
-    if (!chunks.length) {
+    if (!saveable.count) {
       notice = "No catalogued sites in this view. Pan or zoom to the area you want to save.";
       return;
     }
-    if (chunks.length > SAVE_AREA_MAX_CHUNKS) {
-      notice = `This view spans ${chunks.length} files, zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
+    if (saveable.count > SAVE_AREA_MAX_CHUNKS) {
+      notice = `This view spans ${saveable.count} files, zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
       return;
     }
 
@@ -8771,7 +8794,9 @@ async function saveCurrentOfflineArea() {
 
     const bounds = map.getBounds();
     const supportFiles = [FALLING_FRUIT_MANIFEST_URL, STATUS_RASTER_URL];
-    busy.total = chunks.length + supportFiles.length;
+    // The iNaturalist manifest is needed to boot its chunks offline.
+    if (USE_BAKED_INATURALIST && saveable.inat.length) supportFiles.push(INATURALIST_MANIFEST_URL);
+    busy.total = saveable.count + supportFiles.length;
     renderOfflinePanel();
 
     const cache = await caches.open(SAVED_AREAS_CACHE_NAME);
@@ -8811,21 +8836,27 @@ async function saveCurrentOfflineArea() {
     };
 
     for (const url of supportFiles) step(await fetchIntoCache(url, false));
-    await mapWithConcurrency(chunks, SAVE_AREA_FETCH_CONCURRENCY, async (chunk) => {
+    await mapWithConcurrency([...saveable.ff, ...saveable.inat], SAVE_AREA_FETCH_CONCURRENCY, async (chunk) => {
       step(await fetchIntoCache(chunk.path, true));
     });
 
     if (busy.failed > 0) {
       // Nothing was registered — evict this attempt's chunks so the
       // never-rotating cache doesn't accumulate orphans (keep any chunk an
-      // existing saved area still claims).
-      const claimed = new Set(state.savedAreas.flatMap((area) => area.chunkIds));
-      for (const chunk of chunks) {
-        if (!claimed.has(chunk.id)) await cache.delete(chunk.path);
+      // existing saved area still claims). FF and iNat chunk ids share a
+      // filename format, so claim-check each tree against its own registry set.
+      const ffClaimed = new Set(state.savedAreas.flatMap((area) => area.chunkIds));
+      const inatClaimed = new Set(state.savedAreas.flatMap((area) => area.inatChunkIds || []));
+      for (const chunk of saveable.ff) {
+        if (!ffClaimed.has(chunk.id)) await cache.delete(chunk.path);
+      }
+      for (const chunk of saveable.inat) {
+        if (!inatClaimed.has(chunk.id)) await cache.delete(chunk.path);
       }
       if (!state.savedAreas.length) {
         await cache.delete(FALLING_FRUIT_MANIFEST_URL);
         await cache.delete(STATUS_RASTER_URL);
+        await cache.delete(INATURALIST_MANIFEST_URL);
       }
       notice = busy.quota
         ? "Browser storage is full, remove a saved area or free space, then try again."
@@ -8840,9 +8871,10 @@ async function saveCurrentOfflineArea() {
       bbox: [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()],
       center: [Number(center.lng.toFixed(4)), Number(center.lat.toFixed(4))],
       zoom: Number(map.getZoom().toFixed(2)),
-      chunkIds: chunks.map((chunk) => chunk.id),
-      records: chunks.reduce((sum, chunk) => sum + (chunk.recordCount || 0), 0),
-      // Chunk bytes only: the ~5.6 MB manifest + raster are SHARED across areas
+      chunkIds: saveable.ff.map((chunk) => chunk.id),
+      inatChunkIds: saveable.inat.map((chunk) => chunk.id),
+      records: [...saveable.ff, ...saveable.inat].reduce((sum, chunk) => sum + (chunk.recordCount || 0), 0),
+      // Chunk bytes only: the shared manifests + raster are SHARED across areas
       // (one cache entry each), so counting them per-area would double-book.
       bytes: busy.chunkBytes
     });
@@ -8885,14 +8917,20 @@ async function removeSavedArea(areaId) {
   try {
     releaseSavedAreasLock = await acquireSavedAreasLock();
     const cache = await caches.open(SAVED_AREAS_CACHE_NAME);
-    // Only evict chunks no other saved area still claims.
+    // Only evict chunks no other saved area still claims. FF and iNat are
+    // tracked separately (shared filename format, different trees).
     const stillClaimed = new Set(state.savedAreas.flatMap((entry) => entry.chunkIds));
     for (const chunkId of area.chunkIds) {
       if (!stillClaimed.has(chunkId)) await cache.delete(savedAreaChunkPath(chunkId));
     }
+    const stillClaimedInat = new Set(state.savedAreas.flatMap((entry) => entry.inatChunkIds || []));
+    for (const chunkId of (area.inatChunkIds || [])) {
+      if (!stillClaimedInat.has(chunkId)) await cache.delete(savedAreaInatChunkPath(chunkId));
+    }
     if (!state.savedAreas.length) {
       await cache.delete(FALLING_FRUIT_MANIFEST_URL);
       await cache.delete(STATUS_RASTER_URL);
+      await cache.delete(INATURALIST_MANIFEST_URL);
     }
   } catch { /* cache API unavailable — registry is already updated */ } finally {
     releaseSavedAreasLock();
@@ -8953,13 +8991,17 @@ async function renderOfflinePanel(options = {}) {
   let estimate = null;
   if (!busy && !offline) {
     try {
-      const chunks = await getSaveableAreaChunks();
+      const saveable = await getSaveableAreaChunks();
+      const savesInat = USE_BAKED_INATURALIST && saveable.inat.length > 0;
       let catalogSaved = false;
       try {
         const savedCache = await caches.open(SAVED_AREAS_CACHE_NAME);
-        catalogSaved = !!(await savedCache.match(FALLING_FRUIT_MANIFEST_URL));
+        catalogSaved = !!(await savedCache.match(FALLING_FRUIT_MANIFEST_URL))
+          && (!savesInat || !!(await savedCache.match(INATURALIST_MANIFEST_URL)));
       } catch { /* Cache API unavailable — assume first save */ }
-      estimate = { count: chunks.length, bytes: chunks.length * SAVE_AREA_APPROX_CHUNK_BYTES, catalogSaved };
+      const bytes = saveable.ff.length * SAVE_AREA_APPROX_CHUNK_BYTES
+        + saveable.inat.length * SAVE_AREA_APPROX_INAT_CHUNK_BYTES;
+      estimate = { count: saveable.count, bytes, catalogSaved, savesInat };
     } catch { estimate = null; }
   }
 
@@ -8982,7 +9024,10 @@ async function renderOfflinePanel(options = {}) {
       disabled = "disabled";
       hint = `This view spans ${estimate.count} files, zoom in to a smaller area (limit ${SAVE_AREA_MAX_CHUNKS}).`;
     } else if (estimate) {
-      const catalogNote = estimate.catalogSaved ? "" : " + ~5.4 MB shared catalog on the first save";
+      // Shared catalog = FF manifest + status raster (~5.4 MB), plus the
+      // iNaturalist manifest (~17 MB) when the view has iNaturalist chunks.
+      const sharedCatalog = estimate.savesInat ? "~22 MB" : "~5.4 MB";
+      const catalogNote = estimate.catalogSaved ? "" : ` + ${sharedCatalog} shared catalog on the first save`;
       hint = `≈ ${estimate.count} site files · ~${formatSavedBytes(estimate.bytes)}${catalogNote}.`;
     }
     rows.push(`<button class="off-save" id="offlineSaveBtn" type="button" ${disabled}>Save this view</button>`);
@@ -9011,13 +9056,11 @@ async function renderOfflinePanel(options = {}) {
   }
 
   // Honest scope notes — what offline does and does not cover. Saves store the
-  // Falling Fruit site catalog, which only the Food and Ink & Dye maps draw —
-  // say so explicitly on the maps that don't.
-  const modeNote = state.activeMap === "medicine"
-    ? `<div>The Herbs map draws chunked iNaturalist observations that cache as you browse them; a saved area bulk-caches the Food and Ink &amp; Dye site catalog.</div>`
-    : state.activeMap === "minerals"
-      ? `<div>Mineral localities are their own dataset (cached once viewed), saves cover the Food and Ink &amp; Dye site catalog.</div>`
-      : "";
+  // Falling Fruit + iNaturalist chunks, covering the Food, Ink & Dye, and Herbs
+  // maps; minerals are a separate national dataset that only caches as viewed.
+  const modeNote = state.activeMap === "minerals"
+    ? `<div>Mineral localities are their own national dataset (cached once viewed); saves cover the Food, Ink &amp; Dye, and Herbs site catalogs.</div>`
+    : "";
   rows.push(`<div class="off-notes">
     ${modeNote}
     <div>Saved sites keep their access status. The public-land shading layer needs a connection.</div>
@@ -9114,11 +9157,13 @@ async function reconcileSavedAreaCache() {
       // Re-read the registry INSIDE the lock: another tab's completed save
       // lives in localStorage but not in this tab's boot-time snapshot.
       const registries = [...state.savedAreas, ...readSavedAreas()];
-      const claimed = new Set(registries.flatMap((area) => area.chunkIds));
+      const ffClaimed = new Set(registries.flatMap((area) => area.chunkIds));
+      const inatClaimed = new Set(registries.flatMap((area) => area.inatChunkIds || []));
       const anySaved = registries.length > 0;
       const sharedPaths = new Set([
         new URL(FALLING_FRUIT_MANIFEST_URL, window.location.href).pathname,
-        new URL(STATUS_RASTER_URL, window.location.href).pathname
+        new URL(STATUS_RASTER_URL, window.location.href).pathname,
+        new URL(INATURALIST_MANIFEST_URL, window.location.href).pathname
       ]);
       for (const request of keys) {
         if (state.savedAreaBusy) return; // a save started mid-reconcile — stop
@@ -9127,8 +9172,14 @@ async function reconcileSavedAreaCache() {
           if (!anySaved) await cache.delete(request);
           continue;
         }
-        const chunkMatch = /\/chunks\/([^/]+)\.json$/.exec(pathname);
-        if (chunkMatch && claimed.has(chunkMatch[1])) continue;
+        // FF and iNat chunk ids share a filename format; match on the tree.
+        const inatMatch = /\/inaturalist\/us\/chunks\/([^/]+)\.json$/.exec(pathname);
+        if (inatMatch) {
+          if (!inatClaimed.has(inatMatch[1])) await cache.delete(request);
+          continue;
+        }
+        const ffMatch = /\/falling-fruit\/us\/chunks\/([^/]+)\.json$/.exec(pathname);
+        if (ffMatch && ffClaimed.has(ffMatch[1])) continue;
         await cache.delete(request);
       }
     };
