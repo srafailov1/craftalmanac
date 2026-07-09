@@ -4023,34 +4023,6 @@ function getRecordViewCounts() {
   return { loadedInView, visibleInView };
 }
 
-// One guided first task after the welcome modal (first visit only): the two
-// core actions — search a place, open Materials — are otherwise undiscoverable
-// behind a collapsed icon and a nav word. A single dismissible chip, never
-// shown again once dismissed or acted on.
-const COACH_STORAGE_KEY = "craftAlmanacCoachSeen";
-
-function showFirstRunCoach() {
-  try {
-    if (window.localStorage?.getItem(COACH_STORAGE_KEY) === "true") return;
-  } catch { /* private mode: still show once this session */ }
-  const mapArea = document.querySelector(".map-area");
-  if (!mapArea || document.getElementById("coachChip")) return;
-  const chip = document.createElement("div");
-  chip.id = "coachChip";
-  chip.className = "floating";
-  chip.setAttribute("role", "note");
-  chip.innerHTML = `<span><b>Start here:</b> search your town to see what grows nearby. Every point carries the harvesting rule for that land. Try all four maps (food · ink · herbs · minerals) and open <b>Materials</b> for full profiles.</span><button type="button" aria-label="Dismiss tip">&times;</button>`;
-  mapArea.appendChild(chip);
-  const dismiss = () => {
-    try { window.localStorage?.setItem(COACH_STORAGE_KEY, "true"); } catch { /* private mode */ }
-    chip.remove();
-  };
-  chip.querySelector("button").addEventListener("click", dismiss);
-  // Acting on either suggested control also counts as "got it".
-  document.getElementById("locationSearchInput")?.addEventListener("focus", dismiss, { once: true });
-  document.querySelector('#mastLinks [data-sheet="plants"]')?.addEventListener("click", dismiss, { once: true });
-}
-
 // A bare `sp=` deep link (shared from a static material/project page) isolates
 // the species but carries no center/zoom, so the visitor lands on the national
 // map where no point records load (zoom ≥ 8 is required). Rather than leave an
@@ -4158,7 +4130,6 @@ function initWelcomeModal() {
     welcomeModal.hidden = true;
     document.body.classList.remove("modal-open");
     resolveFocusAfterClose()?.focus?.();
-    showFirstRunCoach();
   };
 
   welcomeModalButton.addEventListener("click", dismissWelcome, { once: true });
