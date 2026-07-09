@@ -4100,6 +4100,10 @@ function initOfflineIndicator() {
 
 function initWelcomeModal() {
   if (!welcomeModal || !welcomeModalButton) return;
+  // An inline script in index.html already un-hides the modal at first CSS
+  // paint (it is the first-visit LCP element and must not wait for this file
+  // to evaluate). Everything here is idempotent on top of that early reveal;
+  // the inline script reads the same storage key by literal value.
   const hasSeenModal = window.localStorage?.getItem(WELCOME_MODAL_STORAGE_KEY) === "true";
   if (hasSeenModal) return;
 
@@ -4228,22 +4232,24 @@ function initMapLegend() {
       resetLegendFilters();
       return;
     }
+    // scheduleRender (not render): the full rebuild runs after this tap's
+    // frame paints, so the click itself stays responsive.
     if (event.target.closest("[data-legend-only]")) {
       setOnlyAllowed();
-      render();
+      scheduleRender();
       return;
     }
     const accessChip = event.target.closest("[data-leg-access]");
     if (accessChip) {
       toggleAccessChip(accessChip.dataset.legAccess);
-      render();
+      scheduleRender();
       return;
     }
     const categoryChip = event.target.closest("[data-leg-category]");
     if (categoryChip) {
       const id = categoryChip.dataset.legCategory;
       setSpeciesByCategory(id, getCategorySelectionState(id) !== "all");
-      render();
+      scheduleRender();
     }
   });
   renderMapLegend();
@@ -5170,7 +5176,9 @@ function setMapMode(mode) {
   syncActiveCatalog();
   renderModeChrome();
   updateLayerHandoff();
-  render();
+  // Deferred: lets the mode-switch tap (sheet close + chrome swap) paint
+  // before the full marker/legend/histogram rebuild runs.
+  scheduleRender();
   // Returning users come back to the map they last used; the URL always names
   // the active map so links stay shareable.
   try { window.localStorage?.setItem(ACTIVE_MAP_STORAGE_KEY, mode); } catch { /* private mode */ }
@@ -5439,7 +5447,7 @@ function initControls() {
     if (Number.isNaN(date.getTime())) return;
     state.selectedDay = getDayOfYear(date);
     state.allSeasons = false;
-    render();
+    scheduleRender();
   });
 
   initWelcomeModal();
@@ -5448,12 +5456,12 @@ function initControls() {
   seasonReset.addEventListener("click", () => {
     state.selectedDay = getDayOfYear(new Date());
     state.allSeasons = false;
-    render();
+    scheduleRender();
   });
 
   allSeasonsButton.addEventListener("click", () => {
     state.allSeasons = !state.allSeasons;
-    render();
+    scheduleRender();
   });
 
   // "Chart" (desktop) pins the season histogram open — the visible
@@ -5643,13 +5651,19 @@ function render() {
 
 // One render per frame, max: input events (slider drags especially) can fire
 // several times per frame, and render() rebuilds markers + histogram + legend.
+// The rAF -> setTimeout(0) hop lets the interaction's own frame PAINT before
+// the heavy rebuild runs (rAF callbacks run pre-paint, so rAF alone would
+// still block the tap's presentation and count against INP); the rebuilt UI
+// lands one frame later, which is imperceptible.
 let renderQueuedFrame = false;
 function scheduleRender() {
   if (renderQueuedFrame) return;
   renderQueuedFrame = true;
   requestAnimationFrame(() => {
-    renderQueuedFrame = false;
-    render();
+    window.setTimeout(() => {
+      renderQueuedFrame = false;
+      render();
+    }, 0);
   });
 }
 
@@ -6672,7 +6686,9 @@ function formatRasterCoord(value, negativePrefix, positivePrefix) {
 async function loadStatusRaster() {
   if (state.statusRaster) return state.statusRaster;
   if (!state.statusRasterPromise) {
-    state.statusRasterPromise = fetch(STATUS_RASTER_URL)
+    // priority: "low" keeps this multi-MB fetch from outcompeting basemap
+    // tiles and point chunks on first load (ignored where unsupported).
+    state.statusRasterPromise = fetch(STATUS_RASTER_URL, { priority: "low" })
       .then((response) => {
         if (!response.ok) throw new Error(`status raster returned ${response.status}`);
         return response.json();
@@ -10617,8 +10633,12 @@ map.on("load", () => {
   loadLocalJurisdictions();
   loadUsfsForestRules();
   // The raster also backs provisional record-level rules at point zooms, so
-  // load it at startup rather than only via the overview aggregate path.
-  loadStatusRaster();
+  // warm it near startup rather than only via the overview aggregate path —
+  // but from idle time: it is a ~3.8 MB fetch+parse, and eagerly racing it
+  // against basemap tiles delayed the first paint. Overview boots still get
+  // it promptly because loadINaturalistAggregates awaits it directly.
+  const idle = window.requestIdleCallback || ((fn) => window.setTimeout(fn, 1500));
+  idle(() => loadStatusRaster());
   render();
   loadMapData();
   schedulePublicLandLoad();

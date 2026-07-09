@@ -601,8 +601,10 @@ h2 {
   display: grid;
   place-items: center;
   padding: 20px;
+  /* Dim only, no backdrop blur: a full-viewport blur forces the GPU to
+     composite the entire booting map every frame, right when first paint
+     and first interaction are being measured. The 0.38 dim reads the same. */
   background: rgba(32, 36, 31, 0.38);
-  backdrop-filter: blur(3px);
 }
 
 .welcome-modal-backdrop[hidden] {
@@ -1001,6 +1003,21 @@ body[data-register="night"] {
   font-family: var(--font-ui);
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* Mobile GPUs pay for every blurred panel on every WebGL frame (pans, zooms,
+   the register cross-fade), which lands directly on tap responsiveness. The
+   panels are 93%-opaque already, so on coarse pointers we swap the live blur
+   for the fully opaque panel color: visually near-identical, compositing
+   cost gone. Desktop keeps the glass. */
+@media (pointer: coarse), (max-width: 720px) {
+  .floating,
+  .map-legend,
+  .pt-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--reg-panel);
+  }
 }
 
 .pt-card .spine {
