@@ -613,3 +613,36 @@ already has the id), reduce centroid precision to 4 dec, and/or split
 accessCounts/accessCentroids into a lazy sidecar loaded only when the access
 filter is first used. Rebuilding with a trimmed format re-runs the subset +
 access-status but NOT the access-cache (id-keyed).
+
+---
+
+## 12. POST-GO-LIVE FOLLOW-UP STATUS (2026-07-09)
+
+- **DONE: offline "Save this area" now covers iNaturalist chunks** (commit
+  "Cache iNaturalist chunks in saved offline areas"). Saves cache both trees +
+  both manifests + the status raster; FF and iNat chunk ids share a filename
+  format so the registry tracks `inatChunkIds` separately and
+  save/remove/reconcile claim-check each tree against its own set. Verified in
+  the browser (save writes 11 entries incl. the iNat manifest; remove evicts
+  both trees cleanly). The SW's generic `/data/` network-first + saved-areas
+  fallback serves them offline with no sw.js change. Asset version bumped to
+  inat2.
+- **DONE: doc refresh** — ATTRIBUTION.md (live), CLAUDE.md (app.js is ~11k lines
+  not 17k; data sources note the baked iNat tree + retired live API), and this
+  file.
+- **STILL TODO: delete the live-iNaturalist code (section 10).** Scoped it and
+  it is BIGGER than a trivial removal: 19 function definitions and ~52 call
+  sites, and the live aggregate's readiness/paint-gate/bridge
+  (`setINaturalistAggregateReady`, `shouldDeferAggregatePaint`, the aggregate
+  bridge, `prefetchINaturalistAggregateTiles`) is INTERTWINED with what the
+  baked path reuses (the baked path still calls `loadINaturalistAggregates` /
+  `updateFallingFruitAggregates` to mark-ready + paint). Removing it cleanly
+  means untangling reused-vs-live-only helpers, deleting the
+  `USE_BAKED_INATURALIST` flag + all its branches, and dropping now-dead state
+  (`inatAggregateItems`, `inatRecordCache`, ...) + constants
+  (`INATURALIST_AGGREGATE_SPECIES_ID`, `INATURALIST_MAX_PER_PAGE`, ...) + the
+  `api.inaturalist.org` preconnect in index.html + the sw.js live-API comment.
+  Deferred deliberately: it removes the one-line flag rollback, so it is best
+  done as a focused pass a cycle after go-live, not rushed. Keep the flag until
+  then.
+- Manifest trim (section 11) remains optional.

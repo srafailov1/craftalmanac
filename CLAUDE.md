@@ -26,27 +26,31 @@ form; every real file is still served as a static asset.
   sends succeed; until then the forms degrade to a `mailto:` fallback. `.assetsignore`
   keeps `worker.js` out of the served origin.
 - `index.html` — single page (~120 lines)
-- `app.js` — entire application (~17,000 lines). Constants, safety tags, and rule
-  tables at top; species catalogs from ~line 2500; `MAP_MODE_CONFIG` (line ~3890)
-  defines the four modes: **food**, **ink**, **medicine**, **minerals**, each with
-  its own catalog, categories, and colors; `state` object (~3996); the map +
-  register engine follows; DOM refs (~5280+); then ~300 functions. NOTE: ~75% of
-  the file is embedded content data (PROJECT_RECIPES alone is ~55%) — extraction
-  to fetched JSON is planned (see `docs/critique-remediation-plan.md` Phase 4).
+- `app.js` — entire application (~11,000 lines; re-check anchors, it moves).
+  Constants, safety tags, and rule tables at top; species catalogs from ~line 690;
+  `MAP_MODE_CONFIG` (line ~2105) defines the four modes: **food**, **ink**,
+  **medicine**, **minerals**, each with its own catalog, categories, and colors;
+  `state` object (~2213); the map + register engine follows; then the render,
+  load, aggregate, offline, and access-rule functions. Large content tables
+  (PROJECT_RECIPES, material profiles) were extracted to fetched JSON in `data/`.
 - `styles.css` — all styling (~3,400 lines; `--reg-*` register tokens ~line 1310)
 - `config.js` — Mapbox public token (`window.FORAGE_CONFIG`); committed intentionally, URL-scoped in the Mapbox account
 - `data/` — US boundary GeoJSON (Census-derived), NPS historic orchards, USGS MRDS
   minerals (`minerals-us.json`), USFS forest rules, local jurisdictions, phenology
-  curves, tide stations, and `falling-fruit/us/` (~125 MB of viewport chunks +
-  manifest; loaded lazily at zoom ≥ 8)
+  curves, tide stations, `falling-fruit/us/` (~125 MB of viewport chunks +
+  manifest), and `inaturalist/us/` (baked iNaturalist points from a GBIF DWCA
+  download: ~2.56 M points in ~8,900 0.30-degree chunks + manifest). Both chunk
+  trees load lazily at zoom ≥ 8; their access-cache dirs are build-only.
 - `scripts/` — Python + Node generators and the gate suite (`check.sh`;
-  `build_falling_fruit_subset.py` takes `--types/--locations` archive paths)
+  `build_falling_fruit_subset.py` takes `--types/--locations` archive paths;
+  `build_inaturalist_subset.mjs` + friends bake the iNaturalist tree, see
+  `docs/TODO-inaturalist-chunk-bake.md`)
 - Adding a 5th mode touches more than `MAP_MODE_CONFIG` — follow
   `docs/adding-a-mode.md`.
 
 ## Data sources
 
-Live: iNaturalist API (observations), USGS PAD-US ArcGIS service (public-access polygons). Cached/derived: Falling Fruit chunks, NPS orchards, Census boundaries. Access-rule summaries are hand-encoded from NPS compendiums and 36 CFR 2.1 — see `ATTRIBUTION.md` for all sources and caveats.
+Live: USGS PAD-US ArcGIS service (public-access polygons). Cached/derived: Falling Fruit chunks, iNaturalist chunks (baked from a quarterly GBIF DWCA download; the live iNaturalist API is retired for the map, though `USE_BAKED_INATURALIST` still gates a removable fallback), NPS orchards, Census boundaries. Access-rule summaries are hand-encoded from NPS compendiums and 36 CFR 2.1 — see `ATTRIBUTION.md` for all sources and caveats.
 
 ## Known issues
 
