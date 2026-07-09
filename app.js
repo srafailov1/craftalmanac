@@ -4222,7 +4222,7 @@ function renderMapLegend() {
       </div>
       <div class="legend-note">Cluster bubbles take the tint of their most common category, never an access status.</div>
     </div>
-    ${filterBits.length ? `<div class="legend-filters">FILTERS: ${filterBits.map(escapeHTML).join(" · ")}</div>` : ""}
+    ${filterBits.length ? `<div class="legend-filters">FILTERS: ${filterBits.map(escapeHTML).join(" · ")} <button type="button" class="legend-clear" data-legend-clear="1">Clear</button></div>` : ""}
     <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
     <div class="legend-active">ACTIVE MAP: ${escapeHTML(modeName)}</div>
   `;
@@ -4253,6 +4253,10 @@ function getCategorySelectionState(categoryId) {
 function initMapLegend() {
   if (!mapLegend) return;
   mapLegend.addEventListener("click", (event) => {
+    if (event.target.closest("[data-legend-clear]")) {
+      resetLegendFilters();
+      return;
+    }
     if (event.target.closest("[data-legend-only]")) {
       setOnlyAllowed();
       render();
@@ -4371,6 +4375,7 @@ function sheetReportHTML() {
     <h2 class="serif">Report an error</h2>
     <p>Spotted a wrong rule, a questionable identification, or anything unsafe? Tell us here and it reaches the maintainer directly. Corrections are welcome and help keep the map trustworthy.</p>
     ${contextRow}
+    ${ctx.pointSpecific ? "" : `<p class="report-hint">Reporting a specific point on the map? Please include the material and where it is. The easiest way is to copy the map's web address, which holds the exact coordinates.</p>`}
     <form class="report-form" novalidate
           data-report-mailto="${escapeHTML(mailtoHref)}"
           data-report-subject="${escapeHTML(subjectLabel)}"
@@ -4984,6 +4989,17 @@ function closeSheet() {
   // Restore focus to the control that opened the sheet (un-inert it first).
   if (sheetOpener && typeof sheetOpener.focus === "function") sheetOpener.focus();
   sheetOpener = null;
+}
+
+// Reset everything summarized in the legend's FILTERS line back to the default
+// (all species shown, default access statuses, saved-only off) so a visitor who
+// isolated one species — e.g. via a material page's "open on the map" link — can
+// get back to the full map in one click. Leaves the season/day control alone.
+function resetLegendFilters() {
+  state.selectedSpecies = new Set(speciesCatalog.map((species) => species.id));
+  state.selectedAccessStatuses = new Set(getDefaultAccessStatuses());
+  state.savedLocationsOnly = false;
+  render();
 }
 
 function selectOnlySpecies(speciesId) {
@@ -7430,7 +7446,10 @@ function bindPopupActions(popup) {
     reportButton.addEventListener("click", () => {
       openReportForm({
         subject: reportButton.dataset.reportSubject || "",
-        page: reportButton.dataset.reportPage || ""
+        page: reportButton.dataset.reportPage || "",
+        // Opened from a point card: the record's species + place is already the
+        // subject, so the form skips the "tell us the location" hint.
+        pointSpecific: true
       });
     });
   }

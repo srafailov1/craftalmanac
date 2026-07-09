@@ -136,7 +136,8 @@
     footer .fbox { border-top: 2px solid var(--hair); padding-top: 1.3em; font-size: 0.85rem; color: var(--sub); }
     footer p { margin: 0.6em 0; line-height: 1.55; }
     /* In-site report form (posts to /api/report). Register-plain, matches page. */
-    footer .report-intro { margin: 0.9em 0 0.7em; }
+    footer .report-intro { margin: 0.9em 0 0.4em; }
+    footer .report-hint { margin: 0 0 0.7em; font-size: 0.86rem; line-height: 1.5; color: var(--sub); }
     footer .report-form { display: block; max-width: 40rem; margin: 0.2em 0 0.6em; }
     footer .report-field { display: block; margin: 0 0 12px; }
     footer .report-lab { display: block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--sub); margin-bottom: 5px; }
@@ -261,6 +262,7 @@
       <div class="fbox">
         <p><strong>Occurrence is never permission</strong>, every point in the app carries the rule for the land it sits on. Confirm identification, local rules, and land-manager permission before collecting.</p>
         <p class="report-intro"><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> Write a correction below and it reaches the maintainer directly, or email <a href="mailto:reports@craftalmanac.com?subject=Craft%20Almanac%20error%20report%3A%20Privet%20berry%20ink%20(projects%2Fink-privet.html)">reports@craftalmanac.com</a>. Corrections are welcome and help keep the map trustworthy.</p>
+        <p class="report-hint">Reporting a specific point on the map? Please include the material and where it is. The easiest way is to open that point on the map and copy the web address, which holds the exact coordinates.</p>
         <form class="report-form" novalidate method="post" action="/api/report">
           <label class="report-field"><span class="report-lab">What&rsquo;s wrong? <em>(required)</em></span><textarea class="report-message" name="message" rows="4" maxlength="5000" required placeholder="What did you find, and where? Include the species or place if you can."></textarea></label>
           <label class="report-field"><span class="report-lab">Your email <em>(optional, so we can follow up)</em></span><input class="report-email" type="email" name="email" maxlength="300" autocomplete="email" inputmode="email" placeholder="you@example.com"></label>

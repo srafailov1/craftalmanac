@@ -378,7 +378,8 @@ const SHARED_CSS = `
     footer .fbox { border-top: 2px solid var(--hair); padding-top: 1.3em; font-size: 0.85rem; color: var(--sub); }
     footer p { margin: 0.6em 0; line-height: 1.55; }
     /* In-site report form (posts to /api/report). Register-plain, matches page. */
-    footer .report-intro { margin: 0.9em 0 0.7em; }
+    footer .report-intro { margin: 0.9em 0 0.4em; }
+    footer .report-hint { margin: 0 0 0.7em; font-size: 0.86rem; line-height: 1.5; color: var(--sub); }
     footer .report-form { display: block; max-width: 40rem; margin: 0.2em 0 0.6em; }
     footer .report-field { display: block; margin: 0 0 12px; }
     footer .report-lab { display: block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--sub); margin-bottom: 5px; }
@@ -544,6 +545,7 @@ function footerHtml({ educationalOnly = false, mineralMaterial = false, reportSu
   const subjectPlain = reportSubject || "Craft Almanac error report";
   const mailtoHref = `mailto:reports@craftalmanac.com?subject=${encodeURIComponent(subjectPlain)}`;
   lines.push(`<p class="report-intro"><strong>Spotted a wrong rule, a questionable identification, or anything unsafe?</strong> Write a correction below and it reaches the maintainer directly, or email <a href="${escapeHtml(mailtoHref)}">reports@craftalmanac.com</a>. Corrections are welcome and help keep the map trustworthy.</p>`);
+  lines.push(`<p class="report-hint">Reporting a specific point on the map? Please include the material and where it is. The easiest way is to open that point on the map and copy the web address, which holds the exact coordinates.</p>`);
   lines.push(reportFormHtml(subjectPlain));
   lines.push(`<p class="license">Original content is licensed <a href="/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a>; the application code is licensed PolyForm Noncommercial 1.0.0. Inbound data sources keep their own licenses, see <a href="/attribution.html">attribution notes</a>.</p>`);
   return `    <footer>\n      <div class="fbox">\n${lines.map((l) => `        ${l}`).join("\n")}\n      </div>\n    </footer>`;

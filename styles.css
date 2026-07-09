@@ -430,6 +430,42 @@ h2 {
   margin-top: 7px;
 }
 
+/* One-click escape from an isolated species / active filter, next to the
+   FILTERS summary. Small but a real ≥24px-ish target with a clear affordance. */
+.legend-clear {
+  margin-left: 6px;
+  padding: 2px 8px;
+  min-height: 22px;
+  border: 1px solid var(--reg-hair);
+  border-radius: 999px;
+  background: var(--reg-panel);
+  color: var(--reg-ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.legend-clear:hover {
+  border-color: var(--reg-accent-text, var(--reg-accent));
+  color: var(--reg-accent-text, var(--reg-accent));
+}
+
+.legend-clear:focus-visible {
+  outline: 2px solid var(--reg-accent-text, var(--reg-accent));
+  outline-offset: 2px;
+}
+
+/* Nudge on the report form when it is not tied to a specific point: ask for a
+   location so a general report stays actionable. */
+#sheet .report-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--reg-sub);
+}
+
 /* Mobile mirror of the same state: the collapsed title lines are hidden in the
    season-bar slot, so the Legend toggle carries a dot when filters are on. */
 #season-bar .text-button.has-filters::after {
