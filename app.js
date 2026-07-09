@@ -9092,7 +9092,21 @@ function getSpeciesForObservation(observation) {
     [0].item;
 }
 
+// Falling Fruit records suppressed from the map: points that are technically
+// present in the source data but read as errors or are marginal/unsafe to
+// suggest. The underlying data is left intact; these are filtered at render
+// time by Falling Fruit id (add reported ids here).
+const EXCLUDED_FALLING_FRUIT_IDS = new Set([
+  // Raspberry bushes "overhanging the quarry ... can be picked from the water"
+  // near Waite Park, MN: accurate to the contributor's note, but the pin lands
+  // in a water-filled granite quarry, so it reads as a berry dropped in a lake,
+  // and picking from a cliff or the water is not a harvest we want to suggest.
+  // Reported via the error form, 2026-07 (Falling Fruit location 2114982).
+  "2114982-2422",
+]);
+
 function mapFallingFruitRecord(record) {
+  if (EXCLUDED_FALLING_FRUIT_IDS.has(record.id)) return null;
   const speciesId = getImportedSpeciesId(record.speciesId);
   const species = speciesCatalogById.get(speciesId);
   const lat = Number(record.lat);
