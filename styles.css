@@ -370,20 +370,34 @@ h2 {
 }
 
 /* Collapsed by default; expands UP on hover/focus, like the prototype legend. */
+/* Accordion via grid-template-rows 0fr/1fr (not max-height): the track
+   animates to the TRUE content height, so short content no longer snaps and
+   tall content no longer clips against a guessed cap. The inner wrapper
+   (min-height: 0 + overflow: hidden) is what lets the 0fr row collapse. */
 .legend-body {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
+  transition: grid-template-rows 0.28s ease, opacity 0.28s ease;
+}
+
+.legend-body > .legend-body-inner {
+  min-height: 0;
   overflow: hidden;
-  transition: max-height 0.28s ease, opacity 0.28s ease;
 }
 
 .map-legend:hover .legend-body,
 .map-legend:focus-within .legend-body {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.map-legend:hover .legend-body > .legend-body-inner,
+.map-legend:focus-within .legend-body > .legend-body-inner {
   /* Tall enough for the 15-chip minerals category column (~290px + heading);
      scroll rather than clip so no filter toggle is ever unreachable. */
   max-height: min(70vh, 460px);
   overflow-y: auto;
-  opacity: 1;
 }
 
 .legend-cols {
@@ -470,6 +484,10 @@ h2 {
    season-bar slot, so the Legend toggle carries a dot when filters are on. */
 #season-bar .text-button.has-filters::after {
   content: "●";
+  /* Alternative text keeps the state audible: without it the dot glyph joins
+     the button's accessible name as a literal "●". Plain content line stays
+     first as the fallback for engines without the alt syntax. */
+  content: "●" / " filters on";
   font-size: 7px;
   margin-left: 5px;
   vertical-align: 2px;
@@ -491,8 +509,9 @@ h2 {
    are never misread as access statuses. */
 .legend-note {
   margin-top: 8px;
-  max-width: 250px;
-  font-size: 10px;
+  /* Reading copy, not a label: 12px floor (was 10px); width keeps ~3 lines. */
+  max-width: 290px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   line-height: 1.45;
   color: var(--reg-sub);
@@ -572,6 +591,13 @@ h2 {
 
 .leg-chip.off .swatch {
   background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--reg-sub);
+}
+
+/* Some-but-not-all species of the category selected (renderMapLegend emits
+   "partial"): half-filled square, between the filled on and hollow off marks. */
+.leg-chip.partial .swatch {
+  background: linear-gradient(to bottom, currentColor 50%, transparent 50%);
   box-shadow: inset 0 0 0 1.5px var(--reg-sub);
 }
 
@@ -704,10 +730,10 @@ body.modal-open .app-shell {
     animation: none;
   }
 
-  /* The legend and season-chart reveals animate max-height/opacity; collapse
-     them to instant show/hide for reduced-motion users. Scoped to their
-     containers so this beats the base .season-hist transition rule, which sits
-     LATER in the file with equal specificity (a media query adds none). */
+  /* The legend and season-chart reveals animate grid-template-rows/opacity;
+     collapse them to instant show/hide for reduced-motion users. Scoped to
+     their containers so this beats the base .season-hist transition rule,
+     which sits LATER in the file with equal specificity. */
   .map-legend .legend-body,
   #season-bar .season-hist {
     transition: none;
@@ -1070,6 +1096,10 @@ body[data-register="night"] {
   font-size: 22px;
   font-weight: 500;
   font-family: var(--font-display);
+  /* Clear the close button's 44px corner hit box (anchored top/right of the
+     card; the .pad's 18px right padding covers the rest) so the title's first
+     line stays clickable/selectable to its end. */
+  padding-right: 28px;
 }
 
 .pt-card .sci {
@@ -1201,16 +1231,24 @@ body[data-register="night"] {
   display: block;
 }
 
+/* Corner anchored at 0,0 with the old 8px/11px offsets as padding: the glyph
+   stays visually put while the invisible hit box grows to a 44px corner
+   target (the old effective hit was ~12x27, hopeless with a thumb). */
 .pt-card .close {
   position: absolute;
-  top: 8px;
-  right: 11px;
+  top: 0;
+  right: 0;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 8px 11px;
   background: none;
   border: none;
   color: var(--reg-sub);
   cursor: pointer;
   font-size: 15px;
-  padding: 2px;
 }
 
 .pt-card .src-link {
@@ -1781,16 +1819,24 @@ body[data-register="night"] {
    deterministic keyboard route whose aria-expanded matches what shows. (The
    old :focus-within reveal is gone: it expanded the chart while the Chart
    button honestly announced collapsed.) */
+/* Grid-track accordion (0fr/1fr): animates to true content height, so the
+   reveal never snaps short or clips tall content against a guessed cap. The
+   inner wrapper's min-height: 0 + overflow: hidden make the 0fr collapse. */
 .season-hist {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
+  transition: grid-template-rows 0.28s ease, opacity 0.28s ease;
+}
+
+.season-hist > .season-hist-inner {
+  min-height: 0;
   overflow: hidden;
-  transition: max-height 0.28s ease, opacity 0.28s ease;
 }
 
 #season-bar:hover .season-hist,
 #season-bar.season-open .season-hist {
-  max-height: 230px;
+  grid-template-rows: 1fr;
   opacity: 1;
 }
 
@@ -1806,15 +1852,15 @@ body[data-register="night"] {
   color: var(--reg-ink);
 }
 
-/* National-average seasonality caveat, second line under the histogram head. */
+/* National-average seasonality caveat, second line under the histogram head.
+   Reading copy: 12px floor, no opacity stacked on the muted color. */
 .season-caveat {
   display: block;
   margin-top: 3px;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.03em;
   text-transform: none;
   color: var(--reg-sub);
-  opacity: 0.85;
 }
 
 /* Data-load status line (app.js setDataStatus): loading progress, record
@@ -1823,11 +1869,20 @@ body[data-register="night"] {
    :empty pattern as .location-search-status. */
 #dataStatus {
   margin: 7px 0 0;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.05em;
   line-height: 1.4;
   font-family: var(--font-mono);
   color: var(--reg-sub);
+}
+
+/* Errors and outages are the messages a field user must actually read, so
+   they leave the muted secondary color for the warn text tone (AA in every
+   register; same fallback pattern as the .dnote rules). app.js mirrors the
+   status kind onto data-kind. */
+#dataStatus[data-kind="error"],
+#dataStatus[data-kind="outage"] {
+  color: var(--reg-warn-text, var(--reg-warn));
 }
 
 #dataStatus:empty {
@@ -2302,9 +2357,13 @@ body[data-register="night"] {
 }
 
 /* A middot punctuates each nav item but the last, so Maps · Plants · Projects ·
-   About read as distinct buttons (sits ~centered in the flex gap). */
+   About read as distinct buttons (sits ~centered in the flex gap). The empty
+   alternative text keeps the glyph out of the buttons' accessible names
+   (screen readers announced "MAPS·"); the plain content line stays first as
+   the fallback for engines without the alt syntax. */
 #masthead .links button:not(:last-child)::after {
   content: "·";
+  content: "·" / "";
   margin-left: 11px;
   color: var(--reg-hair);
   pointer-events: none;
@@ -2596,7 +2655,7 @@ body[data-register="night"] {
   color: var(--reg-ink);
   font-size: 10.5px;
   padding: 3px 6px;
-  transition: opacity 0.2s;
+  transition: color 0.2s, background 0.2s;
   border-radius: 5px;
 }
 
@@ -2613,8 +2672,18 @@ body[data-register="night"] {
   background: transparent;
 }
 
-.leg-chip.off {
-  opacity: 0.32;
+.leg-chip .swatch,
+.leg-chip .ring {
+  transition: opacity 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+/* Off state dims only the MARK, never the label: at the old whole-chip 0.32
+   fade the label text bottomed out far below any contrast floor, which made
+   the default-hidden "Prohibited" chip unreadable — the one place a user can
+   learn the map is (deliberately) not drawing that data. State is carried by
+   the dimmed ring / hollow swatch plus aria-pressed; the label stays ink. */
+.leg-chip.off .ring {
+  opacity: 0.35;
 }
 
 /* ---- wind canvas overlay (Phase 4c) ---- */
@@ -2831,7 +2900,8 @@ body[data-register="night"] {
 #offline-panel .off-progress {
   margin-top: 7px;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  /* Reading copy (expectations, sizes, progress), not a label: 12px floor. */
+  font-size: 12px;
   letter-spacing: 0.04em;
   color: var(--reg-sub);
   line-height: 1.5;
@@ -2918,7 +2988,7 @@ body[data-register="night"] {
 #offline-panel .off-storage {
   margin-top: 9px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   color: var(--reg-sub);
 }
@@ -3281,13 +3351,19 @@ body[data-register="night"] {
 
   /* Hover never sticks on touch; SET DATE drives the histogram. */
   #season-bar:hover .season-hist {
-    max-height: 0;
+    grid-template-rows: 0fr;
     opacity: 0;
   }
 
   #season-bar.season-open .season-hist {
-    max-height: 360px;
+    grid-template-rows: 1fr;
     opacity: 1;
+  }
+
+  /* Keep tall mobile reveals scrollable rather than pushing the bar off-screen. */
+  #season-bar.season-open .season-hist > .season-hist-inner {
+    max-height: 360px;
+    overflow-y: auto;
   }
 
   /* The floating legend folds into the season card's #legendSlot (prototype). */
@@ -3307,13 +3383,18 @@ body[data-register="night"] {
 
   /* In the slot the body is controlled by the LEGEND toggle, not hover. */
   #legendSlot .legend-body {
-    max-height: 0;
+    grid-template-rows: 0fr;
     opacity: 0;
   }
 
   #season-bar.legend-open #legendSlot .legend-body {
-    max-height: 360px;
+    grid-template-rows: 1fr;
     opacity: 1;
+  }
+
+  #season-bar.legend-open #legendSlot .legend-body > .legend-body-inner {
+    max-height: 360px;
+    overflow-y: auto;
   }
 
   #legendSlot .legend-cols {
@@ -3470,5 +3551,105 @@ body[data-register="night"] {
   body.season-expanded .mapboxgl-ctrl-bottom-right {
     opacity: 0;
     pointer-events: none;
+  }
+}
+
+/* ===================================================================
+   Touch targets (WCAG 2.5.5 / Apple HIG 44px)
+   ===================================================================
+   On coarse pointers, grow HIT ZONES with a transparent ::before overlay so
+   the drawn design is untouched. ::before, not ::after: the filters dot
+   (#season-bar .text-button.has-filters::after) already owns ::after on
+   #legendMob. Tightly packed neighbors get capped or tiled overlays instead
+   of full 44px so no control steals its neighbor's taps; those land at
+   36-44px effective, always at or above the WCAG 2.5.8 24px floor and far
+   above the old 12-24px. The .pt-card .close grew its real box instead (see
+   its rule). Same guard as the backdrop-blur swap above. */
+@media (pointer: coarse), (max-width: 720px) {
+  #season-bar .text-button,
+  .legend-only,
+  .leg-chip,
+  .rail-seg,
+  .mast-trigger,
+  .mini-card-open {
+    position: relative;
+  }
+
+  .mini-card-link {
+    position: relative;
+    display: inline-block;
+  }
+
+  #season-bar .text-button::before,
+  .legend-only::before,
+  .leg-chip::before,
+  .rail-seg::before,
+  .mast-trigger::before,
+  .mini-card-open::before,
+  .mini-card-link::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  /* Season-bar buttons wrap into rows 6-12px apart; a full 44px overlay would
+     hand the gap between rows to the lower button. +12px per axis = 36px
+     effective on the 24px buttons with zero overlap. */
+  #season-bar .text-button::before {
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+  }
+
+  /* The mini-card links sit INSIDE a card that is itself the primary tap
+     target (isolate species / open recipe), so a full 44px halo would hand
+     the card's own taps to the link (navigating away instead). Cap to the
+     link's own line band: ~24px effective, the WCAG 2.5.8 floor, no steal. */
+  .mini-card-open::before,
+  .mini-card-link::before {
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+  }
+
+  /* A disabled "Open nearest in view" must not dead-zone the card body under
+     its overlay: let taps fall through to the card's own action. */
+  .mini-card-open:disabled {
+    pointer-events: none;
+  }
+
+  .season-meta {
+    row-gap: 12px;
+  }
+
+  /* Legend chips tile: 36px chips + 8px gaps = 44px row pitch, each chip's
+     overlay claiming half the gap on each side, no overlap. */
+  .leg-chip {
+    min-height: 36px;
+  }
+
+  .leg-chip::before {
+    height: calc(100% + 8px);
+  }
+
+  .legend-chips {
+    gap: 8px;
+  }
+
+  /* Clears the last access chip's overlay above it. */
+  .legend-only {
+    margin-top: 15px;
+  }
+
+  /* .mast-triggers gap is 3px; cap the width so adjacent zones only meet. */
+  .mast-trigger::before {
+    width: calc(100% + 3px);
+  }
+
+  /* 42px -> 44px; the list's own gaps absorb the 2px. */
+  .location-suggestion {
+    min-height: 44px;
   }
 }

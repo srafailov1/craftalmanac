@@ -2235,6 +2235,11 @@ const state = {
   publicLoadTimer: null,
   aggregateTimer: null,
   activeRequest: 0,
+  // Highest loadMapData requestId that has finished (applied or was
+  // superseded). activeRequest !== settledRequest means a load is in flight;
+  // the boot idle backstop and the superseded-retry check it so they never
+  // stack a redundant load on top of a healthy one.
+  settledRequest: 0,
   activeINaturalistAggregateRequest: 0,
   activePublicRequest: 0,
   fallingFruitManifest: null,
@@ -4251,6 +4256,7 @@ function renderMapLegend() {
   // hover/focus into two columns — ACCESS (rings) | CATEGORIES (filled squares).
   mapLegend.innerHTML = `
     <div class="legend-body">
+      <div class="legend-body-inner">
       <div class="legend-cols">
         <div class="legend-col">
           <span class="legend-k">ACCESS</span>
@@ -4263,6 +4269,7 @@ function renderMapLegend() {
         </div>
       </div>
       <div class="legend-note">Cluster bubbles take the tint of their most common category, never an access status.</div>
+      </div>
     </div>
     ${filterBits.length ? `<div class="legend-filters">FILTERS: ${filterBits.map(escapeHTML).join(" · ")} <button type="button" class="legend-clear" data-legend-clear="1">Clear</button></div>` : ""}
     <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
@@ -5170,15 +5177,26 @@ function initSheets() {
     // The open sheet's backdrop covers the masthead (the .app-shell is inert),
     // so a click meant for a nav button lands here and used to close the
     // sheet — making every cross-sheet move cost two clicks. Hit-test the nav
-    // buttons' rects and switch directly instead. (elementsFromPoint is
-    // unreliable on inert subtrees; rects are not. The width>0 guard skips
-    // the collapsed mobile nav, and clicking the CURRENT sheet's own button
-    // still falls through to close — the toggle feel is preserved.)
-    const hit = Array.from(document.querySelectorAll("#masthead .links button[data-sheet]")).find((button) => {
-      const r = button.getBoundingClientRect();
-      return r.width > 0
-        && event.clientX >= r.left && event.clientX <= r.right
-        && event.clientY >= r.top && event.clientY <= r.bottom;
+    // labels and switch directly instead. (elementsFromPoint is unreliable on
+    // inert subtrees; rects are not.) Measure the LABEL GLYPHS via a Range,
+    // not the button box: the "·" separator is an ::after inside each button,
+    // which inflates the box ~21px past the label, and strict box containment
+    // sent separator/gap clicks to the wrong button or to closeSheet. Nearest
+    // label within a small slop wins; the zero-width guard skips the collapsed
+    // mobile nav, and clicking the CURRENT sheet's own label still falls
+    // through to close — the toggle feel is preserved.
+    const SLOP = 14; // px of forgiveness around each 20px-tall label
+    let hit = null;
+    let hitDist = Infinity;
+    document.querySelectorAll("#masthead .links button[data-sheet]").forEach((button) => {
+      const range = document.createRange();
+      range.selectNodeContents(button); // glyphs only; excludes the ::after separator
+      const r = range.getBoundingClientRect();
+      if (!(r.width > 0)) return;
+      const dx = Math.max(r.left - event.clientX, event.clientX - r.right, 0);
+      const dy = Math.max(r.top - event.clientY, event.clientY - r.bottom, 0);
+      const d = Math.max(dx, dy);
+      if (d <= SLOP && d < hitDist) { hit = button; hitDist = d; }
     });
     if (hit && hit.dataset.sheet !== state.openSheet) {
       openSheet(hit.dataset.sheet);
@@ -5316,6 +5334,7 @@ async function searchLocation(query) {
   }
 
   const suggestions = await fetchLocationSuggestions(query, 1);
+  if (!suggestions) return; // lookup failed; its own status line stands
   if (suggestions[0]) {
     chooseLocationSuggestion(suggestions[0]);
     return;
@@ -5323,10 +5342,14 @@ async function searchLocation(query) {
   setLocationSearchStatus("No matching place found.");
 }
 
+// Returns an array of features on success (possibly empty), or null when the
+// lookup FAILED and this function already wrote its own status line. Callers
+// must not overwrite the status on null, or "Search unavailable" turns into a
+// misleading "No matching places found" when the user is simply offline.
 async function fetchLocationSuggestions(query, limit = 5) {
   if (!MAPBOX_TOKEN) {
     setLocationSearchStatus("Location search needs a Mapbox token.");
-    return [];
+    return null;
   }
 
   const [[west, south], [east, north]] = REGION_MAX_BOUNDS;
@@ -5347,7 +5370,7 @@ async function fetchLocationSuggestions(query, limit = 5) {
     return (data.features || []).filter((feature) => feature.center);
   } catch {
     setLocationSearchStatus("Search unavailable. Try again in a moment.");
-    return [];
+    return null;
   }
 }
 
@@ -5360,8 +5383,9 @@ async function updateLocationSuggestions(query) {
   }
   const suggestions = await fetchLocationSuggestions(query, 5);
   if (locationSearchInput.value.trim() !== query) return;
-  state.locationSuggestions = suggestions;
-  setLocationSearchStatus(suggestions.length ? "" : "No matching places found.");
+  state.locationSuggestions = suggestions || [];
+  // null = lookup failed and its status ("Search unavailable...") must stand.
+  if (suggestions) setLocationSearchStatus(suggestions.length ? "" : "No matching places found.");
   renderLocationSuggestions();
 }
 
@@ -7734,6 +7758,32 @@ function getMarkerPopupHTML(properties) {
   const approxNote = properties.approximate
     ? `<div class="approx-note">APPROXIMATE, iNaturalist obscured this location for privacy (±~20&nbsp;km). Treat it as an area, not a spot.</div>`
     : "";
+  // LAND row: name the managing unit when the resolved rule knows it (PAD-US
+  // Unit_Nm, curated site rules, local jurisdictions, NPS orchards), so the
+  // footer's "check who manages this land" has an answer on the card itself.
+  // Generic placeholders from the fallback rule branches add nothing over the
+  // ACCESS status, so they render no row and the caution carries the weight.
+  const GENERIC_AREAS = new Set([
+    "Mapped public-access land",
+    "Private or unverified location",
+    "PAD-US public land",
+    // Falling Fruit access strings that describe, but do not name, the land;
+    // the ACCESS status already carries their meaning.
+    "Private or overhanging property",
+    "Reported public access",
+    "Public",
+    "Private",
+    "Private but overhanging",
+    // Mineral rule-table placeholder (~61% of MRDS points) and the NPS orchard
+    // defaults: status descriptions and agency boilerplate the ACCESS and
+    // RULES lines already state, not land names.
+    "Private, leased, or claimed ground",
+    "National Park Service historic orchard",
+    "National Park Service"
+  ]);
+  const landRow = (properties.accessArea && !GENERIC_AREAS.has(properties.accessArea))
+    ? `<div class="row"><span class="lab">LAND</span><span class="val">${escapeHTML(properties.accessArea)}</span></div>`
+    : "";
   const saved = isSavedLocation(properties.id);
   // The map-tap card is the primary decision surface: link it to the full
   // profile (identification + toxic lookalikes live there) and give a one-tap,
@@ -7752,6 +7802,7 @@ function getMarkerPopupHTML(properties) {
         <div class="sci">${sci}</div>
         ${eduStamp}
         <div class="row access"><span class="lab">ACCESS</span><span class="val"><span class="ring" style="color:${statusColor}"></span>${accessLabel}</span></div>
+        ${landRow}
         <div class="row"><span class="lab">RULES</span><span class="val">${ruleLimit} · ${ruleCite}${ruleNote}</span></div>
         ${safetyRow}
         ${usedPartsRow}
@@ -8082,7 +8133,26 @@ async function loadMapData() {
     config.loadMinerals ? loadMinerals() : Promise.resolve([])
   ]);
 
-  if (requestId !== state.activeRequest) return;
+  if (requestId !== state.activeRequest) {
+    state.settledRequest = Math.max(state.settledRequest, requestId);
+    // Superseded mid-flight. Normally the newer request applies instead, but
+    // if it parked (early return, rejected manifest) the point band would stay
+    // silently empty with no camera event to heal it. Arm one delayed retry
+    // that re-checks AT FIRE TIME: if the newer request applied by then
+    // (pointDataReady) or is still honestly in flight, it no-ops instead of
+    // stacking a redundant remap/render pass on top of a healthy load.
+    if (!state.pointDataReady && loadZoom >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
+      window.setTimeout(() => {
+        if (!state.pointDataReady
+          && state.activeRequest === state.settledRequest
+          && state.mapReady && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM) {
+          loadMapData();
+        }
+      }, DATA_REFRESH_DELAY);
+    }
+    return;
+  }
+  state.settledRequest = Math.max(state.settledRequest, requestId);
 
   if (USE_BAKED_INATURALIST) {
     // Baked chunk records are already viewport-scoped; no live record cache.
@@ -8656,7 +8726,10 @@ function mapInatChunkRecord(record) {
     sourceUrl: `https://www.inaturalist.org/observations/${record.id}`,
     accessClass: "unknown",
     publicLand: false,
-    accessNote: "Land access unknown from iNaturalist. Use the public lands layer and local rules before harvesting."
+    // No boilerplate access note: on the card it only restated what the ACCESS
+    // status, the "Access not sourced" citation, and the footer caution
+    // already say (iNaturalist records never carry contributor access notes).
+    accessNote: ""
   };
 }
 
@@ -9380,7 +9453,8 @@ function mapINaturalistObservation(observation) {
     sourceUrl: observation.uri || `https://www.inaturalist.org/observations/${observation.id}`,
     accessClass: "unknown",
     publicLand: false,
-    accessNote: "Land access unknown from iNaturalist. Use the public lands layer and local rules before harvesting."
+    // Same as the baked-chunk mapper: no boilerplate access note on the card.
+    accessNote: ""
   };
 }
 
@@ -9444,7 +9518,12 @@ function mapFallingFruitRecord(record) {
     access: record.access || "",
     accessClass: record.accessClass || "unknown",
     publicLand: Boolean(record.publicLand),
-    accessNote: record.accessNote || "Access unknown in Falling Fruit."
+    // The bake writes "Access unknown in Falling Fruit." into records with no
+    // access field (build_falling_fruit_subset.py); on the point card that
+    // only restates what the ACCESS status and the "Access not sourced"
+    // citation already say, so drop the sentinel and keep real contributor
+    // notes. The rule branches each have their own specific fallback note.
+    accessNote: record.accessNote === "Access unknown in Falling Fruit." ? "" : (record.accessNote || "")
   };
 }
 
@@ -9614,7 +9693,11 @@ function computeRecordAccessRule(record, species) {
     label: "Private / unchecked",
     area: "Private or unverified location",
     limit: "Secure permission from the landowner or managing institution before collecting.",
-    note: record.accessNote || "We don't have a confirmed public-access rule for this exact spot; treat it as private unless you can verify otherwise.",
+    // No fallback note here: on the card the unknown-ness is already stated by
+    // the ACCESS status and the "Access not sourced" citation, and the
+    // treat-as-private instruction is the limit above. A third restatement
+    // buried the two that matter. Real contributor notes still flow through.
+    note: record.accessNote || "",
     sourceLabel: "Access not sourced",
     sourceUrl: ""
   };
@@ -10900,10 +10983,14 @@ function setDataStatus(message, { transient = false, kind = "info" } = {}) {
   // only touch the DOM when the text actually changes.
   if (dataStatus.textContent !== message) dataStatus.textContent = message;
   dataStatusKind = message ? kind : "idle";
+  // Mirror the kind onto the element so CSS can promote error/outage lines
+  // out of the muted secondary color (see #dataStatus[data-kind] rules).
+  dataStatus.dataset.kind = dataStatusKind;
   if (transient && message) {
     dataStatusTimer = window.setTimeout(() => {
       dataStatus.textContent = "";
       dataStatusKind = "idle";
+      dataStatus.dataset.kind = "idle";
     }, 6000);
   }
 }
@@ -10922,6 +11009,10 @@ loadPhenologyRegions();
 loadPhenology(state.activeMap).then(() => renderHistogram());
 map.on("load", () => {
   state.mapReady = true;
+  // A hash deep-link can boot straight into the point band, so the "was I
+  // below point zoom" tracker must start from the real boot zoom or the first
+  // zoom gesture spuriously runs the crossing-up reset branch.
+  state.wasBelowPointZoom = map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM;
   syncLightPreset(state.register);
   setINaturalistAggregateReady(false);
   initMapLayers();
@@ -10938,6 +11029,22 @@ map.on("load", () => {
   idle(() => loadStatusRaster());
   render();
   loadMapData();
+  // Boot backstop: a hash deep-link into the point band has no follow-up
+  // moveend to rescue a dropped or parked first load (moveend is the only
+  // retry trigger, and an untouched boot never fires one). Re-check once the
+  // map settles; idempotent because manifests and chunks dedup through their
+  // shared in-flight promises/caches and the newest activeRequest wins. The
+  // settledRequest check keeps it from superseding a healthy load that is
+  // simply still fetching (tiles idle before the low-priority manifests); a
+  // load that parks after being superseded re-arms its own delayed retry.
+  map.once("idle", () => {
+    if (!getActiveMapConfig().loadMinerals
+      && map.getZoom() >= FALLING_FRUIT_MIN_LOAD_ZOOM
+      && !state.pointDataReady
+      && state.activeRequest === state.settledRequest) {
+      loadMapData();
+    }
+  });
   schedulePublicLandLoad();
   // Warm the whole-region gz 2/4 aggregate tile sets once boot settles
   // (~4-12 requests at concurrency 2): a boot into the point band otherwise
