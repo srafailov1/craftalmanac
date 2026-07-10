@@ -82,6 +82,10 @@ phase 5 strategic work and its OWNER GATEs remain).
 - Claude edits files and commits locally with descriptive messages; the user reviews in GitHub Desktop and pushes. Claude never pushes.
 - Bump static asset version query strings in `index.html` when changing `app.js`/`styles.css` (see commit history convention).
 - Test locally: `python3 -m http.server 4173 --bind 127.0.0.1`
+- **Beta preview**: `npx wrangler deploy --config wrangler.beta.jsonc` publishes
+  the working tree to the `craftalmanac-beta` Worker (stable workers.dev URL,
+  noindexed, Mapbox-allowlisted) so changes can be checked on a live map before
+  the owner pushes. Never affects production — see `docs/beta-deploys.md`.
 
 ## Conventions
 

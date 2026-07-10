@@ -27,6 +27,16 @@ export default {
       return handleReport(request, env, ctx);
     }
     // Not our endpoint — serve the static site exactly as before.
+    // Beta only (wrangler.beta.jsonc sets BETA + run_worker_first): stamp
+    // noindex so the workers.dev staging copy never competes with
+    // craftalmanac.com in search. Production never sets BETA, and its asset
+    // requests are served before this handler runs at all.
+    if (env.BETA) {
+      const response = await env.ASSETS.fetch(request);
+      const headers = new Headers(response.headers);
+      headers.set("x-robots-tag", "noindex");
+      return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    }
     return env.ASSETS.fetch(request);
   }
 };

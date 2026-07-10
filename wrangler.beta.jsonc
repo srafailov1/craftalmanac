@@ -1,0 +1,47 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Beta / staging copy of the site (see docs/beta-deploys.md). Deployed FROM
+  // THE LOCAL WORKING TREE with:
+  //   npx wrangler deploy --config wrangler.beta.jsonc
+  // so work-in-progress can be checked live (the Mapbox token is URL-scoped;
+  // the beta URL is allowlisted in the Mapbox account) before anything is
+  // committed or pushed. Production (wrangler.jsonc) still deploys only via
+  // the git integration when main is pushed — this file never affects it.
+  "name": "craftalmanac-beta",
+  "main": "worker.js",
+  "compatibility_date": "2026-05-20",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    // Beta-only: route every request through worker.js so it can stamp
+    // X-Robots-Tag: noindex on served assets (production keeps the default
+    // assets-first serving and never sets BETA).
+    "run_worker_first": true
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "vars": {
+    // worker.js reads this to add the noindex header. Leave it truthy here;
+    // it must never appear in wrangler.jsonc.
+    "BETA": "true"
+  },
+  // Same report-form plumbing as production so /api/report can be exercised on
+  // beta (sends land in the same reports@ inbox; subjects are tagged by the
+  // form's page field). Separate rate-limit namespace so beta testing can't
+  // consume production's per-IP budget.
+  "send_email": [
+    { "name": "EMAIL" }
+  ],
+  "ratelimits": [
+    {
+      "name": "REPORT_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ]
+}

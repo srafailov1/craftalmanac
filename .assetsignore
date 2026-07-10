@@ -32,6 +32,7 @@ README.md
 .github/
 .assetsignore
 wrangler.jsonc
+wrangler.beta.jsonc
 # worker.js is the Worker entrypoint (wrangler `main`), not a served asset —
 # keep it out of the origin so it can't be fetched at /worker.js.
 worker.js
