@@ -39,7 +39,7 @@
     <!-- Mapbox GL is self-hosted (vendor/) so the render-blocking CSS and the
          SDK JS are same-origin, SW-precacheable, and immutable-cacheable. -->
     <link rel="stylesheet" href="./vendor/mapbox-gl/v3.23.1/mapbox-gl.css">
-    <link rel="stylesheet" href="./styles.css?v=fixes2">
+    <link rel="stylesheet" href="./styles.css?v=fixes3">
   </head>
   <body data-register="day">
     <main class="app-shell">
@@ -150,7 +150,7 @@
          (SDK, config, app) is preserved and still precedes DOMContentLoaded. -->
     <script src="./vendor/mapbox-gl/v3.23.1/mapbox-gl.js" defer></script>
     <script src="./config.js" defer></script>
-    <script src="./app.js?v=fixes2" defer></script>
+    <script src="./app.js?v=fixes3" defer></script>
     <script>
       // Register the offline service worker from the root scope (controls the
       // whole origin). Guarded and deferred to load so it never blocks first

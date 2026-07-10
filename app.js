@@ -8202,6 +8202,11 @@ async function loadMapData() {
   if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     updateFallingFruitAggregates();
   }
+  // Minerals show clusters at every zoom, but the mode-switch handoff ran while
+  // state.records was still empty, leaving the cluster layers hidden. Below the
+  // point band nothing else re-runs the handoff without a zoom event, so the
+  // map sat blank until the first zoom. Re-run it now that the records landed.
+  if (state.mapReady && config.loadMinerals) updateLayerHandoff();
 
   const failedSources = [
     inatResult.status === "rejected" ? "iNaturalist" : "",
