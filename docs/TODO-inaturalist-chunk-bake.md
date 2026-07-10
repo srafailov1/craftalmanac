@@ -645,4 +645,18 @@ access-status but NOT the access-cache (id-keyed).
   Deferred deliberately: it removes the one-line flag rollback, so it is best
   done as a focused pass a cycle after go-live, not rushed. Keep the flag until
   then.
-- Manifest trim (section 11) remains optional.
+- **DONE: manifest trim** (asset inat4). The boot manifest went from 17.4 MB
+  raw / 3.61 MB gzip to **9.9 MB / 1.32 MB gzip** (63% off first load) by
+  replacing the two per-anchor centroid structures (`centroidsByAnchor` +
+  `accessCentroids`, which gzip poorly as unique coordinate triples) with a
+  single count-weighted `center` per chunk used for all aggregate positioning.
+  `accessCounts` stays in the manifest (the access filter is a core feature, so
+  it must work instantly + offline). Exact for the default view; species/access
+  filtering re-counts but does not re-center within a 0.30-degree chunk (a
+  sub-cell approximation invisible at overview zoom). Build scripts updated
+  (`build_inaturalist_subset.mjs` emits `center`, default grid now 0.30;
+  `build_access_status.mjs` skips iNat access-centroids); chunk files unchanged
+  (deterministic). Verified: gates + overview==plotted pass, browser renders the
+  overview + points + access filter. Complements 87b7f874's priority-low
+  manifest fetch. Further headroom (0.46 MB) exists via an access sidecar but
+  was rejected: it defers a core-feature payload and ripples into offline-save.

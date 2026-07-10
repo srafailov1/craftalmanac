@@ -6726,24 +6726,9 @@ function getAggregateItemCenter(item, selectedSpeciesIds, selectedAccessStatuses
     });
     if (accessCount) return [accessWeightedLng / accessCount, accessWeightedLat / accessCount];
   }
-  // Baked iNaturalist chunk: centroids keyed by anchor taxon id.
-  if (item.centroidsByAnchor) {
-    const anchorMap = getActiveInatAnchorSpeciesMap();
-    let anchorCount = 0;
-    let anchorWeightedLng = 0;
-    let anchorWeightedLat = 0;
-    Object.entries(item.centroidsByAnchor).forEach(([anchor, centroid]) => {
-      const species = anchorMap.get(Number(anchor));
-      if (!species || !selectedSpeciesIds.has(species.id) || !Array.isArray(centroid)) return;
-      const centroidCount = Number(centroid[2] || 0);
-      if (!centroidCount) return;
-      anchorWeightedLng += Number(centroid[0]) * centroidCount;
-      anchorWeightedLat += Number(centroid[1]) * centroidCount;
-      anchorCount += centroidCount;
-    });
-    if (anchorCount) return [anchorWeightedLng / anchorCount, anchorWeightedLat / anchorCount];
-    return item.center || getBboxCenter(item.bbox);
-  }
+  // Baked iNaturalist chunk: a single count-weighted center is baked per chunk
+  // (see below's item.center fallback); species/access filtering re-counts but
+  // does not re-center within the chunk.
   let count = 0;
   let weightedLng = 0;
   let weightedLat = 0;

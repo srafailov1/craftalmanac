@@ -50,7 +50,9 @@ const INPUT = args.get("input");
 const THIN_DECIMALS = args.has("thin") ? Number(args.get("thin")) : 4;
 // iNat chunk grid. 0.15 (FF's value) yields ~29k chunks nationally, over
 // Cloudflare's 20k-file cap; a coarser grid trades fewer, larger chunk files.
-const CHUNK_SIZE_DEGREES = args.has("grid") ? Number(args.get("grid")) : 0.15;
+// Production grid is 0.30 deg (0.15 put the national chunk count over
+// Cloudflare's 20k-file cap; see docs/TODO-inaturalist-chunk-bake.md).
+const CHUNK_SIZE_DEGREES = args.has("grid") ? Number(args.get("grid")) : 0.30;
 const OUT_DIR = path.resolve(ROOT, args.get("out") || "data/inaturalist/us");
 if (!INPUT) throw new Error("--input=<file|dir> is required");
 
@@ -303,10 +305,8 @@ async function main() {
       if (!arr) { arr = []; chunksById.set(id, arr); }
       arr.push(t);
       let sa = stateAgg.get(t[R.STATE]);
-      if (!sa) { sa = { counts: {}, centroids: {} }; stateAgg.set(t[R.STATE], sa); }
+      if (!sa) { sa = { counts: {} }; stateAgg.set(t[R.STATE], sa); }
       sa.counts[t[R.ANCHOR]] = (sa.counts[t[R.ANCHOR]] || 0) + 1;
-      (sa.centroids[t[R.ANCHOR]] ||= [0, 0, 0]);
-      sa.centroids[t[R.ANCHOR]][0] += t[R.LNG]; sa.centroids[t[R.ANCHOR]][1] += t[R.LAT]; sa.centroids[t[R.ANCHOR]][2] += 1;
     }
   }
   preciseKeep.clear();
@@ -330,18 +330,22 @@ async function main() {
     totalRecords += rows.length;
 
     const counts = {};
-    const centroids = {};
+    let sumLng = 0;
+    let sumLat = 0;
     for (const t of records) {
       const a = t[R.ANCHOR];
       counts[a] = (counts[a] || 0) + 1;
-      (centroids[a] ||= [0, 0, 0]);
-      centroids[a][0] += t[R.LNG]; centroids[a][1] += t[R.LAT]; centroids[a][2] += 1;
+      sumLng += t[R.LNG]; sumLat += t[R.LAT];
       globalCounts[a] = (globalCounts[a] || 0) + 1;
     }
     manifestChunks.push({
       id, bbox: chunkBbox(id), recordCount: rows.length,
       countsByAnchor: sortedCounts(counts),
-      centroidsByAnchor: finalizeCentroids(centroids),
+      // A single count-weighted center (not per-anchor centroids): the overview
+      // aggregate positions a chunk's circle here, keeping the boot manifest
+      // small. Species/access filtering re-counts but does not re-center within
+      // a 0.30-degree chunk (a sub-cell approximation, invisible at overview zoom).
+      center: [Number((sumLng / rows.length).toFixed(4)), Number((sumLat / rows.length).toFixed(4))],
       path: `./data/inaturalist/us/chunks/${id}.json`
     });
   }
@@ -352,8 +356,7 @@ async function main() {
     return {
       id: sid, name: s.name, bbox: s.bbox, center: bboxCenter(s.bbox),
       recordCount: Object.values(agg.counts).reduce((a, b) => a + b, 0),
-      countsByAnchor: sortedCounts(agg.counts),
-      centroidsByAnchor: finalizeCentroids(agg.centroids)
+      countsByAnchor: sortedCounts(agg.counts)
     };
   }).sort((a, b) => a.id.localeCompare(b.id));
 
@@ -394,14 +397,6 @@ async function main() {
 
 function sortedCounts(counts) {
   return Object.fromEntries(Object.entries(counts).map(([k, v]) => [k, v]).sort((a, b) => Number(a[0]) - Number(b[0])));
-}
-function finalizeCentroids(centroids) {
-  const out = {};
-  for (const [k, [lngSum, latSum, count]] of Object.entries(centroids).sort((a, b) => Number(a[0]) - Number(b[0]))) {
-    if (!count) continue;
-    out[k] = [Number((lngSum / count).toFixed(5)), Number((latSum / count).toFixed(5)), count];
-  }
-  return out;
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });

@@ -32,14 +32,19 @@ const TREE_CONFIG = {
     modes: ["food", "ink"],
     countField: "countsBySpeciesId",
     requiredFields: ["id", "speciesId", "lat", "lng", "access", "accessClass", "publicLand", "accessNote", "sourceUrl"],
-    dataSpotAssertions: true
+    dataSpotAssertions: true,
+    writeAccessCentroids: true
   },
   inaturalist: {
     dir: "inaturalist/us",
     modes: ["food", "ink", "medicine"],
     countField: "countsByAnchor",
     requiredFields: ["id", "anchor", "lat", "lng"],
-    dataSpotAssertions: false
+    dataSpotAssertions: false,
+    // iNaturalist chunks carry one count-weighted center for all aggregate
+    // positioning, so per-status access centroids are not baked (keeps the boot
+    // manifest small); access-filtered overview circles use the chunk center.
+    writeAccessCentroids: false
   }
 };
 const TREE = args.get("tree") || "falling-fruit";
@@ -516,10 +521,12 @@ async function main() {
       mode,
       Object.fromEntries(Object.entries(statuses).filter(([, speciesCounts]) => Object.keys(speciesCounts).length))
     ]));
-    chunk.accessCentroids = Object.fromEntries(Object.entries(centroidAccumulators).map(([mode, centroids]) => [
-      mode,
-      finalizeCentroids(centroids)
-    ]));
+    if (cfg.writeAccessCentroids) {
+      chunk.accessCentroids = Object.fromEntries(Object.entries(centroidAccumulators).map(([mode, centroids]) => [
+        mode,
+        finalizeCentroids(centroids)
+      ]));
+    }
 
     validateChunkCounts(context, chunk, catalogByMode);
   }
