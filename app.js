@@ -2371,7 +2371,77 @@ function updateUrlHash() {
   }, 250);
 }
 
+// ---- Map takeover (Mapbox killswitch, docs/mapbox-killswitch.md) ----
+// A basemap auth error only happens when the token is dead, and revoking the
+// token in the Mapbox dashboard IS the owner's emergency killswitch (revoked
+// requests 401 and are not billed). Swap the broken map for an honest paused
+// panel; the material/project/about sheets don't need Mapbox and stay usable.
+// Sustained 429s (an organic traffic spike hitting provider rate limits) get
+// the same takeover, but only after a few errors so one blipped tile doesn't
+// retire the map for the whole session. This block MUST precede the no-token
+// guard below: its let-bindings would otherwise still be in their temporal
+// dead zone when the guard calls showMapTakeover during a halted boot.
+const MAP_TAKEOVER_RATE_LIMIT_THRESHOLD = 3;
+let mapTakeoverShown = false;
+let mapRateLimitErrors = 0;
+
+function showMapTakeover(kind, { minimal = false } = {}) {
+  if (mapTakeoverShown) return;
+  const mapArea = document.querySelector(".map-area");
+  if (!mapArea) return;
+  mapTakeoverShown = true;
+  document.body.classList.add("map-takeover-active");
+  // Minimal mode: the no-token boot halt, where nothing else in this file has
+  // run, so the sheet buttons and masthead nav would be dead weight.
+  if (minimal) document.body.classList.add("map-takeover-minimal");
+  const paused = kind === "paused";
+  const stamp = paused ? "CRAFT ALMANAC · LIVE MAP PAUSED" : "CRAFT ALMANAC · MAP OVER CAPACITY";
+  const heading = paused ? "The live map is taking a break" : "The map is over capacity right now";
+  const bodyCopy = paused
+    ? "Craft Almanac has grown past what our map hosting can support right now, so we have switched the live map off while we make room. The map will be back."
+    : "A lot of people are exploring at once and our map provider is limiting new tiles. Please try again in a little while.";
+  const followup = minimal
+    ? "Please check back soon."
+    : "In the meantime, the material guides, project recipes, and access notes all still work:";
+  const actions = minimal ? "" : `
+    <div class="takeover-actions">
+      <button type="button" data-takeover-sheet="plants">Materials</button>
+      <button type="button" data-takeover-sheet="projects">Projects</button>
+      <button type="button" data-takeover-sheet="about">About</button>
+    </div>`;
+  const panel = document.createElement("section");
+  panel.id = "map-takeover";
+  panel.setAttribute("aria-label", "Map unavailable");
+  panel.innerHTML = `
+    <div class="takeover-card">
+      <p class="takeover-stamp">${stamp}</p>
+      <h2 class="takeover-title" tabindex="-1">${heading}</h2>
+      <p class="takeover-body">${bodyCopy}</p>
+      <p class="takeover-body">${followup}</p>
+      ${actions}
+    </div>`;
+  panel.querySelectorAll("[data-takeover-sheet]").forEach((button) => {
+    button.addEventListener("click", () => openSheet(button.dataset.takeoverSheet));
+  });
+  mapArea.appendChild(panel);
+  // Announce the takeover by moving focus to its heading, unless a modal
+  // (welcome or a sheet) holds focus; the panel is still there when it closes.
+  if (!document.body.classList.contains("modal-open")) {
+    panel.querySelector(".takeover-title")?.focus?.();
+  }
+}
+
 mapboxgl.accessToken = MAPBOX_TOKEN;
+
+// Killswitch guard (docs/mapbox-killswitch.md): with no token at all the Map
+// constructor throws and the rest of this file never runs, sheets included,
+// so show the static paused takeover first and halt on our own terms. The
+// graceful killswitch path is a REVOKED token (still present in config.js),
+// which boots fully and degrades via the map "error" handler at the bottom.
+if (!MAPBOX_TOKEN) {
+  showMapTakeover("paused", { minimal: true });
+  throw new Error("Craft Almanac: no Mapbox token configured; map boot halted (see docs/mapbox-killswitch.md)");
+}
 
 const map = new mapboxgl.Map({
   container: "map",
@@ -11057,12 +11127,23 @@ map.on("load", () => {
 map.on("error", (event) => {
   const message = event?.error?.message || "";
   const status = event?.error?.status;
-  // A traffic spike that exhausts the Mapbox map-load quota surfaces as 429 /
-  // rate-limit, not 401/403 — surface it honestly so the map never just blanks.
-  if (message.includes("429") || status === 429 || /quota|rate.?limit|too many requests/i.test(message)) {
-    setDataStatus("The map is temporarily over capacity. Please try again in a little while.", { kind: "error" });
-  } else if (message.includes("401") || message.includes("403") || status === 401 || status === 403) {
-    // Origin/token error: developer-actionable, but a visitor only needs an honest cue.
-    setDataStatus("The map can’t load right now (basemap access error). If this keeps happening, please report it.", { kind: "error" });
+  if (message.includes("401") || message.includes("403") || status === 401 || status === 403) {
+    // Dead token: the deliberate killswitch. Retire the map honestly. The
+    // token is URL-restricted, so a non-allowlisted origin (a new local port,
+    // an un-allowlisted beta URL) lands here too; the warn keeps a developer
+    // from mistaking that for the production killswitch.
+    if (!mapTakeoverShown) {
+      console.warn("Craft Almanac: basemap auth error (401/403); showing the paused takeover. Revoked token = killswitch, non-allowlisted origin = use the allowlisted local port. See docs/mapbox-killswitch.md.");
+    }
+    showMapTakeover("paused");
+  } else if (message.includes("429") || status === 429 || /quota|rate.?limit|too many requests/i.test(message)) {
+    // A traffic spike that exhausts the Mapbox map-load quota surfaces as 429 /
+    // rate-limit, not 401/403 — surface it honestly so the map never just blanks.
+    mapRateLimitErrors += 1;
+    if (mapRateLimitErrors >= MAP_TAKEOVER_RATE_LIMIT_THRESHOLD) {
+      showMapTakeover("busy");
+    } else {
+      setDataStatus("The map is temporarily over capacity. Please try again in a little while.", { kind: "error" });
+    }
   }
 });

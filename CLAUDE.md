@@ -86,6 +86,9 @@ phase 5 strategic work and its OWNER GATEs remain).
   the working tree to the `craftalmanac-beta` Worker (stable workers.dev URL,
   noindexed, Mapbox-allowlisted) so changes can be checked on a live map before
   the owner pushes. Never affects production — see `docs/beta-deploys.md`.
+- **Mapbox killswitch**: if usage/cost spikes, the owner revokes the Mapbox
+  token in the dashboard (no deploy); the site degrades to a "live map paused"
+  takeover panel with the sheets still usable — see `docs/mapbox-killswitch.md`.
 
 ## Conventions
 
