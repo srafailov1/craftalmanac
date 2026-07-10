@@ -7807,7 +7807,6 @@ function getMarkerPopupHTML(properties) {
         ${safetyRow}
         ${usedPartsRow}
         ${detailRow}
-        <div class="row"><span class="lab">PLACE</span><span class="val">${escapeHTML(properties.name)}</span></div>
         ${approxNote}
         <div class="row"><span class="lab">SOURCE</span><span class="val">${sourceVal}</span></div>
         ${seasonLine}
@@ -8111,11 +8110,9 @@ async function loadMapData() {
     // handoff bridge and on re-entry into covered bounds — would suddenly
     // hold a fraction of its points: the "clusters fall off, then recover
     // with a lag" bug. Keep the last point-band records intact instead.
-    if (state.records.length) {
-      setDataStatus(`Overview circles count all recorded occurrences (iNaturalist, every year), not individual harvest sites · zoom in to map ${state.records.length} points`, { transient: true });
-    } else {
-      setDataStatus("Overview circles count all recorded occurrences (iNaturalist, every year), not individual harvest sites · zoom in to map points", { transient: true });
-    }
+    // Retire a stale point-band record count (it describes a view we just
+    // left); loading/outage/error messages keep the line until resolved.
+    if (dataStatusKind === "count" || dataStatusKind === "notice") setDataStatus("");
     return;
   }
   const requestId = state.activeRequest + 1;

@@ -347,9 +347,10 @@ h2 {
 .map-legend {
   position: absolute;
   left: 14px;
-  /* Raised off the bottom edge so the card clears the Mapbox logo and
-     attribution; its bottom now lines up with the zoom in/out buttons. */
-  bottom: 30px;
+  /* Clears the Mapbox logo/attribution and aligns the card's bottom edge with
+     the zoom-out button's (ctrl stack: 14px inset + 20px attribution + 10px
+     margin = 44px). Keep in sync with #season-bar and the ctrl layout. */
+  bottom: 44px;
   z-index: 5;
   min-height: 56px;
   display: flex;
@@ -606,14 +607,42 @@ h2 {
   right: 14px;
 }
 
-.mapboxgl-ctrl-group {
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+/* Map controls (zoom, geolocate, offline) join the register system: same
+   panel/hairline/glow shell as the .floating elements, so they read as one
+   family in every register instead of stock white squares. The :not(:empty)
+   variant matches the vendor selector's specificity for the shadow. */
+.mapboxgl-ctrl-group,
+.mapboxgl-ctrl-group:not(:empty) {
+  border-radius: 10px;
+  background: var(--reg-panel-a);
+  border: 1px solid var(--reg-hair);
+  box-shadow: var(--reg-glow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 1.2s ease, border-color 1.2s ease;
 }
 
 .mapboxgl-ctrl-group button {
   width: 34px;
   height: 34px;
+  color: var(--reg-ink);
+}
+
+.mapboxgl-ctrl-group button + button {
+  border-top: 1px solid var(--reg-hair);
+}
+
+.mapboxgl-ctrl-group button:not(:disabled):hover {
+  background-color: rgba(127, 127, 127, 0.12);
+}
+
+/* Mapbox bakes its zoom/geolocate glyphs as dark background-image SVGs;
+   invert + hue-rotate keeps them visible on the dark dusk/night panels while
+   colored states (the geolocate slash) stay in their hue family. The offline
+   button draws with currentColor and needs nothing. */
+body[data-register="dusk"] .mapboxgl-ctrl button .mapboxgl-ctrl-icon,
+body[data-register="night"] .mapboxgl-ctrl button .mapboxgl-ctrl-icon {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .mapboxgl-ctrl-attrib {
@@ -1805,9 +1834,9 @@ body[data-register="night"] {
 #search-bar .location-search-status:empty { display: none; }
 
 #season-bar {
-  /* Raised so the bar clears the Mapbox logo/attribution and its bottom lines
-     up with the zoom in/out buttons on the bottom-right. */
-  bottom: 30px;
+  /* Clears the Mapbox logo/attribution and aligns the bar's bottom edge with
+     the zoom-out button's (44px, see .map-legend). */
+  bottom: 44px;
   left: 50%;
   transform: translateX(-50%);
   width: min(690px, calc(100vw - 28px));
