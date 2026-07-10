@@ -7877,6 +7877,12 @@ function aggregateTilesCachedForView() {
 // viewport (a boot restored to a city view would otherwise warm ~2 tiles and
 // leave the first zoom-out cold anyway).
 async function prefetchINaturalistAggregateTiles(zoomTargets, { channel = "band", regionWide = false } = {}) {
+  // The live /v1/grid overview is retired when USE_BAKED_INATURALIST: its warm
+  // cache is never read by getAggregateItems (which uses the baked manifest
+  // chunks), so warming it fires ~10-20 api.inaturalist.org requests per load
+  // whose results are discarded — pure waste, and it re-exposes the rate-limit
+  // risk the bake removed. Mirror the scheduleINaturalistAggregateLoad guard.
+  if (USE_BAKED_INATURALIST) return;
   if (!state.mapReady || state.savedLocationsOnly) return;
   const selectedSpecies = getSelectedCatalogItems()
     .filter((species) => isSpeciesAvailableOnSelectedDate(species));
@@ -8573,7 +8579,12 @@ async function getInatChunkManifest() {
   if (state.inatChunkManifest) return state.inatChunkManifest;
   if (!inatChunkManifestLoad) {
     inatChunkManifestLoad = (async () => {
-      const response = await fetch(INATURALIST_MANIFEST_URL);
+      // priority: "low" keeps this 3.9 MB (gz) / ~18 MB manifest from
+      // outcompeting basemap tiles + app.js on first paint; the overview
+      // aggregate can lag the basemap by a beat. The main-thread JSON.parse
+      // (~160 ms desktop, more on mobile) remains the durable cost to address
+      // bake-side (a leaner overview manifest); see docs TODO.
+      const response = await fetch(INATURALIST_MANIFEST_URL, { priority: "low" });
       if (!response.ok) throw new Error(`iNaturalist manifest returned ${response.status}`);
       state.inatChunkManifest = await response.json();
       return state.inatChunkManifest;
