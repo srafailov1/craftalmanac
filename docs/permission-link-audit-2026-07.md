@@ -29,11 +29,19 @@ suite passes. Applied in this pass:
   wrong-place fixes, Sacramento and Oakland); 25 individually-sourced food-forest
   claims re-cited or conservatively downgraded.
 
-Deferred (per owner): the ~64 Denver (DUG) and Boston (BFFC) food-forest claims
-that all share one program/directory URL still need per-site harvest-policy
-sources or a downgrade. Bronx River Foodway was kept Allowed (a curated
-crown-jewel anchor) though its citation could still use a stronger primary
-source.
+Follow-up applied 2026-07-12 (both deferred items closed):
+
+- The 33 Denver (DUG) and Boston (BFFC) food-forest sites that shared one
+  program/directory URL were researched per site. 9 are confirmed open-harvest
+  public food forests (flagship or public-parkland sites) and keep Allowed with a
+  site-naming source; 24 downgraded to Unverified because they sit on school
+  grounds, route produce to a food bank, or could not be confirmed as public
+  open-harvest (7 of those were caught by the adversarial verify pass). Non-food
+  craft material at each stays Unverified or Prohibited.
+- Bronx River Foodway keeps Allowed but is now cited to NYC Parks' own "Foragers
+  in the Foodway" public-foraging program (nycgovparks.org), a real primary
+  source, replacing the Bronx River Alliance brochure that never stated a harvest
+  policy.
 
 Method: extracted all 469 (place, claimed-status, cited-link) rows from the six
 rule surfaces (308 unique URLs), fetched and read every URL, judged each against

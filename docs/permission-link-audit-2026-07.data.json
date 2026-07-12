@@ -4645,5 +4645,354 @@
     "note": "13.35 applies; Kobuk not among the four excepted units; 2026 WEAR compendium adds no limits. Personal-use berries/fruits/mushrooms only, not roots/bark."
    }
   }
- ]
+ ],
+ "followup_2026_07_12": {
+  "foodForestSites": [
+   {
+    "name": "Barnum Orchard (Barnum Food Forest)",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/",
+    "foodSourceLabel": "Denver Urban Gardens (DUG)",
+    "notes": "DUG's named flagship food forest at 163 King St, Denver 80219, planted 2016 by neighbors, later adopted by DUG. Program page names it and states the harvest ethic. Non-food craft material not covered by the fruit-and-nut invitation."
+   },
+   {
+    "name": "Fairmont DCIS School Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens (DUG)",
+    "notes": "Real DUG food forest, but on a Denver Public Schools campus (DCIS at Fairmont). The DUG open-harvest ethic is program-level; a school campus restricts public picking, so Unverified rather than allowed. No site-specific harvest page found."
+   },
+   {
+    "name": "Samuels Elementary Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens (DUG)",
+    "notes": "Real DUG food forest on a school campus. Adjacent community garden routes produce to students, the DPS Garden-to-Cafeteria program, and a food bank. School-ground context restricts public picking, so Unverified. No site-specific harvest page found."
+   },
+   {
+    "name": "Nome Park Food Forest",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens (DUG)",
+    "notes": "Confirmed DUG food forest on public parkland at 1200 Nome St, Aurora (planted 2022). Allowed cited to DUG network membership plus the program harvest ethic. Craft/fiber (non-food) marked prohibited: public park vegetation is not covered by the fruit-and-nut invitation."
+   },
+   {
+    "name": "Wheat Ridge Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://www.rootedinfun.com/272/Happiness-Community-Gardens",
+    "foodSourceLabel": "City of Wheat Ridge / DUG",
+    "notes": "Real DUG food forest at Happiness Gardens (City of Wheat Ridge), dedicated May 2023, 125+ fruit trees. City page frames orchard produce as organized food-bank donation and does not state free public picking, so Unverified rather than allowed."
+   },
+   {
+    "name": "48th & Julian Food Forest",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "high",
+    "foodUrl": "https://coloradosun.com/2023/09/25/denver-food-forests-empty-park-land-dug/",
+    "foodSourceLabel": "Denver Urban Gardens food forest program",
+    "notes": "Confirmed as DUG's roughly 20th food forest, on Denver Parks and Recreation land at 48th Ave and Julian St (a former Rocky Mountain Lake Park parcel). Public land, open harvest. Craft or fiber removal not covered and prohibited by parks ordinance."
+   },
+   {
+    "name": "Athmar Park Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens",
+    "notes": "DUG's own name for this spring-2023 food forest is Tennessee Gateway, planted in partnership with the Athmar Park Neighborhood Association. Belongs to DUG's open-harvest network. Exact parcel and land ownership not independently confirmed against the batch coordinates, hence medium confidence."
+   },
+   {
+    "name": "Doull Elementary Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens (school-site food forest)",
+    "notes": "Confirmed real DUG food forest (spring 2023 list, named Tree Keepers, DUG-run volunteer workdays). Downgraded to unknown because it is on an active DPS elementary campus where public and neighbor harvest access during the day is genuinely uncertain."
+   },
+   {
+    "name": "Kepner Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "low",
+    "foodUrl": "https://dug.org/food-forest-directory/",
+    "foodSourceLabel": "Unverified (school garden program only)",
+    "notes": "No authoritative source names a public Kepner food forest. Kepner is absent from DUG's 2022 (6) and spring-2023 (9) food-forest lists. What exists is a Kepner Middle School greenhouse and Edible Schoolyard program, a school garden rather than a DUG open-harvest food forest."
+   },
+   {
+    "name": "The Urban Farm Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens (private partner site)",
+    "notes": "Confirmed as a DUG spring-2023 food forest planted in partnership with The Urban Farm. But The Urban Farm is a private nonprofit community farm (10200 Smith Rd) with paid general admission Wed-Sat 9am-1pm and livestock, so unrestricted open harvest is not established. Private-partner site."
+   },
+   {
+    "name": "Ute Trail Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens food forest network",
+    "notes": "Named as a spring-2023 DUG food forest (Ute Trail Community Garden), Lakewood ~13600 W Jewell Ave. Community-garden land, not a school. Craft/fiber harvest not covered by the food invitation."
+   },
+   {
+    "name": "APDC Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "Denver Urban Gardens food forest network",
+    "notes": "Named as a spring-2023 DUG food forest at the Asian Pacific Development Center (Aurora). Partner community-center campus, so public access is likely but not certain. Program open-harvest ethic applies."
+   },
+   {
+    "name": "Morey Middle School Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "DUG food forest on Denver Public Schools grounds",
+    "notes": "Real DUG spring-2023 food forest, but on an active DPS middle-school campus (Capitol Hill). School sites restrict public picking, so open harvest is not confirmed. Conservative Unverified."
+   },
+   {
+    "name": "Glenbrook Greenhouse Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://dug.org/latest-news/food-forests-planting-today-for-a-greener-future/",
+    "foodSourceLabel": "DUG food forest on a Denver Public Schools site",
+    "notes": "Real DUG spring-2023 food forest, but on a Denver Public Schools greenhouse site (Marston area, ~4900 S Field Way). School-district land, likely access-restricted. Conservative Unverified."
+   },
+   {
+    "name": "Maxwell Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "low",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "Unverified, not in DUG food forest network",
+    "notes": "Not found in any DUG food-forest planting article (2022/2023) or directory. Batch point sits on Maxwell Elementary, Montbello, a school community garden. No authoritative source names a public Maxwell food forest."
+   },
+   {
+    "name": "Edgewater Kaizen Food Forest",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "high",
+    "foodUrl": "https://www.gogreenlocally.org/tourstopsggl/edgewater-kaizen---public-food-forest",
+    "foodSourceLabel": "Go Green Locally listing + DUG food forest program ethic",
+    "notes": "Real DUG public food forest, Kaizen Food Rescue collaboration near 25th Lane and Marshall St, Edgewater. On partner/church-adjacent land but publicly labeled a food forest; DUG program harvest ethic applies (food only)."
+   },
+   {
+    "name": "Vista Peak Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://volunteer.dug.org/need/detail/?need_id=924008",
+    "foodSourceLabel": "DUG volunteer/community-garden listing + Aurora Public Schools siting",
+    "notes": "Sits on the Vista Peak Prep (Aurora Public Schools) campus. Authoritative sources describe a 30-plot community garden with community beds, not a confirmed open-harvest public food forest. Food-forest label appears overstated."
+   },
+   {
+    "name": "GES Food Forest (Globeville/Elyria-Swansea)",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "medium",
+    "foodUrl": "https://volunteer.dug.org/need/detail/?need_id=933612",
+    "foodSourceLabel": "DUG volunteer listing + GES Coalition/Tierra Colectiva coverage",
+    "notes": "Community-owned land trust food forest (Tierra Colectiva/GES Coalition with DUG), around 4798 Josephine St, Denver 80216. Explicitly free and open to neighbors. Young planting from 2024, may be lightly productive."
+   },
+   {
+    "name": "Bradley International Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://beforeitsnews.com/food-and-farming/2025/10/denvers-food-forests-provide-free-fruit-while-greening-the-environment-2541976.html",
+    "foodSourceLabel": "Civil Eats coverage (repost) + DUG food forest program",
+    "notes": "Named as one of DUG's food forests, but on the grounds of Bradley International School (Denver Public Schools). Public harvest access at an operating K-8 campus is unverified. Cited source is a Civil Eats repost."
+   },
+   {
+    "name": "Greenway Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "low",
+    "foodUrl": "https://volunteer.dug.org/need/detail/?need_id=1077755",
+    "foodSourceLabel": "DUG community-garden listing",
+    "notes": "Described as Greenway Community Garden (Greenway Park) with a new food-forest planting. No site page confirms open public harvest; community-garden context. Batch coordinates place it in the Aurora area."
+   },
+   {
+    "name": "STEAM Academy Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "DUG Food Forest Directory (on active DPS school grounds)",
+    "notes": "Confirmed in DUG ArcGIS directory (2900 Richard Allen Ct, Skyland, est. 2024). Site is Robert F. Smith STEAM Academy, an active DPS grades 9-12 school. Public harvest access unverified; marked Unverified to avoid trespass."
+   },
+   {
+    "name": "Lake Middle School Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "DUG Food Forest Directory (on active DPS school grounds)",
+    "notes": "Confirmed in DUG directory (1820 Lowell Blvd, est. 2025) as a real food forest, but sited on Lake Middle School, an active DPS campus. Public harvest access unverified. Conservative Unverified."
+   },
+   {
+    "name": "Crumley Park Food Forest",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "DUG Food Forest Directory + food-forest harvest ethic",
+    "notes": "Confirmed in DUG directory (3400 W Cedar Ave, Barnum, est. 2025) and DUG naming article; open community food forest where neighbors pick fruit. Coords match batch."
+   },
+   {
+    "name": "Newlon Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "DUG Food Forest Directory (on active DPS school grounds)",
+    "notes": "In DUG directory (361 Vrain St, est. 2025), but that address is active Newlon Elementary (DPS Pre-K-5). Public harvest access on school grounds unverified. Conservative Unverified."
+   },
+   {
+    "name": "Martinez Park Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "DUG Food Forest Directory + food-forest harvest ethic",
+    "notes": "Confirmed in DUG directory (4051 W 9th Ave, Villa Park, est. 2025). DUG describes its food forests as open for anyone to pick berries or nuts. Community food forest."
+   },
+   {
+    "name": "Sanderson Gulch Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "high",
+    "foodUrl": "https://dug.org/gardens-food-forests/food-forests/food-forest-directory/",
+    "foodSourceLabel": "Denver Urban Gardens Food Forest Directory + food-forests program page",
+    "notes": "Confirmed in DUG's official ArcGIS-backed Food Forest Directory (feature service Food_Forest_Directory_, ObjectId 29), one of 29 listed sites. Program harvest ethic at dug.org/gardens-food-forests/food-forests/ (pick ripe fruit, take only what you need). Default non-food status kept unknown; craft/fiber not covered by the food invitation."
+   },
+   {
+    "name": "Old West Church Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "medium",
+    "foodUrl": "https://www.bostonfoodforest.org/owc",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "Real BFFC food forest but on private church land (a churchyard Garden Raising) with a donation model; own page states no open-harvest policy. Conservative unknown."
+   },
+   {
+    "name": "Savin Hill Wildlife Garden Food Forest",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "unknown",
+    "verify": "",
+    "confidence": "high",
+    "foodUrl": "https://www.bostonfoodforest.org/savin-hill-wildlife-garden",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "Listed BFFC land-trust site but its own page frames it as a wildlife/native-habitat garden, not a harvest food forest. No open-pick statement, so unknown."
+   },
+   {
+    "name": "Hope Garden",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "medium",
+    "foodUrl": "https://www.bostonfoodforest.org/hero-hope-garden",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "Own BFFC page names it a community food forest open to the public; harvest inferred from BFFC edible-public-park ethic. Some raised beds are community-tended."
+   },
+   {
+    "name": "Leland Cooperative Garden Food Forest",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "medium",
+    "foodUrl": "https://www.bostonfoodforest.org/leland-cooperative-garden",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "BFFC Coalition site. Own page: cooperative garden, no individual plots, everything open for all to use; harvest with gratitude. Food forest label loose but open-harvest supported."
+   },
+   {
+    "name": "Frederick Douglass Peace Park",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "medium",
+    "foodUrl": "https://www.bostonfoodforest.org/frederickdouglasspeacepark",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "BFFC Coalition public park (2023 renovation) with food-forest plantings. No explicit pick statement on page; harvest inferred from BFFC edible-public-park ethic."
+   },
+   {
+    "name": "Egleston Branch Library Food Forest",
+    "finalFoodStatus": "allowed",
+    "researchStatus": "allowed",
+    "verify": "verify-ok",
+    "confidence": "medium",
+    "foodUrl": "https://gardensofegleston.org/explore-the-gardens/friends-of-egleston-square-library-food-forest-and-gardens/",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "On Boston Public Library branch grounds; no individual BFFC page, so cited to BFFC /locations directory plus gardensofegleston.org and network harvest ethic. Reachable cherry-tree fruit confirmed."
+   },
+   {
+    "name": "Sherman Street Green Space / Fairy Hollow",
+    "finalFoodStatus": "unknown",
+    "researchStatus": "allowed",
+    "verify": "verify-refuted",
+    "confidence": "medium",
+    "foodUrl": "https://www.bostonfoodforest.org/sherman-street-green-space-conservancy",
+    "foodSourceLabel": "Boston Food Forest Coalition",
+    "notes": "Community-run semi-mature urban forest, BFFC member since 2024, described as a public edible park. Harvest inferred from BFFC edible-public-park ethic."
+   }
+  ],
+  "bronxRiver": {
+   "bestUrl": "https://www.nycgovparks.org/parks/concrete-plant-park/events/2026/07/18/foragers-in-the-foodway",
+   "sourceLabel": "NYC Parks: Foragers in the Foodway (Concrete Plant Park)",
+   "status": "allowed",
+   "popupText": "The Bronx River Foodway at Concrete Plant Park is NYC's first legal public foraging site, an edible food forest created by NYC Parks and the Bronx River Alliance. The public is invited to harvest ripe plantings for personal use. Take only a fair share, and leave the plants healthy for others and wildlife.",
+   "evidenceQuote": "Come outside and learn how to forage alongside NYC foragers and herbalists at the Bronx River Foodway!",
+   "confidence": "high",
+   "strongerThanBrochure": true,
+   "notes": "Strongest primary source read: NYC Parks' own \"Foragers in the Foodway\" program page (nycgovparks.org), a recurring June\u2013September series; the July 18, 2026 instance is live/upcoming as of today. NYC Parks, the agency whose 56 RCNY / policy otherwise prohibits foraging citywide, here explicitly invites the public to forage and references participants' \"harvests\" (\"...learn the various ways to preserve and use their harvests\"). This clearly beats the current citation: the Bronx River Alliance foodway page (bronxriver.org/visit-the-river/explore-the-greenway/foodway) and the permanent NYC Parks history/highlights page (nycgovparks.org/parks/concrete-plant-park/highlights/19764) both only say the Foodway \"offers access to a variety of edible plants\" and invite you to \"take a stroll,\" stating no harvest policy. Corroborating NYC Parks primary source: the \"Foragers Gathering\" event page explicitly contrasts \"Current NYC policies limit public foraging practices\" with having \"foraged raspberries at the Bronx River Foodway,\" framing the Foodway as the exception. Secondary confirmation that it is NYC's first/only place to forage \"freely and legally\": Civil Eats, Salon, NYC Food Policy Center (Hunter College), and Urban Omnibus (\"A New Harvest\"). Caveats: the event URL is dated (part of a recurring series, so a specific instance may expire); if a permanent NYC Parks link is preferred, the highlights/history page is stable but omits harvest wording, so I chose the event page for its explicit harvest-invitation evidence. NYC Parks' framing centers guided/community foraging of the site's plantings; the site's existence is not blanket permission for every species, consistent with the project's occurrence-is-not-permission stance, but harvesting ripe plantings for personal use is the Foodway's explicit designated purpose."
+  },
+  "summary": {
+   "keptAllowed": 9,
+   "downgradedUnverified": 24,
+   "verifyRefuted": 7
+  }
+ }
 }
