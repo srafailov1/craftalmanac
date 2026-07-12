@@ -43,6 +43,22 @@ Follow-up applied 2026-07-12 (both deferred items closed):
   source, replacing the Bronx River Alliance brochure that never stated a harvest
   policy.
 
+Second-pass on the 6 verify-refuted items (2026-07-12): a determined deep-research
+pass with independent verification confirmed 2 with real sources and honestly
+left 4 Unverified.
+
+- Tampa upgraded from Unverified to Permit-required, cited to Tampa City Code
+  Sec. 16-51 (removing or picking plants in city parks needs the parks director's
+  written approval), verified genuine and current via Municode.
+- Manti-La Sal NF confirmed Permit-required, re-cited from the generic 36 CFR
+  page to the forest's own forest-products page ("a valid permit is required
+  prior to an individual collecting and removing any forest product").
+- Ozark, St. Francis, Carson, and Sequoia NFs stay Unverified: no authoritative
+  personal-use rule exists on the forests' own pages. Notably, the Ozark quote
+  the first pass found ("edible species may be gathered for daily personal
+  consumption") turned out to be Buffalo National River (NPS) text, not the
+  forest, a false positive the verification caught before it could ship.
+
 Method: extracted all 469 (place, claimed-status, cited-link) rows from the six
 rule surfaces (308 unique URLs), fetched and read every URL, judged each against
 the exact claim text that cites it, then researched and adversarially verified a

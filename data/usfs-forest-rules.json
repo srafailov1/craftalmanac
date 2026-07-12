@@ -187,9 +187,9 @@
    "states": "Utah, Colorado",
    "food": "permit-required",
    "mush": "permit-required",
-   "foodLimit": "The Manti-La Sal states that a valid permit is required before collecting any forest product from its lands, and it publishes no free personal-use allowance for edible plants, berries, or nuts. Contact the ranger district for a permit before picking. Occurrence on this map is not permission.",
-   "mushNote": "The forest requires a valid permit before collecting any forest product, which includes wild mushrooms, and publishes no free personal-use mushroom allowance. Contact the ranger district for a permit before collecting. Occurrence on the map is not permission.",
-   "url": "https://www.fs.usda.gov/r04/manti-lasal/forest-products",
+   "foodLimit": "On the Manti-La Sal National Forest, a valid permit is required before collecting or removing any forest product, and no free personal-use allowance for berries, fruit, or edible plants is offered. Occurrence on the map is not permission. Check with a district office before gathering.",
+   "mushNote": "The forest requires a valid permit to collect or remove any forest product, including mushrooms, with no advertised free personal-use allowance. Contact a Manti-La Sal ranger district before harvesting. Confirm edibility yourself, occurrence is not permission.",
+   "url": "https://www.fs.usda.gov/r04/manti-lasal/forest-products/forest-products-industry",
    "checked": {
     "by": "agent",
     "date": "2026-07"
@@ -266,8 +266,8 @@
    "states": "Arkansas",
    "food": "unknown",
    "mush": "unknown",
-   "foodLimit": "This forest publishes no confirmable personal-use rule for edible fruits, nuts, or berries. Its live permits page covers only firewood, special-use, and geocache items. Contact the Ozark-St. Francis ranger district before gathering anything. A plant appearing on this map is not permission to harvest it.",
-   "mushNote": "No confirmable wild-mushroom rule is published for this forest. Whether personal-use gathering needs a permit is unclear, so contact the Ozark-St. Francis ranger district before collecting. A mushroom on this map is not permission to pick it.",
+   "foodLimit": "No published Ozark-St. Francis rule sets whether personal-use gathering of berries, fruit, and nuts needs a permit. The forest lists only timber and firewood permits, and Region 8 defers to each forest. Nothing prohibits it, but the rule is unverified. Occurrence is not permission. Confirm with a district office.",
+   "mushNote": "No published Ozark-St. Francis rule addresses collecting mushrooms for personal use. The forest lists only timber and firewood permits, and its Forest Order bans no foraging. The mushroom rule is unverified. Occurrence is not permission. Confirm with a district office before collecting.",
    "url": "https://www.fs.usda.gov/r08/ozark-stfrancis/permits",
    "checked": {
     "by": "agent",
@@ -1156,9 +1156,9 @@
    "states": "California",
    "food": "unknown",
    "mush": "unknown",
-   "foodLimit": "Sequoia National Forest publishes no confirmable personal-use rule for edible fruits, nuts, or berries. Its guidance says taking any part of a plant without a valid permit violates federal rules. Treat foraging as unverified and contact a ranger district before gathering. Occurrence on this map is not harvest permission.",
-   "mushNote": "The forest publishes no confirmable personal-use rule or free allowance for mushrooms, and shows no specific mushroom permit. Contact a Forest Service ranger district before gathering. Occurrence on this map is not harvest permission.",
-   "url": "https://www.fs.usda.gov/media/232587",
+   "foodLimit": "Sequoia National Forest publishes no free personal use allowance for gathering berries, fruit, nuts, or edible plants. Its 2025 firewood and gathering brochure states that collecting any part of a tree or plant without a valid permit violates 36 CFR 261.6. Occurrence here is not harvest permission. Confirm terms with a district office.",
+   "mushNote": "No Sequoia National Forest rule addressing personal use mushroom or fungi gathering was found. The forest publishes no free use allowance and no mushroom permit here, unlike some neighboring California forests. Status is unverified. Occurrence is not harvest permission.",
+   "url": "https://www.fs.usda.gov/sites/nfs/files/r05/sequoia/publication/Firewood%20Cutting%20%26%20Gathering%202025.pdf",
    "checked": {
     "by": "agent",
     "date": "2026-07"
@@ -1305,8 +1305,8 @@
    "states": "New Mexico",
    "food": "unknown",
    "mush": "unknown",
-   "foodLimit": "The Carson lets you gather small amounts of herbs, cones, and conifer boughs for personal use without a permit, but berries, fruits, and nuts are not on that free list and no rule for them is published. Contact a Carson ranger district before gathering edible plants. Occurrence is not permission.",
-   "mushNote": "The Carson publishes no confirmable mushroom rule. Its free personal-use list names only herbs, cones, and boughs, and mushrooms are not included. Treat mushroom collecting as unverified, contact a Carson ranger district first, and remember occurrence on the map is not permission.",
+   "foodLimit": "Carson National Forest publishes free personal use only for herbs, cones, and conifer boughs. It does not state a rule for edible berries, fruits, or nuts, so the permit status here is unverified. A map dot marks a sighting, not permission to harvest. Contact a Carson district office before gathering.",
+   "mushNote": "The Carson permits page does not mention mushrooms at all, so no personal use rule is published for them here. Status is unverified. Never treat a map sighting as permission. Confirm identification and the current rule with a Carson district office before collecting.",
    "url": "https://www.fs.usda.gov/r03/carson/permits",
    "checked": {
     "by": "agent",
@@ -1578,8 +1578,8 @@
    "states": "Arkansas",
    "food": "unknown",
    "mush": "unknown",
-   "foodLimit": "This forest publishes no confirmable personal-use rule for edible fruits, nuts, or berries, and its live permits page lists only firewood, special-use, and geocache items. Contact an Ozark-St. Francis ranger district before gathering, and note that ginseng harvest is banned here. Occurrence on this map is not permission.",
-   "mushNote": "No confirmable wild-mushroom rule is published for this forest. Whether personal-use gathering needs a permit is unclear, so contact an Ozark-St. Francis ranger district before collecting. A mushroom on this map is not permission to pick it.",
+   "foodLimit": "We could not confirm a rule for gathering edible plants, fruits, nuts, or berries here. The forest requires permits for commercial or high impact use and for firewood, but its published pages do not address personal food gathering. Treat this as unverified, and ask the district office. A map point is not permission.",
+   "mushNote": "We could not confirm a rule for gathering mushrooms here. The forest publishes permits for firewood, timber, and commercial use, but nothing about personal mushroom picking. Treat this as unverified, ask the district ranger, and never eat a wild mushroom you have not expertly identified.",
    "url": "https://www.fs.usda.gov/r08/ozark-stfrancis/permits",
    "checked": {
     "by": "agent",
