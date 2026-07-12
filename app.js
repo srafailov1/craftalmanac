@@ -208,6 +208,7 @@ const ACCESS_RULE_SOURCES = {
   southCarolinaParks: "https://www.scstatehouse.gov/code/t51c003.php",
   westVirginiaParks: "https://www.law.cornell.edu/regulations/west-virginia/W-Va-C-S-R-SS-58-31-2",
   connecticutParks: "https://eregulations.ct.gov/eRegsPortal/Browse/getDocument?guid=%7B3C64A5F8-B731-4393-A6AB-EA64B91A3F63%7D",
+  connecticutStatute: "https://www.cga.ct.gov/current/pub/chap_447.htm#sec_23-4",
   alabamaParks: "https://www.outdooralabama.com/sites/default/files/Enforcement/STATE%20PARKS%20DIVISION%20REG%20FOR%20LE%20PAGE.pdf",
   arizonaParks: "https://www.law.cornell.edu/regulations/arizona/Ariz-Admin-Code-SS-R12-8-103",
   arkansasParks: "https://www.arkansas.com/state-parks/about/rules-regulations",
@@ -230,8 +231,8 @@ const ACCESS_RULE_SOURCES = {
   utahParks: "https://www.law.cornell.edu/regulations/utah/Utah-Admin-Code-R651-620-2",
   npsGeneral: "https://www.ecfr.gov/current/title-36/chapter-I/part-2/section-2.1",
   shenandoah: "https://www.nps.gov/shen/learn/management/compendium.htm#CP_JUMP_5595647",
-  blueRidge: "https://www.nps.gov/blri/learn/management/lawsandpolicies.htm",
-  princeWilliam: "https://www.nps.gov/prwi/learn/management/lawsandpolicies.htm",
+  blueRidge: "https://www.nps.gov/blri/learn/management/compendium-cfr-2-1.htm",
+  princeWilliam: "https://www.nps.gov/prwi/learn/management/park-superintendent-compendium-revised.htm",
   manassas: "https://www.nps.gov/mana/learn/management/compendium.htm",
   usfs: "https://www.ecfr.gov/current/title-36/chapter-II/part-261/subpart-A/section-261.6",
   blm: "https://www.blm.gov/programs/natural-resources/forests-and-woodlands/forest-product-permits",
@@ -241,9 +242,10 @@ const ACCESS_RULE_SOURCES = {
   virginiaStateForests: "https://law.lis.virginia.gov/admincode/title4/agency10/chapter30/section50/",
   virginiaWma: "https://dwr.virginia.gov/wp-content/uploads/media/wma-rules.pdf",
   beaconFoodForest: "https://www.beaconfoodforest.org/openharvest",
-  charlottesville: "https://www.charlottesville.gov/166/Parks-Recreation",
+  charlottesville: "https://www.charlottesville.gov/655/Park-Regulations",
   albemarle: "https://www.albemarle.org/government/parks-recreation",
-  newYorkDec: "https://dec.ny.gov/nature/forests-trees/state-forests/rules-for-use",
+  newYorkDec: "https://www.law.cornell.edu/regulations/new-york/6-NYCRR-190.8",
+  newYorkStateParks: "https://www.law.cornell.edu/regulations/new-york/9-NYCRR-375.1",
   pennsylvaniaDcnr: "https://www.pa.gov/agencies/dcnr/recreation/where-to-go/state-forests/rules-and-regulations",
   washingtonParks: "https://app.leg.wa.gov/wac/default.aspx?cite=352-28-030",
   californiaParks: "https://www.parks.ca.gov/?page_id=21301",
@@ -256,7 +258,7 @@ const ACCESS_RULE_SOURCES = {
   marylandForests: "https://regs.maryland.gov/us/md/exec/comar/08.07.01.13",
   northCarolinaParks: "http://reports.oah.state.nc.us/ncac/title%2007%20-%20natural%20and%20cultural%20resources/chapter%2013%20-%20parks%20and%20recreation%20area%20rules/chapter%2013%20rules.pdf",
   michiganDnr: "https://www.michigan.gov/dnr/things-to-do/foraging",
-  minnesotaParks: "https://www.revisor.mn.gov/rules/6100.0900/",
+  minnesotaParks: "https://www.dnr.state.mn.us/state_parks/harvesting.html",
   illinoisDnr: "https://www.ilga.gov/agencies/JCAR/EntirePart?titlepart=01700110",
   carverEdiblePark: "https://www.ashevillenc.gov/news/park-views-dr-george-washington-carver-edible-park/",
   festivalBeachFoodForest: "https://festivalbeach.org/frequently-asked-questions/",
@@ -9990,7 +9992,9 @@ function getUsfsForestRule(text, species, area) {
   const sourceLabel = entry.url ? `${area} forest-products page` : "National-forest default rule (36 CFR 261.6)";
   // broadForestProducts: national-forest personal use covers roots/bark/boughs,
   // not just edibles, so the non-food restricted-harvest downgrade skips USFS.
-  const base = { area, sourceLabel, sourceUrl, broadForestProducts: true };
+  // checked: carries the per-forest research provenance (data/usfs-forest-rules.json
+  // `checked`) so the popup shows a CHECKED chip like the other rule tables.
+  const base = { area, sourceLabel, sourceUrl, broadForestProducts: true, checked: entry.checked };
   if (status === "allowed") {
     return { ...base, status: "allowed", label: "Allowed",
       limit: detail || "Edible items may be gathered for personal use at this forest without a permit; larger or commercial harvests require a forest-products permit.",
@@ -10006,11 +10010,14 @@ function getUsfsForestRule(text, species, area) {
       limit: detail || `${area} does not permit ${isMushroom ? "mushroom" : "this"} collection.`,
       note: `Specific to ${area}.` };
   }
-  // Status unknown for this category: fall back to the national-forest baseline,
-  // but still cite THIS forest's own page so the user can confirm there.
-  return { ...base, status: "allowed", label: "Allowed",
-    limit: "Incidental personal-use gathering is generally allowed without a permit on national forests; larger or commercial harvests need a permit.",
-    note: `${area} hasn't published a specific ${isMushroom ? "mushroom" : "edible-plant"} rule we could confirm, this is the general national-forest policy; ${entry.url ? ("check " + area + "'s forest-products page") : "contact the forest"} before collecting.` };
+  // Status unknown for this category: we could NOT confirm a personal-use
+  // gathering rule for this forest and material, so we do not assert "Allowed"
+  // from that silence. Show Unverified and point the user at the forest to
+  // confirm. (A permits page or timber page that never mentions edible
+  // gathering is not permission; this is the owner's chosen honest default.)
+  return { ...base, status: "unknown", label: "Unverified",
+    limit: `${area} publishes no personal-use ${isMushroom ? "mushroom" : "edible-plant"} gathering rule we could confirm. National forests often allow small incidental personal-use gathering, but the specific rule, permits, and closures here are not verified.`,
+    note: `Occurrence on the map is not permission. ${entry.url ? ("Check " + area + "'s forest-products page") : "Contact the forest"} or the ranger district before collecting.` };
 }
 
 // Public-land access for a record, with the cross-map permission extension
@@ -10158,17 +10165,20 @@ function resolvePublicLandRule(properties, species, stateCode, record) {
   if (usfsForestRule) return usfsForestRule;
 
   if (isUsfsLand(text)) {
+    // This national forest is not in the researched per-forest table
+    // (data/usfs-forest-rules.json), so we have no confirmed personal-use rule
+    // for it. National forests often allow small incidental personal-use
+    // gathering under 36 CFR 261 free use, but that regulation lists what a
+    // permit is needed for; it does not by itself grant a personal-use food
+    // right here. Rather than assert "Allowed" from that generality, show
+    // Unverified and send the user to the forest to confirm.
     return {
-      status: "allowed",
-      label: "Allowed",
+      status: "unknown",
+      label: "Unverified",
       area,
-      // broadForestProducts: national-forest personal use is not edibles-scoped
-      // (36 CFR 261.6 covers roots, bark, boughs, etc.), so the non-food
-      // restricted-harvest downgrade does not apply here.
-      broadForestProducts: true,
-      limit: "Small amounts for personal use are generally allowed without a permit; larger quantities or commercial collection require a forest-products permit.",
-      note: `This is the national-forest-wide default under 36 CFR 261.6, incidental personal-use gathering is usually allowed, with permits for larger or commercial harvests. The specific designated species, free-use limits, permits, and closures are set by ${area}; confirm them on ${area}'s forest-products page or with the local ranger district before collecting.`,
-      sourceLabel: "National-forest products rule (36 CFR 261.6)",
+      limit: "This is national-forest land, but we have not confirmed a personal-use gathering rule for this specific forest. Small incidental personal-use gathering is often allowed on national forests, with permits for larger or commercial harvests, but the rule here is unverified.",
+      note: `Occurrence on the map is not permission. The designated species, free-use limits, permits, and closures are set by ${area}; confirm them on ${area}'s forest-products page or with the local ranger district before collecting.`,
+      sourceLabel: "National-forest free-use policy (36 CFR 261)",
       sourceUrl: ACCESS_RULE_SOURCES.usfs
     };
   }
@@ -10383,9 +10393,9 @@ function getStateSystemRule(stateCode, text, area, species) {
         status: "allowed",
         label: "Allowed",
         area,
-        limit: "Plants and fungi may be gathered for personal consumption on DEC state forests and Forest Preserve lands; commercial collection requires a permit.",
-        note: "New York DEC land rules make a personal-consumption exception to the plant-protection rule. Harvest lightly and avoid protected species.",
-        sourceLabel: "NYSDEC state forest rules",
+        limit: "Plants and fungi on DEC state land, including state forests and Forest Preserve, may be gathered for personal consumption; more than personal-use amounts or any commercial collection requires a permit.",
+        note: "6 NYCRR 190.8(g) makes a personal-consumption exception to the plant-protection rule on DEC land. Harvest lightly and avoid protected species.",
+        sourceLabel: "6 NYCRR 190.8(g), DEC use of state lands",
         sourceUrl: ACCESS_RULE_SOURCES.newYorkDec
       };
     }
@@ -10394,10 +10404,10 @@ function getStateSystemRule(stateCode, text, area, species) {
         status: "prohibited",
         label: "Prohibited",
         area,
-        limit: "Foraging is prohibited in New York state parks.",
-        note: "The personal-consumption exception applies to DEC lands, not the OPRHP state park system.",
-        sourceLabel: "NYSDEC state land rules",
-        sourceUrl: ACCESS_RULE_SOURCES.newYorkDec
+        limit: "Removing or cutting any tree or other plant life is prohibited on New York state park (OPRHP) property, so foraging is not allowed in state parks.",
+        note: "New York state parks are run by State Parks (OPRHP), not DEC; the DEC personal-consumption exception does not apply. 9 NYCRR 375.1(e) prohibits removing plant life.",
+        sourceLabel: "9 NYCRR 375.1(e), OPRHP prohibited activities",
+        sourceUrl: ACCESS_RULE_SOURCES.newYorkStateParks
       };
     }
   }
@@ -10563,8 +10573,8 @@ function getStateSystemRule(stateCode, text, area, species) {
       label: "Allowed",
       area,
       limit: "Edible fruit and mushrooms may be harvested for personal, noncommercial use in Minnesota state parks and forest recreation areas; nuts and other plant parts are not included in the exception.",
-      note: "Minnesota Rules 6100.0900 excepts edible fruit and mushrooms from the park plant-protection rule; commercial harvest requires the commissioner's written permission.",
-      sourceLabel: "Minnesota Rules 6100.0900",
+      note: "The MN DNR harvesting rules (Minn. R. 6100.0900) except edible fruit and mushrooms from the park plant-protection rule; commercial harvest requires the commissioner's written permission.",
+      sourceLabel: "MN DNR state-park harvesting rules (Minn. R. 6100.0900)",
       sourceUrl: ACCESS_RULE_SOURCES.minnesotaParks
     };
   }
@@ -10624,15 +10634,15 @@ function getStateSystemRule(stateCode, text, area, species) {
 
   // --- Allowed with a mushroom split (need the species param) ---
   if (stateCode === "MO" && (text.includes("state park") || text.includes("state historic site"))) {    if (species.category === "mushroom") {
-      return { status: "prohibited", label: "Prohibited", area,
-        limit: "Mushrooms are not covered by Missouri's in-park foraging exception; only wild edible fruit, berries, seeds, and nuts may be collected.",
-        note: "Missouri's edible exception (10 CSR 90-2.040(4)(B)) names fruit, berries, seeds, and nuts only, not fungi.",
-        sourceLabel: "10 CSR 90-2.040", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
+      return { status: "allowed", label: "Allowed", area,
+        limit: "Edible mushrooms may be collected by hand in Missouri state parks, up to a two-gallon container per person, for personal consumption; no tools, raking, or digging, and no commercial harvest.",
+        note: "Missouri's edible exception (10 CSR 90-2.040(4)(C)) allows hand collection of edible wild mushrooms for personal use in state parks and historic sites.",
+        sourceLabel: "10 CSR 90-2.040(4)(C)", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
     }
     return { status: "allowed", label: "Allowed", area,
-      limit: "Wild edible fruit, berries, seeds, and nuts: up to a one-gallon container per person for personal consumption (no roots/below-ground parts, no commercial harvest, no mushrooms).",
-      note: "Missouri state parks allow personal-use collection of wild edible fruit, berries, seeds, and nuts under 10 CSR 90-2.040(4)(B).",
-      sourceLabel: "10 CSR 90-2.040", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
+      limit: "Wild edible fruit, berries, seeds, and nuts: up to a one-gallon container per person for personal consumption (no roots or below-ground parts, no commercial harvest).",
+      note: "Missouri state parks allow personal-use collection of wild edible fruit, berries, seeds, and nuts under 10 CSR 90-2.040(4)(B); edible mushrooms are separately allowed under (4)(C).",
+      sourceLabel: "10 CSR 90-2.040(4)(B)", sourceUrl: ACCESS_RULE_SOURCES.missouriParks };
   }
   if (stateCode === "HI" && (text.includes("state park") || text.includes("state recreation") || text.includes("state historical park") || text.includes("state wayside") || text.includes("state monument"))) {    if (species.category === "mushroom") {
       return { status: "prohibited", label: "Prohibited", area,
@@ -10663,7 +10673,7 @@ function getStateSystemRule(stateCode, text, area, species) {
       return { status: "allowed", label: "Allowed", area,
         limit: "Mushroom collection is permitted in Connecticut state parks and forests; other plant, berry, and vegetation collection is prohibited.",
         note: "Connecticut bars removing vegetation (R.C.S.A. § 23-4-1(b)(1)) but Conn. Gen. Stat. § 23-4(b) expressly allows mushroom collection.",
-        sourceLabel: "Conn. Gen. Stat. § 23-4(b)", sourceUrl: ACCESS_RULE_SOURCES.connecticutParks };
+        sourceLabel: "Conn. Gen. Stat. § 23-4(b)", sourceUrl: ACCESS_RULE_SOURCES.connecticutStatute };
     }
     return { status: "prohibited", label: "Prohibited", area,
       limit: "Removing vegetation, berries, fruits, or other plant material from Connecticut state parks and forests is prohibited; only mushroom collection is excepted.",
@@ -10971,10 +10981,9 @@ function getPrinceWilliamLimit(species) {
 }
 
 function getManassasLimit(species) {
-  if (species.category === "mushroom") return `${species.commonName}: 1 gallon per person per day.`;
-  if (species.category === "nut") return `${species.commonName}: 1 bushel per species per person per day.`;
-  if (species.category === "berry") return `${species.commonName}: 1/2 gallon per species per person per day.`;
-  return `${species.commonName}: 2 bushels per species per person per day.`;
+  // Manassas compendium: 1/2 gallon per person per day for each category
+  // (nuts, berries, mushrooms, and fruits such as pawpaws, apples, pears).
+  return `${species.commonName}: 1/2 gallon per species per person per day.`;
 }
 
 function getContainingPublicLands(record) {

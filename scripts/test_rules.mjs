@@ -318,8 +318,11 @@ function testStateSystemRules(context) {
       props: { unit: "Garner State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
     { label: "MO State Park food (fruit allowed)", stateCode: "MO", record: { lat: 38.0, lng: -92.8 },
       props: { unit: "Ha Ha Tonka State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
-    { label: "MO State Park mushrooms (not covered)", stateCode: "MO", record: { lat: 38.0, lng: -92.8 },
-      props: { unit: "Ha Ha Tonka State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "prohibited" },
+    // Missouri now allows hand collection of edible wild mushrooms in state parks
+    // under 10 CSR 90-2.040(4)(C) (permission-link audit, July 2026, corrected a
+    // stale prohibition).
+    { label: "MO State Park mushrooms (allowed, 10 CSR 90-2.040(4)(C))", stateCode: "MO", record: { lat: 38.0, lng: -92.8 },
+      props: { unit: "Ha Ha Tonka State Park", mngTp: "State", desTp: "State Park" }, species: MUSHROOM_SPECIES, expected: "allowed" },
     { label: "CT State Park food (prohibited)", stateCode: "CT", record: { lat: 41.4, lng: -72.9 },
       props: { unit: "Sleeping Giant State Park", mngTp: "State", desTp: "State Park" }, expected: "prohibited" },
     { label: "CT State Park mushrooms (allowed)", stateCode: "CT", record: { lat: 41.4, lng: -72.9 },
@@ -402,10 +405,13 @@ function testNewNpsParks(context) {
       props: { unit: "Kings Canyon National Park", mng: "National Park Service", desTp: "National Park" },
       species: MUSHROOM_SPECIES, expected: "allowed" },
     // Guard: Sequoia National Forest is USFS land, not the national park; it must
-    // fall through to the USFS allowance, not the NPS "sequoia national park" entry.
+    // fall through to the USFS rule, not the NPS "sequoia national park" entry.
+    // With no researched per-forest rule loaded it resolves to the USFS default,
+    // which is now Unverified (not the NPS "allowed"), and its sourceLabel must
+    // not be the SEKI national-park compendium (checked below).
     { label: "Sequoia National Forest (USFS, not NPS park)", stateCode: "CA", record: { lat: 36.0, lng: -118.6 },
       props: { unit: "Sequoia National Forest", mng: "Forest Service", desTp: "National Forest" },
-      species: MUSHROOM_SPECIES, expected: "allowed" },
+      species: MUSHROOM_SPECIES, expected: "unknown" },
     // 2026-06-15 national-park completion pass (34 parks added).
     { label: "Zion food", stateCode: "UT", record: { lat: 37.3, lng: -113.0 },
       props: { unit: "Zion National Park", mng: "National Park Service", desTp: "National Park" },
@@ -477,8 +483,16 @@ function testCrossMapExtension(context) {
     { label: "Arches ink (no compendium, prohibited carries across)", stateCode: "UT", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 38.73, lng: -109.59 },
       props: { unit: "Arches National Park", mng: "National Park Service", desTp: "National Park" }, expected: "prohibited" },
     // Broad forest-products land: even a restricted-harvest species stays allowed
-    { label: "National Forest ink live root (broad products, allowed)", stateCode: "CA", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 36.0, lng: -118.6 },
-      props: { unit: "Sequoia National Forest", mng: "Forest Service", desTp: "National Forest" }, expected: "allowed" },
+    // on BLM public land (personal-use collection covers roots, so broadForestProducts
+    // skips the non-food restricted-harvest downgrade).
+    { label: "BLM ink live root (broad products, allowed)", stateCode: "OR", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 43.5, lng: -119.5 },
+      props: { unit: "Lakeview District", mng: "Bureau of Land Management", desTp: "Public Land" }, expected: "allowed" },
+    // Unmatched national forest (no researched per-forest rule): the honest status
+    // is Unverified, not an "allowed by silence" default. Even a broad-products
+    // species is Unverified here because we cannot confirm the forest's rule
+    // (permission-link audit, July 2026; owner-chosen behavior).
+    { label: "National Forest ink live root, rule unconfirmed (Unverified, not allowed-by-silence)", stateCode: "CA", mode: "ink", species: INK_RESTRICTED_SPECIES, record: { lat: 34.5, lng: -119.5 },
+      props: { unit: "Los Padres National Forest", mng: "Forest Service", desTp: "National Forest" }, expected: "unknown" },
     // Virginia state park (was "unknown" for non-food before this change)
     { label: "VA State Park ink berries (extends)", stateCode: "VA", mode: "ink", species: INK_EXTEND_SPECIES, record: { lat: 37.5, lng: -79.0 },
       props: { unit: "Douthat State Park", mngTp: "State", desTp: "State Park" }, expected: "allowed" },
