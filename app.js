@@ -48,6 +48,11 @@ const FALLING_FRUIT_AGGREGATE_SOURCE_ID = "falling-fruit-aggregates";
 const FALLING_FRUIT_AGGREGATE_LAYER_ID = "falling-fruit-aggregate-circles";
 const FALLING_FRUIT_AGGREGATE_COUNT_LAYER_ID = "falling-fruit-aggregate-counts";
 const FALLING_FRUIT_MANIFEST_URL = "./data/falling-fruit/us/manifest.json";
+// Per-chunk access-filter data (accessCounts/accessCentroids), split out of the
+// manifests so the default overview never downloads it — read only when a
+// permission filter is active. See scripts/split_access_manifest.mjs.
+const FALLING_FRUIT_ACCESS_MANIFEST_URL = "./data/falling-fruit/us/manifest-access.json";
+const INATURALIST_ACCESS_MANIFEST_URL = "./data/inaturalist/us/manifest-access.json";
 const STATUS_RASTER_URL = "./data/falling-fruit/us/status-raster.json";
 const STATUS_RASTER_CELL_SIZE_DEGREES = 0.05;
 const FALLING_FRUIT_MIN_LOAD_ZOOM = 8;
@@ -2252,6 +2257,10 @@ const state = {
   fallingFruitRecords: null,
   // Baked iNaturalist chunk tree (parallels the Falling Fruit fields above).
   inatChunkManifest: null,
+  // Which access trees ("ff"/"inat") have had their split-out access data
+  // merged onto their manifest chunks (see ensureAccessManifests). Per-tree, not
+  // one flag: the permission filter persists across mode switches.
+  accessMergedTrees: new Set(),
   inatChunkCache: new Map(),
   inatChunkLoads: new Map(),
   inatChunkRecords: null,
@@ -6529,10 +6538,25 @@ function updateFallingFruitAggregates() {
   const inatManifestPromise = (USE_BAKED_INATURALIST && !config.loadMinerals)
     ? getInatChunkManifest().catch(() => null)
     : Promise.resolve(null);
-  Promise.all([ffManifestPromise, inatManifestPromise])
+  // The access data lives in a separate file now (split off the manifests to
+  // keep it off the default boot). Under a permission filter the aggregate reads
+  // item.accessCounts/accessCentroids, so merge it in FIRST — otherwise the
+  // filtered path silently falls through to the unfiltered (over-permissive)
+  // count. A default view never enters this branch, so it never fetches the
+  // ~920 KB gz access files. NOT swallowed: a merge failure must reject so the
+  // catch below paints empty (fail closed), never an unfiltered view.
+  const filterActive = isAccessFilterActive();
+  const accessPromise = filterActive ? ensureAccessManifests() : Promise.resolve(null);
+  Promise.all([ffManifestPromise, inatManifestPromise, accessPromise])
     .then(([manifest]) => {
       if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
       if (shouldDeferAggregatePaint()) return;
+      // Guard the toggle race: a paint scheduled while the filter was OFF (its
+      // accessPromise resolved to null) can reach here AFTER the filter turned
+      // on but before the merge lands. Painting now would show unfiltered counts
+      // under an active filter. Hold the previous complete paint; the
+      // merge-driven render repaints once the data is ready.
+      if (isAccessFilterActive() && !accessDataReadyForActiveTrees()) return;
       // Building the collection walks every manifest chunk (~11.8k nationwide,
       // three reductions each). Skip the walk AND the setData when nothing it
       // reads has changed — the boot loaders and applyRegister repaint the
@@ -6583,6 +6607,10 @@ function getAggregateSignature(manifest) {
     manifest?.chunks?.length || 0,
     state.inatChunkManifest?.chunks?.length || 0,
     [...getSelectedAccessStatuses()].sort().join(","),
+    // The access data merges in per tree asynchronously under a filter; fold the
+    // merged set in so the paint after each tree lands recomputes instead of
+    // matching the pre-merge signature.
+    [...state.accessMergedTrees].sort().join(","),
     speciesIds
   ].join("|");
 }
@@ -8875,6 +8903,71 @@ async function getInatChunkManifest() {
   return inatChunkManifestLoad;
 }
 
+// The trees whose split-out access data the overview needs: FF whenever the
+// mode loads it, iNat whenever the baked iNat manifest is present. Minerals
+// needs neither. Tracked per tree, NOT as one boolean: the permission filter
+// persists across mode switches, so a filter turned on in Herbs (iNat only)
+// must still merge FF when the user switches to Food, or the FF overview would
+// fall through to unfiltered (over-permissive) counts.
+function requiredAccessTrees() {
+  const config = getActiveMapConfig();
+  const trees = [];
+  if (config.loadFallingFruit) {
+    trees.push({ key: "ff", getManifest: getFallingFruitManifest, url: FALLING_FRUIT_ACCESS_MANIFEST_URL });
+  }
+  if (!config.loadMinerals) {
+    trees.push({ key: "inat", getManifest: () => getInatChunkManifest().catch(() => null), url: INATURALIST_ACCESS_MANIFEST_URL });
+  }
+  return trees;
+}
+
+// True once every access tree the CURRENT mode needs is merged. The overview
+// must not paint a filtered view until this holds — otherwise the filtered path
+// silently shows unfiltered counts. iNat is only "needed" if its manifest
+// actually loaded (a failed iNat manifest contributes no aggregate items).
+function accessDataReadyForActiveTrees() {
+  const config = getActiveMapConfig();
+  if (config.loadFallingFruit && !state.accessMergedTrees.has("ff")) return false;
+  if (!config.loadMinerals && state.inatChunkManifest?.chunks && !state.accessMergedTrees.has("inat")) return false;
+  return true;
+}
+
+// Merge the split-out access data (accessCounts/accessCentroids) back onto the
+// manifest chunk objects, one tree at a time, single-flight per tree. Called
+// only when a permission filter is active, so a default session never fetches
+// these ~920 KB gz. REJECTS if a required tree's access file can't be loaded, so
+// the caller fails CLOSED (paints empty) instead of showing unfiltered counts.
+const accessTreeLoads = new Map();
+async function ensureAccessManifests() {
+  await Promise.all(requiredAccessTrees().map((tree) => {
+    if (state.accessMergedTrees.has(tree.key)) return null;
+    let load = accessTreeLoads.get(tree.key);
+    if (!load) {
+      load = (async () => {
+        const manifest = await tree.getManifest();
+        // No manifest (e.g. iNat load failed) → nothing to merge; don't mark
+        // merged, but don't fail either — there are no items to mis-count.
+        if (!manifest?.chunks) return;
+        const response = await fetch(tree.url, { priority: "low" });
+        if (!response.ok) throw new Error(`access manifest ${tree.url} returned ${response.status}`);
+        const access = await response.json();
+        for (const chunk of manifest.chunks) {
+          const entry = access[chunk.id];
+          if (!entry) continue;
+          if (entry.accessCounts !== undefined) chunk.accessCounts = entry.accessCounts;
+          if (entry.accessCentroids !== undefined) chunk.accessCentroids = entry.accessCentroids;
+        }
+        state.accessMergedTrees.add(tree.key);
+      })();
+      // Clear the in-flight slot when it settles so a failure retries on the
+      // next filtered render rather than caching the rejection forever.
+      load.finally(() => { accessTreeLoads.delete(tree.key); });
+      accessTreeLoads.set(tree.key, load);
+    }
+    return load;
+  }));
+}
+
 async function loadINaturalistChunks() {
   if (state.mapReady && map.getZoom() < FALLING_FRUIT_MIN_LOAD_ZOOM) {
     state.inatChunkRecords = [];
@@ -9094,9 +9187,12 @@ async function saveCurrentOfflineArea() {
     try { navigator.storage?.persist?.(); } catch { /* unsupported */ }
 
     const bounds = map.getBounds();
-    const supportFiles = [FALLING_FRUIT_MANIFEST_URL, STATUS_RASTER_URL];
-    // The iNaturalist manifest is needed to boot its chunks offline.
-    if (USE_BAKED_INATURALIST && saveable.inat.length) supportFiles.push(INATURALIST_MANIFEST_URL);
+    const supportFiles = [FALLING_FRUIT_MANIFEST_URL, FALLING_FRUIT_ACCESS_MANIFEST_URL, STATUS_RASTER_URL];
+    // The iNaturalist manifest (+ its access data) is needed to boot its chunks
+    // and to filter them by permission offline.
+    if (USE_BAKED_INATURALIST && saveable.inat.length) {
+      supportFiles.push(INATURALIST_MANIFEST_URL, INATURALIST_ACCESS_MANIFEST_URL);
+    }
     busy.total = saveable.count + supportFiles.length;
     renderOfflinePanel();
 
@@ -9156,8 +9252,10 @@ async function saveCurrentOfflineArea() {
       }
       if (!state.savedAreas.length) {
         await cache.delete(FALLING_FRUIT_MANIFEST_URL);
+        await cache.delete(FALLING_FRUIT_ACCESS_MANIFEST_URL);
         await cache.delete(STATUS_RASTER_URL);
         await cache.delete(INATURALIST_MANIFEST_URL);
+        await cache.delete(INATURALIST_ACCESS_MANIFEST_URL);
       }
       notice = busy.quota
         ? "Browser storage is full, remove a saved area or free space, then try again."
@@ -9230,8 +9328,10 @@ async function removeSavedArea(areaId) {
     }
     if (!state.savedAreas.length) {
       await cache.delete(FALLING_FRUIT_MANIFEST_URL);
+      await cache.delete(FALLING_FRUIT_ACCESS_MANIFEST_URL);
       await cache.delete(STATUS_RASTER_URL);
       await cache.delete(INATURALIST_MANIFEST_URL);
+      await cache.delete(INATURALIST_ACCESS_MANIFEST_URL);
     }
   } catch { /* cache API unavailable — registry is already updated */ } finally {
     releaseSavedAreasLock();
@@ -9463,8 +9563,10 @@ async function reconcileSavedAreaCache() {
       const anySaved = registries.length > 0;
       const sharedPaths = new Set([
         new URL(FALLING_FRUIT_MANIFEST_URL, window.location.href).pathname,
+        new URL(FALLING_FRUIT_ACCESS_MANIFEST_URL, window.location.href).pathname,
         new URL(STATUS_RASTER_URL, window.location.href).pathname,
-        new URL(INATURALIST_MANIFEST_URL, window.location.href).pathname
+        new URL(INATURALIST_MANIFEST_URL, window.location.href).pathname,
+        new URL(INATURALIST_ACCESS_MANIFEST_URL, window.location.href).pathname
       ]);
       for (const request of keys) {
         if (state.savedAreaBusy) return; // a save started mid-reconcile — stop

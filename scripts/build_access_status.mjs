@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { writeSplitManifest } from "./split_access_manifest.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(__filename), "..");
@@ -540,8 +541,13 @@ async function main() {
   if (totalRecords !== manifest.recordCount) {
     throw new Error(`Total record count changed: manifest ${manifest.recordCount}, chunks ${totalRecords}`);
   }
-  await writeFile(MANIFEST_PATH, `${JSON.stringify(manifest)}\n`);
-  console.log(`Wrote access status aggregates for ${manifest.chunks.length} chunks and ${totalRecords} records.`);
+  // Split the access data (accessCounts/accessCentroids) into a sibling
+  // manifest-access.json so the default overview boot never downloads it — it
+  // is read only when a permission filter is active. writeSplitManifest strips
+  // those keys from the chunks it writes to manifest.json (validation above
+  // already ran with them inline). See scripts/split_access_manifest.mjs.
+  const split = await writeSplitManifest(path.dirname(MANIFEST_PATH), manifest);
+  console.log(`Wrote access status aggregates for ${split.chunks} chunks and ${totalRecords} records (access split into manifest-access.json, ${split.accessEntries} entries).`);
   console.log(`Spot assertions: ${JSON.stringify({ ...syntheticAssertions, ...spots })}`);
 }
 

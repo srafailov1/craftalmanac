@@ -6,6 +6,7 @@ import vm from "vm";
 
 const ROOT = process.cwd();
 const MANIFEST_PATH = "data/falling-fruit/us/manifest.json";
+const ACCESS_MANIFEST_PATH = "data/falling-fruit/us/manifest-access.json";
 const STATES_PATH = "data/contiguous-us-states.json";
 const ACCESS_CACHE_DIR = "data/falling-fruit/us/access-cache";
 
@@ -165,6 +166,26 @@ function getManifest() {
   if (!Array.isArray(manifest.chunks)) {
     fail(`${MANIFEST_PATH} must contain a chunks array`);
     return null;
+  }
+  // accessCounts/accessCentroids live in a sibling manifest-access.json now
+  // (split off so the default overview never downloads them). Merge them back
+  // onto the chunks so check (e) still validates real numbers, and assert the
+  // access file exists and covers every chunk — otherwise the split could
+  // silently drop the data the app needs under a permission filter.
+  const access = readJson(ACCESS_MANIFEST_PATH);
+  if (access?.__readError) {
+    fail(`${ACCESS_MANIFEST_PATH} could not be read or parsed: ${access.__readError} — run scripts/split_access_manifest.mjs`);
+    return manifest;
+  }
+  let missingAccess = 0;
+  for (const chunk of manifest.chunks) {
+    const entry = access[chunk.id];
+    if (!entry || entry.accessCounts === undefined) { missingAccess += 1; continue; }
+    chunk.accessCounts = entry.accessCounts;
+    if (entry.accessCentroids !== undefined) chunk.accessCentroids = entry.accessCentroids;
+  }
+  if (missingAccess) {
+    fail(`${ACCESS_MANIFEST_PATH} is missing access data for ${missingAccess} of ${manifest.chunks.length} chunks`);
   }
   return manifest;
 }
@@ -381,6 +402,17 @@ if (exists(INAT_MANIFEST_PATH)) {
     inatRows.set(chunk.id, rows);
     return rows;
   };
+
+  runCheck("iNat (g): manifest-access.json exists and covers every chunk", () => {
+    if (inatManifest?.__readError || !Array.isArray(inatManifest.chunks)) return;
+    const access = readJson("data/inaturalist/us/manifest-access.json");
+    if (access?.__readError) {
+      fail(`data/inaturalist/us/manifest-access.json unreadable: ${access.__readError} — run scripts/split_access_manifest.mjs`);
+      return;
+    }
+    const missing = inatManifest.chunks.filter((c) => !access[c.id] || access[c.id].accessCounts === undefined).length;
+    if (missing) fail(`iNat manifest-access.json missing access data for ${missing} of ${inatManifest.chunks.length} chunks`);
+  });
 
   runCheck("iNat (a): every manifest chunk path exists and parses to an array", () => {
     if (inatManifest?.__readError || !Array.isArray(inatManifest.chunks)) {
