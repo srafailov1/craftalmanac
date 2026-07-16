@@ -1,5 +1,40 @@
 # Work orders — Speed & responsiveness (2026-07-15)
 
+> **Progress (2026-07-16).** Commits `de87199b`, `16fe557f`, `f615546a` land
+> P1.1, P1.2 (via the aggregate signature, which skips the walk outright), P1.3,
+> P1.4, P1.7, the generation-counter half of P1.5, P2.2, P2.4 and P3.5, plus two
+> finds the plan didn't have. **Do not re-derive these; re-read the code.**
+>
+> - **The worst case was never the one the plan modelled.** Charlottesville z9 is
+>   1.6k records; NYC z8 is **35k records against PAD-US's 4k-polygon page cap**,
+>   and every PAD-US load re-resolved all of them: **2.6s of blocked main thread
+>   per pan**. Fixed by indexing public lands spatially (sub-polygons, not
+>   features — PAD-US bboxes are bimodal) → **327ms, 8x**. A second fix in
+>   `pointInFeature` (skip far sub-polygons) took the rural case 128ms → 51ms.
+>   Both verified equivalent against the old code: 0 mismatches over 35k records
+>   × 4k polygons + synthetic grids.
+> - **`schedulePublicLandLoad` was invalidating every held record's rule on every
+>   render** below zoom 8 (render() calls it each pass; records are retained down
+>   there by design). Now idempotent. This also defeated the marker signature —
+>   found only because the in-browser test measured generation drift.
+> - Verification method that worked, reuse it: assert **painted == freshly
+>   computed** after every state change (25/25 hold), and count `setData` calls
+>   (10 identical renders → 0 rebuilds). See the harness notes below.
+>
+> **Still open:** P1.5's debounced coalescing, P1.6 (now much less urgent — the
+> index cut the cost it targeted by 8x, and it carries permission-staleness
+> risk), P2.1 (largely subsumed: the concurrency cap already abandons queued
+> work), P2.3, P2.5, P3.1, P3.2, P3.3, P3.4, P3.6, P4.
+>
+> **Harness gotcha (cost me a cycle):** the in-app preview pane freezes
+> **timers**, not just rAF — a 300ms setTimeout never fires, so Mapbox's `load`
+> event never arrives. Drive the boot manually (`state.mapReady = true;
+> initMapLayers(); ...`), release the aggregate grace with
+> `setINaturalistAggregateReady(true)`, call `loadMapData()`/`loadPublicLands()`
+> directly instead of via their debounces, and await **microtasks** only. Also:
+> the service worker serves a stale `app.js?v=` — unregister it and clear caches
+> on every reload or you will test the old file and believe a fix worked.
+
 Context: the site's data is rich and accurate, but speed and responsiveness
 suffer under the weight of what we represent. This is the execution plan for
 fixing that. It was produced by a four-dimension performance audit (data
@@ -29,7 +64,15 @@ production RUM after the owner pushes):
 
 - **INP:** a filter tap (legend chip, species select, slider tick) produces
   no main-thread task over ~100 ms on a mid-range phone profile (4x CPU
-  throttle). Today a single tap re-runs the full render pass (see P1).
+  throttle). ~~Today a single tap re-runs the full render pass~~ (P1 landed:
+  an unchanged tap now rebuilds nothing; the remaining tap cost is one
+  `setData` + `getVisibleRecords`, ~6 ms warm at 35k records).
+- **Pan at point zoom** (added 2026-07-16 — this was the real headline):
+  a PAD-US load drops the rule memo and re-resolves every loaded record.
+  Was 2.6 s at NYC z8 (35k records x 4k polygons); now ~330 ms via the
+  spatial index. Next lever if it matters: the ~330 ms is legitimate
+  ray-casting spread over 11.8k visible records — P2.3's Worker, or resolving
+  rules only for records in the viewport, would be where to go.
 - **Boot bandwidth:** gzipped bytes fetched before the national overview is
   interactive drop from ~2.8 MB to under ~1.5 MB (see P3.1 — the two
   manifests are 1.7 MB gz of that today).
@@ -304,7 +347,65 @@ the fallback is gone. Fix the stale manifest-size comment at app.js:8711-8715
 
 ## P3 — Payload diet (bake pipeline + app changes)
 
-### P3.1 Pre-baked overview summary — retire the manifests from the boot path (highest single win)
+### P3.1 REVISED (2026-07-16) — split the access half out of the manifests, don't re-bucket
+
+**Measure first, then read the original plan below for context.** I prototyped
+the "pre-baked coarse summary" idea against the real manifests and it does NOT
+pay: re-bucketing to a 0.3deg grid (today's data resolution, the only grid that
+avoids a visible change) yields 8,953 cells at **1.55 MB gz — no better than
+the 1.69 MB it replaces**, because per-species x per-status keys dominate.
+Coarser grids do shrink (1deg -> 0.51 MB / 921 cells) but the finest geo
+display grid actually in use is ~1.0-1.05deg (`getAggregateGeoGridSize` =
+min(2.4, 110 * 360/(512*2^zoom)); geo mode ends ~zoom 6.2 on desktop), so a
+1deg pre-bucket lands at display resolution and would visibly shift circle
+positions onto a different lattice. Don't.
+
+**The real decomposition** (measured with the same script, on the real files):
+
+| payload | gz |
+|---|---|
+| today: both manifests at boot | **1683 KB** |
+| boot payload, default filters only | **682 KB** (iNat 496 + FF 186) |
+| access payload, only when a permission filter is on | 861 KB (iNat 731 + FF 130) |
+
+`accessCounts` is **68% of the iNat manifest's raw bytes and is read ONLY when
+`isAccessFilterActive()`** — a default overview never touches it (verified in
+the 2026-07-15 field-list audit, and again in-browser: the default paint reads
+`countsByAnchor`/`center`/`countsBySpeciesId`/`centroidsBySpeciesId`/`bbox` and
+nothing else). So: **ship the access data as a separate file, merged into the
+chunk entries on demand.** ~1 MB gz off every default boot, iNat parse ~2.83 MB
+instead of 10.39 MB (~119ms -> ~32ms), and **zero visual change** — same chunks,
+same resolution, same centers. Filter users pay the 861 KB once, on first use.
+
+Work order:
+1. `scripts/build_access_status.mjs` currently writes `accessCounts` +
+   `accessCentroids` INTO `data/falling-fruit/us/manifest.json`; the iNat bake
+   does the same for its manifest. Emit two files per tree instead:
+   `manifest.json` (id, bbox, center/centroids, recordCount, counts*) and
+   `manifest-access.json` (`{[chunkId]: accessCounts | accessCentroids}`).
+   Both must be rewritten by the SAME script run — they are mutually consistent
+   per bake, and `/data/*` re-bakes in place with a 1h TTL (constraint 6).
+2. App: `getInatChunkManifest`/`getFallingFruitManifest` load the default file.
+   Add `ensureAccessManifests()` (single-flight) that fetches both access files
+   and merges them onto the cached chunk objects, so every downstream reader
+   (`getAggregateRecordCount`, `getAggregateItemCenter`, `getFilteredAccessStatusCount`)
+   keeps working unchanged. Call it from `updateFallingFruitAggregates` when
+   `isAccessFilterActive()`, and await it alongside the manifests.
+3. **Signature:** `getAggregateSignature` must fold in whether the access data
+   has landed (e.g. a loaded flag), or the paint that follows its arrival gets
+   skipped. The invariant test in step 5 catches this if you forget.
+4. **Gates that read manifest accessCounts and WILL break** — update in the same
+   commit: `validate_data.mjs` check (e) (per-species access totals reconcile
+   against the catalog) and check (g); re-check `test_overview_coverage.mjs`.
+   Add a gate asserting the split files' totals equal the pre-split totals.
+5. **Verify** with the in-browser invariant harness (painted == freshly
+   computed) across access-filter on/off, at national and zoom-7, plus a
+   before/after fingerprint of the aggregate FeatureCollection under a
+   permission filter — it must be byte-identical to today's.
+6. Also drop the derivable `path` from the FF default manifest (-13 KB gz;
+   `./data/falling-fruit/us/chunks/<id>.json`) while the format is open.
+
+<details><summary>Original P3.1 framing (superseded by the above — kept for the field-list audit)</summary>
 
 Today the national overview downloads ~1.7 MB gz (both manifests) and pays
 two multi-MB parses to draw circles. Verified (2026-07-15): the baked
@@ -336,6 +437,8 @@ Work order:
    runtime-dynamic, so the summary must keep per-species granularity —
    don't pre-render circles. If per-species access counts blow the size
    budget, bucket coarser rather than dropping granularity.
+
+</details>
 
 ### P3.2 Manifest format trims (secondary once P3.1 lands)
 
