@@ -2262,15 +2262,22 @@ const state = {
   mineralRecords: null,
   publicLandFeatures: [],
   publicLandCoverage: null,
+  // True while a PAD-US viewport load is in flight; see schedulePublicLandLoad.
+  publicLandsLoading: false,
   stateBoundaries: null,
   lastPhenologyRegion: null,
   localJurisdictions: null,
   usfsForestRules: null,
   accessRuleCache: new Map(),
+  // Bumped by invalidateAccessRules on every clear; the marker signature folds
+  // it in so a rule-changing load repaints even when the visible ids are equal.
+  accessRuleGeneration: 0,
   pointDataReady: false,
   loadedPointBounds: null,
   wasBelowPointZoom: true,
   lastShowPoints: false,
+  // Last circle-opacity written to the marker halo; see updateMarkerHalo.
+  markerHaloOpacity: null,
   mapReady: false,
   publicLayerLoadedKey: "",
   publicLayerVisible: true,
@@ -3808,6 +3815,22 @@ const mastSearchBtn = document.querySelector("#mastSearchBtn");
 const mastCondBtn = document.querySelector("#mastCondBtn");
 const mastCondVal = document.querySelector("#mastCondVal");
 
+// The legend and the season histogram are rebuilt on every render() — i.e. on
+// every slider tick and filter tap — but their markup changes only when their
+// inputs do. Assigning innerHTML tears down and re-parses the whole subtree
+// (and drops focus inside it), so compare against the last string and skip the
+// write. Only for subtrees whose markup is owned ENTIRELY by one render
+// function: if anything mutates the children directly, the cache goes stale.
+// The four current targets qualify (legend chips are driven by a delegated
+// handler on the container, which survives both rebuilds and skips).
+const lastRenderedHTML = new WeakMap();
+function setRenderedHTML(element, html) {
+  if (!element || lastRenderedHTML.get(element) === html) return false;
+  lastRenderedHTML.set(element, html);
+  element.innerHTML = html;
+  return true;
+}
+
 function getDayOfYear(date) {
   // UTC math avoids daylight-saving off-by-one errors in local-time subtraction.
   const dayMs = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
@@ -4326,7 +4349,7 @@ function renderMapLegend() {
 
   // Prototype layout: a collapsed title bar (bottom-left) that expands UP on
   // hover/focus into two columns — ACCESS (rings) | CATEGORIES (filled squares).
-  mapLegend.innerHTML = `
+  setRenderedHTML(mapLegend, `
     <div class="legend-body">
       <div class="legend-body-inner">
       <div class="legend-cols">
@@ -4346,7 +4369,7 @@ function renderMapLegend() {
     ${filterBits.length ? `<div class="legend-filters">FILTERS: ${filterBits.map(escapeHTML).join(" · ")} <button type="button" class="legend-clear" data-legend-clear="1">Clear</button></div>` : ""}
     <div class="legend-title"><strong>LEGEND:</strong> PERMISSIONS AND POINTS</div>
     <div class="legend-active">ACTIVE MAP: ${escapeHTML(modeName)}</div>
-  `;
+  `);
 
   // The collapsed title/active lines are hidden on phones (the legend lives in
   // the season bar's slot there), so mirror the filters-active state onto the
@@ -5131,7 +5154,9 @@ function resetLegendFilters() {
     state.selectedDay = getDayOfYear(new Date());
     state.allSeasons = false;
   }
-  render();
+  // scheduleRender, not render: this runs inside the legend's click handler,
+  // and its sibling branches already defer so the tap paints first.
+  scheduleRender();
 }
 
 function selectOnlySpecies(speciesId) {
@@ -5142,7 +5167,10 @@ function selectOnlySpecies(speciesId) {
   // lands on an empty map whenever that species is out of season on the selected
   // day. Showing the one species wherever it occurs is the intent of isolating it.
   state.allSeasons = true;
-  render();
+  // Deferred like the legend's chips: shelf taps and "open nearest in view"
+  // reach this from a click handler, and the boot/deep-link caller is followed
+  // by its own render, so nothing here needs the rebuild to be synchronous.
+  scheduleRender();
 }
 
 // Keyboard/SR route to a point card (the map's canvas markers are mouse-only;
@@ -5311,7 +5339,7 @@ function setMapMode(mode) {
     state.records = [];
     state.inatRecords = [];
     state.inatRecordCache.clear();
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     state.savedLocationsOnly = false;
     state.pointDataReady = false;
     state.loadedPointBounds = null;
@@ -5776,7 +5804,9 @@ function isSpeciesAvailableOnSelectedDate(species) {
 }
 
 function getVisibleRecords() {
-  const selectedAccessStatuses = new Set(getSelectedAccessStatuses());
+  // getSelectedAccessStatuses already returns a defensive copy; re-wrapping it
+  // built a second Set per call for nothing.
+  const selectedAccessStatuses = getSelectedAccessStatuses();
 
   return state.records.filter((record) => {
     if (!state.selectedSpecies.has(record.speciesId)) return false;
@@ -6082,6 +6112,12 @@ function loadPhenologyRegions() {
 // polygons already loaded for record->state attribution: point-in-state on
 // map.getCenter() -> that state's group. Returns null outside CONUS (or before
 // the boundaries / region map load) so lookups fall back to `national`.
+// Memoized on the rounded center + the boundary set's identity: renderHistogram
+// calls this on EVERY render (every slider tick and filter tap), and a miss
+// ray-casts the center against up to 49 state polygons. ~4 decimal places is
+// ~11 m — far finer than a state border, so the key never hides a real change.
+let viewportRegionKey = "";
+let viewportRegionValue = null;
 function getViewportRegion() {
   if (!phenologyRegions || !state.stateBoundaries || !map) return null;
   let center;
@@ -6094,13 +6130,16 @@ function getViewportRegion() {
   const lng = Number(center.lng);
   const lat = Number(center.lat);
   if (!Number.isFinite(lng) || !Number.isFinite(lat)) return null;
+  const key = `${state.stateBoundaries.length}|${lng.toFixed(4)},${lat.toFixed(4)}`;
+  if (key === viewportRegionKey) return viewportRegionValue;
   const match = state.stateBoundaries.find((entry) => (
     lng >= entry.bbox[0] && lng <= entry.bbox[2]
     && lat >= entry.bbox[1] && lat <= entry.bbox[3]
     && pointInFeature([lng, lat], entry)
   ));
-  if (!match) return null;
-  return phenologyRegions.states[match.name] || null;
+  viewportRegionKey = key;
+  viewportRegionValue = match ? (phenologyRegions.states[match.name] || null) : null;
+  return viewportRegionValue;
 }
 
 // Human-readable label for a Köppen group id (for the region-named caveat), e.g.
@@ -6178,7 +6217,7 @@ function renderHistogram() {
   const maxTotal = Math.max(0.0001, ...totals);
   const activeMonth = getSelectedMonth();
 
-  seasonHistogram.innerHTML = monthData.map((entry, index) => {
+  setRenderedHTML(seasonHistogram, monthData.map((entry, index) => {
     const total = totals[index];
     const height = total > 0 ? Math.max(6, Math.round((total / maxTotal) * 104)) : 6;
     const activeClass = !state.allSeasons && index + 1 === activeMonth ? " active" : "";
@@ -6200,7 +6239,7 @@ function renderHistogram() {
     // the per-month data — the bars are plain divs otherwise silent to AT.
     const barText = `${MONTHS[index]}: ${title || "none in season"}`;
     return `<div class="histogram-bar${activeClass}" style="height: ${height}px" role="img" aria-label="${escapeHTML(barText)}" title="${barText}">${segments}</div>`;
-  }).join("");
+  }).join(""));
 
   // Header reflects the active map; the category swatch legend sits below.
   // The caveat is load-bearing: it names the Köppen region when the chart is
@@ -6211,7 +6250,7 @@ function renderHistogram() {
   const caveatText = regionLabel
     ? `${regionLabel}, regional timing (local ripening still varies).`
     : "Contiguous-US average, local ripening can differ by weeks.";
-  if (seasonHistHead) seasonHistHead.innerHTML = `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY<span class="season-caveat">${escapeHTML(caveatText)}</span>`;
+  setRenderedHTML(seasonHistHead, `IN SEASON BY MONTH · <b>${escapeHTML(modeName)} MAP</b> · STACKED BY CATEGORY<span class="season-caveat">${escapeHTML(caveatText)}</span>`);
   renderSeasonCats();
 }
 
@@ -6235,7 +6274,7 @@ function renderMineralHistogram() {
   const max = Math.max(1, ...cats.map((id) => counts[id] || 0));
   const activeBand = !state.allSeasons;
   seasonHistogram.classList.add("mineral-hist");
-  seasonHistogram.innerHTML = cats.map((id) => {
+  setRenderedHTML(seasonHistogram, cats.map((id) => {
     const n = counts[id] || 0;
     const height = n > 0 ? Math.max(6, Math.round((n / max) * 104)) : 6;
     const color = registerCategoryColor(config.categoryColors[id] || "#777");
@@ -6250,18 +6289,18 @@ function renderMineralHistogram() {
     if (shortLabel.length > 14) shortLabel = shortLabel.split(" ")[0];
     const mbarText = `${label}: ${n} localit${n === 1 ? "y" : "ies"}`;
     return `<div class="histogram-bar${inBand ? " active" : ""}" role="img" aria-label="${escapeHTML(mbarText)}" title="${escapeHTML(mbarText)}"><div class="histogram-segment" style="height: ${height}px; background: ${escapeHTML(color)}"></div><span class="mbar-label">${escapeHTML(shortLabel)}</span></div>`;
-  }).join("");
-  if (seasonHistHead) seasonHistHead.innerHTML = `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`;
+  }).join(""));
+  setRenderedHTML(seasonHistHead, `MATERIALS BY WORKABILITY · <b>MINERALS MAP</b> · SOFT → HARD`);
   renderSeasonCats();
 }
 
 function renderSeasonCats() {
   if (!seasonCats) return;
   const config = getActiveMapConfig();
-  seasonCats.innerHTML = config.categories.map((category) => {
+  setRenderedHTML(seasonCats, config.categories.map((category) => {
     const color = registerCategoryColor(config.categoryColors[category.id] || "#777");
     return `<span class="season-cat"><i style="background:${escapeHTML(color)}"></i>${escapeHTML(category.label)}</span>`;
-  }).join("");
+  }).join(""));
 }
 
 // Build the marker GeoJSON feature (geometry + full popup properties) for one
@@ -6331,6 +6370,15 @@ function buildRecordFeature(record) {
   };
 }
 
+// Signature of the marker set last painted. The source is cluster:true, so
+// every setData re-runs the supercluster index — the single most expensive
+// thing a filter tap can trigger. These are the only inputs buildRecordFeature
+// reads: the visible ids, the map mode (catalog + category colors + rulesLabel),
+// the access-rule generation (see invalidateAccessRules), and the saved set
+// (the savedLocation property). The marker source is added once in
+// initMapLayers and never torn down (no setStyle anywhere), so a matching
+// signature always means the painted source is still valid.
+let markerSignature = "";
 function renderMarkers(visibleRecords) {
   if (!state.mapReady || !map.getSource(MARKERS_SOURCE_ID)) return;
 
@@ -6338,6 +6386,20 @@ function renderMarkers(visibleRecords) {
   // pass nothing and get a fresh pass; render() threads its shared visible set
   // so one frame resolves per-record access rules once, not two or three times.
   const visible = visibleRecords || getVisibleRecords();
+  const signature = [
+    state.activeMap,
+    state.accessRuleGeneration,
+    // Sorted: the set's content is what matters, and Set iteration is insertion
+    // ordered, so un-saving and re-saving one record would otherwise churn.
+    [...state.savedLocations].sort().join("~"),
+    visible.map((record) => record.id).join(",")
+  ].join("|");
+  if (signature === markerSignature) {
+    // The count line still yields to loading/outage messages, so it can be
+    // stale even when the marker set isn't. Refresh it, skip the reindex.
+    updateRecordCountStatus(visible);
+    return;
+  }
   const features = visible
     .map(buildRecordFeature)
     .filter(Boolean);
@@ -6346,6 +6408,11 @@ function renderMarkers(visibleRecords) {
     type: "FeatureCollection",
     features
   });
+  // Latched only after the paint actually lands: buildRecordFeature can throw
+  // (ensureMarkerIcon's canvas context is null under memory pressure), and
+  // latching first would leave the source frozen on the previous frame for the
+  // rest of the session instead of retrying on the next render.
+  markerSignature = signature;
   updateRecordCountStatus(visible);
 }
 
@@ -6466,15 +6533,58 @@ function updateFallingFruitAggregates() {
     .then(([manifest]) => {
       if (!state.mapReady || !map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)) return;
       if (shouldDeferAggregatePaint()) return;
+      // Building the collection walks every manifest chunk (~11.8k nationwide,
+      // three reductions each). Skip the walk AND the setData when nothing it
+      // reads has changed — the boot loaders and applyRegister repaint the
+      // overview several times over with identical inputs.
+      const signature = getAggregateSignature(manifest);
+      if (signature === aggregateSignature) {
+        settleAggregateBridgeAfterPaint();
+        return;
+      }
+      aggregateSignature = signature;
       map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID).setData(getFallingFruitAggregateCollection(manifest));
       settleAggregateBridgeAfterPaint();
     })
     .catch(() => {
+      aggregateSignature = "";
       map.getSource(FALLING_FRUIT_AGGREGATE_SOURCE_ID)?.setData({
         type: "FeatureCollection",
         features: []
       });
     });
+}
+
+// Signature of the overview aggregate last painted. Mirrors every input
+// getFallingFruitAggregateCollection reads. Two subtleties worth keeping:
+// the register is in here because the dominant-category tint is baked with
+// registerCategoryColor (applyRegister repaints for exactly that reason), and
+// the viewport is in here ONLY in screen mode — geo mode applies no bbox
+// filter, so panning the national overview must not re-walk every chunk.
+let aggregateSignature = "";
+function getAggregateSignature(manifest) {
+  const zoom = state.mapReady ? map.getZoom() : 0;
+  const bounds = state.mapReady ? map.getBounds() : null;
+  const useViewport = shouldUseViewportAggregateBounds(zoom, bounds);
+  const view = useViewport && bounds
+    ? `${zoom}|${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
+    : `${zoom}|geo`;
+  const speciesIds = getSelectedCatalogItems()
+    .filter(isSpeciesAvailableOnSelectedDate)
+    .map((species) => species.id)
+    .join(",");
+  return [
+    state.activeMap,
+    state.savedLocationsOnly ? "saved" : "all",
+    isNightish() ? "night" : "day",
+    view,
+    // Manifests land independently (FF first, baked iNat after): chunk counts
+    // move 0 -> N as each arrives, so the second paint isn't skipped.
+    manifest?.chunks?.length || 0,
+    state.inatChunkManifest?.chunks?.length || 0,
+    [...getSelectedAccessStatuses()].sort().join(","),
+    speciesIds
+  ].join("|");
 }
 
 function scheduleFallingFruitAggregateUpdate() {
@@ -6905,7 +7015,7 @@ async function loadStatusRaster() {
         state.statusRaster = data || {};
         // Record-level rules may have been computed (and cached) before the
         // raster arrived; recompute them so provisional area statuses apply.
-        state.accessRuleCache.clear();
+        invalidateAccessRules();
         renderMarkers();
         return state.statusRaster;
       })
@@ -7435,7 +7545,14 @@ function updateMarkerHalo() {
   // 0.55 (was 0.38): the night basemap stays — auto day/night is deliberate so
   // night foragers aren't blinded — so the halo does the legibility work,
   // lifting dark category icons off the dark ground.
-  map.setPaintProperty(MARKER_HALO_LAYER_ID, "circle-opacity", isNightish() ? 0.55 : 0);
+  const opacity = isNightish() ? 0.55 : 0;
+  // setPaintProperty dirties the style and triggers a repaint even when the
+  // value is identical, and this runs on every settled sourcedata event for the
+  // marker source — several times per setData, plus on tile completion during
+  // pans. The opacity depends only on the register, so those writes are churn.
+  if (opacity === state.markerHaloOpacity) return;
+  state.markerHaloOpacity = opacity;
+  map.setPaintProperty(MARKER_HALO_LAYER_ID, "circle-opacity", opacity);
 }
 
 async function initRegionBoundaryLayers() {
@@ -9376,11 +9493,23 @@ async function loadMinerals() {
 function schedulePublicLandLoad() {
   window.clearTimeout(state.publicLoadTimer);
   if (map.getZoom() < PUBLIC_LANDS_MIN_RENDER_ZOOM) {
+    // render() calls this on every pass, so this branch has to be idempotent.
+    // It wasn't: below the point band it re-invalidated the rule cache on every
+    // render, and records are deliberately RETAINED down here (loadMapData
+    // early-returns and keeps the last point-band set), so each render
+    // re-resolved every held record's rule from scratch. Skip when the drop has
+    // already happened and nothing is in flight to cancel.
+    const nothingToDrop = !state.publicLandFeatures.length
+      && !state.publicLandCoverage
+      && !state.publicLayerLoadedKey
+      && !state.publicLandsLoading;
+    if (nothingToDrop) return;
     state.activePublicRequest += 1;
+    state.publicLandsLoading = false;
     state.publicLandFeatures = [];
     state.publicLandCoverage = null;
     state.publicLayerLoadedKey = "";
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     updatePublicLandSource();
     return;
   }
@@ -9399,6 +9528,10 @@ async function loadPublicLands() {
 
   const requestId = state.activePublicRequest + 1;
   state.activePublicRequest = requestId;
+  // Tracked so the below-zoom drop can stay idempotent without losing its
+  // cancel: an in-flight load has nothing else to signal its own existence
+  // (publicLayerLoadedKey is only set once it finishes).
+  state.publicLandsLoading = true;
 
   try {
     const features = [];
@@ -9450,7 +9583,7 @@ async function loadPublicLands() {
       truncated
     };
     state.publicLayerLoadedKey = boundsKey;
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     updatePublicLandSource();
     renderMarkers();
   } catch (error) {
@@ -9458,6 +9591,10 @@ async function loadPublicLands() {
     // Keep the last loaded polygons on a transient failure: blanking them
     // would silently downgrade every marker's access label to unsourced.
     // The loaded key stays unset, so the next moveend retries this viewport.
+  } finally {
+    // Only the still-active request owns the flag: a superseded load finishing
+    // late must not clear a newer one's in-flight marker.
+    if (requestId === state.activePublicRequest) state.publicLandsLoading = false;
   }
 }
 
@@ -9673,6 +9810,18 @@ function getRecordAccessRule(record, species) {
   return rule;
 }
 
+// Every rule-resolution input that lands asynchronously (PAD-US polygons, the
+// status raster, boundaries, jurisdictions, USFS rules, the rule tables) drops
+// the whole memo. The generation counter is what lets the marker signature stay
+// honest: a record's id can be unchanged while its resolved access rule is not,
+// so the signature folds in the generation and repaints on exactly those loads.
+// Always invalidate through here, never by clearing the Map directly, or a
+// paint can be skipped against a stale rule.
+function invalidateAccessRules() {
+  state.accessRuleCache.clear();
+  state.accessRuleGeneration += 1;
+}
+
 // Rock & mineral collecting rules, keyed by the land manager baked into each
 // MRDS record (data/minerals-us.json). Stone collecting is governed
 // differently from foraging — the 36 CFR 2.1 food exception does not cover it.
@@ -9849,7 +9998,7 @@ async function loadStateBoundaries() {
     const response = await fetch("./data/contiguous-us-states.json");
     if (!response.ok) return;
     state.stateBoundaries = (await response.json()).states || [];
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     renderMarkers();
     // Boundaries just became available, so getViewportRegion() can now resolve
     // the map center. Seed the tracked region and repaint the histogram once so
@@ -9871,7 +10020,7 @@ async function loadLocalJurisdictions() {
     const response = await fetch("./data/local-jurisdictions.json");
     if (!response.ok) return;
     state.localJurisdictions = (await response.json()).jurisdictions || [];
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     renderMarkers();
   } catch {
     // Local park rules degrade to the generic "unknown" fallback without geometry.
@@ -9888,7 +10037,7 @@ async function loadUsfsForestRules() {
     const response = await fetch("./data/usfs-forest-rules.json");
     if (!response.ok) return;
     state.usfsForestRules = (await response.json()).forests || [];
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     renderMarkers();
   } catch {
     // Falls back to the general national-forest rule without per-forest data.
@@ -9917,7 +10066,7 @@ async function loadAccessRuleTables() {
     NPS_GATHERING_RULES = nps.rules || [];
     SITE_ACCESS_RULES = site.rules || [];
     MINERAL_ACCESS_RULES = mineral.rules || {};
-    state.accessRuleCache.clear();
+    invalidateAccessRules();
     render();
   } catch {
     // Conservative defaults stay in effect; a reload retries the fetch.
