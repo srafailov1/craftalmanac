@@ -8307,6 +8307,10 @@ async function loadMapData() {
   const requestId = state.activeRequest + 1;
   state.activeRequest = requestId;
   const config = getActiveMapConfig();
+  // Past the early return we are in the point band (or minerals, which resolves
+  // its rules from the mineral tables alone), so the record-level rule tables
+  // are about to be needed. Not awaited: they self-heal on arrival.
+  if (!config.loadMinerals) ensurePointBandRuleData();
   const loadBounds = state.mapReady ? map.getBounds() : null;
   const loadZoom = state.mapReady ? map.getZoom() : 0;
   const hadRecords = state.records.length > 0;
@@ -8698,11 +8702,15 @@ function getINaturalistAggregateCacheKey(taxonIds, tile) {
   return `${taxonIds}|${tile.id}`;
 }
 
-async function mapWithConcurrency(items, concurrency, mapper) {
+// `shouldStop` (optional) is polled before each item is picked up: workers stop
+// pulling new work when it returns true, leaving holes in `results`. Callers
+// that pass it must tolerate those holes.
+async function mapWithConcurrency(items, concurrency, mapper, shouldStop) {
   const results = new Array(items.length);
   let index = 0;
   const workers = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
     while (index < items.length) {
+      if (shouldStop && shouldStop()) return;
       const current = index;
       index += 1;
       results[current] = await mapper(items[current], current);
@@ -8710,6 +8718,22 @@ async function mapWithConcurrency(items, concurrency, mapper) {
   });
   await Promise.all(workers);
   return results;
+}
+
+// Viewport chunk fetches run through this cap. Unbounded, a dense viewport fired
+// up to FALLING_FRUIT_MAX_VIEWPORT_CHUNKS requests per source at once (320 when
+// a mode loads both trees) — they queue in the browser anyway, but the app loses
+// the ability to order them or to stop after a pan supersedes them. With a cap,
+// a superseded load abandons everything still queued behind the current few.
+const CHUNK_FETCH_CONCURRENCY = 12;
+
+// Settled-shaped mapper so a per-chunk failure can't reject the whole batch
+// (offline saved areas legitimately miss chunks outside the save).
+function settleChunkLoad(loader) {
+  return (chunk) => loader(chunk).then(
+    (value) => ({ status: "fulfilled", value }),
+    (reason) => ({ status: "rejected", reason })
+  );
 }
 
 async function loadFallingFruit() {
@@ -8720,6 +8744,10 @@ async function loadFallingFruit() {
     return [];
   }
 
+  // Captured at entry: loadMapData bumps state.activeRequest per generation, so
+  // a pan that supersedes this load is detectable without threading an argument
+  // through every loader.
+  const requestId = state.activeRequest;
   const manifest = await getFallingFruitManifest();
   const bounds = map.getBounds();
   let chunks = getVisibleFallingFruitChunks(manifest, bounds);
@@ -8727,20 +8755,27 @@ async function loadFallingFruit() {
     state.fallingFruitRecords = [];
     return [];
   }
+  // Nearest-first always, not only when capping: under a concurrency cap the
+  // order decides what lands first, and the viewport centre should win.
+  const center = bounds.getCenter();
+  chunks = [...chunks]
+    .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center));
   if (chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
     // Never drop everything: load the chunks nearest the viewport center
     // up to the cap, so dense regions degrade gracefully at the edges.
-    const center = bounds.getCenter();
-    chunks = [...chunks]
-      .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center))
-      .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
+    chunks = chunks.slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
   }
 
   // Tolerate per-chunk failures: offline with a saved area, chunks outside the
   // save are absent by design — render the chunks that DID resolve instead of
   // letting one miss blank the whole layer. Only when every chunk fails do we
   // rethrow, preserving the online "Falling Fruit unavailable" reporting.
-  const results = await Promise.allSettled(chunks.map(loadFallingFruitChunk));
+  const results = (await mapWithConcurrency(
+    chunks,
+    CHUNK_FETCH_CONCURRENCY,
+    settleChunkLoad(loadFallingFruitChunk),
+    () => state.activeRequest !== requestId
+  )).filter(Boolean); // holes where a supersession stopped the queue
   if (results.length && results.every((r) => r.status === "rejected")) {
     throw results[0].reason;
   }
@@ -8845,6 +8880,7 @@ async function loadINaturalistChunks() {
     state.inatChunkRecords = [];
     return [];
   }
+  const requestId = state.activeRequest;
   const manifest = await getInatChunkManifest();
   const bounds = map.getBounds();
   let chunks = (manifest.chunks || []).filter((chunk) => bboxIntersectsBounds(chunk.bbox, bounds));
@@ -8852,13 +8888,18 @@ async function loadINaturalistChunks() {
     state.inatChunkRecords = [];
     return [];
   }
+  const center = bounds.getCenter();
+  chunks = [...chunks]
+    .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center));
   if (chunks.length > FALLING_FRUIT_MAX_VIEWPORT_CHUNKS) {
-    const center = bounds.getCenter();
-    chunks = [...chunks]
-      .sort((a, b) => getChunkCenterDistance(a, center) - getChunkCenterDistance(b, center))
-      .slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
+    chunks = chunks.slice(0, FALLING_FRUIT_MAX_VIEWPORT_CHUNKS);
   }
-  const results = await Promise.allSettled(chunks.map(loadINaturalistChunk));
+  const results = (await mapWithConcurrency(
+    chunks,
+    CHUNK_FETCH_CONCURRENCY,
+    settleChunkLoad(loadINaturalistChunk),
+    () => state.activeRequest !== requestId
+  )).filter(Boolean);
   if (results.length && results.every((result) => result.status === "rejected")) {
     throw results[0].reason;
   }
@@ -10010,6 +10051,20 @@ async function loadStateBoundaries() {
   }
 }
 
+// local-jurisdictions.json (507 KB) + usfs-forest-rules.json (128 KB) feed ONLY
+// computeRecordAccessRule's public-land path, which cannot run before the point
+// band: records and PAD-US polygons both gate on zoom 8, and mineral/NPS-orchard
+// records short-circuit before these tables. Loading them at map load spent
+// ~78 KB gz on every overview boot that never zooms in. Fetch once, on first
+// point-band entry; both self-heal on late arrival (invalidate + repaint).
+let pointBandRuleDataLoad = null;
+function ensurePointBandRuleData() {
+  if (!pointBandRuleDataLoad) {
+    pointBandRuleDataLoad = Promise.all([loadLocalJurisdictions(), loadUsfsForestRules()]);
+  }
+  return pointBandRuleDataLoad;
+}
+
 async function loadLocalJurisdictions() {
   // City/county park rules are applied geographically: PAD-US carries no
   // city/agency name (only "City Land"/"County Land" + "Local Government"), so
@@ -11135,17 +11190,126 @@ function getManassasLimit(species) {
   return `${species.commonName}: 1/2 gallon per species per person per day.`;
 }
 
+// Uniform-grid index over the loaded public-land polygons, keyed on the feature
+// array's IDENTITY so every reload rebuilds it with nothing to remember to
+// invalidate (the array is only ever reassigned, never mutated in place).
+//
+// getContainingPublicLands used to bbox-test every loaded feature for every
+// record. That is fine for a rural viewport (73 polygons) and pathological for
+// a dense one: NYC at zoom 8 holds 35k records against the 4k-polygon page cap
+// = 140M bbox tests, ~2.5s of blocked main thread on EVERY PAD-US load. The
+// grid narrows a record to the few polygons whose bbox covers its own cell.
+// A feature spanning an unreasonable number of cells (a statewide unit) would
+// bloat the grid, so those go in `oversized` and are always tested; there are
+// few, and skipping the grid for them is cheaper than filling it.
+const PUBLIC_LAND_GRID_DEG = 0.05;
+const PUBLIC_LAND_GRID_MAX_CELLS = 1024;
+
+// Outer-ring bounds per sub-polygon. Mirrors — and warms — the cache
+// pointInFeature keeps on the feature; both must be permissive outer-ring
+// boxes, so keep the two in step if either changes. (pointInFeature holds its
+// own inline copy because build scripts extract it from source and eval it
+// standalone.)
+function computePublicLandPolyBoxes(geometry) {
+  const polygons = geometry.type === "MultiPolygon" ? geometry.coordinates : [geometry.coordinates];
+  return polygons.map((polygon) => {
+    const outer = polygon[0] || [];
+    let west = Infinity;
+    let south = Infinity;
+    let east = -Infinity;
+    let north = -Infinity;
+    for (let i = 0; i < outer.length; i += 1) {
+      const lng = outer[i][0];
+      const lat = outer[i][1];
+      if (lng < west) west = lng;
+      if (lng > east) east = lng;
+      if (lat < south) south = lat;
+      if (lat > north) north = lat;
+    }
+    return [west, south, east, north];
+  });
+}
+
+let publicLandIndexSource = null;
+let publicLandIndexValue = null;
+function getPublicLandIndex() {
+  if (publicLandIndexValue && publicLandIndexSource === state.publicLandFeatures) {
+    return publicLandIndexValue;
+  }
+  const grid = new Map();
+  const oversized = [];
+  state.publicLandFeatures.forEach((feature, order) => {
+    // Recorded so results can be restored to feature-array order: several
+    // getBestPublicLandAccessRule branches break acreage ties by stable sort,
+    // so the order the old full scan produced is part of the answer.
+    Object.defineProperty(feature, "__order", {
+      value: order, enumerable: false, configurable: true, writable: true
+    });
+    const geometry = feature.geometry;
+    if (!geometry) { oversized.push(feature); return; }
+    // Indexed per SUB-POLYGON, not per feature. PAD-US bbox sizes are wildly
+    // bimodal: the median unit spans 0.0014deg (a city park) but the 99th
+    // percentile spans ~19x51deg — scattered agency holdings whose feature-wide
+    // bbox covers half the continent while every actual piece is small and
+    // local. Indexing whole features dumped ~10% of them into `oversized`,
+    // where they were re-tested against every record and ate most of the win.
+    const boxes = computePublicLandPolyBoxes(geometry);
+    if (geometry.type === "MultiPolygon") {
+      Object.defineProperty(feature, "__polyBoxes", {
+        value: boxes, enumerable: false, configurable: true, writable: true
+      });
+    }
+    let cells = 0;
+    for (const box of boxes) {
+      if (!Number.isFinite(box[0]) || !Number.isFinite(box[1])) { cells = Infinity; break; }
+      const spanX = Math.floor(box[2] / PUBLIC_LAND_GRID_DEG) - Math.floor(box[0] / PUBLIC_LAND_GRID_DEG) + 1;
+      const spanY = Math.floor(box[3] / PUBLIC_LAND_GRID_DEG) - Math.floor(box[1] / PUBLIC_LAND_GRID_DEG) + 1;
+      cells += spanX * spanY;
+      if (cells > PUBLIC_LAND_GRID_MAX_CELLS) break;
+    }
+    // A genuinely huge single piece would bloat the grid; test those always.
+    if (cells > PUBLIC_LAND_GRID_MAX_CELLS) { oversized.push(feature); return; }
+    for (const box of boxes) {
+      const x0 = Math.floor(box[0] / PUBLIC_LAND_GRID_DEG);
+      const x1 = Math.floor(box[2] / PUBLIC_LAND_GRID_DEG);
+      const y0 = Math.floor(box[1] / PUBLIC_LAND_GRID_DEG);
+      const y1 = Math.floor(box[3] / PUBLIC_LAND_GRID_DEG);
+      for (let x = x0; x <= x1; x += 1) {
+        for (let y = y0; y <= y1; y += 1) {
+          const key = `${x}:${y}`;
+          const bucket = grid.get(key);
+          // A feature with several pieces in one cell must appear once.
+          if (bucket) { if (bucket[bucket.length - 1] !== feature) bucket.push(feature); }
+          else grid.set(key, [feature]);
+        }
+      }
+    }
+  });
+  publicLandIndexValue = { grid, oversized };
+  publicLandIndexSource = state.publicLandFeatures;
+  return publicLandIndexValue;
+}
+
 function getContainingPublicLands(record) {
   if (!state.publicLandFeatures.length) return [];
   const lat = Number(record.lat);
   const lng = Number(record.lng);
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return [];
-  return state.publicLandFeatures.filter((feature) => {
+  const index = getPublicLandIndex();
+  const cell = index.grid.get(`${Math.floor(lng / PUBLIC_LAND_GRID_DEG)}:${Math.floor(lat / PUBLIC_LAND_GRID_DEG)}`);
+  const found = [];
+  const seen = new Set();
+  const test = (feature) => {
+    if (seen.has(feature)) return;
+    seen.add(feature);
     // Cheap bbox rejection first; full point-in-polygon only for candidates.
     const box = feature.__bbox;
-    if (box && (lng < box[0] || lng > box[2] || lat < box[1] || lat > box[3])) return false;
-    return pointInFeature([lng, lat], feature);
-  });
+    if (box && (lng < box[0] || lng > box[2] || lat < box[1] || lat > box[3])) return;
+    if (pointInFeature([lng, lat], feature)) found.push(feature);
+  };
+  if (cell) cell.forEach(test);
+  index.oversized.forEach(test);
+  return found.length > 1 ? found.sort((a, b) => a.__order - b.__order) : found;
 }
 
 function getFeatureBbox(feature) {
@@ -11285,9 +11449,12 @@ map.on("load", () => {
   setINaturalistAggregateReady(false);
   initMapLayers();
   loadRadar();
+  // Boundaries stay on the boot path (not deferred to the point band): they
+  // drive getViewportRegion, which picks the regional phenology curve behind the
+  // season histogram and the Materials/Projects "Available" filters — all
+  // reachable at overview zoom. The jurisdiction/USFS tables are point-band-only
+  // and now load on first entry there (ensurePointBandRuleData).
   loadStateBoundaries();
-  loadLocalJurisdictions();
-  loadUsfsForestRules();
   // The raster also backs provisional record-level rules at point zooms, so
   // warm it near startup rather than only via the overview aggregate path —
   // but from idle time: it is a ~3.8 MB fetch+parse, and eagerly racing it

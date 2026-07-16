@@ -14,6 +14,13 @@ data/inaturalist/us/access-cache/
 # The GBIF sample/DWCA archives and the taxon-key artifact are build inputs, not
 # served assets (taxon-keys.json is read by scripts at build time only).
 data/inaturalist/taxon-keys.json
+# Build inputs too, despite living beside served data: material-profiles.json is
+# read only by scripts/build_static_pages.mjs (which bakes its content INTO the
+# static pages), and mid-atlantic-boundary.json only by
+# scripts/build_nps_orchards.py. Nothing served ever fetches either — they were
+# shipping ~356 KB of origin no client can use.
+data/material-profiles.json
+data/mid-atlantic-boundary.json
 
 # Internal docs, agent queues, and research (not site content):
 docs/
