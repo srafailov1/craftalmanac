@@ -8822,7 +8822,9 @@ async function getFallingFruitManifest() {
   // can race here, and the manifest is ~1.9 MB — never download it twice.
   if (!fallingFruitManifestLoad) {
     fallingFruitManifestLoad = (async () => {
-      const response = await fetch(FALLING_FRUIT_MANIFEST_URL);
+      // priority:"low" so the early boot prefetch (prefetchOverviewManifests)
+      // yields to the basemap's own tile/style requests on a slow link.
+      const response = await fetch(FALLING_FRUIT_MANIFEST_URL, { priority: "low" });
       if (!response.ok) throw new Error(`Falling Fruit manifest returned ${response.status}`);
       state.fallingFruitManifest = await response.json();
       return state.fallingFruitManifest;
@@ -11541,6 +11543,27 @@ loadAccessRuleTables();
 // also land on map "load", at which point moveend re-renders in-region).
 loadPhenologyRegions();
 loadPhenology(state.activeMap).then(() => renderHistogram());
+
+// Start the overview data download NOW, during app.js eval — it used to wait
+// for the map's "load" event, which fires only after the whole Mapbox library
+// (473 KB) downloads, evaluates (1.78 MB), and renders a frame. The manifests
+// therefore trailed the basemap by their full download; the overview circles
+// were the last thing to appear. These getters are single-flight, so the
+// map-load aggregate paint reuses the in-flight fetch. The download now overlaps
+// the Mapbox eval + tile load instead of following it. priority:"low" keeps it
+// from competing with the basemap's own requests on a slow link.
+function prefetchOverviewManifests() {
+  const config = getActiveMapConfig();
+  if (config.loadMinerals) {
+    // Minerals boots from its own static file, not the shared manifests.
+    loadMinerals().catch(() => {});
+    return;
+  }
+  if (config.loadFallingFruit) getFallingFruitManifest().catch(() => {});
+  getInatChunkManifest().catch(() => {});
+}
+prefetchOverviewManifests();
+
 map.on("load", () => {
   state.mapReady = true;
   // A hash deep-link can boot straight into the point band, so the "was I
