@@ -11172,7 +11172,45 @@ function pointInFeature(point, feature) {
     return pointInPolygon(point, geometry.coordinates);
   }
   if (geometry.type === "MultiPolygon") {
-    return geometry.coordinates.some((polygon) => pointInPolygon(point, polygon));
+    // Per-sub-polygon bounds, computed once per feature and cached on it.
+    // A PAD-US MultiPolygon can carry 100+ far-apart pieces (a loaded forest
+    // here has 131, across 5750 vertices), and the feature-wide __bbox says
+    // nothing about WHICH piece could hold the point — so without this, one
+    // point test ray-casts every ring of every piece. Outer ring only: holes
+    // sit inside it, and this box only ever has to be permissive.
+    // Kept inline rather than in a helper: several build/gate scripts extract
+    // this function out of app.js source text and eval it standalone.
+    let boxes = feature.__polyBoxes;
+    if (!boxes) {
+      boxes = geometry.coordinates.map((polygon) => {
+        const outer = polygon[0] || [];
+        let west = Infinity;
+        let south = Infinity;
+        let east = -Infinity;
+        let north = -Infinity;
+        for (let i = 0; i < outer.length; i += 1) {
+          const lng = outer[i][0];
+          const lat = outer[i][1];
+          if (lng < west) west = lng;
+          if (lng > east) east = lng;
+          if (lat < south) south = lat;
+          if (lat > north) north = lat;
+        }
+        return [west, south, east, north];
+      });
+      // Non-enumerable: the build scripts serialize features, and this is a
+      // derived cache, not data.
+      Object.defineProperty(feature, "__polyBoxes", {
+        value: boxes, enumerable: false, configurable: true, writable: true
+      });
+    }
+    const x = point[0];
+    const y = point[1];
+    return geometry.coordinates.some((polygon, index) => {
+      const box = boxes[index];
+      if (box && (x < box[0] || x > box[2] || y < box[1] || y > box[3])) return false;
+      return pointInPolygon(point, polygon);
+    });
   }
   return false;
 }
