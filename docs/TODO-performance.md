@@ -21,10 +21,39 @@
 >   computed** after every state change (25/25 hold), and count `setData` calls
 >   (10 identical renders → 0 rebuilds). See the harness notes below.
 >
+> **Update 2026-07-16 (round 2, first-paint + zoom-lag investigation).** Owner
+> reported first paint still slow + a zoom-lag band. Measured everything before
+> acting:
+> - **First paint is download-bound**, not CPU: ~2.3 MB gz before overview
+>   circles (Mapbox GL 475 KB [hard floor], app.js 162 KB, manifests 1.68 MB).
+>   **P3.1 LANDED** (`d286525b`): split the access data out of the manifests →
+>   boot manifests **1.68 MB → 768 KB gz** (~915 KB off first paint), zero visual
+>   change, verified lossless + fail-closed under a filter.
+> - **The "zoom lag" is not app JS.** Every handler measured <3 ms below the
+>   point band; the felt lag is Mapbox GL's own basemap zoom rendering
+>   (inherent). The one real app hitch is the point-band crossing (~z8, clusters
+>   appear): cold ~1.8 s at NYC z9 — but that is **network fetch of chunk files**
+>   (JSON.parse only 53 ms; warm-cache whole load = 60 ms). Not parse-bound.
+> - **P2.3 (Worker parsing) DE-SCOPED by measurement.** Its premise was that
+>   main-thread JSON.parse blocks; post-P3.1 the manifest parse is ~15-40 ms and
+>   chunk parse is 53 ms cold / ~0 warm. A Worker + fallback for ~50 ms is
+>   negative ROI. Revisit only if chunk sizes grow a lot. The cold point-band
+>   cost is network — addressed by P3.3/P3.4 (smaller chunks) and P3.6 (caching),
+>   not a Worker.
+> - **P4.1 (minify) quantified:** esbuild takes app.js 162→96 KB gz and
+>   styles.css 23→10.5 KB gz = **~78 KB off the critical path**. Real but modest
+>   vs P3.1. Blocker is the deploy mechanism: this repo serves a 590 MB data tree
+>   from root with no build step, so minifying cleanly needs EITHER committed
+>   `*.min.*` artifacts (ugly in a git-reviewed vanilla repo, must rebuild before
+>   each commit) OR a Cloudflare Workers Build command + dist restructuring
+>   (owner dashboard action, unverifiable from here). OWNER DECISION — see the
+>   round-2 report.
+>
 > **Still open:** P1.5's debounced coalescing, P1.6 (now much less urgent — the
 > index cut the cost it targeted by 8x, and it carries permission-staleness
 > risk), P2.1 (largely subsumed: the concurrency cap already abandons queued
-> work), P2.3, P2.5, P3.1, P3.2, P3.3, P3.4, P3.6, P4.
+> work), ~~P2.3~~ (de-scoped, see above), P2.5, P3.2, P3.3, P3.4, P3.6, P4.1
+> (owner mechanism decision).
 >
 > **Harness gotcha (cost me a cycle):** the in-app preview pane freezes
 > **timers**, not just rAF — a 300ms setTimeout never fires, so Mapbox's `load`
